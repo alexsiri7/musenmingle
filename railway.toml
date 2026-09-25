@@ -1,0 +1,16 @@
+# Railway config for the API service (thaleia-api).
+# The ingest cron service uses the same image with a different start command
+# and a cron schedule; see README.md "Deployment (Railway)". Railway reads one
+# config file per service, so the cron service's settings are set in its
+# service settings (or a separate config file path), not here.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "thaleia-api"
+healthcheckPath = "/healthz"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

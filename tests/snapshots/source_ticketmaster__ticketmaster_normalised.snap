@@ -1,0 +1,119 @@
+---
+source: tests/source_ticketmaster.rs
+expression: normalised
+---
+[
+  [
+    "Z698xZG2Z17aTalks",
+    {
+      "title": "Saturday Talks: Liz Stumpf on LANZA Atelier’s 2026 Serpentine Pavilion",
+      "description": "Free, booking essential. Accessible venue.",
+      "venue_name": "Serpentine Pavilion",
+      "address": "Kensington Gardens, London, W2 3XA",
+      "lat": 51.5046,
+      "lng": -0.1756,
+      "starts_at": "2026-10-10T11:00:00Z",
+      "ends_at": null,
+      "price": {
+        "is_free": true,
+        "min": "0",
+        "max": "0",
+        "currency": "GBP"
+      },
+      "url": "https://www.ticketmaster.co.uk/saturday-talks-liz-stumpf/event/1F00612ABC",
+      "image_url": "https://s1.ticketm.net/dam/a/alks/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+      "category": "talk",
+      "tags": [
+        "lecture/seminar",
+        "miscellaneous theatre",
+        "arts & theatre"
+      ],
+      "dedupe_key": "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion|2026-10-10|serpentine-pavilion"
+    }
+  ],
+  [
+    "Z698xZG2Z17aLion",
+    null
+  ],
+  [
+    "Z698xZG2Z17aFair",
+    {
+      "title": "London Art Fair 2027",
+      "description": "Modern & contemporary art from 100+ galleries. Talks programme daily.",
+      "venue_name": "Business Design Centre",
+      "address": "52 Upper Street, London, N1 0QH",
+      "lat": 51.5374,
+      "lng": -0.1057,
+      "starts_at": "2027-01-20T11:00:00Z",
+      "ends_at": "2027-01-24T18:00:00Z",
+      "price": {
+        "is_free": false,
+        "min": "18.5",
+        "max": "32",
+        "currency": "GBP"
+      },
+      "url": "https://www.ticketmaster.co.uk/london-art-fair/event/1F00612GHI",
+      "image_url": "https://s1.ticketm.net/dam/a/fair/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+      "category": "expo",
+      "tags": [
+        "art",
+        "hobby/special interest expos",
+        "miscellaneous"
+      ],
+      "dedupe_key": "london-art-fair-2027|2027-01-20|business-design"
+    }
+  ],
+  [
+    "Z698xZG2Z17aNoor",
+    {
+      "title": "Noor: Light Installations",
+      "description": null,
+      "venue_name": "Barbican Centre",
+      "address": "Silk Street, London, EC2Y 8DS",
+      "lat": 51.5202,
+      "lng": -0.0938,
+      "starts_at": "2026-11-05T10:00:00Z",
+      "ends_at": "2027-02-28T18:00:00Z",
+      "price": {
+        "is_free": false,
+        "min": "16",
+        "max": "16",
+        "currency": "GBP"
+      },
+      "url": "https://www.ticketmaster.co.uk/noor/event/1F00612JKL",
+      "image_url": "https://s1.ticketm.net/dam/a/noor/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+      "category": "exhibition",
+      "tags": [
+        "fine art",
+        "arts & theatre"
+      ],
+      "dedupe_key": "noor-light-installations|2026-11-05|barbican"
+    }
+  ],
+  [
+    "Z698xZG2Z17aXmas",
+    {
+      "title": "Christmas Lecture Preview: The Science of Colour",
+      "description": null,
+      "venue_name": "Royal Institution",
+      "address": "21 Albemarle Street, London, W1S 4BS",
+      "lat": 51.5099,
+      "lng": -0.1426,
+      "starts_at": "2026-12-02T19:00:00Z",
+      "ends_at": null,
+      "price": {
+        "is_free": false,
+        "min": null,
+        "max": null,
+        "currency": null
+      },
+      "url": "https://www.ticketmaster.co.uk/xmas-lecture/event/1F00612MNO",
+      "image_url": "https://s1.ticketm.net/dam/a/xmas/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+      "category": "talk",
+      "tags": [
+        "miscellaneous"
+      ],
+      "dedupe_key": "christmas-lecture-preview-science-of-colour|2026-12-02|royal-institution"
+    }
+  ]
+]

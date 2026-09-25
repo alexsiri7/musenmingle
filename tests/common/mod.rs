@@ -26,9 +26,9 @@ impl TestDb {
             if std::env::var("THALEIA_REQUIRE_DB").is_ok_and(|v| v == "1") {
                 panic!("THALEIA_REQUIRE_DB=1 but TEST_DATABASE_URL is not set");
             }
-            eprintln!(
+            notice(&format!(
                 "SKIPPING {test_name}: TEST_DATABASE_URL is not set (see README: Local development)"
-            );
+            ));
             return None;
         };
         let name = format!("thaleia_test_{}", uuid::Uuid::new_v4().simple());
@@ -84,6 +84,22 @@ impl TestDb {
         .await
         .expect("DROP DATABASE");
     }
+}
+
+/// Print a line that stays visible although libtest captures test output
+/// (it captures `std::io::stderr()` too, so write to fd 2 directly).
+pub fn notice(line: &str) {
+    #[cfg(unix)]
+    {
+        use std::io::Write;
+        use std::os::fd::FromRawFd;
+        // SAFETY: fd 2 is open for the life of the process; ManuallyDrop
+        // prevents closing it.
+        let mut err = std::mem::ManuallyDrop::new(unsafe { std::fs::File::from_raw_fd(2) });
+        let _ = writeln!(err, "{line}");
+    }
+    #[cfg(not(unix))]
+    eprintln!("{line}");
 }
 
 /// Read a fixture file relative to `tests/fixtures`.

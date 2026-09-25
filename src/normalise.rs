@@ -274,8 +274,8 @@ pub fn price_from_amounts(
     let is_free = max.is_some_and(|m| m.is_zero());
     Price {
         is_free,
-        min: min.map(|d| d.round_dp(2)),
-        max: max.map(|d| d.round_dp(2)),
+        min: min.map(|d| d.round_dp(2).normalize()),
+        max: max.map(|d| d.round_dp(2).normalize()),
         currency: currency
             .map(|c| c.trim().to_ascii_uppercase())
             .filter(|c| !c.is_empty()),

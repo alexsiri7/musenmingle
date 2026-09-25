@@ -198,10 +198,14 @@ fn update_from_values(set: &str) -> String {
 
 /// Insert an event or merge it into an existing one, and link the source.
 ///
-/// 1. If this `(source, source_event_id)` is already linked, the linked event
-///    is refreshed with the new values (the source owns its copy). If the
-///    refreshed dedupe key now belongs to a different event, the link moves
-///    there instead and the old event is deleted if nothing else links to it.
+/// 1. If this `(source, source_event_id)` is already linked:
+///    * sole source of the event → refreshed with the new values (the source
+///      owns its copy, so title/date corrections apply);
+///    * event shared with other sources → gaps filled only (no flip-flopping
+///      between sources' spellings); if the key changed, the source's copy is
+///      split off into a new event;
+///    * if the new dedupe key belongs to a different event, the link moves
+///      there and the old event is deleted if nothing else links to it.
 /// 2. Otherwise the event is inserted, or — when an event with the same
 ///    `dedupe_key` exists (e.g. from another source) — merged into it by
 ///    filling gaps only.
@@ -243,22 +247,48 @@ async fn upsert_event_tx(
 
     let mut orphan_candidate: Option<Uuid> = None;
     let outcome = match (linked, holder) {
-        // Same source, key unchanged or free: refresh in place.
-        (Some(id), None) => {
-            refresh(tx, id, event).await?;
-            UpsertOutcome {
-                event_id: id,
-                created: false,
-            }
-        }
-        (Some(id), Some(h)) if h == id => {
-            refresh(tx, id, event).await?;
-            UpsertOutcome {
-                event_id: id,
-                created: false,
+        // Already linked from this source, and the (possibly new) key is
+        // free or still ours.
+        (Some(id), h) if h.is_none() || h == Some(id) => {
+            let other_sources: i64 = sqlx::query_scalar(
+                "SELECT count(*) FROM events.event_sources
+                 WHERE event_id = $1 AND source_id <> $2",
+            )
+            .bind(id)
+            .bind(source_id)
+            .fetch_one(&mut **tx)
+            .await?;
+            if other_sources == 0 {
+                // Sole owner: the source is authoritative, refresh in place.
+                refresh(tx, id, event).await?;
+                UpsertOutcome {
+                    event_id: id,
+                    created: false,
+                }
+            } else if h == Some(id) {
+                // Shared event: only fill gaps, so sources don't flip-flop.
+                fill_gaps(tx, id, event).await?;
+                UpsertOutcome {
+                    event_id: id,
+                    created: false,
+                }
+            } else {
+                // Shared event but this source now describes something else
+                // (key changed): split it off into its own event.
+                let (new_id,): (Uuid,) = bind_event_as(
+                    sqlx::query_as(AssertSqlSafe(format!("{EVENT_INSERT} RETURNING id"))),
+                    event,
+                )
+                .fetch_one(&mut **tx)
+                .await?;
+                UpsertOutcome {
+                    event_id: new_id,
+                    created: true,
+                }
             }
         }
         // Same source, but its new key collides with another event: move.
+        (Some(_), None) => unreachable!("covered by the first arm's guard"),
         (Some(old), Some(other)) => {
             fill_gaps(tx, other, event).await?;
             orphan_candidate = Some(old);

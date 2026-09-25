@@ -12,6 +12,10 @@
 //! * Quirk: JSON-LD `offers.price` is unreliable (e.g. `"107."` for a £10/£7
 //!   ticket). The human-readable "Price: ..." line in the page banner is
 //!   preferred (CSS fallback), JSON-LD price only when it is absent.
+//! * Not every "What's on" page is an event we want: online programmes
+//!   (`OnlineEventAttendanceMode`) and open-ended projects/research strands
+//!   (JSON-LD ranges longer than [`MAX_RANGE_DAYS`], e.g. one ending in 2100)
+//!   are skipped (`Ok(None)`).
 //! * Venues are the Serpentine's own buildings; addresses/coordinates come
 //!   from the static table in [`venue_details`].
 
@@ -32,6 +36,8 @@ use crate::normalise::{
 pub const KEY: &str = "serpentine-galleries";
 /// Upper bound on detail pages fetched per run (≈ 1 min at 1 req / 2 s).
 pub const MAX_DETAIL_PAGES: usize = 30;
+/// Ranges longer than this are ongoing projects, not exhibitions.
+pub const MAX_RANGE_DAYS: i64 = 366;
 const LISTING_PATH: &str = "/whats-on/";
 const NON_EVENT_SLUGS: &[&str] = &["archive", "page"];
 
@@ -162,6 +168,16 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .and_then(Value::as_str)
         .and_then(parse_london_wall_clock)
         .filter(|e| *e > starts_at);
+
+    let online = ev
+        .get("eventAttendanceMode")
+        .and_then(Value::as_str)
+        .is_some_and(|m| m.contains("OnlineEventAttendanceMode"));
+    let open_ended =
+        ends_at.is_some_and(|e| e - starts_at > chrono::Duration::days(MAX_RANGE_DAYS));
+    if online || open_ended {
+        return Ok(None);
+    }
 
     let location = str_or_name(ev, "location");
     let (venue_name, address, lat, lng) = match location.and_then(venue_details) {
