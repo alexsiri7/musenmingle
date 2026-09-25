@@ -1,0 +1,46 @@
+[package]
+name = "thaleia"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "UNLICENSED"
+publish = false
+description = "London cultural events for creative people: ingestion backend and read API"
+
+[lib]
+name = "thaleia"
+path = "src/lib.rs"
+
+[[bin]]
+name = "thaleia-api"
+path = "src/bin/thaleia-api.rs"
+
+[[bin]]
+name = "thaleia-ingest"
+path = "src/bin/thaleia-ingest.rs"
+
+[dependencies]
+anyhow = "1"
+async-trait = "0.1"
+axum = "0.8"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+chrono-tz = "0.10"
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json", "query"] }
+rust_decimal = { version = "1", features = ["serde-with-str"] }
+scraper = "0.27"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sqlx = { version = "0.9", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls", "migrate", "macros", "chrono", "uuid", "json", "rust_decimal", "sqlx-toml"] }
+texting_robots = "0.2"
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync", "signal"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+url = "2"
+uuid = { version = "1", features = ["v4", "serde"] }
+
+[dev-dependencies]
+insta = { version = "1", features = ["json", "redactions"] }
+tokio = { version = "1", features = ["test-util"] }
+tower = { version = "0.5", features = ["util"] }
+wiremock = "0.6"
