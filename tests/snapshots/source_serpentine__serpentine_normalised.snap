@@ -1,0 +1,272 @@
+---
+source: tests/source_serpentine.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "West Carriage Drive, Kensington Gardens, London W2 2AR",
+      "category": "exhibition",
+      "dedupe_key": "amar-kanwar|2026-09-23|serpentine-north",
+      "description": "This major solo exhibition unfolds as a site-specific installation, bringing together new and existing films to transform Serpentine North into a meditative visual and sonic environment.",
+      "ends_at": "2027-01-31T18:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2025/10/lr2-SaM-amar-kanwar-IMG_8453-AA.jpg",
+      "lat": 51.5055,
+      "lng": -0.1718,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-23T09:00:00Z",
+      "tags": [
+        "contemporary-art"
+      ],
+      "title": "Amar Kanwar",
+      "url": "https://www.serpentinegalleries.org/whats-on/amar-kanwar-exhibition/",
+      "venue_name": "Serpentine North Gallery"
+    },
+    "price_text": null,
+    "slug": "amar-kanwar-exhibition",
+    "source_event_id": "amar-kanwar-exhibition"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "changing-play",
+    "source_event_id": "changing-play"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "future-art-ecosystems",
+    "source_event_id": "future-art-ecosystems"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "community",
+      "dedupe_key": "how-we-hold-rehearsals-for-art-social-change|2024-05-01|serpentine-south",
+      "description": "A book inviting arts educators, cultural workers, facilitators and organisers, who want to use creative practice to work towards change, through personal and social transformation.",
+      "ends_at": null,
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2024/05/LEAD-IMAGE.jpg",
+      "lat": 51.5045,
+      "lng": -0.1751,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2024-04-30T23:00:00Z",
+      "tags": [
+        "contemporary-art"
+      ],
+      "title": "How We Hold: Rehearsals for Art and Social Change",
+      "url": "https://www.serpentinegalleries.org/whats-on/how-we-hold-rehearsals-for-art-and-social-change-resource/",
+      "venue_name": "Serpentine South Gallery"
+    },
+    "price_text": null,
+    "slug": "how-we-hold-rehearsals-for-art-and-social-change-resource",
+    "source_event_id": "how-we-hold-rehearsals-for-art-and-social-change-resource"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "exhibition",
+      "dedupe_key": "jesus-rafael-soto-penetrable-bbl-jaune|2026-06-16|serpentine-south",
+      "description": "Presented in Kensington Gardens, Pénétrable BBL Jaune is a public art sculpture, part of Soto’s celebrated Pénétrable series.",
+      "ends_at": "2026-10-24T23:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/06/Serp_Soto_2026_View8_002.1_web-banner.jpg",
+      "lat": 51.5045,
+      "lng": -0.1751,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-06-15T23:00:00Z",
+      "tags": [
+        "contemporary-art"
+      ],
+      "title": "Jesús Rafael Soto: Pénétrable BBL Jaune",
+      "url": "https://www.serpentinegalleries.org/whats-on/jesus-rafael-soto-penetrable-bbl-jaune/",
+      "venue_name": "Serpentine South Gallery"
+    },
+    "price_text": null,
+    "slug": "jesus-rafael-soto-penetrable-bbl-jaune",
+    "source_event_id": "jesus-rafael-soto-penetrable-bbl-jaune"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "exhibition",
+      "dedupe_key": "justin-caguiat-change-ringing|2026-10-08|serpentine-south",
+      "description": "Discover Justin Caguiat in his first UK institutional exhibition. Explore painting, sculpture, printmaking, sound and film in a site-responsive installation.",
+      "ends_at": "2027-01-10T18:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/07/JUSTIN-CAGUIAT_1920x1080px_14JUL26.jpg",
+      "lat": 51.5045,
+      "lng": -0.1751,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-08T09:00:00Z",
+      "tags": [
+        "contemporary-art"
+      ],
+      "title": "Justin Caguiat: Change Ringing",
+      "url": "https://www.serpentinegalleries.org/whats-on/justin-caguiat-change-ringing/",
+      "venue_name": "Serpentine South Gallery"
+    },
+    "price_text": null,
+    "slug": "justin-caguiat-change-ringing",
+    "source_event_id": "justin-caguiat-change-ringing"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "legal-lab",
+    "source_event_id": "legal-lab"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "community",
+      "dedupe_key": "park-nights-2026-ebun-sodipo-rosa-johan-uddoh|2026-09-25|serpentine-pavilion",
+      "description": "Park Nights 2026 presents Ebun Sodipo and Rosa-Johan Uddoh's Atlantic Cruises: The Sex Tour, in the 2026 Serpentine Pavilion.",
+      "ends_at": "2026-09-25T21:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/07/Ebun-Sodipo-The-Way-Her-Teeth-Settled-2025-as-part-of-Cardion-Nights-at-the-ICA-London.-Photo-Christa-Holka_2-1.jpg",
+      "lat": 51.5046,
+      "lng": -0.1756,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "7"
+      },
+      "starts_at": "2026-09-25T19:00:00Z",
+      "tags": [
+        "contemporary-art",
+        "performance",
+        "architecture"
+      ],
+      "title": "Park Nights 2026: Ebun Sodipo and Rosa-Johan Uddoh",
+      "url": "https://www.serpentinegalleries.org/whats-on/park-nights-2026-ebun-sodipo-and-rosa-johan-uddoh/",
+      "venue_name": "Serpentine Pavilion"
+    },
+    "price_text": "Price: £10, £7 conc.",
+    "slug": "park-nights-2026-ebun-sodipo-and-rosa-johan-uddoh",
+    "source_event_id": "park-nights-2026-ebun-sodipo-and-rosa-johan-uddoh"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "community",
+      "dedupe_key": "park-nights-2026-shala-miller|2026-10-02|serpentine-pavilion",
+      "description": "Park Nights 2026 presents hideandseek, an evening of improvised vocal performance with Shala Miller.",
+      "ends_at": "2026-10-03T21:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/07/Sequence-01.00_19_11_12.Still033.jpg",
+      "lat": 51.5046,
+      "lng": -0.1756,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "7"
+      },
+      "starts_at": "2026-10-02T19:00:00Z",
+      "tags": [
+        "contemporary-art",
+        "performance",
+        "architecture"
+      ],
+      "title": "Park Nights 2026: Shala Miller",
+      "url": "https://www.serpentinegalleries.org/whats-on/park-nights-2026-shala-miller/",
+      "venue_name": "Serpentine Pavilion"
+    },
+    "price_text": "Price: £10, £7 conc.",
+    "slug": "park-nights-2026-shala-miller",
+    "source_event_id": "park-nights-2026-shala-miller"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "talk",
+      "dedupe_key": "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion|2026-10-10|serpentine-pavilion",
+      "description": "Liz Stumpf, Assistant Exhibitions Curator, leads a tour of the 2026 Serpentine Pavilion a serpentine by LANZA atelier.",
+      "ends_at": "2026-10-10T12:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/06/Serpentine-Pavilion-2026_Exterior-View_1_1576.jpg",
+      "lat": 51.5046,
+      "lng": -0.1756,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-10T11:00:00Z",
+      "tags": [
+        "contemporary-art",
+        "architecture"
+      ],
+      "title": "Saturday Talks: Liz Stumpf on LANZA atelier's 2026 Serpentine Pavilion",
+      "url": "https://www.serpentinegalleries.org/whats-on/saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion-2/",
+      "venue_name": "Serpentine Pavilion"
+    },
+    "price_text": null,
+    "slug": "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion-2",
+    "source_event_id": "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion-2"
+  },
+  {
+    "event": {
+      "address": "Kensington Gardens, London W2 3XA",
+      "category": "exhibition",
+      "dedupe_key": "serpentine-pavilion-2026-by-lanza-atelier|2026-06-06|serpentine-pavilion",
+      "description": "Serpentine Pavilion 2026: a serpentine by LANZA atelier, founded by Isabel Abascal and Alessandro Arienzo",
+      "ends_at": "2026-10-25T18:00:00Z",
+      "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/06/Serpentine-Pavilion-2026_Aerial-View_6_1989.jpg",
+      "lat": 51.5046,
+      "lng": -0.1756,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-06-05T23:00:00Z",
+      "tags": [
+        "contemporary-art",
+        "architecture"
+      ],
+      "title": "Serpentine Pavilion 2026 by LANZA atelier",
+      "url": "https://www.serpentinegalleries.org/whats-on/serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier/",
+      "venue_name": "Serpentine Pavilion"
+    },
+    "price_text": null,
+    "slug": "serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier",
+    "source_event_id": "serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "serpentine-podcast",
+    "source_event_id": "serpentine-podcast"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "support-structures-for-support-structures",
+    "source_event_id": "support-structures-for-support-structures"
+  },
+  {
+    "event": null,
+    "price_text": null,
+    "slug": "the-delusion",
+    "source_event_id": "the-delusion"
+  }
+]

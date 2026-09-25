@@ -1,0 +1,15 @@
+# SQLx configuration (requires the `sqlx-toml` feature, enabled in Cargo.toml).
+#
+# Thaleia lives inside a shared Postgres. Everything it owns MUST be in the
+# `events` schema, including sqlx's migration bookkeeping table, which would
+# otherwise be created as `public._sqlx_migrations`.
+#
+# This file is read by `sqlx::migrate!()` at compile time AND by `sqlx-cli`,
+# so both paths agree. `src/db.rs` also sets the table name explicitly and a
+# unit test asserts the macro picked this value up.
+#
+# Do NOT add `create-schemas` here: `CREATE SCHEMA IF NOT EXISTS` requires
+# CREATE on the database even when the schema already exists, which the
+# restricted `thaleia` role does not have (see ops/sql/create-role.sql).
+[migrate]
+table-name = "events._sqlx_migrations"

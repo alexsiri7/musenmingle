@@ -1,0 +1,20 @@
+---
+source: tests/source_serpentine.rs
+expression: paths
+---
+[
+  "/whats-on/serpentine-podcast/",
+  "/whats-on/amar-kanwar-exhibition/",
+  "/whats-on/justin-caguiat-change-ringing/",
+  "/whats-on/serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier/",
+  "/whats-on/jesus-rafael-soto-penetrable-bbl-jaune/",
+  "/whats-on/park-nights-2026-ebun-sodipo-and-rosa-johan-uddoh/",
+  "/whats-on/park-nights-2026-shala-miller/",
+  "/whats-on/saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion-2/",
+  "/whats-on/future-art-ecosystems/",
+  "/whats-on/how-we-hold-rehearsals-for-art-and-social-change-resource/",
+  "/whats-on/support-structures-for-support-structures/",
+  "/whats-on/changing-play/",
+  "/whats-on/legal-lab/",
+  "/whats-on/the-delusion/"
+]

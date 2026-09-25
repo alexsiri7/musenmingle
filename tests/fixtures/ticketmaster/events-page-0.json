@@ -1,0 +1,366 @@
+{
+  "_embedded": {
+    "events": [
+      {
+        "name": "Saturday Talks: Liz Stumpf on LANZA Atelier’s 2026 Serpentine Pavilion",
+        "type": "event",
+        "id": "Z698xZG2Z17aTalks",
+        "test": false,
+        "url": "https://www.ticketmaster.co.uk/saturday-talks-liz-stumpf/event/1F00612ABC",
+        "locale": "en-gb",
+        "images": [
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/alks/RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/alks/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/alks/RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          }
+        ],
+        "sales": {
+          "public": {
+            "startDateTime": "2026-06-01T09:00:00Z",
+            "endDateTime": "2026-10-10T11:00:00Z"
+          }
+        },
+        "dates": {
+          "start": {
+            "localDate": "2026-10-10",
+            "localTime": "12:00:00",
+            "dateTime": "2026-10-10T11:00:00Z",
+            "dateTBD": false,
+            "dateTBA": false,
+            "timeTBA": false,
+            "noSpecificTime": false
+          },
+          "timezone": "Europe/London",
+          "status": {
+            "code": "onsale"
+          },
+          "spanMultipleDays": false
+        },
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7na",
+              "name": "Arts & Theatre"
+            },
+            "genre": {
+              "id": "KnvZfZ7v7ld",
+              "name": "Miscellaneous Theatre"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7vAvJ",
+              "name": "Lecture/Seminar"
+            },
+            "family": false
+          }
+        ],
+        "_embedded": {
+          "venues": [
+            {
+              "name": "Serpentine Pavilion",
+              "type": "venue",
+              "id": "KovZ9177Tz0",
+              "test": false,
+              "locale": "en-gb",
+              "postalCode": "W2 3XA",
+              "timezone": "Europe/London",
+              "city": {
+                "name": "London"
+              },
+              "country": {
+                "name": "Great Britain",
+                "countryCode": "GB"
+              },
+              "address": {
+                "line1": "Kensington Gardens"
+              },
+              "location": {
+                "longitude": "-0.1756",
+                "latitude": "51.5046"
+              },
+              "_links": {
+                "self": {
+                  "href": "/discovery/v2/venues/KovZ9177Tz0?locale=en-gb"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/events/Z698xZG2Z17aTalks?locale=en-gb"
+          }
+        },
+        "priceRanges": [
+          {
+            "type": "standard including fees",
+            "currency": "GBP",
+            "min": 0,
+            "max": 0
+          }
+        ],
+        "info": "Free, booking essential. <b>Accessible</b> venue."
+      },
+      {
+        "name": "The Lion King",
+        "type": "event",
+        "id": "Z698xZG2Z17aLion",
+        "test": false,
+        "url": "https://www.ticketmaster.co.uk/the-lion-king/event/1F00612DEF",
+        "locale": "en-gb",
+        "images": [
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/lion/RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/lion/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/lion/RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          }
+        ],
+        "sales": {
+          "public": {
+            "startDateTime": "2026-06-01T09:00:00Z",
+            "endDateTime": "2026-10-03T18:30:00Z"
+          }
+        },
+        "dates": {
+          "start": {
+            "localDate": "2026-10-03",
+            "localTime": "19:30:00",
+            "dateTime": "2026-10-03T18:30:00Z"
+          },
+          "timezone": "Europe/London",
+          "status": {
+            "code": "onsale"
+          },
+          "spanMultipleDays": false
+        },
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7na",
+              "name": "Arts & Theatre"
+            },
+            "genre": {
+              "id": "KnvZfZ7v7l1",
+              "name": "Theatre"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7v7lv",
+              "name": "Musical"
+            },
+            "family": false
+          }
+        ],
+        "_embedded": {
+          "venues": [
+            {
+              "name": "Lyceum Theatre",
+              "type": "venue",
+              "id": "KovZ9177Lyc",
+              "test": false,
+              "locale": "en-gb",
+              "postalCode": "WC2E 7RQ",
+              "timezone": "Europe/London",
+              "city": {
+                "name": "London"
+              },
+              "country": {
+                "name": "Great Britain",
+                "countryCode": "GB"
+              },
+              "address": {
+                "line1": "21 Wellington Street"
+              },
+              "location": {
+                "longitude": "-0.1199",
+                "latitude": "51.5115"
+              },
+              "_links": {
+                "self": {
+                  "href": "/discovery/v2/venues/KovZ9177Lyc?locale=en-gb"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/events/Z698xZG2Z17aLion?locale=en-gb"
+          }
+        },
+        "priceRanges": [
+          {
+            "type": "standard including fees",
+            "currency": "GBP",
+            "min": 35.0,
+            "max": 180.0
+          }
+        ]
+      },
+      {
+        "name": "London Art Fair 2027",
+        "type": "event",
+        "id": "Z698xZG2Z17aFair",
+        "test": false,
+        "url": "https://www.ticketmaster.co.uk/london-art-fair/event/1F00612GHI",
+        "locale": "en-gb",
+        "images": [
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/fair/RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/fair/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/fair/RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          }
+        ],
+        "sales": {
+          "public": {
+            "startDateTime": "2026-06-01T09:00:00Z",
+            "endDateTime": "2027-01-20T11:00:00Z"
+          }
+        },
+        "dates": {
+          "start": {
+            "localDate": "2027-01-20",
+            "localTime": "11:00:00",
+            "dateTime": "2027-01-20T11:00:00Z"
+          },
+          "timezone": "Europe/London",
+          "status": {
+            "code": "onsale"
+          },
+          "spanMultipleDays": true,
+          "end": {
+            "localDate": "2027-01-24",
+            "localTime": "18:00:00",
+            "dateTime": "2027-01-24T18:00:00Z",
+            "approximate": false,
+            "noSpecificTime": false
+          }
+        },
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7n1",
+              "name": "Miscellaneous"
+            },
+            "genre": {
+              "id": "KnvZfZ7vAAI",
+              "name": "Hobby/Special Interest Expos"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7vFJA",
+              "name": "Art"
+            },
+            "family": false
+          }
+        ],
+        "_embedded": {
+          "venues": [
+            {
+              "name": "Business Design Centre",
+              "type": "venue",
+              "id": "KovZ9177Bdc",
+              "test": false,
+              "locale": "en-gb",
+              "postalCode": "N1 0QH",
+              "timezone": "Europe/London",
+              "city": {
+                "name": "London"
+              },
+              "country": {
+                "name": "Great Britain",
+                "countryCode": "GB"
+              },
+              "address": {
+                "line1": "52 Upper Street"
+              },
+              "location": {
+                "longitude": "-0.1057",
+                "latitude": "51.5374"
+              },
+              "_links": {
+                "self": {
+                  "href": "/discovery/v2/venues/KovZ9177Bdc?locale=en-gb"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/events/Z698xZG2Z17aFair?locale=en-gb"
+          }
+        },
+        "priceRanges": [
+          {
+            "type": "standard including fees",
+            "currency": "GBP",
+            "min": 18.5,
+            "max": 32.0
+          }
+        ],
+        "description": "<p>Modern &amp; contemporary art from 100+ galleries.</p>\n<p>Talks programme daily.</p>"
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "/discovery/v2/events.json?page=0&size=3"
+    }
+  },
+  "page": {
+    "size": 3,
+    "totalElements": 5,
+    "totalPages": 2,
+    "number": 0
+  }
+}

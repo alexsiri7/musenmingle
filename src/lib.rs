@@ -1,0 +1,27 @@
+//! Thaleia: London cultural events for creative people.
+//!
+//! This crate contains the ingestion backend (sources, normalisation, the
+//! ingest runner and health checks) and the HTTP API skeleton. See
+//! `README.md` for the architecture overview and `CLAUDE.md` for invariants.
+
+pub mod api;
+pub mod config;
+pub mod db;
+pub mod fetch;
+pub mod github;
+pub mod health;
+pub mod model;
+pub mod normalise;
+pub mod repo;
+pub mod runner;
+pub mod sources;
+
+/// Crate version, used in the bot User-Agent.
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+/// Initialise `tracing` from `RUST_LOG` (default `info`).
+pub fn init_tracing() {
+    use tracing_subscriber::EnvFilter;
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+    let _ = tracing_subscriber::fmt().with_env_filter(filter).try_init();
+}

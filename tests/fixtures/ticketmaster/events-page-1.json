@@ -1,0 +1,238 @@
+{
+  "_embedded": {
+    "events": [
+      {
+        "name": "Noor: Light Installations",
+        "type": "event",
+        "id": "Z698xZG2Z17aNoor",
+        "test": false,
+        "url": "https://www.ticketmaster.co.uk/noor/event/1F00612JKL",
+        "locale": "en-gb",
+        "images": [
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/noor/RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/noor/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/noor/RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          }
+        ],
+        "sales": {
+          "public": {
+            "startDateTime": "2026-06-01T09:00:00Z",
+            "endDateTime": "2026-12-31T00:00:00Z"
+          }
+        },
+        "dates": {
+          "start": {
+            "localDate": "2026-11-05",
+            "localTime": "10:00:00",
+            "dateTBD": false,
+            "timeTBA": false
+          },
+          "timezone": "Europe/London",
+          "status": {
+            "code": "onsale"
+          },
+          "spanMultipleDays": true,
+          "end": {
+            "localDate": "2027-02-28",
+            "dateTime": "2027-02-28T18:00:00Z"
+          }
+        },
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7na",
+              "name": "Arts & Theatre"
+            },
+            "genre": {
+              "id": "KnvZfZ7v7nJ",
+              "name": "Fine Art"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7v7nE",
+              "name": "Fine Art"
+            },
+            "family": false
+          }
+        ],
+        "_embedded": {
+          "venues": [
+            {
+              "name": "Barbican Centre",
+              "type": "venue",
+              "id": "KovZ9177Brb",
+              "test": false,
+              "locale": "en-gb",
+              "postalCode": "EC2Y 8DS",
+              "timezone": "Europe/London",
+              "city": {
+                "name": "London"
+              },
+              "country": {
+                "name": "Great Britain",
+                "countryCode": "GB"
+              },
+              "address": {
+                "line1": "Silk Street"
+              },
+              "location": {
+                "longitude": "-0.0938",
+                "latitude": "51.5202"
+              },
+              "_links": {
+                "self": {
+                  "href": "/discovery/v2/venues/KovZ9177Brb?locale=en-gb"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/events/Z698xZG2Z17aNoor?locale=en-gb"
+          }
+        },
+        "priceRanges": [
+          {
+            "type": "standard including fees",
+            "currency": "GBP",
+            "min": 16,
+            "max": 16
+          }
+        ]
+      },
+      {
+        "name": "Christmas Lecture Preview: The Science of Colour",
+        "type": "event",
+        "id": "Z698xZG2Z17aXmas",
+        "test": false,
+        "url": "https://www.ticketmaster.co.uk/xmas-lecture/event/1F00612MNO",
+        "locale": "en-gb",
+        "images": [
+          {
+            "ratio": "3_2",
+            "url": "https://s1.ticketm.net/dam/a/xmas/RETINA_PORTRAIT_3_2.jpg",
+            "width": 640,
+            "height": 427,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/xmas/TABLET_LANDSCAPE_LARGE_16_9.jpg",
+            "width": 2048,
+            "height": 1152,
+            "fallback": false
+          },
+          {
+            "ratio": "16_9",
+            "url": "https://s1.ticketm.net/dam/a/xmas/RETINA_LANDSCAPE_16_9.jpg",
+            "width": 1136,
+            "height": 639,
+            "fallback": false
+          }
+        ],
+        "sales": {
+          "public": {
+            "startDateTime": "2026-06-01T09:00:00Z",
+            "endDateTime": "2026-12-02T19:00:00Z"
+          }
+        },
+        "dates": {
+          "start": {
+            "localDate": "2026-12-02",
+            "localTime": "19:00:00",
+            "dateTime": "2026-12-02T19:00:00Z"
+          },
+          "timezone": "Europe/London",
+          "status": {
+            "code": "onsale"
+          },
+          "spanMultipleDays": false
+        },
+        "classifications": [
+          {
+            "primary": true,
+            "segment": {
+              "id": "KZFzniwnSyZfZ7v7n1",
+              "name": "Miscellaneous"
+            },
+            "genre": {
+              "id": "KnvZfZ7vAAv",
+              "name": "Undefined"
+            },
+            "subGenre": {
+              "id": "KZazBEonSMnZfZ7vAvv",
+              "name": "Undefined"
+            },
+            "family": false
+          }
+        ],
+        "_embedded": {
+          "venues": [
+            {
+              "name": "Royal Institution",
+              "type": "venue",
+              "id": "KovZ9177Rcl",
+              "test": false,
+              "locale": "en-gb",
+              "postalCode": "W1S 4BS",
+              "timezone": "Europe/London",
+              "city": {
+                "name": "London"
+              },
+              "country": {
+                "name": "Great Britain",
+                "countryCode": "GB"
+              },
+              "address": {
+                "line1": "21 Albemarle Street"
+              },
+              "location": {
+                "longitude": "-0.1426",
+                "latitude": "51.5099"
+              },
+              "_links": {
+                "self": {
+                  "href": "/discovery/v2/venues/KovZ9177Rcl?locale=en-gb"
+                }
+              }
+            }
+          ]
+        },
+        "_links": {
+          "self": {
+            "href": "/discovery/v2/events/Z698xZG2Z17aXmas?locale=en-gb"
+          }
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": {
+      "href": "/discovery/v2/events.json?page=1&size=3"
+    }
+  },
+  "page": {
+    "size": 3,
+    "totalElements": 5,
+    "totalPages": 2,
+    "number": 1
+  }
+}
