@@ -408,6 +408,20 @@ mod tests {
     }
 
     #[test]
+    fn placeholder_start_without_a_clock_time_keeps_the_date_only() {
+        let node = serde_json::json!({
+            "title": "Talk",
+            "dateStart": "2026-10-07T00:00",
+            "dateEnd": "2026-10-07T03:00",
+            "duration": 180,
+            "timeText": "Open daily",
+        });
+        let event = normalise_payload(&node).unwrap().unwrap();
+        assert_eq!(event.starts_at.to_rfc3339(), "2026-10-06T23:00:00+00:00");
+        assert_eq!(event.ends_at, None);
+    }
+
+    #[test]
     fn postcode_outward_code() {
         assert_eq!(
             postcode_outward("Wapping Hydraulic Power Station, E1W 3SF").as_deref(),
