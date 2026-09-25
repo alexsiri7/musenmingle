@@ -199,8 +199,9 @@ async fn opens_one_issue_dedupes_and_closes_on_recovery() {
 }
 
 #[tokio::test]
-async fn consecutive_errors_trip_and_single_error_does_not() {
-    let Some(db) = TestDb::create("consecutive_errors_trip_and_single_error_does_not").await else {
+async fn single_failure_is_degraded_and_consecutive_errors_trip() {
+    let Some(db) = TestDb::create("single_failure_is_degraded_and_consecutive_errors_trip").await
+    else {
         return;
     };
     let pool = db.migrated_pool().await;
@@ -212,13 +213,17 @@ async fn consecutive_errors_trip_and_single_error_does_not() {
 
     add_run(&pool, &src, 30, 10, 0, true).await;
     add_run(&pool, &src, 20, 0, 1, false).await;
-    // One failed run after a good one: zero-events rule trips (avg 10 > 0).
+    // One failed run after a good one: below the K=2 threshold, degraded only.
     assert_eq!(
         hc.check_source(&pool, &src).await.unwrap(),
-        HealthAction::NoFiler
+        HealthAction::Degraded
     );
-    let db2 = repo::open_health_issue(&pool, src.id).await.unwrap();
-    assert!(db2.is_none(), "without a filer nothing is recorded");
+    assert!(
+        repo::open_health_issue(&pool, src.id)
+            .await
+            .unwrap()
+            .is_none()
+    );
 
     // A run with a partial error but a normal count: that is the second
     // consecutive run with errors, so the consecutive-errors rule trips.

@@ -3,8 +3,10 @@
 //! After every run of a source, [`evaluate`] applies three rules to its
 //! recent runs (newest first):
 //!
-//! 1. **Zero events**: the run found 0 events while the average of the last
-//!    `trailing_runs` successful (`ok`) runs before it is > 0.
+//! 1. **Zero events**: the run completed (`ok`) but found 0 events while the
+//!    average of the last `trailing_runs` successful runs before it is > 0.
+//!    (A failed run also records 0 events; failures are rule 2's job, so a
+//!    single transient 429/timeout does not open an issue.)
 //! 2. **Consecutive errors**: the last `consecutive_error_runs` runs
 //!    (including this one) all had errors or failed.
 //! 3. **Count drop**: the run found some events, but fewer than
@@ -126,7 +128,7 @@ pub fn evaluate(runs: &[RunStats], cfg: &HealthConfig) -> Vec<Trip> {
         trailing.iter().map(|&n| f64::from(n)).sum::<f64>() / trailing.len() as f64
     };
 
-    if current.events_found == 0 && !trailing.is_empty() && avg > 0.0 {
+    if current.ok && current.events_found == 0 && !trailing.is_empty() && avg > 0.0 {
         trips.push(Trip::ZeroEvents { trailing_avg: avg });
     }
 
@@ -420,9 +422,9 @@ mod tests {
                 vec![],
             ),
             (
-                "failed + zero after good history",
+                "two failures after good history",
                 vec![r(0, 1, false), r(0, 1, false), r(10, 0, true)],
-                vec!["zero", "errors"],
+                vec!["errors"],
             ),
             // Rule 3: >60% drop vs trailing average, needs 3 prior ok runs.
             (

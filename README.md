@@ -49,7 +49,7 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
   records `events.source_runs`, then runs the health checker.
 - **Health checks** (`src/health.rs`, `src/github.rs`): after each run a source
-  trips if (1) it found 0 events while its trailing average is > 0, (2) it had
+  trips if (1) a successful run found 0 events while its trailing average is > 0, (2) it had
   errors on 2 consecutive runs, or (3) its count dropped > 60 % vs the trailing
   average. A trip opens **one** GitHub issue `Scraper broken: <key>` labelled
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
@@ -134,15 +134,18 @@ Not deployed yet; nothing has been created on Railway. The intended setup is
 two services built from the same `Dockerfile` (multi-stage; the runtime image
 contains both binaries):
 
-1. **API service** — configured by `railway.toml`: start command
-   `thaleia-api`, health check `GET /healthz`. Env: `DATABASE_URL`,
-   `RUST_LOG`.
-2. **Ingest cron service** — same repo/Dockerfile, in the service settings set
-   *Custom Start Command* `thaleia-ingest` and *Cron Schedule* `*/15 * * * *`
-   (every 15 minutes). The process exits when done, as Railway cron requires.
-   Per-source `interval_minutes` in `events.sources` decides what actually
-   runs on each tick (Ticketmaster every 6 h, Serpentine daily), and an
-   advisory lock prevents overlapping runs. Env: `DATABASE_URL`,
+1. **API service** — reads `railway.toml` (the default config file):
+   start command `thaleia-api`, health check `GET /healthz`, restart on
+   failure. Env: `DATABASE_URL`, `RUST_LOG`.
+2. **Ingest cron service** — same repo and Dockerfile; in its service
+   settings set the *config-as-code file path* to `/railway.ingest.toml`
+   (config in code overrides the dashboard, so it must not read
+   `railway.toml`). That file sets start command `thaleia-ingest`,
+   `cronSchedule = "*/15 * * * *"` (every 15 minutes), no healthcheck and
+   `restartPolicyType = "NEVER"`. The process exits when done, as Railway cron
+   requires. Per-source `interval_minutes` in `events.sources` decides what
+   actually runs on each tick (Ticketmaster every 6 h, Serpentine daily), and
+   an advisory lock prevents overlapping runs. Env: `DATABASE_URL`,
    `TICKETMASTER_API_KEY`, `GITHUB_TOKEN`, `GITHUB_REPO`, `RUST_LOG`,
    optionally `RATE_LIMIT_*`, `SOURCE_TIMEOUT_SECS`.
 
