@@ -1,0 +1,604 @@
+---
+source: tests/source_somerset_house.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "jenkin-van-zyl-enclosure|2026-09-24|somerset-house",
+      "description": "A newly commissioned film and installation by Somerset House Studios artist Jenkin van Zyl.",
+      "ends_at": "2026-11-29T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/2_-_v2.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-23T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Jenkin van Zyl: Enclosure",
+      "url": "https://www.somersethouse.org.uk/whats-on/jenkin-van-zyl-enclosure",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "jenkin-van-zyl-enclosure",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/jenkin-van-zyl-enclosure"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "skate-at-somerset-house-with-virgin-atlantic-holidays|2026-11-11|somerset-house",
+      "description": "Now on sale. Skate at Somerset House with Virgin Atlantic Holidays returns this November.",
+      "ends_at": "2027-01-10T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Skate-26-27-Thumb.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T00:00:00Z",
+      "tags": [
+        "outdoor",
+        "skate"
+      ],
+      "title": "Skate at Somerset House with Virgin Atlantic Holidays",
+      "url": "https://www.somersethouse.org.uk/whats-on/skate-somerset-house",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "skate-somerset-house",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/skate-somerset-house"
+  },
+  {
+    "event": null,
+    "source_event_id": "courtauld-gallery",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/courtauld-gallery"
+  },
+  {
+    "event": null,
+    "source_event_id": "historical-highlights-tour",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/historical-highlights-tour"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "there-are-no-honest-poems-about-dead-women-jemma-desai|2026-07-30|somerset-house",
+      "description": "A new body of work by Somerset House Studios artist Jemma Desai, presented as an installation in G31.",
+      "ends_at": "2026-11-01T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Still_TANPADW_Jemma_Desai.jpeg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-07-29T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "There Are No Honest Poems About Dead Women: Jemma Desai",
+      "url": "https://www.somersethouse.org.uk/whats-on/g31-jemma-desai-there-are-no-honest-poems-about-dead-women",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "g31-jemma-desai-there-are-no-honest-poems-about-dead-women",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/g31-jemma-desai-there-are-no-honest-poems-about-dead-women"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "fleurs-de-villes-diana-in-support-of-diana-award|2026-09-16|somerset-house",
+      "description": "The world premiere of Fleurs de Villes DIANA in support of The Diana Award.",
+      "ends_at": "2026-10-05T23:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Whats_On_3000_x_2000_px.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-15T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Fleurs de Villes DIANA in Support of The Diana Award",
+      "url": "https://www.somersethouse.org.uk/whats-on/fleurs-de-villes-diana-in-support-of-the-diana-award",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "fleurs-de-villes-diana-in-support-of-the-diana-award",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/fleurs-de-villes-diana-in-support-of-the-diana-award"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "reviving-craft-reflection-of-mind|2026-09-16|somerset-house",
+      "description": "Featuring more than 60 artists, a landmark exhibition that traces China’s living craft heritage, exploring objects of art and design as mirrors of the mind.",
+      "ends_at": "2026-09-26T23:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Reviving_Craft_2.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-15T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Reviving Craft: Reflection of the Mind",
+      "url": "https://www.somersethouse.org.uk/whats-on/reviving-craft-reflection-of-the-mind",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "reviving-craft-reflection-of-the-mind",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/reviving-craft-reflection-of-the-mind"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "workshop",
+      "dedupe_key": "upgrade-yourself-monthly-building-your-own-creative-path-as-artist-curator|2026-10-07|somerset-house",
+      "description": "Join us for our October Upgrade Yourself Monthly with Dark Yellow Dot, to explore creating opportunities beyond traditional routes and carving out a path that works for you as an artist and curator.",
+      "ends_at": "2026-10-07T20:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Lauren_Studio_1.JPG",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-07T17:00:00Z",
+      "tags": [
+        "workshop",
+        "talk"
+      ],
+      "title": "Upgrade Yourself Monthly: Building Your Own Creative Path as an Artist and Curator",
+      "url": "https://www.somersethouse.org.uk/whats-on/upgrade-yourself-monthly-sessions/upgrade-yourself-monthly-build-your-own-creative-path",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "upgrade-yourself-monthly-sessions/upgrade-yourself-monthly-build-your-own-creative-path",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/upgrade-yourself-monthly-sessions/upgrade-yourself-monthly-build-your-own-creative-path"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "black-business-residency-cohort-6-showcase|2026-10-08|somerset-house",
+      "description": "Join us on 8 Oct as we showcase the creativity, innovation and impact of 24 Black-led businesses that have spent the past year developing their ventures through the programme.",
+      "ends_at": "2026-10-08T22:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Our-House-Our-Home-347-1.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-08T17:00:00Z",
+      "tags": [
+        "event"
+      ],
+      "title": "Black Business Residency Cohort 6 Showcase",
+      "url": "https://www.somersethouse.org.uk/whats-on/black-business-residency-cohort-6-showcase",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "black-business-residency-cohort-6-showcase",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/black-business-residency-cohort-6-showcase"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "upgrade-yourself-takeover-jenkin-van-zyl|2026-10-09|somerset-house",
+      "description": "This October, Upgrade Yourself is taking over Jenkin van Zyl’s ‘Enclosure’ exhibition for a night full of play, imagination and connection.",
+      "ends_at": "2026-10-09T21:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/imgonline-com-ua-CompressToSize-u4JzdfR4psx.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-09T17:00:00Z",
+      "tags": [
+        "takeover"
+      ],
+      "title": "Upgrade Yourself Takeover: Jenkin van Zyl",
+      "url": "https://www.somersethouse.org.uk/whats-on/upgrade-yourself-takeovers/jenkin-upgrade-yourself-takeover-2026",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "upgrade-yourself-takeovers/jenkin-upgrade-yourself-takeover-2026",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/upgrade-yourself-takeovers/jenkin-upgrade-yourself-takeover-2026"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "future-artists-programme|2026-10-14|somerset-house",
+      "description": "A 6-month creative learning and artist development opportunity for aspiring young artists ages 18-25.",
+      "ends_at": "2027-03-30T23:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/SH.MaterialMetamorphosis.PFiG-37_1.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [],
+      "title": "Future Artists Programme",
+      "url": "https://www.somersethouse.org.uk/whats-on/future-artists-programme/future-artists-programme",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "future-artists-programme/future-artists-programme",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/future-artists-programme/future-artists-programme"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "expo",
+      "dedupe_key": "1-54-contemporary-african-art-fair-2026|2026-10-15|somerset-house",
+      "description": "1-54 Contemporary African Art Fair returns to Somerset House for its fourteenth edition.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/1-54-2026-Header.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-14T23:00:00Z",
+      "tags": [
+        "art-fair",
+        "exhibition"
+      ],
+      "title": "1-54 Contemporary African Art Fair 2026",
+      "url": "https://www.somersethouse.org.uk/whats-on/1-54-contemporary-african-art-fair-2026",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "1-54-contemporary-african-art-fair-2026",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/1-54-contemporary-african-art-fair-2026"
+  },
+  {
+    "event": {
+      "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "category": "community",
+      "dedupe_key": "3-evenings|2026-10-16|wapping-hydraulic-power-station",
+      "description": "Somerset House Studios turns 10 with three nights of experiments in performance and technology.",
+      "ends_at": "2026-10-16T22:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/3_Evenings_listing.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-16T18:00:00Z",
+      "tags": [
+        "event",
+        "in-person"
+      ],
+      "title": "3 Evenings",
+      "url": "https://www.somersethouse.org.uk/whats-on/3-evenings-somerset-house-studios",
+      "venue_name": "Wapping Hydraulic Power Station"
+    },
+    "source_event_id": "3-evenings-somerset-house-studios",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/3-evenings-somerset-house-studios"
+  },
+  {
+    "event": {
+      "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "category": "community",
+      "dedupe_key": "3-evenings-friday|2026-10-16|wapping-hydraulic-power-station",
+      "description": "Live Performances: Gazelle Twin, Lawrence Lek, Jenkin van Zyl & Agnieszka Szczotka, SERAFINE1369. Interactive installations: Ayoung Kim, Xin Liu, Keiken and Louis Morlæ.",
+      "ends_at": "2026-10-16T22:30:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/3_Evenings_Friday_listing.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-16T18:00:00Z",
+      "tags": [
+        "event"
+      ],
+      "title": "3 Evenings: Friday",
+      "url": "https://www.somersethouse.org.uk/whats-on/3-evenings-friday",
+      "venue_name": "Wapping Hydraulic Power Station"
+    },
+    "source_event_id": "3-evenings-friday",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/3-evenings-friday"
+  },
+  {
+    "event": {
+      "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "category": "community",
+      "dedupe_key": "3-evenings-installations|2026-10-16|wapping-hydraulic-power-station",
+      "description": "World premieres of newly commissioned interactive installations from Ayoung Kim, Xin Liu and Keiken alongside a reimagined work from Louis Morlæ.",
+      "ends_at": "2026-10-16T22:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/3_Evenings_installations_listing.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-16T18:00:00Z",
+      "tags": [],
+      "title": "3 Evenings: Installations",
+      "url": "https://www.somersethouse.org.uk/whats-on/3-evenings-installations",
+      "venue_name": "Wapping Hydraulic Power Station"
+    },
+    "source_event_id": "3-evenings-installations",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/3-evenings-installations"
+  },
+  {
+    "event": {
+      "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "category": "community",
+      "dedupe_key": "3-evenings-saturday|2026-10-17|wapping-hydraulic-power-station",
+      "description": "Holly Blakey & Tai Shani, Team Rolfes, Gary Zhexi Zhang, and more.",
+      "ends_at": "2026-10-17T21:30:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/3_Evenings_saturday_listing.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-17T17:30:00Z",
+      "tags": [
+        "event"
+      ],
+      "title": "3 Evenings: Saturday",
+      "url": "https://www.somersethouse.org.uk/whats-on/3-evenings-saturday",
+      "venue_name": "Wapping Hydraulic Power Station"
+    },
+    "source_event_id": "3-evenings-saturday",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/3-evenings-saturday"
+  },
+  {
+    "event": {
+      "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "category": "community",
+      "dedupe_key": "3-evenings-sunday|2026-10-18|wapping-hydraulic-power-station",
+      "description": "Ligia Lewis, Lynn Hershman Leeson, Precious Renee Tucker and dmstfctn.",
+      "ends_at": "2026-10-18T18:29:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/3_Evenings_Sunday.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-18T14:30:00Z",
+      "tags": [
+        "event"
+      ],
+      "title": "3 Evenings: Sunday",
+      "url": "https://www.somersethouse.org.uk/whats-on/3-evenings-sunday",
+      "venue_name": "Wapping Hydraulic Power Station"
+    },
+    "source_event_id": "3-evenings-sunday",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/3-evenings-sunday"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "talk",
+      "dedupe_key": "enclosure-jenkin-van-zyl-in-conversation-with-adam-alston|2026-10-29|somerset-house",
+      "description": "An in conversation between Jenkin van Zyl and Adam Alston exploring the themes and making of Van Zyl’s new exhibition Enclosure.",
+      "ends_at": "2026-10-29T20:30:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Enclosure_2026_-_film_still_20.png",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-29T19:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Enclosure: Jenkin van Zyl in conversation with Adam Alston",
+      "url": "https://www.somersethouse.org.uk/whats-on/jenkin-van-zyl-enclosure-in-conversation",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "jenkin-van-zyl-enclosure-in-conversation",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/jenkin-van-zyl-enclosure-in-conversation"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "through-our-eyes-sami-art-culture|2026-11-06|somerset-house",
+      "description": "Step into a completely different world this winter. Through Our Eyes is the very first group exhibition in the UK to celebrate the vibrant art and culture of the Sámi people.",
+      "ends_at": "2027-02-07T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Narstudie_av_den_koloniala_maktens_fantasier_Olof_Foto_Jean-Baptiste_HEADE.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-06T00:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Through Our Eyes: Sámi Art and Culture",
+      "url": "https://www.somersethouse.org.uk/whats-on/through-our-eyes",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "through-our-eyes",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/through-our-eyes"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "skate-lates-with-aperol-spritz|2026-09-24|somerset-house",
+      "description": "Skate Lates with Aperol Spritz feature an extra special series of music nights throughout the season.",
+      "ends_at": "2026-11-12T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Skate-Lates-header.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-23T23:00:00Z",
+      "tags": [],
+      "title": "Skate Lates with Aperol Spritz",
+      "url": "https://www.somersethouse.org.uk/whats-on/skate-lates-26-27",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "skate-lates-26-27",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/skate-lates-26-27"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "skate-school-kids-skate-club|2026-11-14|somerset-house",
+      "description": "Build confidence or improve your skills at our annual sell-out Skate School and Kids Skate Club.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Skate_School_.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T00:00:00Z",
+      "tags": [],
+      "title": "Skate School & Kids Skate Club",
+      "url": "https://www.somersethouse.org.uk/whats-on/skate-school",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "skate-school",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/skate-school"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "community",
+      "dedupe_key": "k-pop-party|2026-11-23|somerset-house",
+      "description": "On 23 November, we’re teaming up with the Korean Cultural Centre UK (KCCUK) to bring our very first K-Pop Party to the ice.",
+      "ends_at": "2026-11-23T22:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/SKATE_LATES_Rock_Angel_2024_Chloe_Hashemi-9376.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-23T19:00:00Z",
+      "tags": [],
+      "title": "K-pop Party",
+      "url": "https://www.somersethouse.org.uk/whats-on/k-pop-party",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "k-pop-party",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/k-pop-party"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "talk",
+      "dedupe_key": "grounding-practice-access-capacity-with-iarlaith-ni-fheorais|2026-11-25|somerset-house",
+      "description": "Curator and writer Iarlaith Ní Fheorais shares tangible approaches to how access can shape artistic practice, collaboration and sustainability.",
+      "ends_at": "2026-11-25T19:30:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/082_Bridget_OGorman_Support__Work_2023.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-25T18:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Grounding Practice: Access Capacity with Iarlaith Ní Fheorais",
+      "url": "https://www.somersethouse.org.uk/whats-on/grounding-practice/grounding-practice-access-capacity-with-iarlaith-n%C3%AD-fheorais",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "grounding-practice/grounding-practice-access-capacity-with-iarlaith-ní-fheorais",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/grounding-practice/grounding-practice-access-capacity-with-iarlaith-n%C3%AD-fheorais"
+  },
+  {
+    "event": {
+      "address": "Strand, London WC2R 1LA",
+      "category": "exhibition",
+      "dedupe_key": "wonder-why-we-believe-in-magic|2027-02-04|somerset-house",
+      "description": "Our major new exhibition explores why humans continually return to magic, wonder and belief to make sense of a world we can never fully explain.",
+      "ends_at": "2027-04-17T23:00:00Z",
+      "image_url": "https://media.somersethouse.org.uk/original_images/Glimmer_by_Sian_Fan._Photography_by_Dan_Pluck_HEADER.jpg",
+      "lat": 51.511,
+      "lng": -0.1171,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-04T00:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "WONDER: Why We Believe in Magic",
+      "url": "https://www.somersethouse.org.uk/whats-on/wonder",
+      "venue_name": "Somerset House"
+    },
+    "source_event_id": "wonder",
+    "source_url": "https://www.somersethouse.org.uk/whats-on/wonder"
+  }
+]
