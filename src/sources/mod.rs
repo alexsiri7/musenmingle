@@ -16,6 +16,7 @@ pub mod barbican;
 pub mod chisenhale_gallery;
 pub mod design_museum;
 pub mod garden_museum;
+pub mod goldsmiths_cca;
 pub mod jsonld;
 pub mod serpentine;
 pub mod somerset_house;
@@ -77,6 +78,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
+        goldsmiths_cca::KEY => Ok(Box::new(goldsmiths_cca::GoldsmithsCca::new(base))),
         somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
         whitechapel_gallery::KEY => {
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
