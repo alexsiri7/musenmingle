@@ -71,9 +71,6 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     tags (category) and the standard ticket price.
   - `clerkenwell-design-week` — the annual design festival: one homepage
     request for its schema.org JSON-LD `Event` (category expo).
-  - `artrabbit` — aggregator (kind `aggregator`) of current London art shows,
-    listing pages only (paginated, capped, one request per 5 s): facts + link
-    only, per its terms (no descriptions, images or raw payloads).
   - `chisenhale-gallery` — listing-only CSS scraper (no JSON-LD; robots.txt
     Crawl-delay 20, so no detail pages): year-less card dates resolved
     against the run date.
@@ -84,8 +81,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
   honoured) and rate-limits per domain (default 1 request / 2 s; built-in
-  floors in `config::BUILTIN_MIN_INTERVALS`, e.g. 5 s for ArtRabbit, can't be
-  lowered by configuration).
+  floors in `config::BUILTIN_MIN_INTERVALS` can't be lowered by
+  configuration).
 - **Normalisation** (`src/normalise.rs`): HTML/whitespace cleanup,
   Europe/London → UTC, price parsing (free detection), category mapping and
   the cross-source **dedupe key** (`title|London date|venue`, algorithm
@@ -218,8 +215,8 @@ the sources of a tick, `src/enrich/` adds tags and a short note to each
 upcoming event, **only from what we already store** (`enrich::input`:
 title, venue, London dates, category, the listing's own tags, price, the
 ≤ 300-character excerpt when the source's terms let us keep one, and the
-sources' names). It never fetches a page, and facts-only sources (ArtRabbit,
-Ticketmaster, Serpentine) send just the facts.
+sources' names). It never fetches a page, and facts-only sources (Ticketmaster,
+Serpentine, D&AD) send just the facts.
 
 - **Provider:** Requesty's OpenAI-compatible
   `POST https://router.requesty.ai/v1/chat/completions`, model
@@ -306,8 +303,8 @@ When a second source joins an event, fields are merged by source kind:
 | everything else | existing value; newcomer fills gaps; tags unioned |
 
 A kind only wins while it is the sole linked source of that kind; otherwise
-it just fills gaps. An `aggregator` (a third-party listing site such as
-ArtRabbit) never wins: it only fills gaps, and pages link to the venue's own
+it just fills gaps. An `aggregator` (a third-party listing site; none at
+present since ArtRabbit was retired, #96) never wins: it only fills gaps, and pages link to the venue's own
 site (then an API) before it.
 
 Bad (or missed) merges are corrected in `events.merge_overrides`, keyed on

@@ -1106,7 +1106,9 @@ async fn sources(State(state): State<AppState>) -> Response {
                         }
                     }
                     tbody {
-                        @for s in &sources {
+                        // Retired (disabled) sources are listed only under
+                        // "Sites we couldn't use" below.
+                        @for s in sources.iter().filter(|s| s["enabled"] != Value::Bool(false)) {
                             @let run = &s["last_run"];
                             @let status = text(&s["status"]);
                             tr {
@@ -1115,7 +1117,6 @@ async fn sources(State(state): State<AppState>) -> Response {
                                     @let name = text(&s["display_name"]);
                                     a href={ "/?" (url::form_urlencoded::Serializer::new(String::new()).append_pair("source", &key).finish()) }
                                         aria-label={ "Events from " (name) } { (name) }
-                                    @if s["enabled"] == Value::Bool(false) { " (disabled)" }
                                 }
                                 td { (text(&s["kind"])) }
                                 td {

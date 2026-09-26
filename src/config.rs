@@ -18,8 +18,8 @@ pub const DEFAULT_RATE_LIMIT_MS: u64 = 2_000;
 /// host slower but never faster than listed here, so politeness promised to
 /// a site doesn't depend on deployment configuration.
 pub const BUILTIN_MIN_INTERVALS: &[(&str, u64)] = &[
-    // ArtRabbit: an aggregator whose terms restrict reuse; we read only its
-    // listing pages, at most one every 5 s (src/sources/artrabbit.rs).
+    // ArtRabbit: retired (#96, its terms forbid reuse) and no longer fetched;
+    // the floor stays so nothing ever reads it faster than one page per 5 s.
     ("www.artrabbit.com", 5_000),
     ("artrabbit.com", 5_000),
 ];
