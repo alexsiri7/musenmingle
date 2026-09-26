@@ -1,0 +1,110 @@
+---
+source: tests/source_barbican.rs
+expression: pages
+---
+[
+  {
+    "fixture": "art-design",
+    "page": {
+      "event_paths": [
+        "/whats-on/2025/event/concrete-and-clay-archiving-the-barbican",
+        "/whats-on/2026/event/lawrence-abu-hamdan-zifzafa",
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom",
+        "/whats-on/2026/event/yuko-mohri-in-concert",
+        "/whats-on/2026/event/robert-ryman-the-real-thing",
+        "/whats-on/2026/event/yuko-mohri-and-christian-marclay-performance",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki",
+        "/whats-on/2026/event/architecture-on-stage-worofila",
+        "/whats-on/2026/event/robert-ryman-exhibition-tour-with-curatorial-assistant",
+        "/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar",
+        "/whats-on/2026/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith",
+        "/whats-on/2026/event/ryman-in-rhythm-tyroneisaacstuart",
+        "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curatorial-assistant",
+        "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith"
+      ],
+      "next_page": "?page=1"
+    }
+  },
+  {
+    "fixture": "art-design-page-1",
+    "page": {
+      "event_paths": [
+        "/whats-on/2027/event/ryman-in-rhythm-soweto-kinch",
+        "/whats-on/2027/event/dayanita-singh",
+        "/whats-on/2027/event/characters-of-fashion",
+        "/whats-on/2027/event/ximena-garrido-lecca",
+        "/whats-on/2027/event/magdalene-odundo",
+        "/whats-on/2027/event/rosa-barba",
+        "/whats-on/2027/event/alice-adams"
+      ],
+      "next_page": null
+    }
+  },
+  {
+    "fixture": "talks-events",
+    "page": {
+      "event_paths": [
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom",
+        "/whats-on/2026/event/black-british-book-festival-2026",
+        "/whats-on/2026/event/basic-forms-reimagining-public-space",
+        "/whats-on/2026/event/an-evening-with-nick-park",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen",
+        "/whats-on/2026/event/blindboy-the-blindboy-podcast-live",
+        "/whats-on/2026/event/piano-masterclass-with-sofya-gulyak",
+        "/whats-on/2026/event/an-evening-with-fran-lebowitz",
+        "/whats-on/2026/event/realm-of-the-rebels",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki",
+        "/whats-on/2026/event/spirit-moves-us-sound-movement-session-with-seyi-adelekun",
+        "/whats-on/2026/event/darbar-yogabliss-to-live-music-with-kanwal-ahluwalia",
+        "/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk",
+        "/whats-on/2026/event/darbar-breathwork-to-energise-with-davel-patel",
+        "/whats-on/2026/event/darbar-a-voice-without-borders-by-sandeep-narayan"
+      ],
+      "next_page": "?page=1"
+    }
+  },
+  {
+    "fixture": "talks-events-page-1",
+    "page": {
+      "event_paths": [
+        "/whats-on/2026/event/darbar-raga-meditation-with-jason-kalidas-eartha-love",
+        "/whats-on/2026/event/darbar-the-singing-violin",
+        "/whats-on/2026/event/darbar-the-science-of-slower-breathing-with-davel-patel",
+        "/whats-on/2026/event/darbar-the-benaras-gharana-by-sunanda-sharma",
+        "/whats-on/2026/event/darbar-exploring-the-beauty-of-raga-kamas-by-jayanthi-ku",
+        "/whats-on/2026/event/how-the-body-keeps-the-score-dr-bessel-van-der-kolk",
+        "/whats-on/2026/event/architecture-on-stage-worofila",
+        "/whats-on/2026/event/harry-enfield-and-no-chums-0",
+        "/whats-on/2026/event/an-evening-with-sir-chris-hoy",
+        "/whats-on/2026/event/young-barbican-conservatory-sunday",
+        "/whats-on/2026/event/chris-packhams-world-of-wonder-a-planet-on-the-edge",
+        "/whats-on/2026/event/an-evening-with-yotam-ottolenghi-simple-too",
+        "/whats-on/2026/event/young-barbican-pick-mix-signal-decay-15",
+        "/whats-on/2027/event/total-immersion-music-for-wellbeing-talk",
+        "/whats-on/2027/event/bbc-so-total-immersion-music-for-wellbeing"
+      ],
+      "next_page": "?page=2"
+    }
+  },
+  {
+    "fixture": "talks-events-page-2",
+    "page": {
+      "event_paths": [
+        "/whats-on/2027/event/a-new-history-of-our-future-with-peter-frankopan",
+        "/whats-on/2027/event/how-geography-explains-our-world-with-tim-marshall",
+        "/whats-on/2027/event/young-barbican-events-irl-sessions",
+        "/whats-on/2027/event/john-waters-live",
+        "/whats-on/2027/event/young-barbican-pick-mix-the-whole-world-is-watching-18",
+        "/whats-on/2027/event/the-amol-rajan-connection-live",
+        "/whats-on/2027/event/young-barbican-takeover-festival-2027",
+        "/whats-on/2027/event/total-immersion-the-music-of-rebecca-saunders-talk",
+        "/whats-on/2027/event/bbc-so-total-immersion-the-music-of-rebecca-saunders-0",
+        "/whats-on/2027/event/roberto-saviano-quel-che-resta-di-me",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk-0"
+      ],
+      "next_page": null
+    }
+  }
+]

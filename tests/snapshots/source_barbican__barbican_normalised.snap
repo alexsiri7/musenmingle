@@ -1,0 +1,423 @@
+---
+source: tests/source_barbican.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "exhibition",
+      "dedupe_key": "concrete-clay|2025-02-10|barbican",
+      "description": "This free installation invites visitors to orient themselves in the buildings and their complex, fascinating histories in an exciting new display at the heart of the Barbican’s Foyers. Created using the Centre’s original materials, this display presents a changing selection of stories and objects from the Archive. The centrepiece is a rarely seen, 1:22-scale model of the Centre and Estate. Working with Google Arts and Culture, we have also catalogued and digitised thousands of architectural plans, drawings, photos, objects and leaflets. These collections can be viewed on our Google Arts and Culture page, or on a touchscreen in the exhibition. The Barbican Archive Team is beginning the process of recording and reflecting on the centre's histories.This display will keep changing, highlighting different stories, showcasing different objects. Maybe you’ve got something you’d like to donate to the Archive, something you think belongs in this space? Get in touch on [email protected]",
+      "ends_at": "2027-01-01T10:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2023-04/DSC_2433%20%281%29.jpg.avif?itok=Pm7ykw-0",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2025-02-10T10:00:00Z",
+      "tags": [
+        "tours-public-spaces",
+        "art-design"
+      ],
+      "title": "Concrete and Clay",
+      "url": "https://www.barbican.org.uk/whats-on/2025/event/concrete-and-clay-archiving-the-barbican",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2025/concrete-and-clay-archiving-the-barbican",
+    "payload": {
+      "art_forms": [
+        "tours-public-spaces",
+        "art-design"
+      ],
+      "date_text": "Mon 10 Feb 2025 — Fri 1 Jan 2027",
+      "description": "\n  <p><span>This free installation invites visitors to orient themselves in the buildings and their complex, fascinating histories in an exciting new display at the heart of the Barbican’s Foyers.</span></p>\n\n<p><span>Created using the Centre’s original materials, this display presents a changing selection of stories and objects from the Archive. The centrepiece is a rarely seen, 1:22-scale model of the Centre and Estate.</span></p><p><span>Working with Google Arts and Culture, we have also catalogued and digitised thousands of architectural plans, drawings, photos, objects and leaflets. These collections can be viewed on our </span><a href=\"https://artsandculture.google.com/project/barbican\"><span>Google Arts and Culture page</span></a><span>, or on a touchscreen in the exhibition.</span></p><p><span>The Barbican Archive Team is beginning the process of recording and reflecting on the centre's histories.This display will keep changing, highlighting different stories, showcasing different objects. Maybe you’ve got something you’d like to donate to the Archive, something you think belongs in this space? Get in touch on </span><a href=\"/cdn-cgi/l/email-protection#b4d5c6d7dcddc2d1c7f4d6d5c6d6ddd7d5da9adbc6d39ac1df\"><span><span class=\"__cf_email__\" data-cfemail=\"82e3f0e1eaebf4e7f1c2e0e3f0e0ebe1e3ecacedf0e5acf7e9\">[email&nbsp;protected]</span></span></a></p>",
+      "ends": "2027-01-01T10:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2023-04/DSC_2433%20%281%29.jpg.avif?itok=Pm7ykw-0",
+      "price_text": null,
+      "room": "Mezzanine",
+      "starts": "2025-02-10T10:00:00Z",
+      "subtitle": "Archiving the Barbican",
+      "title": "Concrete and Clay",
+      "url": "https://www.barbican.org.uk/whats-on/2025/event/concrete-and-clay-archiving-the-barbican"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "talk",
+      "dedupe_key": "evening-with-fran-lebowitz|2026-10-27|barbican",
+      "description": "In a cultural landscape filled with endless pundits and talking heads, Fran Lebowitz stands out as one of our most insightful social commentators. An American original and purveyor of urban cool, the cultural satirist and author is pointed, forthright, unapologetically opinionated, and known for her hilariously dry social commentary on American life. Lebowitz’s Netflix documentary series directed by good friend Martin Scorsese, Pretend It’s A City, was an unmitigated hit with its offering of a tantalizing snapshot of New York in full bloom, along with Lebowitz’s lively and unapologetic commentary on what it means to live there. Lebowitz will be live in conversation, sharing her invariably cutting take on anything and everything. She’ll offer insights on such timely issues as gender, race, gay rights, and the media, as well as on her own pet peeves—including celebrity culture, tourists, and baby strollers.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2025-11/FRAN%20NEW%202026-2000x1000.jpg.avif?itok=euK9u0pv",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-27T19:30:00Z",
+      "tags": [
+        "talks-events"
+      ],
+      "title": "An Evening with Fran Lebowitz",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/an-evening-with-fran-lebowitz",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/an-evening-with-fran-lebowitz",
+    "payload": {
+      "art_forms": [
+        "talks-events"
+      ],
+      "date_text": "Tue 27 Oct 2026",
+      "description": "\n  <p><span>In a cultural landscape filled with endless pundits and talking heads, </span><strong>Fran Lebowitz</strong><span> stands out as one of our most insightful social commentators.</span></p>\n\n<p>An American original and purveyor of urban cool, the cultural satirist and author is pointed, forthright, unapologetically opinionated, and known for her hilariously dry social commentary on American life. Lebowitz’s Netflix documentary series directed by good friend Martin Scorsese, <em><span>Pretend It’s A City</span></em><span>, was an unmitigated hit with its offering of a tantalizing snapshot of New York in full bloom, along with Lebowitz’s lively and unapologetic commentary on what it means to live there.</span></p><p>Lebowitz will be live in conversation, sharing her invariably cutting take on anything and everything. She’ll offer insights on such timely issues as gender, race, gay rights, and the media, as well as on her own pet peeves—including celebrity culture, tourists, and baby strollers.</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2025-11/FRAN%20NEW%202026-2000x1000.jpg.avif?itok=euK9u0pv",
+      "price_text": null,
+      "room": "Barbican Hall",
+      "starts": "2026-10-27T19:30:00Z",
+      "subtitle": "Fane Presents",
+      "title": "An Evening with Fran Lebowitz",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/an-evening-with-fran-lebowitz"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "talk",
+      "dedupe_key": "walters-cohen|2026-10-22|barbican",
+      "description": "Discover the projects and ideas behind Walters & Cohen's thoughtful, people-focused architecture. Founded in 1994 by Cindy Walters and Michál Cohen, their work places particular emphasis on creating inclusive, sustainable and enduring spaces that respond carefully to their surroundings. Notable projects include the Dorothy Garrod Building at Newnham College, Cambridge, and the Vajrasana Buddhist Retreat Centre in Suffolk. The practice has also developed an estates strategy for Murray Edwards College, Cambridge, helping shape the long-term future of its Grade II* listed Chamberlin, Powell and Bon campus.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-09/Godolphin%20and%20Latymer%20School-Jim%20Stephenson.jpg.avif?itok=yIW7l22R",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16.50",
+        "min": "16.50"
+      },
+      "starts_at": "2026-10-22T18:00:00Z",
+      "tags": [
+        "art-design",
+        "talks-events"
+      ],
+      "title": "Walters and Cohen",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/architecture-on-stage-walters-and-cohen",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/architecture-on-stage-walters-and-cohen",
+    "payload": {
+      "art_forms": [
+        "art-design",
+        "talks-events"
+      ],
+      "date_text": "Thu 22 Oct 2026, 19:00",
+      "description": "\n  <p>Discover the projects and ideas behind Walters &amp; Cohen's thoughtful, people-focused architecture.</p>\n\n<p>Founded in 1994 by <strong>Cindy Walters</strong> and <strong>Michál Cohen</strong>, their work places particular emphasis on creating inclusive, sustainable and enduring spaces that respond carefully to their surroundings.&nbsp;</p><p>Notable projects include the Dorothy Garrod Building at Newnham College, Cambridge, and the Vajrasana Buddhist Retreat Centre in Suffolk.&nbsp;</p><p>The practice has also developed an estates strategy for Murray Edwards College, Cambridge, helping shape the long-term future of its Grade II* listed Chamberlin, Powell and Bon campus.</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-09/Godolphin%20and%20Latymer%20School-Jim%20Stephenson.jpg.avif?itok=yIW7l22R",
+      "price_text": "£16.50 (£15 + £1.50 transaction fee)",
+      "room": "Frobisher Auditorium 1",
+      "starts": "2026-10-22T18:00:00Z",
+      "subtitle": "Architecture on Stage",
+      "title": "Walters and Cohen",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/architecture-on-stage-walters-and-cohen"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "community",
+      "dedupe_key": "black-british-book-festival-2026|2026-10-04|barbican",
+      "description": "Back for its fifth year, the Black British Book Festival is a landmark celebration of Black books, ideas and culture with Candice Carty-Williams, Corinne Bailey Rae, Wretch 32 and more. Hear from Candice Carty-Williams on love, mess and the phenomenon of Queenie. Corinne Bailey Rae goes deep on sound, beauty and creative freedom. Wretch 32 makes the case that bars are literature, breaking down the art of the pen like never before. And closing it all out is The Black Poetry Shutdown with the UK's sharpest spoken-word talent such as Malika Booker, Lady Sanity, Jah Digga and more. Across the rest of the day, expect a line-up that spans literature, music, science, money, love, identity and the internet. There's something for everyone with storytelling, craft, superheroes and more for the youngest readers. Aspiring authors get a programme packed with practical, no-fluff sessions and the brand-new Black British Book Festival × Pan Macmillan collaboration - a real shot at getting published.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-08/BBBF%20Main%20page%202026%20AUDIENCE%20Credit%20-%20Sledge%20Tshibangu.jpg.avif?itok=ihDA7J_e",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-04T11:30:00Z",
+      "tags": [
+        "talks-events",
+        "take-part"
+      ],
+      "title": "Black British Book Festival 2026",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/black-british-book-festival-2026",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/black-british-book-festival-2026",
+    "payload": {
+      "art_forms": [
+        "talks-events",
+        "take-part"
+      ],
+      "date_text": "Sun 4 Oct 2026",
+      "description": "\n  <p><span lang=\"EN-US\">Back for its fifth year, the Black British Book Festival is a landmark celebration of Black books, ideas and culture with <strong>Candice Carty-Williams, Corinne Bailey Rae, Wretch 32 </strong>and more.</span></p>\n\n<p><span lang=\"EN-US\">Hear from <strong>Candice Carty-Williams</strong> on love, mess and the phenomenon of </span><em><span lang=\"EN-US\">Queenie</span></em><span lang=\"EN-US\">. <strong>Corinne Bailey Rae </strong>goes deep on sound, beauty and creative freedom. <strong>Wretch 32 </strong>makes the case that bars are literature, breaking down the art of the pen like never before. And closing it all out is <strong>The Black Poetry Shutdown</strong> with the UK's sharpest spoken-word talent such as <strong>Malika Booker, Lady Sanity, Jah Digga</strong> and more.</span></p><p><span lang=\"EN-US\">Across the rest of the day, expect a line-up that spans literature, music, science, money, love, identity and the internet.</span><span>&nbsp;</span><span lang=\"EN-US\">There's something for everyone with storytelling, craft, superheroes and more for the youngest readers. Aspiring authors get a programme packed with practical, no-fluff sessions and the brand-new Black British Book Festival × Pan Macmillan collaboration - a real shot at getting published.</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-08/BBBF%20Main%20page%202026%20AUDIENCE%20Credit%20-%20Sledge%20Tshibangu.jpg.avif?itok=ihDA7J_e",
+      "price_text": null,
+      "room": "Barbican Centre",
+      "starts": "2026-10-04T11:30:00Z",
+      "subtitle": "Europe’s largest celebration of Black literature",
+      "title": "Black British Book Festival 2026",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/black-british-book-festival-2026"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "talk",
+      "dedupe_key": "two-gharanas-one-musician-shahbaz-hussain-talk|2026-10-31|barbican",
+      "description": "How three legendary gurus shaped one of Europe's finest tabla players. Shahbaz Hussain started learning tabla at five, taught by his father, the vocalist Ustad Mumtaz Hussain. He then went on to be taught by Ustad Faiyaz Khan of the Delhi gharana, Ustad Shaukat Hussain Khan of the Punjab gharana, and finally Ustad Allah Rakha — the man behind Ravi Shankar's rhythm section for decades. That dual training shows in how Hussain plays. He's accompanied Pandit Hariprasad Chaurasia, Ustad Shahid Parvez, and Ghulam Ali. He leads the fusion group Indus. He teaches across Northern England, and he believes that audiences benefit from understanding how tabla works: what a gharana is, how rhythm operates in Hindustani music and why different schools produce different sounds. In this talk, Hussain shares the stories, lessons and musical thinking he's gathered across three decades of performance and teaching.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-02/Shahbaz%20Hussain%20Talk%20Cover%20Image.jpg.avif?itok=DycbnvhG",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24",
+        "min": "24"
+      },
+      "starts_at": "2026-10-31T11:00:00Z",
+      "tags": [
+        "classical-music",
+        "talks-events",
+        "contemporary-music"
+      ],
+      "title": "Two Gharanas, One Musician - Shahbaz Hussain (Talk)",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/darbar-two-gharanas-one-musician-shahbaz-hussain-talk",
+    "payload": {
+      "art_forms": [
+        "classical-music",
+        "talks-events",
+        "contemporary-music"
+      ],
+      "date_text": "Sat 31 Oct 2026, 11:00",
+      "description": "\n  <p>How three legendary gurus shaped one of Europe's finest tabla players.</p>\n\n<p>Shahbaz Hussain started learning tabla at five, taught by his father, the vocalist Ustad Mumtaz Hussain. He then went on to be taught by Ustad Faiyaz Khan of the Delhi gharana, Ustad Shaukat Hussain Khan of the Punjab gharana, and finally Ustad Allah Rakha — the man behind Ravi Shankar's rhythm section for decades.</p><p>That dual training shows in how Hussain plays. He's accompanied Pandit Hariprasad Chaurasia, Ustad Shahid Parvez, and Ghulam Ali. He leads the fusion group Indus. He teaches across Northern England, and he believes that audiences benefit from understanding how tabla works: what a gharana is, how rhythm operates in Hindustani music and why different schools produce different sounds.</p><p>In this talk, Hussain shares the stories, lessons and musical thinking he's gathered across three decades of performance and teaching. &nbsp;</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-02/Shahbaz%20Hussain%20Talk%20Cover%20Image.jpg.avif?itok=DycbnvhG",
+      "price_text": "£24 (£20 + £4 transaction fee)",
+      "room": "Frobisher Auditorium 1",
+      "starts": "2026-10-31T11:00:00Z",
+      "subtitle": "Darbar Festival 2026",
+      "title": "Two Gharanas, One Musician - Shahbaz Hussain (Talk)",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "exhibition",
+      "dedupe_key": "zifzafa|2026-09-23|barbican",
+      "description": "This free exhibition presents video works by Lawrence Abu Hamdan that address how sound can both sustain and disrupt the richness of community life. A video installation explores the effect of a planned wind turbine development on the inhabitants of the Israeli-occupied Syrian Golan Heights. Zifzafa: Livestream Audio Essay (2025) presents a video-game simulation designed by Earshot to fight green colonialism. Adopting a Twitch-inspired format, the work guides viewers through a virtual recreation of the region. Field recordings of the resident Jawlani community—from wedding announcements to whirring water pumps— are periodically overwhelmed by the roar of simulated wind turbines, demonstrating how their impact would effectively silence the buzz of daily life. Wind Ensemble (2024), focuses on a performance by Jawlani saxophonist Amr Mdah. Played from the balcony of a home located just 50 metres from the site of a proposed wind turbine, his music becomes an act of sonic resistance.",
+      "ends_at": "2026-09-26T19:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-09/Zifzafa_%20livestream%20audio%20essay%2C%202025.%20Video%20game%20simulation%2C%204%20channel%20audio.jpg.avif?itok=BGvptMqR",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-23T11:00:00Z",
+      "tags": [
+        "art-design"
+      ],
+      "title": "Zifzafa",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/lawrence-abu-hamdan-zifzafa",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/lawrence-abu-hamdan-zifzafa",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Wed 23 — Sat 26 Sep 2026",
+      "description": "\n  <p><span lang=\"EN-GB\">This free exhibition presents video works by <strong>Lawrence Abu Hamdan</strong> that address how sound can both sustain and disrupt the richness of community life.</span><span>&nbsp;</span></p>\n\n<p><span lang=\"EN-GB\">A video installation explores the effect of a planned wind turbine development on the inhabitants of the Israeli-occupied Syrian Golan Heights.</span><span>&nbsp;</span></p><p><em><span lang=\"EN-GB\">Zifzafa: Livestream Audio Essay</span></em><span lang=\"EN-GB\"> (2025) presents a video-game simulation designed by Earshot to fight green colonialism. Adopting a Twitch-inspired format, the work guides viewers through a virtual recreation of the region. Field recordings of the resident Jawlani community—from wedding announcements to whirring water pumps— are periodically overwhelmed by the roar of simulated wind turbines, demonstrating how their impact would effectively silence the buzz of daily life.</span><span>&nbsp;</span></p><p><em><span lang=\"EN-GB\">Wind Ensemble</span></em><span lang=\"EN-GB\"> (2024), focuses on a performance by Jawlani saxophonist Amr Mdah. Played from the balcony of a home located just 50 metres from the site of a proposed wind turbine, his music becomes an act of sonic resistance.</span></p>",
+      "ends": "2026-09-26T19:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-09/Zifzafa_%20livestream%20audio%20essay%2C%202025.%20Video%20game%20simulation%2C%204%20channel%20audio.jpg.avif?itok=BGvptMqR",
+      "price_text": "Free",
+      "room": "The Pit",
+      "starts": "2026-09-23T11:00:00Z",
+      "subtitle": "Lawrence Abu Hamdan: Repercussions",
+      "title": "Zifzafa",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/lawrence-abu-hamdan-zifzafa"
+    }
+  },
+  {
+    "event": null,
+    "id": "2026/robert-ryman-exhibition-tour-with-curatorial-assistant",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Fri 6 Nov 2026, 18:30",
+      "description": "\n  <p><span>Join Curatorial Assistant Amber Li for a guided tour of Robert Ryman: The Real Thing, focusing on some of her personal highlights.</span></p>\n\n<p><span>The Real Thing is the first major UK exhibition of Robert Ryman's paintings in over 30 years. Emerging as an artist in New York in the mid-1950s, Ryman approached every painting as a test to ‘see what would happen’, discovering that ‘there is never a question of what to paint, but only how to paint.’ For almost six decades, Ryman mainly used white paint and a square format to test materials and their effects, producing a remarkable variety of paintings that affirm materials as they are and ask us to pay attention to subtlety and nuance.</span></p><p><span>Presenting over 60 works from the mid-1950s to the early 2010s, this exhibition celebrates an artist who believed the poetry of painting was in feeling, and that painting was best understood though real, in-person experience:&nbsp;‘the real thing…was the only way to do it.’</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-01/Untitled%20design%20%285%29.png.avif?itok=_2Y-luUT",
+      "price_text": "£20.50 (£19 + £1.50 transaction fee)",
+      "room": "Art Gallery",
+      "starts": "2026-11-06T18:30:00Z",
+      "subtitle": "Robert Ryman: The Real Thing",
+      "title": "Exhibition Tour with Curatorial Assistant Amber Li",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/robert-ryman-exhibition-tour-with-curatorial-assistant"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "exhibition",
+      "dedupe_key": "robert-ryman|2026-10-08|barbican",
+      "description": "‘You have to see the real thing… seeing a real painting is the only way to do it.’ Robert Ryman believed that the best way to experience a painting is in person. His paintings, which mostly use white paint and a square format, reward close looking. He wanted you to notice everything: the texture of the paint, the brushstrokes, the material being painted on, how it's displayed on the wall. The magic is in the feelings that arise as you attune yourself to the paintings’ similarities and differences, how they relate to each other and interact with the surrounding light and space. Presenting over 60 works made from the mid-1950s to the early 2010s, this major new retrospective of the extraordinary American artist invites you to take a closer look. You may notice aspects of painting you haven’t seen before – and perhaps you’ll leave wondering what else in the world might become clearer if you simply slow down and tune in.",
+      "ends_at": "2027-02-28T17:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-01/Ryman%20web%20image2.png.avif?itok=7TY54Bgl",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20.50",
+        "min": "20.50"
+      },
+      "starts_at": "2026-10-08T09:00:00Z",
+      "tags": [
+        "art-design"
+      ],
+      "title": "Robert Ryman",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/robert-ryman-the-real-thing",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/robert-ryman-the-real-thing",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Thu 8 Oct 2026 — Sun 28 Feb 2027",
+      "description": "\n  <p><span>‘You have to see the real thing… seeing a real painting is the only way to do it.’</span></p>\n\n<p><span>Robert Ryman believed that the best way to experience a painting is in person. His paintings, which mostly use white paint and a square format, reward close looking. He wanted you to notice everything: the texture of the paint, the brushstrokes, the material being painted on, how it's displayed on the wall. The magic is in the feelings that arise as you attune yourself to the paintings’ similarities and differences, how they relate to each other and interact with the surrounding light and space.</span></p><p><span>Presenting over 60 works made from the mid-1950s to the early 2010s, this major new retrospective of the extraordinary American artist invites you to take a closer look. You may notice aspects of painting you haven’t seen before – and perhaps you’ll leave wondering what else in the world might become clearer if you simply slow down and tune in.</span></p>",
+      "ends": "2027-02-28T17:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-01/Ryman%20web%20image2.png.avif?itok=7TY54Bgl",
+      "price_text": "£20.50 (£19 + £1.50 transaction fee)",
+      "room": "Art Gallery",
+      "starts": "2026-10-08T09:00:00Z",
+      "subtitle": "The Real Thing",
+      "title": "Robert Ryman",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/robert-ryman-the-real-thing"
+    }
+  },
+  {
+    "event": null,
+    "id": "2026/ryman-in-rhythm-sarathy-korwar",
+    "payload": {
+      "art_forms": [
+        "art-design",
+        "contemporary-music"
+      ],
+      "date_text": "Wed 18 Nov 2026, 19:15",
+      "description": "\n  <p>Join us for this intimate performance in the gallery by percussionist <strong>Sarathy Korwar</strong> as he responds to the work of <strong>Robert Ryman</strong>. &nbsp;</p>\n\n<p>Robert Ryman’s approach to painting was shaped by his early love of jazz. After moving to New York to pursue a career as a saxophonist, he became a painter, but continued to listen to music as he worked. He saw painting as a form of improvisation, with each brushstroke building on the last like successive notes in jazz.</p><p>Sarathy Korwar is one of the UK’s most distinctive jazz artists, fusing jazz, electronics, Indian folk and classical influences. His work has earned two GRAMMY nominations, an AIM Award and MOJO Jazz Album of the Year. He has collaborated with Anoushka Shankar, Kamasi Washington, Shabaka Hutchings and the Metropole Orkest, and performed at Sydney Opera House, North Sea Jazz Festival and London Jazz Festival.</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-09/Sarathy_8%20by%20Keerthana%20Kunnath%20%281%29.png.avif?itok=sPyJOcg8",
+      "price_text": "£20.50 (£19 + £1.50 transaction fee)",
+      "room": "Art Gallery",
+      "starts": "2026-11-18T19:15:00Z",
+      "subtitle": "Ryman in Rhythm",
+      "title": "Sarathy Korwar",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar"
+    }
+  },
+  {
+    "event": null,
+    "id": "2026/young-barbican-pick-mix-signal-decay-15",
+    "payload": {
+      "art_forms": [
+        "talks-events",
+        "take-part",
+        "cinema"
+      ],
+      "date_text": "Thu 10 Dec 2026, 18:30",
+      "description": "\n  <p><span lang=\"EN-GB\">Young Barbican Pick &amp; Mix presents </span><em><span lang=\"EN-GB\">Signal Decay</span></em><span lang=\"EN-GB\">, a screening of short films about moving through cities and finding the strange in the everyday.</span></p>\n\n<p>Pulling together disparate works from London to Dhaka, and Brooklyn to Sheffield, the films range from deadpan snapshots of city life to surreal night drives and poetic portraits of everyday living. Together, they capture the bleary-eyed sensation of finding something to watch at 2am, flicking past a channel you didn't know existed; a restless, unpolished transmission from the overlooked and off-kilter.</p><p><span lang=\"EN-GB\"></span></p><p><span lang=\"EN-GB\"></span></p><p><span lang=\"EN-GB\">Curated by London-based archivist and </span><a class=\"Hyperlink SCXW159605841 BCX0\" href=\"https://www.barbican.org.uk/take-part/young-creatives/barbican-young-film-programmers\"><span lang=\"EN-GB\">Barbican Young Film Programmers</span></a><span lang=\"EN-GB\"> alum, <strong>Raageh Ali</strong>.</span></p><p><span lang=\"EN-GB\"></span></p><p><span lang=\"EN-GB\"></span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-08/HufflePuff%20Landscape%20still%20%28filmmaker%20approved%29%29.jpeg.avif?itok=dogQZnRs",
+      "price_text": null,
+      "room": "Cinema 3",
+      "starts": "2026-12-10T18:30:00Z",
+      "subtitle": "Young Barbican Events",
+      "title": "Pick & Mix: Signal Decay (15)",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/young-barbican-pick-mix-signal-decay-15"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "category": "exhibition",
+      "dedupe_key": "yuko-mohri-in-concert|2026-10-01|barbican",
+      "description": "Japanese artist Yuko Mohri transforms The Curve with a new site-responsive commission exploring states of flux and acts of repair via light, sound and kinetic sculpture featuring Barbican objects. Mohri's practice is grounded in DIY aesthetics, surrealist assemblage, experimental music and an enduring fascination with the flow of energy. Her sculptures often combine ordinary objects—from umbrellas to feather dusters, apples to xylophones—with what she terms ‘unstable elements’, including magnetism, humidity, air, water and gravity. Mohri’s continuously transforming installation will respond to the gallery's atmospheric conditions, and explore ideas of entropy, transience and renewal resonating with the Barbican's current period of renovation.",
+      "ends_at": "2027-01-24T10:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-07/Yuko%20Mohri%2C%20Decomposition%2C%202022.%20Fruits%2C%20wooden%20bowl%2C%20speakers%2C%20amplifier%2C%20computer%2C%20electrodes%2C%20cables.%20Installation%20view%20of%20Kanazawa%20Citizens%20Free%20Art%20Day%20Open%20Museum%202022%2C%2021st%20Century%20Museum%20of%20C.JPG.avif?itok=tFPw9i82",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-01T09:00:00Z",
+      "tags": [
+        "art-design"
+      ],
+      "title": "Yuko Mohri: In Concert",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/yuko-mohri-in-concert",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/yuko-mohri-in-concert",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Thu 1 Oct 2026 — Sun 24 Jan 2027",
+      "description": "\n  <p>Japanese artist Yuko Mohri transforms The Curve with a new site-responsive commission exploring states of flux and acts of repair via light, sound and kinetic sculpture featuring Barbican objects.</p>\n\n<p>Mohri's practice is grounded in DIY aesthetics, surrealist assemblage, experimental music and an enduring fascination with the flow of energy. Her sculptures often combine ordinary objects—from umbrellas to feather dusters, apples to xylophones—with what she terms ‘unstable elements’, including magnetism, humidity, air, water and gravity.</p><p>Mohri’s continuously transforming installation will respond to the gallery's atmospheric conditions, and explore ideas of entropy, transience and renewal resonating with the Barbican's current period of renovation.</p>",
+      "ends": "2027-01-24T10:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-07/Yuko%20Mohri%2C%20Decomposition%2C%202022.%20Fruits%2C%20wooden%20bowl%2C%20speakers%2C%20amplifier%2C%20computer%2C%20electrodes%2C%20cables.%20Installation%20view%20of%20Kanazawa%20Citizens%20Free%20Art%20Day%20Open%20Museum%202022%2C%2021st%20Century%20Museum%20of%20C.JPG.avif?itok=tFPw9i82",
+      "price_text": "Free",
+      "room": "The Curve",
+      "starts": "2026-10-01T09:00:00Z",
+      "subtitle": null,
+      "title": "Yuko Mohri: In Concert",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/yuko-mohri-in-concert"
+    }
+  },
+  {
+    "event": null,
+    "id": "2027/robert-ryman-exhibition-tour-with-curatorial-assistant",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Fri 15 Jan 2027, 18:30",
+      "description": "\n  <p><span>Join Curatorial Assistant Amber Li as she shares personal highlights from the exhibition and offers insights into Robert Ryman’s life and work.</span></p>\n\n<p><span>The Real Thing is the first major UK exhibition of Robert Ryman's paintings in over 30 years. Emerging as an artist in New York in the mid-1950s, Ryman approached every painting as a test to ‘see what would happen’, discovering that ‘there is never a question of what to paint, but only how to paint.’ For almost six decades, Ryman mainly used white paint and a square format to test materials and their effects, producing a remarkable variety of paintings that affirm materials as they are and ask us to pay attention to subtlety and nuance.</span></p><p><span>Presenting over 60 works from the mid-1950s to the early 2010s, this exhibition celebrates an artist who believed the poetry of painting was in feeling, and that painting was best understood though real, in-person experience:&nbsp;‘the real thing…was the only way to do it.’</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/2026-01/Untitled%20design%20%287%29.png.avif?itok=Pjua5dnG",
+      "price_text": "£20.50 (£19 + £1.50 transaction fee)",
+      "room": "Art Gallery",
+      "starts": "2027-01-15T18:30:00Z",
+      "subtitle": "Robert Ryman: The Real Thing",
+      "title": "Exhibition Tour with Curatorial Assistant Amber Li",
+      "url": "https://www.barbican.org.uk/whats-on/2027/event/robert-ryman-exhibition-tour-with-curatorial-assistant"
+    }
+  }
+]
