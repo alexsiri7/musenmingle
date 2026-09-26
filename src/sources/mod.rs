@@ -6,7 +6,7 @@
 
 use async_trait::async_trait;
 
-use crate::config::Config;
+use crate::config::{Config, TICKETMASTER_API_KEY_ENV};
 use crate::fetch::{FetchContext, FetchError};
 use crate::model::{NewEvent, RawEvent};
 use crate::repo::SourceRow;
@@ -67,7 +67,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
     match row.key.as_str() {
         ticketmaster::KEY => match &config.ticketmaster_api_key {
             Some(k) => Ok(Box::new(ticketmaster::Ticketmaster::new(base, k.clone()))),
-            None => Err(SkipReason::MissingConfig("TICKETMASTER_API_KEY")),
+            None => Err(SkipReason::MissingConfig(TICKETMASTER_API_KEY_ENV)),
         },
         barbican::KEY => Ok(Box::new(barbican::Barbican::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
@@ -124,7 +124,7 @@ mod tests {
         let missing_key = skip_reason(&row(ticketmaster::KEY, "https://app.ticketmaster.com/"));
         assert_eq!(
             missing_key,
-            SkipReason::MissingConfig("TICKETMASTER_API_KEY")
+            SkipReason::MissingConfig(TICKETMASTER_API_KEY_ENV)
         );
         assert_eq!(missing_key.to_string(), "TICKETMASTER_API_KEY not set");
 

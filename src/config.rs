@@ -10,6 +10,8 @@ use axum::http::HeaderValue;
 pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/thaleia";
 /// Default minimum interval between two requests to the same domain.
 pub const DEFAULT_RATE_LIMIT_MS: u64 = 2_000;
+/// Environment variable holding the Ticketmaster Discovery API key.
+pub const TICKETMASTER_API_KEY_ENV: &str = "TICKETMASTER_API_KEY";
 
 /// Per-domain rate limit configuration.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -195,7 +197,7 @@ impl Config {
         };
         Ok(Self {
             database_url,
-            ticketmaster_api_key: non_empty("TICKETMASTER_API_KEY"),
+            ticketmaster_api_key: non_empty(TICKETMASTER_API_KEY_ENV),
             github_token: non_empty("GITHUB_TOKEN"),
             github_repo: non_empty("GITHUB_REPO").unwrap_or_else(|| DEFAULT_GITHUB_REPO.into()),
             port,
