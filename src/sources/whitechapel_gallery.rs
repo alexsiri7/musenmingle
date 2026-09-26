@@ -116,8 +116,9 @@ fn description_html(doc: &Html) -> Option<String> {
 }
 
 /// Parse one detail page into a [`RawEvent`] (None if it has no title).
-/// `path` is the page path; its slug is the stable source id.
-pub fn parse_detail(html: &str, path: &str) -> Option<RawEvent> {
+/// `url` is the address the page was fetched from; its last path segment is
+/// the stable source id.
+pub fn parse_detail(html: &str, url: &Url) -> Option<RawEvent> {
     let doc = Html::parse_document(html);
     let title = doc
         .select(&selector(".exhibition_single h1"))
@@ -138,13 +139,13 @@ pub fn parse_detail(html: &str, path: &str) -> Option<RawEvent> {
         .next()
         .and_then(|e| e.value().attr("content"))
         .map(str::to_string);
+    let path = url.path();
     let slug = path.trim_matches('/').rsplit('/').next().unwrap_or(path);
-    let url = format!("{SITE}{path}");
     Some(RawEvent {
         source_event_id: slug.to_string(),
-        source_url: Some(url.clone()),
+        source_url: Some(url.to_string()),
         payload: json!({
-            "url": url,
+            "url": url.as_str(),
             "title": title,
             "date_text": date_text,
             "room": room,
@@ -284,7 +285,7 @@ impl Source for WhitechapelGallery {
                 }
             };
             match ctx.get_text(&url).await {
-                Ok(html) => match parse_detail(&html, path) {
+                Ok(html) => match parse_detail(&html, &url) {
                     Some(raw) => out.push(raw),
                     None => ctx.report_error(format!("{path}: no page title")),
                 },

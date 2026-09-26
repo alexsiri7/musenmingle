@@ -8,6 +8,7 @@ use thaleia::config::RateLimitConfig;
 use thaleia::fetch::FetchContext;
 use thaleia::sources::Source;
 use thaleia::sources::whitechapel_gallery::{WhitechapelGallery, parse_detail, parse_listing};
+use url::Url;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -37,8 +38,14 @@ fn listing_paths() -> Vec<String> {
     parse_listing(&fixture(&format!("{DIR}/exhibitions.html")))
 }
 
+const SITE: &str = "https://www.whitechapelgallery.org";
+
 fn scraper() -> WhitechapelGallery {
-    WhitechapelGallery::new("https://www.whitechapelgallery.org".parse().unwrap())
+    WhitechapelGallery::new(SITE.parse().unwrap())
+}
+
+fn detail_url(slug: &str) -> Url {
+    format!("{SITE}/exhibitions/{slug}/").parse().unwrap()
 }
 
 #[test]
@@ -52,7 +59,7 @@ fn normalised_output_snapshot() {
     let mut out = Vec::new();
     for slug in detail_slugs() {
         let html = fixture(&format!("{DIR}/detail/{slug}.html"));
-        let raw = parse_detail(&html, &format!("/exhibitions/{slug}/")).expect("detail parses");
+        let raw = parse_detail(&html, &detail_url(&slug)).expect("detail parses");
         out.push(serde_json::json!({
             "slug": slug,
             "payload": raw.payload,
@@ -80,7 +87,7 @@ fn every_listing_link_has_a_fixture() {
 #[test]
 fn past_exhibition_page_is_skipped() {
     let html = fixture(&format!("{DIR}/past/common-rooms-displays.html"));
-    let raw = parse_detail(&html, "/exhibitions/common-rooms-displays/").expect("detail parses");
+    let raw = parse_detail(&html, &detail_url("common-rooms-displays")).expect("detail parses");
     assert!(raw.payload["date_text"].is_null(), "{}", raw.payload);
     assert!(scraper().normalise(&raw).expect("normalise").is_none());
 }
@@ -154,6 +161,12 @@ async fn fetches_listing_and_details_via_fetch_context() {
             .any(|e| e.contains(&malformed_path) && e.contains("no page title")),
         "{errors:?}"
     );
+    let site = server.uri();
+    for raw in &raws {
+        let expected = format!("{site}/exhibitions/{}/", raw.source_event_id);
+        assert_eq!(raw.source_url.as_deref(), Some(expected.as_str()));
+        assert_eq!(raw.payload["url"], expected);
+    }
     let mut ids: Vec<String> = raws.into_iter().map(|r| r.source_event_id).collect();
     ids.sort();
     assert_eq!(&ids, ok);
