@@ -1,8 +1,8 @@
 ---
 created: '2026-09-26'
-github_issue: null
+github_issue: 2
 id: '002'
-status: draft
+status: idea
 title: Anyone can suggest a site for Thaleia to cover
 updated: '2026-09-26'
 ---
@@ -22,4 +22,4 @@ Anyone can submit a website URL they think Thaleia should cover and gets an imme
 
 ## Issues
 
-_None yet._
+- #2 — Site submissions: POST a URL, dedupe by domain, rate-limit per IP, file a new-scraper issue
