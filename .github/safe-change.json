@@ -1,0 +1,69 @@
+{
+  "_comment": "Scope policy for PRs that close an issue only the factory's automated screening vetted (labels archon:auto-approved + type:<kind>, no archon:approved). Read from the base branch by .github/safe-change/check.py (pull_request_target). Keys under types are the type:<kind> label suffixes. A file must match a rule of its kind and none of deny.",
+  "screened_label": "archon:auto-approved",
+  "approved_label": "archon:approved",
+  "deny": [
+    ".github/*", ".github/**", ".railway/*", ".railway/**", "ops/*", "ops/**",
+    "Dockerfile", ".dockerignore", "Cargo.toml", "Cargo.lock", "build.rs", "*/build.rs",
+    "sqlx.toml", ".env", ".env.*", ".gitignore", "CLAUDE.md", "requirements/*", "requirements/**",
+    "src/main.rs", "src/bin/*", "src/config.rs", "src/auth*", "src/github.rs"
+  ],
+  "types": {
+    "new-scraper": [
+      {
+        "glob": "src/sources/*.rs",
+        "status": ["added"],
+        "content_deny": [
+          "std::process", "std::env", "std::fs", "std::net", "std::os", "tokio::process", "tokio::fs",
+          "\\bunsafe\\b", "include_(str|bytes)!", "\\b(option_)?env!", "Command::new", "extern\\s+\"",
+          "#\\s*!?\\[\\s*link", "\\bsqlx\\b", "PgPool", "\\bmod\\s+[a-z_]+\\s*;",
+          "reqwest::(Client|ClientBuilder|get)", "PreEscaped"
+        ]
+      },
+      {
+        "path": "src/sources/mod.rs",
+        "status": ["modified"],
+        "line_patterns": [
+          "\\s*pub mod [a-z0-9_]+;",
+          "\\s*[a-z0-9_]+::KEY => (Ok\\(Box::new\\([a-z0-9_]+::[A-Za-z0-9_]+::new\\(base\\)\\)\\),|Ok\\(Box::new\\(|\\{)",
+          "\\s*[a-z0-9_]+::[A-Za-z0-9_]+::new\\(base\\),?",
+          "\\s*Ok\\(Box::new\\([a-z0-9_]+::[A-Za-z0-9_]+::new\\(base\\)\\)\\),?",
+          "\\s*\\)\\),?",
+          "\\s*\\},?"
+        ]
+      },
+      {
+        "glob": "tests/source_*.rs",
+        "status": ["added"],
+        "content_deny": ["std::process", "Command::new", "\\bunsafe\\b", "std::env::set_var", "include_bytes!\\(\"/", "include_str!\\(\"/"]
+      },
+      {"glob": "tests/fixtures/scrapers/*", "status": ["added"]},
+      {"glob": "tests/fixtures/scrapers/**", "status": ["added"]},
+      {"glob": "tests/snapshots/source_*.snap", "status": ["added"]},
+      {"glob": "migrations/*.sql", "status": ["added"], "sql_tables": ["events.sources", "events.refused_sources"]},
+      {"glob": "docs/*.md", "status": ["added", "modified"]},
+      {"path": "README.md", "status": ["modified"]}
+    ],
+    "bug-report": [
+      {
+        "glob": "src/*.rs",
+        "status": ["modified"],
+        "content_deny": [
+          "std::process", "tokio::process", "Command::new", "\\bunsafe\\b", "include_(str|bytes)!",
+          "\\b(option_)?env!", "std::env::var", "extern\\s+\"", "#\\s*!?\\[\\s*link", "GRANT ", "DROP "
+        ]
+      },
+      {
+        "glob": "src/**/*.rs",
+        "status": ["modified"],
+        "content_deny": [
+          "std::process", "tokio::process", "Command::new", "\\bunsafe\\b", "include_(str|bytes)!",
+          "\\b(option_)?env!", "std::env::var", "extern\\s+\"", "#\\s*!?\\[\\s*link", "GRANT ", "DROP "
+        ]
+      },
+      {"glob": "tests/*.rs", "status": ["added", "modified"], "content_deny": ["std::process", "Command::new", "\\bunsafe\\b"]},
+      {"glob": "tests/fixtures/**", "status": ["added", "modified"]},
+      {"glob": "tests/snapshots/*.snap", "status": ["added", "modified"]}
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+# safe-change: scope check for PRs built from issues that only the factory's
+# automated screening vetted (see .github/safe-change/check.py). The factory's
+# pr-maintenance merges such a PR only when this check is green.
+#
+# pull_request_target on purpose: the checker and the policy come from the
+# base branch, so a PR cannot edit the check that judges it. The PR's code is
+# never checked out or run; the checker reads the file list and patches from
+# the API as data. Read-only token.
+name: safe-change
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: safe-change-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  safe-change:
+    name: safe-change
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2, base branch
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - name: Self-test the checker
+        run: python3 -m unittest discover -s .github/safe-change
+      - name: Check the PR's scope
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: python3 .github/safe-change/check.py
