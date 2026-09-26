@@ -212,18 +212,14 @@ async fn rate_limit_per_client_hour_and_day() {
     let alice = Some("6.6.6.6, 1.1.1.1");
     let bob = Some("1.1.1.1, 2.2.2.2");
 
-    for n in 1..=2 {
-        let (status, _, body) = post(
-            &app,
-            json!({ "url": format!("https://site{n}.org") }),
-            alice,
-        )
-        .await;
-        assert_eq!(status, StatusCode::CREATED, "{body}");
-    }
-    // Duplicates count too; the hourly limit is reached.
+    let (status, _, body) = post(&app, json!({ "url": "https://site1.org" }), alice).await;
+    assert_eq!(status, StatusCode::CREATED, "{body}");
+    // A duplicate is stored and counts toward the limit too.
+    let (status, _, body) = post(&app, json!({ "url": "https://www.site1.org" }), alice).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(body["status"], "already_suggested");
     let (status, retry_after, body) =
-        post(&app, json!({ "url": "https://site1.org" }), alice).await;
+        post(&app, json!({ "url": "https://site2.org" }), alice).await;
     assert_eq!(status, StatusCode::TOO_MANY_REQUESTS, "{body}");
     assert_eq!(body["status"], "rate_limited");
     let retry_after = retry_after.expect("Retry-After header");
