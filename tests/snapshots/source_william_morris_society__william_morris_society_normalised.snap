@@ -66,6 +66,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "william-morris-jewellery-making-workshop-with-workingclasp|2026-10-13|william-morris-society",
       "description": "10am-4pm, October 13th, 2026 Spend a day immersed in creativity at the William Morris Society, making two beautiful pieces of jewellery inspired by the timeless patterns and philosophy of William Morris. Guided by Birmingham jewellery designer Rebecca Cowley of Working Clasp, you'll create an elegant floral brooch inspired by Strawberry Thief during the morning, before",
@@ -101,6 +102,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "evening-talk-with-dr-gavin-stoneystreet|2026-10-21|william-morris-society",
       "description": "Wednesday October 21st, 2026 - 5:30-7:30pm An intimate evening exploring the botanical world of William Morris. Join Cultural Botanist Gavin Francis Stoneystreet on a journey into William Morris’s own gardens and the influence they had on his design work, literature, and eco-socialist thinking. Dr Stoneystreet’s forthcoming book on William Morris and his gardens explores Morris’s gardens at",
@@ -136,6 +138,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "october-half-term-halloween-fun-at-william-morris-society|2026-10-26|william-morris-society",
       "description": "Monday 26th October 2026, 10:30am-12:30pm A workshop for 6-12 year olds We are getting ready for Halloween at Kelmscott House, with a colourful owl tree for the window, a pumpkin mobile inspired by a William Morris design and beautiful owl finger puppet. Price: £7.50 per child Please note that all children must be accompanied by an adult",
@@ -171,6 +174,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "water-marbling-workshop-with-daunton-marbling|2026-10-27|william-morris-society",
       "description": "Tuesday October 27th, 2026 10am-4pm Cost: £120 Join Daunton Marbling Studio and dive into the ancient art of paper marbling. In this hands-on workshop you will: * Discover the history of this centuries-old craft * Learn about materials, tools and techniques * Create traditional and contemporary patterns * Create your own hand marbled papers Paper",
@@ -266,6 +270,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "embossed-copper-fruit-ornament-festive-workshop|2026-12-02|william-morris-society",
       "description": "Embossed Copper Fruit Ornament Festive Workshop 10.30am-12.30pm, Wednesday December 2nd Cost: £45 Create your own embossed metal tree decorations with this fun hands on workshop. Using lightweight copper sheets and simple techniques you will create a set of hanging ornaments inspired by William Morris fruit designs. About the Workshop: An enjoyable and relaxing workshop",
@@ -316,6 +321,7 @@ expression: out
   {
     "event": {
       "address": "Kelmscott House, 26 Upper Mall, Hammersmith, London W6 9TA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "morris-by-moonlight-museum-lates|2026-12-03|william-morris-society",
       "description": "Join us for a magical Morris by Moonlight on December 3rd! As winter darkness settles over London, step inside from the cold and discover the world of William Morris by candlelight at The William Morris Society — the perfect way to kick off the festive season. Join one of our expert guides for an enchanting",
