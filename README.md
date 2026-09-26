@@ -52,6 +52,9 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   - `artrabbit` — aggregator (kind `aggregator`) of current London art shows,
     listing pages only (paginated, capped, one request per 5 s): facts + link
     only, per its terms (no descriptions, images or raw payloads).
+  - `chisenhale-gallery` — listing-only CSS scraper (no JSON-LD; robots.txt
+    Crawl-delay 20, so no detail pages): year-less card dates resolved
+    against the run date.
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `ThaleiaBot/<version> (+https://thaleia.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -313,7 +316,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery and the Barbican daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican and Chisenhale Gallery daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

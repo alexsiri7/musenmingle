@@ -13,6 +13,7 @@ use crate::repo::SourceRow;
 
 pub mod artrabbit;
 pub mod barbican;
+pub mod chisenhale_gallery;
 pub mod design_museum;
 pub mod jsonld;
 pub mod serpentine;
@@ -78,6 +79,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         whitechapel_gallery::KEY => {
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
         }
+        chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }
 }
