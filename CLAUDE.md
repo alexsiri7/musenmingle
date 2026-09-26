@@ -46,6 +46,13 @@ There is no local Docker; never try to use testcontainers.
 8. Skips are not errors: out-of-scope items return `Ok(None)` from
    `normalise`; only real failures count toward `source_runs.errors` (which
    drive the health checker).
+9. **HTML is server-rendered, escaped and self-contained.** Pages in
+   `src/web.rs` are `maud` templates: never wrap data in `PreEscaped`;
+   emit `href`/`src` only via `safe_link`/`safe_image` (http(s) only). No
+   JavaScript, no third-party assets (CDNs, fonts, embeds), no inline
+   `style=` or `<style>` (CSS lives in `src/web.css`, served from
+   `/static/style.css`); keep the `CSP` constant strict. Pages read data
+   through the same `api.rs` helpers as the JSON API, never over HTTP.
 
 ## Layout
 
@@ -58,5 +65,6 @@ There is no local Docker; never try to use testcontainers.
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it
 - `src/listing.rs` — `GET /v1/events` parameter parsing and cursors (pure)
+- `src/web.rs` + `src/web.css` — HTML pages (`/`, `/events/{id}`, `/sources`, `POST /suggest`)
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

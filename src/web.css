@@ -1,0 +1,78 @@
+/* Thaleia pages: served at /static/style.css (no inline styles; see CSP). */
+:root {
+  --bg: #fbfaf7; --fg: #1d1b18; --muted: #5d584f; --line: #dcd6cc;
+  --card: #ffffff; --accent: #7a2e8c; --accent-fg: #ffffff; --free: #1f6b3a;
+  --bad: #a3261b; --warn: #8a5a00;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161513; --fg: #ece8e1; --muted: #aaa398; --line: #3a3732;
+    --card: #1f1d1a; --accent: #d49be0; --accent-fg: #161513; --free: #7fd39a;
+    --bad: #ff8a7d; --warn: #f0c060;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 2px;
+}
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 16px; top: 8px; background: var(--card); padding: 4px 8px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+header.site, main, footer.site { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+header.site { display: flex; gap: 16px; align-items: baseline; justify-content: space-between; padding-top: 16px; }
+header.site nav { display: flex; gap: 16px; }
+.brand { font-weight: 700; font-size: 1.25rem; text-decoration: none; }
+h1 { font-size: 1.6rem; line-height: 1.25; margin: 24px 0 8px; }
+.lede, .small, .when, .venue { color: var(--muted); }
+.small { font-size: 0.875rem; }
+.filters {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  padding: 12px; margin: 16px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--card);
+}
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field.check { flex-direction: row; align-items: center; gap: 6px; min-height: 2.25rem; }
+label { font-size: 0.875rem; font-weight: 600; }
+input, select, textarea, button { font: inherit; color: inherit; }
+input[type=date], input[type=url], select, textarea {
+  padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); max-width: 100%;
+}
+button { padding: 7px 14px; border: 0; border-radius: 6px; background: var(--accent); color: var(--accent-fg); cursor: pointer; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+.card img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.card-body { padding: 12px; }
+.card h2 { font-size: 1.1rem; margin: 0 0 4px; }
+.card p { margin: 4px 0; }
+.badge { display: inline-block; font-size: 0.8rem; padding: 1px 8px; border: 1px solid var(--line); border-radius: 999px; }
+.badge.free { color: var(--free); border-color: currentColor; }
+.more { text-align: center; margin: 24px 0; }
+.error { color: var(--bad); font-weight: 600; }
+.detail .hero { width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
+dt { font-weight: 600; }
+dd { margin: 0; overflow-wrap: anywhere; }
+.description { max-width: 70ch; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; background: var(--card); }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.status { font-weight: 600; }
+.status-healthy { color: var(--free); }
+.status-degraded { color: var(--warn); }
+.status-broken { color: var(--bad); }
+footer.site { margin-top: 40px; padding-bottom: 32px; border-top: 1px solid var(--line); }
+.suggest { display: flex; flex-direction: column; gap: 6px; max-width: 480px; }
+.suggest h2 { font-size: 1.1rem; margin: 16px 0 0; }
+.suggest button { align-self: flex-start; }
+.outcome { padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.outcome.error { border-color: var(--bad); }
+@media (max-width: 480px) {
+  dl { grid-template-columns: 1fr; }
+  dd { margin-bottom: 8px; }
+  .filters .field { flex: 1 1 100%; }
+}
