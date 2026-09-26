@@ -790,8 +790,10 @@ async fn more_like_this_excludes_the_event_itself_and_past_events() {
     assert!(!html.contains("Past twin"));
 
     // The internal hybrid-search step: nearest to a query vector, filtered.
+    // Closest to Far, then Target (Near is further from it than Target is,
+    // so there is no tie to break by id).
     let mut q = vec![0.0f32; embed::EMBED_DIMS];
-    q[2] = 1.0;
+    q[..3].copy_from_slice(&[0.5, -0.5, 1.0]);
     let hits = musenmingle::repo::semantic_candidates(
         &pool,
         &q,
@@ -804,7 +806,7 @@ async fn more_like_this_excludes_the_event_itself_and_past_events() {
     .await
     .unwrap();
     assert_eq!(hits.iter().map(|h| h.0).collect::<Vec<_>>(), [far, target]);
-    assert!((hits[0].1 - 1.0).abs() < 1e-6);
+    assert!((hits[0].1 - 1.0 / 1.5f64.sqrt()).abs() < 1e-6, "{hits:?}");
     pool.close().await;
     db.drop_db().await;
 }
