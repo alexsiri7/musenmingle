@@ -1478,39 +1478,6 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                         div class="hero-wrap" { (thumbnail_figure(&e, "hero")) }
                     }
                 }
-                                            br;
-                                            "Ends " (time_tag(end, fmt_date_time(end)))
-                                        }
-                                    }
-                                }
-                            }
-                            div {
-                                dt { "Price" }
-                                dd class=[e.is_free.then_some("free")] {
-                                    (price(&e).unwrap_or_else(|| "Not listed".into()))
-                                    span class="sub" { "Check the venue's page before you go" }
-                                }
-                            }
-                            div {
-                                dt { "Venue" }
-                                dd {
-                                    (e.venue_name.as_deref().unwrap_or("Not listed"))
-                                    @if let Some(a) = &e.address { span class="sub" { (a) } }
-                                }
-                            }
-                            @if let (Some(m), Some(lat), Some(lng)) = (&map, e.lat, e.lng) {
-                                div {
-                                    dt { "Map" }
-                                    dd {
-                                        a href=(m) rel="noopener noreferrer" { "Open in OpenStreetMap ↗" }
-                                        span class="sub" { (format!("{lat:.4}, {lng:.4}")) }
-                                    }
-                                }
-                            }
-                        }
-                        div class="hero-wrap" { (thumbnail_figure(&e, "hero")) }
-                    }
-                }
                 div class="wrap-x" {
                     div class="detail-grid" {
                         div {
