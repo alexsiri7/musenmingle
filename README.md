@@ -458,10 +458,10 @@ railway config apply
 
 Variables are declared with `preserve()`, so their values are managed in the
 dashboard and never committed; when you add a variable in the dashboard, add
-its `preserve()` line too. `GITHUB_TOKEN`, `TICKETMASTER_API_KEY` and
-`CORS_ORIGINS` are not set on Railway yet — add them to `railway.ts` when they
-are. The ingest service has `REQUESTY_API_KEY`, `ENRICH_MODEL`,
-`ENRICH_DAILY_CAP_USD` and `NTFY_TOPIC` (the API needs none of them). Before the first `apply`, check that `plan` shows no unintended changes;
+its `preserve()` line too. `CORS_ORIGINS` is not set on Railway yet — add it to `railway.ts` when it is.
+The ingest service also has `GITHUB_TOKEN`, `TICKETMASTER_API_KEY`,
+`REQUESTY_API_KEY`, `ENRICH_MODEL`, `ENRICH_DAILY_CAP_USD` and `NTFY_TOPIC`
+(the API needs none of the enrichment ones). Before the first `apply`, check that `plan` shows no unintended changes;
 if it reports a service as still managed by a config file, clear that
 service's config-as-code path in the dashboard first.
 
