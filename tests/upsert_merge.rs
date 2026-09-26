@@ -820,6 +820,54 @@ async fn all_day_follows_the_source_that_wins_the_start() {
 }
 
 #[tokio::test]
+async fn a_lone_source_takes_back_all_day_when_it_publishes_a_time() {
+    let Some(db) =
+        TestDb::create("a_lone_source_takes_back_all_day_when_it_publishes_a_time").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let sp_src = source_id(&pool, "serpentine-galleries").await;
+    let show = |starts: &str, all_day: bool| NewEvent {
+        all_day,
+        ..ev(
+            "Open studio day",
+            "Serpentine South",
+            (51.5045, -0.1751),
+            starts,
+            None,
+        )
+    };
+
+    let a = repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-11T23:00:00Z", true),
+        &raw("sp-open"),
+    )
+    .await
+    .unwrap();
+    let b = repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-12T09:00:00Z", false),
+        &raw("sp-open"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(b.event_id, a.event_id);
+    assert_eq!(link_count(&pool, a.event_id).await, 1);
+    let row = repo::get_event(&pool, a.event_id).await.unwrap().unwrap();
+    assert_eq!(
+        (row.starts_at, row.all_day),
+        (t("2026-10-12T09:00:00Z"), false)
+    );
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn fuzzy_merge_prefers_the_closest_title_over_the_oldest() {
     let Some(db) = TestDb::create("fuzzy_merge_prefers_the_closest_title_over_the_oldest").await
     else {
