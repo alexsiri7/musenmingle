@@ -10,6 +10,7 @@ pub mod db;
 pub mod fetch;
 pub mod github;
 pub mod health;
+pub mod matching;
 pub mod model;
 pub mod normalise;
 pub mod repo;
