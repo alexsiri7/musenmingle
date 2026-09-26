@@ -701,6 +701,7 @@ async fn merge_into(
     let (site_wins, api_wins) = match kind {
         SourceKind::Scraper => (!other_same_kind, false),
         SourceKind::Api => (false, !other_same_kind),
+        SourceKind::Aggregator => (false, false),
     };
     let prior = prior_image_url(tx, id).await?;
     let sql = update_from_values(MERGE);

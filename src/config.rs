@@ -10,6 +10,16 @@ use axum::http::HeaderValue;
 pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/thaleia";
 /// Default minimum interval between two requests to the same domain.
 pub const DEFAULT_RATE_LIMIT_MS: u64 = 2_000;
+/// Built-in minimum intervals between requests to particular hosts, in ms.
+/// These are floors: `RATE_LIMIT_MS` / `RATE_LIMIT_OVERRIDES` can make a
+/// host slower but never faster than listed here, so politeness promised to
+/// a site doesn't depend on deployment configuration.
+pub const BUILTIN_MIN_INTERVALS: &[(&str, u64)] = &[
+    // ArtRabbit: an aggregator whose terms restrict reuse; we read only its
+    // listing pages, at most one every 5 s (src/sources/artrabbit.rs).
+    ("www.artrabbit.com", 5_000),
+    ("artrabbit.com", 5_000),
+];
 /// Environment variable holding the Ticketmaster Discovery API key.
 pub const TICKETMASTER_API_KEY_ENV: &str = "TICKETMASTER_API_KEY";
 
@@ -40,12 +50,19 @@ impl RateLimitConfig {
         }
     }
 
-    /// Interval for a given host.
+    /// Interval for a given host: its override (else the default), raised
+    /// to the host's [`BUILTIN_MIN_INTERVALS`] floor if lower.
     pub fn interval_for(&self, host: &str) -> Duration {
-        self.overrides
+        let configured = self
+            .overrides
             .get(host)
             .copied()
-            .unwrap_or(self.default_interval)
+            .unwrap_or(self.default_interval);
+        let floor = BUILTIN_MIN_INTERVALS
+            .iter()
+            .find(|(h, _)| h.eq_ignore_ascii_case(host))
+            .map_or(Duration::ZERO, |(_, ms)| Duration::from_millis(*ms));
+        configured.max(floor)
     }
 
     /// Parse `RATE_LIMIT_MS` and `RATE_LIMIT_OVERRIDES`
@@ -232,6 +249,24 @@ mod tests {
             Duration::from_millis(500)
         );
         assert_eq!(c.interval_for("foo.org"), Duration::from_millis(10));
+    }
+
+    #[test]
+    fn builtin_floors_cannot_be_lowered() {
+        let c = RateLimitConfig::parse(Some("1000"), Some("www.artrabbit.com=100")).unwrap();
+        assert_eq!(c.interval_for("www.artrabbit.com"), Duration::from_secs(5));
+        assert_eq!(c.interval_for("artrabbit.com"), Duration::from_secs(5));
+        assert_eq!(
+            RateLimitConfig::disabled().interval_for("www.artrabbit.com"),
+            Duration::from_secs(5)
+        );
+        // ... but can be raised.
+        let slow = RateLimitConfig::parse(None, Some("www.artrabbit.com=9000")).unwrap();
+        assert_eq!(
+            slow.interval_for("www.artrabbit.com"),
+            Duration::from_secs(9)
+        );
+        assert_eq!(c.interval_for("example.org"), Duration::from_secs(1));
     }
 
     #[test]
