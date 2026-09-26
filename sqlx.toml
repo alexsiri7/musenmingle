@@ -1,6 +1,6 @@
 # SQLx configuration (requires the `sqlx-toml` feature, enabled in Cargo.toml).
 #
-# Thaleia lives inside a shared Postgres. Everything it owns MUST be in the
+# Muse & Mingle lives inside a shared Postgres. Everything it owns MUST be in the
 # `events` schema, including sqlx's migration bookkeeping table, which would
 # otherwise be created as `public._sqlx_migrations`.
 #
@@ -10,6 +10,6 @@
 #
 # Do NOT add `create-schemas` here: `CREATE SCHEMA IF NOT EXISTS` requires
 # CREATE on the database even when the schema already exists, which the
-# restricted `thaleia` role does not have (see ops/sql/create-role.sql).
+# restricted `musenmingle` role does not have (see ops/sql/create-role.sql).
 [migrate]
 table-name = "events._sqlx_migrations"

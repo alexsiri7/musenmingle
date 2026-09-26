@@ -5,15 +5,15 @@ mod common;
 
 use chrono::{Duration, Utc};
 use common::TestDb;
+use musenmingle::github::{GitHubIssueFiler, IssueFiler};
+use musenmingle::health::{HealthAction, HealthChecker, HealthConfig};
+use musenmingle::repo::{self, NewRun, SourceRow};
 use serde_json::json;
 use sqlx::PgPool;
-use thaleia::github::{GitHubIssueFiler, IssueFiler};
-use thaleia::health::{HealthAction, HealthChecker, HealthConfig};
-use thaleia::repo::{self, NewRun, SourceRow};
 use wiremock::matchers::{body_partial_json, header, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-const REPO: &str = "alexsiri7/thaleia";
+const REPO: &str = "alexsiri7/musenmingle";
 const TITLE: &str = "Scraper broken: serpentine-galleries";
 
 async fn add_run(

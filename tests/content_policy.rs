@@ -12,15 +12,15 @@ use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{Request, StatusCode, header};
 use chrono::{Duration, Utc};
 use common::TestDb;
+use musenmingle::api::ApiSettings;
+use musenmingle::config::{RateLimitConfig, SuggestionConfig};
+use musenmingle::fetch::FetchContext;
+use musenmingle::model::{Category, NewEvent, Price, RawEvent, SourceKind};
+use musenmingle::normalise::{EXCERPT_MAX_CHARS, dedupe_key};
+use musenmingle::repo::{self, SourcePolicy};
+use musenmingle::suggestions::Suggestions;
+use musenmingle::thumbs::{self, ThumbConfig};
 use sqlx::PgPool;
-use thaleia::api::ApiSettings;
-use thaleia::config::{RateLimitConfig, SuggestionConfig};
-use thaleia::fetch::FetchContext;
-use thaleia::model::{Category, NewEvent, Price, RawEvent, SourceKind};
-use thaleia::normalise::{EXCERPT_MAX_CHARS, dedupe_key};
-use thaleia::repo::{self, SourcePolicy};
-use thaleia::suggestions::Suggestions;
-use thaleia::thumbs::{self, ThumbConfig};
 use tower::ServiceExt;
 use uuid::Uuid;
 use wiremock::matchers::{method, path};
@@ -243,7 +243,7 @@ async fn enforce_content_policy_cleans_existing_rows() {
     assert_eq!(r.descriptions_trimmed, 1);
     assert_eq!(r.descriptions_cleared + r.images_cleared, 0);
     let trimmed = stored(&pool, other.event_id).await.0.unwrap();
-    assert_eq!(trimmed, thaleia::normalise::excerpt(&long));
+    assert_eq!(trimmed, musenmingle::normalise::excerpt(&long));
 
     // The source's terms turn out to forbid both: existing data goes.
     repo::set_source_policy(
@@ -518,7 +518,7 @@ async fn thumbnailer_caps_work_per_host() {
 // ------------------------------------------------------------ serving & pages
 
 fn app(pool: &PgPool) -> Router {
-    thaleia::api::router(
+    musenmingle::api::router(
         pool.clone(),
         Suggestions::new(
             SuggestionConfig {
@@ -529,7 +529,7 @@ fn app(pool: &PgPool) -> Router {
         )
         .unwrap(),
         ApiSettings {
-            github_repo: "alexsiri7/thaleia".into(),
+            github_repo: "alexsiri7/musenmingle".into(),
             cors_origins: Vec::new(),
         },
     )

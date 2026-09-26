@@ -1,4 +1,4 @@
-/* Thaleia pages: served at /static/style.css (no inline styles; see CSP). */
+/* Muse & Mingle pages: served at /static/style.css (no inline styles; see CSP). */
 :root {
   --bg: #fbfaf7; --fg: #1d1b18; --muted: #5d584f; --line: #dcd6cc;
   --card: #ffffff; --accent: #7a2e8c; --accent-fg: #ffffff; --free: #1f6b3a;

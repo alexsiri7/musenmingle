@@ -1,4 +1,4 @@
-//! `thaleia-ingest`: one-shot ingestion run (scheduled by a Railway cron).
+//! `musenmingle-ingest`: one-shot ingestion run (scheduled by a Railway cron).
 //!
 //! Exits 0 when the run completed, even if individual sources failed (those
 //! are recorded in `events.source_runs` and surfaced as GitHub issues by the
@@ -6,16 +6,16 @@
 
 use anyhow::Context;
 use chrono::Utc;
-use thaleia::config::Config;
-use thaleia::fetch::FetchContext;
-use thaleia::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
-use thaleia::health::{HealthChecker, HealthConfig};
-use thaleia::runner::{RunSummary, Runner};
-use thaleia::{db, sources};
+use musenmingle::config::Config;
+use musenmingle::fetch::FetchContext;
+use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
+use musenmingle::health::{HealthChecker, HealthConfig};
+use musenmingle::runner::{RunSummary, Runner};
+use musenmingle::{db, sources};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    thaleia::init_tracing();
+    musenmingle::init_tracing();
     let config = Config::from_env()?;
     let pool = db::connect(&config.database_url)
         .await

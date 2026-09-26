@@ -10,6 +10,7 @@ function memoryStorage() {
   return {
     getItem: (k) => (data.has(k) ? data.get(k) : null),
     setItem: (k, v) => data.set(k, String(v)),
+    removeItem: (k) => data.delete(k),
     data,
   };
 }
@@ -34,8 +35,8 @@ test("storage round-trips under the versioned key and tolerates failures", () =>
   const s = memoryStorage();
   const items = app.toggle([], { id: ID1, title: "A" }, "2026-09-26T10:00:00Z");
   assert.equal(app.storeSaved(s, items), true);
-  assert.equal(app.STORAGE_KEY, "letsart.saved.v1");
-  assert.ok(s.data.has("letsart.saved.v1"));
+  assert.equal(app.STORAGE_KEY, "musenmingle.saved.v1");
+  assert.ok(s.data.has("musenmingle.saved.v1"));
   assert.deepEqual(app.loadSaved(s), items);
   // Missing storage, corrupt JSON, junk entries, throwing storage.
   assert.deepEqual(app.loadSaved(null), []);
@@ -47,6 +48,39 @@ test("storage round-trips under the versioned key and tolerates failures", () =>
   const throwing = { getItem() { throw new Error("denied"); }, setItem() { throw new Error("quota"); } };
   assert.deepEqual(app.loadSaved(throwing), []);
   assert.equal(app.storeSaved(throwing, items), false);
+});
+
+test("migrateStorage moves the legacy letsart key to the new key once", () => {
+  const items = app.toggle([], { id: ID1, title: "A" }, "2026-09-26T10:00:00Z");
+  const legacy = JSON.stringify({ items });
+  assert.deepEqual(app.LEGACY_STORAGE_KEYS, ["letsart.saved.v1"]);
+
+  // Old key only: copied to the new key, old key removed.
+  const s = memoryStorage();
+  s.setItem("letsart.saved.v1", legacy);
+  assert.equal(app.migrateStorage(s), true);
+  assert.equal(s.data.get("musenmingle.saved.v1"), legacy);
+  assert.ok(!s.data.has("letsart.saved.v1"));
+  assert.deepEqual(app.loadSaved(s), items);
+  // Idempotent.
+  assert.equal(app.migrateStorage(s), false);
+  assert.equal(s.data.get("musenmingle.saved.v1"), legacy);
+
+  // New key already present: never overwritten, old key left alone.
+  const both = memoryStorage();
+  both.setItem("musenmingle.saved.v1", JSON.stringify({ items: [] }));
+  both.setItem("letsart.saved.v1", legacy);
+  assert.equal(app.migrateStorage(both), false);
+  assert.equal(both.data.get("musenmingle.saved.v1"), JSON.stringify({ items: [] }));
+  assert.ok(both.data.has("letsart.saved.v1"));
+
+  // Nothing stored, no storage, or throwing storage: no-op.
+  const empty = memoryStorage();
+  assert.equal(app.migrateStorage(empty), false);
+  assert.equal(empty.data.size, 0);
+  assert.equal(app.migrateStorage(null), false);
+  const throwing = { getItem() { throw new Error("denied"); }, setItem() {}, removeItem() {} };
+  assert.equal(app.migrateStorage(throwing), false);
 });
 
 test("when matches the server's wording in London time", () => {
@@ -75,7 +109,7 @@ test("toICS escapes text, uses UTC and folds long lines", () => {
       { id: ID2, title: "no start", starts_at: null },
     ],
     "2026-09-26T10:00:00.123Z",
-    "https://thaleia.interstellarai.net"
+    "https://musenmingle.interstellarai.net"
   );
   const lines = ics.split("\r\n");
   const unfolded = ics.replace(/\r\n /g, "").split("\r\n");
@@ -85,7 +119,8 @@ test("toICS escapes text, uses UTC and folds long lines", () => {
   assert.ok(unfolded.includes("DTSTART:20261001T170000Z"));
   assert.ok(unfolded.includes("DTEND:20261001T190000Z"));
   assert.ok(unfolded.includes("DTSTAMP:20260926T100000Z"));
-  assert.ok(unfolded.includes(`URL:https://thaleia.interstellarai.net/events/${ID1}`));
+  assert.ok(unfolded.includes(`URL:https://musenmingle.interstellarai.net/events/${ID1}`));
+  assert.ok(unfolded.includes(`UID:${ID1}@musenmingle.interstellarai.net`));
   assert.equal(ics.split("BEGIN:VEVENT").length - 1, 2);
   assert.ok(lines.every((l) => l.length <= 75), "folded");
   assert.ok(lines.some((l) => l.startsWith(" x")), "continuation line");

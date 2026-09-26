@@ -13,18 +13,18 @@ use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{Request, StatusCode, header};
 use chrono::{DateTime, Duration, Utc};
 use common::TestDb;
+use musenmingle::api::ApiSettings;
+use musenmingle::config::SuggestionConfig;
+use musenmingle::github::{GitHubIssueFiler, IssueFiler};
+use musenmingle::suggestions::Suggestions;
 use serde_json::json;
 use sqlx::PgPool;
-use thaleia::api::ApiSettings;
-use thaleia::config::SuggestionConfig;
-use thaleia::github::{GitHubIssueFiler, IssueFiler};
-use thaleia::suggestions::Suggestions;
 use tower::ServiceExt;
 use uuid::Uuid;
 use wiremock::matchers::{body_partial_json, method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-const REPO: &str = "alexsiri7/thaleia";
+const REPO: &str = "alexsiri7/musenmingle";
 
 fn app_with(pool: &PgPool, config: SuggestionConfig, filer: Option<Box<dyn IssueFiler>>) -> Router {
     let config = SuggestionConfig {
@@ -35,7 +35,7 @@ fn app_with(pool: &PgPool, config: SuggestionConfig, filer: Option<Box<dyn Issue
         github_repo: REPO.into(),
         cors_origins: Vec::new(),
     };
-    thaleia::api::router(
+    musenmingle::api::router(
         pool.clone(),
         Suggestions::new(config, filer).unwrap(),
         settings,
@@ -63,7 +63,7 @@ async fn send(app: &Router, req: Request<Body>) -> Page {
     Page {
         status,
         headers,
-        body: String::from_utf8(bytes.to_vec()).unwrap(),
+        body: String::from_utf8_lossy(&bytes).into_owned(),
     }
 }
 
@@ -333,11 +333,30 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
         js.headers[header::CACHE_CONTROL],
         "public, max-age=31536000, immutable"
     );
-    assert!(js.body.contains("letsart.saved.v1"));
+    assert!(js.body.contains("musenmingle.saved.v1"));
 
     let css = get(&app, "/static/style.css").await;
     assert_eq!(css.status, StatusCode::OK);
     assert_eq!(css.headers[header::CONTENT_TYPE], "text/css; charset=utf-8");
+
+    // Site icons, from our own origin and linked from every page.
+    assert!(
+        p.body
+            .contains(r#"<link rel="icon" href="/favicon.svg" type="image/svg+xml">"#)
+    );
+    assert!(
+        p.body
+            .contains(r#"<link rel="icon" href="/favicon.ico" sizes="32x32">"#)
+    );
+    for (path, ct) in [
+        ("/favicon.svg", "image/svg+xml"),
+        ("/favicon.ico", "image/x-icon"),
+        ("/apple-touch-icon.png", "image/png"),
+    ] {
+        let icon = get(&app, path).await;
+        assert_eq!(icon.status, StatusCode::OK, "{path}");
+        assert_eq!(icon.headers[header::CONTENT_TYPE], ct, "{path}");
+    }
     pool.close().await;
     db.drop_db().await;
 }
@@ -537,7 +556,7 @@ async fn home_paginates_with_a_more_link_keeping_filters() {
         return;
     };
     let pool = db.migrated_pool().await;
-    let n = thaleia::web::PAGE_SIZE + 3;
+    let n = musenmingle::web::PAGE_SIZE + 3;
     for i in 0..n {
         insert(
             &pool,
@@ -552,7 +571,10 @@ async fn home_paginates_with_a_more_link_keeping_filters() {
     let app = app(&pool);
 
     let p = get(&app, "/?category=workshop").await;
-    assert_eq!(card_titles(&p.body).len() as i64, thaleia::web::PAGE_SIZE);
+    assert_eq!(
+        card_titles(&p.body).len() as i64,
+        musenmingle::web::PAGE_SIZE
+    );
     let start = p.body.find("<a href=\"/?").expect("More link") + "<a href=\"".len();
     let href = p.body[start..start + p.body[start..].find('"').unwrap()].replace("&amp;", "&");
     assert!(
@@ -646,14 +668,14 @@ async fn sources_page_renders_the_sources_api_data() {
         return;
     };
     let pool = db.migrated_pool().await;
-    let source = thaleia::repo::source_by_key(&pool, "barbican")
+    let source = musenmingle::repo::source_by_key(&pool, "barbican")
         .await
         .unwrap()
         .unwrap();
     let started_at: DateTime<Utc> = "2026-09-26T05:00:00Z".parse().unwrap();
-    thaleia::repo::record_run(
+    musenmingle::repo::record_run(
         &pool,
-        &thaleia::repo::NewRun {
+        &musenmingle::repo::NewRun {
             source_id: source.id,
             started_at,
             finished_at: started_at + Duration::seconds(2),
@@ -696,7 +718,7 @@ async fn sources_page_renders_the_sources_api_data() {
     assert!(p.body.contains(">Southbank Centre</a>"));
     assert!(
         p.body
-            .contains("it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks")
+            .contains("it returns 403 to our crawler's User-Agent; we don't evade blocks")
     );
     assert!(
         p.body
@@ -783,7 +805,7 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     assert!(
         p.body.contains(
             "We looked at Southbank Centre on 25 September 2026 and couldn't include it: \
-         it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks."
+         it returns 403 to our crawler's User-Agent; we don't evade blocks."
         ),
         "{}",
         p.body
@@ -892,7 +914,7 @@ async fn about_page_states_our_approach_with_all_anchors() {
         "free, non-commercial",
         "No ads, no ticket sales, no affiliate links.",
         "robots.txt",
-        "<strong>ThaleiaBot</strong>",
+        "<strong>MuseNMingleBot</strong>",
         "one request every 2 seconds per website",
         "a short excerpt of the description",
         "Image: &lt;your venue&gt;",

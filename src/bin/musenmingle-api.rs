@@ -1,15 +1,16 @@
-//! `thaleia-api`: the HTTP service (health check, read API, site suggestions).
+//! `musenmingle-api`: the HTTP service (health check, read API, site suggestions).
 
 use std::net::SocketAddr;
 
 use anyhow::Context;
-use thaleia::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
-use thaleia::suggestions::Suggestions;
-use thaleia::{api, config::Config, db};
+use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
+use musenmingle::host_redirect::HostRedirect;
+use musenmingle::suggestions::Suggestions;
+use musenmingle::{api, config::Config, db, host_redirect};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    thaleia::init_tracing();
+    musenmingle::init_tracing();
     let config = Config::from_env()?;
     let filer: Option<Box<dyn IssueFiler>> = match &config.github_token {
         Some(token) => Some(Box::new(GitHubIssueFiler::new(
@@ -32,12 +33,16 @@ async fn main() -> anyhow::Result<()> {
     let listener = tokio::net::TcpListener::bind(addr)
         .await
         .with_context(|| format!("binding {addr}"))?;
-    tracing::info!(%addr, version = thaleia::VERSION, "thaleia-api listening");
+    tracing::info!(%addr, version = musenmingle::VERSION, "musenmingle-api listening");
     let settings = api::ApiSettings {
         github_repo: config.github_repo.clone(),
         cors_origins: config.cors_origins.clone(),
     };
-    let app = api::router(pool, suggestions, settings)
+    let redirect = HostRedirect::from_env();
+    if redirect.is_active() {
+        tracing::info!("redirecting legacy hosts to CANONICAL_HOST");
+    }
+    let app = host_redirect::apply(api::router(pool, suggestions, settings), redirect)
         .into_make_service_with_connect_info::<SocketAddr>();
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())

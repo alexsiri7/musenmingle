@@ -12,22 +12,22 @@ use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{Request, StatusCode, header};
 use chrono::{Duration, Utc};
 use common::TestDb;
+use musenmingle::api::ApiSettings;
+use musenmingle::config::SuggestionConfig;
+use musenmingle::contact;
+use musenmingle::github::{GitHubIssueFiler, IssueFiler};
+use musenmingle::suggestions::Suggestions;
 use serde_json::{Value, json};
 use sqlx::PgPool;
-use thaleia::api::ApiSettings;
-use thaleia::config::SuggestionConfig;
-use thaleia::contact;
-use thaleia::github::{GitHubIssueFiler, IssueFiler};
-use thaleia::suggestions::Suggestions;
 use tower::ServiceExt;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-const REPO: &str = "alexsiri7/thaleia";
+const REPO: &str = "alexsiri7/musenmingle";
 const SALT: &str = "test-salt";
 
 fn app(pool: &PgPool, filer: Option<Box<dyn IssueFiler>>) -> Router {
-    thaleia::api::router(
+    musenmingle::api::router(
         pool.clone(),
         Suggestions::new(
             SuggestionConfig {

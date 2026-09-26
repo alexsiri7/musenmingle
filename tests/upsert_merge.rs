@@ -7,13 +7,13 @@ mod common;
 
 use chrono::{DateTime, Utc};
 use common::{TestDb, fixture};
+use musenmingle::matching::{self, MatchInput};
+use musenmingle::model::{Category, NewEvent, OverrideAction, Price, RawEvent, SourceKind};
+use musenmingle::repo;
+use musenmingle::sources::serpentine::parse_detail;
+use musenmingle::sources::{serpentine, ticketmaster};
 use rust_decimal::Decimal;
 use sqlx::PgPool;
-use thaleia::matching::{self, MatchInput};
-use thaleia::model::{Category, NewEvent, OverrideAction, Price, RawEvent, SourceKind};
-use thaleia::repo;
-use thaleia::sources::serpentine::parse_detail;
-use thaleia::sources::{serpentine, ticketmaster};
 
 const TALK_SLUG: &str = "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion-2";
 
@@ -149,8 +149,11 @@ async fn different_dates_stay_separate_and_retitled_events_move() {
     // Same title, a week later, from a different source id: separate event.
     let mut later = base.clone();
     later.starts_at += chrono::Duration::days(7);
-    later.dedupe_key =
-        thaleia::normalise::dedupe_key(&later.title, later.starts_at, later.venue_name.as_deref());
+    later.dedupe_key = musenmingle::normalise::dedupe_key(
+        &later.title,
+        later.starts_at,
+        later.venue_name.as_deref(),
+    );
     let raw_later = RawEvent {
         source_event_id: "other-id".into(),
         ..raw.clone()
@@ -178,7 +181,7 @@ async fn different_dates_stay_separate_and_retitled_events_move() {
     // A plain title fix from the same source updates in place.
     let mut renamed = later.clone();
     renamed.title = "Saturday Talks (updated)".into();
-    renamed.dedupe_key = thaleia::normalise::dedupe_key(
+    renamed.dedupe_key = musenmingle::normalise::dedupe_key(
         &renamed.title,
         renamed.starts_at,
         renamed.venue_name.as_deref(),
@@ -220,7 +223,7 @@ fn ev(
         image_url: None,
         category: Category::Exhibition,
         tags: vec![],
-        dedupe_key: thaleia::normalise::dedupe_key(title, starts_at, Some(venue)),
+        dedupe_key: musenmingle::normalise::dedupe_key(title, starts_at, Some(venue)),
     }
 }
 

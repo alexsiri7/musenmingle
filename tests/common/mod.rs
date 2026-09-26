@@ -4,7 +4,7 @@
 //! where the user may `CREATE DATABASE` (CI uses a `postgres:17` service).
 //! Each test gets its own fresh database, dropped afterwards. When the
 //! variable is unset the test prints a notice and passes, unless
-//! `THALEIA_REQUIRE_DB=1` (set in CI) in which case it fails.
+//! `MUSENMINGLE_REQUIRE_DB=1` (set in CI) in which case it fails.
 #![allow(dead_code)]
 
 use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
@@ -23,15 +23,15 @@ impl TestDb {
     /// `TEST_DATABASE_URL` is not set.
     pub async fn create(test_name: &str) -> Option<TestDb> {
         let Ok(admin_url) = std::env::var("TEST_DATABASE_URL") else {
-            if std::env::var("THALEIA_REQUIRE_DB").is_ok_and(|v| v == "1") {
-                panic!("THALEIA_REQUIRE_DB=1 but TEST_DATABASE_URL is not set");
+            if std::env::var("MUSENMINGLE_REQUIRE_DB").is_ok_and(|v| v == "1") {
+                panic!("MUSENMINGLE_REQUIRE_DB=1 but TEST_DATABASE_URL is not set");
             }
             notice(&format!(
                 "SKIPPING {test_name}: TEST_DATABASE_URL is not set (see README: Local development)"
             ));
             return None;
         };
-        let name = format!("thaleia_test_{}", uuid::Uuid::new_v4().simple());
+        let name = format!("musenmingle_test_{}", uuid::Uuid::new_v4().simple());
         let admin = PgConnectOptions::from_str(&admin_url).expect("valid TEST_DATABASE_URL");
         let mut conn = admin.connect().await.expect("connect to TEST_DATABASE_URL");
         sqlx::raw_sql(AssertSqlSafe(format!("CREATE DATABASE {name}")))
@@ -66,10 +66,10 @@ impl TestDb {
     /// A pool configured exactly like the binaries (search_path=events),
     /// with migrations applied.
     pub async fn migrated_pool(&self) -> PgPool {
-        let pool = thaleia::db::connect(&self.url())
+        let pool = musenmingle::db::connect(&self.url())
             .await
             .expect("connect app pool");
-        thaleia::db::migrate(&pool).await.expect("migrate");
+        musenmingle::db::migrate(&pool).await.expect("migrate");
         pool
     }
 

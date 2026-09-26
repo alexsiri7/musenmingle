@@ -1,5 +1,5 @@
 [package]
-name = "thaleia"
+name = "musenmingle"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
@@ -8,16 +8,16 @@ publish = false
 description = "London cultural events for creative people: ingestion backend and read API"
 
 [lib]
-name = "thaleia"
+name = "musenmingle"
 path = "src/lib.rs"
 
 [[bin]]
-name = "thaleia-api"
-path = "src/bin/thaleia-api.rs"
+name = "musenmingle-api"
+path = "src/bin/musenmingle-api.rs"
 
 [[bin]]
-name = "thaleia-ingest"
-path = "src/bin/thaleia-ingest.rs"
+name = "musenmingle-ingest"
+path = "src/bin/musenmingle-ingest.rs"
 
 [dependencies]
 anyhow = "1"

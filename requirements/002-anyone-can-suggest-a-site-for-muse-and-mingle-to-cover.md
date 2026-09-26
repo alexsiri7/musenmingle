@@ -3,7 +3,7 @@ created: '2026-09-26'
 github_issue: 2
 id: '002'
 status: idea
-title: Anyone can suggest a site for Thaleia to cover
+title: Anyone can suggest a site for Muse & Mingle to cover
 updated: '2026-09-26'
 ---
 
@@ -13,7 +13,7 @@ Much of London's creative scene (small galleries, writing groups, community meet
 
 ## What
 
-Anyone can submit a website URL they think Thaleia should cover and gets an immediate answer: accepted, already covered, already suggested, or rejected as invalid.
+Anyone can submit a website URL they think Muse & Mingle should cover and gets an immediate answer: accepted, already covered, already suggested, or rejected as invalid.
 
 - A site we already scrape, or one already waiting, isn't queued twice, however the URL is written (same domain, different path, http vs https, with or without www).
 - One person can't flood the queue: submissions from the same source are rate-limited, with a clear "try again later".

@@ -4,10 +4,10 @@
 mod common;
 
 use common::fixture;
-use thaleia::config::RateLimitConfig;
-use thaleia::fetch::FetchContext;
-use thaleia::sources::Source;
-use thaleia::sources::somerset_house::{MAX_LISTING_PAGES, SomersetHouse, parse_listing};
+use musenmingle::config::RateLimitConfig;
+use musenmingle::fetch::FetchContext;
+use musenmingle::sources::Source;
+use musenmingle::sources::somerset_house::{MAX_LISTING_PAGES, SomersetHouse, parse_listing};
 use wiremock::matchers::{method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -152,7 +152,7 @@ async fn failed_later_page_is_a_soft_error() {
 #[tokio::test]
 async fn robots_disallow_blocks_the_scraper() {
     let server = MockServer::start().await;
-    mount_robots(&server, "User-agent: ThaleiaBot\nDisallow: /whats-on\n").await;
+    mount_robots(&server, "User-agent: MuseNMingleBot\nDisallow: /whats-on\n").await;
     Mock::given(method("GET"))
         .and(path("/whats-on"))
         .respond_with(ResponseTemplate::new(200).set_body_string("should never be fetched"))

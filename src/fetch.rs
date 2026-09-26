@@ -27,11 +27,11 @@ use url::Url;
 use crate::config::RateLimitConfig;
 
 /// Robots.txt product token.
-pub const ROBOTS_AGENT: &str = "ThaleiaBot";
+pub const ROBOTS_AGENT: &str = "MuseNMingleBot";
 
 /// Where site owners learn what the bot does and how to reach us (the
 /// "For venues" section of the public About page).
-pub const BOT_INFO_URL: &str = "https://thaleia.interstellarai.net/about#for-venues";
+pub const BOT_INFO_URL: &str = "https://musenmingle.interstellarai.net/about#for-venues";
 
 /// The User-Agent sent with every request.
 pub fn user_agent() -> String {
@@ -349,7 +349,7 @@ mod tests {
         assert_eq!(
             ua,
             format!(
-                "ThaleiaBot/{} (+https://thaleia.interstellarai.net/about#for-venues)",
+                "MuseNMingleBot/{} (+https://musenmingle.interstellarai.net/about#for-venues)",
                 crate::VERSION
             )
         );
@@ -370,7 +370,7 @@ mod tests {
 
     #[test]
     fn robots_rules_for_our_agent_and_wildcard() {
-        let txt = b"User-agent: *\nDisallow: /private\n\nUser-agent: ThaleiaBot\nDisallow: /events/secret\nAllow: /events/secret/ok\nCrawl-delay: 5\n";
+        let txt = b"User-agent: *\nDisallow: /private\n\nUser-agent: MuseNMingleBot\nDisallow: /events/secret\nAllow: /events/secret/ok\nCrawl-delay: 5\n";
         let p = RobotsPolicy::from_response(StatusCode::OK, txt);
         // Our specific group wins over `*`, so /private is allowed for us.
         assert!(p.allowed(&u("https://x.test/private")));

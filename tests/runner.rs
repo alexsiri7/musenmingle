@@ -9,14 +9,14 @@ use std::time::Duration;
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
 use common::TestDb;
-use thaleia::config::RateLimitConfig;
-use thaleia::fetch::FetchContext;
-use thaleia::health::{HealthAction, HealthChecker, HealthConfig};
-use thaleia::model::{Category, NewEvent, Price, RawEvent, SourceKind};
-use thaleia::normalise::dedupe_key;
-use thaleia::repo;
-use thaleia::runner::{INGEST_LOCK_KEY, RunSummary, Runner};
-use thaleia::sources::{SkipReason, Source, SourceError};
+use musenmingle::config::RateLimitConfig;
+use musenmingle::fetch::FetchContext;
+use musenmingle::health::{HealthAction, HealthChecker, HealthConfig};
+use musenmingle::model::{Category, NewEvent, Price, RawEvent, SourceKind};
+use musenmingle::normalise::dedupe_key;
+use musenmingle::repo;
+use musenmingle::runner::{INGEST_LOCK_KEY, RunSummary, Runner};
+use musenmingle::sources::{SkipReason, Source, SourceError};
 
 struct FakeSource {
     now: DateTime<Utc>,

@@ -9,14 +9,14 @@
 mod common;
 
 use common::{TestDb, fixture};
-use thaleia::config::RateLimitConfig;
-use thaleia::fetch::FetchContext;
-use thaleia::matching::{self, MatchInput};
-use thaleia::model::{NewEvent, RawEvent};
-use thaleia::repo;
-use thaleia::sources::Source;
-use thaleia::sources::artrabbit::{self, ArtRabbit, parse_listing};
-use thaleia::sources::somerset_house;
+use musenmingle::config::RateLimitConfig;
+use musenmingle::fetch::FetchContext;
+use musenmingle::matching::{self, MatchInput};
+use musenmingle::model::{NewEvent, RawEvent};
+use musenmingle::repo;
+use musenmingle::sources::Source;
+use musenmingle::sources::artrabbit::{self, ArtRabbit, parse_listing};
+use musenmingle::sources::somerset_house;
 use wiremock::matchers::{method, path, query_param, query_param_is_missing};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -209,7 +209,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .and(path("/robots.txt"))
         .respond_with(
             ResponseTemplate::new(200)
-                .set_body_string("User-agent: ThaleiaBot\nDisallow: /all-shows\n"),
+                .set_body_string("User-agent: MuseNMingleBot\nDisallow: /all-shows\n"),
         )
         .mount(&server)
         .await;

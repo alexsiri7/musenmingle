@@ -13,7 +13,7 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 
 ### Findings
 
-- robots.txt (fetched with the ThaleiaBot UA), relevant lines:
+- robots.txt (fetched with the MuseNMingleBot UA), relevant lines:
   ```
   ```
 - JSON-LD `Event` markup: yes / no / partial (where?)
@@ -25,7 +25,7 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 ### Checklist
 
 - [ ] Site name, events page URL and proposed source key
-- [ ] robots.txt checked with the ThaleiaBot UA; events pages allowed (paste the relevant lines)
+- [ ] robots.txt checked with the MuseNMingleBot UA; events pages allowed (paste the relevant lines)
 - [ ] JSON-LD `Event` markup present? (listing and/or detail pages) — if not, which CSS selectors
 - [ ] Pagination / detail pages and a per-run fetch cap
 - [ ] Proposed `interval_minutes`

@@ -151,7 +151,7 @@ pub fn issue_body(url: &str, domain: &str, note: Option<&str>) -> String {
         .unwrap_or_default();
     format!(
         "Suggested via `POST /v1/suggestions`: **{domain}**\n\n{note}{filled}\n\n\
-         _Filed automatically by thaleia-api._"
+         _Filed automatically by musenmingle-api._"
     )
 }
 

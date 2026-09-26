@@ -4,7 +4,7 @@
 //! * robots.txt (checked 2026-09-26, saved as a fixture): `User-agent: *`
 //!   disallows only technical paths (`/ajax/*.tpl`, `/account/`, `/*.php`,
 //!   ...), so the `/all-shows/...` listing is allowed. (It blocks GPTBot and
-//!   ClaudeBot by name; ThaleiaBot is neither and parses deterministically.)
+//!   ClaudeBot by name; MuseNMingleBot is neither and parses deterministically.)
 //! * **Terms** (<https://www.artrabbit.com/about/terms>, checked 2026-09-26)
 //!   prohibit "reproducing, copying, editing, transmitting, uploading or
 //!   incorporating into any other materials, any of the Website, including

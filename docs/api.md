@@ -1,4 +1,4 @@
-# Thaleia HTTP API
+# Muse & Mingle HTTP API
 
 All responses are JSON with snake_case field names. Field names are stable:
 they are not renamed or removed without notice; new fields may be added.
@@ -41,7 +41,7 @@ image does). `GET /thumbs/{event_id}` serves the current thumbnail without
 hashes and images from sources that no longer allow them are 404.
 
 Browsers may call the API only from the origins listed in `CORS_ORIGINS`
-(comma-separated, e.g. `https://thaleia.example,http://localhost:5173`).
+(comma-separated, e.g. `https://musenmingle.example,http://localhost:5173`).
 Unset means no cross-origin access.
 
 ## `GET /v1/events`
@@ -183,7 +183,7 @@ Every configured source, ordered by `key`.
       },
       "skip": null,
       "status": "broken",
-      "issue_url": "https://github.com/alexsiri7/thaleia/issues/31"
+      "issue_url": "https://github.com/alexsiri7/musenmingle/issues/31"
     },
     {
       "key": "ticketmaster",
@@ -212,9 +212,9 @@ scrape, most recently checked first:
     "domain": "southbankcentre.co.uk",
     "url": "https://www.southbankcentre.co.uk/whats-on",
     "reason_code": "bot_blocked",
-    "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+    "reason_text": "it returns 403 to our crawler's User-Agent; we don't evade blocks",
     "checked_on": "2026-09-25",
-    "issue_url": "https://github.com/alexsiri7/thaleia/issues/6"
+    "issue_url": "https://github.com/alexsiri7/musenmingle/issues/6"
   }
 ]
 ```

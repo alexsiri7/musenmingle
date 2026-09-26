@@ -13,19 +13,19 @@ async fn healthz_ok_with_database() {
         return;
     };
     let pool = db.migrated_pool().await;
-    let suggestions = thaleia::suggestions::Suggestions::new(
-        thaleia::config::SuggestionConfig {
+    let suggestions = musenmingle::suggestions::Suggestions::new(
+        musenmingle::config::SuggestionConfig {
             ip_salt: Some("salt".into()),
             ..Default::default()
         },
         None,
     )
     .unwrap();
-    let settings = thaleia::api::ApiSettings {
-        github_repo: "alexsiri7/thaleia".into(),
+    let settings = musenmingle::api::ApiSettings {
+        github_repo: "alexsiri7/musenmingle".into(),
         cors_origins: Vec::new(),
     };
-    let resp = thaleia::api::router(pool.clone(), suggestions, settings)
+    let resp = musenmingle::api::router(pool.clone(), suggestions, settings)
         .oneshot(Request::get("/healthz").body(Body::empty()).unwrap())
         .await
         .unwrap();

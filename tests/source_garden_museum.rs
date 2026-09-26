@@ -4,10 +4,10 @@
 mod common;
 
 use common::fixture;
-use thaleia::config::RateLimitConfig;
-use thaleia::fetch::FetchContext;
-use thaleia::sources::Source;
-use thaleia::sources::garden_museum::{GardenMuseum, ListingItem, parse_detail, parse_listing};
+use musenmingle::config::RateLimitConfig;
+use musenmingle::fetch::FetchContext;
+use musenmingle::sources::Source;
+use musenmingle::sources::garden_museum::{GardenMuseum, ListingItem, parse_detail, parse_listing};
 use url::Url;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -218,7 +218,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .and(path("/robots.txt"))
         .respond_with(
             ResponseTemplate::new(200)
-                .set_body_string("User-agent: ThaleiaBot\nDisallow: /whats-on\n"),
+                .set_body_string("User-agent: MuseNMingleBot\nDisallow: /whats-on\n"),
         )
         .mount(&server)
         .await;
