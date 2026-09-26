@@ -1,0 +1,234 @@
+---
+source: tests/source_courtauld.rs
+expression: listing()
+---
+[
+  {
+    "id": 171220,
+    "path": "/whats-on/exh-modern-painting-from-the-courtauld-and-reuben-collections/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 169977,
+    "path": "/whats-on/courtauld-commission-2026-ella-walker/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 153975,
+    "path": "/whats-on/hepworth-and-nicholson-the-hampstead-studio-photographs/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 174483,
+    "path": "/whats-on/buddhanature-exhibiting-buddhist-art-in-a-time-of-climate-crisis/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 168369,
+    "path": "/whats-on/looking-at-edward-gibbon/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 155134,
+    "path": "/whats-on/exh-salman-toor-drawings/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 153971,
+    "path": "/whats-on/exh-salman-toor-someone-like-you/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 174694,
+    "path": "/whats-on/research-led-curating-in-an-art-fair-context/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174577,
+    "path": "/whats-on/andy-warhols-guide-to-everyday-life/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173773,
+    "path": "/whats-on/what-we-carry-we-cannot-leave-artists-in-response-to-the-british-pavilion-at-the-61st-venice-biennale/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173907,
+    "path": "/whats-on/the-martyr-and-distraction-jacques-callots-etching-of-st-sebastian-ca-1630/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174411,
+    "path": "/whats-on/mira-schor-artist-talk-and-panel/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 154911,
+    "path": "/whats-on/exh-winifred-gill/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 174755,
+    "path": "/whats-on/medieval-work-in-progress-seminar-the-bayeux-tapestry-on-display/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173209,
+    "path": "/whats-on/book-talk-hurled-towards-the-future-lesbian-photography-and-queer-imagination-in-1980s-london/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174423,
+    "path": "/whats-on/borobudur-as-living-heritage-historical-precedents-and-futures-of-non-intervention/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 169730,
+    "path": "/whats-on/the-romanesque-sculpture-of-norwich-castle-keep/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173219,
+    "path": "/whats-on/why-constable-didnt-give-up-figure-painting/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 161157,
+    "path": "/whats-on/the-portals-of-notre-dame-in-paris-findings-from-the-current-construction-site/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174706,
+    "path": "/whats-on/untold-tales-women-pioneers-in-british-and-irish-architectural-history/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174845,
+    "path": "/whats-on/sacred-flowscapes-negotiating-and-imagining-the-spaces-of-chinese-religion-in-singapore/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174589,
+    "path": "/whats-on/robert-ryman-a-new-way-of-seeing-symposium/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174933,
+    "path": "/whats-on/public-intimacies-and-wig-stores-entangled-migrations-of-korean-and-african-americans/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173224,
+    "path": "/whats-on/art-monthly-at-50/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 175153,
+    "path": "/whats-on/the-metabolism-of-landscape-ecology-and-natural-philosophy-in-the-prints-of-hercules-segers/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 175353,
+    "path": "/whats-on/art-beyond-the-nation-statehood-in-contemporary-art-from-kazakhstan/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173234,
+    "path": "/whats-on/a-matrilineal-descent-racial-inheritances-in-victorian-paintings-of-mothers-and-their-children/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174771,
+    "path": "/whats-on/singulariter-afficitur-ad-gloriosissimum-lignum-crucis-jean-duc-de-berry-and-the-cross/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 174606,
+    "path": "/whats-on/a-book-talk-women-artists-and-abstract-art-in-postwar-rome/",
+    "category": "talk",
+    "venue": "vernon-square"
+  },
+  {
+    "id": 173161,
+    "path": "/whats-on/exh-new-discoveries-drawing-in-the-age-of-bruegel/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173655,
+    "path": "/whats-on/georgia-okeeffe-ghost-ranch/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173157,
+    "path": "/whats-on/exh-paula-rego-pendle-witches/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173662,
+    "path": "/whats-on/exh-paula-rego-dog-woman/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173473,
+    "path": "/whats-on/exh-rubens-the-master-and-his-circle/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173164,
+    "path": "/whats-on/exh-turner-and-the-landscape-generation-journeys-in-watercolour/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173728,
+    "path": "/whats-on/exh-vanessa-bell-a-rediscovery/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 173486,
+    "path": "/whats-on/exh-georgia-okeeffe-life-at-ghost-ranch/",
+    "category": "exhibition",
+    "venue": "gallery"
+  },
+  {
+    "id": 153973,
+    "path": "/whats-on/exh-the-painted-tower-conservation-in-context-at-longthorpe/",
+    "category": "exhibition",
+    "venue": "gallery"
+  }
+]

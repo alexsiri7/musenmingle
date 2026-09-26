@@ -58,6 +58,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     subtitle and description.
   - `whitechapel-gallery` — CSS-selector scraper (no JSON-LD): exhibitions
     listing → detail pages for dates and free-entry status.
+  - `courtauld` — the site's listing is rendered by JavaScript, so it reads
+    the same GET JSON endpoints (the programme id list + WordPress REST
+    `events` for links and taxonomy classes) → server-rendered detail pages
+    (CSS selectors) for dates, times and price; gallery exhibitions and
+    public talks at Vernon Square, online items and courses skipped.
   - `barbican` — CSS-selector scraper (no JSON-LD): the art & design and
     talks & events listings (paginated) → detail pages for times, art-form
     tags (category) and the standard ticket price.

@@ -1,0 +1,204 @@
+---
+source: tests/source_courtauld.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Somerset House, Strand, London WC2R 0RN",
+      "category": "exhibition",
+      "dedupe_key": "salman-toor-drawings|2026-10-02|courtauld",
+      "description": "‘Painting was something I learned when I moved from Pakistan to the United States, but drawing I always considered as second nature.’ – Salman Toor (2020) For Salman Toor (b.1983), drawing is an integral part of his artistic life. To coincide with the exhibition Salman Toor: Someone Like You, this focused display of a substantial group of works on paper, made with ink, charcoal, and gouache, showcases the artist’s mastery of drawing and the way in which it informs his practice as a painter. Having started drawing as a child, figure-drawing classes were a crucial part of Toor’s undergraduate training. Informed by his close study of art history, particularly of baroque works, Toor’s arresting drawings are characterised by his striking treatment of light as well as his rendering of real and implied movement to create pictures charged with a sense of dynamism and inner life. Toor often works on variations of recurring motifs. Among the works included in this presentation are examples of his distinctive drawings of individuals and groups of figures at border control checks, as well as still-lifes such as Fag Puddle in Vitrine (2021), which capture the fascination and greed connected to histories of accumulation and plundering. At times, the artist has reworked historical paintings that especially affected him into new narratives and compositions, such as in his drawing Three Mascots (2023), after Pieter Bruegel the Elder’s grisaille The Three Soldiers (1568). Although they are derived from his imagination, Toor’s drawings are often based on memories, especially the faces of friends and acquaintances. Toor has said that drawing someone is a way of connecting, ‘like praying for someone, or thinking about them, creating a fantasy of them’. This display is included in the Permanent Collection or Permanent Collection + Exhibition ticket. Salman Toor: Someone Like You is on display in the Denise Coates Exhibition Gallery, Floor 3, from 2 Oct 2026 – 10 Jan 2027. The programme of displays in the Gilbert and Ildiko Butler Drawings Gallery is generously supported by the International Music and Art Foundation, with additional support from James Bartos.",
+      "ends_at": "2027-01-10T00:00:00Z",
+      "image_url": "https://courtauld.ac.uk/wp-content/uploads/2025/08/D.2024.XX_.2-scaled.jpg",
+      "lat": 51.5111,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Salman Toor: Drawings",
+      "url": "https://courtauld.ac.uk/whats-on/exh-salman-toor-drawings/",
+      "venue_name": "The Courtauld Gallery"
+    },
+    "payload": {
+      "category": "exhibition",
+      "date_text": "2 Oct 2026 - 10 Jan 2027",
+      "description": "<h3>‘Painting was something I learned when I moved from Pakistan to the United States, but drawing I always considered as second nature.’ – Salman Toor (2020)</h3>\n<p>For Salman Toor (b.1983), drawing is an integral part of his artistic life. To coincide with the exhibition <em>Salman Toor: Someone Like You</em>, this focused display of a substantial group of works on paper, made with ink, charcoal, and gouache, showcases the artist’s mastery of drawing and the way in which it informs his practice as a painter.</p>\n<p>Having started drawing as a child, figure-drawing classes were a crucial part of Toor’s undergraduate training. Informed by his close study of art history, particularly of baroque works, Toor’s arresting drawings are characterised by his striking treatment of light as well as his rendering of real and implied movement to create pictures charged with a sense of dynamism and inner life.</p>\n<p>Toor often works on variations of recurring motifs. Among the works included in this presentation are examples of his distinctive drawings of individuals and groups of figures at border control checks, as well as still-lifes such as <em>Fag Puddle in Vitrine</em> (2021), which capture the fascination and greed connected to histories of accumulation and plundering. At times, the artist has reworked historical paintings that especially affected him into new narratives and compositions, such as in his drawing <em>Three Mascots</em> (2023), after Pieter Bruegel the Elder’s grisaille <em>The Three Soldiers</em> (1568).</p>\n<p>Although they are derived from his imagination, Toor’s drawings are often based on memories, especially the faces of friends and acquaintances.&nbsp;Toor has said that drawing someone is a way of connecting, ‘like praying for someone, or thinking about them, creating a fantasy of them’.</p>\n<p><strong>This display is included in the Permanent Collection or Permanent Collection + Exhibition ticket.&nbsp;</strong></p>\n<p><a href=\"https://courtauld.ac.uk/whats-on/exh-salman-toor-someone-like-you/\"><strong><em>Salman Toor: Someone Like You </em></strong></a>is on display in the Denise Coates Exhibition Gallery, Floor 3, from 2 Oct 2026 – 10 Jan 2027.</p>\n<p><span data-teams=\"true\">The programme of displays in the Gilbert and Ildiko Butler Drawings Gallery is generously supported by the International Music and Art Foundation, with additional support from James Bartos.</span></p>",
+      "image_url": "https://courtauld.ac.uk/wp-content/uploads/2025/08/D.2024.XX_.2-scaled.jpg",
+      "location_text": "Courtauld Gallery The Gilbert and Ildiko Butler Drawings Gallery",
+      "price_text": null,
+      "time_text": "10:00 – 18:00 (last entry 17:15)",
+      "title": "Salman Toor: Drawings",
+      "url": "https://courtauld.ac.uk/whats-on/exh-salman-toor-drawings/",
+      "venue": "gallery"
+    },
+    "slug": "exh-salman-toor-drawings",
+    "source_event_id": "155134"
+  },
+  {
+    "event": {
+      "address": "Somerset House, Strand, London WC2R 0RN",
+      "category": "exhibition",
+      "dedupe_key": "salman-toor-someone-like-you|2026-10-02|courtauld",
+      "description": "The first solo exhibition in Europe of the celebrated New York-based painter Salman Toor. The exhibition focuses on Salman Toor’s exploration of human interactions and the desire and struggle to experience a sense of belonging, both culturally and emotionally. The exhibition will bring together 19 of the artist’s most iconic, thought-provoking and at times humorous paintings, never-before-seen in Britain, that represent people in shared moments of friendship and love, as well as experiencing solitude and alienation. While Toor’s figures and scenes are fictional, they are rooted in his personal experiences and memories. Speaking of his works, he says they “depict queer and immigrant lives that straddle different cultures and inhabit the tension between intimacy and exposure, belonging and estrangement. What it means to find a community, but also the daily costs associated with visibility”. Born in Lahore, Pakistan, in 1983, Toor trained in the United States. He currently lives and works in New York. He has had major exhibitions internationally, including his acclaimed first institutional solo exhibition at the Whitney Museum of American Art, New York (2020-21). More recently, he participated in the 60th International Art Exhibition of La Biennale di Venezia (2024). The Courtauld’s exhibition will be Toor’s first solo museum show in Europe. Toor’s work is rooted in a deep engagement with and admiration for the Old Masters, in particular Baroque and 18th century painting, and the Courtauld is a museum he particularly enjoys. One of the principal works in the exhibition, The Bar on East 13th (2019), revisits the Courtauld’s celebrated painting by Édouard Manet, A Bar at the Folies-Bergère (1882). The exhibition will be accompanied by a display of Toor’s drawings in the Gilbert & Ildiko Butler Drawings Gallery. Showcasing Toor’s mastery of drawing and the way it informs his practice as a painter, the display will include Fag Puddle in Vitrine (2021), acquired by the Courtauld in 2024. Courtauld Members go free.",
+      "ends_at": "2027-01-10T00:00:00Z",
+      "image_url": "https://courtauld.ac.uk/wp-content/uploads/2025/09/EXH.2026.ST_.003_Bar-Boy_2019_C33895-e1784115434729.jpg",
+      "lat": 51.5111,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Salman Toor: Someone Like You",
+      "url": "https://courtauld.ac.uk/whats-on/exh-salman-toor-someone-like-you/",
+      "venue_name": "The Courtauld Gallery"
+    },
+    "payload": {
+      "category": "exhibition",
+      "date_text": "2 October 2026 – 10 January 2027",
+      "description": "<h3>The first solo exhibition in Europe of the celebrated New York-based painter Salman Toor.</h3>\n<p>The exhibition focuses on Salman Toor’s exploration of human interactions and the desire and struggle to experience a sense of belonging, both culturally and emotionally. The exhibition will bring together 19 of the artist’s most iconic, thought-provoking and at times humorous paintings, never-before-seen in Britain, that represent people in shared moments of friendship and love, as well as experiencing solitude and alienation.</p>\n<p><span data-teams=\"true\">While Toor’s figures and scenes are fictional, they are rooted in his personal experiences and memories. Speaking of his works, he says they “depict queer and immigrant lives that straddle different cultures and inhabit the tension between intimacy and exposure, belonging and estrangement. What it means to find a community, but also the daily costs associated with visibility”.</span></p>\n<p>Born in Lahore, Pakistan, in 1983, Toor trained in the United States. He currently lives and works in New York. He has had major exhibitions internationally, including his acclaimed first institutional solo exhibition at the Whitney Museum of American Art, New York (2020-21). More recently, he participated in the 60th International Art Exhibition of La Biennale di Venezia (2024). The Courtauld’s exhibition will be Toor’s first solo museum show in Europe.</p>\n<p><span data-teams=\"true\">Toor’s work is rooted in a deep engagement with and admiration for the Old Masters, in particular Baroque and 18th century painting, and the Courtauld is a museum he particularly enjoys.</span> One of the principal works in the exhibition, <em>The Bar on East 13th</em> (2019), revisits the Courtauld’s celebrated painting by Édouard Manet, <em>A Bar at the Folies-Bergère</em> (1882).</p>\n<p>The exhibition will be accompanied by a display of Toor’s drawings in the Gilbert &amp; Ildiko Butler Drawings Gallery. Showcasing Toor’s mastery of drawing and the way it informs his practice as a painter, the display will include <em>Fag Puddle in Vitrine</em> (2021), acquired by the Courtauld in 2024.</p>\n<p><strong>Courtauld Members go free.</strong></p>",
+      "image_url": "https://courtauld.ac.uk/wp-content/uploads/2025/09/EXH.2026.ST_.003_Bar-Boy_2019_C33895-e1784115434729.jpg",
+      "location_text": "Courtauld Gallery The Denise Coates Exhibition Galleries",
+      "price_text": null,
+      "time_text": "10:00 – 18:00 (last entry 17:15)",
+      "title": "Salman Toor: Someone Like You",
+      "url": "https://courtauld.ac.uk/whats-on/exh-salman-toor-someone-like-you/",
+      "venue": "gallery"
+    },
+    "slug": "exh-salman-toor-someone-like-you",
+    "source_event_id": "153971"
+  },
+  {
+    "event": {
+      "address": "Vernon Square, Penton Rise, London WC1X 9EW",
+      "category": "talk",
+      "dedupe_key": "untold-tales-women-pioneers-in-british-irish-architectural-history|2026-11-13|courtauld-vernon-square",
+      "description": "There have been a growing number of studies of female architects over the past twenty years but almost no accounts of female architectural historians. One exception is Dana Arnold’s edited collection Women and Architectural History: The Monstrous Regiment Then and Now (2025) which involved women operating from the 1970s onwards. This symposium looks back further to the earliest generations involved in the writing and promotion of architectural history in a wide range of spheres. We are interested in women who were involved in the subject as academics, curators, journalists, photographers, writers and in the conservation and heritage spheres from the nineteenth century onwards. Organised by Dr Kyle Leyden, Lecturer in Early Modern Architecture and Visual Culture, the Courtauld; Dr Manolo Guerci, Reader in Architecture, University of Kent and Prof. Elizabeth McKellar, President, SAHGB. Supported by the Paul Mellon Centre for Studies in British Art and The Institute of Historic Building Conservation.",
+      "ends_at": "2026-11-14T00:00:00Z",
+      "image_url": null,
+      "lat": 51.5298,
+      "lng": -0.1164,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "35.00",
+        "min": "35.00"
+      },
+      "starts_at": "2026-11-13T00:00:00Z",
+      "tags": [
+        "art",
+        "art history"
+      ],
+      "title": "Untold Tales: Women Pioneers in British and Irish Architectural History",
+      "url": "https://courtauld.ac.uk/whats-on/untold-tales-women-pioneers-in-british-and-irish-architectural-history/",
+      "venue_name": "The Courtauld, Vernon Square"
+    },
+    "payload": {
+      "category": "talk",
+      "date_text": "13 Nov - 14 Nov 2026",
+      "description": "<p>There have been a growing number of studies of female architects over the past twenty years but almost no accounts of female architectural historians. One exception is Dana Arnold’s edited collection <i>Women and Architectural History: The Monstrous Regiment Then and Now</i> (2025) which involved women operating from the 1970s onwards. This symposium looks back further to the earliest generations involved in the writing and promotion of architectural history in a wide range of spheres. We are interested in women who were involved in the subject as academics, curators, journalists, photographers, writers and in the conservation and heritage spheres from the nineteenth century onwards.</p>\n<p><strong>Organised by Dr Kyle Leyden, Lecturer in Early Modern Architecture and Visual Culture, the Courtauld; Dr Manolo Guerci, <span data-olk-copy-source=\"MessageBody\">Reader in Architecture, University of Kent</span> and Prof. Elizabeth McKellar, <span data-olk-copy-source=\"MessageBody\">President, SAHGB</span>. <span data-olk-copy-source=\"MessageBody\">Supported by the Paul Mellon Centre for Studies in British Art and The Institute of Historic Building Conservation.</span></strong></p>",
+      "image_url": null,
+      "location_text": "Vernon Square Campus, Lecture Theatre 2",
+      "price_text": "£35.00 (including sandwich lunch), concessions available",
+      "time_text": "Friday 17:30–20:00; Saturday 10:15–19:30",
+      "title": "Untold Tales: Women Pioneers in British and Irish Architectural History",
+      "url": "https://courtauld.ac.uk/whats-on/untold-tales-women-pioneers-in-british-and-irish-architectural-history/",
+      "venue": "vernon-square"
+    },
+    "slug": "untold-tales-women-pioneers-in-british-and-irish-architectural-history",
+    "source_event_id": "174706"
+  },
+  {
+    "event": {
+      "address": "Vernon Square, Penton Rise, London WC1X 9EW",
+      "category": "talk",
+      "dedupe_key": "art-beyond-nation-statehood-in-contemporary-art-from-kazakhstan|2026-11-30|courtauld-vernon-square",
+      "description": "The lecture examines artworks by contemporary Kazakh artists who work with the material trappings of statehood, including flags and maps. Treating the structures of sovereignty themselves as material for artistic experimentation they examine the assumption that the nation is the only form of post-colonial liberation. In this way, they expose the contingent nature of political authority and imagine more inclusive forms of (post- national belonging. Organised by Professor Klara Kemp-Welch, Professor of Modern and Contemporary Art History and Dr Maria Mileeva, Senior Lecturer in Modern and Contemporary Art",
+      "ends_at": "2026-11-30T19:00:00Z",
+      "image_url": null,
+      "lat": 51.5298,
+      "lng": -0.1164,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-30T17:30:00Z",
+      "tags": [
+        "art",
+        "art history"
+      ],
+      "title": "Art Beyond the Nation: “Statehood in Contemporary Art from Kazakhstan”",
+      "url": "https://courtauld.ac.uk/whats-on/art-beyond-the-nation-statehood-in-contemporary-art-from-kazakhstan/",
+      "venue_name": "The Courtauld, Vernon Square"
+    },
+    "payload": {
+      "category": "talk",
+      "date_text": "30 Nov 2026",
+      "description": "<p>The lecture examines artworks by contemporary Kazakh artists who work with the material trappings of statehood, including flags and maps. Treating the structures of sovereignty themselves as material for artistic experimentation they examine the assumption that the nation is the only form of post-colonial liberation. In this way, they expose the contingent nature of political authority and imagine more inclusive forms of (post- national belonging.</p>\n<p><strong>Organised by Professor Klara Kemp-Welch, Professor of Modern and Contemporary Art History and Dr Maria Mileeva, Senior Lecturer in Modern and Contemporary Art</strong></p>",
+      "image_url": null,
+      "location_text": "Vernon Square Campus, Lecture Theatre 2",
+      "price_text": "Free, booking essential",
+      "time_text": "17:30 - 19:00",
+      "title": "Art Beyond the Nation: “Statehood in Contemporary Art from Kazakhstan”",
+      "url": "https://courtauld.ac.uk/whats-on/art-beyond-the-nation-statehood-in-contemporary-art-from-kazakhstan/",
+      "venue": "vernon-square"
+    },
+    "slug": "art-beyond-the-nation-statehood-in-contemporary-art-from-kazakhstan",
+    "source_event_id": "175353"
+  },
+  {
+    "event": {
+      "address": "Vernon Square, Penton Rise, London WC1X 9EW",
+      "category": "talk",
+      "dedupe_key": "matrilineal-descent-racial-inheritances-in-victorian-paintings-of-mothers-their-children|2026-12-02|courtauld-vernon-square",
+      "description": "Join the Manton Centre for a lecture from Keren Hammerschlag: A Matrilineal Descent: Racial Inheritances in Victorian Paintings of Mothers and Their Children Babies and children were a preoccupation among Victorian artists, biologists and anthropologists concerned with the infancy of humanity and the future of the human species. This wa s in part because the ‘offspring’ of inter-racial unions—their fertility, but also their intelligence, biology and physiognomy—were thought to hold the answer to the question of whether the races were descended from a common origin and were one species (monogenism) or constituted entirely different species (polygenism). In this talk, which is taken from Keren Hammerschlag’s recently published book, The Chosen Race: Troubling Whiteness in Victorian Painting (University of California Press), she addresses the fraught topics of descent and inheritance through an examination of Victorian paintings of mothers and their children, with particular attention paid to depictions of infants who look different from their mothers. These complex representations of matrilineal descent are revealing of the challenges involved in identifying and portraying racial lineages, and undermine systems of racial classification based on skin, hair and eye colour. A case in point is Dante Gabriel Rossetti’s The Beloved (1865-6), a highly racialised illustration of the Hebrew Bible’s Song of Songs and Psalm 45. In addition to the fair-skinned bride and racially diverse bridesmaids, Rossetti included in The Beloved a depiction of a Black child. By speculating on the relationship of the child to other figures inside and outside the frame, Hammerschlag finds traces of the trauma of forced removal of ‘mixed-race’ children from their mothers, which was practiced under both American slavery and British colonialism. This event is organised by Professor Steve Edwards, Manton Professor of British Art and Director of the Manton Centre for British Art, The Courtauld.",
+      "ends_at": "2026-12-02T19:30:00Z",
+      "image_url": null,
+      "lat": 51.5298,
+      "lng": -0.1164,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-12-02T18:00:00Z",
+      "tags": [
+        "art",
+        "art history"
+      ],
+      "title": "A Matrilineal Descent: Racial Inheritances in Victorian Paintings of Mothers and Their Children",
+      "url": "https://courtauld.ac.uk/whats-on/a-matrilineal-descent-racial-inheritances-in-victorian-paintings-of-mothers-and-their-children/",
+      "venue_name": "The Courtauld, Vernon Square"
+    },
+    "payload": {
+      "category": "talk",
+      "date_text": "2 Dec 2026",
+      "description": "<p>Join the Manton Centre for a lecture from Keren Hammerschlag: A&nbsp;Matrilineal Descent:&nbsp;Racial Inheritances in Victorian Paintings of Mothers and Their Children</p>\n<p><span class=\"TextRun Highlight SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">Babies and children were </span><span class=\"NormalTextRun SCXW73662580 BCX4\">a preoccupation among</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> Victorian artists, </span></span><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">biologists and anthropologists concerned with the infancy of humanity and the future of the human species. This </span><span class=\"NormalTextRun SCXW73662580 BCX4\">wa</span><span class=\"NormalTextRun SCXW73662580 BCX4\">s </span><span class=\"NormalTextRun SCXW73662580 BCX4\">in part</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> because the ‘offspring’ of inter-racial unions—their fertility, but also their intelligence, biology and physiognomy—were thought to hold the answer to the question of whether the races were descended from a common origin and were one species (monogenism) or constituted entirely different species (polygenism). </span><span class=\"NormalTextRun SCXW73662580 BCX4\">In this talk, which is taken from Keren Hammerschlag’s recently published book, </span></span><em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">The Chosen Race: Troubling Whiteness in Victorian Painting </span></span></em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">(University of California Press), she </span><span class=\"NormalTextRun SCXW73662580 BCX4\">addresses the </span><span class=\"NormalTextRun SCXW73662580 BCX4\">fraught </span><span class=\"NormalTextRun SCXW73662580 BCX4\">topics of </span><span class=\"NormalTextRun SCXW73662580 BCX4\">descent and inheritance through an examination of Victorian paintings of mothers and their children, with particular attention paid to depictions of </span><span class=\"NormalTextRun SCXW73662580 BCX4\">infants</span> <span class=\"NormalTextRun SCXW73662580 BCX4\">who</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> look different from their mothers</span><span class=\"NormalTextRun SCXW73662580 BCX4\">. These complex representations of matrilineal descent are revealing of the</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> challenges involved in </span><span class=\"NormalTextRun SCXW73662580 BCX4\">identifying</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> and portraying</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> racial lineages</span><span class=\"NormalTextRun SCXW73662580 BCX4\">, and undermine systems of racial classification based on skin, </span><span class=\"NormalTextRun SCXW73662580 BCX4\">hair</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> and eye colour</span><span class=\"NormalTextRun SCXW73662580 BCX4\">. </span><span class=\"NormalTextRun SCXW73662580 BCX4\">A case in point is </span><span class=\"NormalTextRun SCXW73662580 BCX4\">Dante Gabriel Rossetti’s </span></span><em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">The Beloved</span></span></em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"> <span class=\"NormalTextRun SCXW73662580 BCX4\">(1865-6), a highly racialised illustration of the </span><span class=\"NormalTextRun SCXW73662580 BCX4\">Hebrew Bible’s </span></span><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">Song of Songs</span></span><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\"> and Psalm 45</span><span class=\"NormalTextRun SCXW73662580 BCX4\">. </span><span class=\"NormalTextRun SCXW73662580 BCX4\">In addition to the fair-skinned bride and racially diverse bridesmaids, Rossetti included in </span></span><em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\">The Beloved</span></span></em><span class=\"TextRun SCXW73662580 BCX4\" data-contrast=\"none\" lang=\"EN-GB\" xml:lang=\"EN-GB\"><span class=\"NormalTextRun SCXW73662580 BCX4\"> a depiction of a Black child. By </span><span class=\"NormalTextRun SCXW73662580 BCX4\">speculating</span><span class=\"NormalTextRun SCXW73662580 BCX4\"> on the relationship of the child to other figures inside and outside the frame, Hammerschlag finds </span><span class=\"NormalTextRun SCXW73662580 BCX4\">traces of the trauma of forced removal of ‘mixed-race’ children from their mothers, which was practiced under both American slavery and British colonialism.</span></span><span class=\"EOP SCXW73662580 BCX4\" data-ccp-props=\"{&quot;201341983&quot;:0,&quot;335559740&quot;:360,&quot;469777462&quot;:[2785],&quot;469777927&quot;:[0],&quot;469777928&quot;:[1]}\">&nbsp;</span></p>\n<p><strong>This event is organised by <a href=\"https://courtauld.ac.uk/people/steve-edwards/\">Professor Steve Edwards,</a> Manton Professor of British Art and Director of the Manton Centre for British Art, The Courtauld.</strong></p>",
+      "image_url": null,
+      "location_text": "Vernon Square Campus, Lecture Theatre 2",
+      "price_text": "Free, booking essential",
+      "time_text": "18:00 - 19:30",
+      "title": "A Matrilineal Descent: Racial Inheritances in Victorian Paintings of Mothers and Their Children",
+      "url": "https://courtauld.ac.uk/whats-on/a-matrilineal-descent-racial-inheritances-in-victorian-paintings-of-mothers-and-their-children/",
+      "venue": "vernon-square"
+    },
+    "slug": "a-matrilineal-descent-racial-inheritances-in-victorian-paintings-of-mothers-and-their-children",
+    "source_event_id": "173234"
+  }
+]

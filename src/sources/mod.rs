@@ -14,6 +14,7 @@ use crate::repo::SourceRow;
 pub mod artrabbit;
 pub mod barbican;
 pub mod chisenhale_gallery;
+pub mod courtauld;
 pub mod design_museum;
 pub mod garden_museum;
 pub mod goldsmiths_cca;
@@ -75,6 +76,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         },
         artrabbit::KEY => Ok(Box::new(artrabbit::ArtRabbit::new(base))),
         barbican::KEY => Ok(Box::new(barbican::Barbican::new(base))),
+        courtauld::KEY => Ok(Box::new(courtauld::Courtauld::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
