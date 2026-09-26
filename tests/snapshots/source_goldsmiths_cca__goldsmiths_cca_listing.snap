@@ -1,0 +1,20 @@
+---
+source: tests/source_goldsmiths_cca.rs
+expression: listing()
+---
+[
+  {
+    "path": "/exhibition/evelyn-taocheng-wang/",
+    "title": "Evelyn Taocheng Wang",
+    "date_text": "25 September–13 December 2026",
+    "summary": "Goldsmiths CCA presents 'Being Poetic Ruins Life', the first UK institutional exhibition by Netherlands-based artist, Evelyn Taocheng Wang (b. 1981, Chengdu, China).",
+    "image_url": "https://goldsmithscca.art/wp-content/uploads/2026/07/CI-ETW-0472_CraAntennaSpace-scaled-e1790161958853.jpg"
+  },
+  {
+    "path": "/exhibition/episode-16-katie-shannon/",
+    "title": "Episode 16: Katie Shannon",
+    "date_text": "06 November–12 December 2026",
+    "summary": "Katie Shannon (b. Glasgow) is the latest artist to participate in CCA’s ongoing commissioning series Episodes. Her exhibition 'BACK/PRUNE/VIRGIN/RUIN' will present work across visual art, performance, writing, and event making.",
+    "image_url": "https://goldsmithscca.art/wp-content/uploads/2026/01/archive89-1-scaled.jpg"
+  }
+]
