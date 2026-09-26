@@ -647,6 +647,10 @@ async fn sources(State(state): State<AppState>) -> Response {
                                     @if let Some(u) = safe_link(s["issue_url"].as_str()) {
                                         " " a href=(u) rel="noopener noreferrer" { "issue" }
                                     }
+                                    // Present once sources record skips (#25).
+                                    @if let Some(reason) = s["skip"]["reason"].as_str() {
+                                        br; span class="small" { "Skipped: " (reason) }
+                                    }
                                 }
                             }
                         }

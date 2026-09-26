@@ -65,6 +65,7 @@ th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); w
 .status-healthy { color: var(--free); }
 .status-degraded { color: var(--warn); }
 .status-broken { color: var(--bad); }
+.status-pending, .status-unconfigured { color: var(--muted); }
 footer.site { margin-top: 40px; padding-bottom: 32px; border-top: 1px solid var(--line); }
 .suggest { display: flex; flex-direction: column; gap: 6px; max-width: 480px; }
 .suggest h2 { font-size: 1.1rem; margin: 16px 0 0; }
