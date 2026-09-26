@@ -75,6 +75,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   - `chisenhale-gallery` — listing-only CSS scraper (no JSON-LD; robots.txt
     Crawl-delay 20, so no detail pages): year-less card dates resolved
     against the run date.
+  - `dandad` — D&AD's creative-industry events: reads the embedded
+    `script#props` page data (no JSON-LD) of the events listing → detail
+    pages for time and address; London only; facts + link only (terms).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -339,6 +342,7 @@ the runtime image contains both binaries), and are declared in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
    Gallery, the Barbican and Chisenhale Gallery daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican and D&AD daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

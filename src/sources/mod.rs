@@ -15,6 +15,7 @@ pub mod artrabbit;
 pub mod barbican;
 pub mod chisenhale_gallery;
 pub mod courtauld;
+pub mod dandad;
 pub mod design_museum;
 pub mod garden_museum;
 pub mod goldsmiths_cca;
@@ -88,6 +89,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
         }
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
+        dandad::KEY => Ok(Box::new(dandad::Dandad::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }
 }

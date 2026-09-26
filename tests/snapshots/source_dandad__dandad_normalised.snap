@@ -1,0 +1,51 @@
+---
+source: tests/source_dandad.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "64 Cheshire Street, E2 6EH, London",
+      "category": "talk",
+      "dedupe_key": "insights-from-d-ad-annual-trend-report-2026|2026-09-30|d-ad-hq",
+      "description": "Join us for drinks, networking and a deep-dive into key trends from the D&AD Awards 2026 with CCOO, Donal Keenan. The D&AD Awards celebrate the very best creative work across advertising and design. For work to win at D&AD, jurors needed to see flawless execution supporting the big, bold idea. This report delves into the emerging trends that defined D&AD Pencil-winning work in 2026. We rigorously analysed this year’s awarded work and pored over feedback from the jury rooms, where more than 300 world-leading designers, advertising experts and creatives came together to judge the very best in global creativity. We revisited interviews and Jury Insight sessions from D&AD Festival to uncover the ideas, approaches and shifts that emerged across the 46 categories awarded this year.",
+      "ends_at": "2026-09-30T20:00:00Z",
+      "image_url": "https://cms.dandad.org/images/B36WC3g4UNFBTD79Xq8I6q1VDoc=/139056/width-1600%7Cformat-jpeg/Event_Banners.png",
+      "lat": 51.52356,
+      "lng": -0.069096,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-30T17:00:00Z",
+      "tags": [
+        "design",
+        "creative industry"
+      ],
+      "title": "Insights from the D&AD Annual Trend Report 2026",
+      "url": "https://www.dandad.org/events/annual-trend-report-insights-2026",
+      "venue_name": "D&AD HQ"
+    },
+    "id": "annual-trend-report-insights-2026",
+    "payload": {
+      "address": "D&AD\r\n64 Cheshire Street\r\nE2 6EH, London",
+      "coordinates": {
+        "lat": 51.52356,
+        "lng": -0.069096
+      },
+      "description": "<h4 data-block-key=\"eecg7\">Join us for drinks, networking and a deep-dive into key trends from the D&amp;AD Awards 2026 with CCOO, Donal Keenan.</h4><p data-block-key=\"2fujv\">The D&amp;AD Awards celebrate the very best creative work across advertising and design. For work to win at D&amp;AD, jurors needed to see flawless execution supporting the big, bold idea.</p><p data-block-key=\"3oss4\"></p><p data-block-key=\"2utk\">This report delves into the emerging trends that defined D&amp;AD Pencil-winning work in 2026. We rigorously analysed this year’s awarded work and pored over feedback from the jury rooms, where more than 300 world-leading designers, advertising experts and creatives came together to judge the very best in global creativity. We revisited interviews and Jury Insight sessions from D&amp;AD Festival to uncover the ideas, approaches and shifts that emerged across the 46 categories awarded this year.</p>",
+      "image_url": "https://cms.dandad.org/images/B36WC3g4UNFBTD79Xq8I6q1VDoc=/139056/width-1600%7Cformat-jpeg/Event_Banners.png",
+      "instance": {
+        "datesText": "30 September 2026",
+        "locationText": "D&AD HQ",
+        "priceText": "Free",
+        "startDate": "2026-09-30"
+      },
+      "time_text": "18:00–21:00",
+      "title": "Insights from the D&AD Annual Trend Report 2026",
+      "url": "https://www.dandad.org/events/annual-trend-report-insights-2026"
+    }
+  }
+]
