@@ -144,6 +144,12 @@
     return p.weekday + " " + Number(p.day) + " " + MONTHS[Number(p.month) - 1] + " " + p.year;
   }
 
+  /** "04": the London day of the month (the placeholder's numeral). */
+  function dayOfMonth(iso) {
+    var d = String(Number(parts(iso).day));
+    return d.length < 2 ? "0" + d : d;
+  }
+
   function fmtTime(iso) {
     var p = parts(iso);
     return p.hour + ":" + p.minute;
@@ -263,6 +269,7 @@
     isSaved: isSaved,
     toggle: toggle,
     when: when,
+    dayOfMonth: dayOfMonth,
     price: price,
     toICS: toICS,
   };
@@ -334,6 +341,11 @@
     return el.querySelector('[data-slot="' + name + '"]');
   }
 
+  function removeSlot(el, name) {
+    var s = slot(el, name);
+    if (s) s.parentNode.removeChild(s);
+  }
+
   function renderCard(tpl, item, event, nowIso, gone) {
     var node = tpl.content.firstElementChild.cloneNode(true);
     var e = event || {
@@ -376,8 +388,19 @@
       c.setAttribute("href", creditUrl);
       c.textContent = credit.name;
       figure.hidden = false;
-    } else if (figure) {
-      figure.parentNode.removeChild(figure);
+      removeSlot(node, "blank");
+    } else {
+      if (figure) figure.parentNode.removeChild(figure);
+      // The decorative "Monograph Blank" (same as web::blank on the server).
+      var blank = slot(node, "blank");
+      if (blank) {
+        var kind = slot(node, "blank-kind");
+        if (e.category) kind.textContent = titleCase(e.category);
+        else kind.hidden = true;
+        slot(node, "blank-venue").textContent = e.venue_name || "London";
+        slot(node, "blank-numeral").textContent = e.starts_at ? dayOfMonth(e.starts_at) : "";
+        blank.hidden = false;
+      }
     }
     var details = slot(node, "details");
     slot(node, "details-title").textContent = ": " + e.title;

@@ -92,6 +92,11 @@ test("when matches the server's wording in London time", () => {
   assert.equal(app.when("2026-09-28T10:09:00Z", null, now), "Mon 28 Sep 2026, 11:09");
 });
 
+test("dayOfMonth is the London day, two digits (the placeholder numeral, like web::blank)", () => {
+  assert.equal(app.dayOfMonth("2026-10-02T23:00:00Z"), "03"); // 00:00 BST on the 3rd
+  assert.equal(app.dayOfMonth("2026-12-31T12:00:00Z"), "31");
+});
+
 test("price matches the server's wording", () => {
   assert.equal(app.price({ is_free: true }), "Free");
   assert.equal(app.price({ is_free: false, price_min: "5.00", price_max: "12.50", currency: "GBP" }), "£5–£12.50");

@@ -102,10 +102,27 @@ fn assert_html(p: &Page) {
     }
     assert!(!csp.contains("unsafe-inline"), "{csp}");
     assert!(p.body.starts_with("<!DOCTYPE html>"));
+    // The wordmark: a decorative inline SVG plus the site name as text.
     assert!(
+        p.body.contains(
+            "<a class=\"brand\" href=\"/\"><svg class=\"brand-mark\" aria-hidden=\"true\""
+        ),
+        "{}",
         p.body
-            .contains("<a class=\"brand\" href=\"/\">Muse &amp; Mingle</a>")
     );
+    assert!(p.body.contains("<span>Muse &amp; Mingle</span></a>"));
+    // Fonts are self-hosted and preloaded; nothing comes from a CDN.
+    assert_eq!(
+        p.body
+            .matches("<link rel=\"preload\" href=\"/static/fonts/")
+            .count(),
+        2,
+        "{}",
+        p.body
+    );
+    for external in ["googleapis", "gstatic", "cdn.", "tailwind", "https://fonts"] {
+        assert!(!p.body.contains(external), "{external}");
+    }
     // Exactly one script: the first-party, versioned app.js (no inline code).
     assert_eq!(p.body.matches("<script").count(), 1, "{}", p.body);
     assert!(
@@ -315,12 +332,13 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
             .contains("data-title=\"&lt;script&gt;alert(1)&lt;/script&gt;\"")
     );
     assert!(p.body.contains(
-        "<a href=\"/saved\">Saved <span class=\"count\" data-saved-count hidden>0</span></a>"
+        "<a href=\"/saved\">Saved<span class=\"count\" data-saved-count hidden>0</span></a>"
     ));
     // Footer suggestion form.
     assert!(
-        p.body
-            .contains("<form class=\"suggest\" method=\"post\" action=\"/suggest\">")
+        p.body.contains(
+            "<form class=\"suggest\" id=\"suggest\" method=\"post\" action=\"/suggest\">"
+        )
     );
 
     let js = get(&app, "/static/app.js?v=whatever").await;
@@ -335,9 +353,69 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     );
     assert!(js.body.contains("musenmingle.saved.v1"));
 
+    // The stylesheet URL is versioned by content (new markup never meets old CSS).
+    let at = p
+        .body
+        .find("<link rel=\"stylesheet\" href=\"/static/style.css?v=")
+        .expect("versioned css");
+    let href = &p.body[at + 29..];
+    let href = &href[..href.find('"').unwrap()];
+    let versioned = get(&app, href).await;
+    assert!(
+        versioned.headers[header::CACHE_CONTROL]
+            .to_str()
+            .unwrap()
+            .contains("immutable")
+    );
     let css = get(&app, "/static/style.css").await;
     assert_eq!(css.status, StatusCode::OK);
     assert_eq!(css.headers[header::CONTENT_TYPE], "text/css; charset=utf-8");
+    // Each @font-face URL is versioned by content, served by us as woff2.
+    let fonts: Vec<&str> = css
+        .body
+        .split("url(\"")
+        .skip(1)
+        .map(|u| &u[..u.find('"').unwrap()])
+        .collect();
+    assert_eq!(fonts.len(), 2, "{}", css.body);
+    for url in fonts {
+        assert!(
+            url.starts_with("/static/fonts/") && url.contains(".woff2?v="),
+            "{url}"
+        );
+        assert!(
+            p.body.contains(&format!("href=\"{url}\"")),
+            "preloaded: {url}"
+        );
+        let font = get(&app, url).await;
+        assert_eq!(font.status, StatusCode::OK, "{url}");
+        assert_eq!(font.headers[header::CONTENT_TYPE], "font/woff2");
+        assert!(
+            font.headers[header::CACHE_CONTROL]
+                .to_str()
+                .unwrap()
+                .contains("immutable")
+        );
+    }
+    assert_eq!(
+        get(&app, "/static/fonts/nope.woff2").await.status,
+        StatusCode::NOT_FOUND
+    );
+    // Cards without a thumbnail get the decorative placeholder: no <img>,
+    // no credit, hidden from assistive tech, only real facts.
+    assert!(
+        p.body
+            .contains("<div class=\"blank thumb\" aria-hidden=\"true\"><span class=\"blank-top\"><span>No image</span>"),
+        "{}",
+        p.body
+    );
+    assert!(!p.body.contains("Image: "), "no credit without an image");
+    assert!(!p.body.contains("ARCHIVE") && !p.body.contains("REF:"));
+    // Navigation marks the current page.
+    assert!(
+        p.body
+            .contains("<a href=\"/\" aria-current=\"page\">Events</a>")
+    );
 
     // Site icons, from our own origin and linked from every page.
     assert!(
@@ -699,6 +777,12 @@ async fn detail_page_shows_all_fields_and_404s_unknown_ids() {
     assert!(p.body.contains("rel=\"noopener\">Barbican</a>"));
     assert!(p.body.contains("See it on Barbican →"), "{}", p.body);
     assert!(!p.body.contains("img.example.org"), "{}", p.body);
+    // No thumbnail yet: the decorative placeholder, never a credit.
+    assert!(
+        p.body
+            .contains("<div class=\"blank hero\" aria-hidden=\"true\">")
+    );
+    assert!(!p.body.contains("Image: "));
     assert!(p.body.contains("href=\"https://www.ticketmaster.co.uk/x\""));
     assert!(p.body.contains("£5–£12.50"), "{}", p.body);
     assert!(p.body.contains("Talk"));
@@ -988,11 +1072,14 @@ async fn about_page_states_our_approach_with_all_anchors() {
     assert!(p.headers.get(header::SET_COOKIE).is_none());
     // Header and footer link to it on every page.
     let home = get(&app, "/").await;
-    assert_eq!(
+    assert!(
+        home.body.contains("<a href=\"/about\">About</a>"),
+        "{}",
         home.body
-            .matches("<a href=\"/about\">About &amp; our approach</a>")
-            .count(),
-        2,
+    );
+    assert!(
+        home.body
+            .contains("<li><a href=\"/about\">About &amp; our approach</a></li>"),
         "{}",
         home.body
     );
