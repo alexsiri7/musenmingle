@@ -324,6 +324,14 @@ pub fn parse_detail(html: &str, url: &Url, item: &ListingItem) -> Option<RawEven
     })
 }
 
+/// Whether date text names a day of the month. Announcements of future
+/// shows give only months or seasons ("October 2027 – February 2028",
+/// "Autumn 2027"): too vague to list yet, so they are skips, not errors.
+fn has_day_number(text: &str) -> bool {
+    text.split(|c: char| !c.is_ascii_digit())
+        .any(|n| (1..=2).contains(&n.len()))
+}
+
 /// A single day such as `2 Dec 2026` or `Tuesday 2 December 2026`.
 pub fn parse_single_date(text: &str) -> Option<NaiveDate> {
     let mut tokens: Vec<&str> = text.split_whitespace().collect();
@@ -380,6 +388,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     if ["until", "from", "ongoing", "open"]
         .iter()
         .any(|p| lower.starts_with(p))
+        || !has_day_number(date_text)
     {
         return Ok(None);
     }
@@ -560,7 +569,15 @@ mod tests {
 
     #[test]
     fn open_ended_and_missing_dates_are_skips() {
-        for text in ["Open daily, 10:00 - 18:00", "Until 10 Jan 2027", "Ongoing"] {
+        for text in [
+            "Open daily, 10:00 - 18:00",
+            "Until 10 Jan 2027",
+            "Ongoing",
+            // Future shows announced by month or season only (live on
+            // 2026-09-26: "Vanessa Bell: A Rediscovery").
+            "October 2027 – February 2028",
+            "Autumn 2027",
+        ] {
             assert!(
                 normalise_payload(&payload(text, None, "exhibition"))
                     .unwrap()
@@ -575,7 +592,7 @@ mod tests {
 
     #[test]
     fn unrecognised_dates_are_errors() {
-        for text in ["Autumn 2026", "2 Dec"] {
+        for text in ["2 Dec", "2 Dec - 3 Jan", "Tuesday evening, 2 Dec"] {
             assert!(
                 normalise_payload(&payload(text, None, "talk")).is_err(),
                 "{text}"
