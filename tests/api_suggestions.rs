@@ -20,7 +20,7 @@ use thaleia::fetch::FetchContext;
 use thaleia::github::{GitHubIssueFiler, IssueFiler};
 use thaleia::health::{HealthChecker, HealthConfig};
 use thaleia::runner::Runner;
-use thaleia::suggestions::{RETRY_GRACE, Suggestions};
+use thaleia::suggestions::{MAX_NOTE_CHARS, RETRY_GRACE, Suggestions, ip_hash};
 use tower::ServiceExt;
 use wiremock::matchers::{body_partial_json, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -273,6 +273,64 @@ async fn invalid_submissions_are_rejected_and_not_stored() {
         assert!(resp["error"].is_string());
     }
     assert!(rows(&pool).await.is_empty());
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn note_at_the_length_limit_is_stored() {
+    let Some(db) = TestDb::create("note_at_the_length_limit_is_stored").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let app = app(&pool, SuggestionConfig::default(), None);
+    let note = "é".repeat(MAX_NOTE_CHARS);
+
+    let (status, _, body) = post(
+        &app,
+        json!({ "url": "https://example.org", "note": note }),
+        None,
+    )
+    .await;
+    assert_eq!(status, StatusCode::CREATED, "{body}");
+    let stored: Option<String> = sqlx::query_scalar("SELECT note FROM events.site_suggestions")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(stored, Some(note));
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn submissions_from_one_client_wait_for_its_lock() {
+    let Some(db) = TestDb::create("submissions_from_one_client_wait_for_its_lock").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let app = app(&pool, SuggestionConfig::default(), None);
+    let mut holder = pool.begin().await.unwrap();
+    let client = ip_hash([10, 0, 0, 1].into(), "test-salt");
+    thaleia::repo::lock_suggestion_submitter(&mut holder, &client)
+        .await
+        .unwrap();
+
+    let mut pending = tokio::spawn({
+        let app = app.clone();
+        async move { post(&app, json!({ "url": "https://example.org" }), None).await }
+    });
+    assert!(
+        tokio::time::timeout(Duration::from_millis(500), &mut pending)
+            .await
+            .is_err(),
+        "submission did not wait for the client's lock"
+    );
+    holder.commit().await.unwrap();
+    let (status, _, body) = tokio::time::timeout(Duration::from_secs(10), pending)
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(status, StatusCode::CREATED, "{body}");
     pool.close().await;
     db.drop_db().await;
 }
