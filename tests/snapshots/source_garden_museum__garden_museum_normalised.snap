@@ -1,0 +1,406 @@
+---
+source: tests/source_garden_museum.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "workshop",
+      "dedupe_key": "cook-with-seasons-october|2026-10-10|garden",
+      "description": "Join our Food Educator Ceri, for a monthly series of cookery classes for adults, exploring what it means to cook with the seasons; planning your meals around what fresh produce is in abundance from your veg box, market, or even grown yourself in your garden, balcony or allotment. Each hands on class includes a vegetarian main dish, side and a dessert, putting seasonal produce front and centre. Through cooking these dishes you will gain valuable vegetable specific knife skills, learn how to season to taste, what ‘goes’ together, and how to beautifully present your food. The class will end by sitting down to lunch together, to enjoy everything that has been prepared, plus everyone receives a recipe pack to take home. October Sample Menu Butternut squash & feta borek with harissa yoghurt Mixed roasted seasonal squash, with chickpeas, homemade labne and zhoug Kale, celeriac, apple and blue cheese salad Upside down fig cake Classes are small with just 6 participants and take place in our learning studio kitchen at the Museum. The classes are a combination of hands on and demo by Ceri and open to all levels of skills and interests. This class is suitable for adults 18 and over. Cookery class ticket includes entry to the Museum and temporary exhibition gallery. Please note this class will take place on Saturday 10 October and Wednesday 14 October.",
+      "ends_at": "2026-10-14T12:45:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/Veg-Box-Ceri-Jones.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "65",
+        "min": "65"
+      },
+      "starts_at": "2026-10-10T10:00:00Z",
+      "tags": [
+        "gardens"
+      ],
+      "title": "Cook with the Seasons October",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/cook-with-the-seasons-october/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "adults"
+      ],
+      "booking": [
+        "£65 Cook with the Seasons October | Saturday 10th or Wednesday 14th"
+      ],
+      "date_text": "10 Oct - 14 Oct 2026, 11am - 1:45pm",
+      "description": "<p>\n\n          Join our Food Educator Ceri, for a monthly series of cookery classes for adults, exploring what it means to cook with the seasons; planning your meals around what fresh produce is in abundance from your veg box, market, or even grown yourself in your garden, balcony or allotment.\n        </p>\n<p>\n\n          <p>Each hands on class includes a vegetarian main dish, side and a dessert, putting seasonal produce front and centre. Through cooking these dishes you will gain valuable vegetable specific knife skills, learn how to season to taste, what ‘goes’ together, and how to beautifully present your food.</p>\n<p>The class will end by sitting down to lunch together, to enjoy everything that has been prepared, plus everyone receives a recipe pack to take home.</p>\n<p><strong>October Sample Menu</strong></p>\n<ul>\n<li><strong>Butternut squash &amp; feta borek with harissa yoghurt &nbsp;</strong></li>\n<li><strong>Mixed roasted seasonal squash, with chickpeas, homemade labne and zhoug </strong></li>\n<li><strong>Kale, celeriac, apple and blue cheese salad </strong></li>\n<li><strong>Upside down fig cake</strong></li>\n</ul>\n<p>Classes are small with just 6 participants and take place in our learning studio kitchen at the Museum. The classes are a combination of hands on and demo by Ceri and open to all levels of skills and interests. This class is suitable for adults&nbsp;<strong>18</strong>&nbsp;and over. Cookery class ticket includes entry to the Museum and temporary exhibition gallery.</p>\n<p>Please note this class will take place on <strong>Saturday 10 October&nbsp;</strong>and<strong> Wednesday 14 October</strong>.</p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/Veg-Box-Ceri-Jones.jpg",
+      "listing_is_free": false,
+      "location": null,
+      "title": "Cook with the Seasons October",
+      "types": [
+        "workshops"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/cook-with-the-seasons-october/"
+    },
+    "slug": "cook-with-the-seasons-october"
+  },
+  {
+    "event": null,
+    "payload": {
+      "audience": [
+        "adults"
+      ],
+      "booking": [
+        "£20 Standard",
+        "£15 Friends",
+        "£15 Young Fronds",
+        "£10 Student",
+        "£10 Livestream",
+        "Or book all 5 for a discounted rate of £80 for Standard tickets or £65 for Friends tickets"
+      ],
+      "date_text": "15 Sep - 1 Dec 2026",
+      "description": "<p>\n\n          From modern Japanese gardens to experimental land art, wilderness and utopia to environmental hopes and anxieties, join us to stretch our ideas of what gardens and place can mean as artistic practice in an era of climate change. \n        </p>\n<p>\n\n          <p>This autumn at the Garden Museum, a new series of talks bringing together curators, gardeners, and artists exploring gardens, landscape, and environment as artistic practice.</p>\n<p>Across five evenings chaired and curated by landscape historian and critic Tim Richardson, hear from a range of practitioners, curators and academics discussing their own work and reflecting on the broader scene.</p>\n<p>A drink is included in the price of the ticket so stick around to continue the discussion. Book for all five evenings at a reduced price.</p>\n<p><strong>Please note that our talks now begin at 6:30pm, rather than 7pm, giving you more time to enjoy dinner at our award-winning Garden Museum Café. Table reservations are available <a data-cke-saved-href=\"http://www.sevenrooms.com/explore/gardenmuseum/reservations/create/search/\" href=\"http://www.sevenrooms.com/explore/gardenmuseum/reservations/create/search/\">here</a>. Your talk ticket also includes entry to the Garden Museum’s temporary exhibitions from 6pm on the evening of the talk.</strong></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/GM_social_blank_02.png",
+      "listing_is_free": false,
+      "location": "Garden Museum",
+      "title": "Garden/Art/Garden: a series of talks exploring gardens as an artform",
+      "types": [
+        "talks"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/garden-art-garden/"
+    },
+    "slug": "garden-art-garden"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "community",
+      "dedupe_key": "garden-cafe-whos-game|2026-10-02|garden",
+      "description": "Game season is upon us! An exciting time for cooks and we have a series of autumnal dinners planned to celebrate. We’re talking to our suppliers to source the best in all manner of furred and feathered game, as well as wild mushrooms and many other autumn treats. Menu TBC",
+      "ends_at": "2026-10-30T22:00:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/GMC_Whos-Game-2026_1080x1350-1.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "48",
+        "min": "48"
+      },
+      "starts_at": "2026-10-02T17:00:00Z",
+      "tags": [
+        "gardens"
+      ],
+      "title": "Garden Café: Who’s Game?!",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/garden-cafe-whos-game/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "adults"
+      ],
+      "booking": [
+        "2, 9, 16, 23, 30 September",
+        "From 6pm",
+        "£48 for four courses"
+      ],
+      "date_text": "2 Oct - 30 Oct 2026, 6pm - 10pm",
+      "description": "<p>\n\n          Game season is upon us! An exciting time for cooks and we have a series of autumnal dinners planned to celebrate. \n        </p>\n<p>\n\n          <p>We’re talking to our suppliers to source the best in all manner of furred and feathered game, as well as wild mushrooms and many other autumn treats.</p>\n<p><em>Menu TBC</em></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/GMC_Whos-Game-2026_1080x1350-1.jpg",
+      "listing_is_free": false,
+      "location": null,
+      "title": "Garden Café: Who’s Game?!",
+      "types": [
+        "lates"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/garden-cafe-whos-game/"
+    },
+    "slug": "garden-cafe-whos-game"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "community",
+      "dedupe_key": "harvest-festival-2026|2026-10-18|garden",
+      "description": "The Garden Museum Harvest Festival is a day of stalls, talks and workshops exploring the world of growing and producing food in the city. For its third edition, the Garden Museum Harvest Festival 2026 – in collaboration with felloe – celebrates the people finding innovative, exciting ways to grow food in urban settings, across London and beyond. Cities now hold around 60% of the world’s population. As people have moved to urban settings, they’ve become increasingly dependent on long supply chains to access food grown far away. And yet, from community gardens that have transformed neglected land into neighbourhood hubs, to rooftop beehives, underground mushroom caves, vertical farms and windowsill fermentation jars, the world of urban growing is creative and sprawling, offering inspiring and novel ideas on how we can bring back our connection to food and growing to the cities so many of us now call home. Join us on Sunday 18 October for a day full of stalls, workshops and talks all about the world of urban growing. This year’s stalls will include: Simplicity, E5 Bakehouse, The Ferm, The China Edit, Company Drinks, Kvass, Mary’s Marmalade, The Root Co, Ki Kefir, Lamiri Harissa, Uppa Club, Vicky’s Noodles We’re also delighted to present a programme of talks and activities curated by Amy Bendel, founder of Felloe, and Ollie Whitehead, Head of Public Programmes at the Garden Museum. Please note, these talks and workshops must be booked separately in addition to the Harvest Festival entry ticket. The award-winning Garden Café will be open throughout the day serving a fresh, seasonal menu. Takeaway cakes and beverages will be available for walk-ins, booking is essential for lunch: book a table",
+      "ends_at": "2026-10-18T15:00:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/DSC_5031_gwl-scaled.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "5",
+        "min": "5"
+      },
+      "starts_at": "2026-10-18T10:00:00Z",
+      "tags": [
+        "gardens",
+        "family"
+      ],
+      "title": "Harvest Festival 2026",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/harvest-festival-2026/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "adults",
+        "family",
+        "young-adults"
+      ],
+      "booking": [
+        "£5",
+        "Includes entry to the collection galleries and gardens"
+      ],
+      "date_text": "18 Oct 2026, 11am - 4pm",
+      "description": "<p>\n\n          The Garden Museum Harvest Festival is a day of stalls, talks and workshops exploring the world of growing and producing food in the city. \n        </p>\n<p>\n\n          <p>For its third edition, the Garden Museum Harvest Festival 2026 – in collaboration with <em>felloe</em> – celebrates the people finding innovative, exciting ways to grow food in urban settings, across London and beyond.</p>\n<p>Cities now hold around 60% of the world’s population. As people have moved to urban settings, they’ve become increasingly dependent on long supply chains to access food grown far away.</p>\n<p>And yet, from community gardens that have transformed neglected land into neighbourhood hubs, to rooftop beehives, underground mushroom caves, vertical farms and windowsill fermentation jars, the world of urban growing is creative and sprawling, offering inspiring and novel ideas on how we can bring back our connection to food and growing to the cities so many of us now call home.</p>\n<p>Join us on Sunday 18 October for a day full of stalls, workshops and talks all about the world of urban growing.</p>\n<p>This year’s stalls will include: <a href=\"https://www.simplicitybakery.co.uk\" rel=\"noopener\" target=\"_blank\"><strong>Simplicity</strong></a>, <a href=\"https://e5bakehouse.com\" rel=\"noopener\" target=\"_blank\"><strong>E5 Bakehouse</strong></a>, <a href=\"https://www.theferm.net\" rel=\"noopener\" target=\"_blank\"><strong>The Ferm</strong></a>, <strong>The China Edit, </strong><a href=\"https://companydrinks.info\" rel=\"noopener\" target=\"_blank\"><strong>Company Drinks</strong></a>, <a href=\"https://garnakvass.com/\" rel=\"noopener\" target=\"_blank\"><strong>Kvass</strong></a>, <a href=\"https://www.marysmarmalade.co.uk/\"><strong>Mary’s Marmalade</strong></a>, <a href=\"https://rootcodrinks.co.uk/?srsltid=AU7gw4XA9pC6Y7btY3De-FazzIO13sePrgUgIakokZn32VZztFUkXfeW\"><strong>The Root Co</strong></a>, <a href=\"https://kikefir.com/?srsltid=AU7gw4W-08AEPZw3IvQV8kiq_3r7LdV89uwBcK_keJL2KzcUzEFgLTE_\"><strong>Ki Kefir</strong></a>, <a href=\"https://www.lamiriharissa.com/\"><strong>Lamiri Harissa</strong></a>, <a href=\"https://uppaclub.com/?srsltid=AU7gw4UffTjHZvriW0yhv59CqEgilLt-3wJOHOZsrqySvsedQKCeFaHi\"><strong>Uppa Club</strong></a>, <strong>Vicky’s Noodles</strong></p>\n<p>We’re also delighted to present a programme of talks and activities curated by Amy Bendel, founder of <a href=\"https://www.felloe.co.uk/about\" rel=\"noopener\" target=\"_blank\">Felloe,</a> and Ollie Whitehead, Head of Public Programmes at the Garden Museum. Please note, these talks and workshops must be booked separately in addition to the Harvest Festival entry ticket.</p>\n<p>The award-winning <a href=\"https://www.gardenmuseum.org.uk/visit/garden-cafe/\">Garden Café</a> will be open throughout the day serving a fresh, seasonal menu. Takeaway cakes and beverages will be available for walk-ins, booking is essential for lunch: <a href=\"https://www.gardenmuseum.org.uk/visit/garden-cafe/\">book a table</a></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/DSC_5031_gwl-scaled.jpg",
+      "listing_is_free": false,
+      "location": "Garden Museum",
+      "title": "Harvest Festival 2026",
+      "types": [
+        "festivals"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/harvest-festival-2026/"
+    },
+    "slug": "harvest-festival-2026"
+  },
+  {
+    "event": {
+      "address": null,
+      "category": "community",
+      "dedupe_key": "harvest-festival-2026-harvest-ride-through-south-london|2026-10-18|south",
+      "description": "This Harvest Festival, join George Hudson and Divya Hariramani ( Fruity Walks ) for something a little different: a slow bicycle ride through South London’s overlooked green corners, tracing the trees growing along the way. The route winds from Lambeth’s riverside edges into quieter Georgian squares and community gardens further south: Vauxhall Walk Black Prince Road Imperial War Museum Garden West Square Cottington Community Alberta Fruits Commons Kennington Park Walworth Garden We’ll pause along the way to look up and share the stories of what’s growing at each stop, finishing at Walworth Garden. Expect a relaxed pace and plenty of stopping. Suitable for confident cyclists comfortable riding on quiet city roads. This talk is part of the Harvest Festival 2026 programme. In order to purchase this talk you must also purchase a general entry ticket for the Harvest Festival 2026.",
+      "ends_at": "2026-10-18T11:00:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-20-at-6.31.32-pm-578x1024.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "starts_at": "2026-10-18T09:00:00Z",
+      "tags": [
+        "gardens",
+        "family"
+      ],
+      "title": "Harvest Festival 2026 |A Harvest Ride Through South London",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/harvest-festival-2026-a-harvest-ride-through-south-london/",
+      "venue_name": "South London"
+    },
+    "payload": {
+      "audience": [
+        "adults",
+        "family",
+        "young-adults"
+      ],
+      "booking": [
+        "£15",
+        "You’ll need a bicycle to be able to join the event. Details on where to meet will be shared once you have booked a ticket."
+      ],
+      "date_text": "18 Oct 2026, 10am - 12pm",
+      "description": "<p>\n\n          <p>This Harvest Festival, join George Hudson and Divya Hariramani (<a href=\"https://www.instagram.com/fruitywalks/?hl=en\">Fruity Walks</a>) for something a little different: a slow bicycle ride through South London’s overlooked green corners, tracing the trees growing along the way.</p>\n<p>The route winds from Lambeth’s riverside edges into quieter Georgian squares and community gardens further south:</p>\n<p>Vauxhall Walk<br>\nBlack Prince Road<br>\nImperial War Museum Garden<br>\nWest Square<br>\nCottington Community<br>\nAlberta&nbsp;Fruits Commons<br>\nKennington Park<br>\nWalworth Garden</p>\n<p>We’ll pause along the way to look up and share the stories of what’s growing at each stop, finishing at Walworth Garden.</p>\n<p>Expect a relaxed pace and plenty of stopping. Suitable for confident cyclists comfortable riding on quiet city roads.</p>\n<p><strong>This talk is part of the Harvest Festival 2026&nbsp;programme. In order to purchase this talk you must also purchase a general entry ticket for the&nbsp;<a href=\"https://gardenmuseum.digitickets.co.uk/event-tickets/80057\">Harvest Festival 2026</a>.</strong></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-20-at-6.31.32-pm-578x1024.png",
+      "listing_is_free": false,
+      "location": "South London",
+      "title": "Harvest Festival 2026 |A Harvest Ride Through South London",
+      "types": [
+        "festivals"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/harvest-festival-2026-a-harvest-ride-through-south-london/"
+    },
+    "slug": "harvest-festival-2026-a-harvest-ride-through-south-london"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "talk",
+      "dedupe_key": "matthew-rice-year-in-garden|2026-10-06|garden",
+      "description": "Grab a chair (and perhaps a trowel) for an evening with gardener and painter Matthew Rice, marking the launch of his new book, A Year in the Garden. 14 years ago, Matthew bought the last shred of a medieval castle gatehouse in the very edge of the Cotswolds at Bampton. Move a decade forward and where there were concrete barns, slurry lagoons, and silage pits there is a walled garden, glasshouses, hen runs, and an orchard. A Year in the Garden is a record of 12 months spent working, painting, and planning in a garden that is personal and flower filled and undisciplined but super productive. This evening Matthew will talk about the transformation and why he’s always reluctant to leave and joyful to get home. Please note that our talks now begin at 6:30pm, rather than 7pm, giving you more time to enjoy dinner at our award-winning Garden Museum Cafe. Table reservations are available here. Your talk ticket also includes entry to the Garden Museum’s temporary exhibitions from 6pm on the evening of the talk.",
+      "ends_at": "2026-10-06T18:30:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-13-at-11.56.54-pm-e1786691280421-1024x472.png",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "20"
+      },
+      "starts_at": "2026-10-06T17:30:00Z",
+      "tags": [
+        "gardens"
+      ],
+      "title": "Matthew Rice: A Year in the Garden",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/matthew-rice-a-year-in-the-garden/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "adults"
+      ],
+      "booking": [
+        "£25 Standard",
+        "£20 Friends",
+        "£20 Young Fronds",
+        "£10 Livestream",
+        "All our live streams are recorded so you have the choice to watch the event live or enjoy at a later time that suits you. Customers who book the live stream can automatically view the recording immediately after the event at the same link."
+      ],
+      "date_text": "6 Oct 2026, 6:30pm - 7:30pm",
+      "description": "<p>\n\n          <p>Grab a chair (and perhaps a trowel) for an evening with gardener and painter Matthew Rice, marking the launch of his new book,&nbsp;<em>A Year in the Garden</em>.</p>\n<p>14 years ago, Matthew bought the last shred of a medieval castle gatehouse in the very edge of the Cotswolds at Bampton. Move a decade forward and where there were concrete barns, slurry lagoons, and silage pits there is a walled garden, glasshouses, hen runs, and an orchard.</p>\n<p><em>A Year in the Garden</em>&nbsp;is a record of 12 months spent working, painting, and planning in a garden that is personal and flower filled and undisciplined but super productive. This evening Matthew will talk about the transformation and why he’s always reluctant to leave and joyful to get home.</p>\n<p><strong>Please note that our talks now begin at 6:30pm, rather than 7pm, giving you more time to enjoy dinner at our award-winning Garden Museum Cafe. Table reservations are available <a data-cke-saved-href=\"http://www.sevenrooms.com/explore/gardenmuseum/reservations/create/search/\" href=\"http://www.sevenrooms.com/explore/gardenmuseum/reservations/create/search/\">here</a>. Your talk ticket also includes entry to the Garden Museum’s temporary exhibitions from 6pm on the evening of the talk.</strong></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-13-at-11.56.54-pm-e1786691280421-1024x472.png",
+      "listing_is_free": false,
+      "location": "Garden Museum",
+      "title": "Matthew Rice: A Year in the Garden",
+      "types": [
+        "livestreams",
+        "talks"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/matthew-rice-a-year-in-the-garden/"
+    },
+    "slug": "matthew-rice-a-year-in-the-garden"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "exhibition",
+      "dedupe_key": "sabine-moritz-lie-down-in-green-pastures|2026-10-08|garden",
+      "description": "This autumn, the Garden Museum will hold contemporary German artist Sabine Moritz’s first UK museum exhibition. Reflecting on her childhood in East Germany, Moritz explores memories and encounters with the natural world through richly textured sketches and canvases, the majority of which have not been exhibited before. Several of the works in this exhibition draw on Moritz’s recollections of growing up in Neulobeda, a satellite town filled with concrete-slab housing, where her family moved following the death of her father. Dealing with grief, Moritz searched for solace beyond the city, exploring the surrounding hills and countryside. Moritz now lives and works in Cologne. She keeps potted plants and vases of fresh flowers, which inspire her ongoing series of floral sti ll life paintings. In recent years, she has also explored relationships with the natural world through an almost total abstraction, demonstrated in a vast piece created especially for this exhibition. Moritz, whose work was described by curator Hans Ulrich Obrist in 2013 as “memories made visual – the fleeting impulses of the past rendered concrete in art”, has been widely exhibited in group and solo exhibitions in D ü sseldorf, Brussels, Paris and London. This exhibition is supported by Pilar Corrias.",
+      "ends_at": "2026-12-20T00:00:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/SML00034-1024x783.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T23:00:00Z",
+      "tags": [
+        "gardens"
+      ],
+      "title": "Sabine Moritz: Lie Down in Green Pastures",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/sabine-moritz/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [],
+      "booking": [
+        "Tickets include entry to the whole museum and gardens",
+        "Friends go free! Become a Friend",
+        "Please note this exhibition will be closed on Sunday 18 October as the Harvest Festival takes place across the museum."
+      ],
+      "date_text": "8 Oct - 20 Dec 2026",
+      "description": "<p>\n\n          This autumn, the Garden Museum will hold contemporary German artist Sabine Moritz’s first UK museum exhibition. Reflecting on her childhood in East Germany, Moritz explores memories and encounters with the natural world through richly textured sketches and canvases, the majority of which have not been exhibited before.\n        </p>\n<p>\n\n          <p><span data-contrast=\"auto\">Several of the works in this exhibition draw on Moritz’s recollections of growing up in Neulobeda, a satellite town filled with concrete-slab housing, where her family moved following the death of her father. </span>Dealing with grief, Moritz searched for solace beyond the city, exploring the surrounding hills and countryside.</p>\n<p><span class=\"NormalTextRun SCXW134715312 BCX8\">Moritz now lives and works in Cologne. She keeps</span><span class=\"NormalTextRun SCXW134715312 BCX8\">&nbsp;</span><span class=\"NormalTextRun SCXW134715312 BCX8\">potted plants and </span><span class=\"NormalTextRun SCXW134715312 BCX8\">vases of&nbsp;</span><span class=\"NormalTextRun SCXW134715312 BCX8\">fresh&nbsp;</span><span class=\"NormalTextRun SCXW134715312 BCX8\">flowers, which </span><span class=\"NormalTextRun SCXW134715312 BCX8\">inspire her ongoing series of floral </span><span class=\"FindHit SCXW134715312 BCX8\">sti</span><span class=\"FindHit SCXW134715312 BCX8\">ll&nbsp;</span><span class=\"FindHit SCXW134715312 BCX8\">life</span><span class=\"NormalTextRun SCXW134715312 BCX8\"> paintings. In recent years, she has also </span>explored relationships with the natural world through an almost total abstraction, demonstrated in a vast piece created especially for this exhibition.</p>\n<p><span data-contrast=\"auto\">Moritz, whose work was described by curator Hans Ulrich Obrist in 2013 as “memories made visual – the fleeting impulses of the past rendered concrete in art”, has been widely exhibited in group and solo exhibitions in D</span><span data-contrast=\"auto\">ü</span><span data-contrast=\"auto\">sseldorf, Brussels, Paris and London.</span></p>\n<p><em>This exhibition is supported by <a href=\"https://www.pilarcorrias.com/\">Pilar Corrias</a>.</em></p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/SML00034-1024x783.jpg",
+      "listing_is_free": false,
+      "location": "Garden Museum",
+      "title": "Sabine Moritz: Lie Down in Green Pastures",
+      "types": [
+        "exhibitions"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/sabine-moritz/"
+    },
+    "slug": "sabine-moritz"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "workshop",
+      "dedupe_key": "sunday-family-sessions-clay-mushrooms|2026-10-04|garden",
+      "description": "Join us for our Family Learning Sunday Drop-In Sessions. Ahead of UK Fungus Day on October 10th, we will be looking at different types of fungi and then creating our own, real and imagined from air dry clay. We will be decorating them with acrylic paints which may stain. Please wear suitable clothing.",
+      "ends_at": "2026-10-04T11:30:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Sunday-sessions-fungi-4.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-04T10:00:00Z",
+      "tags": [
+        "gardens",
+        "family"
+      ],
+      "title": "Sunday Family Sessions Clay Mushrooms",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/sunday-family-sessions-clay-mushrooms/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "family"
+      ],
+      "booking": [
+        "Free. No booking required: first come, first served.",
+        "Please arrive promptly at 11am to start the session.",
+        "Suitable for all ages 3y+",
+        "All children to be accompanied and actively supervised by a parent or carer, who are encouraged to join in with the session too."
+      ],
+      "date_text": "4 Oct 2026, 11am - 12:30pm",
+      "description": "<p>\n\n          Join us for our Family Learning Sunday Drop-In Sessions.\n        </p>\n<p>\n\n          <p>Ahead of UK Fungus Day on October 10th, we will be looking at different types of fungi and then creating our own, real and imagined from air dry clay.</p>\n<p>We will be decorating them with acrylic paints which may stain.&nbsp; Please wear suitable clothing.</p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Sunday-sessions-fungi-4.jpg",
+      "listing_is_free": true,
+      "location": "Garden Museum",
+      "title": "Sunday Family Sessions Clay Mushrooms",
+      "types": [
+        "workshops"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/sunday-family-sessions-clay-mushrooms/"
+    },
+    "slug": "sunday-family-sessions-clay-mushrooms"
+  },
+  {
+    "event": {
+      "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "category": "exhibition",
+      "dedupe_key": "winter-flowers-week-2026|2026-11-10|garden",
+      "description": "Every Winter Flowers Week we deck the halls of the Garden Museum with seasonal flowers and foliage, as we invite five floral designers transform the museum into a winter wonderland. With sustainability at the heart, their installations will be created using only British-grown seasonal flowers and foliage, and environmentally-friendly materials and methods. This year’s exhibiting floral designers are Flùr, Billy Loves Flowers, Yinari, Botanical Tales and Joanne Truby, all trailblazers in the field and passionate about improving sustainability in the floristry industry. Meet the designers below! The week will also include a Late and panel talk on Thursday 12 November, a chance to mingle among the flowers with a drink in hand, live music and floral activities.",
+      "ends_at": "2026-11-15T17:00:00Z",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/DSC_4866-GWL-scaled.jpg",
+      "lat": 51.4947,
+      "lng": -0.1199,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-10T10:00:00Z",
+      "tags": [
+        "gardens"
+      ],
+      "title": "Winter Flowers Week 2026",
+      "url": "https://www.gardenmuseum.org.uk/whats-on/winter-flowers-week-2026/",
+      "venue_name": "Garden Museum"
+    },
+    "payload": {
+      "audience": [
+        "adults"
+      ],
+      "booking": [
+        "Tickets include entry to the whole museum and temporary exhibition Sabine Moritz: Lie Down in Green Pastures",
+        "Friends go free!",
+        "Become a Friend"
+      ],
+      "date_text": "10 Nov - 15 Nov 2026, 10am - 5pm",
+      "description": "<p>\n\n          Every Winter Flowers Week we deck the halls of the Garden Museum with seasonal flowers and foliage, as we invite five floral designers transform the museum into a winter wonderland.\n        </p>\n<p>\n\n          <p>With sustainability at the heart, their installations will be created using only British-grown seasonal flowers and foliage, and environmentally-friendly materials and methods.</p>\n<p>This year’s exhibiting floral designers are Flùr, Billy Loves Flowers, Yinari, Botanical Tales and Joanne Truby, all trailblazers in the field and passionate about improving sustainability in the floristry industry. Meet the designers below!</p>\n<p>The week will also include a <a href=\"https://www.gardenmuseum.org.uk/whats-on/winter-flowers-week-2026-late/\" rel=\"noopener\" target=\"_blank\">Late</a> and <a href=\"https://www.gardenmuseum.org.uk/whats-on/winter-flowers-week-2025-meet-the-designers-panel-talk/\">panel talk</a> on Thursday 12 November, a chance to mingle among the flowers with a drink in hand, live music and floral activities.</p>\n\n        </p>",
+      "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/DSC_4866-GWL-scaled.jpg",
+      "listing_is_free": false,
+      "location": "Garden Museum",
+      "title": "Winter Flowers Week 2026",
+      "types": [
+        "exhibitions"
+      ],
+      "url": "https://www.gardenmuseum.org.uk/whats-on/winter-flowers-week-2026/"
+    },
+    "slug": "winter-flowers-week-2026"
+  }
+]
