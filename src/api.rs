@@ -29,7 +29,8 @@ use uuid::Uuid;
 
 use crate::health::{HealthStatus, RunStats};
 use crate::listing::{self, Cursor, EventOrder};
-use crate::repo::{self, EventRow, RefusedSourceRow, SourceStatusRow};
+use crate::model::SourceKind;
+use crate::repo::{self, EventRow, RefusedSourceRow, SourceStatusRow, ThumbnailMeta};
 use crate::suggestions::{Outcome, Suggestions};
 
 #[derive(Clone)]
@@ -222,7 +223,12 @@ pub(crate) struct EventJson {
     pub(crate) price_max: Option<Decimal>,
     pub(crate) currency: Option<String>,
     pub(crate) url: Option<String>,
-    pub(crate) image_url: Option<String>,
+    /// Our own small copy of the event's image (`/thumbs/...`); the
+    /// source's image URL is never exposed, so nobody hotlinks it.
+    pub(crate) thumbnail_url: Option<String>,
+    pub(crate) image_credit: Option<ImageCreditJson>,
+    #[serde(skip)]
+    pub(crate) thumbnail_size: Option<(i32, i32)>,
     pub(crate) category: String,
     pub(crate) tags: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,16 +236,33 @@ pub(crate) struct EventJson {
     pub(crate) sources: Vec<SourceLinkJson>,
 }
 
+/// Who the thumbnail's image belongs to, and where to see it in context.
+#[derive(Serialize)]
+pub(crate) struct ImageCreditJson {
+    /// Human-readable source name ("Barbican").
+    pub(crate) name: String,
+    /// The event's page on that source (else the source's site).
+    pub(crate) url: String,
+}
+
 #[derive(Serialize)]
 pub(crate) struct SourceLinkJson {
     pub(crate) source: String,
+    pub(crate) display_name: String,
+    #[serde(skip)]
+    pub(crate) kind: SourceKind,
     pub(crate) url: Option<String>,
     pub(crate) first_seen_at: DateTime<Utc>,
     pub(crate) last_seen_at: DateTime<Utc>,
 }
 
 impl EventJson {
-    fn new(e: EventRow, distance_km: Option<f64>, sources: Vec<SourceLinkJson>) -> Self {
+    fn new(
+        e: EventRow,
+        distance_km: Option<f64>,
+        sources: Vec<SourceLinkJson>,
+        thumb: Option<ThumbnailMeta>,
+    ) -> Self {
         Self {
             id: e.id,
             title: e.title,
@@ -255,7 +278,14 @@ impl EventJson {
             price_max: e.price_max,
             currency: e.currency,
             url: e.url,
-            image_url: e.image_url,
+            thumbnail_url: thumb
+                .as_ref()
+                .map(|t| crate::thumbs::thumb_path(e.id, &t.content_hash)),
+            thumbnail_size: thumb.as_ref().map(|t| (t.width, t.height)),
+            image_credit: thumb.map(|t| ImageCreditJson {
+                name: repo::display_name(&t.credit_key, t.credit_display_name.as_deref()),
+                url: t.credit_url,
+            }),
             category: e.category,
             tags: e.tags,
             distance_km,
@@ -274,13 +304,23 @@ async fn source_links(
             .entry(l.event_id)
             .or_default()
             .push(SourceLinkJson {
+                display_name: repo::display_name(&l.source, l.display_name.as_deref()),
                 source: l.source,
+                kind: l.kind,
                 url: l.source_url,
                 first_seen_at: l.first_seen_at,
                 last_seen_at: l.last_seen_at,
             });
     }
     Ok(by_event)
+}
+
+async fn thumbnails(pool: &PgPool, ids: &[Uuid]) -> sqlx::Result<HashMap<Uuid, ThumbnailMeta>> {
+    Ok(repo::thumbnail_meta(pool, ids)
+        .await?
+        .into_iter()
+        .map(|t| (t.event_id, t))
+        .collect())
 }
 
 /// One page of events for `query` and the cursor of the next page (shared
@@ -305,11 +345,13 @@ pub(crate) async fn event_page(
         .map(|c| c.encode());
     let ids: Vec<Uuid> = rows.iter().map(|r| r.event.id).collect();
     let mut links = source_links(pool, &ids).await?;
+    let mut thumbs = thumbnails(pool, &ids).await?;
     let events = rows
         .into_iter()
         .map(|r| {
             let sources = links.remove(&r.event.id).unwrap_or_default();
-            EventJson::new(r.event, r.distance_km, sources)
+            let thumb = thumbs.remove(&r.event.id);
+            EventJson::new(r.event, r.distance_km, sources, thumb)
         })
         .collect();
     Ok((events, next_cursor))
@@ -335,7 +377,8 @@ pub(crate) async fn event_by_id(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<
         .await?
         .remove(&id)
         .unwrap_or_default();
-    Ok(Some(EventJson::new(event, None, sources)))
+    let thumb = thumbnails(pool, &[id]).await?.remove(&id);
+    Ok(Some(EventJson::new(event, None, sources, thumb)))
 }
 
 /// Ids that are not UUIDs are unknown ids too: 404, not 400.
@@ -353,6 +396,7 @@ async fn get_event(
 #[derive(Serialize)]
 struct SourceJson {
     key: String,
+    display_name: String,
     kind: &'static str,
     interval_minutes: i32,
     enabled: bool,
@@ -411,6 +455,7 @@ impl SourceJson {
             }),
         );
         Self {
+            display_name: repo::display_name(&r.key, r.display_name.as_deref()),
             key: r.key,
             kind: r.kind.as_str(),
             interval_minutes: r.interval_minutes,

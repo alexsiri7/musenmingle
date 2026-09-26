@@ -9,7 +9,10 @@
 //!    fetch with a timeout, normalise, drop past events, upsert, and record
 //!    an `events.source_runs` row (events found, errors, duration);
 //! 4. run the health checker for that source;
-//! 5. file GitHub issues for site suggestions the API left `pending`.
+//! 5. bring stored rows in line with the sources' content policy
+//!    (`repo::enforce_content_policy`) and make missing thumbnails
+//!    (`crate::thumbs`) — every tick, even when no source was due;
+//! 6. file GitHub issues for site suggestions the API left `pending`.
 
 use std::time::Duration;
 
@@ -21,6 +24,7 @@ use crate::health::{HealthAction, HealthChecker};
 use crate::repo::{self, NewRun, SourceRow};
 use crate::sources::{SkipReason, Source};
 use crate::suggestions;
+use crate::thumbs::{self, ThumbConfig};
 
 /// Arbitrary constant key for `pg_try_advisory_lock` (session-level locks
 /// are not schema objects).
@@ -106,6 +110,24 @@ impl Runner {
             tracing::info!(?report, "source finished");
             reports.push(report);
         }
+        match repo::enforce_content_policy(&self.pool).await {
+            Ok(r) if r != repo::PolicyReport::default() => {
+                tracing::info!(report = ?r, "content policy applied to stored rows")
+            }
+            Ok(_) => {}
+            Err(e) => tracing::error!(error = %e, "content policy pass failed"),
+        }
+        match thumbs::run(&self.pool, &self.ctx, &ThumbConfig::default(), now).await {
+            Ok(r) => tracing::info!(
+                made = r.made,
+                failed = r.failed,
+                deferred = r.deferred,
+                "thumbnail pass finished"
+            ),
+            Err(e) => tracing::error!(error = %e, "thumbnail pass failed"),
+        }
+        // Thumbnail fetches may report soft errors; they are not source errors.
+        let _ = self.ctx.take_errors();
         if let Some(filer) = self.health.filer() {
             match suggestions::file_pending(&self.pool, filer, now).await {
                 Ok(filed) if !filed.is_empty() => {

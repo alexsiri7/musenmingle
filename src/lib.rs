@@ -18,6 +18,7 @@ pub mod repo;
 pub mod runner;
 pub mod sources;
 pub mod suggestions;
+pub mod thumbs;
 pub mod web;
 
 /// Crate version, used in the bot User-Agent.

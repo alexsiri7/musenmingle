@@ -93,7 +93,7 @@ fn assert_html(p: &Page) {
     for d in [
         "default-src 'self'",
         "script-src 'self'",
-        "img-src https: data:",
+        "img-src 'self';",
         "style-src 'self'",
         "form-action 'self'",
         "frame-ancestors 'none'",
@@ -102,7 +102,10 @@ fn assert_html(p: &Page) {
     }
     assert!(!csp.contains("unsafe-inline"), "{csp}");
     assert!(p.body.starts_with("<!DOCTYPE html>"));
-    assert!(p.body.contains("<a class=\"brand\" href=\"/\">LetsArt</a>"));
+    assert!(
+        p.body
+            .contains("<a class=\"brand\" href=\"/\">Muse &amp; Mingle</a>")
+    );
     // Exactly one script: the first-party, versioned app.js (no inline code).
     assert_eq!(p.body.matches("<script").count(), 1, "{}", p.body);
     assert!(
@@ -112,6 +115,13 @@ fn assert_html(p: &Page) {
     );
     assert!(p.body.contains("\" defer></script>"));
     assert!(!p.body.contains(" onclick="));
+    // Never hotlink: every image is one of our own thumbnails.
+    for img in p.body.split("<img ").skip(1) {
+        let tag = &img[..img.find('>').unwrap()];
+        if let Some(at) = tag.find("src=\"") {
+            assert!(tag[at..].starts_with("src=\"/thumbs/"), "{tag}");
+        }
+    }
     assert!(!p.body.contains("style=\""), "{}", p.body);
 }
 
@@ -259,7 +269,7 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert_html(&p);
     assert!(
         p.body
-            .contains("<title>LetsArt — What's on in London for creative people</title>")
+            .contains("<title>Muse &amp; Mingle — What's on in London for creative people</title>")
     );
     assert!(
         p.body
@@ -276,11 +286,9 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert!(!p.body.contains("<img src=x"), "{}", p.body);
     assert!(p.body.contains("&lt;img src=x onerror=alert(2)&gt;"));
     assert!(!p.body.contains("javascript:"), "{}", p.body);
-    // Thumbnail, venue, price, category, links.
-    assert!(
-        p.body
-            .contains("<img src=\"https://img.example.org/drawing.jpg\" alt=\"\" loading=\"lazy\"")
-    );
+    // The source's image is never hotlinked (no thumbnail made yet: none).
+    assert!(!p.body.contains("img.example.org"), "{}", p.body);
+    assert!(!p.body.contains("<img"), "{}", p.body);
     assert!(p.body.contains("Barbican"));
     assert!(p.body.contains("£5–£12.50"), "{}", p.body);
     assert!(p.body.contains(">Free</span>"));
@@ -289,7 +297,7 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert!(p.body.contains(&format!("href=\"/events/{drawing}\"")));
     assert!(
         p.body
-            .contains("href=\"https://www.barbican.org.uk/life-drawing\" rel=\"noopener noreferrer\">on barbican</a>")
+            .contains("<a class=\"button\" href=\"https://www.barbican.org.uk/life-drawing\" rel=\"noopener\">See it on Barbican →")
     );
     // Default "from" is today (London), shown in the form.
     assert!(p.body.contains(&format!(
@@ -490,7 +498,7 @@ async fn home_filters_by_source_with_a_clearable_chip() {
     assert_eq!(p.status, StatusCode::OK, "{}", p.body);
     assert_eq!(card_titles(&p.body), ["On both", "Barbican only"]);
     assert!(
-        p.body.contains("From: <strong>barbican</strong>"),
+        p.body.contains("From: <strong>Barbican</strong>"),
         "{}",
         p.body
     );
@@ -607,7 +615,9 @@ async fn detail_page_shows_all_fields_and_404s_unknown_ids() {
     assert!(p.body.contains(
         "https://www.openstreetmap.org/?mlat=51.5202&amp;mlon=-0.0938#map=17/51.5202/-0.0938"
     ));
-    assert!(p.body.contains(">barbican</a>"));
+    assert!(p.body.contains("rel=\"noopener\">Barbican</a>"));
+    assert!(p.body.contains("See it on Barbican →"), "{}", p.body);
+    assert!(!p.body.contains("img.example.org"), "{}", p.body);
     assert!(p.body.contains("href=\"https://www.ticketmaster.co.uk/x\""));
     assert!(p.body.contains("£5–£12.50"), "{}", p.body);
     assert!(p.body.contains("Talk"));
@@ -658,7 +668,10 @@ async fn sources_page_renders_the_sources_api_data() {
     let p = get(&app, "/sources").await;
     assert_eq!(p.status, StatusCode::OK, "{}", p.body);
     assert_html(&p);
-    assert!(p.body.contains("<title>Sources · LetsArt</title>"));
+    assert!(
+        p.body
+            .contains("<title>Sources · Muse &amp; Mingle</title>")
+    );
     let row = &p.body[p
         .body
         .find("<a href=\"/?source=barbican\"")
@@ -806,7 +819,10 @@ async fn saved_page_is_a_script_enhanced_shell() {
     let p = get(&app, "/saved").await;
     assert_eq!(p.status, StatusCode::OK, "{}", p.body);
     assert_html(&p);
-    assert!(p.body.contains("<title>Saved events · LetsArt</title>"));
+    assert!(
+        p.body
+            .contains("<title>Saved events · Muse &amp; Mingle</title>")
+    );
     assert!(p.body.contains("only in this browser on this device"));
     assert!(p.body.contains("<noscript>"));
     assert!(

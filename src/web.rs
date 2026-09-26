@@ -7,7 +7,15 @@
 //! `PreEscaped` (which this module never does with data). Pages use no
 //! JavaScript and no third-party assets; the stylesheet is served from
 //! `/static/style.css`, so the Content-Security-Policy needs no
-//! `'unsafe-inline'`. Everything shown comes from the same helpers as the
+//! `'unsafe-inline'`. Images are only our own thumbnails (`/thumbs/...`,
+//! see `crate::thumbs`), each credited to its source, so `img-src` is
+//! `'self'`.
+//!
+//! Links to venues and sources use `rel="noopener"` but deliberately NOT
+//! `noreferrer`: we want venues to see (via the Referer, which our
+//! `Referrer-Policy: strict-origin-when-cross-origin` limits to our origin)
+//! that visitors came from Muse & Mingle. The primary call to action on cards and
+//! detail pages is the source's own page ("See it on Barbican →"). Everything shown comes from the same helpers as the
 //! JSON API (`api::event_page`, `api::event_by_id`, `api::source_values`,
 //! `api::submit_suggestion`), and filters go through `listing::parse_query`,
 //! so validation is identical.
@@ -30,19 +38,20 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
-use crate::api::{self, AppState, EventJson};
+use crate::api::{self, AppState, EventJson, SourceLinkJson};
 use crate::listing;
-use crate::model::Category;
+use crate::model::{Category, SourceKind};
 use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 
 /// Content-Security-Policy for every HTML response.
-pub const CSP: &str = "default-src 'self'; script-src 'self'; img-src https: data:; \
+/// Images are our own thumbnails only (`/thumbs/...`), never hotlinked.
+pub const CSP: &str = "default-src 'self'; script-src 'self'; img-src 'self'; \
      style-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
 
 /// Site name shown in page titles and the header (the product name; the
 /// project/crate stays `thaleia`).
-pub const BRAND: &str = "LetsArt";
+pub const BRAND: &str = "Muse & Mingle";
 
 const TAGLINE: &str = "What's on in London for creative people";
 
@@ -111,6 +120,62 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/static/style.css", get(stylesheet))
         .route("/static/app.js", get(app_js))
         .route("/saved", get(saved))
+        .route("/thumbs/{name}", get(thumbnail))
+}
+
+/// `GET /thumbs/{event_id}-{hash}.jpg` (immutable: the hash changes with the
+/// bytes) or `GET /thumbs/{event_id}` (current thumbnail, revalidated).
+/// A stale hash or unknown id is 404.
+async fn thumbnail(
+    State(state): State<AppState>,
+    Path(name): Path<String>,
+    headers: HeaderMap,
+) -> Response {
+    let not_found = || (StatusCode::NOT_FOUND, "not found").into_response();
+    let Some((id, want_hash)) = crate::thumbs::parse_thumb_name(&name) else {
+        return not_found();
+    };
+    let t = match repo::get_thumbnail(&state.pool, id).await {
+        Ok(Some(t)) => t,
+        Ok(None) => return not_found(),
+        Err(e) => {
+            tracing::error!(error = %e, "thumbnail query failed");
+            return (StatusCode::INTERNAL_SERVER_ERROR, "internal error").into_response();
+        }
+    };
+    if want_hash.is_some_and(|h| h != t.content_hash) {
+        return not_found();
+    }
+    let etag = format!("\"{}\"", t.content_hash);
+    let cache = if want_hash.is_some() {
+        "public, max-age=604800, immutable"
+    } else {
+        "public, max-age=604800"
+    };
+    let matches = headers
+        .get(header::IF_NONE_MATCH)
+        .and_then(|v| v.to_str().ok())
+        .is_some_and(|v| v.split(',').any(|e| e.trim() == etag || e.trim() == "*"));
+    let mut resp = if matches {
+        StatusCode::NOT_MODIFIED.into_response()
+    } else {
+        (StatusCode::OK, t.bytes).into_response()
+    };
+    let h = resp.headers_mut();
+    if !matches {
+        if let Ok(v) = HeaderValue::from_str(&t.content_type) {
+            h.insert(header::CONTENT_TYPE, v);
+        }
+    }
+    h.insert(header::CACHE_CONTROL, HeaderValue::from_static(cache));
+    if let Ok(v) = HeaderValue::from_str(&etag) {
+        h.insert(header::ETAG, v);
+    }
+    h.insert(
+        header::X_CONTENT_TYPE_OPTIONS,
+        HeaderValue::from_static("nosniff"),
+    );
+    resp
 }
 
 async fn stylesheet() -> Response {
@@ -137,8 +202,8 @@ async fn app_js() -> Response {
 
 // ---------------------------------------------------------------- layout
 
-/// `title` is the page's own name ("Sources" → "Sources · LetsArt"); empty
-/// for the home page ("LetsArt — What's on in London for creative people").
+/// `title` is the page's own name ("Sources" → "Sources · Muse & Mingle"); empty
+/// for the home page ("Muse & Mingle — What's on in London for creative people").
 fn page(status: StatusCode, title: &str, main: Markup) -> Response {
     let doc = html! {
         (DOCTYPE)
@@ -245,9 +310,37 @@ fn safe_link(s: Option<&str>) -> Option<String> {
     matches!(u.scheme(), "http" | "https").then(|| u.to_string())
 }
 
-/// `s` if it is an https URL (the CSP only allows https images).
-fn safe_image(s: Option<&str>) -> Option<String> {
-    safe_link(s).filter(|u| u.starts_with("https://"))
+/// The source page to send visitors to: the first venue site (scraper)
+/// listing with a link, else the first listing with a link.
+fn primary_source(e: &EventJson) -> Option<(&SourceLinkJson, String)> {
+    let linked = |s: &'_ SourceLinkJson| safe_link(s.url.as_deref());
+    e.sources
+        .iter()
+        .filter(|s| s.kind == SourceKind::Scraper)
+        .chain(e.sources.iter().filter(|s| s.kind != SourceKind::Scraper))
+        .find_map(|s| linked(s).map(|u| (s, u)))
+}
+
+/// Our thumbnail with its visible credit ("Image: Barbican", linking to the
+/// event's page on that source, never to the image file).
+fn thumbnail_figure(e: &EventJson, class: &str) -> Markup {
+    let (Some(src), Some(credit)) = (&e.thumbnail_url, &e.image_credit) else {
+        return html! {};
+    };
+    let (w, h) = e.thumbnail_size.unwrap_or((480, 270));
+    html! {
+        figure class=(class) {
+            img src=(src) alt="" loading="lazy" decoding="async" width=(w) height=(h);
+            figcaption class="credit" {
+                "Image: "
+                @if let Some(u) = safe_link(Some(&credit.url)) {
+                    a href=(u) rel="noopener" { (credit.name) }
+                } @else {
+                    (credit.name)
+                }
+            }
+        }
+    }
 }
 
 fn london(t: DateTime<Utc>) -> DateTime<chrono_tz::Tz> {
@@ -529,7 +622,10 @@ fn card_template() -> Markup {
     html! {
         template id="card-template" {
             article class="card" {
-                img data-slot="image" alt="" loading="lazy" decoding="async" width="320" height="180" hidden;
+                figure class="thumb" data-slot="figure" hidden {
+                    img data-slot="image" alt="" loading="lazy" decoding="async" width="480" height="270";
+                    figcaption class="credit" { "Image: " a data-slot="credit" rel="noopener" {} }
+                }
                 div class="card-body" {
                     h2 { a data-slot="title" href="/" {} }
                     p class="when" data-slot="when" {}
@@ -539,7 +635,10 @@ fn card_template() -> Markup {
                         " " span class="badge" data-slot="price" {}
                         " " span class="badge gone" data-slot="gone" hidden { "No longer listed" }
                     }
-                    p class="links" {
+                    p class="cta" data-slot="cta-wrap" hidden {
+                        a class="button" data-slot="cta" rel="noopener" {}
+                    }
+                    p class="links small" {
                         a data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
                         span data-slot="sources" {}
                     }
@@ -556,11 +655,10 @@ fn card_template() -> Markup {
 
 fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
+    let primary = primary_source(e);
     html! {
         article class="card" {
-            @if let Some(img) = safe_image(e.image_url.as_deref()) {
-                img src=(img) alt="" loading="lazy" decoding="async" width="320" height="180";
-            }
+            (thumbnail_figure(e, "thumb"))
             div class="card-body" {
                 h2 { a href=(detail) { (e.title) } }
                 p class="when" { (when(e.starts_at, e.ends_at, now)) }
@@ -574,11 +672,19 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                         " " span class="badge" { (format!("{d:.1} km")) }
                     }
                 }
-                p class="links" {
+                @if let Some((p, u)) = &primary {
+                    p class="cta" {
+                        a class="button" href=(u) rel="noopener" {
+                            "See it on " (p.display_name) " →"
+                            span class="vh" { ": " (e.title) }
+                        }
+                    }
+                }
+                p class="links small" {
                     a href=(detail) { "Details" span class="vh" { ": " (e.title) } }
                     @for s in &e.sources {
-                        @if let Some(u) = safe_link(s.url.as_deref()) {
-                            " · " a href=(u) rel="noopener noreferrer" { "on " (s.source) }
+                        @if let Some(u) = safe_link(s.url.as_deref()).filter(|u| primary.as_ref().is_none_or(|(_, pu)| pu != u)) {
+                            " · " a href=(u) rel="noopener" { "also on " (s.display_name) }
                         }
                     }
                 }
@@ -590,6 +696,14 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
 
 async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Response {
     let filters = Filters::parse(raw.as_deref().unwrap_or(""));
+    let source_names = if filters.sources.is_empty() {
+        Vec::new()
+    } else {
+        match repo::source_names(&state.pool).await {
+            Ok(n) => n,
+            Err(e) => return internal_error(e),
+        }
+    };
     let heading = html! {
         h1 { (TAGLINE) }
         p class="lede" {
@@ -599,9 +713,10 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         @if !filters.sources.is_empty() {
             p class="chips" aria-label="Active filters" {
                 @for src in &filters.sources {
+                    @let name = source_names.iter().find(|(k, _)| k == src).map_or_else(|| repo::display_name(src, None), |(_, n)| n.clone());
                     span class="chip" {
-                        "From: " strong { (src) } " "
-                        a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (src) } { "×" }
+                        "From: " strong { (name) } " "
+                        a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (name) } { "×" }
                     }
                     " "
                 }
@@ -713,10 +828,13 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
             p class="small" { a href="/" { "← All events" } }
             article class="detail" {
                 h1 { (e.title) }
+                @if let Some((p, u)) = primary_source(&e) {
+                    p class="cta" {
+                        a class="button" href=(u) rel="noopener" { "See it on " (p.display_name) " →" }
+                    }
                 (save_button(&e))
-                @if let Some(img) = safe_image(e.image_url.as_deref()) {
-                    img class="hero" src=(img) alt="" loading="lazy" decoding="async";
                 }
+                (thumbnail_figure(&e, "hero"))
                 dl {
                     dt { "When" } dd { (when(e.starts_at, e.ends_at, now)) }
                     @if e.ends_at.is_some() {
@@ -734,20 +852,29 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                     dt { "Price" } dd { (price(&e).unwrap_or_else(|| "Not listed".into())) }
                     @if !e.tags.is_empty() { dt { "Tags" } dd { (e.tags.join(", ")) } }
                     @if let Some(u) = safe_link(e.url.as_deref()) {
-                        dt { "Event page" } dd { a href=(u) rel="noopener noreferrer" { (u) } }
+                        dt { "Event page" } dd { a href=(u) rel="noopener" { (u) } }
                     }
                 }
                 @if let Some(d) = e.description.as_deref().filter(|d| !d.trim().is_empty()) {
-                    section class="description" aria-label="Description" { (paragraphs(d)) }
+                    section class="description" aria-label="Description" {
+                        (paragraphs(d))
+                        @if let Some((p, u)) = primary_source(&e) {
+                            p class="small" {
+                                "An excerpt. Read more "
+                                a href=(u) rel="noopener" { "on " (p.display_name) }
+                                "."
+                            }
+                        }
+                    }
                 }
                 h2 { "Found on" }
                 ul class="sources" {
                     @for s in &e.sources {
                         li {
                             @if let Some(u) = safe_link(s.url.as_deref()) {
-                                a href=(u) rel="noopener noreferrer" { (s.source) }
+                                a href=(u) rel="noopener" { (s.display_name) }
                             } @else {
-                                (s.source)
+                                (s.display_name)
                             }
                             span class="small" {
                                 " — first seen " (time_tag(s.first_seen_at, fmt_date(s.first_seen_at)))
@@ -802,8 +929,9 @@ async fn sources(State(state): State<AppState>) -> Response {
                             tr {
                                 th scope="row" {
                                     @let key = text(&s["key"]);
+                                    @let name = text(&s["display_name"]);
                                     a href={ "/?" (url::form_urlencoded::Serializer::new(String::new()).append_pair("source", &key).finish()) }
-                                        aria-label={ "Events from " (key) } { (key) }
+                                        aria-label={ "Events from " (name) } { (name) }
                                     @if s["enabled"] == Value::Bool(false) { " (disabled)" }
                                 }
                                 td { (text(&s["kind"])) }
@@ -990,13 +1118,11 @@ mod tests {
     }
 
     #[test]
-    fn only_http_links_and_https_images() {
+    fn only_http_links() {
         assert_eq!(safe_link(Some("javascript:alert(1)")), None);
         assert_eq!(safe_link(Some("data:text/html,x")), None);
         assert_eq!(safe_link(Some("/relative")), None);
         assert!(safe_link(Some("http://example.org/a")).is_some());
-        assert_eq!(safe_image(Some("http://example.org/a.jpg")), None);
-        assert!(safe_image(Some("https://example.org/a.jpg")).is_some());
     }
 
     #[test]

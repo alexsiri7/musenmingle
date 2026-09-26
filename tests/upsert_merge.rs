@@ -315,7 +315,7 @@ async fn fuzzy_merge_is_stable_across_reruns_in_both_orders() {
         };
         let pool = db.migrated_pool().await;
         let tm_src = source_id(&pool, "ticketmaster").await;
-        let sp_src = source_id(&pool, "serpentine-galleries").await;
+        let sp_src = source_id(&pool, "barbican").await;
         let tm_listing = (tm_src, &tm, raw("tm-kusama"));
         let sp_listing = (sp_src, &sp, raw("sp-kusama"));
         let (first, second) = if tm_first {

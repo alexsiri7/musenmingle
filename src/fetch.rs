@@ -53,6 +53,17 @@ pub enum FetchError {
     InvalidUrl(String),
     #[error("could not decode response from {url}: {message}")]
     Decode { url: String, message: String },
+    #[error("response from {url} is larger than {limit} bytes")]
+    TooLarge { url: String, limit: usize },
+}
+
+/// A body fetched by [`FetchContext::get_bytes_limited`].
+#[derive(Debug, Clone)]
+pub struct FetchedBytes {
+    pub bytes: Vec<u8>,
+    pub content_type: Option<String>,
+    pub etag: Option<String>,
+    pub last_modified: Option<String>,
 }
 
 /// Strip the query string (which may contain API keys) for logs and errors.
@@ -253,6 +264,53 @@ impl FetchContext {
                 url: redact(url),
                 source: e.without_url(),
             })
+    }
+
+    /// GET a binary body (e.g. an image for the thumbnailer), refusing
+    /// bodies over `limit` bytes: by `Content-Length` before reading, and
+    /// while streaming otherwise. Same robots.txt / rate-limit rules as
+    /// [`FetchContext::get`].
+    pub async fn get_bytes_limited(
+        &self,
+        url: &Url,
+        limit: usize,
+    ) -> Result<FetchedBytes, FetchError> {
+        let too_large = || FetchError::TooLarge {
+            url: redact(url),
+            limit,
+        };
+        let mut resp = self.get(url).await?;
+        if resp
+            .content_length()
+            .is_some_and(|n| n > u64::try_from(limit).unwrap_or(u64::MAX))
+        {
+            return Err(too_large());
+        }
+        let header = |name: reqwest::header::HeaderName| {
+            resp.headers()
+                .get(name)
+                .and_then(|v| v.to_str().ok())
+                .map(str::to_string)
+        };
+        let content_type = header(reqwest::header::CONTENT_TYPE);
+        let etag = header(reqwest::header::ETAG);
+        let last_modified = header(reqwest::header::LAST_MODIFIED);
+        let mut bytes = Vec::new();
+        while let Some(chunk) = resp.chunk().await.map_err(|e| FetchError::Http {
+            url: redact(url),
+            source: e.without_url(),
+        })? {
+            if bytes.len() + chunk.len() > limit {
+                return Err(too_large());
+            }
+            bytes.extend_from_slice(&chunk);
+        }
+        Ok(FetchedBytes {
+            bytes,
+            content_type,
+            etag,
+            last_modified,
+        })
     }
 
     /// GET and decode the body as JSON.

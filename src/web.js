@@ -1,4 +1,4 @@
-// LetsArt: "Saved" events, stored only in this browser (localStorage).
+// Muse & Mingle: "Saved" events, stored only in this browser (localStorage).
 // Served from /static/app.js; no third-party code, no inline scripts.
 // Progressive enhancement: pages render and work without this file; the
 // save buttons are rendered `hidden` and only shown from here.
@@ -203,13 +203,13 @@
 
   /**
    * A VCALENDAR for `events` ({id, title, venue, starts_at, ends_at, url}).
-   * `origin` builds each event's LetsArt link.
+   * `origin` builds each event's Muse & Mingle link.
    */
   function toICS(events, nowIso, origin) {
     var lines = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//LetsArt//Saved events//EN",
+      "PRODID:-//Muse & Mingle//Saved events//EN",
       "CALSCALE:GREGORIAN",
     ];
     events.forEach(function (e) {
@@ -331,26 +331,51 @@
       priceEl.textContent = p;
       if (event.is_free) priceEl.classList.add("free");
     } else priceEl.hidden = true;
-    var img = slot(node, "image");
-    if (event && typeof event.image_url === "string" && /^https:\/\//i.test(event.image_url)) {
-      img.setAttribute("src", event.image_url);
-      img.hidden = false;
-    } else if (img) {
-      img.parentNode.removeChild(img);
+    // Only our own thumbnails (never the source's image), with the credit.
+    var figure = slot(node, "figure");
+    var credit = event && event.image_credit;
+    var creditUrl = credit ? safeLink(credit.url) : null;
+    if (
+      event &&
+      typeof event.thumbnail_url === "string" &&
+      event.thumbnail_url.indexOf("/thumbs/") === 0 &&
+      credit &&
+      creditUrl
+    ) {
+      slot(node, "image").setAttribute("src", event.thumbnail_url);
+      var c = slot(node, "credit");
+      c.setAttribute("href", creditUrl);
+      c.textContent = credit.name;
+      figure.hidden = false;
+    } else if (figure) {
+      figure.parentNode.removeChild(figure);
     }
     var details = slot(node, "details");
     slot(node, "details-title").textContent = ": " + e.title;
     var sources = slot(node, "sources");
     if (event) {
       details.setAttribute("href", href);
+      // The primary call to action is the source's own page; venue links
+      // keep the referrer (rel="noopener", no "noreferrer").
+      var primary = null;
       (event.sources || []).forEach(function (s) {
         var u = safeLink(s.url);
         if (!u) return;
+        var name = s.display_name || s.source;
+        if (!primary) {
+          primary = u;
+          var cta = slot(node, "cta");
+          cta.setAttribute("href", u);
+          cta.textContent = "See it on " + name + " \u2192";
+          slot(node, "cta-wrap").hidden = false;
+          return;
+        }
+        if (u === primary) return;
         sources.appendChild(doc.createTextNode(" · "));
         var a = doc.createElement("a");
         a.setAttribute("href", u);
-        a.setAttribute("rel", "noopener noreferrer");
-        a.textContent = "on " + s.source;
+        a.setAttribute("rel", "noopener");
+        a.textContent = "also on " + name;
         sources.appendChild(a);
       });
     } else {

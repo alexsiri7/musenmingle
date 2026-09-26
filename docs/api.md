@@ -15,7 +15,30 @@ takes `from`, `to`, `category`, `free`, `near=<area>`, `source` and
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
-`Content-Security-Policy`. See `src/web.rs`.
+`Content-Security-Policy` (`img-src 'self'`). See `src/web.rs`.
+
+## Content policy
+
+The service is a free, for-fun aggregator: it links out to venues and
+does not republish their content. So, in every response:
+
+- `description` is at most a **300-character excerpt** (cut at a sentence
+  or word boundary, ending in `…`), and `null` for sources whose terms don't
+  allow us to keep descriptions (currently Ticketmaster and Serpentine
+  Galleries). Follow the source link for the full text.
+- The source's own image URL is **never exposed** (`image_url` was removed
+  on 2026-09-26). Instead `thumbnail_url` points to a small copy we host
+  (made once per image, ≤ 480 px, JPEG), and `image_credit` names its
+  owner and links to the event's page there. Show the credit whenever you
+  show the thumbnail, and don't hotlink the venue's image.
+
+## `GET /thumbs/{event_id}-{hash}.jpg`
+
+A thumbnail as linked from `thumbnail_url`: `image/jpeg`, `ETag`,
+`Cache-Control: public, max-age=604800, immutable` (the hash changes when the
+image does). `GET /thumbs/{event_id}` serves the current thumbnail without
+`immutable`. `If-None-Match` is answered with 304. Unknown ids, stale
+hashes and images from sources that no longer allow them are 404.
 
 Browsers may call the API only from the origins listed in `CORS_ORIGINS`
 (comma-separated, e.g. `https://thaleia.example,http://localhost:5173`).
@@ -73,19 +96,25 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       "price_max": "12.50",
       "currency": "GBP",
       "url": "https://www.barbican.org.uk/life-drawing",
-      "image_url": null,
+      "thumbnail_url": "/thumbs/1f3632de-af3f-4c79-9ecb-f4bc48b0821f-9c1f4e2ab07d3355.jpg",
+      "image_credit": {
+        "name": "Barbican",
+        "url": "https://www.barbican.org.uk/life-drawing"
+      },
       "category": "talk",
       "tags": ["art", "drawing"],
       "distance_km": 2.7318,
       "sources": [
         {
           "source": "barbican",
+          "display_name": "Barbican",
           "url": "https://www.barbican.org.uk/life-drawing",
           "first_seen_at": "2026-09-01T00:00:00Z",
           "last_seen_at": "2026-09-26T06:00:00Z"
         },
         {
           "source": "ticketmaster",
+          "display_name": "Ticketmaster",
           "url": "https://www.ticketmaster.co.uk/x",
           "first_seen_at": "2026-09-02T00:00:00Z",
           "last_seen_at": "2026-09-26T06:00:00Z"
@@ -98,10 +127,17 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
 ```
 
 Event fields: `description`, `venue_name`, `address`, `lat`, `lng`,
-`ends_at`, `price_min`, `price_max`, `currency`, `url` and `image_url` may be
-`null`. `distance_km` is present only with `near`. `sources` lists every
-place the event was found (oldest first); `url` there is the listing on that
-source and may be `null`.
+`ends_at`, `price_min`, `price_max`, `currency`, `url`, `thumbnail_url` and
+`image_credit` may be `null` (`thumbnail_url` and `image_credit` are both
+set or both `null`). `thumbnail_url` is a path on this server (see
+[Content policy](#content-policy)); `image_credit` is `{"name", "url"}`: who
+the image belongs to and the event's page there. `distance_km` is present
+only with `near`. `sources` lists every place the event was found (oldest
+first); `display_name` is the source's human-readable name and `url` is the
+listing on that source (may be `null`).
+
+**Breaking change (2026-09-26):** `image_url` was removed from event
+objects; use `thumbnail_url` + `image_credit`.
 
 ## `GET /v1/events/{id}`
 
@@ -117,6 +153,7 @@ Every configured source, ordered by `key`.
   "sources": [
     {
       "key": "barbican",
+      "display_name": "Barbican",
       "kind": "scraper",
       "interval_minutes": 1440,
       "enabled": true,
@@ -133,6 +170,7 @@ Every configured source, ordered by `key`.
     },
     {
       "key": "serpentine-galleries",
+      "display_name": "Serpentine Galleries",
       "kind": "scraper",
       "interval_minutes": 1440,
       "enabled": true,
@@ -185,6 +223,7 @@ scrape, most recently checked first:
 `no_event_data`, `terms`, `js_only`, `other`; `checked_on` is a date; `issue_url` may be
 `null`.
 
+- `display_name`: human-readable name (falls back to the title-cased key).
 - `kind`: `api` or `scraper`.
 - `last_run`: the most recent real run, or `null` if the source never ran.
   Skips never appear here.

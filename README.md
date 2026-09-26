@@ -66,8 +66,13 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
   records `events.source_runs`, then runs the health checker (a source that
   cannot be built, e.g. missing credentials, is instead recorded as skipped
-  on `events.sources` and retried next tick), and finally
-  files issues for site suggestions the API left `pending`.
+  on `events.sources` and retried next tick). Every tick it then applies the
+  content policy to stored rows, runs the thumbnailer, and finally files
+  issues for site suggestions the API left `pending`.
+- **Content policy** (see [Content policy](#content-policy)): per-source
+  `display_name`, `store_description`, `store_image` and `policy_note` on
+  `events.sources`; description excerpts; self-hosted, credited thumbnails
+  (`src/thumbs.rs`, `events.thumbnails`, served at `/thumbs/...`).
 - **Health checks** (`src/health.rs`, `src/github.rs`): after each run a source
   trips if (1) a successful run found 0 events while its trailing average is > 0, (2) it had
   errors on 2 consecutive runs, or (3) its count dropped > 60 % vs the trailing
@@ -114,9 +119,12 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   runs the same validation, dedupe, rate limit and issue filing as
   `POST /v1/suggestions`. Templates are [maud](https://maud.lambda.xyz)
   (compile-time checked, HTML-escaped by default); no third-party scripts or
-  assets (images are the sources' own `https` URLs), and a strict
-  Content-Security-Policy (`default-src 'self'`, `script-src 'self'`, no
-  `unsafe-inline`: the CSS is served from `/static/style.css`).
+  assets (images are our own credited thumbnails, never the sources' URLs),
+  and a strict Content-Security-Policy (`default-src 'self'`, `script-src
+  'self'`, `img-src 'self'`, no `unsafe-inline`: the CSS is served from
+  `/static/style.css`). Sources are shown by `display_name`. The main button
+  on every card and detail page is the source's own page ("See it on
+  Barbican →"); our detail page is the secondary link.
   **Saved events** (`/saved`, `src/web.js` served as `/static/app.js?v=<hash>`):
   the only script, and progressive enhancement — without it every page
   works and the save buttons stay `hidden`. Saves live only in the
@@ -125,6 +133,37 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   storage). `/saved` is a server-rendered shell whose script fetches the
   saved events with `GET /v1/events?ids=…`, renders them from a `<template>`,
   marks vanished ones "No longer listed", and can export them as `.ics`.
+
+### Content policy
+
+The site is a free, for-fun aggregator: we don't want to use venues'
+resources or take their traffic, so we keep facts, a short excerpt and a
+small credited thumbnail, and send people to the venue.
+
+- **Per-source policy** (`events.sources`, set by migration): `display_name`
+  (shown on the pages and used in image credits), `store_description`,
+  `store_image` (both default true; false when the site's terms restrict
+  reuse — then we keep facts + link only) and `policy_note` (why, with the
+  terms URL and date). `repo::upsert_event` enforces the flags for every
+  source, and the ingest runner's `repo::enforce_content_policy` clears data
+  already stored if a flag is turned off. Currently Ticketmaster (API terms)
+  and Serpentine Galleries (site terms) are facts + link only.
+- **Excerpts**: every stored description is cut to ≤ 300 characters at a
+  sentence (else word) boundary with an ellipsis (`normalise::excerpt`);
+  pages say "An excerpt. Read more on <venue>".
+- **Thumbnails, never hotlinks** (`src/thumbs.rs`): after the sources of a
+  tick, the runner fetches each new source image ONCE through
+  `FetchContext` (robots.txt, User-Agent, rate limit), skips images over
+  8 MB, shrinks it to fit 480×480 as a JPEG (quality 70, lowered until
+  < 40 KB), and stores it in `events.thumbnails`. It re-fetches only when
+  the event's `image_url` changes (failures are retried after 7 days), at
+  most 60 per run and 20 per image host. `events.events.image_source_id`
+  records which source the image came from, for the credit "Image:
+  <display_name>" that links to the event's page on that source (not to the
+  image file). Pages and JSON never expose the source's image URL.
+- **Links** to venues use `rel="noopener"` without `noreferrer`, so venues
+  can see (as our origin only, under `Referrer-Policy:
+  strict-origin-when-cross-origin`) that visitors came from us.
 
 ### Merging and overrides
 
