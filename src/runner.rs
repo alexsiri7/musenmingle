@@ -4,7 +4,8 @@
 //!
 //! 1. take a Postgres advisory lock so overlapping ticks never run twice;
 //! 2. load enabled sources whose `interval_minutes` has elapsed;
-//! 3. for each (sequentially, so per-domain politeness is trivially kept):
+//! 3. record a skip on any that cannot be built (no run row, no health
+//!    check), and for the rest (sequentially, so per-domain politeness is trivially kept):
 //!    fetch with a timeout, normalise, drop past events, upsert, and record
 //!    an `events.source_runs` row (events found, errors, duration);
 //! 4. run the health checker for that source;
@@ -18,7 +19,7 @@ use sqlx::PgPool;
 use crate::fetch::FetchContext;
 use crate::health::{HealthAction, HealthChecker};
 use crate::repo::{self, NewRun, SourceRow};
-use crate::sources::Source;
+use crate::sources::{SkipReason, Source};
 use crate::suggestions;
 
 /// Arbitrary constant key for `pg_try_advisory_lock` (session-level locks
@@ -29,8 +30,10 @@ pub const INGEST_LOCK_KEY: i64 = 0x0074_6861_6c65_6961; // "thaleia"
 /// are skipped.
 pub const PAST_GRACE: chrono::Duration = chrono::Duration::days(1);
 
-/// Builds a source implementation for a DB row (`None` = skip).
-pub type SourceFactory = Box<dyn Fn(&SourceRow) -> Option<Box<dyn Source>> + Send + Sync>;
+/// Builds a source implementation for a DB row (`Err` = skip, recorded on the
+/// source).
+pub type SourceFactory =
+    Box<dyn Fn(&SourceRow) -> Result<Box<dyn Source>, SkipReason> + Send + Sync>;
 
 pub struct Runner {
     pub pool: PgPool,
@@ -84,8 +87,13 @@ impl Runner {
         tracing::info!(count = due.len(), "sources due");
         let mut reports = Vec::new();
         for row in due {
-            let Some(source) = (self.factory)(&row) else {
-                continue;
+            let source = match (self.factory)(&row) {
+                Ok(source) => source,
+                Err(reason) => {
+                    tracing::warn!(source = %row.key, %reason, "source cannot run; skipping");
+                    repo::record_skip(&self.pool, row.id, &reason.to_string(), now).await?;
+                    continue;
+                }
             };
             let mut report = self.run_source(&row, source.as_ref(), now).await?;
             report.health = match self.health.check_source(&self.pool, &row).await {

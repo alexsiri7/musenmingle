@@ -736,7 +736,8 @@ pub struct RunRow {
     pub ok: bool,
 }
 
-/// Record a run and bump the source's `last_run_at` to the run start.
+/// Record a run, bump the source's `last_run_at` to the run start and clear
+/// any recorded skip.
 pub async fn record_run(pool: &PgPool, run: &NewRun) -> sqlx::Result<i64> {
     let mut tx = pool.begin().await?;
     let duration_ms = (run.finished_at - run.started_at).num_milliseconds().max(0);
@@ -755,13 +756,33 @@ pub async fn record_run(pool: &PgPool, run: &NewRun) -> sqlx::Result<i64> {
     .bind(run.ok)
     .fetch_one(&mut *tx)
     .await?;
-    sqlx::query("UPDATE events.sources SET last_run_at = $2 WHERE id = $1")
-        .bind(run.source_id)
-        .bind(run.started_at)
-        .execute(&mut *tx)
-        .await?;
+    sqlx::query(
+        "UPDATE events.sources SET last_run_at = $2, skip_reason = NULL, skipped_at = NULL
+         WHERE id = $1",
+    )
+    .bind(run.source_id)
+    .bind(run.started_at)
+    .execute(&mut *tx)
+    .await?;
     tx.commit().await?;
     Ok(id)
+}
+
+/// Record that a due source could not be built; `last_run_at` is left alone
+/// so it stays due.
+pub async fn record_skip(
+    pool: &PgPool,
+    source_id: i64,
+    reason: &str,
+    at: DateTime<Utc>,
+) -> sqlx::Result<()> {
+    sqlx::query("UPDATE events.sources SET skip_reason = $2, skipped_at = $3 WHERE id = $1")
+        .bind(source_id)
+        .bind(reason)
+        .bind(at)
+        .execute(pool)
+        .await?;
+    Ok(())
 }
 
 /// Most recent runs of a source, newest first.
@@ -845,6 +866,8 @@ pub struct SourceStatusRow {
     pub run_duration_ms: Option<i64>,
     pub run_ok: Option<bool>,
     pub open_issue_number: Option<i64>,
+    pub skip_reason: Option<String>,
+    pub skipped_at: Option<DateTime<Utc>>,
 }
 
 pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>> {
@@ -852,7 +875,7 @@ pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>
         "SELECT s.key, s.kind, s.interval_minutes, s.enabled,
                 r.started_at AS run_started_at, r.events_found AS run_events_found,
                 r.errors AS run_errors, r.duration_ms AS run_duration_ms, r.ok AS run_ok,
-                h.github_issue_number AS open_issue_number
+                h.github_issue_number AS open_issue_number, s.skip_reason, s.skipped_at
          FROM events.sources s
          LEFT JOIN LATERAL (
              SELECT started_at, events_found, errors, duration_ms, ok

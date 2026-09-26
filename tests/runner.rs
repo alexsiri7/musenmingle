@@ -2,6 +2,8 @@
 
 mod common;
 
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 
 use async_trait::async_trait;
@@ -14,7 +16,7 @@ use thaleia::model::{Category, NewEvent, Price, RawEvent, SourceKind};
 use thaleia::normalise::dedupe_key;
 use thaleia::repo;
 use thaleia::runner::{INGEST_LOCK_KEY, RunSummary, Runner};
-use thaleia::sources::{Source, SourceError};
+use thaleia::sources::{SkipReason, Source, SourceError};
 
 struct FakeSource {
     now: DateTime<Utc>,
@@ -87,7 +89,11 @@ fn runner(
         pool,
         ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
         factory: Box::new(move |row| {
-            (row.key == "fake").then(|| Box::new(FakeSource { now, delay }) as Box<dyn Source>)
+            if row.key == "fake" {
+                Ok(Box::new(FakeSource { now, delay }))
+            } else {
+                Err(SkipReason::UnknownKey)
+            }
         }),
         health: HealthChecker::new(HealthConfig::default(), None),
         source_timeout: timeout,
@@ -216,6 +222,100 @@ async fn timeouts_are_recorded_as_failed_runs() {
             .unwrap()
             .contains("timed out")
     );
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+async fn skip_state(pool: &sqlx::PgPool) -> (Option<String>, Option<DateTime<Utc>>) {
+    sqlx::query_as("SELECT skip_reason, skipped_at FROM events.sources WHERE key = 'fake'")
+        .fetch_one(pool)
+        .await
+        .unwrap()
+}
+
+#[tokio::test]
+async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
+    let Some(db) =
+        TestDb::create("unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query("UPDATE events.sources SET enabled = false")
+        .execute(&pool)
+        .await
+        .unwrap();
+    let src = repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
+    let now: DateTime<Utc> = "2026-09-26T06:00:00Z".parse().unwrap();
+    let configured = Arc::new(AtomicBool::new(false));
+    let factory_configured = configured.clone();
+    let r = Runner {
+        pool: pool.clone(),
+        ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+        factory: Box::new(move |_| {
+            if factory_configured.load(Ordering::SeqCst) {
+                Ok(Box::new(FakeSource { now, delay: None }))
+            } else {
+                Err(SkipReason::MissingConfig("FAKE_API_KEY"))
+            }
+        }),
+        health: HealthChecker::new(HealthConfig::default(), None),
+        source_timeout: Duration::from_secs(5),
+    };
+
+    let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {
+        panic!("expected a run");
+    };
+    assert!(reports.is_empty());
+    assert!(
+        repo::recent_runs(&pool, src.id, 10)
+            .await
+            .unwrap()
+            .is_empty()
+    );
+    let after_skip = repo::source_by_key(&pool, "fake").await.unwrap().unwrap();
+    assert_eq!(after_skip.last_run_at, None);
+    assert_eq!(
+        skip_state(&pool).await,
+        (Some("FAKE_API_KEY not set".into()), Some(now))
+    );
+    let issues: i64 = sqlx::query_scalar("SELECT count(*) FROM events.health_issues")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(issues, 0, "a skip never reaches the health checker");
+
+    // Still due on the next tick, well inside the 60-minute interval.
+    let next_tick = now + chrono::Duration::minutes(1);
+    let RunSummary::Ran(reports) = r.run_once(next_tick).await.unwrap() else {
+        panic!("expected a run");
+    };
+    assert!(reports.is_empty());
+    assert_eq!(skip_state(&pool).await.1, Some(next_tick));
+
+    configured.store(true, Ordering::SeqCst);
+    let RunSummary::Ran(reports) = r
+        .run_once(now + chrono::Duration::minutes(2))
+        .await
+        .unwrap()
+    else {
+        panic!("expected a run");
+    };
+    assert_eq!(reports.len(), 1);
+    assert_eq!(repo::recent_runs(&pool, src.id, 10).await.unwrap().len(), 1);
+    let after_run = repo::source_by_key(&pool, "fake").await.unwrap().unwrap();
+    assert!(after_run.last_run_at.is_some());
+    assert_eq!(skip_state(&pool).await, (None, None));
 
     pool.close().await;
     db.drop_db().await;

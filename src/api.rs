@@ -357,6 +357,7 @@ struct SourceJson {
     interval_minutes: i32,
     enabled: bool,
     last_run: Option<LastRunJson>,
+    skip: Option<SkipJson>,
     status: HealthStatus,
     issue_url: Option<String>,
 }
@@ -368,6 +369,12 @@ struct LastRunJson {
     errors: i32,
     duration_ms: i64,
     ok: bool,
+}
+
+#[derive(Serialize)]
+struct SkipJson {
+    at: DateTime<Utc>,
+    reason: String,
 }
 
 impl SourceJson {
@@ -390,7 +397,12 @@ impl SourceJson {
             }
             _ => None,
         };
+        let skip = match (r.skip_reason, r.skipped_at) {
+            (Some(reason), Some(at)) => Some(SkipJson { at, reason }),
+            _ => None,
+        };
         let status = HealthStatus::of(
+            skip.is_some(),
             r.open_issue_number.is_some(),
             last_run.as_ref().map(|l| RunStats {
                 events_found: l.events_found,
@@ -404,6 +416,7 @@ impl SourceJson {
             interval_minutes: r.interval_minutes,
             enabled: r.enabled,
             last_run,
+            skip,
             status,
             issue_url: r
                 .open_issue_number

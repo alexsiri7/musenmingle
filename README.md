@@ -64,7 +64,9 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   [Merging and overrides](#merging-and-overrides).
 - **Ingest runner** (`src/runner.rs`): takes an advisory lock, runs enabled
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
-  records `events.source_runs`, then runs the health checker, and finally
+  records `events.source_runs`, then runs the health checker (a source that
+  cannot be built, e.g. missing credentials, is instead recorded as skipped
+  on `events.sources` and retried next tick), and finally
   files issues for site suggestions the API left `pending`.
 - **Health checks** (`src/health.rs`, `src/github.rs`): after each run a source
   trips if (1) a successful run found 0 events while its trailing average is > 0, (2) it had
@@ -92,7 +94,8 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   and `near`+`radius_km` (bounding-box prefilter on the lat/lng index, then
   haversine, nearest first), with keyset cursor pagination and every event's
   source links; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
-  and `healthy`/`degraded`/`broken` status. Read-only; browser access is
+  and `pending`/`unconfigured`/`healthy`/`degraded`/`broken` status (skips
+  recorded by ingest). Read-only; browser access is
   limited to `CORS_ORIGINS`.
 - **Web pages** (`src/web.rs`, `src/web.css`): server-rendered HTML from the
   same process, for people rather than programs. `GET /` lists upcoming
