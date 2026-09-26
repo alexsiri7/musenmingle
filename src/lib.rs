@@ -6,6 +6,7 @@
 
 pub mod api;
 pub mod config;
+pub mod contact;
 pub mod db;
 pub mod fetch;
 pub mod github;

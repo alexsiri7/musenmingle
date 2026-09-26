@@ -1,18 +1,33 @@
 # Venue requests
 
-Venues and site owners reach us through the **Venue request** issue template
-(`.github/ISSUE_TEMPLATE/venue-request.md`, label `venue-request`), linked
-from the public About page (`/about#contact`). The About page promises that
-we act on every request and **remove a venue's listings within 7 days**, so
-check the `venue-request` label at least weekly.
+Venues and site owners use the **contact form** on the site (`/contact`,
+linked from `/about`, the footer and the "Sites we couldn't use" note on
+`/sources`; code in `src/contact.rs`). No GitHub account or email address is
+needed. Each request:
 
-> **Note:** the GitHub repository is private, so the template link only works
-> for collaborators. Until the repo is public or an email address exists,
-> venues have no working channel (the reason PR #54 was parked).
->
-> TODO(owner): add a contact email address so venues don't need a GitHub
-> account. When it exists, add it to `/about#contact` (`src/web.rs`,
-> `about`) and to the issue template, and list here who reads it.
+- is stored in `events.contact_requests` (type, URL, registrable domain,
+  details, optional reply email, salted IP hash, status, issue number);
+- arrives as a GitHub issue labelled **`venue-request`**, titled
+  "Venue request: <domain> (<type>)", filed by the API with the server-side
+  `GITHUB_TOKEN`. The issue references the row as "contact request #<id>".
+  **The reply email is never put in the issue**: look it up with
+  `SELECT reply_email FROM events.contact_requests WHERE id = <id>;`;
+- is added as a comment to the earlier issue when the same domain and type
+  were requested within 7 days;
+- stays `pending_issue` when GitHub is not configured or fails, and the next
+  ingest run files it (the visitor sees "Thanks" either way).
+
+Spam protection: a honeypot field, a signed form timestamp (submissions
+under 3 s are dropped), 3 requests per hour / 10 per day per IP hash, and a
+16 KB body limit. No CAPTCHA and no third-party scripts.
+
+The About page promises that we act on every request and **remove a venue's
+listings within 7 days**, so the owner checks the `venue-request` label at
+least **weekly**. Reply (if an email was given) from your own mail client,
+then note it on the issue.
+
+(`.github/ISSUE_TEMPLATE/venue-request.md` stays for internal use; it is not
+linked from public pages because the repository is private.)
 
 Every change below is a normal PR with a **new** migration (migrations are
 append-only); it takes effect when Railway deploys `main` (the API applies

@@ -117,6 +117,12 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/events/{id}", get(event_detail))
         .route("/sources", get(sources))
         .route("/about", get(about))
+        .route(
+            "/contact",
+            get(contact_page)
+                .post(contact_submit)
+                .layer(axum::extract::DefaultBodyLimit::max(CONTACT_BODY_LIMIT)),
+        )
         .route("/suggest", post(suggest))
         .route("/static/style.css", get(stylesheet))
         .route("/static/app.js", get(app_js))
@@ -241,6 +247,8 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                     p class="small" {
                         "Data from venue sites and ticketing APIs, credited and linked. "
                         a href="/about" { "About & our approach" }
+                        " · "
+                        a href="/contact" { "Contact" }
                         " · Also available as "
                         a href="/v1/events" { "JSON" } "."
                     }
@@ -949,8 +957,9 @@ async fn sources(State(state): State<AppState>) -> Response {
                                 td { (text(&run["errors"])) }
                                 td {
                                     span class={ "status status-" (status) } { (status) }
-                                    @if let Some(u) = safe_link(s["issue_url"].as_str()) {
-                                        " " a href=(u) rel="noopener noreferrer" { "issue" }
+                                    // The issue link points into the private repo (#57).
+                                    @if !s["issue_url"].is_null() {
+                                        " " span class="small" { "(we're on it)" }
                                     }
                                     // Present once sources record skips (#25).
                                     @if let Some(reason) = s["skip"]["reason"].as_str() {
@@ -967,6 +976,10 @@ async fn sources(State(state): State<AppState>) -> Response {
                 "We checked these sites and decided not to collect their events, so they "
                 "won't appear here. We don't retry them."
             }
+            p class="small" {
+                "Run a venue listed here, or want yours removed or corrected? "
+                a href="/contact" { "Contact us" } "."
+            }
             @if refused.is_empty() {
                 p { "None so far." }
             } @else {
@@ -977,7 +990,6 @@ async fn sources(State(state): State<AppState>) -> Response {
                                 th scope="col" { "Site" }
                                 th scope="col" { "Reason" }
                                 th scope="col" { "Checked" }
-                                th scope="col" { "Decision" }
                             }
                         }
                         tbody {
@@ -997,11 +1009,6 @@ async fn sources(State(state): State<AppState>) -> Response {
                                             (r.checked_on.format("%-d %b %Y").to_string())
                                         }
                                     }
-                                    td {
-                                        @if let Some(u) = safe_link(r.issue_url.as_deref()) {
-                                            a href=(u) rel="noopener noreferrer" { "issue" }
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -1014,19 +1021,12 @@ async fn sources(State(state): State<AppState>) -> Response {
 
 // ---------------------------------------------------------------- about
 
-/// Label of the `venue-request` issue template (see
-/// `.github/ISSUE_TEMPLATE/venue-request.md` and `docs/venue-requests.md`).
-pub const VENUE_REQUEST_LABEL: &str = "venue-request";
-
 /// `GET /about`: what the site is for and how it treats venues and their
 /// content. Every statement must stay true for the code (crawler rules in
 /// `fetch.rs`, content policy in `repo.rs`/`thumbs.rs`, suggestions in
-/// `suggestions.rs`, saved events in `web.js`); update it when they change.
-async fn about(State(state): State<AppState>) -> Response {
-    let request_url = format!(
-        "https://github.com/{}/issues/new?template=venue-request.md&labels={VENUE_REQUEST_LABEL}",
-        state.github_repo
-    );
+/// `suggestions.rs`, contact form in `contact.rs`, saved events in
+/// `web.js`); update it when they change.
+async fn about() -> Response {
     let rate_secs = crate::config::DEFAULT_RATE_LIMIT_MS as f64 / 1000.0;
     page(
         StatusCode::OK,
@@ -1087,7 +1087,8 @@ async fn about(State(state): State<AppState>) -> Response {
                     p {
                         "If you'd rather we didn't list your events, or want something changed "
                         "(wrong details, or you'd prefer we didn't use your images), tell us and "
-                        "we'll act on it. We remove a venue's listings within 7 days of a request."
+                        "we'll act on it. We remove a venue's listings within 7 days of a request. "
+                        "Just " a href="/contact" { "use our contact form" } "."
                     }
                 }
                 section id="your-data" aria-labelledby="your-data-h" {
@@ -1103,16 +1104,21 @@ async fn about(State(state): State<AppState>) -> Response {
                             "plus a salted hash of your IP address (not the address itself) to stop spam. "
                             "The address and note go into our project's issue tracker so we can review them."
                         }
+                        li {
+                            "If you use the contact form, we keep what you send and the same salted IP hash; "
+                            "your details go into our issue tracker so we can act on them. An email "
+                            "address, if you give one, is kept only in our database, only used to reply, "
+                            "and never put in the issue tracker."
+                        }
                         li { "Nothing is sold or shared for advertising." }
                     }
                 }
                 section id="contact" aria-labelledby="contact-h" {
                     h2 id="contact-h" { "Contact" }
                     p {
-                        "Venue requests and corrections: "
-                        a href=(request_url) rel="noopener" { "open a venue request" }
-                        " (a GitHub issue, so for now you need a free GitHub account). "
-                        "We plan to add an email address so you won't need one."
+                        "Venue requests, corrections or anything else: "
+                        a href="/contact" { "use our contact form" }
+                        ". No account needed; leave an email address only if you'd like a reply."
                     }
                 }
                 p class="small" {
@@ -1122,6 +1128,128 @@ async fn about(State(state): State<AppState>) -> Response {
             }
         },
     )
+}
+
+// ---------------------------------------------------------------- contact
+
+/// Largest accepted `POST /contact` body (the fields' own limits are far
+/// smaller; this just stops huge bodies early).
+pub const CONTACT_BODY_LIMIT: usize = 16 * 1024;
+
+fn contact_form(state: &AppState, f: &crate::contact::ContactForm, error: Option<&str>) -> Markup {
+    use crate::contact::{MAX_DETAILS_CHARS, MAX_EMAIL_CHARS, RequestType, form_token};
+    let token = form_token(state.suggestions.ip_salt(), Utc::now());
+    html! {
+        @if let Some(e) = error {
+            p class="error" role="alert" { "Please check the form: " (e) "." }
+        }
+        form class="contact" method="post" action="/contact" {
+            fieldset {
+                legend { "What would you like us to do?" }
+                @for t in RequestType::ALL {
+                    div class="field check" {
+                        input type="radio" id={ "type-" (t.as_str()) } name="request_type"
+                            value=(t.as_str()) required checked[f.request_type == t.as_str()];
+                        label for={ "type-" (t.as_str()) } { (t.label()) }
+                    }
+                }
+            }
+            label for="contact-url" { "Your venue or website address" }
+            input id="contact-url" name="url" type="text" required maxlength="2048"
+                inputmode="url" autocomplete="url" placeholder="https://" value=(f.url);
+            label for="contact-details" { "Details" }
+            p class="small" id="details-hint" {
+                "Which events or pages, and what should change. Up to " (MAX_DETAILS_CHARS) " characters."
+            }
+            textarea id="contact-details" name="details" rows="6" required
+                maxlength=(MAX_DETAILS_CHARS) aria-describedby="details-hint" { (f.details) }
+            label for="contact-email" { "Your email (optional)" }
+            p class="small" id="email-hint" {
+                "Only if you'd like a reply. We only use it to reply to you, and it is never published."
+            }
+            input id="contact-email" name="reply_email" type="email" maxlength=(MAX_EMAIL_CHARS)
+                autocomplete="email" aria-describedby="email-hint" value=(f.reply_email);
+            // Honeypot: hidden from people (CSS and aria), tempting to bots.
+            div class="hp" aria-hidden="true" {
+                label for="contact-website" { "Leave this empty" }
+                input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off";
+            }
+            input type="hidden" name="token" value=(token);
+            button type="submit" { "Send" }
+        }
+    }
+}
+
+fn contact_intro() -> Markup {
+    html! {
+        h1 { "Contact us" }
+        p class="lede" {
+            "For venues and site owners: ask us to remove your listings, correct an event, "
+            "or anything else. We remove a venue's listings within 7 days of a request. "
+            "No account needed."
+        }
+    }
+}
+
+async fn contact_page(State(state): State<AppState>) -> Response {
+    page(
+        StatusCode::OK,
+        "Contact",
+        html! { (contact_intro()) (contact_form(&state, &crate::contact::ContactForm::default(), None)) },
+    )
+}
+
+async fn contact_submit(
+    State(state): State<AppState>,
+    ConnectInfo(peer): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    form: Result<Form<crate::contact::ContactForm>, FormRejection>,
+) -> Response {
+    use crate::contact::Outcome as C;
+    let thanks = || {
+        page(
+            StatusCode::OK,
+            "Contact",
+            html! {
+                h1 { "Thanks, we've got it" }
+                div class="outcome" role="status" {
+                    p { "We read every request. We remove a venue's listings within 7 days, and we'll reply if you left an email address." }
+                }
+                p { a href="/" { "Back to events" } }
+            },
+        )
+    };
+    let Ok(Form(form)) = form else {
+        return page(
+            StatusCode::BAD_REQUEST,
+            "Contact",
+            html! { (contact_intro()) (contact_form(&state, &Default::default(), Some("some fields were missing"))) },
+        );
+    };
+    let forwarded_for = headers
+        .get_all("x-forwarded-for")
+        .iter()
+        .filter_map(|v| v.to_str().ok());
+    let client = state.suggestions.client_ip(peer.ip(), forwarded_for);
+    match crate::contact::submit(&state.pool, &state.suggestions, client, &form, Utc::now()).await {
+        Ok(C::Received { .. } | C::Dropped) => thanks(),
+        Ok(C::Invalid(e)) => page(
+            StatusCode::BAD_REQUEST,
+            "Contact",
+            html! { (contact_intro()) (contact_form(&state, &form, Some(&e.to_string()))) },
+        ),
+        Ok(C::RateLimited) => page(
+            StatusCode::TOO_MANY_REQUESTS,
+            "Contact",
+            html! {
+                h1 { "Contact us" }
+                div class="outcome error" role="status" {
+                    p { "You've sent several requests recently. Please try again later; we have the earlier ones." }
+                }
+            },
+        ),
+        Err(e) => internal_error(e),
+    }
 }
 
 // ---------------------------------------------------------------- suggest
@@ -1165,17 +1293,13 @@ async fn suggest(
     let outcome = api::submit_suggestion(&state, peer, &headers, form.url.trim(), note).await;
     match outcome {
         Ok(Outcome::Accepted { domain, issue }) => {
-            let issue_url =
-                issue.map(|n| format!("https://github.com/{}/issues/{n}", state.github_repo));
+            if let Some(n) = issue {
+                tracing::info!(%domain, issue = n, "suggestion filed");
+            }
             respond(
                 StatusCode::CREATED,
                 html! {
-                    p { "Thanks! We'll look at adding " strong { (domain) } "." }
-                    @if let (Some(n), Some(u)) = (issue, issue_url) {
-                        p { "Tracked as " a href=(u) rel="noopener noreferrer" { "issue #" (n) } "." }
-                    } @else {
-                        p { "It is queued for review." }
-                    }
+                    p { "Thanks — we'll take a look at " strong { (domain) } "." }
                 },
             )
         }
@@ -1191,9 +1315,6 @@ async fn suggest(
             StatusCode::CONFLICT,
             html! {
                 p { (crate::suggestions::refused_message(&r)) "." }
-                @if let Some(u) = safe_link(r.issue_url.as_deref()) {
-                    p { a href=(u) rel="noopener noreferrer" { "Why we decided this" } }
-                }
                 p { a href="/sources#refused" { "Other sites we couldn't use" } }
             },
         ),

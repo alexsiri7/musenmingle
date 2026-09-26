@@ -114,8 +114,13 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   the header and footer) states the site's objective and how it treats
   venues, their content and visitors' data (anchors `#objective`,
   `#how-we-collect`, `#for-venues`, `#your-data`, `#contact`); keep it true
-  when crawler or content-policy behaviour changes. Venue requests use the
-  `venue-request` issue template ([docs/venue-requests.md](docs/venue-requests.md)).
+  when crawler or content-policy behaviour changes. Venues use the `/contact`
+  form (`src/contact.rs`): requests are stored in `events.contact_requests`
+  and filed as `venue-request` GitHub issues with the server's token (the
+  optional reply email stays in the database), with a honeypot, a signed
+  minimum fill time and a per-IP rate limit against spam; see
+  [docs/venue-requests.md](docs/venue-requests.md). Public pages never link
+  into the (private) GitHub repository.
   `GET /sources` is the `/v1/sources` data as a table;
   each source links to `/?source=<key>` (only its events, with a clearable
   "From: <source>" chip), and "Sites we couldn't use" lists

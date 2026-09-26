@@ -73,8 +73,11 @@ There is no local Docker; never try to use testcontainers.
 11. **`/about` must stay true.** It makes public promises (robots.txt, the
     ThaleiaBot UA linking to `/about#for-venues`, 2 s default rate limit,
     excerpts, credited thumbnails, no cookies, removal within 7 days via
-    `docs/venue-requests.md`). If you change any of that behaviour, update
-    the page (`web::about`) in the same PR.
+    `docs/venue-requests.md`, the `/contact` form). If you change any of that
+    behaviour, update the page (`web::about`) in the same PR. Public HTML
+    never links into the private GitHub repo (`github.com/alexsiri7/…`;
+    tests assert it), and a contact request's reply email never goes to
+    GitHub (only the `events.contact_requests` row id does).
 12. **Sites we decided not to scrape go in `events.refused_sources`** (via a
     new migration, with reason and issue link) when a `new-scraper` issue is
     closed as not possible; see `docs/adding-a-scraper.md`. Never retry them.
@@ -88,6 +91,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
 - `src/thumbs.rs` — thumbnailer (fetch once, resize, store in `events.thumbnails`)
+- `src/contact.rs` — `/contact` venue requests (spam checks, `venue-request` issues, pending filing)
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it
 - `src/listing.rs` — `GET /v1/events` parameter parsing and cursors (pure)

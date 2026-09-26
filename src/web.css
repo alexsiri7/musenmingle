@@ -115,3 +115,14 @@ a.button:hover { filter: brightness(1.1); }
 .about h2 { font-size: 1.2rem; margin: 28px 0 8px; }
 .about section { scroll-margin-top: 16px; }
 .about li { margin: 4px 0; }
+
+/* Contact form */
+.contact { display: flex; flex-direction: column; gap: 6px; max-width: 560px; }
+.contact fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 0 0 8px; }
+.contact legend { font-weight: 600; font-size: 0.875rem; }
+.contact input[type=text], .contact input[type=email], .contact textarea {
+  padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); max-width: 100%;
+}
+.contact .small { margin: 0; }
+.contact button { align-self: flex-start; margin-top: 8px; }
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }

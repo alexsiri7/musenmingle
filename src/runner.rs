@@ -12,7 +12,8 @@
 //! 5. bring stored rows in line with the sources' content policy
 //!    (`repo::enforce_content_policy`) and make missing thumbnails
 //!    (`crate::thumbs`) — every tick, even when no source was due;
-//! 6. file GitHub issues for site suggestions the API left `pending`.
+//! 6. file GitHub issues for site suggestions and contact requests the API
+//!    left pending.
 
 use std::time::Duration;
 
@@ -136,9 +137,14 @@ impl Runner {
                 Ok(_) => {}
                 Err(e) => tracing::error!(error = %e, "filing pending site suggestions failed"),
             }
+            match crate::contact::file_pending(&self.pool, filer, now).await {
+                Ok(0) => {}
+                Ok(n) => tracing::info!(count = n, "filed pending contact requests"),
+                Err(e) => tracing::error!(error = %e, "filing pending contact requests failed"),
+            }
         } else {
             tracing::warn!(
-                "no GitHub filer configured; pending site suggestions will not be filed"
+                "no GitHub filer configured; pending site suggestions and contact requests will not be filed"
             );
         }
         Ok(reports)

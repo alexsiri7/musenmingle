@@ -115,6 +115,8 @@ fn assert_html(p: &Page) {
     );
     assert!(p.body.contains("\" defer></script>"));
     assert!(!p.body.contains(" onclick="));
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     // Never hotlink: every image is one of our own thumbnails.
     for img in p.body.split("<img ").skip(1) {
         let tag = &img[..img.find('>').unwrap()];
@@ -700,10 +702,8 @@ async fn sources_page_renders_the_sources_api_data() {
         p.body
             .contains("<time datetime=\"2026-09-25\">25 Sep 2026</time>")
     );
-    assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/4\"")
-    );
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     assert!(p.body.contains("Never"));
     pool.close().await;
     db.drop_db().await;
@@ -746,9 +746,11 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
     assert_html(&p);
     assert!(p.body.contains("<strong>example-gallery.org.uk</strong>"));
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/42\"")
+        p.body.contains("Thanks — we&#39;ll take a look at")
+            || p.body.contains("Thanks — we'll take a look at")
     );
     let note: Option<String> =
         sqlx::query_scalar("SELECT note FROM events.site_suggestions ORDER BY id LIMIT 1")
@@ -786,10 +788,8 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
         "{}",
         p.body
     );
-    assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/6\"")
-    );
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
 
     // Missing field: a friendly 400 page, not a plain-text rejection.
     let p = post_form(&app, "note=hi").await;
@@ -800,7 +800,7 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     // (GitHub rejects this one: accepted but left pending for the ingest run.)
     let p = post_form(&app, "url=https%3A%2F%2Fanother-venue.org.uk").await;
     assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
-    assert!(p.body.contains("queued for review"), "{}", p.body);
+    assert!(p.body.contains("take a look at"), "{}", p.body);
     let p = post_form(&app, "url=https%3A%2F%2Fthird-venue.org.uk").await;
     assert_eq!(p.status, StatusCode::TOO_MANY_REQUESTS, "{}", p.body);
     assert!(p.headers.contains_key(header::RETRY_AFTER));
@@ -901,7 +901,7 @@ async fn about_page_states_our_approach_with_all_anchors() {
         "no tracking or analytics cookies",
         "salted hash of your IP address",
         "href=\"/sources#refused\"",
-        "href=\"https://github.com/alexsiri7/thaleia/issues/new?template=venue-request.md&amp;labels=venue-request\"",
+        "<a href=\"/contact\">use our contact form</a>",
     ] {
         assert!(p.body.contains(text), "missing {text:?}");
     }
