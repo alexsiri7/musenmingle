@@ -1,6 +1,6 @@
 # CLAUDE.md — guidance for coding agents
 
-Thaleia: London cultural events ingestion backend + (later) read API. Rust,
+Thaleia: London cultural events ingestion backend + read API. Rust,
 single crate `thaleia` (lib) with binaries `thaleia-api` and `thaleia-ingest`.
 Read `README.md` for the architecture.
 
@@ -56,6 +56,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
-- `src/api.rs` — axum router (`/healthz`, `POST /v1/suggestions`)
+- `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it
+- `src/listing.rs` — `GET /v1/events` parameter parsing and cursors (pure)
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

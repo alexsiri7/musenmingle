@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 use anyhow::{Context, Result, bail};
+use axum::http::HeaderValue;
 
 /// Default GitHub repository for health issues.
 pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/thaleia";
@@ -126,6 +127,32 @@ impl SuggestionConfig {
     }
 }
 
+/// Parse `CORS_ORIGINS` (comma-separated `scheme://host[:port]`) into the
+/// exact `Origin` header values browsers send.
+pub fn parse_cors_origins(value: Option<&str>) -> Result<Vec<HeaderValue>> {
+    let mut origins = Vec::new();
+    for entry in value
+        .unwrap_or("")
+        .split(',')
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+    {
+        let url = url::Url::parse(entry)
+            .with_context(|| format!("CORS_ORIGINS: not an origin: {entry:?}"))?;
+        let origin = url.origin();
+        if !matches!(url.scheme(), "http" | "https")
+            || url.path() != "/"
+            || url.query().is_some()
+            || url.fragment().is_some()
+            || !origin.is_tuple()
+        {
+            bail!("CORS_ORIGINS: expected scheme://host[:port], got {entry:?}");
+        }
+        origins.push(HeaderValue::from_str(&origin.ascii_serialization())?);
+    }
+    Ok(origins)
+}
+
 /// Process configuration shared by both binaries.
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -138,6 +165,8 @@ pub struct Config {
     /// Per-source fetch timeout for the ingest runner.
     pub source_timeout: Duration,
     pub suggestions: SuggestionConfig,
+    /// Browser origins allowed to call the API; empty = none.
+    pub cors_origins: Vec<HeaderValue>,
 }
 
 fn non_empty(name: &str) -> Option<String> {
@@ -176,6 +205,7 @@ impl Config {
             )?,
             source_timeout,
             suggestions: SuggestionConfig::from_env()?,
+            cors_origins: parse_cors_origins(non_empty("CORS_ORIGINS").as_deref())?,
         })
     }
 }
@@ -200,6 +230,37 @@ mod tests {
             Duration::from_millis(500)
         );
         assert_eq!(c.interval_for("foo.org"), Duration::from_millis(10));
+    }
+
+    #[test]
+    fn cors_origins_parse_to_browser_origins() {
+        assert!(parse_cors_origins(None).unwrap().is_empty());
+        let origins = parse_cors_origins(Some(
+            "https://Thaleia.example/, http://localhost:5173 ,https://a.example:443",
+        ))
+        .unwrap();
+        assert_eq!(
+            origins,
+            [
+                "https://thaleia.example",
+                "http://localhost:5173",
+                "https://a.example"
+            ]
+        );
+    }
+
+    #[test]
+    fn cors_origins_reject_non_origins() {
+        for bad in [
+            "*",
+            "thaleia.example",
+            "https://thaleia.example/app",
+            "https://thaleia.example?x=1",
+            "file:///tmp",
+            "ftp://thaleia.example",
+        ] {
+            assert!(parse_cors_origins(Some(bad)).is_err(), "{bad}");
+        }
     }
 
     #[test]

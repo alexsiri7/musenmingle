@@ -22,6 +22,7 @@
 
 use std::fmt;
 
+use serde::Serialize;
 use sqlx::PgPool;
 use tokio::sync::Mutex;
 
@@ -55,6 +56,36 @@ pub struct RunStats {
     pub events_found: i32,
     pub errors: i32,
     pub ok: bool,
+}
+
+impl RunStats {
+    /// Completed with no errors.
+    pub fn is_clean(&self) -> bool {
+        self.ok && self.errors == 0
+    }
+}
+
+/// A source's health as reported by `GET /v1/sources`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum HealthStatus {
+    Healthy,
+    Degraded,
+    Broken,
+}
+
+impl HealthStatus {
+    /// Broken while a `scraper-broken` issue is open, degraded when the
+    /// latest run was not clean, otherwise healthy (also before the first run).
+    pub fn of(open_issue: bool, latest_run: Option<RunStats>) -> Self {
+        if open_issue {
+            HealthStatus::Broken
+        } else if latest_run.is_some_and(|r| !r.is_clean()) {
+            HealthStatus::Degraded
+        } else {
+            HealthStatus::Healthy
+        }
+    }
 }
 
 impl From<&RunRow> for RunStats {
@@ -309,7 +340,7 @@ impl HealthChecker {
             return Ok(HealthAction::Opened(n));
         }
 
-        let current_clean = stats.first().is_some_and(|r| r.ok && r.errors == 0);
+        let current_clean = stats.first().is_some_and(RunStats::is_clean);
         if !current_clean {
             return Ok(HealthAction::Degraded);
         }
@@ -352,6 +383,28 @@ impl HealthChecker {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn reported_status_prefers_open_issue_then_latest_run() {
+        let clean = RunStats {
+            events_found: 3,
+            errors: 0,
+            ok: true,
+        };
+        let errored = RunStats { errors: 1, ..clean };
+        let failed = RunStats { ok: false, ..clean };
+        assert_eq!(HealthStatus::of(false, None), HealthStatus::Healthy);
+        assert_eq!(HealthStatus::of(false, Some(clean)), HealthStatus::Healthy);
+        assert_eq!(
+            HealthStatus::of(false, Some(errored)),
+            HealthStatus::Degraded
+        );
+        assert_eq!(
+            HealthStatus::of(false, Some(failed)),
+            HealthStatus::Degraded
+        );
+        assert_eq!(HealthStatus::of(true, Some(clean)), HealthStatus::Broken);
+    }
 
     fn r(events: i32, errors: i32, ok: bool) -> RunStats {
         RunStats {
