@@ -31,12 +31,17 @@
 //! * Price comes only from the ticket row ("Free, booking essential",
 //!   "£35.00 …"); exhibitions have none (tickets are sold by a JavaScript
 //!   booking system), so their price is unknown.
+//! * Late openings: an accordion section headed "… late opening(s)"
+//!   ("FRIDAY LATE OPENINGS: … the Gallery will open until 20:00 on …") is
+//!   kept as `late_opening_text`; when it states late hours
+//!   ([`mentions_late_opening`]) the event is tagged `late opening`, which
+//!   the `when=evening` filter reads.
 //! * `og:image` is the event image, except on pages without one, where it is
 //!   the generic Courtauld social card; that logo is dropped.
 
 use async_trait::async_trait;
 use chrono::{NaiveDate, NaiveTime};
-use scraper::{ElementRef, Html, Selector};
+use scraper::{CaseSensitivity, ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
@@ -44,7 +49,9 @@ use super::whitechapel_gallery::parse_date_range;
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
-use crate::normalise::{clean_description, clean_text, dedupe_key, london_to_utc, parse_price};
+use crate::normalise::{
+    clean_description, clean_text, dedupe_key, london_to_utc, mentions_late_opening, parse_price,
+};
 
 pub const KEY: &str = "courtauld";
 /// Upper bound on detail pages fetched per run (≈ 90 s at 1 req / 2 s).
@@ -274,6 +281,29 @@ fn description_html(doc: &Html) -> Option<String> {
     (!parts.is_empty()).then(|| parts.join("\n"))
 }
 
+/// The text of the accordion sections about late openings (header and
+/// panel), if any.
+fn late_opening_text(doc: &Html) -> Option<String> {
+    let parts: Vec<String> = doc
+        .select(&selector(".js-accordion__header"))
+        .filter(|h| element_text(*h).to_lowercase().contains("late opening"))
+        .map(|h| {
+            let panel = h
+                .next_siblings()
+                .filter_map(ElementRef::wrap)
+                .next()
+                .filter(|p| {
+                    p.value()
+                        .has_class("js-accordion__panel", CaseSensitivity::CaseSensitive)
+                })
+                .map(element_text)
+                .unwrap_or_default();
+            clean_text(&format!("{} {panel}", element_text(h)))
+        })
+        .collect();
+    (!parts.is_empty()).then(|| parts.join(" "))
+}
+
 /// Parse one detail page into a [`RawEvent`] (None if it has no title).
 /// `url` is the address the page was fetched from.
 pub fn parse_detail(html: &str, url: &Url, item: &ListingItem) -> Option<RawEvent> {
@@ -320,6 +350,7 @@ pub fn parse_detail(html: &str, url: &Url, item: &ListingItem) -> Option<RawEven
             "location_text": row("location"),
             "description": description_html(&doc),
             "image_url": image_url,
+            "late_opening_text": late_opening_text(&doc),
         }),
     })
 }
@@ -414,6 +445,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let mut tags = vec!["art".to_string()];
     if category == Category::Talk {
         tags.push("art history".to_string());
+    }
+    if s("late_opening_text").is_some_and(mentions_late_opening) {
+        tags.push("late opening".to_string());
     }
 
     Ok(Some(NewEvent {
@@ -565,6 +599,24 @@ mod tests {
                 Some("2026-11-14T00:00:00+00:00".into())
             )
         );
+    }
+
+    #[test]
+    fn late_openings_are_tagged() {
+        let tags = |late: Option<&str>| {
+            let mut p = payload("2 October 2026 – 10 January 2027", None, "exhibition");
+            p["late_opening_text"] = json!(late);
+            normalise_payload(&p).unwrap().unwrap().tags
+        };
+        assert_eq!(tags(None), ["art"]);
+        assert_eq!(
+            tags(Some(
+                "FRIDAY LATE OPENINGS Experience the exhibition after hours with Friday late \
+                 openings – the Gallery will open until 20:00 on 2 October"
+            )),
+            ["art", "late opening"]
+        );
+        assert_eq!(tags(Some("Opening hours: open until 18:00")), ["art"]);
     }
 
     #[test]
