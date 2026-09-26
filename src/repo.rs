@@ -6,15 +6,17 @@
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
+use std::collections::HashSet;
 use uuid::Uuid;
 
-use crate::model::{NewEvent, RawEvent};
+use crate::matching::{self, MatchInput, TitleScore};
+use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
 #[derive(Debug, Clone, FromRow)]
 pub struct SourceRow {
     pub id: i64,
     pub key: String,
-    pub kind: String,
+    pub kind: SourceKind,
     pub base_url: String,
     pub domain: String,
     pub interval_minutes: i32,
@@ -51,7 +53,7 @@ pub async fn source_by_key(pool: &PgPool, key: &str) -> sqlx::Result<Option<Sour
 pub async fn upsert_source(
     pool: &PgPool,
     key: &str,
-    kind: &str,
+    kind: SourceKind,
     base_url: &str,
     interval_minutes: i32,
     enabled: bool,
@@ -135,30 +137,51 @@ fn bind_event_as<'q, O>(q: PgQueryAs<'q, O>, e: &'q NewEvent) -> PgQueryAs<'q, O
         .bind(&e.dedupe_key)
 }
 
-/// Merge used when a DIFFERENT source reports an event we already have:
-/// existing values win, the newcomer only fills gaps; tags are unioned.
-/// (`x` is the existing row, `n` the incoming values.)
-const FILL_GAPS: &str = "
-    description = COALESCE(x.description, n.description),
+/// Merge used when a DIFFERENT source reports an event we already have
+/// (`x` is the existing row, `n` the incoming values). Existing values win
+/// and the newcomer only fills gaps, except where the incoming source has
+/// precedence: `$19` (a venue site) wins dates, description and image; `$20`
+/// (an API) wins price and URL. Tags are unioned. The `ends_at` guards keep
+/// `events_ends_after_start` true when fuzzy-merged start dates differ.
+const MERGE: &str = "
+    description = CASE WHEN $19::bool THEN COALESCE(n.description, x.description)
+                       ELSE COALESCE(x.description, n.description) END,
     venue_name  = COALESCE(x.venue_name, n.venue_name),
     address     = COALESCE(x.address, n.address),
     lat         = COALESCE(x.lat, n.lat),
     lng         = COALESCE(x.lng, n.lng),
-    ends_at     = COALESCE(x.ends_at, n.ends_at),
-    is_free     = CASE WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
+    starts_at   = CASE WHEN $19::bool THEN n.starts_at ELSE x.starts_at END,
+    ends_at     = CASE WHEN $19::bool
+                       THEN (CASE WHEN n.ends_at IS NOT NULL THEN n.ends_at
+                                  WHEN x.ends_at >= n.starts_at THEN x.ends_at END)
+                       ELSE COALESCE(x.ends_at,
+                                     CASE WHEN n.ends_at >= x.starts_at THEN n.ends_at END) END,
+    is_free     = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+                                           OR n.price_max IS NOT NULL) THEN n.is_free
+                       WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.is_free ELSE x.is_free END,
-    price_min   = CASE WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
+    price_min   = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+                                           OR n.price_max IS NOT NULL) THEN n.price_min
+                       WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.price_min ELSE x.price_min END,
-    price_max   = CASE WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
+    price_max   = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+                                           OR n.price_max IS NOT NULL) THEN n.price_max
+                       WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.price_max ELSE x.price_max END,
-    currency    = COALESCE(x.currency, n.currency),
-    url         = COALESCE(x.url, n.url),
-    image_url   = COALESCE(x.image_url, n.image_url),
+    currency    = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+                                           OR n.price_max IS NOT NULL)
+                       THEN COALESCE(n.currency, x.currency)
+                       ELSE COALESCE(x.currency, n.currency) END,
+    url         = CASE WHEN $20::bool THEN COALESCE(n.url, x.url) ELSE COALESCE(x.url, n.url) END,
+    image_url   = CASE WHEN $19::bool THEN COALESCE(n.image_url, x.image_url)
+                       ELSE COALESCE(x.image_url, n.image_url) END,
     tags        = ARRAY(SELECT DISTINCT t FROM unnest(x.tags || n.tags) AS t ORDER BY t),
     updated_at  = now()";
 
 /// Update used when the SAME source re-reports its event: the source is
 /// authoritative for its own copy (new values win, NULLs keep old values).
+/// An old `ends_at` left by a departed source is dropped if it would now end
+/// before the start.
 const REFRESH: &str = "
     title       = n.title,
     description = COALESCE(n.description, x.description),
@@ -167,7 +190,7 @@ const REFRESH: &str = "
     lat         = COALESCE(n.lat, x.lat),
     lng         = COALESCE(n.lng, x.lng),
     starts_at   = n.starts_at,
-    ends_at     = COALESCE(n.ends_at, x.ends_at),
+    ends_at     = COALESCE(n.ends_at, CASE WHEN x.ends_at >= n.starts_at THEN x.ends_at END),
     is_free     = CASE WHEN n.price_min IS NULL AND n.price_max IS NULL AND NOT n.is_free
                        THEN x.is_free ELSE n.is_free END,
     price_min   = CASE WHEN n.price_min IS NULL AND n.price_max IS NULL AND NOT n.is_free
@@ -198,20 +221,37 @@ fn update_from_values(set: &str) -> String {
 
 /// Insert an event or merge it into an existing one, and link the source.
 ///
-/// 1. If this `(source, source_event_id)` is already linked:
-///    * sole source of the event → refreshed with the new values (the source
-///      owns its copy, so title/date corrections apply);
-///    * event shared with other sources → gaps filled only (no flip-flopping
-///      between sources' spellings); if the key changed, the source's copy is
-///      split off into a new event;
-///    * if the new dedupe key belongs to a different event, the link moves
-///      there and the old event is deleted if nothing else links to it.
-/// 2. Otherwise the event is inserted, or — when an event with the same
-///    `dedupe_key` exists (e.g. from another source) — merged into it by
-///    filling gaps only.
-/// 3. The `events.event_sources` row is upserted (raw payload, last_seen_at).
+/// The target event is the first of:
 ///
-/// Everything happens in one transaction.
+/// 1. a `force_merge` override partner's event;
+/// 2. the event this `(source, source_event_id)` is already linked to, when
+///    this source is its sole owner and the dedupe key is free or still its
+///    own: refreshed with the new values (the source owns its copy, so
+///    title/date corrections apply);
+/// 3. the linked event, when shared with other sources and still holding
+///    the key: merged (no flip-flopping between sources' spellings);
+/// 4. the event holding the same `dedupe_key` (e.g. from another source):
+///    merged;
+/// 5. otherwise a fuzzy match (`crate::matching`) among events of nearby
+///    dates, excluding events holding a different listing of this same
+///    source: the linked event if it still matches, else the best match
+///    (highest title dice, then oldest), merged;
+/// 6. otherwise a new event (a listing that no longer matches its shared
+///    event is split off).
+///
+/// Merges apply field precedence: a venue-site (`scraper`) source wins
+/// dates, description and image, an `api` source wins price and URL, each
+/// only while no other linked source has the same kind; everything else
+/// keeps the existing value and fills gaps. The title is first-come.
+///
+/// `never_merge` overrides exclude the partner's event from 2–5; on an exact
+/// key collision the listing's key is suffixed with its identity so the two
+/// can coexist. Overrides (`events.merge_overrides`) take effect the next
+/// time either listing is upserted.
+///
+/// The `events.event_sources` row is then upserted (raw payload,
+/// last_seen_at), and an event the listing moved away from is deleted if
+/// nothing else links to it. Everything happens in one transaction.
 pub async fn upsert_event(
     pool: &PgPool,
     source_id: i64,
@@ -239,77 +279,112 @@ async fn upsert_event_tx(
     .fetch_optional(&mut **tx)
     .await?;
 
-    let holder: Option<Uuid> =
-        sqlx::query_scalar("SELECT id FROM events.events WHERE dedupe_key = $1 FOR UPDATE")
-            .bind(&event.dedupe_key)
-            .fetch_optional(&mut **tx)
-            .await?;
+    let overrides = load_overrides(tx, source_id, &raw.source_event_id).await?;
+    let forbidden: HashSet<Uuid> = overrides
+        .iter()
+        .filter(|(action, _)| *action == OverrideAction::NeverMerge)
+        .map(|(_, id)| *id)
+        .collect();
+    let force = overrides
+        .iter()
+        .find(|(action, id)| *action == OverrideAction::ForceMerge && !forbidden.contains(id))
+        .map(|(_, id)| *id);
 
-    let mut orphan_candidate: Option<Uuid> = None;
-    let outcome = match (linked, holder) {
-        // Already linked from this source, and the (possibly new) key is
-        // free or still ours.
-        (Some(id), h) if h.is_none() || h == Some(id) => {
+    let mut ev = event.clone();
+    let mut holder = key_holder(tx, &ev.dedupe_key).await?;
+    if holder.is_some_and(|h| forbidden.contains(&h)) {
+        // The dedupe key index is UNIQUE, so a never-merge partner holding
+        // our key can only be kept apart under a listing-specific key.
+        ev.dedupe_key = format!("{}|{}:{}", event.dedupe_key, source_id, raw.source_event_id);
+        holder = key_holder(tx, &ev.dedupe_key).await?;
+    }
+
+    let linked_ok = linked.filter(|l| !forbidden.contains(l));
+    let shared = match linked_ok {
+        Some(l) => {
             let other_sources: i64 = sqlx::query_scalar(
                 "SELECT count(*) FROM events.event_sources
                  WHERE event_id = $1 AND source_id <> $2",
             )
-            .bind(id)
+            .bind(l)
             .bind(source_id)
             .fetch_one(&mut **tx)
             .await?;
-            if other_sources == 0 {
-                // Sole owner: the source is authoritative, refresh in place.
-                refresh(tx, id, event).await?;
-                UpsertOutcome {
-                    event_id: id,
-                    created: false,
-                }
-            } else if h == Some(id) {
-                // Shared event: only fill gaps, so sources don't flip-flop.
-                fill_gaps(tx, id, event).await?;
-                UpsertOutcome {
-                    event_id: id,
-                    created: false,
-                }
-            } else {
-                // Shared event but this source now describes something else
-                // (key changed): split it off into its own event.
-                let (new_id,): (Uuid,) = bind_event_as(
-                    sqlx::query_as(AssertSqlSafe(format!("{EVENT_INSERT} RETURNING id"))),
-                    event,
-                )
-                .fetch_one(&mut **tx)
-                .await?;
-                UpsertOutcome {
-                    event_id: new_id,
-                    created: true,
-                }
-            }
+            other_sources > 0
         }
-        // Same source, but its new key collides with another event: move.
-        (Some(_), None) => unreachable!("covered by the first arm's guard"),
-        (Some(old), Some(other)) => {
-            fill_gaps(tx, other, event).await?;
-            orphan_candidate = Some(old);
+        None => false,
+    };
+
+    let outcome = if let Some(target) = force {
+        tracing::info!(
+            event_id = %target,
+            source_id,
+            source_event_id = %raw.source_event_id,
+            "force merge"
+        );
+        merge_into(tx, target, source_id, &ev).await?;
+        UpsertOutcome {
+            event_id: target,
+            created: false,
+        }
+    } else if let Some(l) = linked_ok.filter(|l| !shared && holder.is_none_or(|h| h == *l)) {
+        refresh(tx, l, &ev).await?;
+        UpsertOutcome {
+            event_id: l,
+            created: false,
+        }
+    } else if let Some(target) = linked_ok.filter(|l| holder == Some(*l)).or(holder) {
+        merge_into(tx, target, source_id, &ev).await?;
+        UpsertOutcome {
+            event_id: target,
+            created: false,
+        }
+    } else {
+        let incoming = MatchInput::from(&ev);
+        let mut matches: Vec<(CandidateRow, TitleScore)> =
+            fuzzy_candidates(tx, &ev, source_id, &raw.source_event_id)
+                .await?
+                .into_iter()
+                .filter(|c| !forbidden.contains(&c.id))
+                .filter_map(|c| {
+                    let score = matching::match_score(&incoming, &MatchInput::from(&c))?;
+                    Some((c, score))
+                })
+                .collect();
+        matches.sort_by(|(a, sa), (b, sb)| {
+            sb.dice
+                .total_cmp(&sa.dice)
+                .then(a.created_at.cmp(&b.created_at))
+                .then(a.id.cmp(&b.id))
+        });
+        let stay = linked_ok.filter(|l| matches.iter().any(|(c, _)| c.id == *l));
+        if let Some(l) = stay {
+            tracing::debug!(event_id = %l, source_id, "fuzzy match keeps listing in place");
+            merge_into(tx, l, source_id, &ev).await?;
             UpsertOutcome {
-                event_id: other,
+                event_id: l,
                 created: false,
             }
-        }
-        // New to this source; an event with this key exists: merge.
-        (None, Some(other)) => {
-            fill_gaps(tx, other, event).await?;
+        } else if let Some((c, score)) = matches.first() {
+            tracing::info!(
+                event_id = %c.id,
+                source_id,
+                source_event_id = %raw.source_event_id,
+                incoming_title = %ev.title,
+                existing_title = %c.title,
+                jaccard = score.jaccard,
+                dice = score.dice,
+                "fuzzy merge"
+            );
+            merge_into(tx, c.id, source_id, &ev).await?;
             UpsertOutcome {
-                event_id: other,
+                event_id: c.id,
                 created: false,
             }
-        }
-        // Brand new.
-        (None, None) => {
+        } else {
             let (id,): (Uuid,) = bind_event_as(
                 sqlx::query_as(AssertSqlSafe(format!("{EVENT_INSERT} RETURNING id"))),
-                event,
+                &ev,
             )
             .fetch_one(&mut **tx)
             .await?;
@@ -338,7 +413,7 @@ async fn upsert_event_tx(
     .execute(&mut **tx)
     .await?;
 
-    if let Some(old) = orphan_candidate {
+    if let Some(old) = linked.filter(|old| *old != outcome.event_id) {
         sqlx::query(
             "DELETE FROM events.events e WHERE e.id = $1
                AND NOT EXISTS (SELECT 1 FROM events.event_sources s WHERE s.event_id = e.id)",
@@ -348,6 +423,92 @@ async fn upsert_event_tx(
         .await?;
     }
     Ok(outcome)
+}
+
+async fn key_holder(
+    tx: &mut Transaction<'_, Postgres>,
+    dedupe_key: &str,
+) -> sqlx::Result<Option<Uuid>> {
+    sqlx::query_scalar("SELECT id FROM events.events WHERE dedupe_key = $1 FOR UPDATE")
+        .bind(dedupe_key)
+        .fetch_optional(&mut **tx)
+        .await
+}
+
+/// `(action, partner's event id)` for every override naming this listing
+/// whose partner listing has been ingested, oldest override first.
+async fn load_overrides(
+    tx: &mut Transaction<'_, Postgres>,
+    source_id: i64,
+    source_event_id: &str,
+) -> sqlx::Result<Vec<(OverrideAction, Uuid)>> {
+    sqlx::query_as(
+        "SELECT o.action, es.event_id
+         FROM events.merge_overrides o
+         JOIN events.event_sources es
+           ON (o.source_id_a = $1 AND o.source_event_id_a = $2
+               AND es.source_id = o.source_id_b AND es.source_event_id = o.source_event_id_b)
+           OR (o.source_id_b = $1 AND o.source_event_id_b = $2
+               AND es.source_id = o.source_id_a AND es.source_event_id = o.source_event_id_a)
+         ORDER BY o.id",
+    )
+    .bind(source_id)
+    .bind(source_event_id)
+    .fetch_all(&mut **tx)
+    .await
+}
+
+/// An existing event considered for a fuzzy merge.
+#[derive(Debug, Clone, FromRow)]
+struct CandidateRow {
+    id: Uuid,
+    title: String,
+    venue_name: Option<String>,
+    lat: Option<f64>,
+    lng: Option<f64>,
+    starts_at: DateTime<Utc>,
+    ends_at: Option<DateTime<Utc>>,
+    created_at: DateTime<Utc>,
+}
+
+impl<'a> From<&'a CandidateRow> for MatchInput<'a> {
+    fn from(c: &'a CandidateRow) -> Self {
+        MatchInput {
+            title: &c.title,
+            venue_name: c.venue_name.as_deref(),
+            lat: c.lat,
+            lng: c.lng,
+            starts_at: c.starts_at,
+            ends_at: c.ends_at,
+        }
+    }
+}
+
+/// Events whose date range comes within two days of `ev`'s (slack for
+/// London-day rounding; `matching` does the exact check), excluding events
+/// that carry a different listing of this source: one source's distinct
+/// listings are never fuzzy-joined.
+async fn fuzzy_candidates(
+    tx: &mut Transaction<'_, Postgres>,
+    ev: &NewEvent,
+    source_id: i64,
+    source_event_id: &str,
+) -> sqlx::Result<Vec<CandidateRow>> {
+    let slack = chrono::Duration::days(2);
+    sqlx::query_as(
+        "SELECT e.id, e.title, e.venue_name, e.lat, e.lng, e.starts_at, e.ends_at, e.created_at
+         FROM events.events e
+         WHERE e.starts_at < $2 AND COALESCE(e.ends_at, e.starts_at) > $1
+           AND NOT EXISTS (SELECT 1 FROM events.event_sources s
+                           WHERE s.event_id = e.id AND s.source_id = $3
+                             AND s.source_event_id <> $4)",
+    )
+    .bind(ev.starts_at - slack)
+    .bind(ev.ends_at.unwrap_or(ev.starts_at) + slack)
+    .bind(source_id)
+    .bind(source_event_id)
+    .fetch_all(&mut **tx)
+    .await
 }
 
 async fn refresh(
@@ -363,14 +524,36 @@ async fn refresh(
     Ok(())
 }
 
-async fn fill_gaps(
+/// Merge `event` from `source_id` into event `id` with [`MERGE`], deciding
+/// the precedence flags from the source kinds linked to `id`. A source only
+/// takes precedence while it is the sole linked source of its kind, so two
+/// venue sites (or two APIs) never overwrite each other on alternate runs.
+async fn merge_into(
     tx: &mut Transaction<'_, Postgres>,
     id: Uuid,
+    source_id: i64,
     event: &NewEvent,
 ) -> sqlx::Result<()> {
-    let sql = update_from_values(FILL_GAPS);
+    let (kind, other_same_kind): (SourceKind, bool) = sqlx::query_as(
+        "SELECT s.kind, EXISTS (SELECT 1 FROM events.event_sources es
+                                JOIN events.sources o ON o.id = es.source_id
+                                WHERE es.event_id = $2 AND es.source_id <> $1
+                                  AND o.kind = s.kind)
+         FROM events.sources s WHERE s.id = $1",
+    )
+    .bind(source_id)
+    .bind(id)
+    .fetch_one(&mut **tx)
+    .await?;
+    let (site_wins, api_wins) = match kind {
+        SourceKind::Scraper => (!other_same_kind, false),
+        SourceKind::Api => (false, !other_same_kind),
+    };
+    let sql = update_from_values(MERGE);
     bind_event(sqlx::query(AssertSqlSafe(sql)), event)
         .bind(id)
+        .bind(site_wins)
+        .bind(api_wins)
         .execute(&mut **tx)
         .await?;
     Ok(())

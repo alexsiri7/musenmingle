@@ -19,8 +19,8 @@
 //!    "Serpentine North" agree. A missing venue becomes `unknown`.
 //!
 //! Two sources describing the same event therefore collide on the key and are
-//! merged by `repo::upsert_event`. Known limitation: exhibitions whose sources
-//! disagree on the opening date will not merge.
+//! merged by `repo::upsert_event`. Near-matches (differing titles, venue names
+//! or exhibition opening dates) are handled there by `crate::matching`.
 
 use chrono::{DateTime, NaiveDate, NaiveDateTime, TimeZone, Utc};
 use chrono_tz::Europe::London;
@@ -355,7 +355,7 @@ const CATEGORY_KEYWORDS: &[(Category, &[&str])] = &[
 ];
 
 /// Tokenise into lowercase alphanumeric words (diacritics folded).
-fn words(s: &str) -> Vec<String> {
+pub(crate) fn words(s: &str) -> Vec<String> {
     fold_diacritics(&s.to_lowercase())
         .split(|c: char| !c.is_alphanumeric())
         .filter(|w| !w.is_empty())
@@ -406,7 +406,7 @@ fn fold_diacritics(s: &str) -> String {
         .collect()
 }
 
-const TITLE_STOP_WORDS: &[&str] = &["the", "a", "an", "and"];
+pub(crate) const TITLE_STOP_WORDS: &[&str] = &["the", "a", "an", "and"];
 const VENUE_STOP_WORDS: &[&str] = &[
     "the",
     "a",

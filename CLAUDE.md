@@ -51,6 +51,7 @@ There is no local Docker; never try to use testcontainers.
 
 - `src/fetch.rs` — FetchContext (UA, robots, rate limit)
 - `src/normalise.rs` — text/time/price/category helpers, dedupe key
+- `src/matching.rs` — fuzzy cross-source match rules (pure)
 - `src/sources/` — `Source` trait, `jsonld` helpers, `ticketmaster`, `serpentine`
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
