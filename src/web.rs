@@ -1232,12 +1232,33 @@ async fn contact_page(State(state): State<AppState>) -> Response {
     )
 }
 
+/// Whether a browser says this form POST came from another site's page
+/// (`Sec-Fetch-Site: cross-site`). Our forms are only ever submitted from
+/// our own pages; non-browser clients send no such header.
+fn cross_site(headers: &HeaderMap) -> bool {
+    headers
+        .get("sec-fetch-site")
+        .and_then(|v| v.to_str().ok())
+        .is_some_and(|v| v.eq_ignore_ascii_case("cross-site"))
+}
+
+fn cross_site_refused(title: &str) -> Response {
+    error_page(
+        StatusCode::FORBIDDEN,
+        title,
+        "Please use the form on this site.",
+    )
+}
+
 async fn contact_submit(
     State(state): State<AppState>,
     ConnectInfo(peer): ConnectInfo<SocketAddr>,
     headers: HeaderMap,
     form: Result<Form<crate::contact::ContactForm>, FormRejection>,
 ) -> Response {
+    if cross_site(&headers) {
+        return cross_site_refused("Contact");
+    }
     use crate::contact::Outcome as C;
     let thanks = || {
         page(
@@ -1301,6 +1322,9 @@ async fn suggest(
     form: Result<Form<SuggestForm>, FormRejection>,
 ) -> Response {
     let title = "Suggest a venue site";
+    if cross_site(&headers) {
+        return cross_site_refused(title);
+    }
     let respond = |status: StatusCode, message: Markup| {
         page(
             status,
