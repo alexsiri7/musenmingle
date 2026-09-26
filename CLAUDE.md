@@ -122,6 +122,8 @@ There is no local Docker; never try to use testcontainers.
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it
 - `src/listing.rs` — `GET /v1/events` parameter parsing and cursors (pure)
+- `docs/design/stitch-2026-09/` — the visual design (DESIGN.md tokens/components + Stitch screens); follow it for UI work, but Stitch's copy is not ours (see its README)
+- `static/fonts/` — self-hosted, subset woff2 fonts (SIL OFL, licences alongside), embedded and served at `/static/fonts/`
 - `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/sources`, `/saved`, `/about`, `POST /suggest`, `/thumbs/...`) and the Saved-events script
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

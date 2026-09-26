@@ -14,6 +14,8 @@ COPY Cargo.toml Cargo.lock sqlx.toml ./
 COPY migrations ./migrations
 COPY .github/ISSUE_TEMPLATE/new-scraper.md ./.github/ISSUE_TEMPLATE/new-scraper.md
 COPY src ./src
+# Self-hosted fonts, embedded by src/web.rs (include_bytes!).
+COPY static ./static
 # Tests reference fixtures via include_bytes! only under #[cfg(test)], so
 # they are not needed for a release build.
 RUN cargo build --release --locked --bins \

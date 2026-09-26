@@ -873,7 +873,7 @@ async fn tag_filters_facets_and_the_labelled_ai_note() {
     let (_, home) = get(&app, "/").await;
     assert!(
         home.contains(
-            r#"<p class="one-liner" title="AI-written summary">Talk on analogue photography</p>"#
+            r#"<p class="one-liner" title="AI-written summary"><span class="ai-mark">✨ AI<span class="vh">-written summary:</span></span>Talk on analogue photography</p>"#
         ),
         "{home}"
     );
@@ -888,6 +888,7 @@ async fn tag_filters_facets_and_the_labelled_ai_note() {
     assert!(detail.contains(r#"href="/?medium=photography""#));
     let (_, detail) = get(&app, &format!("/events/{plain}")).await;
     assert!(!detail.contains("AI note"));
+    assert!(!detail.contains("ai-mark"), "no AI label without AI text");
     let (_, about) = get(&app, "/about").await;
     assert!(about.contains(r#"<section id="ai""#));
     assert!(about.contains("zero data retention"));
