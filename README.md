@@ -209,27 +209,46 @@ See `.env.example`.
 
 ## Deployment (Railway)
 
-Not deployed yet; nothing has been created on Railway. The intended setup is
-two services built from the same `Dockerfile` (multi-stage; the runtime image
-contains both binaries):
+Railway project `thaleia`, environment `production`, region
+`europe-west4-drams3a` (EU West), runs two services. Both deploy from
+`alexsiri7/thaleia` `main`, are built from the same `Dockerfile` (multi-stage;
+the runtime image contains both binaries), and are declared in
+`.railway/railway.ts`:
 
-1. **API service** — reads `railway.toml` (the default config file):
-   start command `thaleia-api`, health check `GET /healthz`, restart on
-   failure. Env: `DATABASE_URL`, `RUST_LOG`, `SUGGESTION_IP_SALT`,
-   `TRUSTED_PROXY_COUNT=1` (Railway's edge proxy appends the client to
-   `X-Forwarded-For`), `GITHUB_TOKEN`, `GITHUB_REPO`, `CORS_ORIGINS` (the
-   frontend's origin), optionally `SUGGESTION_RATE_*`.
-2. **Ingest cron service** — same repo and Dockerfile; in its service
-   settings set the *config-as-code file path* to `/railway.ingest.toml`
-   (config in code overrides the dashboard, so it must not read
-   `railway.toml`). That file sets start command `thaleia-ingest`,
-   `cronSchedule = "*/15 * * * *"` (every 15 minutes), no healthcheck and
-   `restartPolicyType = "NEVER"`. The process exits when done, as Railway cron
-   requires. Per-source `interval_minutes` in `events.sources` decides what
-   actually runs on each tick (Ticketmaster every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel Gallery and the Barbican daily), and
-   an advisory lock prevents overlapping runs. Env: `DATABASE_URL`,
-   `TICKETMASTER_API_KEY`, `GITHUB_TOKEN`, `GITHUB_REPO`, `RUST_LOG`,
-   optionally `RATE_LIMIT_*`, `SOURCE_TIMEOUT_SECS`.
+1. **thaleia-api** — start command `thaleia-api`, health check `GET /healthz`
+   (30 s timeout), restart on failure (max 5 retries).
+2. **thaleia-ingest** — cron job `*/15 * * * *` (every 15 minutes), start
+   command `thaleia-ingest`, no healthcheck, never restarted. The process
+   exits when done, as Railway cron requires. Per-source `interval_minutes` in
+   `events.sources` decides what actually runs on each tick (Ticketmaster
+   every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
+   Gallery and the Barbican daily), and an advisory lock prevents overlapping
+   runs.
+
+See the environment variable table above (`Used by` column) for the full
+per-service list and defaults.
+
+**Infrastructure as Code.** Railway retired `railway.toml` config-as-code
+(cutoff 2026-12-01); service settings now live in `.railway/railway.ts`, which
+Railway does **not** read on deploy. To change a setting, edit the file, then
+run the steps below with the global `railway` CLI at 5.42.1 or newer (check
+`railway --version`; upgrade it if needed). `npm ci` installs only the
+TypeScript SDK the file imports, not the CLI:
+
+```bash
+cd .railway && npm ci
+railway link            # project thaleia, environment production
+railway config plan     # review the diff
+railway config apply
+```
+
+Variables are declared with `preserve()`, so their values are managed in the
+dashboard and never committed; when you add a variable in the dashboard, add
+its `preserve()` line too. `GITHUB_TOKEN`, `TICKETMASTER_API_KEY` and
+`CORS_ORIGINS` are not set on Railway yet — add them to `railway.ts` when they
+are. Before the first `apply`, check that `plan` shows no unintended changes;
+if it reports a service as still managed by a config file, clear that
+service's config-as-code path in the dashboard first.
 
 Database: run `ops/sql/create-role.sql` once as the Supabase owner, set the
 role's password, and use a **session**-mode (or direct) connection string for
@@ -240,4 +259,3 @@ role's password, and use a **session**-mode (or direct) connection string for
 
 - **More sources** — CreativeMornings London, galleries/museums, writing groups;
   each via a `new-scraper` issue (`docs/adding-a-scraper.md`).
-- **Railway deployment** — API + ingest cron services as described above.
