@@ -1,0 +1,34 @@
+---
+source: tests/source_clerkenwell_design_week.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "London, London, EC1A, United Kingdom",
+      "category": "expo",
+      "dedupe_key": "clerkenwell-design-week-2027|2027-05-25|clerkenwell",
+      "description": "Clerkenwell Design Week is the UK's leading design festival and showcases the very best in comtemporary design products for upcoming interiors projects..",
+      "ends_at": "2027-05-26T23:00:00Z",
+      "image_url": "https://cdn.asp.events/CLIENT_Media_10_B9D470DF_5056_B739_5443B4BBAA6F8ED4/productImages/E4987F2F-E098-F78B-76E2FBB55522E28E_cover.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-05-24T23:00:00Z",
+      "tags": [
+        "design",
+        "festival"
+      ],
+      "title": "Clerkenwell Design Week 2027",
+      "url": "https://www.clerkenwelldesignweek.com/",
+      "venue_name": "Clerkenwell"
+    },
+    "source_event_id": "2027-05-25",
+    "source_url": "https://www.clerkenwelldesignweek.com/"
+  }
+]
