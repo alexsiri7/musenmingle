@@ -284,7 +284,9 @@ fn classify(
         .next()
         .unwrap_or_default()
         .replace('-', " ");
-    let mapped = map_category(&[title, slug_words.as_str()]).filter(|c| *c != Category::Exhibition);
+    let mapped = [title, slug_words.as_str()]
+        .into_iter()
+        .find_map(|hint| map_category(&[hint]).filter(|c| *c != Category::Exhibition));
     Ok(mapped.or(match genre {
         Some(FAMILY_EVENTS | "Events for Adults") => Some(Category::Community),
         _ => None,
@@ -606,6 +608,16 @@ mod tests {
                     None,
                 ),
                 None,
+            ),
+            (
+                card(
+                    "/events/hmm-tuesday-talk-x",
+                    "Exhibition Preview",
+                    "Events for Adults",
+                    at,
+                    None,
+                ),
+                Some(Category::Talk),
             ),
         ];
         for (card, expected) in cases {
