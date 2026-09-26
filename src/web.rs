@@ -490,6 +490,10 @@ struct Filters {
     near: String,
     /// Source keys (repeatable), e.g. from a link on `/sources`.
     sources: Vec<String>,
+    /// AI/default tag filters (one value each on the page; the API repeats).
+    medium: String,
+    format: String,
+    good_for: String,
     cursor: String,
 }
 
@@ -505,6 +509,9 @@ impl Filters {
                 "category" => f.category = v,
                 "free" => f.free = matches!(v.as_str(), "true" | "on" | "1"),
                 "near" => f.near = v,
+                "medium" => f.medium = v,
+                "format" => f.format = v,
+                "good_for" => f.good_for = v,
                 "source" if !v.is_empty() && !f.sources.contains(&v) => f.sources.push(v),
                 "cursor" => f.cursor = v,
                 _ => {}
@@ -528,6 +535,9 @@ impl Filters {
             ("to", &self.to),
             ("category", &self.category),
             ("near", &self.near),
+            ("medium", &self.medium),
+            ("format", &self.format),
+            ("good_for", &self.good_for),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -551,6 +561,9 @@ impl Filters {
             category: self.category.clone(),
             free: self.free,
             near: self.near.clone(),
+            medium: self.medium.clone(),
+            format: self.format.clone(),
+            good_for: self.good_for.clone(),
             cursor: String::new(),
         };
         format!("/?{}", rest.page_query())
@@ -572,6 +585,15 @@ impl Filters {
         for src in &self.sources {
             s.append_pair("source", src);
         }
+        for (k, v) in [
+            ("medium", &self.medium),
+            ("format", &self.format),
+            ("good_for", &self.good_for),
+        ] {
+            if !v.is_empty() {
+                s.append_pair(k, v);
+            }
+        }
         if !self.near.is_empty() {
             let area = AREAS
                 .iter()
@@ -588,7 +610,46 @@ impl Filters {
     }
 }
 
-fn filter_form(f: &Filters) -> Markup {
+/// A tag filter select whose options show how many events each would give
+/// (`counts` from `api::facets`; tags with none are left out unless chosen).
+fn tag_select(
+    id: &str,
+    label: &str,
+    any: &str,
+    vocab: &[&str],
+    chosen: &str,
+    counts: Option<&serde_json::Value>,
+) -> Markup {
+    let count = |t: &str| {
+        counts
+            .and_then(|c| c.get(t))
+            .and_then(serde_json::Value::as_i64)
+    };
+    html! {
+        div class="field" {
+            label for=(id) { (label) }
+            select id=(id) name=(id) {
+                option value="" selected[chosen.is_empty()] { (any) }
+                @for t in vocab {
+                    @let n = count(t);
+                    @if counts.is_none() || n.is_some() || chosen == *t {
+                        option value=(t) selected[chosen == *t] {
+                            (title_case(label_of(t)))
+                            @if let Some(n) = n { " (" (n) ")" }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fn label_of(tag: &str) -> &str {
+    crate::enrich::output::label(tag)
+}
+
+fn filter_form(f: &Filters, facets: Option<&serde_json::Value>) -> Markup {
+    use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
     html! {
         form class="filters" method="get" action="/" {
             div class="field" {
@@ -619,6 +680,9 @@ fn filter_form(f: &Filters) -> Markup {
                     }
                 }
             }
+            (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium"))))
+            (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format"))))
+            (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for"))))
             div class="field check" {
                 input id="free" name="free" type="checkbox" value="true" checked[f.free];
                 label for="free" { "Free only" }
@@ -708,8 +772,14 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                 h2 { a href=(detail) { (e.title) } }
                 p class="when" { (when(e.starts_at, e.ends_at, now)) }
                 @if let Some(v) = &e.venue_name { p class="venue" { (v) } }
+                @if let Some(o) = e.ai.as_ref().and_then(|a| a.one_liner.as_deref()) {
+                    p class="one-liner" title="AI-written summary" { (o) }
+                }
                 p class="tags" {
                     span class="badge" { (title_case(&e.category)) }
+                    @if e.is_opening == Some(true) {
+                        " " span class="badge opening" { "Opening" }
+                    }
                     @if let Some(p) = price(e) {
                         " " span class={ "badge" @if e.is_free { " free" } } { (p) }
                     }
@@ -749,12 +819,20 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             Err(e) => return internal_error(e),
         }
     };
+    let query = filters.api_query();
+    let facets = match &query {
+        Ok(q) => match api::facets(&state.pool, q).await {
+            Ok(f) => Some(f),
+            Err(e) => return internal_error(e),
+        },
+        Err(_) => None,
+    };
     let heading = html! {
         h1 { (TAGLINE) }
         p class="lede" {
             "Exhibitions, talks, workshops, expos and community events, gathered from venue sites."
         }
-        (filter_form(&filters))
+        (filter_form(&filters, facets.as_ref()))
         @if !filters.sources.is_empty() {
             p class="chips" aria-label="Active filters" {
                 @for src in &filters.sources {
@@ -768,7 +846,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             }
         }
     };
-    let query = match filters.api_query() {
+    let query = match query {
         Ok(q) => q,
         Err(msg) => {
             return page(
@@ -860,6 +938,12 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
         Err(err) => return internal_error(err),
     };
     let now = Utc::now();
+    let similar = api::similar_events(&state.pool, &e, now)
+        .await
+        .unwrap_or_else(|err| {
+            tracing::error!(error = %err, "similar events query failed");
+            Vec::new()
+        });
     let map = match (e.lat, e.lng) {
         (Some(lat), Some(lng)) => Some(format!(
             "https://www.openstreetmap.org/?mlat={lat}&mlon={lng}#map=17/{lat}/{lng}"
@@ -896,8 +980,41 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                     dt { "Category" } dd { (title_case(&e.category)) }
                     dt { "Price" } dd { (price(&e).unwrap_or_else(|| "Not listed".into())) }
                     @if !e.tags.is_empty() { dt { "Tags" } dd { (e.tags.join(", ")) } }
+                    @if e.is_opening == Some(true) { dt { "Opening" } dd { "Private view / opening event" } }
+                    @if !e.good_for.is_empty() {
+                        dt { "Good for" }
+                        dd { (e.good_for.iter().map(|t| label_of(t)).collect::<Vec<_>>().join(", ")) }
+                    }
                     @if let Some(u) = safe_link(e.url.as_deref()) {
                         dt { "Event page" } dd { a href=(u) rel="noopener" { (u) } }
+                    }
+                }
+                @if !e.medium_tags.is_empty() || !e.format_tags.is_empty() {
+                    p class="tag-chips" aria-label="Medium and format" {
+                        @for t in &e.medium_tags {
+                            a class="tag-chip" href={ "/?medium=" (t) } { (title_case(label_of(t))) } " "
+                        }
+                        @for t in &e.format_tags {
+                            a class="tag-chip format" href={ "/?format=" (t) } { (title_case(label_of(t))) } " "
+                        }
+                    }
+                }
+                @if let Some(ai) = &e.ai {
+                    @if let Some(w) = &ai.whats_cool {
+                        section class="ai-note" aria-labelledby="whats-cool-h" {
+                            h2 id="whats-cool-h" {
+                                "What's cool "
+                                a class="ai-label" href="/about#ai" { "\u{2728} AI note" }
+                            }
+                            p { (w) }
+                            p class="small" {
+                                "Written by AI from the listing"
+                                @if ai.grounding == "listing_plus_general_knowledge" {
+                                    " and general knowledge about the people or venue named"
+                                }
+                                ". It is not the venue's description; check details on the venue's own page."
+                            }
+                        }
                     }
                 }
                 @if let Some(d) = e.description.as_deref().filter(|d| !d.trim().is_empty()) {
@@ -908,6 +1025,27 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                 "An excerpt. Read more "
                                 a href=(u) rel="noopener" { "on " (p.display_name) }
                                 "."
+                            }
+                        }
+                    }
+                }
+                @if !similar.is_empty() {
+                    section class="similar" aria-labelledby="similar-h" {
+                        h2 id="similar-h" { "More like this" }
+                        ul {
+                            @for s in &similar {
+                                li {
+                                    a href={ "/events/" (s.id) } { (s.title) }
+                                    span class="small" {
+                                        @if let Some(v) = &s.venue_name { " — " (v) }
+                                        ", " (when(s.starts_at, s.ends_at, now))
+                                        @if !s.shared_tags.is_empty() {
+                                            br;
+                                            "Similar because: shared "
+                                            (s.shared_tags.iter().map(|t| label_of(t)).collect::<Vec<_>>().join(", "))
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1098,7 +1236,53 @@ async fn about() -> Response {
                             "We follow each site's terms. Where they restrict reuse, we keep only "
                             "the basic facts (title, dates, venue) and a link."
                         }
-                        li { "We don't use AI to rewrite or summarise venues' content." }
+                        li {
+                            "Collecting never uses AI: our crawler reads listings with ordinary, "
+                            "predictable code. AI only adds tags and a short note afterwards, from "
+                            "what we already keep ("
+                            a href="#ai" { "how we use AI" } ")."
+                        }
+                    }
+                }
+                section id="ai" aria-labelledby="ai-h" {
+                    h2 id="ai-h" { "How we use AI" }
+                    ul {
+                        li {
+                            "After collecting, an AI language model tags each event (medium, format, "
+                            "who it suits, whether it's an opening) and may write a short "
+                            "\u{201c}What's cool\u{201d} note and a one-line summary."
+                        }
+                        li {
+                            "It only sees facts we already store: title, venue, dates, category, the "
+                            "listing's own labels, price, the short excerpt we keep (if any) and which "
+                            "sites list the event. We never fetch a page for it, and for sites whose "
+                            "terms limit reuse it gets just the basic facts."
+                        }
+                        li {
+                            "Notes are labelled \u{201c}\u{2728} AI note\u{201d} and link here. They are our "
+                            "AI's summary, not the venue's words, and can be wrong: check details on the "
+                            "venue's own page. When a listing says too little, the AI writes nothing "
+                            "rather than guess, and a note is withdrawn at our next update when the facts it was "
+                            "written from change."
+                        }
+                        li {
+                            "We reach the model through Requesty, an AI gateway, and only use models "
+                            "whose provider keeps no copy of what we send (zero data retention). "
+                            "Requesty itself may keep a log of our requests (event facts and the AI's "
+                            "answers) in our account. To "
+                            "find similar events we also turn each event's facts and tags into an "
+                            "embedding (a list of numbers) with OpenAI's embedding model through the "
+                            "same gateway; OpenAI may keep API inputs for up to 30 days for abuse "
+                            "monitoring."
+                        }
+                        li {
+                            "Only event information is ever sent: nothing about you, your searches, "
+                            "saved events, suggestions or messages."
+                        }
+                        li {
+                            "A note or tag about your venue is wrong? "
+                            a href="/contact" { "Tell us" } " and we'll fix or remove it."
+                        }
                     }
                 }
                 section id="for-venues" aria-labelledby="for-venues-h" {
@@ -1142,6 +1326,10 @@ async fn about() -> Response {
                             "your details go into our issue tracker so we can act on them. An email "
                             "address, if you give one, is kept only in our database, only used to reply, "
                             "and never put in the issue tracker."
+                        }
+                        li {
+                            "Nothing about you is sent to AI services: the AI features only ever see "
+                            "event listings (see " a href="#ai" { "How we use AI" } ")."
                         }
                         li { "Nothing is sold or shared for advertising." }
                     }

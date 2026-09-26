@@ -12,7 +12,10 @@
 //! 5. bring stored rows in line with the sources' content policy
 //!    (`repo::enforce_content_policy`) and make missing thumbnails
 //!    (`crate::thumbs`) — every tick, even when no source was due;
-//! 6. file GitHub issues for site suggestions and contact requests the API
+//! 6. keep AI fields in step with the stored facts (`crate::enrich::sync`)
+//!    and, when a Requesty key is configured, run the AI enrichment and
+//!    embedding pass within its spend caps (`crate::enrich`);
+//! 7. file GitHub issues for site suggestions and contact requests the API
 //!    left pending.
 
 use std::time::Duration;
@@ -48,6 +51,8 @@ pub struct Runner {
     pub factory: SourceFactory,
     pub health: HealthChecker,
     pub source_timeout: Duration,
+    /// AI enrichment + embeddings (`None` without `REQUESTY_API_KEY`).
+    pub enrich: Option<crate::enrich::Enricher>,
 }
 
 /// Outcome of one source within a run.
@@ -131,6 +136,32 @@ impl Runner {
         }
         // Thumbnail fetches may report soft errors; they are not source errors.
         let _ = self.ctx.take_errors();
+        match crate::enrich::sync(&self.pool, now).await {
+            Ok(r) if r != crate::enrich::SyncReport::default() => {
+                tracing::info!(report = ?r, "AI fields synced with stored facts")
+            }
+            Ok(_) => {}
+            Err(e) => tracing::error!(error = %e, "AI field sync failed"),
+        }
+        if let Some(enricher) = &self.enrich {
+            match enricher.run(&self.pool, now).await {
+                Ok(r) => tracing::info!(
+                    model = %enricher.config.model,
+                    queued = r.queued,
+                    enriched = r.enriched,
+                    failed = r.failed,
+                    calls = r.calls,
+                    tokens_in = r.tokens_in,
+                    tokens_out = r.tokens_out,
+                    cost_usd = crate::enrich::usd(r.cost_usd),
+                    spent_today_usd = crate::enrich::usd(r.spent_today_usd),
+                    embedded = r.embedded,
+                    stopped = ?r.stopped,
+                    "enrichment pass finished"
+                ),
+                Err(e) => tracing::error!(error = %e, "enrichment pass failed"),
+            }
+        }
         if let Some(filer) = self.health.filer() {
             match suggestions::file_pending(&self.pool, filer, now).await {
                 Ok(filed) if !filed.is_empty() => {

@@ -4,6 +4,7 @@
 use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
 use uuid::Uuid;
 
+use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
 use crate::model::Category;
 use crate::normalise::london_to_utc;
 
@@ -23,6 +24,8 @@ pub struct EventQuery {
     pub filter: EventFilter,
     pub order: EventOrder,
     pub limit: i64,
+    /// Also return tag counts for the other filters (`facets=true`).
+    pub facets: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -39,6 +42,26 @@ pub struct EventFilter {
     pub sources: Vec<String>,
     /// Only these events (`ids=<uuid>,<uuid>`); empty = no restriction.
     pub ids: Vec<Uuid>,
+    /// Medium tags (`medium=`, repeatable): events with ANY of them.
+    pub mediums: Vec<String>,
+    /// Format tags (`format=`, repeatable): events with ANY of them.
+    pub formats: Vec<String>,
+    /// `good_for=` (repeatable): events with ANY of them.
+    pub good_for: Vec<String>,
+}
+
+/// Add a vocabulary tag to `list` (deduped), or explain why it is invalid.
+fn push_tag(list: &mut Vec<String>, name: &str, value: &str, vocab: &[&str]) -> Result<(), String> {
+    if !vocab.contains(&value) {
+        return Err(format!(
+            "unknown {name} {value:?} (one of: {})",
+            vocab.join(", ")
+        ));
+    }
+    if !list.iter().any(|v| v == value) {
+        list.push(value.to_string());
+    }
+    Ok(())
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -139,8 +162,19 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
     let (mut from, mut to) = (None, None);
     let (mut near, mut radius_km) = (None, None);
     let (mut limit, mut cursor) = (None, None);
+    let mut facets = false;
     for (key, value) in url::form_urlencoded::parse(raw.as_bytes()) {
         match key.as_ref() {
+            "medium" => push_tag(&mut filter.mediums, "medium", &value, MEDIUM_TAGS)?,
+            "format" => push_tag(&mut filter.formats, "format", &value, FORMAT_TAGS)?,
+            "good_for" => push_tag(&mut filter.good_for, "good_for", &value, GOOD_FOR)?,
+            "facets" => {
+                facets = match value.as_ref() {
+                    "true" => true,
+                    "false" => false,
+                    _ => return Err("facets must be true or false".into()),
+                }
+            }
             "from" => from = Some(parse_date("from", &value)?),
             "to" => to = Some(parse_date("to", &value)?),
             "category" => {
@@ -241,6 +275,7 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
         filter,
         order,
         limit: limit.unwrap_or(DEFAULT_LIMIT),
+        facets,
     })
 }
 
@@ -318,6 +353,26 @@ mod tests {
     fn sources_repeat_and_dedupe() {
         let q = parse_query("source=barbican&source=design-museum&source=barbican").unwrap();
         assert_eq!(q.filter.sources, ["barbican", "design-museum"]);
+    }
+
+    #[test]
+    fn tag_filters_repeat_dedupe_and_use_the_vocabularies() {
+        let q = parse_query(
+            "medium=photography&medium=painting&medium=photography&format=talk&good_for=kids&facets=true",
+        )
+        .unwrap();
+        assert_eq!(q.filter.mediums, ["photography", "painting"]);
+        assert_eq!(q.filter.formats, ["talk"]);
+        assert_eq!(q.filter.good_for, ["kids"]);
+        assert!(q.facets);
+        for raw in [
+            "medium=pottery",
+            "format=party",
+            "good_for=everyone",
+            "facets=yes",
+        ] {
+            assert!(parse_query(raw).is_err(), "{raw}");
+        }
     }
 
     #[test]

@@ -45,11 +45,17 @@ export default defineRailway(() => {
     regions,
     env: {
       DATABASE_URL: preserve(),
+      ENRICH_DAILY_CAP_USD: preserve(),
+      ENRICH_MODEL: preserve(),
       GITHUB_REPO: preserve(),
+      GITHUB_TOKEN: preserve(),
+      NTFY_TOPIC: preserve(),
       RATE_LIMIT_MS: preserve(),
       RATE_LIMIT_OVERRIDES: preserve(),
+      REQUESTY_API_KEY: preserve(),
       RUST_LOG: preserve(),
       SOURCE_TIMEOUT_SECS: preserve(),
+      TICKETMASTER_API_KEY: preserve(),
     },
   });
 

@@ -9,7 +9,7 @@ use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
 use uuid::Uuid;
 
-use crate::listing::{EARTH_RADIUS_KM, EventOrder, EventQuery};
+use crate::listing::{EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery};
 use crate::matching::{self, MatchInput, TitleScore};
 use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
@@ -735,10 +735,24 @@ pub struct EventRow {
     pub category: String,
     pub tags: Vec<String>,
     pub dedupe_key: String,
+    /// Materialised AI enrichment (`crate::enrich`); medium tags fall back to
+    /// the sources' defaults.
+    pub medium_tags: Vec<String>,
+    pub format_tags: Vec<String>,
+    pub good_for: Vec<String>,
+    pub vibe_tags: Vec<String>,
+    pub is_opening: Option<bool>,
+    pub whats_cool: Option<String>,
+    pub one_liner: Option<String>,
+    pub ai_grounding: Option<String>,
+    pub ai_model: Option<String>,
+    pub ai_enriched_at: Option<DateTime<Utc>>,
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
-    ends_at, is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key";
+    ends_at, is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key,
+    medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
+    ai_grounding, ai_model, ai_enriched_at";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
     sqlx::query_as(AssertSqlSafe(format!(
@@ -758,11 +772,12 @@ pub struct ListedEvent {
     pub distance_km: Option<f64>,
 }
 
-/// `$1`..`$6` of both listing queries (on `events.events ev`). An event with
+/// `$1`..`$9` of every listing query (on `events.events ev`). An event with
 /// an end (`ends_at` set), whatever its category, matches when its range
 /// overlaps the window, a one-off when it starts inside it. `$5` (source
 /// keys) matches an event listed by ANY of those sources; `$6` restricts to
-/// the given event ids.
+/// the given event ids; `$7`/`$8`/`$9` (medium, format, good_for) match an
+/// event with ANY of the given tags.
 const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, ev.starts_at) >= $1)
     AND ($2::timestamptz IS NULL OR ev.starts_at < $2)
     AND (cardinality($3::text[]) = 0 OR ev.category = ANY($3))
@@ -770,29 +785,47 @@ const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, e
     AND (cardinality($5::text[]) = 0 OR EXISTS (
         SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
         WHERE es.event_id = ev.id AND s.key = ANY($5)))
-    AND (cardinality($6::uuid[]) = 0 OR ev.id = ANY($6))";
+    AND (cardinality($6::uuid[]) = 0 OR ev.id = ANY($6))
+    AND (cardinality($7::text[]) = 0 OR ev.medium_tags && $7)
+    AND (cardinality($8::text[]) = 0 OR ev.format_tags && $8)
+    AND (cardinality($9::text[]) = 0 OR ev.good_for && $9)";
+
+/// Bind `$1`..`$9` ([`LISTING_FILTER`]) for `f`.
+fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, O> {
+    let categories: Vec<&'static str> = f.categories.iter().map(|c| c.as_str()).collect();
+    q.bind(f.from)
+        .bind(f.until)
+        .bind(categories)
+        .bind(f.free_only)
+        .bind(&f.sources)
+        .bind(&f.ids)
+        .bind(&f.mediums)
+        .bind(&f.formats)
+        .bind(&f.good_for)
+}
+
+/// Haversine distance from (`$10`, `$11`) with Earth radius `$12`.
+const DISTANCE_KM: &str = "2 * $12::float8 * asin(least(1, sqrt(
+        power(sin(radians(lat - $10) / 2), 2)
+        + cos(radians($10)) * cos(radians(lat))
+          * power(sin(radians(lng - $11) / 2), 2))))";
 
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
-    let categories: Vec<&str> = f.categories.iter().map(|c| c.as_str()).collect();
-    let sources: Vec<&str> = f.sources.iter().map(String::as_str).collect();
     let fetch = query.limit + 1;
     match &query.order {
         EventOrder::ByStart { after } => {
-            sqlx::query_as(AssertSqlSafe(format!(
-                "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
-                 WHERE {LISTING_FILTER}
-                   AND ($7::timestamptz IS NULL OR (starts_at, id) > ($7, $8::uuid))
-                 ORDER BY starts_at, id LIMIT $9"
-            )))
-            .bind(f.from)
-            .bind(f.until)
-            .bind(&categories)
-            .bind(f.free_only)
-            .bind(&sources)
-            .bind(&f.ids)
+            bind_filter(
+                sqlx::query_as(AssertSqlSafe(format!(
+                    "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
+                     WHERE {LISTING_FILTER}
+                       AND ($10::timestamptz IS NULL OR (starts_at, id) > ($10, $11::uuid))
+                     ORDER BY starts_at, id LIMIT $12"
+                ))),
+                f,
+            )
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
             .bind(fetch)
@@ -801,34 +834,27 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
         }
         EventOrder::ByDistance { near, after } => {
             let b = near.bounding_box();
-            sqlx::query_as(AssertSqlSafe(format!(
-                "SELECT * FROM (
-                     SELECT {EVENT_COLS},
-                         2 * $13::float8 * asin(least(1, sqrt(
-                             power(sin(radians(lat - $7) / 2), 2)
-                             + cos(radians($7)) * cos(radians(lat))
-                               * power(sin(radians(lng - $8) / 2), 2)))) AS distance_km
-                     FROM events.events ev
-                     WHERE {LISTING_FILTER}
-                       AND lat BETWEEN $9 AND $10 AND lng BETWEEN $11 AND $12
-                 ) e
-                 WHERE distance_km <= $14
-                   AND ($15::float8 IS NULL OR (distance_km, id) > ($15, $16::uuid))
-                 ORDER BY distance_km, id LIMIT $17"
-            )))
-            .bind(f.from)
-            .bind(f.until)
-            .bind(&categories)
-            .bind(f.free_only)
-            .bind(&sources)
-            .bind(&f.ids)
+            bind_filter(
+                sqlx::query_as(AssertSqlSafe(format!(
+                    "SELECT * FROM (
+                         SELECT {EVENT_COLS}, {DISTANCE_KM} AS distance_km
+                         FROM events.events ev
+                         WHERE {LISTING_FILTER}
+                           AND lat BETWEEN $13 AND $14 AND lng BETWEEN $15 AND $16
+                     ) e
+                     WHERE distance_km <= $17
+                       AND ($18::float8 IS NULL OR (distance_km, id) > ($18, $19::uuid))
+                     ORDER BY distance_km, id LIMIT $20"
+                ))),
+                f,
+            )
             .bind(near.lat)
             .bind(near.lng)
+            .bind(EARTH_RADIUS_KM)
             .bind(b.min_lat)
             .bind(b.max_lat)
             .bind(b.min_lng)
             .bind(b.max_lng)
-            .bind(EARTH_RADIUS_KM)
             .bind(near.radius_km)
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
@@ -837,6 +863,109 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             .await
         }
     }
+}
+
+/// Which tag column a facet counts.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Facet {
+    Medium,
+    Format,
+    GoodFor,
+}
+
+impl Facet {
+    pub const ALL: [Facet; 3] = [Facet::Medium, Facet::Format, Facet::GoodFor];
+
+    pub fn column(self) -> &'static str {
+        match self {
+            Facet::Medium => "medium_tags",
+            Facet::Format => "format_tags",
+            Facet::GoodFor => "good_for",
+        }
+    }
+
+    /// The API name (`medium`, `format`, `good_for`).
+    pub fn name(self) -> &'static str {
+        match self {
+            Facet::Medium => "medium",
+            Facet::Format => "format",
+            Facet::GoodFor => "good_for",
+        }
+    }
+}
+
+/// For each tag of `facet`, how many events match `query`'s filters (and
+/// area) with that facet's own selection ignored, so every count says what
+/// choosing that tag would show. Tags with no events are omitted.
+pub async fn facet_counts(
+    pool: &PgPool,
+    query: &EventQuery,
+    facet: Facet,
+) -> sqlx::Result<Vec<(String, i64)>> {
+    let mut f = query.filter.clone();
+    match facet {
+        Facet::Medium => f.mediums.clear(),
+        Facet::Format => f.formats.clear(),
+        Facet::GoodFor => f.good_for.clear(),
+    }
+    let near = match &query.order {
+        EventOrder::ByDistance { near, .. } => Some(*near),
+        EventOrder::ByStart { .. } => None,
+    };
+    let b = near.map(|n| n.bounding_box());
+    let col = facet.column();
+    bind_filter(
+        sqlx::query_as(AssertSqlSafe(format!(
+            "SELECT t, count(*) FROM events.events ev CROSS JOIN LATERAL unnest(ev.{col}) AS t
+             WHERE {LISTING_FILTER}
+               AND ($10::float8 IS NULL OR (
+                   lat BETWEEN $13 AND $14 AND lng BETWEEN $15 AND $16
+                   AND {DISTANCE_KM} <= $17))
+             GROUP BY t ORDER BY count(*) DESC, t"
+        ))),
+        &f,
+    )
+    .bind(near.map(|n| n.lat))
+    .bind(near.map(|n| n.lng))
+    .bind(EARTH_RADIUS_KM)
+    .bind(b.map(|b| b.min_lat))
+    .bind(b.map(|b| b.max_lat))
+    .bind(b.map(|b| b.min_lng))
+    .bind(b.map(|b| b.max_lng))
+    .bind(near.map(|n| n.radius_km))
+    .fetch_all(pool)
+    .await
+}
+
+/// Up to `k` events matching `filter`, nearest to `query_vec` by cosine
+/// distance (id, similarity), for hybrid search. Empty when embeddings are
+/// off (`events.event_embeddings` missing). `query_vec` must come from the
+/// same model as the stored embeddings (`crate::enrich::embed`).
+pub async fn semantic_candidates(
+    pool: &PgPool,
+    query_vec: &[f32],
+    filter: &EventFilter,
+    k: i64,
+) -> sqlx::Result<Vec<(Uuid, f64)>> {
+    if !crate::enrich::store::embeddings_available(pool).await? {
+        return Ok(Vec::new());
+    }
+    bind_filter(
+        sqlx::query_as(AssertSqlSafe(format!(
+            "SELECT ev.id, 1 - (em.embedding OPERATOR(extensions.<=>) q.v) AS similarity
+             FROM events.event_embeddings em
+             JOIN events.events ev ON ev.id = em.event_id
+             CROSS JOIN (SELECT $10::real[]::extensions.vector AS v) q
+             WHERE {LISTING_FILTER}
+             ORDER BY em.embedding OPERATOR(extensions.<=>) q.v, ev.id
+             LIMIT $11"
+        ))),
+        filter,
+    )
+    .bind(query_vec)
+    .bind(k)
+    .fetch_all(pool)
+    .await
 }
 
 /// Where an event was found (one row per listing in `events.event_sources`).

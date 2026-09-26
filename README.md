@@ -100,8 +100,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   records `events.source_runs`, then runs the health checker (a source that
   cannot be built, e.g. missing credentials, is instead recorded as skipped
   on `events.sources` and retried next tick). Every tick it then applies the
-  content policy to stored rows, runs the thumbnailer, and finally files
-  issues for site suggestions the API left `pending`.
+  content policy to stored rows, runs the thumbnailer, keeps AI fields in
+  step with the stored facts, runs the [AI enrichment](#ai-enrichment)
+  pass (when `REQUESTY_API_KEY` is set), and finally files issues for site
+  suggestions the API left `pending`.
 - **Content policy** (see [Content policy](#content-policy)): per-source
   `display_name`, `store_description`, `store_image` and `policy_note` on
   `events.sources`; description excerpts; self-hosted, credited thumbnails
@@ -146,7 +148,7 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   OpenStreetMap link. `GET /about` ("About & our approach", linked from
   the header and footer) states the site's objective and how it treats
   venues, their content and visitors' data (anchors `#objective`,
-  `#how-we-collect`, `#for-venues`, `#your-data`, `#contact`); keep it true
+  `#how-we-collect`, `#ai`, `#for-venues`, `#your-data`, `#contact`); keep it true
   when crawler or content-policy behaviour changes. Venues use the `/contact`
   form (`src/contact.rs`): requests are stored in `events.contact_requests`
   and filed as `venue-request` GitHub issues with the server's token (the
@@ -208,6 +210,80 @@ small credited thumbnail, and send people to the venue.
 - **Links** to venues use `rel="noopener"` without `noreferrer`, so venues
   can see (as our origin only, under `Referrer-Policy:
   strict-origin-when-cross-origin`) that visitors came from us.
+
+### AI enrichment
+
+Scrapers never use a language model; extraction stays deterministic. After
+the sources of a tick, `src/enrich/` adds tags and a short note to each
+upcoming event, **only from what we already store** (`enrich::input`:
+title, venue, London dates, category, the listing's own tags, price, the
+≤ 300-character excerpt when the source's terms let us keep one, and the
+sources' names). It never fetches a page, and facts-only sources (ArtRabbit,
+Ticketmaster, Serpentine) send just the facts.
+
+- **Provider:** Requesty's OpenAI-compatible
+  `POST https://router.requesty.ai/v1/chat/completions`, model
+  `ENRICH_MODEL` (default `anthropic/claude-opus-5-5`, 0-day retention).
+  The model must have an `events.model_prices` row with
+  `retention_days = 0` (the `/about#ai` promise); otherwise the pass does
+  nothing. Prices in that table (catalogue, per million tokens) turn each
+  response's `usage` into dollars.
+- **Output** (`src/enrich/prompt.txt`, `enrich::output`): per event
+  `medium_tags` (≤ 3 of 16), `format_tags` (≤ 3 of 10), `good_for` (≤ 3 of 6),
+  `vibe_tags` (≤ 2 of 8), `artists` (≤ 6, verbatim from the input),
+  `is_opening` + `opening_evidence` (verbatim), `grounding`
+  (`listing` / `listing_plus_general_knowledge` / `insufficient`),
+  `whats_cool` (≤ 220 characters, British English, no hype words; null when
+  insufficient), `one_liner` (≤ 90) and `confidence`. The answer is requested
+  as JSON (`ENRICH_OUTPUT_MODE`, default `json_object` with low reasoning:
+  strict `json_schema` returned degenerate placeholders from Opus 5.5 in 4 of
+  10 test calls) and validated strictly in Rust; invalid results are retried
+  once with the validator's complaints, then given up (logged, stored in
+  `events.enrichment_failures`, no partial writes, not re-sent until the
+  input or `PROMPT_VERSION` changes).
+- **Storage:** `events.enrichments` (event, model, prompt version, input
+  hash, output JSON, tokens, cost) and materialised onto `events.events`
+  (`medium_tags`, `format_tags`, `good_for`, `vibe_tags`, `is_opening`,
+  `whats_cool`, `one_liner`, `ai_grounding`, `ai_model`, `ai_enriched_at`)
+  for filters and pages. Events are re-enriched only when their input hash
+  or the prompt version changes; when the input changes the materialised AI
+  fields are cleared at once (`enrich::sync`, every tick) so a note never
+  outlives its facts. `medium_tags` also carries the sources'
+  `default_medium_tags` (e.g. Design Museum → `design`), which is all an
+  event has while AI is off.
+- **Cost control:** batches of `ENRICH_BATCH_SIZE` (10) behind one long
+  static system prompt, with Requesty `auto_cache` when a pass makes several
+  calls; every call (failed ones too) is recorded in
+  `events.enrichment_calls`; a call is made only if its pessimistic estimate
+  fits under `ENRICH_DAILY_CAP_USD` (1.00, per London day, embeddings
+  included) and `ENRICH_RUN_CAP_USD` (0.40); `ENRICH_RUN_BUDGET_SECS` (300)
+  bounds the pass's time inside the ingest lock. Each pass logs events
+  enriched, tokens and dollars. Measured 2026-09-26: ~$0.005 per event on
+  Opus 5.5 (see the evaluation notes in the PR).
+- **Credits:** a 402 from Requesty (or a 403/429 whose message is about
+  credits, balance, quota or spend limits) stops the pass for that run and
+  is recorded in `events.alert_state`; the owner gets one high-priority
+  ntfy (`NTFY_TOPIC`) per London day while it lasts, and one "OK again"
+  message when a later call succeeds.
+- **Embeddings** (`enrich::embed`): after enrichment, each upcoming event with
+  a current enrichment (or a given-up one: then facts only, re-embedded once
+  enriched) gets an `EMBED_MODEL` (default `openai/text-embedding-3-small`,
+  1536 dimensions) vector of a documented text template (`EMBED_VERSION`),
+  in batches of 100, re-embedded when the text hash changes. They live in
+  `events.event_embeddings` (pgvector `extensions.vector(1536)`, HNSW
+  cosine index), which exists only when the role may use the shared
+  database's `extensions` schema (`GRANT USAGE ON SCHEMA extensions TO
+  musenmingle`, in `ops/sql/create-role.sql`); the ingest re-applies that
+  idempotent migration on start, so embeddings switch on after the grant.
+  Used for "More like this" on event pages (`GET /v1/events/{id}/similar`)
+  and by `repo::semantic_candidates` for future hybrid search.
+- **Pages:** cards show the `one_liner` (muted); event pages show "What's
+  cool" labelled "✨ AI note" (linking to `/about#ai`), medium/format chips
+  and "More like this"; the listing filters by medium, format and "good for"
+  with live counts (`GET /v1/events?medium=…&format=…&good_for=…&facets=true`).
+- **Evaluating prompts/models:** `cargo run --example enrich_eval -- events.json
+  <model> <in> <out> <cache-read> <cache-write>` runs the production request
+  builder and validator on exported events without a database.
 
 ### Merging and overrides
 
@@ -281,8 +357,11 @@ cargo test
 There is no Docker requirement. Database integration tests read
 `TEST_DATABASE_URL`, pointing at **any** Postgres (15+) where the user may
 `CREATE DATABASE`; each test creates and drops its own database. Without it
-they print `SKIPPING ...` and pass. CI runs them against a `postgres:17`
-service with `MUSENMINGLE_REQUIRE_DB=1`, which turns a missing URL into a failure.
+they print `SKIPPING ...` and pass. CI runs them against a
+`pgvector/pgvector:pg17` service with `MUSENMINGLE_REQUIRE_DB=1`, which turns a
+missing URL into a failure. When the server has pgvector, every test database
+gets it in schema `extensions` (as in production), so the embedding tests
+run; without it they print `SKIPPING` for those parts.
 
 ```bash
 TEST_DATABASE_URL=postgres://postgres@localhost:5432/postgres cargo test
@@ -324,6 +403,19 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
 | `RATE_LIMIT_OVERRIDES` | ingest | — | `host=ms,host=ms` per-host overrides |
 | `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout |
+| `REQUESTY_API_KEY` | ingest | unset → AI enrichment and embeddings off | Requesty key ([AI enrichment](#ai-enrichment)) |
+| `ENRICH_MODEL` | ingest | `anthropic/claude-opus-5-5` | Chat model (needs a zero-retention `events.model_prices` row) |
+| `ENRICH_DAILY_CAP_USD` | ingest | `1.00` | Max Requesty spend per London day (enrichment + embeddings) |
+| `ENRICH_RUN_CAP_USD` | ingest | `0.40` | Max spend per ingest run |
+| `ENRICH_BATCH_SIZE` | ingest | `10` | Events per chat call (1–25) |
+| `ENRICH_MAX_EVENTS_PER_RUN` | ingest | `120` | Events queued per run |
+| `ENRICH_RUN_BUDGET_SECS` | ingest | `300` | Wall-clock budget of the pass |
+| `ENRICH_OUTPUT_MODE` | ingest | `json_object` | Or `json_schema` (strict) |
+| `ENRICH_REASONING_EFFORT` | ingest | `low` | `reasoning_effort` sent to the model (`default` = omit) |
+| `EMBED_MODEL` | ingest | `openai/text-embedding-3-small` | Embedding model (`off` = none; needs a `model_prices` row) |
+| `REQUESTY_BASE_URL` | ingest | `https://router.requesty.ai` | Tests point it at a mock |
+| `NTFY_TOPIC` | ingest | unset → alerts logged | ntfy topic for owner alerts (secret) |
+| `NTFY_BASE_URL` | ingest | `https://ntfy.sh` | ntfy server |
 | `TEST_DATABASE_URL` | tests | unset → DB tests skip | Throwaway Postgres for tests |
 
 See `.env.example`.
@@ -366,9 +458,10 @@ railway config apply
 
 Variables are declared with `preserve()`, so their values are managed in the
 dashboard and never committed; when you add a variable in the dashboard, add
-its `preserve()` line too. `GITHUB_TOKEN`, `TICKETMASTER_API_KEY` and
-`CORS_ORIGINS` are not set on Railway yet — add them to `railway.ts` when they
-are. Before the first `apply`, check that `plan` shows no unintended changes;
+its `preserve()` line too. `CORS_ORIGINS` is not set on Railway yet — add it to `railway.ts` when it is.
+The ingest service also has `GITHUB_TOKEN`, `TICKETMASTER_API_KEY`,
+`REQUESTY_API_KEY`, `ENRICH_MODEL`, `ENRICH_DAILY_CAP_USD` and `NTFY_TOPIC`
+(the API needs none of the enrichment ones). Before the first `apply`, check that `plan` shows no unintended changes;
 if it reports a service as still managed by a config file, clear that
 service's config-as-code path in the dashboard first.
 

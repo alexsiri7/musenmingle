@@ -5,6 +5,9 @@ use std::time::Duration;
 
 use anyhow::{Context, Result, bail};
 use axum::http::HeaderValue;
+use rust_decimal::Decimal;
+
+use crate::enrich::{EnrichConfig, OutputMode};
 
 /// Default GitHub repository for health issues.
 pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/musenmingle";
@@ -186,6 +189,76 @@ pub struct Config {
     pub suggestions: SuggestionConfig,
     /// Browser origins allowed to call the API; empty = none.
     pub cors_origins: Vec<HeaderValue>,
+    /// Requesty API key (`REQUESTY_API_KEY`); unset = no AI enrichment or
+    /// embeddings (the ingest only applies default tags).
+    pub requesty_api_key: Option<String>,
+    /// `REQUESTY_BASE_URL` (tests point it at a mock server).
+    pub requesty_base_url: String,
+    pub enrich: EnrichConfig,
+    /// ntfy topic for owner alerts (`NTFY_TOPIC`); unset = alerts are logged.
+    pub ntfy_topic: Option<String>,
+    pub ntfy_base_url: String,
+}
+
+fn parse_usd(name: &str, default: Decimal) -> Result<Decimal> {
+    match non_empty(name) {
+        Some(v) => {
+            let d: Decimal = v
+                .parse()
+                .map_err(|_| anyhow::anyhow!("{name} is not a dollar amount: {v:?}"))?;
+            if d < Decimal::ZERO {
+                bail!("{name} must not be negative");
+            }
+            Ok(d)
+        }
+        None => Ok(default),
+    }
+}
+
+impl EnrichConfig {
+    /// `ENRICH_*` and `EMBED_MODEL` (see README).
+    pub fn from_env() -> Result<Self> {
+        let d = EnrichConfig::default();
+        let embed_model = match non_empty("EMBED_MODEL") {
+            Some(m) if matches!(m.as_str(), "off" | "none") => None,
+            Some(m) => Some(m),
+            None => d.embed_model.clone(),
+        };
+        let reasoning_effort = match non_empty("ENRICH_REASONING_EFFORT") {
+            Some(e) if e == "default" => None,
+            Some(e) => Some(e),
+            None => d.reasoning_effort.clone(),
+        };
+        let output_mode = match non_empty("ENRICH_OUTPUT_MODE").as_deref() {
+            None => d.output_mode,
+            Some("json_object") => OutputMode::JsonObject,
+            Some("json_schema") => OutputMode::JsonSchema,
+            Some(other) => {
+                bail!("ENRICH_OUTPUT_MODE must be json_object or json_schema, got {other:?}")
+            }
+        };
+        let c = EnrichConfig {
+            model: non_empty("ENRICH_MODEL").unwrap_or(d.model),
+            output_mode,
+            embed_model,
+            daily_cap_usd: parse_usd("ENRICH_DAILY_CAP_USD", d.daily_cap_usd)?,
+            run_cap_usd: parse_usd("ENRICH_RUN_CAP_USD", d.run_cap_usd)?,
+            batch_size: parse_env("ENRICH_BATCH_SIZE", d.batch_size)?,
+            max_events_per_run: parse_env("ENRICH_MAX_EVENTS_PER_RUN", d.max_events_per_run)?,
+            embed_batch_size: d.embed_batch_size,
+            call_timeout: d.call_timeout,
+            run_budget: Duration::from_secs(parse_env(
+                "ENRICH_RUN_BUDGET_SECS",
+                d.run_budget.as_secs(),
+            )?),
+            reasoning_effort,
+            temperature: d.temperature,
+        };
+        if !(1..=25).contains(&c.batch_size) {
+            bail!("ENRICH_BATCH_SIZE must be between 1 and 25");
+        }
+        Ok(c)
+    }
 }
 
 fn non_empty(name: &str) -> Option<String> {
@@ -225,6 +298,13 @@ impl Config {
             source_timeout,
             suggestions: SuggestionConfig::from_env()?,
             cors_origins: parse_cors_origins(non_empty("CORS_ORIGINS").as_deref())?,
+            requesty_api_key: non_empty("REQUESTY_API_KEY"),
+            requesty_base_url: non_empty("REQUESTY_BASE_URL")
+                .unwrap_or_else(|| crate::enrich::requesty::DEFAULT_BASE_URL.into()),
+            enrich: EnrichConfig::from_env()?,
+            ntfy_topic: non_empty("NTFY_TOPIC"),
+            ntfy_base_url: non_empty("NTFY_BASE_URL")
+                .unwrap_or_else(|| crate::notify::DEFAULT_NTFY_BASE.into()),
         })
     }
 }

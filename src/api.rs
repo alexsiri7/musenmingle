@@ -58,6 +58,7 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
         .route("/healthz", get(healthz))
         .route("/v1/events", get(list_events))
         .route("/v1/events/{id}", get(get_event))
+        .route("/v1/events/{id}/similar", get(get_similar))
         .route("/v1/sources", get(list_sources))
         .route("/v1/suggestions", post(suggest))
         .merge(crate::web::routes())
@@ -260,9 +261,36 @@ pub(crate) struct EventJson {
     pub(crate) thumbnail_size: Option<(i32, i32)>,
     pub(crate) category: String,
     pub(crate) tags: Vec<String>,
+    /// Art forms (AI enrichment, else the sources' default tags).
+    pub(crate) medium_tags: Vec<String>,
+    /// Kind of occasion (AI enrichment).
+    pub(crate) format_tags: Vec<String>,
+    /// Who it suits (AI enrichment).
+    pub(crate) good_for: Vec<String>,
+    pub(crate) vibe_tags: Vec<String>,
+    /// Private view / opening / launch (AI enrichment; null = unknown).
+    pub(crate) is_opening: Option<bool>,
+    /// AI-written notes, labelled as such; never the venue's words.
+    pub(crate) ai: Option<AiNoteJson>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) distance_km: Option<f64>,
     pub(crate) sources: Vec<SourceLinkJson>,
+}
+
+/// The AI-written part of an event.
+#[derive(Serialize)]
+pub(crate) struct AiNoteJson {
+    /// Always "AI-generated".
+    pub(crate) label: &'static str,
+    /// "What's cool about this" (<= 220 characters), or null when the
+    /// listing gave too little to say something specific.
+    pub(crate) whats_cool: Option<String>,
+    /// Neutral summary for cards (<= 90 characters).
+    pub(crate) one_liner: Option<String>,
+    /// `listing` or `listing_plus_general_knowledge` (or `insufficient`).
+    pub(crate) grounding: String,
+    pub(crate) model: String,
+    pub(crate) generated_at: DateTime<Utc>,
 }
 
 /// Who the thumbnail's image belongs to, and where to see it in context.
@@ -317,6 +345,22 @@ impl EventJson {
             }),
             category: e.category,
             tags: e.tags,
+            medium_tags: e.medium_tags,
+            format_tags: e.format_tags,
+            good_for: e.good_for,
+            vibe_tags: e.vibe_tags,
+            is_opening: e.is_opening,
+            ai: match (e.ai_grounding, e.ai_model, e.ai_enriched_at) {
+                (Some(grounding), Some(model), Some(generated_at)) => Some(AiNoteJson {
+                    label: "AI-generated",
+                    whats_cool: e.whats_cool,
+                    one_liner: e.one_liner,
+                    grounding,
+                    model,
+                    generated_at,
+                }),
+                _ => None,
+            },
             distance_km,
             sources,
         }
@@ -392,9 +436,95 @@ async fn list_events(
 ) -> Result<Json<Value>, ApiError> {
     let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
     let (events, next_cursor) = event_page(&state.pool, &query).await?;
-    Ok(Json(
-        json!({ "events": events, "next_cursor": next_cursor }),
-    ))
+    let mut body = json!({ "events": events, "next_cursor": next_cursor });
+    if query.facets {
+        body["facets"] = facets(&state.pool, &query).await?;
+    }
+    Ok(Json(body))
+}
+
+/// `{"medium": {"photography": 12, ...}, "format": {...}, "good_for": {...}}`
+/// for `query` (each facet ignoring its own selection).
+pub(crate) async fn facets(pool: &PgPool, query: &listing::EventQuery) -> sqlx::Result<Value> {
+    let mut out = serde_json::Map::new();
+    for facet in repo::Facet::ALL {
+        let counts: serde_json::Map<String, Value> = repo::facet_counts(pool, query, facet)
+            .await?
+            .into_iter()
+            .map(|(t, n)| (t, json!(n)))
+            .collect();
+        out.insert(facet.name().into(), Value::Object(counts));
+    }
+    Ok(Value::Object(out))
+}
+
+/// Events most like `id` ("More like this"), still running today or later.
+#[derive(Serialize)]
+pub(crate) struct SimilarJson {
+    pub(crate) id: Uuid,
+    pub(crate) title: String,
+    pub(crate) venue_name: Option<String>,
+    pub(crate) starts_at: DateTime<Utc>,
+    pub(crate) ends_at: Option<DateTime<Utc>>,
+    pub(crate) category: String,
+    pub(crate) similarity: f64,
+    /// Tags it shares with the event (why it is similar), as tag values.
+    pub(crate) shared_tags: Vec<String>,
+}
+
+/// Up to 6 similar upcoming events (empty when embeddings are off).
+pub(crate) async fn similar_events(
+    pool: &PgPool,
+    event: &EventJson,
+    now: DateTime<Utc>,
+) -> sqlx::Result<Vec<SimilarJson>> {
+    let since = crate::enrich::london_midnight(now);
+    let mine: Vec<&String> = event
+        .medium_tags
+        .iter()
+        .chain(&event.format_tags)
+        .chain(&event.good_for)
+        .chain(&event.vibe_tags)
+        .collect();
+    Ok(
+        crate::enrich::store::more_like_this(pool, event.id, since, 6)
+            .await?
+            .into_iter()
+            .map(|s| {
+                let shared_tags = s
+                    .medium_tags
+                    .iter()
+                    .chain(&s.format_tags)
+                    .chain(&s.good_for)
+                    .chain(&s.vibe_tags)
+                    .filter(|t| mine.contains(t))
+                    .cloned()
+                    .collect();
+                SimilarJson {
+                    id: s.id,
+                    title: s.title,
+                    venue_name: s.venue_name,
+                    starts_at: s.starts_at,
+                    ends_at: s.ends_at,
+                    category: s.category,
+                    similarity: s.similarity,
+                    shared_tags,
+                }
+            })
+            .collect(),
+    )
+}
+
+async fn get_similar(
+    State(state): State<AppState>,
+    Path(id): Path<String>,
+) -> Result<Json<Value>, ApiError> {
+    let id = Uuid::parse_str(&id).map_err(|_| ApiError::NotFound)?;
+    let event = event_by_id(&state.pool, id)
+        .await?
+        .ok_or(ApiError::NotFound)?;
+    let similar = similar_events(&state.pool, &event, Utc::now()).await?;
+    Ok(Json(json!({ "similar": similar })))
 }
 
 /// One event with its source links, or `None` if the id is unknown.

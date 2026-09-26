@@ -10,8 +10,8 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `from`, `to`, `category`, `free`, `near=<area>`, `source` and
-`cursor`),
+takes `from`, `to`, `category`, `free`, `near=<area>`, `source`, `medium`,
+`format`, `good_for` and `cursor`),
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
@@ -56,6 +56,10 @@ Lists events. Every parameter is optional; they combine freely.
 | `free` | `true` | Free events only (`false` = no filter) |
 | `source` | `source=barbican&source=ticketmaster` | Events listed by any of the given sources (keys as in `GET /v1/sources`). Repeatable; an event found by several sources appears under each |
 | `ids` | `ids=1f3632de-…,0414a989-…` | Only these events (comma-separated UUIDs, at most 100; unknown ids are simply absent). Combine with `limit=100` to get them all in one page. Used by the Saved page |
+| `medium` | `medium=photography&medium=painting` | Events with any of these medium tags: `photography`, `painting`, `drawing`, `sculpture`, `installation`, `design`, `architecture`, `illustration`, `textiles_craft`, `ceramics`, `film_video`, `performance`, `sound_music`, `writing_poetry`, `digital_new_media`, `printmaking`. Repeatable |
+| `format` | `format=talk` | Events with any of these format tags: `hands_on`, `talk`, `social`, `opening`, `late`, `family_friendly`, `course`, `tour`, `screening`, `fair_market`. Repeatable |
+| `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
+| `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>`, nearest first. Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
@@ -103,6 +107,19 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       },
       "category": "talk",
       "tags": ["art", "drawing"],
+      "medium_tags": ["drawing"],
+      "format_tags": ["hands_on"],
+      "good_for": ["solo", "first_timers"],
+      "vibe_tags": ["intimate"],
+      "is_opening": false,
+      "ai": {
+        "label": "AI-generated",
+        "whats_cool": "A clothed model and an evening of quick poses: two hours of drawing from life in the Barbican's own studio.",
+        "one_liner": "Evening life-drawing session",
+        "grounding": "listing",
+        "model": "anthropic/claude-opus-5-5",
+        "generated_at": "2026-09-26T14:00:00Z"
+      },
       "distance_km": 2.7318,
       "sources": [
         {
@@ -136,6 +153,35 @@ only with `near`. `sources` lists every place the event was found (oldest
 first); `display_name` is the source's human-readable name and `url` is the
 listing on that source (may be `null`).
 
+Tags and AI notes (see `README.md`, "AI enrichment"): `medium_tags`,
+`format_tags`, `good_for` and `vibe_tags` use the fixed vocabularies in the
+parameter table (`vibe_tags`: `contemplative`, `playful`, `provocative`,
+`immersive`, `lively`, `intimate`, `experimental`, `crafty`). They come from
+the AI enrichment; `medium_tags` also carries the listing sources' default
+tags (e.g. `design` for the Design Museum), so it may be set without `ai`.
+`is_opening` is `true` for private views / openings / launches, `false`
+when checked and not one, `null` when not checked yet. `ai` is `null`
+until the event is enriched (and again after its facts change, until it is
+re-enriched); `ai.whats_cool` (≤ 220 characters) and `ai.one_liner` (≤ 90)
+may be `null` when the listing said too little. **Label AI text as
+AI-generated wherever you show it**: it is our model's summary of the
+listing, not the venue's words.
+
+With `facets=true` the response also has
+
+```json
+"facets": {
+  "medium": { "photography": 12, "painting": 7 },
+  "format": { "talk": 9 },
+  "good_for": { "friends": 14, "kids": 3 }
+}
+```
+
+counting the events that match every other filter (dates, category, free,
+source, area and the other two tag filters), ignoring that facet's own
+selection, so each number says how many events choosing that tag would
+show. Tags with no events are omitted.
+
 **Breaking change (2026-09-26):** `image_url` was removed from event
 objects; use `thumbnail_url` + `image_credit`.
 
@@ -143,6 +189,21 @@ objects; use `thumbnail_url` + `image_credit`.
 
 One event, same shape as a list item (without `distance_km`). An unknown or
 malformed id is `404 {"error": "not found"}`.
+
+## `GET /v1/events/{id}/similar`
+
+"More like this": up to 6 events still on today or later whose embeddings
+are nearest to this event's (cosine similarity), most similar first. Empty
+when the event has no embedding yet or embeddings are off.
+
+```json
+{ "similar": [ { "id": "…", "title": "…", "venue_name": "…", "starts_at": "…",
+  "ends_at": null, "category": "talk", "similarity": 0.83,
+  "shared_tags": ["photography", "talk"] } ] }
+```
+
+`shared_tags` are the tag values the two events have in common (the
+"similar because" hint).
 
 ## `GET /v1/sources`
 
