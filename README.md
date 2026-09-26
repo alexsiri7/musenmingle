@@ -93,6 +93,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     against the run date, "Load more" pages followed), plus detail pages of
     dated items for price and page title; recurring programmes, runs of
     sessions and performances skipped; facts + link only (terms).
+  - `william-morris-gallery` — CSS-selector scraper (no JSON-LD): the "What's
+    on" featured and grid cards ("Load more" endpoint followed when the grid
+    is full), plus every card's detail page for dates, session times,
+    category classes and price; runs of sessions, online, off-site events,
+    tours and films skipped; descriptions but no images (collection images
+    need permission).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -450,7 +456,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum and the Old Royal Naval College daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College and the William Morris Gallery daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
