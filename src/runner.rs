@@ -106,6 +106,10 @@ impl Runner {
                 Ok(_) => {}
                 Err(e) => tracing::error!(error = %e, "filing pending site suggestions failed"),
             }
+        } else {
+            tracing::warn!(
+                "no GitHub filer configured; pending site suggestions will not be filed"
+            );
         }
         Ok(reports)
     }
