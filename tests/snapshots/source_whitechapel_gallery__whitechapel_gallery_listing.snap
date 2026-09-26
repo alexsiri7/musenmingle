@@ -1,0 +1,10 @@
+---
+source: tests/source_whitechapel_gallery.rs
+expression: listing_paths()
+---
+[
+  "/exhibitions/cecilia-vicuna/",
+  "/exhibitions/cecilia-vicuna-foraging-quipu/",
+  "/exhibitions/this-must-be-the-place-artists-for-whitechapel-gallery/",
+  "/exhibitions/the-film-london-jarman-award-2026/"
+]

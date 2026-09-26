@@ -38,6 +38,8 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
     `script#props` JSON (the site has no JSON-LD), paginated, no detail pages.
   - `design-museum` — CSS-selector scraper (the site has no JSON-LD): the
     current and future exhibition listings → detail pages for the date range.
+  - `whitechapel-gallery` — CSS-selector scraper (no JSON-LD): exhibitions
+    listing → detail pages for dates and free-entry status.
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `ThaleiaBot/<version> (+https://github.com/alexsiri7/thaleia; contact via repo issues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -148,7 +150,7 @@ contains both binaries):
    `cronSchedule = "*/15 * * * *"` (every 15 minutes), no healthcheck and
    `restartPolicyType = "NEVER"`. The process exits when done, as Railway cron
    requires. Per-source `interval_minutes` in `events.sources` decides what
-   actually runs on each tick (Ticketmaster every 6 h, Serpentine, Somerset House and the Design Museum daily), and
+   actually runs on each tick (Ticketmaster every 6 h, Serpentine, Somerset House, the Design Museum and Whitechapel Gallery daily), and
    an advisory lock prevents overlapping runs. Env: `DATABASE_URL`,
    `TICKETMASTER_API_KEY`, `GITHUB_TOKEN`, `GITHUB_REPO`, `RUST_LOG`,
    optionally `RATE_LIMIT_*`, `SOURCE_TIMEOUT_SECS`.

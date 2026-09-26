@@ -1,0 +1,146 @@
+---
+source: tests/source_whitechapel_gallery.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "77-82 Whitechapel High Street, London E1 7QX",
+      "category": "exhibition",
+      "dedupe_key": "cecilia-vicuna-living-threads|2026-10-07|whitechapel",
+      "description": "This extensive exhibition marks the first major UK exhibition of Cecilia Vicuña (b.1948, Santiago, Chile) – one of Latin America’s most internationally renowned artists, poets, and feminist activists. Spanning six decades, the presentation provides a unique opportunity to explore Vicuña’s interdisciplinary practice, which intentionally dissolves the boundaries between visual art, poetry, performance, ritual and activism, and encompasses works across painting, textile, photography, installation and film. Born and raised in Santiago, Vicuña came to London to study at Slade School of Art in the early 1970s, and self-exiled after the violent military coup against President Salvador Allende in 1973. As a creative and personal response to the situation in Chile, Vicuña’s practice became more explicitly political during the Allende period (1970-73), a process that intensified in London reflecting her experience of displacement, loss, political violence and instability. The exhibition includes a dedicated display on Artists for Democracy (AFD), the organisation Vicuña co-founded in London in 1974 with David Medalla, John Dugger and Guy Brett in solidarity with Chile and other liberation struggles worldwide, and brings together never-before-seen documents, photographs and printed materials. Another key facet of Vicuña’s work, evident from the 1960s onwards, is her deep commitment to honouring and preserving ecosystems and indigenous systems of knowledge. Many of her installations function as acts of remembrance for cultures, languages and ways of being that have been suppressed by dominant Western models and colonial systems. The exhibition brings together key emblematic works from across her career including the spectacular Quipu Menstrual (2006–2024), a dense sculptural installation of unspun wool in vivid shades of red and brown suspended from the ceiling. Vicuña has been creating quipus (knots) for over 50 years as striking embodiments of an ancestral, non-alphabetic communication system rooted in Andean culture. Also on display will be the only surviving work from her precarios series she made during her time in London, as well as documentation of the 400 lost works from that same collection. Vicuña began making precarious in the mid-1960s. There small sculptures, crafted from papers, prints, fabric, feathers and other found materials are defined by their ephemerality and challenge conventional understandings of sculpture as fixed or permanent. The presentation features a selection of paintings from Vicuña’s time in London in the 1970s, as well as work from her acclaimed Palabrarmas series, which she began during her time in London, and a series of works dedicated to Vicuña’s performances and interventions in public spaces. For full details of the exhibition and works on display please see/download the press release. Cecilia Vicuña: Living Threads has been principally and generously supported by The Colwinston Charitable Trust.",
+      "ends_at": "2027-02-14T00:00:00Z",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/06/1.-Cecilia-Vicuna-Quipu-menstrual-1-2006-2024-scaled.jpg",
+      "lat": 51.516,
+      "lng": -0.07,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-06T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Cecilia Vicuña: Living Threads",
+      "url": "https://www.whitechapelgallery.org/exhibitions/cecilia-vicuna/",
+      "venue_name": "Whitechapel Gallery"
+    },
+    "payload": {
+      "date_text": "07 Oct - 14 Feb 2027",
+      "description": "This extensive exhibition marks the first major UK exhibition of <strong>Cecilia Vicuña</strong> (b.1948, Santiago, Chile) – one of Latin America’s most internationally renowned artists, poets, and feminist activists. Spanning six decades, the presentation provides a unique opportunity to explore Vicuña’s interdisciplinary practice, which intentionally dissolves the boundaries between visual art, poetry, performance, ritual and activism, and encompasses works across painting, textile, photography, installation and film.\nBorn and raised in Santiago, Vicuña came to London to study at Slade School of Art in the early 1970s, and self-exiled after the violent military coup against President Salvador Allende in 1973. As a creative and personal response to the situation in Chile, Vicuña’s practice became more explicitly political during the Allende period (1970-73), a process that intensified in London reflecting her experience of displacement, loss, political violence and instability. The exhibition includes a dedicated display on Artists for Democracy (AFD), the organisation Vicuña co-founded in London in 1974 with David Medalla, John Dugger and Guy Brett in solidarity with Chile and other liberation struggles worldwide, and brings together never-before-seen documents, photographs and printed materials.\nAnother key facet of Vicuña’s work, evident from the 1960s onwards, is her deep commitment to honouring and preserving ecosystems and indigenous systems of knowledge. Many of her installations function as acts of remembrance for cultures, languages and ways of being that have been suppressed by dominant Western models and colonial systems. The exhibition brings together key emblematic works from across her career including the spectacular <em>Quipu Menstrual</em> (2006–2024), a dense sculptural installation of unspun wool in vivid shades of red and brown suspended from the ceiling. Vicuña has been creating <em>quipus</em> (knots) for over 50 years as striking embodiments of an ancestral, non-alphabetic communication system rooted in Andean culture. Also on display will be the only surviving work from her <em>precarios</em> series she made during her time in London, as well as documentation of the 400 lost works from that same collection. Vicuña began making <em>precarious </em>in the mid-1960s. There small sculptures, crafted from papers, prints, fabric, feathers and other found materials are defined by their ephemerality and challenge conventional understandings of sculpture as fixed or permanent.\nThe presentation features a selection of paintings from Vicuña’s time in London in the 1970s, as well as work from her acclaimed <em>Palabrarmas </em>series, which she began during her time in London, and a series of works dedicated to Vicuña’s performances and interventions in public spaces.\nFor full details of the exhibition and works on display please <a href=\"https://www.whitechapelgallery.org/about/press/cecilia-vicuna/\">see/download the press release</a>.\n<em><strong>Cecilia Vicuña: Living Threads </strong></em>has been principally and generously supported by <strong>The Colwinston Charitable Trust</strong>.",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/06/1.-Cecilia-Vicuna-Quipu-menstrual-1-2006-2024-scaled.jpg",
+      "price_text": null,
+      "room": "Galleries 1, 2 & 3",
+      "title": "Cecilia Vicuña: Living Threads",
+      "url": "https://www.whitechapelgallery.org/exhibitions/cecilia-vicuna/"
+    },
+    "slug": "cecilia-vicuna"
+  },
+  {
+    "event": {
+      "address": "77-82 Whitechapel High Street, London E1 7QX",
+      "category": "exhibition",
+      "dedupe_key": "cecilia-vicuna-foraging-quipu|2026-10-07|whitechapel",
+      "description": "Created through a public call for contributions, Foraging Quipu is a large-scale participatory installation by Cecilia Vicuña, bringing together plant matter, found objects and materials gathered by local communities. First realised at the Irish Museum of Modern Art (IMMA) in Dublin in 2025, the installation will be recreated at Whitechapel Gallery through a new public invitation to collect and contribute materials. Visitors are invited to gather dry plant matter and lightweight debris from their surroundings, creating a collective archive of ecological traces, chance encounters and personal acts of attention. The resulting installation will weave together these contributions into a suspended quipu, a form inspired by the ancient Andean system of knotted cords used for recording and communication. Throughout her practice, Vicuña has explored the relationships between people, place, memory and the natural world. Foraging Quipu extends this approach by transforming everyday acts of collecting into a shared artistic gesture, bringing together materials shaped by different environments and histories. Branches, seeds, roots, fungi, textiles, fragments of wood, plastics and other found objects coexist within the work, creating a poetic assembly that reflects both ecological interdependence and human responsibility towards the environments we inhabit. Foraging Quipu is presented alongside Cecilia Vicuña: Living Threads, the artist’s first major UK survey exhibition. The open call for Foraging Quipu is now live. Visitors are invited to contribute dried plant matter and found materials for inclusion in the installation, with collections accepted at Whitechapel Gallery 2-21 Sep 2026. See below for information on how to participate and guidance on responsible collecting.",
+      "ends_at": "2027-02-14T00:00:00Z",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/08/Foraging-Quipu-Featured-image-1.png",
+      "lat": 51.516,
+      "lng": -0.07,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-06T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Cecilia Vicuña: Foraging Quipu",
+      "url": "https://www.whitechapelgallery.org/exhibitions/cecilia-vicuna-foraging-quipu/",
+      "venue_name": "Whitechapel Gallery"
+    },
+    "payload": {
+      "date_text": "7 Oct 2026 - 14 Feb 2027",
+      "description": "Created through a public call for contributions, <em>Foraging Quipu</em> is a large-scale participatory installation by <strong>Cecilia Vicuña</strong>, bringing together plant matter, found objects and materials gathered by local communities.\nFirst realised at the Irish Museum of Modern Art (IMMA) in Dublin in 2025, the installation will be recreated at Whitechapel Gallery through a new public invitation to collect and contribute materials. Visitors are invited to gather dry plant matter and lightweight debris from their surroundings, creating a collective archive of ecological traces, chance encounters and personal acts of attention. The resulting installation will weave together these contributions into a suspended <em>quipu</em>, a form inspired by the ancient Andean system of knotted cords used for recording and communication.\nThroughout her practice, Vicuña has explored the relationships between people, place, memory and the natural world. <em>Foraging Quipu</em> extends this approach by transforming everyday acts of collecting into a shared artistic gesture, bringing together materials shaped by different environments and histories. Branches, seeds, roots, fungi, textiles, fragments of wood, plastics and other found objects coexist within the work, creating a poetic assembly that reflects both ecological interdependence and human responsibility towards the environments we inhabit.\n<em>Foraging Quipu</em> is presented alongside <a href=\"https://www.whitechapelgallery.org/exhibitions/cecilia-vicuna/\"><strong>Cecilia Vicuña: Living Threads</strong></a>, the artist’s first major UK survey exhibition.\n<strong>The open call for Foraging Quipu is now live. Visitors are invited to contribute dried plant matter and found materials for inclusion in the installation, with collections accepted at Whitechapel Gallery 2-21 Sep 2026. See below for information on how to participate and guidance on responsible collecting.</strong>",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/08/Foraging-Quipu-Featured-image-1.png",
+      "price_text": "Free entry",
+      "room": "Gallery 4",
+      "title": "Cecilia Vicuña: Foraging Quipu",
+      "url": "https://www.whitechapelgallery.org/exhibitions/cecilia-vicuna-foraging-quipu/"
+    },
+    "slug": "cecilia-vicuna-foraging-quipu"
+  },
+  {
+    "event": {
+      "address": "77-82 Whitechapel High Street, London E1 7QX",
+      "category": "exhibition",
+      "dedupe_key": "film-london-jarman-award-2026|2026-11-17|whitechapel",
+      "description": "Featuring work from the four artists shortlisted for the prestigious 2026 Film London Jarman Award, the exhibition showcases the incredible diversity within the world of artists’ filmmaking in the UK. The artists shortlisted this year are: Sadia Pineda Hameed, Ilona Sagar, Rhea Storr and Alia Syed. Inspired by visionary British filmmaker Derek Jarman, the Award recognises and supports artists working with the moving image. The shortlisted artists illustrate the spirit of inventiveness within moving image, highlighting the breadth of creativity and craftsmanship the medium has to offer, as well as its powerful ability to engage and provoke audiences. The Award comes with a £10,000 prize. The winner of the Film London Jarman Award will be announced on the 24 November 2026. The award is presented in partnership with the Whitechapel Gallery. Films Rhea Storr A Protest, a Celebration, a Mixed Message (2018), 12 mins Alia Syed The Dhaba – 1st Chapter: Mr Sharif and 2nd Chapter: Mr Bhari (2025), 30 mins Sadia Pineda Hameed Anak Where Did We Stay? (2026), 16 mins Ilona Sagar Other Actors (2025), 60 mins",
+      "ends_at": "2026-12-13T00:00:00Z",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/09/JA2026_Tour-composite_v1_16-9-wide-1024x576.png",
+      "lat": 51.516,
+      "lng": -0.07,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-17T00:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "The Film London Jarman Award 2026",
+      "url": "https://www.whitechapelgallery.org/exhibitions/the-film-london-jarman-award-2026/",
+      "venue_name": "Whitechapel Gallery"
+    },
+    "payload": {
+      "date_text": "Tue 17 Nov - Sun 13 Dec 2026",
+      "description": "Featuring work from the four artists shortlisted for the prestigious 2026 Film London Jarman Award, the exhibition showcases the incredible diversity within the world of artists’ filmmaking in the UK. The artists shortlisted this year are: <strong>Sadia Pineda Hameed</strong>, <strong>Ilona Sagar</strong>, <strong>Rhea Storr</strong> and <strong>Alia Syed</strong>.\nInspired by visionary British filmmaker Derek Jarman, the Award recognises and supports artists working with the moving image. The shortlisted artists illustrate the spirit of inventiveness within moving image, highlighting the breadth of creativity and craftsmanship the medium has to offer, as well as its powerful ability to engage and provoke audiences. The Award comes with a £10,000 prize.\nThe winner of the Film London Jarman Award will be announced on the <strong>24 November 2026</strong>. The award is presented in partnership with the Whitechapel Gallery.\n<strong>Films</strong>\n<strong>Rhea Storr</strong><br>\n<em>A Protest, a Celebration, a Mixed Message</em> (2018), 12 mins\n<strong>Alia Syed</strong><br>\n<em>The Dhaba – 1st Chapter: Mr Sharif and 2nd Chapter: Mr Bhari</em> (2025), 30 mins\n<strong>Sadia Pineda Hameed</strong><br>\n<em>Anak Where Did We Stay?</em> (2026), 16 mins\n<strong>Ilona Sagar</strong><br>\n<em>Other Actors</em> (2025), 60 mins",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/09/JA2026_Tour-composite_v1_16-9-wide-1024x576.png",
+      "price_text": "Free entry",
+      "room": "Assembly Room",
+      "title": "The Film London Jarman Award 2026",
+      "url": "https://www.whitechapelgallery.org/exhibitions/the-film-london-jarman-award-2026/"
+    },
+    "slug": "the-film-london-jarman-award-2026"
+  },
+  {
+    "event": {
+      "address": "77-82 Whitechapel High Street, London E1 7QX",
+      "category": "exhibition",
+      "dedupe_key": "this-must-be-place-artists-for-whitechapel-gallery|2026-10-07|whitechapel",
+      "description": "This Must Be the Place is a special exhibition and sale developed in collaboration with artists and their galleries to mark Whitechapel Gallery’s 125th anniversary and help support its future. Since opening its doors in East London in 1901, the Gallery has introduced its many audiences to groundbreaking artists and practices from across the globe, ensuring its role as a vital barometer and shaper of contemporary culture. This Must Be the Place continues that legacy by bringing together twenty-three international artists whose distinctive works are defining the present moment. Exclusively presented in the Gallery’s historic Assembly Room – site of the former Whitechapel Library – are newly commissioned or recent works from: Remi Ajani, Oliver Bak, Nicholas Bierk, Tim Breuer, Gareth Cadwallader, Andrew Cranston, Simone Kennedy Doig, Nat Faulkner, Lenz Geerk, Brett Goodroad, Sky Glabush, Jake Grewal, Nathanaëlle Herbelin, Esme Hodsoll, Mia Kokkoni, Aaron Kudi, Shigeo Otake, Marc Prats-Quintana, Shiwen, Ellen Siebers, Laurie Smith, Rafał Topolewski, and Arisa Yoshioka. All the artists share a commitment to painting as a practice. Taking both figurative and abstract approaches, they position the image not as a fixed statement but as a space of enquiry, where meaning is built through attention to surface, material, gesture and time. Many of the works in the exhibition resist the speed and immediacy of contemporary image culture. Instead, they invite a slower encounter, with content and meaning revealed gradually through layers of paint, accumulated marks, shifts of perspective and visual ambiguity. All works are offered for sale, with proceeds directly supporting Whitechapel Gallery, the artists and their representative galleries.",
+      "ends_at": "2026-11-08T00:00:00Z",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/08/tmbtp-scent.png",
+      "lat": 51.516,
+      "lng": -0.07,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-06T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "This Must Be the Place: Artists for Whitechapel Gallery",
+      "url": "https://www.whitechapelgallery.org/exhibitions/this-must-be-the-place-artists-for-whitechapel-gallery/",
+      "venue_name": "Whitechapel Gallery"
+    },
+    "payload": {
+      "date_text": "7 Oct - 8 Nov 2026",
+      "description": "<em><strong>This Must Be the Place</strong></em> is a special exhibition and sale developed in collaboration with artists and their galleries to mark Whitechapel Gallery’s 125th anniversary and help support its future.\nSince opening its doors in East London in 1901, the Gallery has introduced its many audiences to groundbreaking artists and practices from across the globe, ensuring its role as a vital barometer and shaper of contemporary culture. <em>This Must Be the Place  </em>continues that legacy by bringing together twenty-three international artists whose distinctive works are defining the present moment.\nExclusively presented in the Gallery’s historic Assembly Room – site of the former Whitechapel Library – are newly commissioned or recent works from: <strong>Remi Ajani, Oliver Bak, Nicholas Bierk, Tim Breuer, Gareth Cadwallader, Andrew Cranston, Simone Kennedy Doig, Nat Faulkner, Lenz Geerk, Brett Goodroad, Sky Glabush, Jake Grewal, Nathanaëlle Herbelin, Esme Hodsoll, Mia Kokkoni, Aaron Kudi, Shigeo Otake, Marc Prats-Quintana, Shiwen, Ellen Siebers, Laurie Smith, Rafał Topolewski</strong>, and <strong>Arisa Yoshioka</strong>.\nAll the artists share a commitment to painting as a practice. Taking both figurative and abstract approaches, they position the image not as a fixed statement but as a space of enquiry, where meaning is built through attention to surface, material, gesture and time. Many of the works in the exhibition resist the speed and immediacy of contemporary image culture. Instead, they invite a slower encounter, with content and meaning revealed gradually through layers of paint, accumulated marks, shifts of perspective and visual ambiguity.\nAll works are offered for sale, with proceeds directly supporting Whitechapel Gallery, the artists and their representative galleries.",
+      "image_url": "https://www.whitechapelgallery.org/wp-content/uploads/2026/08/tmbtp-scent.png",
+      "price_text": "Free entry",
+      "room": "Assembly Room",
+      "title": "This Must Be the Place: Artists for Whitechapel Gallery",
+      "url": "https://www.whitechapelgallery.org/exhibitions/this-must-be-the-place-artists-for-whitechapel-gallery/"
+    },
+    "slug": "this-must-be-the-place-artists-for-whitechapel-gallery"
+  }
+]
