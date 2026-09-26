@@ -97,6 +97,7 @@ fn runner(
         }),
         health: HealthChecker::new(HealthConfig::default(), None),
         source_timeout: timeout,
+        enrich: None,
     }
 }
 
@@ -271,6 +272,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
         }),
         health: HealthChecker::new(HealthConfig::default(), None),
         source_timeout: Duration::from_secs(5),
+        enrich: None,
     };
 
     let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {

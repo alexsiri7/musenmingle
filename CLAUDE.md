@@ -15,7 +15,7 @@ INSTA_UPDATE=always cargo test --test <name>                 # rewrite snapshots
 ```
 
 CI (`.github/workflows/ci.yml`) runs fmt, clippy and tests against a
-`postgres:17` service with `MUSENMINGLE_REQUIRE_DB=1`, plus a `docker build`.
+`pgvector/pgvector:pg17` service (pgvector, like production; `tests/common` installs it in schema `extensions` per test database) with `MUSENMINGLE_REQUIRE_DB=1`, plus a `docker build`.
 There is no local Docker; never try to use testcontainers.
 
 ## Invariants — do not break these
@@ -23,22 +23,40 @@ There is no local Docker; never try to use testcontainers.
 1. **Never touch schemas other than `events`.** Every SQL object and query is
    schema-qualified `events.`; the migration table is `events._sqlx_migrations`
    (`sqlx.toml` + `src/db.rs`). No extensions, no objects in `public`, no
-   `CREATE SCHEMA` in migrations. `tests/schema_isolation.rs` must keep
+   `CREATE SCHEMA` in migrations. The one exception is *using* pgvector's
+   type and operators from the owner's `extensions` schema
+   (`extensions.vector`, `OPERATOR(extensions.<=>)`,
+   `extensions.vector_cosine_ops`) for `events.event_embeddings`; that
+   migration is idempotent and a no-op without the grant (see its header). `tests/schema_isolation.rs` must keep
    passing. Do not use `sqlx migrate run` with a different config, and never
    run anything against the production database.
 2. **Migrations are append-only.** Never edit or delete a file in
    `migrations/` once merged; add a new timestamped file instead.
 3. **No LLM parsing.** All extraction is deterministic code (JSON-LD first,
-   then CSS selectors).
+   then CSS selectors); scrapers never call a model. AI enrichment
+   (`src/enrich/`) runs only AFTER ingest, only on data already stored in
+   `events.events` (title, venue, dates, category, source tags, price, the
+   stored excerpt, source names: `enrich::input`), never fetches pages and
+   never sends visitor data. Its output is validated strictly
+   (`enrich::output::validate`: fixed vocabularies, lengths, grounding,
+   artists/evidence quoted from the input), always labelled as AI-written
+   on pages and in JSON (`ai.label`), withdrawn when its input hash changes
+   (`enrich::sync`), and never presented as the venue's words. Every call
+   goes in the `events.enrichment_calls` ledger and must fit the daily/run
+   caps; the chat model must have a zero-retention `events.model_prices`
+   row (`/about` promises it). Changing the prompt/schema/validation means
+   bumping `PROMPT_VERSION`; changing the embedding text means bumping
+   `EMBED_VERSION`.
 4. **Every scraper needs a saved fixture + an `insta` snapshot test** of its
    normalised output (see `docs/adding-a-scraper.md`), and a wiremock fetch
    test. Tests never hit the real network.
 5. **robots.txt, the MuseNMingleBot User-Agent and the per-domain rate limit are
    enforced by `FetchContext` and must not be bypassed.** Sources get network
    access only through `FetchContext`; do not create a `reqwest::Client` in a
-   source or expose FetchContext's client. (The GitHub issue filer in
-   `src/github.rs` is an authenticated API client, not a source, and is the
-   only other HTTP client.)
+   source or expose FetchContext's client. (The other HTTP clients are
+   authenticated API clients, not sources, and never fetch web pages: the
+   GitHub issue filer in `src/github.rs`, the Requesty client in
+   `src/enrich/requesty.rs` and the ntfy notifier in `src/notify.rs`.)
 6. Runtime-checked sqlx queries only (`sqlx::query*` + `AssertSqlSafe` for
    constant-built strings); no `query!` macros — builds must not need a DB.
 7. Secrets (API keys, tokens) are never logged; FetchContext redacts query
@@ -73,7 +91,9 @@ There is no local Docker; never try to use testcontainers.
 11. **`/about` must stay true.** It makes public promises (robots.txt, the
     MuseNMingleBot UA linking to `/about#for-venues`, 2 s default rate limit,
     excerpts, credited thumbnails, no cookies, removal within 7 days via
-    `docs/venue-requests.md`, the `/contact` form). If you change any of that
+    `docs/venue-requests.md`, the `/contact` form, and `#ai`: what the AI
+    sees, the "✨ AI note" label, zero-retention chat model, the embedding
+    model's retention, no visitor data). If you change any of that
     behaviour, update the page (`web::about`) in the same PR. Public HTML
     never links into the private GitHub repo (`github.com/alexsiri7/…`;
     tests assert it), and a contact request's reply email never goes to
@@ -91,6 +111,13 @@ There is no local Docker; never try to use testcontainers.
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
 - `src/thumbs.rs` — thumbnailer (fetch once, resize, store in `events.thumbnails`)
+- `src/enrich/` — AI enrichment + embeddings after ingest: `input` (what the
+  model sees, input hash), `prompt.txt` + `output` (vocabularies, schema,
+  validation), `requesty` (client, credit-exhaustion detection), `embed`
+  (embedding text), `store` (its SQL, "More like this"), `mod` (the pass,
+  caps, ntfy alert). `examples/enrich_eval.rs` evaluates prompts/models
+  without a database.
+- `src/notify.rs` — ntfy owner alerts
 - `src/contact.rs` — `/contact` venue requests (spam checks, `venue-request` issues, pending filing)
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it

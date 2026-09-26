@@ -452,6 +452,12 @@ async fn event_by_id_includes_every_source_link_and_unknown_ids_are_404() {
             "image_credit": null,
             "category": "talk",
             "tags": ["art", "drawing"],
+            "medium_tags": [],
+            "format_tags": [],
+            "good_for": [],
+            "vibe_tags": [],
+            "is_opening": null,
+            "ai": null,
             "sources": [
                 {
                     "source": "barbican",

@@ -18,6 +18,15 @@ pub struct TestDb {
     pub options: PgConnectOptions,
 }
 
+/// Whether the test server has pgvector (then every fresh database has it in
+/// schema `extensions`, like production).
+pub async fn has_pgvector(pool: &PgPool) -> bool {
+    sqlx::query_scalar("SELECT to_regtype('extensions.vector') IS NOT NULL")
+        .fetch_one(pool)
+        .await
+        .unwrap_or(false)
+}
+
 impl TestDb {
     /// Create a fresh, empty database, or `None` (with a notice) if
     /// `TEST_DATABASE_URL` is not set.
@@ -39,6 +48,29 @@ impl TestDb {
             .await
             .expect("CREATE DATABASE");
         let options = admin.clone().database(&name);
+        // Mirror the shared production database: pgvector installed in an
+        // `extensions` schema (by the owner, not by our migrations). Skipped
+        // when the server has no pgvector; embeddings then stay off.
+        let mut fresh = options
+            .connect()
+            .await
+            .expect("connect to the fresh database");
+        let has_vector: bool = sqlx::query_scalar(
+            "SELECT EXISTS (SELECT 1 FROM pg_available_extensions WHERE name = 'vector')",
+        )
+        .fetch_one(&mut fresh)
+        .await
+        .expect("pg_available_extensions");
+        if has_vector {
+            sqlx::raw_sql(
+                "CREATE SCHEMA IF NOT EXISTS extensions;
+                 CREATE EXTENSION IF NOT EXISTS vector SCHEMA extensions;",
+            )
+            .execute(&mut fresh)
+            .await
+            .expect("create pgvector in schema extensions");
+        }
+        drop(fresh);
         Some(TestDb {
             name,
             admin_url,

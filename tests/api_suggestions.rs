@@ -418,6 +418,7 @@ fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
         factory: Box::new(|_| Err(SkipReason::UnknownKey)),
         health: HealthChecker::new(HealthConfig::default(), Some(filer)),
         source_timeout: Duration::from_secs(1),
+        enrich: None,
     }
 }
 

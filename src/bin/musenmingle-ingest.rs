@@ -7,9 +7,12 @@
 use anyhow::Context;
 use chrono::Utc;
 use musenmingle::config::Config;
+use musenmingle::enrich::Enricher;
+use musenmingle::enrich::requesty::Requesty;
 use musenmingle::fetch::FetchContext;
 use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
 use musenmingle::health::{HealthChecker, HealthConfig};
+use musenmingle::notify::{LogNotifier, Notifier, Ntfy};
 use musenmingle::runner::{RunSummary, Runner};
 use musenmingle::{db, sources};
 
@@ -21,6 +24,9 @@ async fn main() -> anyhow::Result<()> {
         .await
         .context("connecting to the database")?;
     db::migrate(&pool).await.context("running migrations")?;
+    if let Err(e) = db::ensure_optional_schema(&pool).await {
+        tracing::warn!(error = %e, "optional schema (event embeddings) not applied");
+    }
 
     let filer: Option<Box<dyn IssueFiler>> = match &config.github_token {
         Some(token) => Some(Box::new(GitHubIssueFiler::new(
@@ -34,6 +40,27 @@ async fn main() -> anyhow::Result<()> {
         }
     };
 
+    let enrich = match &config.requesty_api_key {
+        Some(key) => {
+            let notifier: Box<dyn Notifier> = match &config.ntfy_topic {
+                Some(topic) => Box::new(Ntfy::new(&config.ntfy_base_url, topic)?),
+                None => {
+                    tracing::warn!("NTFY_TOPIC not set; owner alerts will only be logged");
+                    Box::new(LogNotifier)
+                }
+            };
+            Some(Enricher {
+                client: Requesty::new(&config.requesty_base_url, key)?,
+                notifier,
+                config: config.enrich.clone(),
+            })
+        }
+        None => {
+            tracing::info!("REQUESTY_API_KEY not set; AI enrichment and embeddings are off");
+            None
+        }
+    };
+
     let factory_config = config.clone();
     let runner = Runner {
         pool,
@@ -41,6 +68,7 @@ async fn main() -> anyhow::Result<()> {
         factory: Box::new(move |row| sources::build(row, &factory_config)),
         health: HealthChecker::new(HealthConfig::default(), filer),
         source_timeout: config.source_timeout,
+        enrich,
     };
     match runner.run_once(Utc::now()).await? {
         RunSummary::Locked => tracing::info!("skipped: another run in progress"),

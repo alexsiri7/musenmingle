@@ -85,6 +85,19 @@ pub async fn migrate(pool: &PgPool) -> Result<(), DbError> {
     Ok(())
 }
 
+/// Re-run the idempotent embeddings migration (see its header): it creates
+/// `events.event_embeddings` only once pgvector is usable (the owner granted
+/// USAGE on schema `extensions`), so the ingest calls this on every start and
+/// embeddings switch on without a new migration.
+pub async fn ensure_optional_schema(pool: &PgPool) -> Result<(), sqlx::Error> {
+    sqlx::raw_sql(include_str!(
+        "../migrations/20260927000002_event_embeddings.sql"
+    ))
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

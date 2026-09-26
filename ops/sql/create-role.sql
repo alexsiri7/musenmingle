@@ -15,7 +15,8 @@
 -- and use it as DATABASE_URL for musenmingle-api and musenmingle-ingest.
 --
 -- Result: `musenmingle` can log in, has USAGE + CREATE on schema `events` only
--- (it creates and therefore owns the tables via migrations), and gets no
+-- (it creates and therefore owns the tables via migrations), USAGE on the
+-- `extensions` schema when it exists (to use pgvector's type), and no other
 -- privileges on any other schema. No psql meta-commands are used, so the
 -- script can also be run verbatim by tests (tests/schema_isolation.rs).
 
@@ -59,6 +60,23 @@ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA events TO musenmingle;
 ALTER DEFAULT PRIVILEGES IN SCHEMA events GRANT ALL PRIVILEGES ON TABLES TO musenmingle;
 ALTER DEFAULT PRIVILEGES IN SCHEMA events GRANT ALL PRIVILEGES ON SEQUENCES TO musenmingle;
 ALTER DEFAULT PRIVILEGES IN SCHEMA events GRANT EXECUTE ON FUNCTIONS TO musenmingle;
+
+-- 3b. pgvector: USAGE (only) on the owner's `extensions` schema, where the
+--     shared database has the `vector` extension installed, so migrations can
+--     use the `extensions.vector` type for event embeddings. musenmingle
+--     cannot create anything there. Skipped when the schema does not exist or
+--     this owner may not grant on it.
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname = 'extensions') THEN
+        BEGIN
+            GRANT USAGE ON SCHEMA extensions TO musenmingle;
+        EXCEPTION WHEN insufficient_privilege THEN
+            RAISE NOTICE 'cannot grant USAGE on schema extensions (run as its owner): embeddings stay off';
+        END;
+    END IF;
+END
+$$;
 
 -- 4. Nothing elsewhere. Explicitly strip anything that may have been granted
 --    to the role directly (PUBLIC grants are shared by every role and are

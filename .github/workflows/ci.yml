@@ -19,7 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:17
+        # pgvector, like the shared production database (installed in schema
+        # `extensions` by tests/common for each test database).
+        image: pgvector/pgvector:pg17
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres

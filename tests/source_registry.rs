@@ -33,6 +33,11 @@ async fn every_seeded_source_has_an_implementation() {
         source_timeout: Duration::from_secs(1),
         suggestions: Default::default(),
         cors_origins: Vec::new(),
+        requesty_api_key: None,
+        requesty_base_url: String::new(),
+        enrich: Default::default(),
+        ntfy_topic: None,
+        ntfy_base_url: String::new(),
     };
     assert!(!rows.is_empty());
     for row in &rows {

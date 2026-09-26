@@ -130,6 +130,11 @@ mod tests {
             source_timeout: Duration::from_secs(1),
             suggestions: Default::default(),
             cors_origins: Vec::new(),
+            requesty_api_key: None,
+            requesty_base_url: String::new(),
+            enrich: Default::default(),
+            ntfy_topic: None,
+            ntfy_base_url: String::new(),
         };
         match build(row, &config) {
             Ok(_) => panic!("{:?} unexpectedly built", row.key),

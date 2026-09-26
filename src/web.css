@@ -126,3 +126,17 @@ a.button:hover { filter: brightness(1.1); }
 .contact .small { margin: 0; }
 .contact button { align-self: flex-start; margin-top: 8px; }
 .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+/* AI enrichment: card one-liner, tag chips, the labelled AI note. */
+.one-liner { color: var(--muted); font-size: 0.9rem; margin: 4px 0; }
+.badge.opening { color: var(--accent); border-color: currentColor; }
+.tag-chips { margin: 8px 0; }
+.tag-chip {
+  display: inline-block; margin: 0 4px 4px 0; padding: 1px 10px; border: 1px solid var(--accent);
+  border-radius: 999px; font-size: 0.85rem; text-decoration: none;
+}
+.tag-chip.format { border-style: dashed; }
+.ai-note { margin: 16px 0; padding: 12px; border: 1px dashed var(--line); border-radius: 8px; background: var(--card); }
+.ai-note h2 { margin-top: 0; font-size: 1.1rem; }
+.ai-label { font-size: 0.8rem; font-weight: 400; margin-left: 6px; }
+.similar ul { padding-left: 20px; }
+.similar li { margin-bottom: 6px; }
