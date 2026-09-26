@@ -230,6 +230,18 @@
     return isMidnight(e.starts_at) && (!e.ends_at || isMidnight(e.ends_at));
   }
 
+  /** A saved item as the event fields the card needs, from its snapshot. */
+  function fromSnapshot(item) {
+    return {
+      id: item.id,
+      title: item.snapshot.title,
+      venue_name: item.snapshot.venue,
+      starts_at: item.snapshot.starts_at,
+      ends_at: item.snapshot.ends_at,
+      all_day: isAllDay(item.snapshot),
+    };
+  }
+
   /** The London date of `iso` plus `addDays`, as an iCalendar DATE. */
   function icsDate(iso, addDays) {
     var p = parts(iso);
@@ -293,6 +305,7 @@
     dayOfMonth: dayOfMonth,
     price: price,
     toICS: toICS,
+    fromSnapshot: fromSnapshot,
   };
   if (typeof module === "object" && module.exports) {
     module.exports = api;
@@ -370,14 +383,7 @@
 
   function renderCard(tpl, item, event, nowIso, gone) {
     var node = tpl.content.firstElementChild.cloneNode(true);
-    var e = event || {
-      id: item.id,
-      title: item.snapshot.title,
-      venue_name: item.snapshot.venue,
-      starts_at: item.snapshot.starts_at,
-      ends_at: item.snapshot.ends_at,
-      all_day: item.snapshot.all_day,
-    };
+    var e = event || fromSnapshot(item);
     var href = "/events/" + encodeURIComponent(e.id);
     var title = slot(node, "title");
     title.textContent = e.title;
@@ -538,7 +544,7 @@
                 venue: item.snapshot.venue,
                 starts_at: item.snapshot.starts_at,
                 ends_at: item.snapshot.ends_at,
-                all_day: item.snapshot.all_day,
+                all_day: isAllDay(item.snapshot),
               };
         });
         var blob = new Blob([toICS(events, new Date().toISOString(), root.location.origin)], {

@@ -148,3 +148,12 @@ test("toICS writes all-day events as London dates", () => {
   assert.ok(timed.includes("DTSTART:20261002T230000Z"));
   assert.ok(!timed.some((l) => l.startsWith("DTEND")));
 });
+
+test("fromSnapshot reads saves from before all_day as the .ics does", () => {
+  const card = (snapshot) => app.fromSnapshot({ id: ID1, snapshot: { title: "x", ...snapshot } });
+  const legacy = card({ starts_at: "2026-10-02T23:00:00Z", ends_at: null });
+  assert.equal(legacy.all_day, true);
+  assert.equal(app.when(legacy.starts_at, legacy.ends_at, "2026-10-01T12:00:00Z", legacy.all_day), "Sat 3 Oct 2026, all day");
+  assert.equal(card({ starts_at: "2026-10-03T17:00:00Z", ends_at: null }).all_day, false);
+  assert.equal(card({ starts_at: "2026-10-02T23:00:00Z", ends_at: null, all_day: false }).all_day, false);
+});
