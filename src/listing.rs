@@ -32,6 +32,9 @@ pub struct EventFilter {
     /// Empty = any category.
     pub categories: Vec<Category>,
     pub free_only: bool,
+    /// Source keys; empty = any. An event matches if any of its listings
+    /// comes from one of them.
+    pub sources: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -152,6 +155,14 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
                     _ => return Err("free must be true or false".into()),
                 }
             }
+            "source" => {
+                if !is_source_key(&value) {
+                    return Err(format!("invalid source {value:?}"));
+                }
+                if !filter.sources.iter().any(|s| *s == value) {
+                    filter.sources.push(value.into_owned());
+                }
+            }
             "near" => near = Some(parse_near(&value)?),
             "radius_km" => {
                 let r: f64 = value
@@ -212,6 +223,13 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
         order,
         limit: limit.unwrap_or(DEFAULT_LIMIT),
     })
+}
+
+/// Source keys are kebab-case ASCII (`serpentine-galleries`).
+pub fn is_source_key(s: &str) -> bool {
+    (1..=64).contains(&s.len())
+        && s.bytes()
+            .all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-')
 }
 
 fn parse_date(name: &str, value: &str) -> Result<NaiveDate, String> {
@@ -278,6 +296,12 @@ mod tests {
     }
 
     #[test]
+    fn sources_repeat_and_dedupe() {
+        let q = parse_query("source=barbican&source=design-museum&source=barbican").unwrap();
+        assert_eq!(q.filter.sources, ["barbican", "design-museum"]);
+    }
+
+    #[test]
     fn rejects_bad_input() {
         for raw in [
             "from=2026-10-2x",
@@ -293,6 +317,9 @@ mod tests {
             "limit=101",
             "cursor=zz",
             "bogus=1",
+            "source=",
+            "source=Barbican",
+            "source=a%20b",
         ] {
             assert!(parse_query(raw).is_err(), "{raw}");
         }

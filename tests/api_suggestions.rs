@@ -206,6 +206,72 @@ async fn domains_we_already_scrape_are_already_covered() {
 }
 
 #[tokio::test]
+async fn refused_sites_are_answered_with_the_reason_and_not_filed() {
+    let Some(db) = TestDb::create("refused_sites_are_answered_with_the_reason_and_not_filed").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let github = MockServer::start().await;
+    mock_create(&github, ResponseTemplate::new(500), 0).await;
+    let app = app(&pool, SuggestionConfig::default(), Some(filer(&github)));
+
+    // Seeded refusals, matched by registrable domain.
+    let (status, _, body) = post(
+        &app,
+        json!({ "url": "https://southbankcentre.co.uk/whats-on/talks" }),
+        None,
+    )
+    .await;
+    assert_eq!(status, StatusCode::CONFLICT, "{body}");
+    assert_eq!(
+        body,
+        json!({
+            "status": "refused",
+            "message": "We looked at Southbank Centre on 25 September 2026 and couldn't include it: \
+                        it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+            "refused": {
+                "name": "Southbank Centre",
+                "domain": "southbankcentre.co.uk",
+                "url": "https://www.southbankcentre.co.uk/whats-on",
+                "reason_code": "bot_blocked",
+                "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+                "checked_on": "2026-09-25",
+                "issue_url": "https://github.com/alexsiri7/thaleia/issues/6",
+            },
+        })
+    );
+    let (status, _, body) = post(
+        &app,
+        json!({ "url": "https://www.creativemornings.com/cities/lon" }),
+        None,
+    )
+    .await;
+    assert_eq!(status, StatusCode::CONFLICT, "{body}");
+    assert_eq!(body["refused"]["reason_code"], "robots_disallowed");
+
+    // Recorded (they count toward the rate limit) but never filed.
+    let stored = rows(&pool).await;
+    assert_eq!(
+        stored,
+        [
+            (
+                "southbankcentre.co.uk".to_string(),
+                "refused".to_string(),
+                None
+            ),
+            (
+                "creativemornings.com".to_string(),
+                "refused".to_string(),
+                None
+            ),
+        ]
+    );
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn rate_limit_per_client_hour_and_day() {
     let Some(db) = TestDb::create("rate_limit_per_client_hour_and_day").await else {
         return;

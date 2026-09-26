@@ -10,7 +10,8 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `from`, `to`, `category`, `free`, `near=<area>` and `cursor`),
+takes `from`, `to`, `category`, `free`, `near=<area>`, `source` and
+`cursor`),
 `GET /events/{id}`, `GET /sources`, `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css`. HTML responses carry a strict
@@ -30,6 +31,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `to` | `2026-10-05` | Events starting on or before this London date (inclusive) |
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
+| `source` | `source=barbican&source=ticketmaster` | Events listed by any of the given sources (keys as in `GET /v1/sources`). Repeatable; an event found by several sources appears under each |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>`, nearest first. Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
@@ -146,6 +148,27 @@ Every configured source, ordered by `key`.
 }
 ```
 
+The response also has `refused`: sites we checked and decided not to
+scrape, most recently checked first:
+
+```json
+"refused": [
+  {
+    "name": "Southbank Centre",
+    "domain": "southbankcentre.co.uk",
+    "url": "https://www.southbankcentre.co.uk/whats-on",
+    "reason_code": "bot_blocked",
+    "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+    "checked_on": "2026-09-25",
+    "issue_url": "https://github.com/alexsiri7/thaleia/issues/6"
+  }
+]
+```
+
+`reason_code` is one of `robots_disallowed`, `bot_blocked`,
+`no_event_data`, `terms`, `other`; `checked_on` is a date; `issue_url` may be
+`null`.
+
 - `kind`: `api` or `scraper`.
 - `last_run`: the most recent run, or `null` if the source never ran.
 - `status`: `broken` while a `scraper-broken` issue is open (its link is in
@@ -161,6 +184,9 @@ answers, `503` with `"status": "unavailable"` otherwise.
 
 Suggest a site to scrape: body `{"url": "https://...", "note": "optional"}`.
 Responses: `201` `{"status": "accepted", "domain", "github_issue"}`, `200`
-`already_suggested`, `409` `already_covered` (with `source`), `400` `invalid`
+`already_suggested`, `409` `already_covered` (with `source`), `409`
+`refused` for a site in `refused` above (with `message`, e.g. "We looked at
+Southbank Centre on 25 September 2026 and couldn't include it: …", and the
+`refused` entry; nothing is filed), `400` `invalid`
 (with `error`), `429` `rate_limited` (with `retry_after_secs` and a
 `Retry-After` header).

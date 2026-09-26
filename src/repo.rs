@@ -3,7 +3,7 @@
 //! Runtime-checked queries only (`sqlx::query*`), no compile-time macros, so
 //! builds never need a live database.
 
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use rust_decimal::Decimal;
 use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
@@ -604,32 +604,38 @@ pub struct ListedEvent {
     pub distance_km: Option<f64>,
 }
 
-/// `$1`..`$4` of both listing queries. An event with an end (`ends_at` set),
-/// whatever its category, matches when its range overlaps the window, a
-/// one-off when it starts inside it.
-const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ends_at, starts_at) >= $1)
-    AND ($2::timestamptz IS NULL OR starts_at < $2)
-    AND (cardinality($3::text[]) = 0 OR category = ANY($3))
-    AND (NOT $4 OR is_free)";
+/// `$1`..`$5` of both listing queries (on `events.events ev`). An event with
+/// an end (`ends_at` set), whatever its category, matches when its range
+/// overlaps the window, a one-off when it starts inside it. `$5` (source
+/// keys) matches an event listed by ANY of those sources.
+const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, ev.starts_at) >= $1)
+    AND ($2::timestamptz IS NULL OR ev.starts_at < $2)
+    AND (cardinality($3::text[]) = 0 OR ev.category = ANY($3))
+    AND (NOT $4 OR ev.is_free)
+    AND (cardinality($5::text[]) = 0 OR EXISTS (
+        SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
+        WHERE es.event_id = ev.id AND s.key = ANY($5)))";
 
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
     let categories: Vec<&str> = f.categories.iter().map(|c| c.as_str()).collect();
+    let sources: Vec<&str> = f.sources.iter().map(String::as_str).collect();
     let fetch = query.limit + 1;
     match &query.order {
         EventOrder::ByStart { after } => {
             sqlx::query_as(AssertSqlSafe(format!(
-                "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events
+                "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
                  WHERE {LISTING_FILTER}
-                   AND ($5::timestamptz IS NULL OR (starts_at, id) > ($5, $6::uuid))
-                 ORDER BY starts_at, id LIMIT $7"
+                   AND ($6::timestamptz IS NULL OR (starts_at, id) > ($6, $7::uuid))
+                 ORDER BY starts_at, id LIMIT $8"
             )))
             .bind(f.from)
             .bind(f.until)
             .bind(&categories)
             .bind(f.free_only)
+            .bind(&sources)
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
             .bind(fetch)
@@ -641,22 +647,23 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             sqlx::query_as(AssertSqlSafe(format!(
                 "SELECT * FROM (
                      SELECT {EVENT_COLS},
-                         2 * $11::float8 * asin(least(1, sqrt(
-                             power(sin(radians(lat - $5) / 2), 2)
-                             + cos(radians($5)) * cos(radians(lat))
-                               * power(sin(radians(lng - $6) / 2), 2)))) AS distance_km
-                     FROM events.events
+                         2 * $12::float8 * asin(least(1, sqrt(
+                             power(sin(radians(lat - $6) / 2), 2)
+                             + cos(radians($6)) * cos(radians(lat))
+                               * power(sin(radians(lng - $7) / 2), 2)))) AS distance_km
+                     FROM events.events ev
                      WHERE {LISTING_FILTER}
-                       AND lat BETWEEN $7 AND $8 AND lng BETWEEN $9 AND $10
+                       AND lat BETWEEN $8 AND $9 AND lng BETWEEN $10 AND $11
                  ) e
-                 WHERE distance_km <= $12
-                   AND ($13::float8 IS NULL OR (distance_km, id) > ($13, $14::uuid))
-                 ORDER BY distance_km, id LIMIT $15"
+                 WHERE distance_km <= $13
+                   AND ($14::float8 IS NULL OR (distance_km, id) > ($14, $15::uuid))
+                 ORDER BY distance_km, id LIMIT $16"
             )))
             .bind(f.from)
             .bind(f.until)
             .bind(&categories)
             .bind(f.free_only)
+            .bind(&sources)
             .bind(near.lat)
             .bind(near.lng)
             .bind(b.min_lat)
@@ -943,6 +950,59 @@ pub async fn insert_duplicate_suggestion(
     sqlx::query(
         "INSERT INTO events.site_suggestions (url, domain, note, submitter_ip_hash, status)
          VALUES ($1, $2, $3, $4, 'duplicate')",
+    )
+    .bind(&s.url)
+    .bind(&s.domain)
+    .bind(&s.note)
+    .bind(&s.submitter_ip_hash)
+    .execute(&mut **tx)
+    .await?;
+    Ok(())
+}
+
+/// A site we decided not to scrape (`events.refused_sources`).
+#[derive(Debug, Clone, FromRow, PartialEq, Eq)]
+pub struct RefusedSourceRow {
+    pub domain: String,
+    pub name: String,
+    pub url: String,
+    pub reason_code: String,
+    pub reason_text: String,
+    pub checked_on: NaiveDate,
+    pub issue_url: Option<String>,
+}
+
+const REFUSED_COLS: &str = "domain, name, url, reason_code, reason_text, checked_on, issue_url";
+
+/// Every refused site, most recently checked first.
+pub async fn refused_sources(pool: &PgPool) -> sqlx::Result<Vec<RefusedSourceRow>> {
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT {REFUSED_COLS} FROM events.refused_sources ORDER BY checked_on DESC, name"
+    )))
+    .fetch_all(pool)
+    .await
+}
+
+/// Refused sites, inside a suggestion transaction.
+pub async fn refused_source_list(
+    tx: &mut Transaction<'_, Postgres>,
+) -> sqlx::Result<Vec<RefusedSourceRow>> {
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT {REFUSED_COLS} FROM events.refused_sources ORDER BY domain"
+    )))
+    .fetch_all(&mut **tx)
+    .await
+}
+
+/// Record a suggestion for a refused site (counts toward the rate limit;
+/// never filed).
+pub async fn insert_refused_suggestion(
+    tx: &mut Transaction<'_, Postgres>,
+    s: &NewSuggestion,
+) -> sqlx::Result<()> {
+    sqlx::query(
+        "INSERT INTO events.site_suggestions (url, domain, note, submitter_ip_hash, status)
+         VALUES ($1, $2, $3, $4, 'refused')",
     )
     .bind(&s.url)
     .bind(&s.domain)

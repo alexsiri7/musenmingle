@@ -102,7 +102,11 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   every filtered view is a shareable URL; results are cards with a "More"
   link on the same cursor as the API. `GET /events/{id}` shows every field,
   the description as escaped paragraphs, each source link and an
-  OpenStreetMap link. `GET /sources` is the `/v1/sources` data as a table.
+  OpenStreetMap link. `GET /sources` is the `/v1/sources` data as a table;
+  each source links to `/?source=<key>` (only its events, with a clearable
+  "From: <source>" chip), and "Sites we couldn't use" lists
+  `events.refused_sources` (why a venue is missing; suggestions for those
+  domains get the reason instead of a new issue).
   The footer's "Suggest a venue site" form posts to `POST /suggest`, which
   runs the same validation, dedupe, rate limit and issue filing as
   `POST /v1/suggestions`. Templates are [maud](https://maud.lambda.xyz)
