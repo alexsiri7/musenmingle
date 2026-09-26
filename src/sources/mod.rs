@@ -17,6 +17,7 @@ pub mod clerkenwell_design_week;
 pub mod courtauld;
 pub mod dandad;
 pub mod design_museum;
+pub mod four_corners;
 pub mod garden_museum;
 pub mod goldsmiths_cca;
 pub mod headstone_manor;
@@ -88,6 +89,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         courtauld::KEY => Ok(Box::new(courtauld::Courtauld::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
+        four_corners::KEY => Ok(Box::new(four_corners::FourCorners::new(base))),
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
         goldsmiths_cca::KEY => Ok(Box::new(goldsmiths_cca::GoldsmithsCca::new(base))),
         headstone_manor::KEY => Ok(Box::new(headstone_manor::HeadstoneManor::new(base))),
