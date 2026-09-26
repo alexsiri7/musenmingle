@@ -131,9 +131,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
 - **Read API** (`src/api.rs`, `src/listing.rs`; documented in
   [`docs/api.md`](docs/api.md)): `GET /v1/events` filters by London date
   window (events with an end date match on range overlap), category, free,
-  and `near`+`radius_km` (bounding-box prefilter on the lat/lng index, then
-  haversine, nearest first), with keyset cursor pagination and every event's
-  source links; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
+  `price_max`, time of day (`when=evening|after_work|weekend|daytime`, in
+  London time) and `near`+`radius_km` (bounding-box prefilter on the lat/lng
+  index, then haversine, nearest first), with keyset cursor pagination,
+  every event's source links and per-option `counts`; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
   and `pending`/`unconfigured`/`healthy`/`degraded`/`broken` status (skips
   recorded by ingest). Read-only; browser access is
   limited to `CORS_ORIGINS`.

@@ -30,7 +30,9 @@ use uuid::Uuid;
 use crate::health::{HealthStatus, RunStats};
 use crate::listing::{self, Cursor, EventOrder};
 use crate::model::SourceKind;
-use crate::repo::{self, EventRow, RefusedSourceRow, SourceStatusRow, ThumbnailMeta};
+use crate::repo::{
+    self, EventRow, ListingCounts, RefusedSourceRow, SourceStatusRow, ThumbnailMeta,
+};
 use crate::suggestions::{Outcome, Suggestions};
 
 #[derive(Clone)]
@@ -430,13 +432,71 @@ pub(crate) async fn event_page(
     Ok((events, next_cursor))
 }
 
+/// How many events each `when=` and price option would list (see
+/// `repo::listing_counts`).
+#[derive(Debug, Serialize)]
+pub(crate) struct CountsJson {
+    pub(crate) when: WhenCountsJson,
+    pub(crate) price: PriceCountsJson,
+}
+
+#[derive(Debug, Serialize)]
+pub(crate) struct WhenCountsJson {
+    pub(crate) evening: i64,
+    pub(crate) after_work: i64,
+    pub(crate) weekend: i64,
+    pub(crate) daytime: i64,
+}
+
+#[derive(Debug, Serialize)]
+pub(crate) struct PriceCountsJson {
+    pub(crate) free: i64,
+    pub(crate) max_10: i64,
+    pub(crate) max_20: i64,
+    pub(crate) unknown: i64,
+}
+
+impl From<ListingCounts> for CountsJson {
+    fn from(c: ListingCounts) -> Self {
+        Self {
+            when: WhenCountsJson {
+                evening: c.evening,
+                after_work: c.after_work,
+                weekend: c.weekend,
+                daytime: c.daytime,
+            },
+            price: PriceCountsJson {
+                free: c.free,
+                max_10: c.max_10,
+                max_20: c.max_20,
+                unknown: c.unknown,
+            },
+        }
+    }
+}
+
+/// Facet counts for `query` (shared by `GET /v1/events` and the home page).
+pub(crate) async fn event_counts(
+    pool: &PgPool,
+    query: &listing::EventQuery,
+) -> sqlx::Result<CountsJson> {
+    let near = match &query.order {
+        EventOrder::ByDistance { near, .. } => Some(near),
+        EventOrder::ByStart { .. } => None,
+    };
+    Ok(repo::listing_counts(pool, &query.filter, near)
+        .await?
+        .into())
+}
+
 async fn list_events(
     State(state): State<AppState>,
     RawQuery(raw): RawQuery,
 ) -> Result<Json<Value>, ApiError> {
     let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
     let (events, next_cursor) = event_page(&state.pool, &query).await?;
-    let mut body = json!({ "events": events, "next_cursor": next_cursor });
+    let counts = event_counts(&state.pool, &query).await?;
+    let mut body = json!({ "events": events, "next_cursor": next_cursor, "counts": counts });
     if query.facets {
         body["facets"] = facets(&state.pool, &query).await?;
     }

@@ -296,6 +296,52 @@ pub fn describes_free_entry(text: &str) -> bool {
         && !parse_price(text).max.is_some_and(|m| m > Decimal::ZERO)
 }
 
+/// Whether a venue's text states late opening hours: "late opening(s)", or
+/// "open(s) until" a clock time after 18:00 ("20:00", "20.00", "8pm",
+/// "8.30pm"). An ordinary closing time ("open until 18:00") is not late,
+/// because the `evening` filter starts at 18:00.
+pub fn mentions_late_opening(text: &str) -> bool {
+    let lower = text.to_lowercase();
+    if lower.contains("late opening") {
+        return true;
+    }
+    ["open until ", "opens until "].iter().any(|needle| {
+        lower
+            .match_indices(needle)
+            .filter_map(|(i, _)| clock_time(&lower[i + needle.len()..]))
+            .any(|(h, m)| (h, m) > (18, 0))
+    })
+}
+
+/// A clock time at the start of `s`: `20:00`, `20.00`, `8pm`, `8.30 pm`.
+/// A bare number ("until 8") is ambiguous and not a time.
+fn clock_time(s: &str) -> Option<(u32, u32)> {
+    let digits = |s: &str| s.chars().take_while(char::is_ascii_digit).count();
+    let n = digits(s);
+    if !(1..=2).contains(&n) {
+        return None;
+    }
+    let mut hour: u32 = s[..n].parse().ok()?;
+    let mut rest = &s[n..];
+    let mut minute = None;
+    if let Some(after) = rest.strip_prefix([':', '.']) {
+        if digits(after) == 2 {
+            minute = Some(after[..2].parse().ok()?);
+            rest = &after[2..];
+        }
+    }
+    let rest = rest.trim_start();
+    let pm = rest.starts_with("pm") || rest.starts_with("p.m.");
+    if !pm && !rest.starts_with("am") && !rest.starts_with("a.m.") && minute.is_none() {
+        return None;
+    }
+    if pm && hour < 12 {
+        hour += 12;
+    }
+    let minute = minute.unwrap_or(0);
+    (hour < 24 && minute < 60).then_some((hour, minute))
+}
+
 /// Build a [`Price`] from structured min/max amounts (e.g. an API).
 pub fn price_from_amounts(
     min: Option<Decimal>,
@@ -807,6 +853,32 @@ mod tests {
                 "currency for {:?}",
                 c.input
             );
+        }
+    }
+
+    #[test]
+    fn late_opening_wording() {
+        for text in [
+            "FRIDAY LATE OPENINGS Experience the exhibition after hours with Friday late \
+             openings – the Gallery will open until 20:00 on 2 October",
+            "Open until 21:00 on Thursdays",
+            "The gallery is open until 8.30pm on Fridays",
+            "Opens until 9 pm on the first Friday",
+            "open until 18:30",
+        ] {
+            assert!(mentions_late_opening(text), "{text}");
+        }
+        for text in [
+            "open until 18:00",
+            "open until 17:30",
+            "Open until 6pm",
+            "open until 8",
+            "open until late",
+            "Tate Lates",
+            "arrive late",
+            "",
+        ] {
+            assert!(!mentions_late_opening(text), "{text}");
         }
     }
 
