@@ -26,7 +26,7 @@ fn listing_html() -> String {
 fn listing_snapshot() {
     insta::assert_json_snapshot!(
         "william_morris_society_listing",
-        parse_listing(&listing_html())
+        parse_listing(&listing_html()).cards
     );
 }
 
@@ -35,6 +35,7 @@ fn normalised_output_snapshot() {
     let s = WilliamMorrisSociety::new(SITE.parse().unwrap());
     let page_url: Url = format!("{SITE}/whats-on/").parse().unwrap();
     let out: Vec<serde_json::Value> = parse_listing(&listing_html())
+        .cards
         .iter()
         .map(|card| {
             let raw = card_event(card, &page_url).unwrap();
@@ -80,6 +81,7 @@ async fn fetches_the_listing_once_via_fetch_context() {
     assert!(errors.is_empty(), "{errors:?}");
     let got: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
     let expected: Vec<String> = parse_listing(&listing_html())
+        .cards
         .iter()
         .map(|c| c.path.trim_matches('/').to_string())
         .collect();
@@ -146,4 +148,33 @@ async fn empty_listing_is_an_error() {
     let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event cards"), "{err}");
+}
+
+#[tokio::test]
+async fn cards_without_a_title_link_are_reported() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
+        )
+        .mount(&server)
+        .await;
+    let listing = r#"<html><body><ul class="fusion-grid">
+        <li class="post-card"><h3 class="fusion-title-heading"><a href="https://williammorrissociety.org/events/a-talk/">A Talk</a></h3></li>
+        <li class="post-card"><h3 class="fusion-title-heading">Renamed Heading</h3></li>
+        </ul></body></html>"#;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(listing))
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["events/a-talk"]);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("Renamed Heading"), "{errors:?}");
 }

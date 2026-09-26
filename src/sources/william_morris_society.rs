@@ -15,7 +15,8 @@
 //!   free-form prose, so they are never fetched.
 //! * Cards with an empty date are open-ended or recurring programmes (the
 //!   museum exhibition, weekly guided tours, multi-date textile tours) and
-//!   are skipped. A non-empty date or time that doesn't parse is an error.
+//!   are skipped. A non-empty date or time that doesn't parse is an error,
+//!   and so is a card without an `/events/<slug>/` title link.
 //! * Times are London wall-clock. An end time not after the start (MorrisFest:
 //!   "6:00 pm" to "3:00 pm", ending on a later day the card doesn't give) is
 //!   dropped; a card with no start time starts at London midnight.
@@ -124,18 +125,32 @@ fn parse_card(card: ElementRef<'_>) -> Option<Card> {
     })
 }
 
-pub fn parse_listing(html: &str) -> Vec<Card> {
+#[derive(Debug)]
+pub struct Listing {
+    pub cards: Vec<Card>,
+    /// Descriptions of cards without a usable title link.
+    pub rejected: Vec<String>,
+}
+
+pub fn parse_listing(html: &str) -> Listing {
     let doc = Html::parse_document(html);
     let mut cards: Vec<Card> = Vec::new();
+    let mut rejected = Vec::new();
     for li in doc.select(&selector("li.post-card")) {
         let Some(card) = parse_card(li) else {
+            let heading = li
+                .select(&selector("h3"))
+                .next()
+                .map(element_text)
+                .unwrap_or_default();
+            rejected.push(format!("unusable listing card {heading:?}"));
             continue;
         };
         if !cards.iter().any(|c| c.path == card.path) {
             cards.push(card);
         }
     }
-    cards
+    Listing { cards, rejected }
 }
 
 /// "October 26, 2026".
@@ -263,7 +278,10 @@ impl Source for WilliamMorrisSociety {
             .base_url
             .join(LISTING_PATH)
             .map_err(|e| SourceError::Config(e.to_string()))?;
-        let cards = parse_listing(&ctx.get_text(&url).await?);
+        let Listing { cards, rejected } = parse_listing(&ctx.get_text(&url).await?);
+        for card in rejected {
+            ctx.report_error(card);
+        }
         if cards.is_empty() {
             return Err(SourceError::Parse(
                 "no event cards found on the listing".into(),
@@ -413,6 +431,17 @@ mod tests {
             ),
             None
         );
+    }
+
+    #[test]
+    fn uncategorised_cards_are_skipped() {
+        let payload = card(
+            "Guided Tours",
+            Some("October 21, 2026"),
+            Some("10 am"),
+            None,
+        );
+        assert!(normalise(&payload).is_none());
     }
 
     #[test]
