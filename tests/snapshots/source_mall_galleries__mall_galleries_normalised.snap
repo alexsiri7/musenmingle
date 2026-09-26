@@ -1,0 +1,166 @@
+---
+source: tests/source_mall_galleries.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "The Mall, London SW1Y 5BD",
+      "category": "exhibition",
+      "dedupe_key": "society-of-wildlife-artists-natural-eye-2026|2026-10-01|mall",
+      "description": "The Natural Eye 2026 The Society of Wildlife Artists presents The Natural Eye, an annual exhibition of fine art inspired by the natural world. Showing work by Society members alongside artists selected from an open call, this exhibition presents a wide-ranging collection of work including sculpture, printmaking, painting and drawing, that celebrates the continued inspiration of the natural world for contemporary artists. With a global outlook, The Natural Eye provides an opportunity to reflect on the world's wildlife, as well as the importance of its conservation. Out of the Frame The Out of the Frame room celebrates the tradition of working from life and will show a selection of field sketches and project work from the SWLA Massingham Heath Project. The project has seen over thirty SWLA artists follow the seasons and changing flora, fauna and landscape of an exciting rewilding project in West Norfolk. The SWLA Massingham Heath Project was featured on BBC Radio 4's Open Country. Listen here to host Martha Kearney in conversation with SWLA President Harriet Mead and members Darren Woodhead and Kim Atkinson. About the SWLA The Society of Wildlife Artists is a registered charity that seeks to generate an appreciation of and delight in the natural world through all forms of fine art based on or representing the world’s wildlife. Through art, the Society actively seeks not only to generate an appreciation of and enthusiasm for the natural world, but also to advance the interest, education and concern of the public in the conservation of wildlife. The focus of the Society’s year is the annual exhibition, The Natural Eye.",
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/SWLA%20017.jpg?itok=ZpsBenAP",
+      "lat": 51.5063,
+      "lng": -0.131,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "7",
+        "min": "7"
+      },
+      "starts_at": "2026-09-30T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Society of Wildlife Artists | The Natural Eye 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/society-wildlife-artists-natural-eye-2026",
+      "venue_name": "Mall Galleries"
+    },
+    "payload": {
+      "dates": [
+        "2026-10-01T12:00:00Z",
+        "2026-10-10T12:00:00Z"
+      ],
+      "description": "\n              \n    <h2 class=\"h4\">The Natural Eye 2026</h2>\n\n  <div class=\"m-entity__text--content\">\n    <p>The Society of Wildlife Artists presents The Natural Eye, an annual exhibition of fine art inspired by the natural world.</p>\n<p>Showing work by Society members alongside artists selected from an open call, this exhibition presents a wide-ranging collection of work including sculpture, printmaking, painting and drawing, that celebrates the continued inspiration of the natural world for contemporary artists. With a global outlook, The Natural Eye provides an opportunity to reflect on the world's wildlife, as well as the importance of its conservation.&nbsp;</p>\n\n  </div>\n\n\n            \n\n              \n    <h2 class=\"h4\">Out of the Frame</h2>\n\n  <div class=\"m-entity__text--content\">\n    <p>The Out of the Frame room celebrates the tradition of working from life and will show a selection of field sketches and project work from the SWLA Massingham Heath Project. The project has seen over thirty SWLA artists follow the seasons and changing flora, fauna and landscape of an exciting rewilding project in West Norfolk.</p>\n<p>The SWLA Massingham Heath Project was featured on BBC Radio 4's Open Country. Listen <a href=\"https://www.bbc.co.uk/sounds/play/m002vykl\">here</a> to host Martha Kearney in conversation with SWLA President Harriet Mead and members Darren Woodhead and Kim Atkinson.&nbsp;</p>\n\n  </div>\n\n\n            \n\n              \n    <h2 class=\"h4\">About the SWLA</h2>\n\n  <div class=\"m-entity__text--content\">\n    <p>The Society of Wildlife Artists is a registered charity that seeks to generate an appreciation of and delight in the natural world through all forms of fine art based on or representing the world’s wildlife.</p>\n<p>Through art, the Society actively seeks not only to generate an appreciation of and enthusiasm for the natural world, but also to advance the interest, education and concern of the public in the conservation of wildlife.</p>\n<p>The focus of the Society’s year is the annual exhibition, The Natural Eye.</p>\n\n  </div>\n\n\n            ",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/SWLA%20017.jpg?itok=ZpsBenAP",
+      "info_text": "Admission £7. Free for Friends of Mall Galleries and under 25s. Concessions available. No booking required. Buy the catalogue / read the e-catalogue",
+      "label": "Exhibition",
+      "rooms": "North, East & West Galleries",
+      "title": "Society of Wildlife Artists | The Natural Eye 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/society-wildlife-artists-natural-eye-2026",
+      "when_text": "1 Oct 2026 - 10 Oct 2026 - 10am to 5pm | North, East & West Galleries"
+    },
+    "slug": "society-wildlife-artists-natural-eye-2026"
+  },
+  {
+    "event": {
+      "address": "The Mall, London SW1Y 5BD",
+      "category": "exhibition",
+      "dedupe_key": "hannah-shergold-solo-exhibition-2026|2026-10-13|mall",
+      "description": "Hannah Shergold is a contemporary artist whose work bridges the gap between abstract and expressionist figuratism. She is entirely self-taught, developing her technique as a hobbyist during a career as an Army helicopter pilot. Her background is littered with influences, including her studies of veterinary anatomy for a Cambridge zoology degree, and a 3-year period as a bronze realist sculptor prior to her military career. In 2018, having drawn a following for her style of ‘broken’, interrupted form, Hannah left the Armed Forces to pursue a full time career as a self-representing artist. Nurturing a growing reputation and client base she continued to expose the work to new audiences, hosting six solo exhibitions in central London, including at Mall Galleries in 2022 and 2025, as well as solo exhibitions in Winchester and Cheltenham. Ever willing to experiment with new products and techniques, Hannah plays with the juxtaposition of fluid acrylics and impasto oils whilst anchoring each collection to her original ‘broken’ style. Her passion for anatomical accuracy, with heavy influence from George Stubbs, Sir Alfred Munnings and contemporary artist Christian Hook, has enabled her to push the boundaries of colour and pattern. She says: “There is expectation in the anatomy – it is the anchor that allows the viewer’s eye to lose and regain the form whilst travelling through and around the painting – but everything else is there to be messed with.” Hannah is deeply drawn to movement in her work. Whether the subject itself is depicted in motion, or it is the mark-making that brings life to an otherwise static subject, she is relentless in seeking ways to escape from realism. From sweeping, gestural curves to a timelapse of motion in the subject itself, here Hannah looks to Jenny Saville for her overlayed sketches and bold application of paint. Hannah’s focus on animals as her subject breaks from current trends in the art world, but is something she feels passionate about representing. She says: “In an increasingly urbanised and chaotic world, animals in art bring a sense of connection with nature. They trigger memories, they invoke emotion and they connect us with the living world when there is ever more temptation to disconnect from it. It is my intention as an artist to celebrate the ancient human relationship with figurative work while exploring just how far I can push it into the abstract.” Twice a finalist for the David Shepherd Wildlife Artist of the Year, and a competitor in the 2019 series of Sky Arts Portrait Artist of the Year, Hannah now works from her studio in Winchester, Hampshire, producing just one exclusive collection per year. She is an ambassador to Prince William’s African community and wildlife conservation charity, Tusk, and last year partnered with Rolling Stones legend Ronnie Wood to paint his portrait which was donated and auctioned for the charity. Having now raised almost £500,000 for various causes through the sale of her work, this year she is donating a further 10% of all sales to Tusk.",
+      "ends_at": "2026-10-16T23:00:00Z",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/Hannah-Shergold-MP-blue-banner-1_med.png?itok=XWD6BpNk",
+      "lat": 51.5063,
+      "lng": -0.131,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-12T23:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Hannah Shergold | Solo exhibition 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/hannah-shergold-solo-exhibition-2026",
+      "venue_name": "Mall Galleries"
+    },
+    "payload": {
+      "dates": [
+        "2026-10-13T12:00:00Z",
+        "2026-10-17T12:00:00Z"
+      ],
+      "description": "\n                    <p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">Hannah Shergold is a contemporary artist whose work bridges the gap between abstract and expressionist figuratism. She is entirely self-taught, developing her technique as a hobbyist during a career as an Army helicopter pilot. Her background is littered with influences, including her studies of veterinary anatomy for a Cambridge zoology degree, and a 3-year period as a bronze realist sculptor prior to her military career.</span></p>\n<p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">In 2018, having drawn a following for her style of ‘broken’, interrupted form, Hannah left the Armed Forces to pursue a full time career as a self-representing artist. Nurturing a growing reputation and client base she continued to expose the work to new audiences, hosting six solo exhibitions in central London, including at Mall Galleries in 2022 and 2025, as well as solo exhibitions in Winchester and Cheltenham.</span></p>\n<p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">Ever willing to experiment with new products and techniques, Hannah plays with the juxtaposition of fluid acrylics and impasto oils whilst anchoring each collection to her original ‘broken’ style. Her passion for anatomical accuracy, with heavy influence from George Stubbs, Sir Alfred Munnings and contemporary artist Christian Hook, has enabled her to push the boundaries of colour and pattern. She says: “There is expectation in the anatomy –&nbsp;&nbsp;it is the anchor that allows the viewer’s eye to lose and regain the form whilst travelling through and around the painting – but everything else is there to be messed with.”</span></p>\n<p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">Hannah is deeply drawn to movement in her work. Whether the subject itself is depicted in motion, or it is the mark-making that brings life to an otherwise static subject, she is relentless in seeking ways to escape from realism. From sweeping, gestural curves to a timelapse of motion in the subject itself, here Hannah looks to Jenny Saville for her overlayed sketches and bold application of paint.&nbsp;</span></p>\n<p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">Hannah’s focus on animals as her subject breaks from current trends in the art world, but is something she feels passionate about representing. She says: “In an increasingly urbanised and chaotic world, animals in art bring a sense of connection with nature. They trigger memories, they invoke emotion and they connect us with the living world when there is ever more temptation to disconnect from it. It is my intention as an artist to celebrate the ancient human relationship with figurative work while exploring just how far I can push it into the abstract.”</span></p>\n<p><span style=\"font-family:Poppins;font-size:12.0pt;line-height:107%;\">Twice a finalist for the David Shepherd Wildlife Artist of the Year, and a competitor in the 2019 series of Sky Arts Portrait Artist of the Year, Hannah now works from her studio in Winchester, Hampshire, producing just one exclusive collection per year. She is an ambassador to Prince William’s African community and wildlife conservation charity, Tusk, and last year partnered with Rolling Stones legend Ronnie Wood to paint his portrait which was donated and auctioned for the charity. Having now raised almost £500,000 for various causes through the sale of her work, this year she is donating a further 10% of all sales to Tusk.</span></p>\n\n                ",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/Hannah-Shergold-MP-blue-banner-1_med.png?itok=XWD6BpNk",
+      "info_text": "Open daily, from: Tuesday 13 October to Saturday 17th October, from 10am – 5pm Late Night Openings: Wednesday 14 October and Thursday 15 October, from 10am - 6pm Free Admission Hannah will be present daily, to answer questions about the work and her inspiration.",
+      "label": "Exhibition",
+      "rooms": "West and East Galleries",
+      "title": "Hannah Shergold | Solo exhibition 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/hannah-shergold-solo-exhibition-2026",
+      "when_text": "13 Oct 2026 - 17 Oct 2026 | West and East Galleries"
+    },
+    "slug": "hannah-shergold-solo-exhibition-2026"
+  },
+  {
+    "event": {
+      "address": "The Mall, London SW1Y 5BD",
+      "category": "exhibition",
+      "dedupe_key": "royal-institute-of-oil-painters-annual-exhibition-2026|2026-11-26|mall",
+      "description": "The Royal Institute of Oil Painters presents the ROI Annual Exhibition 2026. The ROI is the only major national art society that is devoted exclusively to the art of oil painting and its annual exhibition platforms the continued, contemporary relevance of the medium. Showcasing works by many of the nation's top oil painters, alongside talented artists selected from an open call, this exhibition is the best place to see and buy contemporary oil paintings. The diversity of subjects is matched by the variety of approaches, making for a rigorous and exciting survey of oil painting today. Young Artist Awards The ROI takes a keen interest in the development of young artists, especially through the Winsor & Newton Young Artist Awards which has become an important feature of the annual exhibition. About the ROI The Royal Institute of Oil Painters was founded in 1882, promoting and exhibiting work of the highest standard in oil paint. Today, as then, it provides a centre of excellence and encouragement for oil painting. The Institute was granted royal status by King Edward VII in 1909. Membership is limited to some 65 elected members and includes many of the leading painters in the country. The ROI Annual Exhibition, held at Mall Galleries, allows for non-members to exhibit alongside established ROI members in central London.",
+      "ends_at": "2026-12-12T00:00:00Z",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/ROI%2025%20045_0.jpg?itok=fRgSGfhn",
+      "lat": 51.5063,
+      "lng": -0.131,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "7",
+        "min": "7"
+      },
+      "starts_at": "2026-11-26T00:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "Royal Institute of Oil Painters | Annual Exhibition 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/royal-institute-oil-painters-annual-exhibition-2026",
+      "venue_name": "Mall Galleries"
+    },
+    "payload": {
+      "dates": [
+        "2026-11-26T12:00:00Z",
+        "2026-12-12T12:00:00Z"
+      ],
+      "description": "\n              \n  \n  <div class=\"m-entity__text--content\">\n    <p>The Royal Institute of Oil Painters presents the ROI Annual Exhibition 2026.</p>\n<p>The ROI is the only major national art society that is devoted exclusively to the art of oil painting and its annual exhibition platforms the continued, contemporary relevance of the medium.</p>\n<p>Showcasing works by many of the nation's top oil painters, alongside talented artists selected from an open call, this exhibition is the best place to see and buy contemporary oil paintings. The diversity of subjects is matched by the variety of approaches, making for a rigorous and exciting survey of oil painting today.&nbsp;<br><br><strong>Young Artist Awards</strong></p>\n<p>The ROI takes a keen interest in the development of young artists, especially through the Winsor &amp; Newton Young Artist Awards which has become an important feature of the annual exhibition.</p>\n\n  </div>\n\n\n            \n\n              \n    <h2 class=\"h4\">About the ROI</h2>\n\n  <div class=\"m-entity__text--content\">\n    <p>The Royal Institute of Oil Painters was founded in 1882, promoting and exhibiting work of the highest standard in oil paint. Today, as then, it provides a centre of excellence and encouragement for oil painting.</p>\n<p>The Institute was granted royal status by King Edward VII in 1909. Membership is limited to some 65 elected members and includes many of the leading painters in the country.</p>\n<p>The ROI Annual Exhibition, held at Mall Galleries, allows for non-members to exhibit alongside established ROI members in central London.</p>\n\n  </div>\n\n\n            ",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/ROI%2025%20045_0.jpg?itok=fRgSGfhn",
+      "info_text": "Admission £7. Free for Friends of Mall Galleries and under 25s. Concessions available. No booking required.",
+      "label": "Exhibition",
+      "rooms": "North, East & West Galleries",
+      "title": "Royal Institute of Oil Painters | Annual Exhibition 2026",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/royal-institute-oil-painters-annual-exhibition-2026",
+      "when_text": "26 Nov 2026 - 12 Dec 2026 - 10am to 5pm daily | North, East & West Galleries"
+    },
+    "slug": "royal-institute-oil-painters-annual-exhibition-2026"
+  },
+  {
+    "event": {
+      "address": "The Mall, London SW1Y 5BD",
+      "category": "exhibition",
+      "dedupe_key": "hope-youth-voices-for-change|2027-01-10|mall",
+      "description": "The future is here. Are you listening? A youth-led exhibition by national charity, Artswork This youth-led exhibition brings together bold, honest and imaginative responses from young people to some of the most pressing challenges of our time, including: Mental health and wellbeing Climate and environmental responsibility Community cohesion and belonging Youth unemployment, skills and future opportunity Through visual arts, film, sound and word, Hope uses creativity as a catalyst – sparking dialogue, inviting shared responsibility and inspiring action. Young people are not contributing to a pre-written story. They are the authors. They bring insight, solutions, resilience, leadership and imagination to the table, and HOPE gives them the platform to be seen, heard and understood.",
+      "ends_at": "2027-01-23T00:00:00Z",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/BANNER%20IMAGE%20Sep%202023%2C%20Moby%20The%20Whale%2C%20Portsmouth%20Creative%20Skills%20cr%20Dev%20Place%200111.jpg?itok=994W6HnS",
+      "lat": 51.5063,
+      "lng": -0.131,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2027-01-10T00:00:00Z",
+      "tags": [
+        "art"
+      ],
+      "title": "HOPE, Youth Voices for Change",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/hope-youth-voices-change",
+      "venue_name": "Mall Galleries"
+    },
+    "payload": {
+      "dates": [
+        "2027-01-10T12:00:00Z",
+        "2027-01-23T12:00:00Z"
+      ],
+      "description": "\n                    <h4><span style=\"font-family:Poppins;\"><strong>The future is here. Are you listening?&nbsp;</strong></span></h4>\n<h4><span style=\"font-family:Poppins;\"><strong>A youth-led exhibition by national charity,&nbsp;Artswork</strong></span></h4>\n<p><span style=\"font-family:Poppins;\">This&nbsp;youth-led&nbsp;exhibition brings together bold,&nbsp;honest&nbsp;and imaginative responses from young people to some of the most pressing challenges of our time,&nbsp;including:&nbsp;</span></p>\n<ul style=\"list-style-type:disc;\">\n<li><span style=\"font-family:Poppins;\">Mental health and wellbeing&nbsp;</span></li>\n<li><span style=\"font-family:Poppins;\">Climate and environmental responsibility&nbsp;</span></li>\n<li><span style=\"font-family:Poppins;\">Community cohesion and belonging&nbsp;</span></li>\n<li><span style=\"font-family:Poppins;\">Youth unemployment,&nbsp;skills&nbsp;and future opportunity&nbsp;</span></li>\n</ul>\n<p><span style=\"font-family:Poppins;\">Through visual arts, film, sound and word, Hope uses creativity as a catalyst – sparking dialogue, inviting shared responsibility and inspiring action.&nbsp;</span></p>\n<p><span style=\"font-family:Poppins;\">Young people are not contributing&nbsp;to a pre-written story.&nbsp;They are the authors.&nbsp;</span></p>\n<p><span style=\"font-family:Poppins;\">They bring insight, solutions, resilience, leadership and imagination to the table, and HOPE gives them the platform to be seen,&nbsp;heard&nbsp;and&nbsp;understood.&nbsp;&nbsp;</span></p>\n\n                ",
+      "image_url": "https://www.mallgalleries.org.uk/sites/default/files/styles/meta_facebook/public/banner-images/BANNER%20IMAGE%20Sep%202023%2C%20Moby%20The%20Whale%2C%20Portsmouth%20Creative%20Skills%20cr%20Dev%20Place%200111.jpg?itok=994W6HnS",
+      "info_text": "Open to Public: Sunday 10 January to Saturday 23 January, 10am - 5pm Altered timings on: Thursday 14 January, Open to Public 10am - 1pm Free Admission, donations welcome",
+      "label": "Exhibition",
+      "rooms": "West, East and North Galleries",
+      "title": "HOPE, Youth Voices for Change",
+      "url": "https://www.mallgalleries.org.uk/exhibitions-events/hope-youth-voices-change",
+      "when_text": "10 Jan 2027 - 23 Jan 2027 | West, East and North Galleries"
+    },
+    "slug": "hope-youth-voices-change"
+  }
+]

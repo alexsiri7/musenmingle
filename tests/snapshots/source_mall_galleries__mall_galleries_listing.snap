@@ -1,0 +1,38 @@
+---
+source: tests/source_mall_galleries.rs
+expression: listing()
+---
+[
+  {
+    "path": "/exhibitions-events/royal-society-marine-artists-annual-exhibition-2026",
+    "label": null
+  },
+  {
+    "path": "/exhibitions-events/society-wildlife-artists-natural-eye-2026",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/hannah-shergold-solo-exhibition-2026",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/ray-atkins-unseen",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/art-youth-london-2026-0",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/discerning-eye-2026",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/royal-institute-oil-painters-annual-exhibition-2026",
+    "label": "Exhibition"
+  },
+  {
+    "path": "/exhibitions-events/hope-youth-voices-change",
+    "label": "Exhibition"
+  }
+]

@@ -55,6 +55,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   - `goldsmiths-cca` — CSS-selector scraper (no JSON-LD): the homepage's
     exhibition list (title, dates, image) → exhibition pages for the
     subtitle and description.
+  - `mall-galleries` — CSS-selector scraper (no JSON-LD): the homepage's
+    server-rendered current + upcoming exhibition teasers (the
+    `/exhibitions-events` list is a JavaScript app) → detail pages for
+    dates, admission price and description.
   - `whitechapel-gallery` — CSS-selector scraper (no JSON-LD): exhibitions
     listing → detail pages for dates and free-entry status.
   - `courtauld` — the site's listing is rendered by JavaScript, so it reads
