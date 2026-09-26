@@ -113,6 +113,7 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       "lng": -0.0938,
       "starts_at": "2026-10-01T18:00:00Z",
       "ends_at": "2026-10-01T20:00:00Z",
+      "all_day": false,
       "is_free": false,
       "price_min": "0",
       "price_max": "12.50",
@@ -183,6 +184,10 @@ only with `near`. `sources` lists every place the event was found (oldest
 first); `display_name` is the source's human-readable name and `url` is the
 listing on that source (may be `null`).
 
+`all_day` is `true` when the source gave dates but no time of day:
+`starts_at` and `ends_at` are then London midnight of the first and last day
+(the last day inclusive), so display dates without times.
+
 Tags and AI notes (see `README.md`, "AI enrichment"): `medium_tags`,
 `format_tags`, `good_for` and `vibe_tags` use the fixed vocabularies in the
 parameter table (`vibe_tags`: `contemplative`, `playful`, `provocative`,
@@ -228,7 +233,7 @@ when the event has no embedding yet or embeddings are off.
 
 ```json
 { "similar": [ { "id": "…", "title": "…", "venue_name": "…", "starts_at": "…",
-  "ends_at": null, "category": "talk", "similarity": 0.83,
+  "ends_at": null, "all_day": false, "category": "talk", "similarity": 0.83,
   "shared_tags": ["photography", "talk"] } ] }
 ```
 

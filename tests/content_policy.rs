@@ -39,6 +39,7 @@ fn event(title: &str, days: i64) -> NewEvent {
         lng: None,
         starts_at,
         ends_at: None,
+        all_day: false,
         price: Price::default(),
         url: None,
         image_url: None,

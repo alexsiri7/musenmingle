@@ -38,6 +38,7 @@ expression: out
   {
     "event": {
       "address": "224-238 Kensington High Street, London W8 6AG",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "es-devlin-other-worlds|2026-10-02|design",
       "description": "Enter the imaginative world of British artist and designer Es Devlin in the first retrospective in Europe celebrating her 30-year creative practice across sculpture, stage design, music, language and light. Tickets are on sale.",
@@ -108,6 +109,7 @@ expression: out
   {
     "event": {
       "address": "224-238 Kensington High Street, London W8 6AG",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "laika-presents-wildwood-exhibition|2026-10-15|design",
       "description": "Step behind the scenes of LAIKA's latest stop-motion film and explore how a world is built through original props, sketches, puppets, miniature sets, and more. Tickets are on sale.",
@@ -146,6 +148,7 @@ expression: out
   {
     "event": {
       "address": "224-238 Kensington High Street, London W8 6AG",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "nigo-from-japan-with-love|2026-05-01|design",
       "description": "Explore the vision and legacy of Japanese designer and creative director NIGO – from street style to music and beyond, in the first UK exhibition showcasing his multifaceted creative work, alongside vintage objects and traditional crafts from his personal collection.",
@@ -184,6 +187,7 @@ expression: out
   {
     "event": {
       "address": "224-238 Kensington High Street, London W8 6AG",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "platform-simone-brewster|2026-02-13|design",
       "description": "PLATFORM is an annual display dedicated to showcasing contemporary design practice. The second edition in the series presents the fascinating work of designer Simone Brewster. Free to visit, the display is open until January 2027.",
@@ -223,6 +227,7 @@ expression: out
   {
     "event": {
       "address": "224-238 Kensington High Street, London W8 6AG",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "nue-black-aesthetic|2026-11-06|design",
       "description": "Explore a major exhibition celebrating contemporary Black designers who are reshaping the design landscape, from fashion and furniture to architecture, product design and sculpture. Tickets are on sale.",

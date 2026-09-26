@@ -453,6 +453,7 @@ async fn event_by_id_includes_every_source_link_and_unknown_ids_are_404() {
             "lng": -0.1,
             "starts_at": "2026-10-01T18:00:00Z",
             "ends_at": "2026-10-01T20:00:00Z",
+            "all_day": false,
             "is_free": true,
             "price_min": "0",
             "price_max": "12.50",

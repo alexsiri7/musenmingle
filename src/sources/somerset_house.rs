@@ -19,7 +19,8 @@
 //! * Times are naive London wall-clock times. Quirk: some single-evening
 //!   events have a placeholder `00:00` start with the end at start +
 //!   `duration` (e.g. `00:00 → 03:00` for "6–9pm"); for those the start time
-//!   is taken from the human `timeText`. Exhibitions are date-only ranges.
+//!   is taken from the human `timeText`. Exhibitions are date-only ranges
+//!   (`all_day`).
 //! * Known site data errors are stored as published: some ends are an hour
 //!   off (`18:00 → 23:00` for "6–10pm") and some `dateStart`s disagree with
 //!   the human date text.
@@ -38,8 +39,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
-    parse_london_wall_clock, parse_price, postcode_outward,
+    clean_description, clean_text, dedupe_key, is_london_midnight, london_date, london_to_utc,
+    map_category, parse_london_wall_clock, parse_price, postcode_outward,
 };
 
 pub const KEY: &str = "somerset-house";
@@ -272,17 +273,21 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
         .get("duration")
         .and_then(Value::as_i64)
         .filter(|d| *d > 0);
-    let (starts_at, ends_at) = match duration {
+    let (starts_at, ends_at, all_day) = match duration {
         Some(minutes) if placeholder_start => {
             match node_str(node, "/timeText").and_then(parse_start_time) {
                 Some(time) => {
                     let start = london_to_utc(date.and_time(time));
-                    (start, Some(start + Duration::minutes(minutes)))
+                    (start, Some(start + Duration::minutes(minutes)), false)
                 }
-                None => (listed_start, None),
+                None => (listed_start, None, true),
             }
         }
-        _ => (listed_start, listed_end.filter(|e| *e > listed_start)),
+        _ => {
+            let ends_at = listed_end.filter(|e| *e > listed_start);
+            let all_day = placeholder_start && ends_at.is_none_or(is_london_midnight);
+            (listed_start, ends_at, all_day)
+        }
     };
 
     let venue = venue(node_str(node, "/space").unwrap_or_default());
@@ -325,6 +330,7 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
         lng: venue.lng,
         starts_at,
         ends_at,
+        all_day,
         price,
         url,
         image_url,
@@ -431,6 +437,31 @@ mod tests {
         let event = normalise_payload(&node).unwrap().unwrap();
         assert_eq!(event.starts_at.to_rfc3339(), "2026-10-06T23:00:00+00:00");
         assert_eq!(event.ends_at, None);
+        assert!(event.all_day);
+    }
+
+    #[test]
+    fn all_day_only_for_date_only_items() {
+        let evening = serde_json::json!({
+            "title": "Late",
+            "dateStart": "2026-10-07T00:00",
+            "dateEnd": "2026-10-07T03:00",
+            "duration": 180,
+            "timeText": "6–9pm",
+        });
+        assert!(!normalise_payload(&evening).unwrap().unwrap().all_day);
+        let exhibition = serde_json::json!({
+            "title": "Show",
+            "dateStart": "2026-10-07T00:00",
+            "dateEnd": "2026-11-07T00:00",
+        });
+        assert!(normalise_payload(&exhibition).unwrap().unwrap().all_day);
+        let timed = serde_json::json!({
+            "title": "Talk",
+            "dateStart": "2026-10-07T18:00",
+            "dateEnd": "2026-10-07T20:00",
+        });
+        assert!(!normalise_payload(&timed).unwrap().unwrap().all_day);
     }
 
     #[test]

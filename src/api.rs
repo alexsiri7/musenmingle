@@ -250,6 +250,9 @@ pub(crate) struct EventJson {
     pub(crate) lng: Option<f64>,
     pub(crate) starts_at: DateTime<Utc>,
     pub(crate) ends_at: Option<DateTime<Utc>>,
+    /// The source gave dates but no time of day: `starts_at`/`ends_at` are
+    /// London midnight of the first/last day (inclusive).
+    pub(crate) all_day: bool,
     pub(crate) is_free: bool,
     pub(crate) price_min: Option<Decimal>,
     pub(crate) price_max: Option<Decimal>,
@@ -332,6 +335,7 @@ impl EventJson {
             lng: e.lng,
             starts_at: e.starts_at,
             ends_at: e.ends_at,
+            all_day: e.all_day,
             is_free: e.is_free,
             price_min: e.price_min,
             price_max: e.price_max,
@@ -526,6 +530,7 @@ pub(crate) struct SimilarJson {
     pub(crate) venue_name: Option<String>,
     pub(crate) starts_at: DateTime<Utc>,
     pub(crate) ends_at: Option<DateTime<Utc>>,
+    pub(crate) all_day: bool,
     pub(crate) category: String,
     pub(crate) similarity: f64,
     /// Tags it shares with the event (why it is similar), as tag values.
@@ -566,6 +571,7 @@ pub(crate) async fn similar_events(
                     venue_name: s.venue_name,
                     starts_at: s.starts_at,
                     ends_at: s.ends_at,
+                    all_day: s.all_day,
                     category: s.category,
                     similarity: s.similarity,
                     shared_tags,

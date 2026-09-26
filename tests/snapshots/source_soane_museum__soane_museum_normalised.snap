@@ -70,6 +70,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "soane-museum-study-group-olivia-mcconnell|2026-09-30|sir-john-soanes",
       "description": "The Soane Museum Study Group is an open forum for scholars – both established and emerging – to present new research into an aspect of architectural history and/or Soane’s collection",
@@ -157,6 +158,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "michael-landy-future-ruins|2026-10-14|sir-john-soanes",
       "description": "Future Ruins at Sir John Soane’s Museum will feature new and recent work showcasing the detailed drawings that continue Michael Landy's reputation as one of the most talented draughtsman of his generation.",
@@ -195,6 +197,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3d-portraits-holiday-workshop|2026-10-28|sir-john-soanes",
       "description": "Join us for an engaging 4-hour art workshop where we will be using a variety of craft material to create portraits in 3D.",
@@ -234,6 +237,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "haunted-ruins-halloween-family-drop-in|2026-10-29|sir-john-soanes",
       "description": "Join us for our October Family Drop-in session, where we'll be using craft materials to create haunted ruins - spooky!",
@@ -273,6 +277,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "soane-late-halloween-special|2026-10-30|sir-john-soanes",
       "description": "Venture through the candlelit corridors of Sir John Soane's Museum on this eerie evening, for a special Halloween Late. Explore the eclectic collection after dark and learn more about the house's otherworldly artefacts.",
@@ -328,6 +333,7 @@ expression: out
   {
     "event": {
       "address": "6 Burlington Gardens, Mayfair, London, W1J 0PE",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "2026-soane-medal-lecture|2026-11-24|royal-academy-of-arts",
       "description": "Join us for this special event celebrating our 2026 Soane Medallist, Farshid Moussavi, at the Royal Academy of Arts.",
@@ -367,6 +373,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "sir-john-soane-poetry-of-architecture|2027-01-14|sir-john-soanes",
       "description": "In 2027, a landmark collaboration between Sir John Soane’s Museum and Yale School of Architecture will bring Sir John Soane: The Poetry of Architecture to the United States.",
@@ -405,6 +412,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "sam-belinfante-all-that-i-have-to-say-is|2027-01-27|sir-john-soanes",
       "description": "Sam Belinfante’s new film All that I have to say is... explores how changing light can affect our perception of space and create a sense of drama.",
@@ -443,6 +451,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "architecture-drawing-prize-2026|2027-01-27|sir-john-soanes",
       "description": "A selection of winning works from the 9th edition of The Architecture Drawing Prize will go on display at Sir John Soane’s Museum in January 2027.",
@@ -481,6 +490,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "zaha-hadid-visionary-museum-designs|2027-03-24|sir-john-soanes",
       "description": "This major exhibition will explore the work of Iraqi-British architect Zaha Hadid through the lens of the many museum’s she worked on throughout her career.",
@@ -519,6 +529,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "mohammed-qasim-ashfaq-drawing-in-dark|2027-03-24|sir-john-soanes",
       "description": "This Spring, Mohammed Qasim Ashfaq will present a new series of work in the Museum’s Foyle Space that explores architectural intricacies among Soane’s collection.",
@@ -557,6 +568,7 @@ expression: out
   {
     "event": {
       "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "gavin-turk-domestic-archaeology|2027-07-14|sir-john-soanes",
       "description": "Gavin Turk’s intervention at Sir John Soane’s Museum brings one of Britain’s leading contemporary artists into dialogue with one of London’s most extraordinary museums, uncovering new stories of collecting, value and memory.",

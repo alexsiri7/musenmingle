@@ -218,6 +218,7 @@ fn ev(
         lng: Some(lng),
         starts_at,
         ends_at: ends.map(t),
+        all_day: false,
         price: Price::default(),
         url: None,
         image_url: None,
@@ -747,6 +748,71 @@ async fn a_later_start_drops_an_end_that_would_precede_it() {
     assert_eq!(
         (row.starts_at, row.ends_at),
         (t("2026-10-12T18:00:00Z"), None)
+    );
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn all_day_follows_the_source_that_wins_the_start() {
+    let Some(db) = TestDb::create("all_day_follows_the_source_that_wins_the_start").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let tm_src = source_id(&pool, "ticketmaster").await;
+    let sp_src = source_id(&pool, "serpentine-galleries").await;
+    let all_day = |id: uuid::Uuid| {
+        let pool = &pool;
+        async move { repo::get_event(pool, id).await.unwrap().unwrap().all_day }
+    };
+    let show = |starts: &str, all_day: bool| NewEvent {
+        all_day,
+        ..ev(
+            "Open studio day",
+            "Serpentine South",
+            (51.5045, -0.1751),
+            starts,
+            None,
+        )
+    };
+
+    let tm = show("2026-10-12T17:00:00Z", false);
+    let a = repo::upsert_event(&pool, tm_src, &tm, &raw("tm-open"))
+        .await
+        .unwrap();
+    assert!(!all_day(a.event_id).await);
+
+    // The venue site wins the start, and with it all_day; the API's next
+    // run does not take it back.
+    let b = repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-11T23:00:00Z", true),
+        &raw("sp-open"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(b.event_id, a.event_id);
+    assert!(all_day(a.event_id).await);
+    repo::upsert_event(&pool, tm_src, &tm, &raw("tm-open"))
+        .await
+        .unwrap();
+    assert!(all_day(a.event_id).await);
+
+    // The venue site later publishes a time.
+    repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-12T09:00:00Z", false),
+        &raw("sp-open"),
+    )
+    .await
+    .unwrap();
+    let row = repo::get_event(&pool, a.event_id).await.unwrap().unwrap();
+    assert_eq!(
+        (row.starts_at, row.all_day),
+        (t("2026-10-12T09:00:00Z"), false)
     );
 
     pool.close().await;

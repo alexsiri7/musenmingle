@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "concrete-clay|2025-02-10|barbican",
       "description": "This free installation invites visitors to orient themselves in the buildings and their complex, fascinating histories in an exciting new display at the heart of the Barbican’s Foyers. Created using the Centre’s original materials, this display presents a changing selection of stories and objects from the Archive. The centrepiece is a rarely seen, 1:22-scale model of the Centre and Estate. Working with Google Arts and Culture, we have also catalogued and digitised thousands of architectural plans, drawings, photos, objects and leaflets. These collections can be viewed on our Google Arts and Culture page, or on a touchscreen in the exhibition. The Barbican Archive Team is beginning the process of recording and reflecting on the centre's histories.This display will keep changing, highlighting different stories, showcasing different objects. Maybe you’ve got something you’d like to donate to the Archive, something you think belongs in this space? Get in touch on [email protected]",
@@ -49,6 +50,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "evening-with-fran-lebowitz|2026-10-27|barbican",
       "description": "In a cultural landscape filled with endless pundits and talking heads, Fran Lebowitz stands out as one of our most insightful social commentators. An American original and purveyor of urban cool, the cultural satirist and author is pointed, forthright, unapologetically opinionated, and known for her hilariously dry social commentary on American life. Lebowitz’s Netflix documentary series directed by good friend Martin Scorsese, Pretend It’s A City, was an unmitigated hit with its offering of a tantalizing snapshot of New York in full bloom, along with Lebowitz’s lively and unapologetic commentary on what it means to live there. Lebowitz will be live in conversation, sharing her invariably cutting take on anything and everything. She’ll offer insights on such timely issues as gender, race, gay rights, and the media, as well as on her own pet peeves—including celebrity culture, tourists, and baby strollers.",
@@ -90,6 +92,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "walters-cohen|2026-10-22|barbican",
       "description": "Discover the projects and ideas behind Walters & Cohen's thoughtful, people-focused architecture. Founded in 1994 by Cindy Walters and Michál Cohen, their work places particular emphasis on creating inclusive, sustainable and enduring spaces that respond carefully to their surroundings. Notable projects include the Dorothy Garrod Building at Newnham College, Cambridge, and the Vajrasana Buddhist Retreat Centre in Suffolk. The practice has also developed an estates strategy for Murray Edwards College, Cambridge, helping shape the long-term future of its Grade II* listed Chamberlin, Powell and Bon campus.",
@@ -133,6 +136,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "black-british-book-festival-2026|2026-10-04|barbican",
       "description": "Back for its fifth year, the Black British Book Festival is a landmark celebration of Black books, ideas and culture with Candice Carty-Williams, Corinne Bailey Rae, Wretch 32 and more. Hear from Candice Carty-Williams on love, mess and the phenomenon of Queenie. Corinne Bailey Rae goes deep on sound, beauty and creative freedom. Wretch 32 makes the case that bars are literature, breaking down the art of the pen like never before. And closing it all out is The Black Poetry Shutdown with the UK's sharpest spoken-word talent such as Malika Booker, Lady Sanity, Jah Digga and more. Across the rest of the day, expect a line-up that spans literature, music, science, money, love, identity and the internet. There's something for everyone with storytelling, craft, superheroes and more for the youngest readers. Aspiring authors get a programme packed with practical, no-fluff sessions and the brand-new Black British Book Festival × Pan Macmillan collaboration - a real shot at getting published.",
@@ -176,6 +180,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "two-gharanas-one-musician-shahbaz-hussain-talk|2026-10-31|barbican",
       "description": "How three legendary gurus shaped one of Europe's finest tabla players. Shahbaz Hussain started learning tabla at five, taught by his father, the vocalist Ustad Mumtaz Hussain. He then went on to be taught by Ustad Faiyaz Khan of the Delhi gharana, Ustad Shaukat Hussain Khan of the Punjab gharana, and finally Ustad Allah Rakha — the man behind Ravi Shankar's rhythm section for decades. That dual training shows in how Hussain plays. He's accompanied Pandit Hariprasad Chaurasia, Ustad Shahid Parvez, and Ghulam Ali. He leads the fusion group Indus. He teaches across Northern England, and he believes that audiences benefit from understanding how tabla works: what a gharana is, how rhythm operates in Hindustani music and why different schools produce different sounds. In this talk, Hussain shares the stories, lessons and musical thinking he's gathered across three decades of performance and teaching.",
@@ -221,6 +226,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "zifzafa|2026-09-23|barbican",
       "description": "This free exhibition presents video works by Lawrence Abu Hamdan that address how sound can both sustain and disrupt the richness of community life. A video installation explores the effect of a planned wind turbine development on the inhabitants of the Israeli-occupied Syrian Golan Heights. Zifzafa: Livestream Audio Essay (2025) presents a video-game simulation designed by Earshot to fight green colonialism. Adopting a Twitch-inspired format, the work guides viewers through a virtual recreation of the region. Field recordings of the resident Jawlani community—from wedding announcements to whirring water pumps— are periodically overwhelmed by the roar of simulated wind turbines, demonstrating how their impact would effectively silence the buzz of daily life. Wind Ensemble (2024), focuses on a performance by Jawlani saxophonist Amr Mdah. Played from the balcony of a home located just 50 metres from the site of a proposed wind turbine, his music becomes an act of sonic resistance.",
@@ -281,6 +287,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "robert-ryman|2026-10-08|barbican",
       "description": "‘You have to see the real thing… seeing a real painting is the only way to do it.’ Robert Ryman believed that the best way to experience a painting is in person. His paintings, which mostly use white paint and a square format, reward close looking. He wanted you to notice everything: the texture of the paint, the brushstrokes, the material being painted on, how it's displayed on the wall. The magic is in the feelings that arise as you attune yourself to the paintings’ similarities and differences, how they relate to each other and interact with the surrounding light and space. Presenting over 60 works made from the mid-1950s to the early 2010s, this major new retrospective of the extraordinary American artist invites you to take a closer look. You may notice aspects of painting you haven’t seen before – and perhaps you’ll leave wondering what else in the world might become clearer if you simply slow down and tune in.",
@@ -363,6 +370,7 @@ expression: out
   {
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "yuko-mohri-in-concert|2026-10-01|barbican",
       "description": "Japanese artist Yuko Mohri transforms The Curve with a new site-responsive commission exploring states of flux and acts of repair via light, sound and kinetic sculpture featuring Barbican objects. Mohri's practice is grounded in DIY aesthetics, surrealist assemblage, experimental music and an enduring fascination with the flow of energy. Her sculptures often combine ordinary objects—from umbrellas to feather dusters, apples to xylophones—with what she terms ‘unstable elements’, including magnetism, humidity, air, water and gravity. Mohri’s continuously transforming installation will respond to the gallery's atmospheric conditions, and explore ideas of entropy, transience and renewal resonating with the Barbican's current period of renovation.",

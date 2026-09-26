@@ -375,6 +375,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at,
+        all_day: times.is_none(),
         price,
         url: text("url"),
         image_url: text("image_url"),

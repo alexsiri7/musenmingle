@@ -14,6 +14,7 @@ expression: normalised
       "lng": -0.1756,
       "starts_at": "2026-10-10T11:00:00Z",
       "ends_at": null,
+      "all_day": false,
       "price": {
         "is_free": true,
         "min": "0",
@@ -46,6 +47,7 @@ expression: normalised
       "lng": -0.1057,
       "starts_at": "2027-01-20T11:00:00Z",
       "ends_at": "2027-01-24T18:00:00Z",
+      "all_day": false,
       "price": {
         "is_free": false,
         "min": "18.5",
@@ -74,6 +76,7 @@ expression: normalised
       "lng": -0.0938,
       "starts_at": "2026-11-05T10:00:00Z",
       "ends_at": "2027-02-28T18:00:00Z",
+      "all_day": false,
       "price": {
         "is_free": false,
         "min": "16",
@@ -101,6 +104,7 @@ expression: normalised
       "lng": -0.1426,
       "starts_at": "2026-12-02T19:00:00Z",
       "ends_at": null,
+      "all_day": false,
       "price": {
         "is_free": false,
         "min": null,
