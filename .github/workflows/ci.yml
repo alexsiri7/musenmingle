@@ -48,6 +48,8 @@ jobs:
         run: cargo clippy --all-targets --all-features -- -D warnings
       - name: cargo test
         run: cargo test --all-features
+      - name: JS unit tests (src/web.js)
+        run: node --test tests/js/*.test.js
 
   docker:
     name: docker build (no push)

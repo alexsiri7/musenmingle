@@ -12,9 +12,9 @@ The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
 takes `from`, `to`, `category`, `free`, `near=<area>`, `source` and
 `cursor`),
-`GET /events/{id}`, `GET /sources`, `POST /suggest` (form-encoded `url`,
+`GET /events/{id}`, `GET /sources`, `GET /saved`, `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
-`GET /static/style.css`. HTML responses carry a strict
+`GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
 `Content-Security-Policy`. See `src/web.rs`.
 
 Browsers may call the API only from the origins listed in `CORS_ORIGINS`
@@ -32,6 +32,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
 | `source` | `source=barbican&source=ticketmaster` | Events listed by any of the given sources (keys as in `GET /v1/sources`). Repeatable; an event found by several sources appears under each |
+| `ids` | `ids=1f3632de-…,0414a989-…` | Only these events (comma-separated UUIDs, at most 100; unknown ids are simply absent). Combine with `limit=100` to get them all in one page. Used by the Saved page |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>`, nearest first. Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
