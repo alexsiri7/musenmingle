@@ -110,11 +110,10 @@ async fn ticketmaster_and_venue_site_copies_merge_into_one_event() {
     want.sort();
     assert_eq!(ids, want);
     assert!(links.iter().any(|l| l.1 == "Z698xZG2Z17aTalks"));
-    assert!(
-        links
-            .iter()
-            .any(|l| l.1 == TALK_SLUG && l.2.get("jsonld").is_some())
-    );
+    // Both sources restrict reuse (content policy), so neither raw payload
+    // is kept.
+    assert!(links.iter().any(|l| l.1 == TALK_SLUG));
+    assert!(links.iter().all(|l| l.2 == repo::redacted_raw()));
 
     // Merge policy: the title is first-come; the venue site wins dates,
     // description and image; the API wins price and URL; anything else only
