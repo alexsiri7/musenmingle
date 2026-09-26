@@ -1,0 +1,652 @@
+//! The server-rendered HTML pages (`/`, `/events/{id}`, `/sources`,
+//! `POST /suggest`) against a real database (and a wiremock GitHub for the
+//! suggestion form). Event dates are relative to now because `/` defaults to
+//! upcoming events.
+
+mod common;
+
+use std::net::SocketAddr;
+
+use axum::Router;
+use axum::body::Body;
+use axum::extract::connect_info::MockConnectInfo;
+use axum::http::{Request, StatusCode, header};
+use chrono::{DateTime, Duration, Utc};
+use common::TestDb;
+use serde_json::json;
+use sqlx::PgPool;
+use thaleia::api::ApiSettings;
+use thaleia::config::SuggestionConfig;
+use thaleia::github::{GitHubIssueFiler, IssueFiler};
+use thaleia::suggestions::Suggestions;
+use tower::ServiceExt;
+use uuid::Uuid;
+use wiremock::matchers::{body_partial_json, method, path};
+use wiremock::{Mock, MockServer, ResponseTemplate};
+
+const REPO: &str = "alexsiri7/thaleia";
+
+fn app_with(pool: &PgPool, config: SuggestionConfig, filer: Option<Box<dyn IssueFiler>>) -> Router {
+    let config = SuggestionConfig {
+        ip_salt: Some("test-salt".into()),
+        ..config
+    };
+    let settings = ApiSettings {
+        github_repo: REPO.into(),
+        cors_origins: Vec::new(),
+    };
+    thaleia::api::router(
+        pool.clone(),
+        Suggestions::new(config, filer).unwrap(),
+        settings,
+    )
+    .layer(MockConnectInfo(SocketAddr::from(([10, 0, 0, 1], 4000))))
+}
+
+fn app(pool: &PgPool) -> Router {
+    app_with(pool, SuggestionConfig::default(), None)
+}
+
+struct Page {
+    status: StatusCode,
+    headers: axum::http::HeaderMap,
+    body: String,
+}
+
+async fn send(app: &Router, req: Request<Body>) -> Page {
+    let resp = app.clone().oneshot(req).await.unwrap();
+    let status = resp.status();
+    let headers = resp.headers().clone();
+    let bytes = axum::body::to_bytes(resp.into_body(), 4 * 1024 * 1024)
+        .await
+        .unwrap();
+    Page {
+        status,
+        headers,
+        body: String::from_utf8(bytes.to_vec()).unwrap(),
+    }
+}
+
+async fn get(app: &Router, uri: &str) -> Page {
+    send(app, Request::get(uri).body(Body::empty()).unwrap()).await
+}
+
+async fn post_form(app: &Router, body: &str) -> Page {
+    send(
+        app,
+        Request::post("/suggest")
+            .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
+            .body(Body::from(body.to_string()))
+            .unwrap(),
+    )
+    .await
+}
+
+fn assert_html(p: &Page) {
+    assert_eq!(
+        p.headers[header::CONTENT_TYPE],
+        "text/html; charset=utf-8",
+        "{}",
+        p.body
+    );
+    let csp = p.headers[header::CONTENT_SECURITY_POLICY].to_str().unwrap();
+    for d in [
+        "default-src 'self'",
+        "img-src https: data:",
+        "style-src 'self'",
+        "form-action 'self'",
+        "frame-ancestors 'none'",
+    ] {
+        assert!(csp.contains(d), "{csp}");
+    }
+    assert!(!csp.contains("unsafe-inline"), "{csp}");
+    assert!(p.body.starts_with("<!DOCTYPE html>"));
+    assert!(!p.body.contains("<script"), "{}", p.body);
+    assert!(!p.body.contains("style=\""), "{}", p.body);
+}
+
+fn days(n: i64) -> DateTime<Utc> {
+    Utc::now() + Duration::days(n)
+}
+
+fn date(t: DateTime<Utc>) -> String {
+    t.with_timezone(&chrono_tz::Europe::London)
+        .format("%Y-%m-%d")
+        .to_string()
+}
+
+#[derive(Clone)]
+struct Ev {
+    title: String,
+    starts_at: DateTime<Utc>,
+    ends_at: Option<DateTime<Utc>>,
+    category: &'static str,
+    is_free: bool,
+    at: Option<(f64, f64)>,
+    venue: Option<&'static str>,
+    description: Option<&'static str>,
+    image_url: Option<&'static str>,
+    url: Option<&'static str>,
+}
+
+impl Ev {
+    fn new(title: &str, starts_at: DateTime<Utc>) -> Self {
+        Ev {
+            title: title.into(),
+            starts_at,
+            ends_at: None,
+            category: "talk",
+            is_free: false,
+            at: None,
+            venue: None,
+            description: None,
+            image_url: None,
+            url: None,
+        }
+    }
+}
+
+async fn insert(pool: &PgPool, e: Ev) -> Uuid {
+    sqlx::query_scalar(
+        "INSERT INTO events.events
+            (title, starts_at, ends_at, category, is_free, lat, lng, dedupe_key,
+             venue_name, description, image_url, url, price_min, price_max, currency)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $1, $8, $9, $10, $11,
+                 CASE WHEN $5 THEN NULL ELSE 5 END, CASE WHEN $5 THEN NULL ELSE 12.50 END,
+                 CASE WHEN $5 THEN NULL ELSE 'GBP' END)
+         RETURNING id",
+    )
+    .bind(&e.title)
+    .bind(e.starts_at)
+    .bind(e.ends_at)
+    .bind(e.category)
+    .bind(e.is_free)
+    .bind(e.at.map(|a| a.0))
+    .bind(e.at.map(|a| a.1))
+    .bind(e.venue)
+    .bind(e.description)
+    .bind(e.image_url)
+    .bind(e.url)
+    .fetch_one(pool)
+    .await
+    .unwrap()
+}
+
+async fn link(pool: &PgPool, event: Uuid, source_key: &str, url: &str) {
+    sqlx::query(
+        "INSERT INTO events.event_sources
+            (event_id, source_id, source_event_id, source_url, raw, first_seen_at, last_seen_at)
+         SELECT $1, id, $3, $3, '{}', now(), now() FROM events.sources WHERE key = $2",
+    )
+    .bind(event)
+    .bind(source_key)
+    .bind(url)
+    .execute(pool)
+    .await
+    .unwrap();
+}
+
+/// Card titles on a page, in order.
+fn card_titles(body: &str) -> Vec<String> {
+    body.split("<article class=\"card\">")
+        .skip(1)
+        .map(|card| {
+            let h2 = &card[card.find("<h2><a href=\"").unwrap()..];
+            let start = h2.find("\">").unwrap() + 2;
+            h2[start..start + h2[start..].find("</a>").unwrap()].to_string()
+        })
+        .collect()
+}
+
+#[tokio::test]
+async fn home_lists_upcoming_events_escaped_with_safe_links() {
+    let Some(db) = TestDb::create("home_lists_upcoming_events_escaped_with_safe_links").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let drawing = insert(
+        &pool,
+        Ev {
+            venue: Some("Barbican"),
+            image_url: Some("https://img.example.org/drawing.jpg"),
+            ..Ev::new("Life drawing", days(2))
+        },
+    )
+    .await;
+    link(
+        &pool,
+        drawing,
+        "barbican",
+        "https://www.barbican.org.uk/life-drawing",
+    )
+    .await;
+    let evil = insert(
+        &pool,
+        Ev {
+            venue: Some("<img src=x onerror=alert(2)>"),
+            image_url: Some("javascript:alert(3)"),
+            ..Ev::new("<script>alert(1)</script>", days(3))
+        },
+    )
+    .await;
+    link(&pool, evil, "barbican", "javascript:alert(4)").await;
+    insert(
+        &pool,
+        Ev {
+            ends_at: Some(days(30)),
+            category: "exhibition",
+            is_free: true,
+            ..Ev::new("Running show", days(-5))
+        },
+    )
+    .await;
+    insert(&pool, Ev::new("Last week's talk", days(-7))).await;
+    let app = app(&pool);
+
+    let p = get(&app, "/").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert!(
+        p.body
+            .contains("What&#39;s on in London for creative people")
+            || p.body.contains("What's on in London for creative people")
+    );
+    assert_eq!(
+        card_titles(&p.body),
+        [
+            "Running show",
+            "Life drawing",
+            "&lt;script&gt;alert(1)&lt;/script&gt;"
+        ]
+    );
+    assert!(!p.body.contains("<img src=x"), "{}", p.body);
+    assert!(p.body.contains("&lt;img src=x onerror=alert(2)&gt;"));
+    assert!(!p.body.contains("javascript:"), "{}", p.body);
+    // Thumbnail, venue, price, category, links.
+    assert!(
+        p.body
+            .contains("<img src=\"https://img.example.org/drawing.jpg\" alt=\"\" loading=\"lazy\"")
+    );
+    assert!(p.body.contains("Barbican"));
+    assert!(p.body.contains("£5–£12.50"), "{}", p.body);
+    assert!(p.body.contains(">Free</span>"));
+    assert!(p.body.contains(">Exhibition</span>"));
+    assert!(p.body.contains("Until <time"));
+    assert!(p.body.contains(&format!("href=\"/events/{drawing}\"")));
+    assert!(
+        p.body
+            .contains("href=\"https://www.barbican.org.uk/life-drawing\" rel=\"noopener noreferrer\">on barbican</a>")
+    );
+    // Default "from" is today (London), shown in the form.
+    assert!(p.body.contains(&format!(
+        "name=\"from\" type=\"date\" value=\"{}\"",
+        date(Utc::now())
+    )));
+    // Footer suggestion form.
+    assert!(
+        p.body
+            .contains("<form class=\"suggest\" method=\"post\" action=\"/suggest\">")
+    );
+
+    let css = get(&app, "/static/style.css").await;
+    assert_eq!(css.status, StatusCode::OK);
+    assert_eq!(css.headers[header::CONTENT_TYPE], "text/css; charset=utf-8");
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn home_filters_are_applied_and_reflected_in_the_form() {
+    let Some(db) = TestDb::create("home_filters_are_applied_and_reflected_in_the_form").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let kings_cross = Some((51.5345, -0.1250));
+    let barbican = Some((51.5202, -0.0938));
+    let match_it = Ev {
+        category: "workshop",
+        is_free: true,
+        at: kings_cross,
+        ..Ev::new("Free KX workshop", days(3))
+    };
+    insert(&pool, match_it.clone()).await;
+    insert(
+        &pool,
+        Ev {
+            is_free: false,
+            ..Ev::new("Paid KX workshop", days(3))
+        }
+        .with(match_it.clone()),
+    )
+    .await;
+    insert(
+        &pool,
+        Ev {
+            at: barbican,
+            ..match_it.clone()
+        }
+        .titled("Free Barbican workshop"),
+    )
+    .await;
+    insert(
+        &pool,
+        Ev {
+            category: "talk",
+            ..match_it.clone()
+        }
+        .titled("Free KX talk"),
+    )
+    .await;
+    insert(
+        &pool,
+        Ev {
+            starts_at: days(20),
+            ..match_it.clone()
+        }
+        .titled("Free KX workshop later"),
+    )
+    .await;
+    let app = app(&pool);
+
+    let (from, to) = (date(days(1)), date(days(10)));
+    let p = get(
+        &app,
+        &format!("/?from={from}&to={to}&category=workshop&free=true&near=kings-cross"),
+    )
+    .await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_eq!(card_titles(&p.body), ["Free KX workshop"]);
+    assert!(
+        p.body
+            .contains(&format!("name=\"from\" type=\"date\" value=\"{from}\""))
+    );
+    assert!(
+        p.body
+            .contains(&format!("name=\"to\" type=\"date\" value=\"{to}\""))
+    );
+    assert!(
+        p.body.contains("<option value=\"workshop\" selected>"),
+        "{}",
+        p.body
+    );
+    assert!(p.body.contains("<option value=\"kings-cross\" selected>"));
+    assert!(p.body.contains("type=\"checkbox\" value=\"true\" checked"));
+    assert!(p.body.contains(" km</span>"), "distance shown with near");
+
+    // Checkbox "on" and empty fields (a plain browser submit) are accepted.
+    let p = get(&app, &format!("/?from={from}&to=&category=&free=on&near=")).await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    let mut titles = card_titles(&p.body);
+    titles.sort();
+    assert_eq!(
+        titles,
+        [
+            "Free Barbican workshop",
+            "Free KX talk",
+            "Free KX workshop",
+            "Free KX workshop later"
+        ]
+    );
+
+    // Invalid filters: 400 page with the message, form still shown.
+    for (q, msg) in [
+        (format!("from={to}&to={from}"), "from must not be after to"),
+        ("category=concert".into(), "unknown category"),
+        ("near=mars".into(), "unknown area"),
+        ("from=yesterday".into(), "from must be a date"),
+    ] {
+        let p = get(&app, &format!("/?{q}")).await;
+        assert_eq!(p.status, StatusCode::BAD_REQUEST, "{q}");
+        assert_html(&p);
+        assert!(p.body.contains(msg), "{q}: {}", p.body);
+        assert!(p.body.contains("<form class=\"filters\""));
+    }
+    pool.close().await;
+    db.drop_db().await;
+}
+
+impl Ev {
+    fn titled(mut self, title: &str) -> Self {
+        self.title = title.into();
+        self
+    }
+
+    /// `self`'s title and price with the rest of `base`.
+    fn with(self, base: Ev) -> Self {
+        Ev {
+            title: self.title,
+            is_free: self.is_free,
+            ..base
+        }
+    }
+}
+
+#[tokio::test]
+async fn home_paginates_with_a_more_link_keeping_filters() {
+    let Some(db) = TestDb::create("home_paginates_with_a_more_link_keeping_filters").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let n = thaleia::web::PAGE_SIZE + 3;
+    for i in 0..n {
+        insert(
+            &pool,
+            Ev {
+                category: "workshop",
+                ..Ev::new(&format!("Workshop {i:02}"), days(1) + Duration::hours(i))
+            },
+        )
+        .await;
+    }
+    insert(&pool, Ev::new("A talk", days(1))).await;
+    let app = app(&pool);
+
+    let p = get(&app, "/?category=workshop").await;
+    assert_eq!(card_titles(&p.body).len() as i64, thaleia::web::PAGE_SIZE);
+    let start = p.body.find("<a href=\"/?").expect("More link") + "<a href=\"".len();
+    let href = p.body[start..start + p.body[start..].find('"').unwrap()].replace("&amp;", "&");
+    assert!(
+        href.contains("category=workshop") && href.contains("cursor="),
+        "{href}"
+    );
+    let p2 = get(&app, &href).await;
+    assert_eq!(p2.status, StatusCode::OK, "{}", p2.body);
+    assert_eq!(
+        card_titles(&p2.body),
+        ["Workshop 24", "Workshop 25", "Workshop 26"]
+    );
+    assert!(!p2.body.contains("rel=\"next\""));
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn detail_page_shows_all_fields_and_404s_unknown_ids() {
+    let Some(db) = TestDb::create("detail_page_shows_all_fields_and_404s_unknown_ids").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let id = insert(
+        &pool,
+        Ev {
+            venue: Some("Barbican"),
+            at: Some((51.5202, -0.0938)),
+            description: Some("First <b>para</b>\nsecond line\n\nSecond para & more"),
+            url: Some("https://www.barbican.org.uk/life-drawing"),
+            image_url: Some("https://img.example.org/drawing.jpg"),
+            ..Ev::new("<script>alert(1)</script> drawing", days(2))
+        },
+    )
+    .await;
+    link(
+        &pool,
+        id,
+        "barbican",
+        "https://www.barbican.org.uk/life-drawing",
+    )
+    .await;
+    link(
+        &pool,
+        id,
+        "ticketmaster",
+        "https://www.ticketmaster.co.uk/x",
+    )
+    .await;
+    let app = app(&pool);
+
+    let p = get(&app, &format!("/events/{id}")).await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert!(
+        p.body
+            .contains("<h1>&lt;script&gt;alert(1)&lt;/script&gt; drawing</h1>")
+    );
+    assert!(p.body.contains(
+        "<p>First &lt;b&gt;para&lt;/b&gt;<br>second line</p><p>Second para &amp; more</p>"
+    ));
+    assert!(p.body.contains(
+        "https://www.openstreetmap.org/?mlat=51.5202&amp;mlon=-0.0938#map=17/51.5202/-0.0938"
+    ));
+    assert!(p.body.contains(">barbican</a>"));
+    assert!(p.body.contains("href=\"https://www.ticketmaster.co.uk/x\""));
+    assert!(p.body.contains("£5–£12.50"), "{}", p.body);
+    assert!(p.body.contains("Talk"));
+
+    for uri in [
+        format!("/events/{}", Uuid::new_v4()),
+        "/events/not-a-uuid".to_string(),
+    ] {
+        let p = get(&app, &uri).await;
+        assert_eq!(p.status, StatusCode::NOT_FOUND, "{uri}");
+        assert_html(&p);
+        assert!(p.body.contains("Event not found"));
+    }
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn sources_page_renders_the_sources_api_data() {
+    let Some(db) = TestDb::create("sources_page_renders_the_sources_api_data").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let source = thaleia::repo::source_by_key(&pool, "barbican")
+        .await
+        .unwrap()
+        .unwrap();
+    let started_at: DateTime<Utc> = "2026-09-26T05:00:00Z".parse().unwrap();
+    thaleia::repo::record_run(
+        &pool,
+        &thaleia::repo::NewRun {
+            source_id: source.id,
+            started_at,
+            finished_at: started_at + Duration::seconds(2),
+            events_found: 41,
+            errors: 3,
+            error_summary: None,
+            ok: true,
+        },
+    )
+    .await
+    .unwrap();
+    let app = app(&pool);
+
+    let p = get(&app, "/sources").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    let row = &p.body[p
+        .body
+        .find("<th scope=\"row\">barbican")
+        .expect("barbican row")..];
+    let row = &row[..row.find("</tr>").unwrap()];
+    assert!(row.contains("Sat 26 Sep 2026, 06:00"), "{row}");
+    assert!(row.contains("<td>41</td><td>3</td>"), "{row}");
+    assert!(row.contains("status-degraded"), "{row}");
+    assert!(p.body.contains("<th scope=\"row\">ticketmaster"));
+    assert!(p.body.contains("Never"));
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn suggestion_form_files_an_issue_and_reports_outcomes() {
+    let Some(db) = TestDb::create("suggestion_form_files_an_issue_and_reports_outcomes").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let github = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path(format!("/repos/{REPO}/issues")))
+        .and(body_partial_json(json!({
+            "title": "New scraper: example-gallery.org.uk",
+            "labels": ["new-scraper"],
+        })))
+        .respond_with(ResponseTemplate::new(201).set_body_json(json!({
+            "number": 42, "title": "New scraper: example-gallery.org.uk"
+        })))
+        .expect(1)
+        .mount(&github)
+        .await;
+    let filer: Box<dyn IssueFiler> =
+        Box::new(GitHubIssueFiler::new(&github.uri(), REPO, "test-token").unwrap());
+    let config = SuggestionConfig {
+        per_hour: 3,
+        per_day: 20,
+        ..Default::default()
+    };
+    let app = app_with(&pool, config, Some(filer));
+
+    let p = post_form(
+        &app,
+        "url=https%3A%2F%2Fwww.example-gallery.org.uk%2Fwhats-on&note=tiny+%3Cb%3Egallery",
+    )
+    .await;
+    assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
+    assert_html(&p);
+    assert!(p.body.contains("<strong>example-gallery.org.uk</strong>"));
+    assert!(
+        p.body
+            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/42\"")
+    );
+    let note: Option<String> =
+        sqlx::query_scalar("SELECT note FROM events.site_suggestions ORDER BY id LIMIT 1")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(note.as_deref(), Some("tiny <b>gallery"));
+
+    // Same domain again (empty note): already suggested, no second issue.
+    let p = post_form(&app, "url=http%3A%2F%2Fexample-gallery.org.uk%2F&note=").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert!(p.body.contains("already been suggested"));
+
+    // Invalid URL: validation message, escaped.
+    let p = post_form(&app, "url=javascript%3Aalert(1)").await;
+    assert_eq!(p.status, StatusCode::BAD_REQUEST, "{}", p.body);
+    assert!(
+        p.body.contains("only http and https URLs are accepted"),
+        "{}",
+        p.body
+    );
+
+    // Missing field: a friendly 400 page, not a plain-text rejection.
+    let p = post_form(&app, "note=hi").await;
+    assert_eq!(p.status, StatusCode::BAD_REQUEST);
+    assert_html(&p);
+
+    // Rate limit (3/hour; invalid ones do not count): 429 + Retry-After.
+    // (GitHub rejects this one: accepted but left pending for the ingest run.)
+    let p = post_form(&app, "url=https%3A%2F%2Fanother-venue.org.uk").await;
+    assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
+    assert!(p.body.contains("queued for review"), "{}", p.body);
+    let p = post_form(&app, "url=https%3A%2F%2Fthird-venue.org.uk").await;
+    assert_eq!(p.status, StatusCode::TOO_MANY_REQUESTS, "{}", p.body);
+    assert!(p.headers.contains_key(header::RETRY_AFTER));
+    assert!(p.body.contains("Too many suggestions"));
+    pool.close().await;
+    db.drop_db().await;
+}

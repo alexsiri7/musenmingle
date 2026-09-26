@@ -3,8 +3,9 @@
 London cultural events for creative people: exhibitions, expos, talks,
 workshops and community events (CreativeMornings, writing groups, ...).
 
-This repository is the **ingestion backend** and the **read API**,
-written in Rust (axum, tokio, sqlx, reqwest). There is no frontend yet.
+This repository is the **ingestion backend**, the **read API** and a
+minimal server-rendered **web page** (https://thaleia.interstellarai.net),
+written in Rust (axum, tokio, sqlx, reqwest, maud).
 
 ## Architecture
 
@@ -15,6 +16,8 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
             +---------+---------+        |  GET /v1/events[/{id}],   |
                       │                  |  GET /v1/sources,         |
                       │                  |  POST /v1/suggestions     |
+                      │                  |  HTML: /, /events/{id},   |
+                      │                  |  /sources, POST /suggest  |
                       │                  +-------------+-------------+
        ┌──────────────┼──────────────┐                 │
        ▼              ▼              ▼                 ▼
@@ -91,6 +94,22 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   source links; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
   and `healthy`/`degraded`/`broken` status. Read-only; browser access is
   limited to `CORS_ORIGINS`.
+- **Web pages** (`src/web.rs`, `src/web.css`): server-rendered HTML from the
+  same process, for people rather than programs. `GET /` lists upcoming
+  events (from today, London) with a plain GET filter form — dates,
+  category, free only, and a preset "near" area (Central & South Bank,
+  East, King's Cross, South Kensington) mapped to `near`+`radius_km` — so
+  every filtered view is a shareable URL; results are cards with a "More"
+  link on the same cursor as the API. `GET /events/{id}` shows every field,
+  the description as escaped paragraphs, each source link and an
+  OpenStreetMap link. `GET /sources` is the `/v1/sources` data as a table.
+  The footer's "Suggest a venue site" form posts to `POST /suggest`, which
+  runs the same validation, dedupe, rate limit and issue filing as
+  `POST /v1/suggestions`. Templates are [maud](https://maud.lambda.xyz)
+  (compile-time checked, HTML-escaped by default); no JavaScript, no
+  third-party assets (images are the sources' own `https` URLs), and a strict
+  Content-Security-Policy (`default-src 'self'`, no `unsafe-inline`: the CSS
+  is served from `/static/style.css`).
 
 ### Merging and overrides
 

@@ -2,6 +2,9 @@
 //! `GET /v1/events/{id}`, `GET /v1/sources`; see `docs/api.md`) and
 //! `POST /v1/suggestions`.
 //!
+//! The human-facing HTML pages (`/`, `/events/{id}`, `/sources`,
+//! `POST /suggest`) live in `crate::web` and share the helpers here.
+//!
 //! Handlers that need the client address extract `ConnectInfo`, so serve
 //! the router with `into_make_service_with_connect_info::<SocketAddr>()`.
 
@@ -56,6 +59,7 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
         .route("/v1/events/{id}", get(get_event))
         .route("/v1/sources", get(list_sources))
         .route("/v1/suggestions", post(suggest))
+        .merge(crate::web::routes())
         .layer(cors)
         .with_state(AppState {
             pool,
@@ -107,15 +111,7 @@ async fn suggest(
                 .into_response();
         }
     };
-    let forwarded_for = headers
-        .get_all("x-forwarded-for")
-        .iter()
-        .filter_map(|v| v.to_str().ok());
-    let client = state.suggestions.client_ip(peer.ip(), forwarded_for);
-    let outcome = state
-        .suggestions
-        .submit(&state.pool, &req.url, req.note.as_deref(), client)
-        .await;
+    let outcome = submit_suggestion(&state, peer, &headers, &req.url, req.note.as_deref()).await;
     match outcome {
         Ok(Outcome::Accepted { domain, issue }) => (
             StatusCode::CREATED,
@@ -154,6 +150,26 @@ async fn suggest(
     }
 }
 
+/// Validate, dedupe, rate-limit and file a suggestion from `peer` (shared by
+/// the JSON and HTML handlers).
+pub(crate) async fn submit_suggestion(
+    state: &AppState,
+    peer: SocketAddr,
+    headers: &HeaderMap,
+    url: &str,
+    note: Option<&str>,
+) -> anyhow::Result<Outcome> {
+    let forwarded_for = headers
+        .get_all("x-forwarded-for")
+        .iter()
+        .filter_map(|v| v.to_str().ok());
+    let client = state.suggestions.client_ip(peer.ip(), forwarded_for);
+    state
+        .suggestions
+        .submit(&state.pool, url, note, client)
+        .await
+}
+
 /// Read-API failures, rendered as `{"error": "..."}`.
 enum ApiError {
     BadRequest(String),
@@ -182,35 +198,35 @@ impl IntoResponse for ApiError {
 }
 
 #[derive(Serialize)]
-struct EventJson {
-    id: Uuid,
-    title: String,
-    description: Option<String>,
-    venue_name: Option<String>,
-    address: Option<String>,
-    lat: Option<f64>,
-    lng: Option<f64>,
-    starts_at: DateTime<Utc>,
-    ends_at: Option<DateTime<Utc>>,
-    is_free: bool,
-    price_min: Option<Decimal>,
-    price_max: Option<Decimal>,
-    currency: Option<String>,
-    url: Option<String>,
-    image_url: Option<String>,
-    category: String,
-    tags: Vec<String>,
+pub(crate) struct EventJson {
+    pub(crate) id: Uuid,
+    pub(crate) title: String,
+    pub(crate) description: Option<String>,
+    pub(crate) venue_name: Option<String>,
+    pub(crate) address: Option<String>,
+    pub(crate) lat: Option<f64>,
+    pub(crate) lng: Option<f64>,
+    pub(crate) starts_at: DateTime<Utc>,
+    pub(crate) ends_at: Option<DateTime<Utc>>,
+    pub(crate) is_free: bool,
+    pub(crate) price_min: Option<Decimal>,
+    pub(crate) price_max: Option<Decimal>,
+    pub(crate) currency: Option<String>,
+    pub(crate) url: Option<String>,
+    pub(crate) image_url: Option<String>,
+    pub(crate) category: String,
+    pub(crate) tags: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    distance_km: Option<f64>,
-    sources: Vec<SourceLinkJson>,
+    pub(crate) distance_km: Option<f64>,
+    pub(crate) sources: Vec<SourceLinkJson>,
 }
 
 #[derive(Serialize)]
-struct SourceLinkJson {
-    source: String,
-    url: Option<String>,
-    first_seen_at: DateTime<Utc>,
-    last_seen_at: DateTime<Utc>,
+pub(crate) struct SourceLinkJson {
+    pub(crate) source: String,
+    pub(crate) url: Option<String>,
+    pub(crate) first_seen_at: DateTime<Utc>,
+    pub(crate) last_seen_at: DateTime<Utc>,
 }
 
 impl EventJson {
@@ -242,7 +258,7 @@ impl EventJson {
 async fn source_links(
     pool: &PgPool,
     ids: &[Uuid],
-) -> Result<HashMap<Uuid, Vec<SourceLinkJson>>, ApiError> {
+) -> sqlx::Result<HashMap<Uuid, Vec<SourceLinkJson>>> {
     let mut by_event: HashMap<Uuid, Vec<SourceLinkJson>> = HashMap::new();
     for l in repo::event_source_links(pool, ids).await? {
         by_event
@@ -258,12 +274,13 @@ async fn source_links(
     Ok(by_event)
 }
 
-async fn list_events(
-    State(state): State<AppState>,
-    RawQuery(raw): RawQuery,
-) -> Result<Json<Value>, ApiError> {
-    let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
-    let mut rows = repo::list_events(&state.pool, &query).await?;
+/// One page of events for `query` and the cursor of the next page (shared
+/// by `GET /v1/events` and the HTML home page).
+pub(crate) async fn event_page(
+    pool: &PgPool,
+    query: &listing::EventQuery,
+) -> sqlx::Result<(Vec<EventJson>, Option<String>)> {
+    let mut rows = repo::list_events(pool, query).await?;
     let has_more = rows.len() as i64 > query.limit;
     rows.truncate(query.limit as usize);
     let next_cursor = rows
@@ -278,17 +295,38 @@ async fn list_events(
         })
         .map(|c| c.encode());
     let ids: Vec<Uuid> = rows.iter().map(|r| r.event.id).collect();
-    let mut links = source_links(&state.pool, &ids).await?;
-    let events: Vec<EventJson> = rows
+    let mut links = source_links(pool, &ids).await?;
+    let events = rows
         .into_iter()
         .map(|r| {
             let sources = links.remove(&r.event.id).unwrap_or_default();
             EventJson::new(r.event, r.distance_km, sources)
         })
         .collect();
+    Ok((events, next_cursor))
+}
+
+async fn list_events(
+    State(state): State<AppState>,
+    RawQuery(raw): RawQuery,
+) -> Result<Json<Value>, ApiError> {
+    let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
+    let (events, next_cursor) = event_page(&state.pool, &query).await?;
     Ok(Json(
         json!({ "events": events, "next_cursor": next_cursor }),
     ))
+}
+
+/// One event with its source links, or `None` if the id is unknown.
+pub(crate) async fn event_by_id(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventJson>> {
+    let Some(event) = repo::get_event(pool, id).await? else {
+        return Ok(None);
+    };
+    let sources = source_links(pool, &[id])
+        .await?
+        .remove(&id)
+        .unwrap_or_default();
+    Ok(Some(EventJson::new(event, None, sources)))
 }
 
 /// Ids that are not UUIDs are unknown ids too: 404, not 400.
@@ -297,14 +335,10 @@ async fn get_event(
     Path(id): Path<String>,
 ) -> Result<Json<EventJson>, ApiError> {
     let id = Uuid::parse_str(&id).map_err(|_| ApiError::NotFound)?;
-    let event = repo::get_event(&state.pool, id)
+    let event = event_by_id(&state.pool, id)
         .await?
         .ok_or(ApiError::NotFound)?;
-    let sources = source_links(&state.pool, &[id])
-        .await?
-        .remove(&id)
-        .unwrap_or_default();
-    Ok(Json(EventJson::new(event, None, sources)))
+    Ok(Json(event))
 }
 
 #[derive(Serialize)]
@@ -370,12 +404,21 @@ impl SourceJson {
 }
 
 async fn list_sources(State(state): State<AppState>) -> Result<Json<Value>, ApiError> {
+    Ok(Json(json!({ "sources": source_values(&state).await? })))
+}
+
+/// Every source exactly as `GET /v1/sources` serialises it (the HTML page
+/// renders these, so new fields and statuses show up without changes).
+pub(crate) async fn source_values(state: &AppState) -> sqlx::Result<Vec<Value>> {
     let sources: Vec<SourceJson> = repo::source_statuses(&state.pool)
         .await?
         .into_iter()
         .map(|r| SourceJson::new(r, &state.github_repo))
         .collect();
-    Ok(Json(json!({ "sources": sources })))
+    Ok(sources
+        .iter()
+        .map(|s| serde_json::to_value(s).expect("SourceJson serialises"))
+        .collect())
 }
 
 #[cfg(test)]

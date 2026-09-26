@@ -8,6 +8,14 @@ they are not renamed or removed without notice; new fields may be added.
 - Read-API errors are `{"error": "<message>"}` with status 400 (bad
   parameters), 404 (not found) or 500.
 
+The same process also serves human-facing HTML pages (not part of this
+API's stability promise): `GET /` (upcoming events with a filter form that
+takes `from`, `to`, `category`, `free`, `near=<area>` and `cursor`),
+`GET /events/{id}`, `GET /sources`, `POST /suggest` (form-encoded `url`,
+`note`; same rules and status codes as `POST /v1/suggestions`) and
+`GET /static/style.css`. HTML responses carry a strict
+`Content-Security-Policy`. See `src/web.rs`.
+
 Browsers may call the API only from the origins listed in `CORS_ORIGINS`
 (comma-separated, e.g. `https://thaleia.example,http://localhost:5173`).
 Unset means no cross-origin access.
