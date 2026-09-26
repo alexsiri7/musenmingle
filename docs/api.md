@@ -24,8 +24,8 @@ does not republish their content. So, in every response:
 
 - `description` is at most a **300-character excerpt** (cut at a sentence
   or word boundary, ending in `…`), and `null` for sources whose terms don't
-  allow us to keep descriptions (currently Ticketmaster and Serpentine
-  Galleries). Follow the source link for the full text.
+  allow us to keep descriptions (currently Ticketmaster, Serpentine
+  Galleries and Sir John Soane's Museum). Follow the source link for the full text.
 - The source's own image URL is **never exposed** (`image_url` was removed
   on 2026-09-26). Instead `thumbnail_url` points to a small copy we host
   (made once per image, ≤ 480 px, JPEG), and `image_credit` names its

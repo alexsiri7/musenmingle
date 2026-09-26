@@ -195,8 +195,9 @@ small credited thumbnail, and send people to the venue.
   reuse — then we keep facts + link only) and `policy_note` (why, with the
   terms URL and date). `repo::upsert_event` enforces the flags for every
   source, and the ingest runner's `repo::enforce_content_policy` clears data
-  already stored if a flag is turned off. Currently Ticketmaster (API terms)
-  and Serpentine Galleries (site terms) are facts + link only.
+  already stored if a flag is turned off. Currently Ticketmaster (API terms),
+  Serpentine Galleries (site terms) and Sir John Soane's Museum (site terms)
+  are facts + link only.
 - **Excerpts**: every stored description is cut to ≤ 300 characters at a
   sentence (else word) boundary with an ellipsis (`normalise::excerpt`);
   pages say "An excerpt. Read more on <venue>".
@@ -438,8 +439,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican and Chisenhale Gallery daily), and an advisory lock prevents overlapping
-   Gallery, the Barbican and D&AD daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD and Sir John Soane's Museum daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
