@@ -72,11 +72,14 @@ impl SomersetHouse {
 #[derive(Debug)]
 pub struct ListingPage {
     pub events: Vec<RawEvent>,
+    /// Descriptions of listing nodes that could not become a [`RawEvent`].
+    pub rejected: Vec<String>,
     pub total_pages: u32,
 }
 
 /// Parse one `/whats-on?page=N` page: one [`RawEvent`] per listing node, with
 /// the node JSON as payload and its path below `/whats-on/` as the source id.
+/// Nodes without such a path are listed in [`ListingPage::rejected`].
 pub fn parse_listing(html: &str) -> Result<ListingPage, SourceError> {
     let doc = Html::parse_document(html);
     let sel = Selector::parse("script#props").expect("valid selector");
@@ -93,22 +96,20 @@ pub fn parse_listing(html: &str) -> Result<ListingPage, SourceError> {
         .and_then(Value::as_array)
         .ok_or_else(|| SourceError::Parse("script#props has no data.page.items.edges".into()))?;
     let site = Url::parse(SITE).expect("valid url");
-    let events = edges
-        .iter()
-        .filter_map(|edge| {
-            let node = edge.get("node")?;
-            let path = node.get("url").and_then(Value::as_str)?;
-            let id = path
-                .strip_prefix(LISTING_PATH)?
-                .strip_prefix('/')
-                .filter(|id| !id.is_empty())?;
-            Some(RawEvent {
-                source_event_id: id.to_string(),
-                source_url: Some(site.join(path).ok()?.to_string()),
-                payload: node.clone(),
-            })
-        })
-        .collect();
+    let mut events = Vec::new();
+    let mut rejected = Vec::new();
+    for edge in edges {
+        match listing_event(edge, &site) {
+            Some(raw) => events.push(raw),
+            None => {
+                let label = ["/node/url", "/node/title"]
+                    .iter()
+                    .find_map(|p| edge.pointer(p).and_then(Value::as_str))
+                    .unwrap_or("?");
+                rejected.push(format!("unusable listing item {label:?}"));
+            }
+        }
+    }
     let total_pages = items
         .and_then(|i| i.pointer("/pageInfo/totalPages"))
         .and_then(Value::as_u64)
@@ -116,7 +117,22 @@ pub fn parse_listing(html: &str) -> Result<ListingPage, SourceError> {
         .unwrap_or(1);
     Ok(ListingPage {
         events,
+        rejected,
         total_pages,
+    })
+}
+
+fn listing_event(edge: &Value, site: &Url) -> Option<RawEvent> {
+    let node = edge.get("node")?;
+    let path = node.get("url").and_then(Value::as_str)?;
+    let id = path
+        .strip_prefix(LISTING_PATH)?
+        .strip_prefix('/')
+        .filter(|id| !id.is_empty())?;
+    Some(RawEvent {
+        source_event_id: id.to_string(),
+        source_url: Some(site.join(path).ok()?.to_string()),
+        payload: node.clone(),
     })
 }
 
@@ -350,22 +366,37 @@ impl Source for SomersetHouse {
         };
         let first = parse_listing(&ctx.get_text(&page_url(1)?).await?)?;
         let last_page = first.total_pages.min(self.max_listing_pages);
-        let mut out = first.events;
+        let mut out = Vec::new();
+        let mut rejected = Vec::new();
+        let mut merge = |page: ListingPage| {
+            for raw in page.events {
+                if !out
+                    .iter()
+                    .any(|r: &RawEvent| r.source_event_id == raw.source_event_id)
+                {
+                    out.push(raw);
+                }
+            }
+            // Pages are cumulative, so the same bad item recurs on every page.
+            for item in page.rejected {
+                if !rejected.contains(&item) {
+                    rejected.push(item);
+                }
+            }
+        };
+        merge(first);
         for n in 2..=last_page {
             let page = match ctx.get_text(&page_url(n)?).await {
                 Ok(html) => parse_listing(&html),
                 Err(e) => Err(e.into()),
             };
             match page {
-                Ok(page) => {
-                    for raw in page.events {
-                        if !out.iter().any(|r| r.source_event_id == raw.source_event_id) {
-                            out.push(raw);
-                        }
-                    }
-                }
+                Ok(page) => merge(page),
                 Err(e) => ctx.report_error(format!("page {n}: {e}")),
             }
+        }
+        for item in rejected {
+            ctx.report_error(item);
         }
         if out.is_empty() {
             return Err(SourceError::Parse(
@@ -430,6 +461,10 @@ mod tests {
         assert_eq!(
             postcode_outward("Strand, London wc2r 1la").as_deref(),
             Some("WC2R")
+        );
+        assert_eq!(
+            postcode_outward(VENUE_ADDRESS).as_deref(),
+            Some(VENUE_OUTWARD_CODE)
         );
         assert_eq!(postcode_outward("Lancaster Rooms\r\nNew Wing"), None);
     }

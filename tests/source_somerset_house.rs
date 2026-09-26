@@ -7,7 +7,7 @@ use common::fixture;
 use thaleia::config::RateLimitConfig;
 use thaleia::fetch::FetchContext;
 use thaleia::sources::Source;
-use thaleia::sources::somerset_house::{SomersetHouse, parse_listing};
+use thaleia::sources::somerset_house::{MAX_LISTING_PAGES, SomersetHouse, parse_listing};
 use wiremock::matchers::{method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -52,6 +52,28 @@ fn props_json_with_invalid_escape_parses() {
     let page = parse_listing(html).expect("parse");
     assert_eq!(page.events.len(), 1);
     assert_eq!(page.events[0].source_event_id, "a");
+}
+
+/// A listing page whose props hold one item per id and claim `total_pages`.
+fn listing_html(total_pages: u32, urls: &[&str]) -> String {
+    let edges: Vec<_> = urls
+        .iter()
+        .map(|url| serde_json::json!({ "node": { "url": url, "title": url, "dateStart": "2026-10-01T00:00" } }))
+        .collect();
+    let props = serde_json::json!({
+        "data": { "page": { "items": { "edges": edges, "pageInfo": { "totalPages": total_pages } } } }
+    });
+    format!(
+        r#"<html><body><script id="props" type="application/json">{props}</script></body></html>"#
+    )
+}
+
+#[test]
+fn unusable_listing_items_are_rejected() {
+    let page =
+        parse_listing(&listing_html(1, &["/whats-on/a", "/about", "/whats-on/"])).expect("parse");
+    assert_eq!(page.events.len(), 1);
+    assert_eq!(page.rejected.len(), 2, "{:?}", page.rejected);
 }
 
 #[test]
@@ -144,4 +166,67 @@ async fn robots_disallow_blocks_the_scraper() {
         .unwrap_err()
         .to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
+}
+
+#[tokio::test]
+async fn failed_first_page_fails_the_fetch() {
+    let server = MockServer::start().await;
+    mount_robots(&server, &fixture(&format!("{DIR}/robots.txt"))).await;
+    mount_page(&server, "1", ResponseTemplate::new(500)).await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on"))
+        .and(query_param("page", "2"))
+        .respond_with(page_fixture(2))
+        .expect(0)
+        .mount(&server)
+        .await;
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let result = SomersetHouse::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await;
+    assert!(result.is_err(), "{result:?}");
+}
+
+#[tokio::test]
+async fn pagination_stops_at_the_page_cap() {
+    let server = MockServer::start().await;
+    mount_robots(&server, &fixture(&format!("{DIR}/robots.txt"))).await;
+    for n in 1..=MAX_LISTING_PAGES + 1 {
+        let url = format!("/whats-on/item-{n}");
+        Mock::given(method("GET"))
+            .and(path("/whats-on"))
+            .and(query_param("page", n.to_string()))
+            .respond_with(ResponseTemplate::new(200).set_body_string(listing_html(20, &[&url])))
+            .expect(u64::from(n <= MAX_LISTING_PAGES))
+            .mount(&server)
+            .await;
+    }
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let raws = SomersetHouse::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(raws.len(), MAX_LISTING_PAGES as usize);
+}
+
+#[tokio::test]
+async fn unusable_listing_items_are_reported_once() {
+    let server = MockServer::start().await;
+    mount_robots(&server, &fixture(&format!("{DIR}/robots.txt"))).await;
+    for n in ["1", "2"] {
+        let body = listing_html(2, &["/whats-on/a", "/about"]);
+        mount_page(&server, n, ResponseTemplate::new(200).set_body_string(body)).await;
+    }
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let raws = SomersetHouse::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("/about"), "{errors:?}");
+    assert_eq!(raws.len(), 1);
 }
