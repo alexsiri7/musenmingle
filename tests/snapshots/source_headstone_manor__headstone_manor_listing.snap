@@ -1,0 +1,254 @@
+---
+source: tests/source_headstone_manor.rs
+expression: "serde_json::json!({ \"pages\": pages, \"cards\": cards() })"
+---
+{
+  "cards": [
+    {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Autumn-2-moats-and-boats-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784644346&s=f3f1cd1c7db9c371b3b94fced05db93c",
+      "path": "/events/mini-museum-explorers-my-home-your-home-manor-home",
+      "start": null,
+      "title": "Mini Museum Explorers: My Home, Your Home, Manor Home"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Rectangular-advertising-photo.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784645422&s=7a1689367131673406b5f3bb830afba4",
+      "path": "/events/festive-block-printing-lino-cuts",
+      "start": null,
+      "title": "Festive Block Printing & Lino Cuts"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/1780169711974blob.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784556300&s=0d8f5f8cd3bb6b40412b9c51fe90ca78",
+      "path": "/events/hmm-tuesday-talk-the-story-of-the-music-hall",
+      "start": "2026-10-06T14:00:00+01:00",
+      "title": "The Story of The Music Hall"
+    },
+    {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Digital-Screen-II-The-Witch-Who-Couldnt-Sleep.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786351039&s=2e1e364ffe03637d501c77d817a7787b",
+      "path": "/events/the-witch-who-couldnt-sleep",
+      "start": "2026-10-17T14:00:00+01:00",
+      "title": "The Witch Who Couldn’t Sleep"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Tuesday-Tour-Halloween-at-Headstone-web.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1788272465&s=1105bb058b610ec3adfa284d5012d77d",
+      "path": "/events/tuesday-tour-halloween-at-headstone",
+      "start": "2026-10-20T14:00:00+01:00",
+      "title": "Tuesday Tour: Halloween at Headstone"
+    },
+    {
+      "end": "2026-11-26T10:30:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Mums-Club.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1780657863&s=2ac39dfa663f6d5b0334ccbe5d32b569",
+      "path": "/events/mums-club-at-headstone-manor",
+      "start": "2026-10-22T10:30:00+01:00",
+      "title": "Mum's Club at Headstone Manor"
+    },
+    {
+      "end": "2026-11-01T10:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Pumpkin-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789553149&s=29c748c843b79694e3c2ad45c795de6e",
+      "path": "/events/pumpkin-trail",
+      "start": "2026-10-24T10:00:00+01:00",
+      "title": "Pumpkin Trail"
+    },
+    {
+      "end": "2026-10-28T13:15:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Nightmare-Catcher-2-Rectangle.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784646155&s=62955132e2e8ffe2dd0a922e3c175649",
+      "path": "/events/halloween-nightmare-catcher-workshop",
+      "start": "2026-10-25T11:00:00+00:00",
+      "title": "Halloween ‘Nightmare Catcher’ Workshop"
+    },
+    {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/FB_IMG_1770721351868.jpg?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.4794&fp-y=0.4255&dm=1784561154&s=150450dda2f4348cdaedc69ab3189373",
+      "path": "/events/hmm-creepy-creature-pond-dipping",
+      "start": "2026-10-27T10:00:00+00:00",
+      "title": "Creepy Creature Pond Dipping"
+    },
+    {
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Exhibitions-Gallery/pots-archive-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786435536&s=2d885cca51d8f44e71e5f8c8f47f4809",
+      "path": "/exhibitions/the-history-of-roman-harrow",
+      "start": "2026-09-15T00:00:00+01:00",
+      "title": "The History of Roman Harrow"
+    },
+    {
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Mock-CC-icon-landscape.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627744&s=5a300291bbdcf679a271420d2b0a6b6b",
+      "path": "/exhibitions/40-years-of-exhibitions-whats-next",
+      "start": "2026-09-03T00:00:00+01:00",
+      "title": "40 Years of Exhibitions: What's Next?"
+    },
+    {
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Turning-the-Page.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627269&s=ca267689a19944ee97c3a9e040e7dd82",
+      "path": "/exhibitions/turning-the-page-a-history-of-reading",
+      "start": "2026-09-03T00:00:00+01:00",
+      "title": "Turning the Page: A History of Reading"
+    },
+    {
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Harrow-Unearthed-A-Litter-Legacy.jpeg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784626871&s=827a57ba45300c1b1de7409fe81f42eb",
+      "path": "/exhibitions/harrow-unearthed-a-litter-legacy",
+      "start": "2026-09-02T00:00:00+01:00",
+      "title": "Harrow Unearthed: A Litter Legacy"
+    },
+    {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Glowing-Spooky-Creations.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562055&s=1ec6f44607523f4acef7d3c9b5ed2773",
+      "path": "/events/hmm-spooky-halloween-craft",
+      "start": "2026-10-30T10:00:00+00:00",
+      "title": "Spooky Halloween Craft"
+    },
+    {
+      "end": "2026-11-29T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Remembrance-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789554000&s=5902c58a527704bd4e4dc48fadfa3667",
+      "path": "/events/remembrance-trail",
+      "start": "2026-11-01T10:00:00+00:00",
+      "title": "Remembrance Trail"
+    },
+    {
+      "end": "2026-11-29T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Roman-Discoveries-family-drop-in-image.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562912&s=e18bec5f3821b28180936d6228c30464",
+      "path": "/events/roman-discoveries",
+      "start": "2026-11-01T11:00:00+00:00",
+      "title": "Roman Discoveries"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/HOD-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784553067&s=7efac62cba879d6b803a923918b26c45",
+      "path": "/events/hmm-tuesday-talk-the-history-of-roman-harrow",
+      "start": "2026-11-03T14:00:00+00:00",
+      "title": "The History of Roman Harrow"
+    },
+    {
+      "end": "2026-12-17T10:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Autumn-2-moats-and-boats-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784644346&s=f3f1cd1c7db9c371b3b94fced05db93c",
+      "path": "/events/mini-museum-explorers-2",
+      "start": "2026-11-05T10:00:00+00:00",
+      "title": "Mini Museum Explorers: Around the Moat"
+    },
+    {
+      "end": null,
+      "genre": "Special Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/3.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1786976550&s=b833dfe0e012b9c55c4b65cc8f54a136",
+      "path": "/events/hmm-bollywood-by-candlelight",
+      "start": "2026-11-07T19:00:00+00:00",
+      "title": "Bollywood by Candlelight"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/IMG_20260602_141758.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784554523&s=0211940955acf32e1256f214d3976e6b",
+      "path": "/events/hmm-exploring-harrows-wartime-bomb-map",
+      "start": "2026-11-10T10:00:00+00:00",
+      "title": "Exploring Harrow’s Wartime Bomb Map"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/bombe-wave-bw-ncm-2016-107w-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784557060&s=e00757dd557059c6e02edbaf839a5228",
+      "path": "/events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2",
+      "start": "2026-11-10T14:00:00+00:00",
+      "title": "The Impact of the Americans coming to England and Eastcote during WW2"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/community-connex-memory-session.JPG?w=640&h=360&q=100&auto=format&fit=crop&dm=1784632803&s=f2bd88fe11249b788cca31865ef17a9e",
+      "path": "/events/harrow-now-and-then-a-memorabilia-session",
+      "start": "2026-11-17T10:00:00+00:00",
+      "title": "Harrow Now and Then: A Memorabilia Session"
+    },
+    {
+      "end": null,
+      "genre": "Special Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/20251128_200156.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784635091&s=2c8f2f460a6f9b870f0d3a2273dcc18b",
+      "path": "/events/hmm-candlelight-concert-a-night-at-the-ball",
+      "start": "2026-11-19T19:00:00+00:00",
+      "title": "Candlelight Concert: A Night at the Ball"
+    },
+    {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Toddler-Takeover.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1790238323&s=d35346ba9d09a6410db0b7c20dd9f389",
+      "path": "/events/hmm-toddler-takeover-day-2026",
+      "start": "2026-11-23T10:00:00+00:00",
+      "title": "Toddler Takeover Day 2026"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Picture2-suncatcher.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784647640&s=e071a4ec4f80992186bcd63a500df030",
+      "path": "/events/stained-glass-suncatcher-workshop",
+      "start": "2026-11-29T10:00:00+00:00",
+      "title": "Stained Glass Suncatcher Workshop"
+    },
+    {
+      "end": "2027-01-03T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Twinkle-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789635072&s=328af614184fe582b14bb5719b5bb815",
+      "path": "/events/twinkle-trail",
+      "start": "2026-12-05T11:00:00+00:00",
+      "title": "Twinkle Trail"
+    },
+    {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Father-Xmas.png?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.476&fp-y=0.3177&dm=1784562261&s=eb0ea41901d82e71c48db64d196d5e0e",
+      "path": "/events/hmm-tuesday-talk-in-search-of-father-christmas",
+      "start": "2026-12-08T14:00:00+00:00",
+      "title": "In Search of Father Christmas"
+    },
+    {
+      "end": "2026-12-23T16:30:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/sanca2_1.20.1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786626665&s=f209890b0bbe7fa04d029dda8758ff13",
+      "path": "/events/hmm-storytelling-with-santa",
+      "start": "2026-12-12T11:00:00+00:00",
+      "title": "Storytelling with Santa"
+    },
+    {
+      "end": "2026-12-20T13:15:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Rectangular-Ad-Photo-Winter-Wreaths.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784648108&s=38122e10fc9640d28d8d9ca0ca7ef8d0",
+      "path": "/events/christmas-creations-wreaths-winter-wonderland",
+      "start": "2026-12-13T11:00:00+00:00",
+      "title": "Christmas Creations: Wreaths & Winter Wonderland"
+    }
+  ],
+  "pages": [
+    {
+      "fixture": "whats-on",
+      "next_path": "/whats-on/page-2/"
+    },
+    {
+      "fixture": "whats-on-page-2",
+      "next_path": "/whats-on/page-3/"
+    },
+    {
+      "fixture": "whats-on-page-3",
+      "next_path": null
+    }
+  ]
+}

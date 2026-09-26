@@ -84,6 +84,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     "What's on" cards' date, time and location fields. Events at Kelmscott
     House only; online-only, off-site (e.g. Birmingham) and undated recurring
     programmes skipped.
+  - `headstone-manor` — CSS-selector scraper (its JSON-LD is malformed): the
+    paginated "What's on" cards' `<time>` attributes and genre, plus detail
+    pages of in-scope items for description and price; multi-day
+    programmes, tours and Special Events (performances) skipped.
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -441,7 +445,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum and the William Morris Society daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society and Headstone Manor & Museum daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

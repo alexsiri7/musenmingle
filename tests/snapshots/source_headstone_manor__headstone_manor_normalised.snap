@@ -1,0 +1,781 @@
+---
+source: tests/source_headstone_manor.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "id": "events/mini-museum-explorers-my-home-your-home-manor-home",
+    "payload": {
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Autumn-2-moats-and-boats-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784644346&s=f3f1cd1c7db9c371b3b94fced05db93c",
+      "path": "/events/mini-museum-explorers-my-home-your-home-manor-home",
+      "start": null,
+      "title": "Mini Museum Explorers: My Home, Your Home, Manor Home",
+      "url": "https://headstonemanor.org/events/mini-museum-explorers-my-home-your-home-manor-home"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/festive-block-printing-lino-cuts",
+    "payload": {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Rectangular-advertising-photo.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784645422&s=7a1689367131673406b5f3bb830afba4",
+      "path": "/events/festive-block-printing-lino-cuts",
+      "start": null,
+      "title": "Festive Block Printing & Lino Cuts",
+      "url": "https://headstonemanor.org/events/festive-block-printing-lino-cuts"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "story-of-music-hall|2026-10-06|headstone-manor",
+      "description": "Take a lively trip through the rise of the British Music Hall, meeting the colourful stars whose songs and cheeky humour charmed a nation. With stories, scandals, sparkle and a chance to sing along to some familiar favourites - it’s an irresistible journey into a world that still delights today. About the Speaker: Judy Karbritz is Harrow's Community Poet and writes regular columns for the Harrow Times and Barnet Borough Times. She has broadcast on LBC and local BBC radio and performed in amateur dramatics. She has been giving entertaining talks for twenty years and performs locally and regularly speaks on cruise ships.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/1780169711974blob.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784556300&s=0d8f5f8cd3bb6b40412b9c51fe90ca78",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "4.50",
+        "min": "4.50"
+      },
+      "starts_at": "2026-10-06T13:00:00Z",
+      "tags": [],
+      "title": "The Story of The Music Hall",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-story-of-the-music-hall",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-tuesday-talk-the-story-of-the-music-hall",
+    "payload": {
+      "description": "<p>Take a lively trip through the rise of the British Music Hall, meeting the colourful stars whose songs and cheeky humour charmed a nation. With stories, scandals, sparkle and a chance to sing along to some familiar favourites - it’s an irresistible journey into a world that still delights today.</p><p><strong>About the Speaker:</strong></p><p>Judy Karbritz is Harrow's Community Poet and writes regular columns for the Harrow Times and Barnet Borough Times. She has broadcast on LBC and local BBC radio and performed in amateur dramatics. She has been giving entertaining talks for twenty years and performs locally and regularly speaks on cruise ships.&nbsp;</p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/1780169711974blob.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784556300&s=0d8f5f8cd3bb6b40412b9c51fe90ca78",
+      "path": "/events/hmm-tuesday-talk-the-story-of-the-music-hall",
+      "pre_title": "Tuesday Talk",
+      "price_text": "£4.50 per person",
+      "room": "The Granary",
+      "start": "2026-10-06T14:00:00+01:00",
+      "title": "The Story of The Music Hall",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-story-of-the-music-hall"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "witch-who-couldnt-sleep|2026-10-17|headstone-manor",
+      "description": "Being a witch is super exciting. There's always so much to do and so much fun to be had. Especially around Halloween. And maybe that's why Natascha The Witch can't sleep...Can anyone, or anything, help her drift off? Based on a story from Steven Lee's best selling \"How The Koala Learnt To Hug and Other Australian Fairytales\" this gentle, heartwarming show is just what you need to enjoy a cosy, cuddly time together with your family. Children get to join in, shout out, and help shape the story as it unfolds. So pop on your favourite pyjamas and come help Natascha The Witch enjoy a better bedtime in this enchanting sing-along musical. Presented with a magical mixture of live action, music and animation1",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Digital-Screen-II-The-Witch-Who-Couldnt-Sleep.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786351039&s=2e1e364ffe03637d501c77d817a7787b",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "12",
+        "min": "10"
+      },
+      "starts_at": "2026-10-17T13:00:00Z",
+      "tags": [
+        "family"
+      ],
+      "title": "The Witch Who Couldn’t Sleep",
+      "url": "https://headstonemanor.org/events/the-witch-who-couldnt-sleep",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/the-witch-who-couldnt-sleep",
+    "payload": {
+      "description": "<p>Being a witch is super exciting. There's always so much to do and so much fun to be had. Especially around Halloween. And maybe that's why Natascha The Witch can't sleep...Can anyone, or anything, help her drift off?</p><p>Based on a story from Steven Lee's best selling \"How The Koala Learnt To Hug and Other Australian Fairytales\" this gentle, heartwarming show is just what you need to enjoy a cosy, cuddly time together with your family. Children get to join in, shout out, and help shape the story as it unfolds.</p><p>So pop on your favourite pyjamas and come help Natascha The Witch enjoy a better bedtime in this enchanting sing-along musical. Presented with a magical mixture of live action, music and animation1</p>",
+      "duration": "50 minutes (no interval)",
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Digital-Screen-II-The-Witch-Who-Couldnt-Sleep.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786351039&s=2e1e364ffe03637d501c77d817a7787b",
+      "path": "/events/the-witch-who-couldnt-sleep",
+      "pre_title": "October Half Term",
+      "price_text": "£12 Standard | £10 Concessions",
+      "room": "The Great Barn",
+      "start": "2026-10-17T14:00:00+01:00",
+      "title": "The Witch Who Couldn’t Sleep",
+      "url": "https://headstonemanor.org/events/the-witch-who-couldnt-sleep"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/tuesday-tour-halloween-at-headstone",
+    "payload": {
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Tuesday-Tour-Halloween-at-Headstone-web.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1788272465&s=1105bb058b610ec3adfa284d5012d77d",
+      "path": "/events/tuesday-tour-halloween-at-headstone",
+      "start": "2026-10-20T14:00:00+01:00",
+      "title": "Tuesday Tour: Halloween at Headstone",
+      "url": "https://headstonemanor.org/events/tuesday-tour-halloween-at-headstone"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/mums-club-at-headstone-manor",
+    "payload": {
+      "end": "2026-11-26T10:30:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Mums-Club.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1780657863&s=2ac39dfa663f6d5b0334ccbe5d32b569",
+      "path": "/events/mums-club-at-headstone-manor",
+      "start": "2026-10-22T10:30:00+01:00",
+      "title": "Mum's Club at Headstone Manor",
+      "url": "https://headstonemanor.org/events/mums-club-at-headstone-manor"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/pumpkin-trail",
+    "payload": {
+      "end": "2026-11-01T10:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Pumpkin-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789553149&s=29c748c843b79694e3c2ad45c795de6e",
+      "path": "/events/pumpkin-trail",
+      "start": "2026-10-24T10:00:00+01:00",
+      "title": "Pumpkin Trail",
+      "url": "https://headstonemanor.org/events/pumpkin-trail"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/halloween-nightmare-catcher-workshop",
+    "payload": {
+      "end": "2026-10-28T13:15:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Nightmare-Catcher-2-Rectangle.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784646155&s=62955132e2e8ffe2dd0a922e3c175649",
+      "path": "/events/halloween-nightmare-catcher-workshop",
+      "start": "2026-10-25T11:00:00+00:00",
+      "title": "Halloween ‘Nightmare Catcher’ Workshop",
+      "url": "https://headstonemanor.org/events/halloween-nightmare-catcher-workshop"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "creepy-creature-pond-dipping|2026-10-27|headstone-manor",
+      "description": "Grab your wellies and join us for a splashing good time! During October half term, we're pond dipping with the Friends of Headstone Manor Park in The Yeading Brook to discover what amazing creatures live beneath the surface. This fun family event is part of our nature week celebrations – perfect for curious kids and nature-loving adults alike. Bring your wellies and your curiosity – we'll provide everything else. Perfect for families who love getting hands-on with nature!",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/FB_IMG_1770721351868.jpg?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.4794&fp-y=0.4255&dm=1784561154&s=150450dda2f4348cdaedc69ab3189373",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "7",
+        "min": "4"
+      },
+      "starts_at": "2026-10-27T10:00:00Z",
+      "tags": [
+        "family"
+      ],
+      "title": "Creepy Creature Pond Dipping",
+      "url": "https://headstonemanor.org/events/hmm-creepy-creature-pond-dipping",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-creepy-creature-pond-dipping",
+    "payload": {
+      "description": "<p>Grab your wellies and join us for a splashing good time! During October half term, we're pond dipping with the Friends of Headstone Manor Park in The Yeading Brook to discover what amazing creatures live beneath the surface. This fun family event is part of our nature week celebrations – perfect for curious kids and nature-loving adults alike.</p><p>Bring your wellies and your curiosity – we'll provide everything else. Perfect for families who love getting hands-on with nature!</p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/FB_IMG_1770721351868.jpg?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.4794&fp-y=0.4255&dm=1784561154&s=150450dda2f4348cdaedc69ab3189373",
+      "path": "/events/hmm-creepy-creature-pond-dipping",
+      "pre_title": "October Half Term",
+      "price_text": "£7 Standard | £4 Concessions",
+      "room": "The Granary",
+      "start": "2026-10-27T10:00:00+00:00",
+      "title": "Creepy Creature Pond Dipping",
+      "url": "https://headstonemanor.org/events/hmm-creepy-creature-pond-dipping"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "history-of-roman-harrow|2026-09-15|headstone-manor",
+      "description": "Join us on a journey through the landmarks of Roman Harrow. Meet the potters of Sulloniacae and spend the night at the roadside mutatio (service station), which may once have stood on Brockley Hill. Discover the skill and artistry behind the settlement's thriving pottery industry, from the craftspeople who shaped everyday vessels to the extensive trade networks that carried their wares across Roman Britain. Objects made here have been uncovered as far north as the famous Hadrian's Wall, revealing Harrow's important place in the Roman world and the remarkable legacy of its ancient communities.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Exhibitions-Gallery/pots-archive-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786435536&s=2d885cca51d8f44e71e5f8c8f47f4809",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-14T23:00:00Z",
+      "tags": [],
+      "title": "The History of Roman Harrow",
+      "url": "https://headstonemanor.org/exhibitions/the-history-of-roman-harrow",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "exhibitions/the-history-of-roman-harrow",
+    "payload": {
+      "description": "<p>Join us on a journey through the landmarks of Roman Harrow. Meet the potters of Sulloniacae and spend the night at the roadside mutatio (service station), which may once have stood on Brockley Hill. Discover the skill and artistry behind the settlement's thriving pottery industry, from the craftspeople who shaped everyday vessels to the extensive trade networks that carried their wares across Roman Britain. Objects made here have been uncovered as far north as the famous Hadrian's Wall, revealing Harrow's important place in the Roman world and the remarkable legacy of its ancient communities.</p>",
+      "duration": null,
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Exhibitions-Gallery/pots-archive-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786435536&s=2d885cca51d8f44e71e5f8c8f47f4809",
+      "path": "/exhibitions/the-history-of-roman-harrow",
+      "pre_title": "Potters, Potteries & Pagans",
+      "price_text": "FREE to view during usual opening hours",
+      "room": "Special Exhibitions Room, Manor House",
+      "start": "2026-09-15T00:00:00+01:00",
+      "title": "The History of Roman Harrow",
+      "url": "https://headstonemanor.org/exhibitions/the-history-of-roman-harrow"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "40-years-of-exhibitions-whats-next|2026-09-03|headstone-manor",
+      "description": "Museums are built by communities, for communities. Since Headstone Manor Museum opened its doors 40 years ago, Harrow has grown into one of London's most diverse boroughs, and the museum has continued to evolve alongside it. This mini-exhibition explores how our exhibitions have changed over the decades, reflecting new ideas, voices and perspectives. Discover highlights from past displays, learn how community partnerships have shaped the stories we tell, and take a glimpse behind the scenes at exciting projects currently in development. Together, they demonstrate our ongoing commitment to preserving Harrow's heritage while ensuring everyone can see themselves reflected in the museum. Sponsored by The Friends of the Museum – Headstone Manor and Museum.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Mock-CC-icon-landscape.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627744&s=5a300291bbdcf679a271420d2b0a6b6b",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "40 Years of Exhibitions: What's Next?",
+      "url": "https://headstonemanor.org/exhibitions/40-years-of-exhibitions-whats-next",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "exhibitions/40-years-of-exhibitions-whats-next",
+    "payload": {
+      "description": "<p>Museums are built by communities, for communities. Since Headstone Manor Museum opened its doors 40 years ago, Harrow has grown into one of London's most diverse boroughs, and the museum has continued to evolve alongside it.&nbsp;</p><p>This mini-exhibition explores how our exhibitions have changed over the decades, reflecting new ideas, voices and perspectives. Discover highlights from past displays, learn how community partnerships have shaped the stories we tell, and take a glimpse behind the scenes at exciting projects currently in development. Together, they demonstrate our ongoing commitment to preserving Harrow's heritage while ensuring everyone can see themselves reflected in the museum.</p>\n<p>Sponsored by The Friends of the Museum – Headstone Manor and Museum.</p>",
+      "duration": null,
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Mock-CC-icon-landscape.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627744&s=5a300291bbdcf679a271420d2b0a6b6b",
+      "path": "/exhibitions/40-years-of-exhibitions-whats-next",
+      "pre_title": null,
+      "price_text": "FREE to view during usual opening hours",
+      "room": "The Community Cupboard, Manor House",
+      "start": "2026-09-03T00:00:00+01:00",
+      "title": "40 Years of Exhibitions: What's Next?",
+      "url": "https://headstonemanor.org/exhibitions/40-years-of-exhibitions-whats-next"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "turning-page-history-of-reading|2026-09-03|headstone-manor",
+      "description": "Want to know how books have changed throughout history? As part of the National Year of Reading, in this mini-exhibition find hidden treasures from the archives and discover how children once enjoyed reading. Although small in size, this display highlights the enduring importance of books and celebrates the rich history of reading through just a few carefully chosen items from Harrow's collections. Sponsored by The Friends of the Museum – Headstone Manor and Museum.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Turning-the-Page.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627269&s=ca267689a19944ee97c3a9e040e7dd82",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "Turning the Page: A History of Reading",
+      "url": "https://headstonemanor.org/exhibitions/turning-the-page-a-history-of-reading",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "exhibitions/turning-the-page-a-history-of-reading",
+    "payload": {
+      "description": "<p>Want to know how books have changed throughout history? As part of the National Year of Reading, in this mini-exhibition find hidden treasures from the archives and discover how children once enjoyed reading. &nbsp;</p><p>Although small in size, this display highlights the enduring importance of books and celebrates the rich history of reading through just a few carefully chosen items from Harrow's collections.</p>\n<p>Sponsored by The Friends of the Museum – Headstone Manor and Museum.</p>",
+      "duration": null,
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Turning-the-Page.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784627269&s=ca267689a19944ee97c3a9e040e7dd82",
+      "path": "/exhibitions/turning-the-page-a-history-of-reading",
+      "pre_title": null,
+      "price_text": "FREE to view during usual opening hours",
+      "room": "The Local History Room, Manor House",
+      "start": "2026-09-03T00:00:00+01:00",
+      "title": "Turning the Page: A History of Reading",
+      "url": "https://headstonemanor.org/exhibitions/turning-the-page-a-history-of-reading"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "harrow-unearthed-litter-legacy|2026-09-02|headstone-manor",
+      "description": "Historic litter and curiosities found in Harrow by volunteers from Harrow Litter Pickers, an apolitical group of volunteers who litter pick, remove graffiti, organise events, and make Harrow a cleaner and brighter place. In 2025 volunteers gave 9,810 hours of time to clear 17,874 bags of rubbish from Harrow’s streets, parks and waterways. Our finds include glass bottles and ceramic jars over a century old, drinks cans and plastic packaging dating back decades, and even local newspapers from the 1980s. This display highlights the longevity of waste in the environment and showcases the work done in the borough of Harrow by our brilliant volunteers.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Harrow-Unearthed-A-Litter-Legacy.jpeg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784626871&s=827a57ba45300c1b1de7409fe81f42eb",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-01T23:00:00Z",
+      "tags": [],
+      "title": "Harrow Unearthed: A Litter Legacy",
+      "url": "https://headstonemanor.org/exhibitions/harrow-unearthed-a-litter-legacy",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "exhibitions/harrow-unearthed-a-litter-legacy",
+    "payload": {
+      "description": "<p>Historic litter and curiosities found in Harrow by volunteers from Harrow Litter Pickers, an apolitical group of volunteers who litter pick, remove graffiti, organise events, and make Harrow a cleaner and brighter place. In 2025 volunteers gave 9,810 hours of time to clear 17,874 bags of rubbish from Harrow’s streets, parks and waterways.</p><p>Our finds include glass bottles and ceramic jars over a century old, drinks cans and plastic packaging dating back decades, and even local newspapers from the 1980s.&nbsp;</p><p>This display highlights the longevity of waste in the environment and showcases the work done in the borough of Harrow by our brilliant volunteers.</p>",
+      "duration": null,
+      "end": "2027-01-03T00:00:00+00:00",
+      "genre": "Exhibitions",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Harrow-Unearthed-A-Litter-Legacy.jpeg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784626871&s=827a57ba45300c1b1de7409fe81f42eb",
+      "path": "/exhibitions/harrow-unearthed-a-litter-legacy",
+      "pre_title": null,
+      "price_text": "FREE to view during usual opening hours",
+      "room": "The Moat Cafe (Visitor's Cafe Case)",
+      "start": "2026-09-02T00:00:00+01:00",
+      "title": "Harrow Unearthed: A Litter Legacy",
+      "url": "https://headstonemanor.org/exhibitions/harrow-unearthed-a-litter-legacy"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "spooky-halloween-craft|2026-10-30|headstone-manor",
+      "description": "Join us at The Granary for a frightfully fun family adventure! Create your own glowing Halloween creatures – spooky spiders, witches, bats and more – decorating them with eyes and colours at our craft tables, then head outside to bring them to life by flapping and dancing with your fluorescent creations. Plus, enjoy Halloween wordsearch and colouring activities while you're here!",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Glowing-Spooky-Creations.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562055&s=1ec6f44607523f4acef7d3c9b5ed2773",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "7",
+        "min": "4"
+      },
+      "starts_at": "2026-10-30T10:00:00Z",
+      "tags": [
+        "family"
+      ],
+      "title": "Spooky Halloween Craft",
+      "url": "https://headstonemanor.org/events/hmm-spooky-halloween-craft",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-spooky-halloween-craft",
+    "payload": {
+      "description": "<p>Join us at The Granary for a frightfully fun family adventure! Create your own glowing Halloween creatures – spooky spiders, witches, bats and more – decorating them with eyes and colours at our craft tables, then head outside to bring them to life by flapping and dancing with your fluorescent creations. Plus, enjoy Halloween wordsearch and colouring activities while you're here!</p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Glowing-Spooky-Creations.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562055&s=1ec6f44607523f4acef7d3c9b5ed2773",
+      "path": "/events/hmm-spooky-halloween-craft",
+      "pre_title": "October Half Term",
+      "price_text": "£7 Standard | £4 Concessions",
+      "room": "The Granary",
+      "start": "2026-10-30T10:00:00+00:00",
+      "title": "Spooky Halloween Craft",
+      "url": "https://headstonemanor.org/events/hmm-spooky-halloween-craft"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/remembrance-trail",
+    "payload": {
+      "end": "2026-11-29T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Remembrance-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789554000&s=5902c58a527704bd4e4dc48fadfa3667",
+      "path": "/events/remembrance-trail",
+      "start": "2026-11-01T10:00:00+00:00",
+      "title": "Remembrance Trail",
+      "url": "https://headstonemanor.org/events/remembrance-trail"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/roman-discoveries",
+    "payload": {
+      "end": "2026-11-29T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Roman-Discoveries-family-drop-in-image.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562912&s=e18bec5f3821b28180936d6228c30464",
+      "path": "/events/roman-discoveries",
+      "start": "2026-11-01T11:00:00+00:00",
+      "title": "Roman Discoveries",
+      "url": "https://headstonemanor.org/events/roman-discoveries"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "history-of-roman-harrow|2026-11-03|headstone-manor",
+      "description": "Join us on a journey through the landmarks of Roman Harrow. Meet the potters of Sulloniacae and spend the night at the roadside Mutatio (service station), which may have once stood upon Brockley-Hill. See the artistry of the settlement’s productive labours and the reach of their wares – which have been found as far North as the famous Hadrian’s Wall. In this accompanying exhibition talk, we will explore the Roman history of Harrow and consider what it meant to be Romano-British, during one of the most evocative periods of British history. About the Speaker: Louis is Head of Classics at St. Dominic's Sixth Form College and is a Romanist at heart. He has a background in the Archaeology and Museum sectors, and is currently completing a second Heritage Lottery Funded research excavation, upon the grounds of the College itself. Louis is also a knowledgeable tour guide, with extensive experience guiding groups around Rome, Ostia Antica, Pompeii & Herculamneum. If you are interested in this talk, check out the exhibition in the museum - it explores the Roman history of Harrow, tracing the lives of the people who lived, worked, and passed through this busy community. From the potters whose craft found its way as far north as Hadrian's Wall, to the travellers who stopped at the roadside mutation — an ancient service station thought to have stood on Brockley Hill — the story of Roman Harrow offers a vivid window into what it meant to be Romano-British.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/HOD-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784553067&s=7efac62cba879d6b803a923918b26c45",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "4.50",
+        "min": "4.50"
+      },
+      "starts_at": "2026-11-03T14:00:00Z",
+      "tags": [],
+      "title": "The History of Roman Harrow",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-history-of-roman-harrow",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-tuesday-talk-the-history-of-roman-harrow",
+    "payload": {
+      "description": "<p>Join us on a journey through the landmarks of Roman Harrow. Meet the potters of Sulloniacae and spend the night at the roadside Mutatio (service station), which may have once stood upon Brockley-Hill. See the artistry of the settlement’s productive labours and the reach of their wares – which have been found as far North as the famous Hadrian’s Wall. In this accompanying exhibition talk, we will explore the Roman history of Harrow and consider what it meant to be Romano-British, during one of the most evocative periods of British history.</p><p><strong>About the Speaker:</strong></p><p>Louis is Head of Classics at St. Dominic's Sixth Form College and is a Romanist at heart. He has a background in the Archaeology and Museum sectors, and is currently completing a second Heritage Lottery Funded research excavation, upon the grounds of the College itself. Louis is also a knowledgeable tour guide, with extensive &nbsp;experience guiding groups around Rome, Ostia Antica, Pompeii &amp; Herculamneum.&nbsp;</p><p><i>If you are interested in this talk, check out the exhibition in the museum - it explores the Roman history of Harrow, tracing the lives of the people who lived, worked, and passed through this busy community. From the potters whose craft found its way as far north as Hadrian's Wall, to the travellers who stopped at the roadside mutation — an ancient service station thought to have stood on Brockley Hill — the story of Roman Harrow offers a vivid window into what it meant to be Romano-British.</i></p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/HOD-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784553067&s=7efac62cba879d6b803a923918b26c45",
+      "path": "/events/hmm-tuesday-talk-the-history-of-roman-harrow",
+      "pre_title": "Tuesday Talk",
+      "price_text": "£4.50 per person",
+      "room": "The Granary",
+      "start": "2026-11-03T14:00:00+00:00",
+      "title": "The History of Roman Harrow",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-history-of-roman-harrow"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/mini-museum-explorers-2",
+    "payload": {
+      "end": "2026-12-17T10:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Autumn-2-moats-and-boats-2.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784644346&s=f3f1cd1c7db9c371b3b94fced05db93c",
+      "path": "/events/mini-museum-explorers-2",
+      "start": "2026-11-05T10:00:00+00:00",
+      "title": "Mini Museum Explorers: Around the Moat",
+      "url": "https://headstonemanor.org/events/mini-museum-explorers-2"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/hmm-bollywood-by-candlelight",
+    "payload": {
+      "end": null,
+      "genre": "Special Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/3.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1786976550&s=b833dfe0e012b9c55c4b65cc8f54a136",
+      "path": "/events/hmm-bollywood-by-candlelight",
+      "start": "2026-11-07T19:00:00+00:00",
+      "title": "Bollywood by Candlelight",
+      "url": "https://headstonemanor.org/events/hmm-bollywood-by-candlelight"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "exploring-harrows-wartime-bomb-map|2026-11-10|headstone-manor",
+      "description": "Harrow's wartime bomb map is one of the most remarkable local records to survive the Second World War; colour-coded street by street to document exactly what the Blitz, the Doodlebugs and the V2 rockets did to the borough and its people. We are delighted to offer guided talks at our brand-new interactive bomb-damage map, a remarkable survival from the Second World War that recorded, street by street and house by house, exactly what the bombing of Harrow looked like. Colour-coded under official wartime instruction, the map tells the story not just of destruction but of the families displaced, and the extraordinary effort by ordinary people to keep the borough functioning through some of the darkest years in living memory. Our knowledgeable guide will lead you through the map's hidden language: what each colour meant, which weapons caused which damage, and how the record was used for everything from rehousing applications to hospital planning. Whether you have family roots in the area or are simply curious about the history beneath today's streets, this is a rare chance to see Harrow's wartime experience close up, in vivid and human detail.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/IMG_20260602_141758.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784554523&s=0211940955acf32e1256f214d3976e6b",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "3",
+        "min": "3"
+      },
+      "starts_at": "2026-11-10T10:00:00Z",
+      "tags": [],
+      "title": "Exploring Harrow’s Wartime Bomb Map",
+      "url": "https://headstonemanor.org/events/hmm-exploring-harrows-wartime-bomb-map",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-exploring-harrows-wartime-bomb-map",
+    "payload": {
+      "description": "<p>Harrow's wartime bomb map is one of the most remarkable local records to survive the Second World War; colour-coded street by street to document exactly what the Blitz, the Doodlebugs and the V2 rockets did to the borough and its people.</p><p>We are delighted to offer guided talks at our brand-new interactive bomb-damage map, a remarkable survival from the Second World War that recorded, street by street and house by house, exactly what the bombing of Harrow looked like. Colour-coded under official wartime instruction, the map tells the story not just of destruction but of the families displaced, and the extraordinary effort by ordinary people to keep the borough functioning through some of the darkest years in living memory.</p><p>Our knowledgeable guide will lead you through the map's hidden language: what each colour meant, which weapons caused which damage, and how the record was used for everything from rehousing applications to hospital planning. Whether you have family roots in the area or are simply curious about the history beneath today's streets, this is a rare chance to see Harrow's wartime experience close up, in vivid and human detail.</p>",
+      "duration": "45 minutes",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/IMG_20260602_141758.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784554523&s=0211940955acf32e1256f214d3976e6b",
+      "path": "/events/hmm-exploring-harrows-wartime-bomb-map",
+      "pre_title": null,
+      "price_text": "£3 per person",
+      "room": "Meeting point: entrance to The Manor House",
+      "start": "2026-11-10T10:00:00+00:00",
+      "title": "Exploring Harrow’s Wartime Bomb Map",
+      "url": "https://headstonemanor.org/events/hmm-exploring-harrows-wartime-bomb-map"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "impact-of-americans-coming-to-england-eastcote-during-ww2|2026-11-10|headstone-manor",
+      "description": "Codebreaking played a crucial role in the Allied victory during the Second World War. Yet few people realise just how closely American and British personnel worked together to decipher Nazi Germany's encoded messages. This presentation explores the vital contribution of the Americans who came to England, and specifically to Eastcote, during the war. Discover how they were recruited and trained, and how they worked alongside British servicemen and women in one of the most secret and important intelligence operations of the conflict. The talk also examines the friendly rivalry between Britain and the United States, and how this competitive spirit was channelled into a highly effective partnership. Attendees will have the opportunity to view a collection of rare photographs of American personnel working at Eastcote, uncovered through the speaker's extensive research and previously unseen by GCHQ Museum archivists. Learn about the achievements of the Wrens and their American naval counterparts across the Atlantic, whose dedication, skill and determination helped shorten the war and contribute to the Allied victory. About the Speaker: Ronald Koorm has published four books on Military history, codebreaking, and has given numerous talks to museums, history societies, Universities, libraries, and other organisations.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/bombe-wave-bw-ncm-2016-107w-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784557060&s=e00757dd557059c6e02edbaf839a5228",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "4.50",
+        "min": "4.50"
+      },
+      "starts_at": "2026-11-10T14:00:00Z",
+      "tags": [],
+      "title": "The Impact of the Americans coming to England and Eastcote during WW2",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2",
+    "payload": {
+      "description": "<p>Codebreaking played a crucial role in the Allied victory during the Second World War. Yet few people realise just how closely American and British personnel worked together to decipher Nazi Germany's encoded messages.</p><p>This presentation explores the vital contribution of the Americans who came to England, and specifically to Eastcote, during the war. Discover how they were recruited and trained, and how they worked alongside British servicemen and women in one of the most secret and important intelligence operations of the conflict.</p><p>The talk also examines the friendly rivalry between Britain and the United States, and how this competitive spirit was channelled into a highly effective partnership. Attendees will have the opportunity to view a collection of rare photographs of American personnel working at Eastcote, uncovered through the speaker's extensive research and previously unseen by GCHQ Museum archivists.</p><p>Learn about the achievements of the Wrens and their American naval counterparts across the Atlantic, whose dedication, skill and determination helped shorten the war and contribute to the Allied victory.</p><p><strong>About the Speaker:</strong></p><p>Ronald Koorm has published four books on Military history, codebreaking, and has given numerous talks to museums, history societies, Universities, libraries, and other organisations.</p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/bombe-wave-bw-ncm-2016-107w-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784557060&s=e00757dd557059c6e02edbaf839a5228",
+      "path": "/events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2",
+      "pre_title": "Tuesday Talk",
+      "price_text": "£4.50 per person",
+      "room": "The Granary",
+      "start": "2026-11-10T14:00:00+00:00",
+      "title": "The Impact of the Americans coming to England and Eastcote during WW2",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "harrow-now-then-memorabilia-session|2026-11-17|headstone-manor",
+      "description": "Join Community Connex for a nostalgic drop-in session exploring how Harrow has changed since the 1960s. Bring your memories (or browse ours!) as we handle objects, photos, and stories from decades gone by. Taking place during UK Disability History Month, this session is a chance to reflect on the borough's shared history while celebrating inclusive, accessible community spaces for all. Free and open to all — hosted by Community Connex, a local charity supporting our community. A £4 donation is warmly welcomed to help continue their work but is not required. Community Connex is a Harrow-based community organisation (part of Harrow Mencap) dedicated to bringing people together through inclusive, engaging local activities and events.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/community-connex-memory-session.JPG?w=640&h=360&q=100&auto=format&fit=crop&dm=1784632803&s=f2bd88fe11249b788cca31865ef17a9e",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-17T10:00:00Z",
+      "tags": [],
+      "title": "Harrow Now and Then: A Memorabilia Session",
+      "url": "https://headstonemanor.org/events/harrow-now-and-then-a-memorabilia-session",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/harrow-now-and-then-a-memorabilia-session",
+    "payload": {
+      "description": "<p>Join Community Connex for a nostalgic drop-in session exploring how Harrow has changed since the 1960s. Bring your memories (or browse ours!) as we handle objects, photos, and stories from decades gone by.&nbsp;</p><p>Taking place during UK Disability History Month, this session is a chance to reflect on the borough's shared history while celebrating inclusive, accessible community spaces for all.&nbsp;</p><p>Free and open to all — hosted by Community Connex, a local charity supporting our community. A £4 donation is warmly welcomed to help continue their work but is not required.&nbsp;</p><p><i>Community Connex is a Harrow-based community organisation (part of Harrow Mencap) dedicated to bringing people together through inclusive, engaging local activities and events.</i></p>",
+      "duration": "10am - 12pm",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/community-connex-memory-session.JPG?w=640&h=360&q=100&auto=format&fit=crop&dm=1784632803&s=f2bd88fe11249b788cca31865ef17a9e",
+      "path": "/events/harrow-now-and-then-a-memorabilia-session",
+      "pre_title": null,
+      "price_text": "Free - no booking required",
+      "room": "The Granary",
+      "start": "2026-11-17T10:00:00+00:00",
+      "title": "Harrow Now and Then: A Memorabilia Session",
+      "url": "https://headstonemanor.org/events/harrow-now-and-then-a-memorabilia-session"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/hmm-candlelight-concert-a-night-at-the-ball",
+    "payload": {
+      "end": null,
+      "genre": "Special Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/20251128_200156.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784635091&s=2c8f2f460a6f9b870f0d3a2273dcc18b",
+      "path": "/events/hmm-candlelight-concert-a-night-at-the-ball",
+      "start": "2026-11-19T19:00:00+00:00",
+      "title": "Candlelight Concert: A Night at the Ball",
+      "url": "https://headstonemanor.org/events/hmm-candlelight-concert-a-night-at-the-ball"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "toddler-takeover-day-2026|2026-11-23|headstone-manor",
+      "description": "A day for Under 5's to take over the running of Headstone Manor & Museum. Toddlers will have the chance to be Security Guards, Archaeologists, Curators and more!",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Toddler-Takeover.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1790238323&s=d35346ba9d09a6410db0b7c20dd9f389",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-23T10:00:00Z",
+      "tags": [
+        "family"
+      ],
+      "title": "Toddler Takeover Day 2026",
+      "url": "https://headstonemanor.org/events/hmm-toddler-takeover-day-2026",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-toddler-takeover-day-2026",
+    "payload": {
+      "description": "<p>A day for Under 5's to take over the running of Headstone Manor &amp; Museum. Toddlers will have the chance to be Security Guards, Archaeologists, Curators and more!</p>",
+      "duration": "10am - 1pm",
+      "end": null,
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Toddler-Takeover.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1790238323&s=d35346ba9d09a6410db0b7c20dd9f389",
+      "path": "/events/hmm-toddler-takeover-day-2026",
+      "pre_title": null,
+      "price_text": "FREE but booking is required (for children only, adults to not need a ticket)",
+      "room": "Headstone Manor",
+      "start": "2026-11-23T10:00:00+00:00",
+      "title": "Toddler Takeover Day 2026",
+      "url": "https://headstonemanor.org/events/hmm-toddler-takeover-day-2026"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "stained-glass-suncatcher-workshop|2026-11-29|headstone-manor",
+      "description": "Create a stained glass suncatcher with artist Suzanne Raffellini using the copperfoil (Tiffany) technique—the perfect handmade gift for Christmas or treasured decoration for your home. What to Expect Create a beautiful stained glass suncatcher using the copperfoil (Tiffany) technique – the perfect handmade gift for Christmas or a treasured decoration for your home. During this relaxing, therapeutic workshop, you'll learn to cut and shape glass, wrap pieces with copperfoil, and solder them together to create a stunning suncatcher. Choose from pre-designed patterns or create your own. All skills taught from scratch with small group demonstrations and individual support – no experience needed. Beginners and experienced makers welcome. Work at your own pace and take your finished piece home the same day. Suzanne Raffellini is a full-time glass artist who sells her work through her website www.suzanneraffelliniglassartist.com and at craft fairs such as Waddesdon Christmas Market and Handmade in Chelsea. She takes on commission work such as the front entrance of St. Michael’s and All Angels Church in Amersham and other private residences. She also teaches regular weekly classes at Bellingdon Village Hall, one day workshops, covering a variety of topics, and fully immersive summer schools at her Chesham Studio. This course is supported by our Council Partner, Learn Harrow. To take part, you’ll need to book with them directly here. You can read their privacy policy here.",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Picture2-suncatcher.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784647640&s=e071a4ec4f80992186bcd63a500df030",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "42",
+        "min": "24"
+      },
+      "starts_at": "2026-11-29T10:00:00Z",
+      "tags": [],
+      "title": "Stained Glass Suncatcher Workshop",
+      "url": "https://headstonemanor.org/events/stained-glass-suncatcher-workshop",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/stained-glass-suncatcher-workshop",
+    "payload": {
+      "description": "<p>Create a stained glass suncatcher with artist Suzanne Raffellini using the copperfoil (Tiffany) technique—the perfect handmade gift for Christmas or treasured decoration for your home.</p><p><strong>What to Expect</strong></p><p>Create a beautiful stained glass suncatcher using the copperfoil (Tiffany) technique – the perfect handmade gift for Christmas or a treasured decoration for your home. During this relaxing, therapeutic workshop, you'll learn to cut and shape glass, wrap pieces with copperfoil, and solder them together to create a stunning suncatcher. Choose from pre-designed patterns or create your own.&nbsp;</p><p>All skills taught from scratch with small group demonstrations and individual support – no experience needed. Beginners and experienced makers welcome. Work at your own pace and take your finished piece home the same day.</p><p><i>Suzanne Raffellini is a full-time glass artist who sells her work through her website www.suzanneraffelliniglassartist.com and at craft fairs such as Waddesdon Christmas Market and Handmade in Chelsea. She takes on commission work such as the front entrance of St. Michael’s and All Angels Church in Amersham and other private residences. She also teaches regular weekly classes at Bellingdon Village Hall, one day workshops, covering a variety of topics, and fully immersive summer schools at her Chesham Studio.</i></p>\n<p><strong>This course is supported by our Council Partner, Learn Harrow. To take part, you’ll need to book with them directly </strong><a href=\"https://learnharrow.ac.uk/course/from-scrap-to-stage-make-your-own-tabletop-puppets/\"><strong>here</strong></a><strong>. You can read their privacy policy </strong><a href=\"https://learnharrow.ac.uk/privacy-policy/\"><strong>here</strong></a><strong>.&nbsp;</strong></p>",
+      "duration": "10am - 4pm",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Picture2-suncatcher.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784647640&s=e071a4ec4f80992186bcd63a500df030",
+      "path": "/events/stained-glass-suncatcher-workshop",
+      "pre_title": null,
+      "price_text": "£42 Standard / £24 Concessions",
+      "room": "The Granary",
+      "start": "2026-11-29T10:00:00+00:00",
+      "title": "Stained Glass Suncatcher Workshop",
+      "url": "https://headstonemanor.org/events/stained-glass-suncatcher-workshop"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/twinkle-trail",
+    "payload": {
+      "end": "2027-01-03T11:00:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/Twinkle-Trail.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1789635072&s=328af614184fe582b14bb5719b5bb815",
+      "path": "/events/twinkle-trail",
+      "start": "2026-12-05T11:00:00+00:00",
+      "title": "Twinkle Trail",
+      "url": "https://headstonemanor.org/events/twinkle-trail"
+    }
+  },
+  {
+    "event": {
+      "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-search-of-father-christmas|2026-12-08|headstone-manor",
+      "description": "We all know Father Christmas, don’t we? Maybe we don’t know him as well as we think as the cheery gift-giver of today is both very ancient and relatively modern, he is both fictional and real and is born from many legends, many traditions and many individuals. Father Christmas is composed of controversies and intrigues. Let’s go in search of this fascinating figure! About the Speaker: Nick Dobson used to be a Librarian so he’s very boring! He was Principal Librarian for Redbridge, but since 2012 he has earned a meagre living by doing talks on a wide range of subjects. Nick is a former National Fuchsia Champion which his wife thinks is even more boring and he has performed in semi-professional productions of light opera throughout London and the south east. Nick’s family is related by marriage to Charles Dickens, but it is a very tenuous link, so that’s boring too! You did ask!",
+      "ends_at": null,
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Father-Xmas.png?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.476&fp-y=0.3177&dm=1784562261&s=eb0ea41901d82e71c48db64d196d5e0e",
+      "lat": 51.5947,
+      "lng": -0.3542,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "4.50",
+        "min": "4.50"
+      },
+      "starts_at": "2026-12-08T14:00:00Z",
+      "tags": [],
+      "title": "In Search of Father Christmas",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-in-search-of-father-christmas",
+      "venue_name": "Headstone Manor & Museum"
+    },
+    "id": "events/hmm-tuesday-talk-in-search-of-father-christmas",
+    "payload": {
+      "description": "<p>We all know Father Christmas, don’t we? Maybe we don’t know him as well as we think as the cheery gift-giver of today is both very ancient and relatively modern, he is both fictional and real and is born from many legends, many traditions and many individuals. Father Christmas is composed of controversies and intrigues. Let’s go in search of this fascinating figure!</p><p><strong>About the Speaker:</strong></p><p>Nick Dobson used to be a Librarian so he’s very boring! &nbsp;He was Principal Librarian for Redbridge, but since 2012 he has earned a meagre living by doing talks on a wide range of subjects. &nbsp;Nick is a former National Fuchsia Champion which his wife thinks is even more boring and he has performed in semi-professional productions of light opera throughout London and the south east. &nbsp;Nick’s family is related by marriage to Charles Dickens, but it is a very tenuous link, so that’s boring too! &nbsp;You did ask!</p>",
+      "duration": "60 minutes",
+      "end": null,
+      "genre": "Events for Adults",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Father-Xmas.png?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.476&fp-y=0.3177&dm=1784562261&s=eb0ea41901d82e71c48db64d196d5e0e",
+      "path": "/events/hmm-tuesday-talk-in-search-of-father-christmas",
+      "pre_title": "Tuesday Talk",
+      "price_text": "£4.50 per person",
+      "room": "The Granary",
+      "start": "2026-12-08T14:00:00+00:00",
+      "title": "In Search of Father Christmas",
+      "url": "https://headstonemanor.org/events/hmm-tuesday-talk-in-search-of-father-christmas"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/hmm-storytelling-with-santa",
+    "payload": {
+      "end": "2026-12-23T16:30:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/sanca2_1.20.1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1786626665&s=f209890b0bbe7fa04d029dda8758ff13",
+      "path": "/events/hmm-storytelling-with-santa",
+      "start": "2026-12-12T11:00:00+00:00",
+      "title": "Storytelling with Santa",
+      "url": "https://headstonemanor.org/events/hmm-storytelling-with-santa"
+    }
+  },
+  {
+    "event": null,
+    "id": "events/christmas-creations-wreaths-winter-wonderland",
+    "payload": {
+      "end": "2026-12-20T13:15:00+00:00",
+      "genre": "Family Events",
+      "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Rectangular-Ad-Photo-Winter-Wreaths.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784648108&s=38122e10fc9640d28d8d9ca0ca7ef8d0",
+      "path": "/events/christmas-creations-wreaths-winter-wonderland",
+      "start": "2026-12-13T11:00:00+00:00",
+      "title": "Christmas Creations: Wreaths & Winter Wonderland",
+      "url": "https://headstonemanor.org/events/christmas-creations-wreaths-winter-wonderland"
+    }
+  }
+]
