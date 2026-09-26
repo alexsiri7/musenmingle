@@ -52,8 +52,10 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   the cross-source **dedupe key** (`title|London date|venue`, algorithm
   documented in the module).
 - **Repository** (`src/repo.rs`): `upsert_event` inserts or merges events by
-  dedupe key and links each source in `events.event_sources`, so one event can
-  carry several source links (e.g. Ticketmaster + the venue's own site).
+  exact dedupe key, then by fuzzy title and venue matching (`src/matching.rs`),
+  and links each source in `events.event_sources`, so one event can carry
+  several source links (e.g. Ticketmaster + the venue's own site). See
+  [Merging and overrides](#merging-and-overrides).
 - **Ingest runner** (`src/runner.rs`): takes an advisory lock, runs enabled
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
   records `events.source_runs`, then runs the health checker.
@@ -64,6 +66,44 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
   issues by label + title, so it survives DB resets). Recovery comments on and
   closes the issue.
+
+### Merging and overrides
+
+A listing whose dedupe key matches no event is compared with existing events
+of nearby dates (`src/matching.rs`). It joins one when the dates agree (same
+London day, or overlapping ranges when both run over several days), the venue
+agrees (same or contained normalised name, or coordinates within 150 m) and
+the titles agree (after dropping stop words, "exhibition"/"tickets"/"london",
+years and venue words: token Jaccard ≥ 0.8 or bigram Sørensen–Dice ≥ 0.9).
+Distinct listings of the same source are never merged. Every fuzzy merge is
+logged at `info` ("fuzzy merge") with both titles and scores.
+
+When a second source joins an event, fields are merged by source kind:
+
+| Field | Winner |
+| --- | --- |
+| title | first source (never overwritten) |
+| dates, description, image | venue site (`scraper`) |
+| price, URL | `api` (price only when it reports one) |
+| everything else | existing value; newcomer fills gaps; tags unioned |
+
+A kind only wins while it is the sole linked source of that kind; otherwise
+it just fills gaps.
+
+Bad (or missed) merges are corrected in `events.merge_overrides`, keyed on
+the source listings `(source_id, source_event_id)`:
+
+```sql
+INSERT INTO events.merge_overrides
+    (action, source_id_a, source_event_id_a, source_id_b, source_event_id_b, note)
+VALUES ('never_merge', 1, 'Z698xZG2Z17aTalks', 2, 'some-slug', 'different talks');
+```
+
+`action` is `never_merge` (keep apart, even on an identical dedupe key) or
+`force_merge` (join even though they do not match). The pair must be in
+canonical order, `(source_id_a, source_event_id_a) < (source_id_b,
+source_event_id_b)` (enforced by a CHECK). An override takes effect the next
+time either listing is ingested.
 
 ### Schema isolation
 
