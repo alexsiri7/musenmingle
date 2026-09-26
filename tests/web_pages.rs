@@ -101,6 +101,7 @@ fn assert_html(p: &Page) {
     }
     assert!(!csp.contains("unsafe-inline"), "{csp}");
     assert!(p.body.starts_with("<!DOCTYPE html>"));
+    assert!(p.body.contains("<a class=\"brand\" href=\"/\">LetsArt</a>"));
     assert!(!p.body.contains("<script"), "{}", p.body);
     assert!(!p.body.contains("style=\""), "{}", p.body);
 }
@@ -249,8 +250,11 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert_html(&p);
     assert!(
         p.body
-            .contains("What&#39;s on in London for creative people")
-            || p.body.contains("What's on in London for creative people")
+            .contains("<title>LetsArt — What's on in London for creative people</title>")
+    );
+    assert!(
+        p.body
+            .contains("<h1>What's on in London for creative people</h1>")
     );
     assert_eq!(
         card_titles(&p.body),
@@ -557,6 +561,7 @@ async fn sources_page_renders_the_sources_api_data() {
     let p = get(&app, "/sources").await;
     assert_eq!(p.status, StatusCode::OK, "{}", p.body);
     assert_html(&p);
+    assert!(p.body.contains("<title>Sources · LetsArt</title>"));
     let row = &p.body[p
         .body
         .find("<th scope=\"row\">barbican")

@@ -37,6 +37,12 @@ use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 pub const CSP: &str = "default-src 'self'; img-src https: data:; style-src 'self'; \
      form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
 
+/// Site name shown in page titles and the header (the product name; the
+/// project/crate stays `thaleia`).
+pub const BRAND: &str = "LetsArt";
+
+const TAGLINE: &str = "What's on in London for creative people";
+
 /// Events per page on `/`.
 pub const PAGE_SIZE: i64 = 24;
 
@@ -104,6 +110,8 @@ async fn stylesheet() -> Response {
 
 // ---------------------------------------------------------------- layout
 
+/// `title` is the page's own name ("Sources" → "Sources · LetsArt"); empty
+/// for the home page ("LetsArt — What's on in London for creative people").
 fn page(status: StatusCode, title: &str, main: Markup) -> Response {
     let doc = html! {
         (DOCTYPE)
@@ -111,13 +119,15 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
             head {
                 meta charset="utf-8";
                 meta name="viewport" content="width=device-width, initial-scale=1";
-                title { (title) " · Thaleia" }
+                title {
+                    @if title.is_empty() { (BRAND) " — " (TAGLINE) } @else { (title) " · " (BRAND) }
+                }
                 link rel="stylesheet" href="/static/style.css";
             }
             body {
                 a class="skip" href="#main" { "Skip to content" }
                 header class="site" {
-                    a class="brand" href="/" { "Thaleia" }
+                    a class="brand" href="/" { (BRAND) }
                     nav aria-label="Site" {
                         a href="/" { "Events" }
                         a href="/sources" { "Sources" }
@@ -462,7 +472,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
 async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Response {
     let filters = Filters::parse(raw.as_deref().unwrap_or(""));
     let heading = html! {
-        h1 { "What's on in London for creative people" }
+        h1 { (TAGLINE) }
         p class="lede" {
             "Exhibitions, talks, workshops, expos and community events, gathered from venue sites."
         }
@@ -473,7 +483,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         Err(msg) => {
             return page(
                 StatusCode::BAD_REQUEST,
-                "Events",
+                "",
                 html! { (heading) p class="error" role="alert" { "Check the filters: " (msg) } },
             );
         }
@@ -495,7 +505,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
     });
     page(
         StatusCode::OK,
-        "What's on in London",
+        "",
         html! {
             (heading)
             @if events.is_empty() {
