@@ -849,6 +849,12 @@ async fn price_max_and_counts() {
         priced("£15", "15", "GBP"),
         priced("£25", "25", "GBP"),
         priced("€5", "5", "EUR"),
+        // A price without a currency is taken to be in pounds.
+        Ev {
+            price_min: Some("7"),
+            currency: None,
+            ..Ev::one_off("no currency 7", "2026-10-01T18:00:00Z")
+        },
         Ev::one_off("unknown", "2026-10-01T18:00:00Z"),
         // An untimed daytime event, so `when` facets differ.
         Ev {
@@ -868,22 +874,22 @@ async fn price_max_and_counts() {
     let app = app(&pool);
     assert_eq!(
         sorted_titles(&app, "price_max=10").await,
-        ["free", "free daytime", "£5"]
+        ["free", "free daytime", "no currency 7", "£5"]
     );
     assert_eq!(
         sorted_titles(&app, "price_max=20").await,
-        ["free", "free daytime", "£15", "£5"]
+        ["free", "free daytime", "no currency 7", "£15", "£5"]
     );
     assert_eq!(
         sorted_titles(&app, "price_max=10&when=evening").await,
-        ["free", "£5"]
+        ["free", "no currency 7", "£5"]
     );
 
     let counts = |query: &'static str| {
         let app = app.clone();
         async move { get(&app, &format!("/v1/events?{query}")).await.1["counts"].clone() }
     };
-    let price = json!({"free": 2, "max_10": 3, "max_20": 4, "unknown": 1});
+    let price = json!({"free": 2, "max_10": 4, "max_20": 5, "unknown": 1});
     assert_eq!(counts("").await["price"], price);
     // Price counts ignore the active price filter.
     assert_eq!(counts("free=true").await["price"], price);
@@ -891,16 +897,16 @@ async fn price_max_and_counts() {
     // … but apply the active `when`.
     assert_eq!(
         counts("when=evening").await["price"],
-        json!({"free": 1, "max_10": 2, "max_20": 3, "unknown": 1})
+        json!({"free": 1, "max_10": 3, "max_20": 4, "unknown": 1})
     );
     // `when` counts apply the active price filter.
     assert_eq!(
         counts("").await["when"],
-        json!({"evening": 6, "after_work": 6, "weekend": 0, "daytime": 1})
+        json!({"evening": 7, "after_work": 7, "weekend": 0, "daytime": 1})
     );
     assert_eq!(
         counts("price_max=10").await["when"],
-        json!({"evening": 2, "after_work": 2, "weekend": 0, "daytime": 1})
+        json!({"evening": 3, "after_work": 3, "weekend": 0, "daytime": 1})
     );
     // Counts respect `near`.
     assert_eq!(counts("near=51.5,-0.1").await, counts("").await);
