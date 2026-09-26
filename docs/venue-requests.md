@@ -6,6 +6,10 @@ from the public About page (`/about#contact`). The About page promises that
 we act on every request and **remove a venue's listings within 7 days**, so
 check the `venue-request` label at least weekly.
 
+> **Note:** the GitHub repository is private, so the template link only works
+> for collaborators. Until the repo is public or an email address exists,
+> venues have no working channel (the reason PR #54 was parked).
+>
 > TODO(owner): add a contact email address so venues don't need a GitHub
 > account. When it exists, add it to `/about#contact` (`src/web.rs`,
 > `about`) and to the issue template, and list here who reads it.
@@ -26,16 +30,19 @@ UPDATE events.sources
        policy_note = 'Owner asked us not to list their events (<issue URL>, <date>)'
  WHERE key = '<key>';
 
--- Events that other sources also list stay, without this venue's text or image
--- (the other sources refill theirs on their next run).
+-- Events only this venue lists go (their links and thumbnails cascade).
+DELETE FROM events.events e
+ WHERE EXISTS (SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
+               WHERE es.event_id = e.id AND s.key = '<key>')
+   AND NOT EXISTS (SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
+                   WHERE es.event_id = e.id AND s.key <> '<key>');
+-- Events other sources also list stay, without this venue's text or image
+-- (the other sources refill theirs on their next run) and without its link.
 UPDATE events.events e SET description = NULL, image_url = NULL, image_source_id = NULL
  WHERE EXISTS (SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
                WHERE es.event_id = e.id AND s.key = '<key>');
 DELETE FROM events.event_sources
  WHERE source_id = (SELECT id FROM events.sources WHERE key = '<key>');
--- Events nothing else lists go (thumbnails cascade).
-DELETE FROM events.events e
- WHERE NOT EXISTS (SELECT 1 FROM events.event_sources es WHERE es.event_id = e.id);
 
 INSERT INTO events.refused_sources (domain, name, url, reason_code, reason_text, checked_on, issue_url)
 VALUES ('<registrable domain>', '<Venue name>', '<https://… events page>', 'owner_request',

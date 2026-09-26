@@ -1053,7 +1053,7 @@ async fn about(State(state): State<AppState>) -> Response {
                         }
                         li {
                             "We go slowly: by default one request every " (rate_secs)
-                            " seconds per site, and slower where a site asks us to."
+                            " seconds per website, and slower where a site asks us to."
                         }
                         li { "We check each site on a schedule (usually once a day), not constantly." }
                         li {
@@ -1101,7 +1101,7 @@ async fn about(State(state): State<AppState>) -> Response {
                         li {
                             "If you suggest a venue, we store the website address and your note, "
                             "plus a salted hash of your IP address (not the address itself) to stop spam. "
-                            "The address and note are posted as a public GitHub issue so we can review it."
+                            "The address and note go into our project's issue tracker so we can review them."
                         }
                         li { "Nothing is sold or shared for advertising." }
                     }
@@ -1114,7 +1114,6 @@ async fn about(State(state): State<AppState>) -> Response {
                         " (a GitHub issue, so for now you need a free GitHub account). "
                         "We plan to add an email address so you won't need one."
                     }
-                    p { "Anything else: " a href={ "https://github.com/" (state.github_repo) "/issues" } rel="noopener" { "our issue tracker" } "." }
                 }
                 p class="small" {
                     "Sources and credits: every venue and service we use, and the sites we "

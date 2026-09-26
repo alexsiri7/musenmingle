@@ -893,7 +893,7 @@ async fn about_page_states_our_approach_with_all_anchors() {
         "No ads, no ticket sales, no affiliate links.",
         "robots.txt",
         "<strong>ThaleiaBot</strong>",
-        "one request every 2 seconds per site",
+        "one request every 2 seconds per website",
         "a short excerpt of the description",
         "Image: &lt;your venue&gt;",
         "See it on &lt;your venue&gt;",
