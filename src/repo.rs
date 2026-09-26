@@ -983,10 +983,15 @@ pub async fn facet_counts(
     };
     let b = near.map(|n| n.bounding_box());
     let col = facet.column();
+    let filter = format!(
+        "{LISTING_FILTER} AND {} AND {}",
+        price_max_sql("$18"),
+        when_sql(f.when)
+    );
     bind_filter(
         sqlx::query_as(AssertSqlSafe(format!(
             "SELECT t, count(*) FROM events.events ev CROSS JOIN LATERAL unnest(ev.{col}) AS t
-             WHERE {LISTING_FILTER}
+             WHERE {filter}
                AND ($10::float8 IS NULL OR (
                    lat BETWEEN $13 AND $14 AND lng BETWEEN $15 AND $16
                    AND {DISTANCE_KM} <= $17))
@@ -1002,6 +1007,7 @@ pub async fn facet_counts(
     .bind(b.map(|b| b.min_lng))
     .bind(b.map(|b| b.max_lng))
     .bind(near.map(|n| n.radius_km))
+    .bind(f.price_max)
     .fetch_all(pool)
     .await
 }
