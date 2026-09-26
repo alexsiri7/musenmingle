@@ -1,0 +1,200 @@
+---
+source: tests/source_old_royal_naval_college.rs
+expression: "serde_json::json!({ \"pages\": pages, \"cards\": cards })"
+---
+{
+  "cards": [
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/01/Social-Media-Mondays-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "What's On",
+      "path": "/whats-on/social-media-mondays/",
+      "title": "Social Media Mondays",
+      "when": "Every Monday | 10am–11am"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2020/09/ORNC_NOV_23-12-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "What's On",
+      "path": "/whats-on/first-sundays/",
+      "title": "First Sundays | £5 tickets",
+      "when": "First Sunday of the month | 10am–5pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/02/Tigz-Rice-Old-Royal-Naval-College-2025-37-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "path": "/whats-on/wigs-weddings-powder-and-palaces-film-tour/",
+      "title": "Film Tour: Wigs, Weddings, Powder and Palaces",
+      "when": "Saturdays | 11.30am & 1.30pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/02/ORNC_NOV_23-58-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "path": "/whats-on/600-years-of-history/",
+      "title": "Official tour: 600 Years of History",
+      "when": "Daily | 11am, 12pm, 1pm, 2pm & 3pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/10/ONRC_1-182-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "path": "/whats-on/painted-hall-talks/",
+      "title": "Painted Hall Talks",
+      "when": "Daily | Various times"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/09/Cornwallis-Cloth-1203-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "path": "/whats-on/cornwallis-cloth-exhibition-in-the-visitor-centre/",
+      "title": "Cornwallis Cloth | Exhibition in the Visitor Centre",
+      "when": "Open Daily | 10am–5pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/10/Thor-Cosplay-25-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "path": "/whats-on/film-tour-spies/",
+      "title": "Film tour: Spies, Sleuths and Superheroes",
+      "when": "Sundays | 11.30am"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/12/YOGA_PAINTED_HALL-06312-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Wellbeing",
+      "path": "/whats-on/yoga-in-the-painted-hall/",
+      "title": "Feel Good Friday | Yoga in the Painted Hall",
+      "when": "Last Friday of the month | 8am–8.45am"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/05/6-ORNC-Dome-Tours.-Photo-credits-Annabel-Moeller-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "path": "/whats-on/behind-the-scenes-secret-dome-tour/",
+      "title": "Behind the Scenes | Secret Dome Tour",
+      "when": "Mon & Fri | 11.30am & 1.30pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/10/The-Observatory-at-Kew-illustration-by-John-Gulich-from-Weather-Watchers-and-Their-Work-The-Strand-Magazine-1892-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "path": "/whats-on/visitor-centre-display-a-journey-through-the-stars/",
+      "title": "Visitor Centre Display | A Journey Through the Stars",
+      "when": "Daily | 10am–5pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/07/image00004-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Wellbeing",
+      "path": "/whats-on/lie-down-and-listen-illumination/",
+      "title": "Lie Down and Listen",
+      "when": "Various dates in 2026 | 6.30pm & 8.30pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/01/IMG_9792-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "path": "/whats-on/family-day/",
+      "title": "Family Day in the Painted Hall",
+      "when": "Third Sunday of the month | 11am-4pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/10/Silent-Disco-Helios-73-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "path": "/whats-on/silent-disco/",
+      "title": "Silent Disco in the Painted Hall",
+      "when": "Various dates | 8pm–11pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/08/Art-of-Location-final-edit-1035-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "path": "/whats-on/art-of-directing-adjani-salmon/",
+      "title": "The Art of Directing: Creating Your Own Path with Adjani Salmon",
+      "when": "Tue 6 Oct | 6pm-8.30pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/ORNC_Chapel-Concert_Credit-Docklands-Sinfonia_1-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "path": "/whats-on/halloween-film-music-concert/",
+      "title": "Halloween Film Music LIVE!",
+      "when": "Sat 31 Oct | 6.30pm-7.45pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/03/PAINTED_HALL_MURDER_MYSTERY-05555-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "path": "/whats-on/murder-mystery-halloween-edition/",
+      "title": "Murder Mystery Halloween Edition",
+      "when": "Sat 31 Oct | 7pm-10pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/DSF0476-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "path": "/whats-on/lost-worlds-by-luxmuralis/",
+      "title": "Lost Worlds by Luxmuralis",
+      "when": "6–8 & 11–15 Nov | 5.45pm-9pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/06/ORNC_Peave-Doves-Render-2_Peter-Walker-Sculptor-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "path": "/whats-on/peace-doves-by-peter-walker/",
+      "title": "Peace Doves by Peter Walker",
+      "when": "20 Nov 2026 - 7 Feb 2027"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/09/6735404b-3d62-40ec-b89d-edeaaa80a98c-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Performance",
+      "path": "/whats-on/opera-rara-celebrating-tosti/",
+      "title": "Opera Rara presents: Celebrating Tosti",
+      "when": "Thu 26 Nov | 1pm-10pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/10/Unknown-2-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "path": "/whats-on/father-christmas-greenwich/",
+      "title": "Father Christmas | Family Festive Magic in Greenwich",
+      "when": "Sat 28 Nov– Tue 22 Dec | Various times"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/08/Unknown-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "path": "/whats-on/christmas-social-media-days/",
+      "title": "Christmas Social Media Days",
+      "when": "1 Dec–3 Dec, 8 Dec–10 Dec & 15 Dec–17 Dec| Various times"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/04/PAINTED_HALL_MURDER_MYSTERY-05345-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "path": "/whats-on/murder-mystery/",
+      "title": "Murder Mystery Experience",
+      "when": "Sat 12 Dec | 7pm & 8.30pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/9685dd8b-a362-4a15-bbe2-c462ea36ac47-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "path": "/whats-on/the-elves-and-the-jingle-bell-ball/",
+      "title": "The Elves and the Jingle Bell Ball",
+      "when": "Sat 19 - Wed 23 Dec 2026 | Various Times"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/03/ORNC_Tudor-Takeover_1-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "path": "/whats-on/tudor-takeover/",
+      "title": "Tudor Takeover",
+      "when": "Sat 3 Apr & Sun 4 Apr 2027 | 10am-5pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/04/Greenwich-Dog-Show-2024-136-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "path": "/whats-on/greenwich-dog-show/",
+      "title": "Greenwich Dog Show presented by Virtue Vets",
+      "when": "Sun 2 May 2027 | 10am–6pm"
+    },
+    {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/02/e58523a7-3367-4699-905c-108f9c5c6b10-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "path": "/whats-on/pirates-takeover/",
+      "title": "Pirate’s Takeover",
+      "when": "Sat 28 Aug - Mon 30 Aug 2027 | 10am-5pm"
+    }
+  ],
+  "pages": [
+    {
+      "fixture": "whats-on",
+      "has_more": true
+    },
+    {
+      "fixture": "whats-on-page-2",
+      "has_more": false
+    }
+  ]
+}
