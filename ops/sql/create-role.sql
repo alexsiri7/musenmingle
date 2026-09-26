@@ -1,7 +1,10 @@
 -- Thaleia: create the restricted `thaleia` login role.
 --
 -- Run ONCE (it is idempotent, re-running is safe) as the database owner,
--- e.g. the Supabase `postgres` user, in the target database:
+-- e.g. the Supabase `postgres` user, in the target database. The owner need
+-- not be a superuser, but needs CREATEROLE, plus REPLICATION and BYPASSRLS
+-- (PostgreSQL only lets a role grant or revoke those attributes if it holds
+-- them itself); Supabase's `postgres` has all three:
 --
 --     psql "$OWNER_DATABASE_URL" -v ON_ERROR_STOP=1 -f ops/sql/create-role.sql
 --
@@ -29,8 +32,17 @@ BEGIN
 END
 $$;
 
--- Keep attributes correct even if the role pre-existed.
-ALTER ROLE thaleia LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+-- Keep attributes correct even if the role pre-existed. Only a superuser may
+-- mention NOSUPERUSER at all, so it is applied only when the role really is a
+-- superuser (then a non-superuser owner fails here, as it should).
+DO $$
+BEGIN
+    IF (SELECT rolsuper FROM pg_catalog.pg_roles WHERE rolname = 'thaleia') THEN
+        ALTER ROLE thaleia NOSUPERUSER;
+    END IF;
+END
+$$;
+ALTER ROLE thaleia LOGIN NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
 -- Unqualified names resolve inside `events` only.
 ALTER ROLE thaleia SET search_path = events;
 

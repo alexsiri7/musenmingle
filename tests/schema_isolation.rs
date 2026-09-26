@@ -3,8 +3,11 @@
 mod common;
 
 use common::TestDb;
-use sqlx::{AssertSqlSafe, PgPool};
+use sqlx::postgres::{PgConnectOptions, PgPoolOptions};
+use sqlx::{AssertSqlSafe, ConnectOptions, PgPool};
 use std::collections::BTreeSet;
+use std::str::FromStr;
+use tokio::sync::Mutex;
 
 /// Every relation, TOAST owner, type, function, schema and extension, as
 /// `kind:schema.name`.
@@ -125,51 +128,74 @@ async fn migrations_create_nothing_outside_events_schema() {
     db.drop_db().await;
 }
 
-/// Runs ops/sql/create-role.sql as the superuser, then migrates AS the
-/// restricted role and checks it cannot reach other schemas.
-#[tokio::test]
-async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
-    let Some(db) = TestDb::create("restricted_role_can_migrate_but_not_touch_other_schemas").await
-    else {
-        return;
-    };
-    let admin = db.raw_pool().await;
-    let script = std::fs::read_to_string(
+/// `thaleia` is a cluster-wide role, so tests that create or drop it must
+/// not overlap.
+static THALEIA_ROLE: Mutex<()> = Mutex::const_new(());
+
+fn create_role_script() -> String {
+    std::fs::read_to_string(
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("ops/sql/create-role.sql"),
     )
-    .unwrap();
-    // Idempotent: run it twice.
+    .unwrap()
+}
+
+/// A single-connection pool that logs in as the test superuser and then
+/// switches to `role` (avoids needing a password / pg_hba entry in CI).
+async fn pool_as(options: PgConnectOptions, role: &str) -> PgPool {
+    let set_role = format!("SET ROLE {role}");
+    PgPoolOptions::new()
+        .max_connections(1)
+        .after_connect(move |conn, _| {
+            let set_role = set_role.clone();
+            Box::pin(async move {
+                sqlx::raw_sql(AssertSqlSafe(set_role)).execute(conn).await?;
+                Ok(())
+            })
+        })
+        .connect_with(options)
+        .await
+        .unwrap()
+}
+
+/// Runs ops/sql/create-role.sql twice (it must be idempotent) on `pool`.
+async fn run_create_role(pool: &PgPool) {
+    let script = create_role_script();
     sqlx::raw_sql(AssertSqlSafe(script.clone()))
-        .execute(&admin)
+        .execute(pool)
         .await
         .expect("create-role.sql");
     sqlx::raw_sql(AssertSqlSafe(script))
-        .execute(&admin)
+        .execute(pool)
         .await
         .expect("create-role.sql rerun");
+}
+
+/// Checks the `thaleia` role's attributes, then migrates AS the role and
+/// checks it cannot reach other schemas.
+async fn assert_thaleia_confined(db: &TestDb, admin: &PgPool) {
+    let attrs: (bool, bool, bool, bool, bool, bool, bool) = sqlx::query_as(
+        "SELECT rolcanlogin, rolsuper, rolcreatedb, rolcreaterole, rolinherit, rolreplication, rolbypassrls
+           FROM pg_catalog.pg_roles WHERE rolname = 'thaleia'",
+    )
+    .fetch_one(admin)
+    .await
+    .unwrap();
+    assert_eq!(attrs, (true, false, false, false, false, false, false));
 
     // A sentinel table in another schema the role must not see.
     sqlx::raw_sql(
         "CREATE SCHEMA other_app; CREATE TABLE other_app.secrets (x int); INSERT INTO other_app.secrets VALUES (1);
          CREATE TABLE public.public_secrets (x int);",
     )
-    .execute(&admin)
+    .execute(admin)
     .await
     .unwrap();
 
-    // Connect as the superuser but switch to the role for every connection
-    // (avoids needing a password / pg_hba entry in CI).
-    let as_role = sqlx::postgres::PgPoolOptions::new()
-        .max_connections(1)
-        .after_connect(|conn, _| {
-            Box::pin(async move {
-                sqlx::raw_sql("SET ROLE thaleia").execute(conn).await?;
-                Ok(())
-            })
-        })
-        .connect_with(db.options.clone().options([("search_path", "events")]))
-        .await
-        .unwrap();
+    let as_role = pool_as(
+        db.options.clone().options([("search_path", "events")]),
+        "thaleia",
+    )
+    .await;
     let who: String = sqlx::query_scalar("SELECT current_user::text")
         .fetch_one(&as_role)
         .await
@@ -199,6 +225,74 @@ async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
     }
 
     as_role.close().await;
+}
+
+/// Runs ops/sql/create-role.sql as the superuser.
+#[tokio::test]
+async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
+    let _role = THALEIA_ROLE.lock().await;
+    let Some(db) = TestDb::create("restricted_role_can_migrate_but_not_touch_other_schemas").await
+    else {
+        return;
+    };
+    let admin = db.raw_pool().await;
+    run_create_role(&admin).await;
+    assert_thaleia_confined(&db, &admin).await;
+
     admin.close().await;
     db.drop_db().await;
+}
+
+/// Runs ops/sql/create-role.sql as a database owner that is not a superuser
+/// but has what Supabase's `postgres` role has (CREATEROLE, REPLICATION,
+/// BYPASSRLS).
+#[tokio::test]
+async fn create_role_script_runs_as_non_superuser_owner() {
+    let _role = THALEIA_ROLE.lock().await;
+    let Some(db) = TestDb::create("create_role_script_runs_as_non_superuser_owner").await else {
+        return;
+    };
+    let admin = db.raw_pool().await;
+    // A `thaleia` left by another test (or run) was created by the superuser;
+    // this owner must create its own.
+    sqlx::raw_sql("DROP ROLE IF EXISTS thaleia")
+        .execute(&admin)
+        .await
+        .expect("drop stale thaleia role");
+    let owner = format!("thaleia_test_owner_{}", uuid::Uuid::new_v4().simple());
+    sqlx::raw_sql(AssertSqlSafe(format!(
+        "CREATE ROLE {owner} LOGIN NOSUPERUSER CREATEDB CREATEROLE REPLICATION BYPASSRLS;
+         ALTER DATABASE {} OWNER TO {owner};",
+        db.name
+    )))
+    .execute(&admin)
+    .await
+    .unwrap();
+
+    let as_owner = pool_as(db.options.clone(), &owner).await;
+    let is_superuser: bool =
+        sqlx::query_scalar("SELECT rolsuper FROM pg_catalog.pg_roles WHERE rolname = current_user")
+            .fetch_one(&as_owner)
+            .await
+            .unwrap();
+    assert!(!is_superuser);
+    run_create_role(&as_owner).await;
+    as_owner.close().await;
+
+    assert_thaleia_confined(&db, &admin).await;
+
+    admin.close().await;
+    let admin_url = db.admin_url.clone();
+    db.drop_db().await;
+    let mut conn = PgConnectOptions::from_str(&admin_url)
+        .unwrap()
+        .connect()
+        .await
+        .unwrap();
+    sqlx::raw_sql(AssertSqlSafe(format!(
+        "DROP ROLE thaleia; DROP ROLE {owner};"
+    )))
+    .execute(&mut conn)
+    .await
+    .expect("drop test roles");
 }
