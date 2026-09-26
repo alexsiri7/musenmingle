@@ -5,7 +5,7 @@ mod common;
 
 use axum::Router;
 use axum::body::Body;
-use axum::http::{Request, StatusCode, header};
+use axum::http::{HeaderValue, Request, StatusCode, header};
 use chrono::{DateTime, Utc};
 use common::TestDb;
 use serde_json::{Value, json};
@@ -17,6 +17,13 @@ use tower::ServiceExt;
 use uuid::Uuid;
 
 fn app(pool: &PgPool) -> Router {
+    app_with_cors(
+        pool,
+        parse_cors_origins(Some("https://thaleia.example")).unwrap(),
+    )
+}
+
+fn app_with_cors(pool: &PgPool, cors_origins: Vec<HeaderValue>) -> Router {
     let suggestions = Suggestions::new(
         SuggestionConfig {
             ip_salt: Some("salt".into()),
@@ -27,7 +34,7 @@ fn app(pool: &PgPool) -> Router {
     .unwrap();
     let settings = ApiSettings {
         github_repo: "alexsiri7/thaleia".into(),
-        cors_origins: parse_cors_origins(Some("https://thaleia.example")).unwrap(),
+        cors_origins,
     };
     thaleia::api::router(pool.clone(), suggestions, settings)
 }
@@ -115,8 +122,9 @@ async fn link(pool: &PgPool, event: Uuid, source_key: &str, url: &str, first_see
 }
 
 #[tokio::test]
-async fn date_window_uses_overlap_for_exhibitions_and_london_days() {
-    let Some(db) = TestDb::create("date_window_uses_overlap_for_exhibitions_and_london_days").await
+async fn date_window_uses_overlap_for_ranged_events_and_london_days() {
+    let Some(db) =
+        TestDb::create("date_window_uses_overlap_for_ranged_events_and_london_days").await
     else {
         return;
     };
@@ -154,6 +162,11 @@ async fn date_window_uses_overlap_for_exhibitions_and_london_days() {
             "2026-10-03T23:00:00Z",
             "2026-11-01T00:00:00Z",
         ),
+        // Overlap applies to any event with an end, not just exhibitions.
+        Ev {
+            ends_at: Some("2026-10-01T00:30:00Z"),
+            ..Ev::one_off("talk into Oct 1", "2026-09-30T22:00:00Z")
+        },
         Ev::one_off("00:30 London on Oct 1", "2026-09-30T23:30:00Z"),
         Ev::one_off("22:30 London on Sep 30", "2026-09-30T21:30:00Z"),
         Ev::one_off("inside", "2026-10-02T18:00:00Z"),
@@ -170,6 +183,7 @@ async fn date_window_uses_overlap_for_exhibitions_and_london_days() {
         [
             "spans window",
             "closes on first day",
+            "talk into Oct 1",
             "00:30 London on Oct 1",
             "inside",
             "opens on last day",
@@ -195,6 +209,7 @@ async fn date_window_uses_overlap_for_exhibitions_and_london_days() {
             "closes on first day",
             "closed day before",
             "22:30 London on Sep 30",
+            "talk into Oct 1",
         ]
     );
     pool.close().await;
@@ -585,6 +600,47 @@ async fn sources_report_last_run_and_health() {
     assert_eq!(
         ticketmaster["issue_url"],
         "https://github.com/alexsiri7/thaleia/issues/31"
+    );
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn cors_unset_allows_no_origin() {
+    let Some(db) = TestDb::create("cors_unset_allows_no_origin").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let app = app_with_cors(&pool, parse_cors_origins(None).unwrap());
+    let resp = app
+        .clone()
+        .oneshot(
+            Request::get("/v1/sources")
+                .header(header::ORIGIN, "https://anything.example")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(resp.status(), StatusCode::OK);
+    assert_eq!(
+        resp.headers().get(header::ACCESS_CONTROL_ALLOW_ORIGIN),
+        None
+    );
+
+    let resp = app
+        .oneshot(
+            Request::options("/v1/suggestions")
+                .header(header::ORIGIN, "https://anything.example")
+                .header(header::ACCESS_CONTROL_REQUEST_METHOD, "POST")
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    assert_eq!(
+        resp.headers().get(header::ACCESS_CONTROL_ALLOW_ORIGIN),
+        None
     );
     pool.close().await;
     db.drop_db().await;
