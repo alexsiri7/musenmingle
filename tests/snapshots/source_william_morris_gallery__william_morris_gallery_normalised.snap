@@ -1,0 +1,152 @@
+---
+source: tests/source_william_morris_gallery.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "earthly-paradise-radical-living-in-uk|2026-10-03|william-morris",
+      "description": "Exploring the people, places and stories that have shaped our relationship to home. This autumn, William Morris Gallery presents Earthly Paradise: Radical Living in the UK, a major touring exhibition that explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. Spanning two centuries, the exhibition spotlights the homes of many important British artists and thinkers, including William Morris’s Red House; Vanessa Bell and Duncan Grant’s modernist home, Charleston; Cedric Morris’s Benton End; Derek Jarman’s Prospect Cottage; and Dial House, the self-sustaining anarcho-pacifist open house founded in 1967 by Penny Rimbaud and Gee Vaucher, members of the influential anarchist punk band Crass. Earthly Paradise is part of Art Fund’s Going Places programme, a series of exhibitions touring the UK, created by museums working together to share their collections. The exhibition has been developed in partnership with Tŷ Pawb in Wrexham, Blackwell – The Arts & Crafts house in Bowness-on-Windermere, and Dovecot Studios in Edinburgh, who are working together under the name Four Lanterns. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. The exhibition brings together works from the collections of the William Morris Gallery and Blackwell – The Arts & Crafts house, alongside works from collections across the UK including Tate, National Trust, National Portrait Gallery and the Lee Miller Archive. It will be accompanied by ten newly commissioned and freely available texts that draw out some of the many perspectives explored in the exhibition by writers including Charlie Porter, Sheena Patel, Dr Lucy Brownson, Nathalie Olah and Adam Sutherland. Following its presentation at William Morris Gallery it will tour to Tŷ Pawb, Wrexham (April – September 2027), Blackwell – The Arts & Crafts house, Bowness-on-Windermere (October 2027 – February 2028) and Dovecot Studios, Edinburgh (March – September 2028). Going Places is an Art Fund programme made possible with major support from The National Lottery Heritage Fund and The Julia Rausing Trust, with additional support from a generous group of trusts, foundations and individuals. The Four Lanterns network is supported directly by the Woven Foundation. Art Fund is continuing to fundraise to reach the full potential of the programme and make the biggest impact for museums and visitors across the UK. Earthly Paradise is also supported by The Ampersand Foundation. Read the press release Title images: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester The Ghetto, 43 Kitchen, 1993, Tom Hunter",
+      "ends_at": "2027-03-28T00:00:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/04/Exhibition-page-banner-collage-EP-1.png",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-02T23:00:00Z",
+      "tags": [],
+      "title": "Earthly Paradise: Radical Living in the UK",
+      "url": "https://www.wmgallery.org.uk/event/earthly-paradise/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/earthly-paradise",
+    "payload": {
+      "categories": [
+        "all-ages",
+        "exhibition-type-2",
+        "upcoming-exhibitions"
+      ],
+      "dates_text": "Saturday 3 October 2026 - Sunday 28 March 2027",
+      "description": "Exploring the people, places and stories that have shaped our relationship to home. This autumn, William Morris Gallery presents Earthly Paradise: Radical Living in the UK, a major touring exhibition that explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. Spanning two centuries, the exhibition spotlights the homes of many important British artists and thinkers, including William Morris’s Red House; Vanessa Bell and Duncan Grant’s modernist home, Charleston; Cedric Morris’s Benton End; Derek Jarman’s Prospect Cottage; and Dial House, the self-sustaining anarcho-pacifist open house founded in 1967 by Penny Rimbaud and Gee Vaucher, members of the influential anarchist punk band Crass. Earthly Paradise is part of Art Fund’s Going Places programme, a series of exhibitions touring the UK, created by museums working together to share their collections. The exhibition has been developed in partnership with Tŷ Pawb in Wrexham, Blackwell – The Arts & Crafts house in Bowness-on-Windermere, and Dovecot Studios in Edinburgh, who are working together under the name Four Lanterns. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. The exhibition brings together works from the collections of the William Morris Gallery and Blackwell – The Arts & Crafts house, alongside works from collections across the UK including Tate, National Trust, National Portrait Gallery and the Lee Miller Archive. It will be accompanied by ten newly commissioned and freely available texts that draw out some of the many perspectives explored in the exhibition by writers including Charlie Porter, Sheena Patel, Dr Lucy Brownson, Nathalie Olah and Adam Sutherland. Following its presentation at William Morris Gallery it will tour to Tŷ Pawb, Wrexham (April – September 2027), Blackwell – The Arts & Crafts house, Bowness-on-Windermere (October 2027 – February 2028) and Dovecot Studios, Edinburgh (March – September 2028). Going Places is an Art Fund programme made possible with major support from The National Lottery Heritage Fund and The Julia Rausing Trust, with additional support from a generous group of trusts, foundations and individuals. The Four Lanterns network is supported directly by the Woven Foundation. Art Fund is continuing to fundraise to reach the full potential of the programme and make the biggest impact for museums and visitors across the UK. Earthly Paradise is also supported by The Ampersand Foundation. Read the press release Title images: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester The Ghetto, 43 Kitchen, 1993, Tom Hunter",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/04/Exhibition-page-banner-collage-EP-1.png",
+      "price_text": "FREE admission.",
+      "sessions": [],
+      "subtitle": "Radical Living in the UK",
+      "title": "Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/earthly-paradise/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/flow-state-sessions-2026",
+    "payload": {
+      "categories": [
+        "adults",
+        "wellbeing",
+        "workshops"
+      ],
+      "dates_text": "Sunday 27 September 2026 - Sunday 14 March 2027",
+      "description": "Art and craft workshops for health and wellbeing. Flow State Sessions aim to create a gentle space for creativity – where no experience in art is necessary. Flow is the mental state in which a person performing an activity is fully immersed in a feeling of energised focus, full involvement, and enjoyment in the process of the activity rather than just the outcomes. Research has shown that engaging in Flow State can be a useful tool to manage stress, anxiety and negative feelings. Run by art therapists, the aim is to create a calm, accessible and supportive space, where participants feel at ease to learn new skills to enter Flow State and inspired to nurture their creativity. Our programme has been designed specifically for those with low to moderate mental health needs such as mild anxiety or low mood. T hey are also suitable for those feeling isolated, stressed or overwhelmed due to having an ongoing health condition or being a carer, for example. All sessions take place at William Morris Gallery. Upcoming dates: 27 September 2026 – Collage landscapes 18 October 2026 – Nature clay tiles 8 November 2026 – Doodle weaving 13 December 2026 – Movement map books 10 January 2026 – Photo embroidery 14 February 2026 – Printing 14 March 2026 – Group still-life As we are an arts organisation rather than mental health providers, these workshops are not suitable for those with complex mental health needs or for those in crisis. If you are in need of support, please contact the Waltham Forest Single Point of Access. If you have any questions, comments or additional access requirements, please do not hesitate to contact us.",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2025/04/painting-banner-2to1-scaled.jpg",
+      "price_text": "These sessions are FREE of charge.",
+      "sessions": [],
+      "subtitle": "Multiple dates",
+      "title": "Flow State Sessions",
+      "url": "https://www.wmgallery.org.uk/event/flow-state-sessions-2026/"
+    }
+  },
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "family-day-welcome-home|2026-10-10|william-morris",
+      "description": "Celebrate a new chapter at William Morris Gallery with a special Family Day marking the redisplay of our permanent collection, and the launch of the new exhibition Earthly Paradise. Working with artist Lucy Rainbow, families will design their own front doors inspired by ideas of welcome, belonging and new beginnings. As we celebrate reopening the Gallery’s doors, children and their grown-ups can imagine how they would welcome friends, neighbours and loved ones into their own homes. Once their designs are complete, families will create a colourful screenprinted souvenir poster to take home, marking this special moment in the Gallery’s history. As part of the day, families can be among the first to try our brand-new permanent collection family trail, packed with opportunities to discover fascinating objects, stories and ideas throughout the newly redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, full of creative prompts and activities to help explore the exhibition together. Sessions will take place in the Learning Rooms on the second floor, with step-free access available via lift. A quiet breakout space will be available throughout the day for anyone who would benefit from taking some time away from the activity. Sensory satchels can also be borrowed to support a comfortable and enjoyable visit.",
+      "ends_at": "2026-10-10T15:00:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/3-to-2-front-door-scaled.jpeg",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-10T12:00:00Z",
+      "tags": [],
+      "title": "Family Day: Welcome Home",
+      "url": "https://www.wmgallery.org.uk/event/family-day-welcome-home/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/family-day-welcome-home",
+    "payload": {
+      "categories": [
+        "all-ages",
+        "families",
+        "free-events",
+        "workshops"
+      ],
+      "dates_text": "Saturday 10 October 2026",
+      "description": "Celebrate a new chapter at William Morris Gallery with a special Family Day marking the redisplay of our permanent collection, and the launch of the new exhibition Earthly Paradise. Working with artist Lucy Rainbow, families will design their own front doors inspired by ideas of welcome, belonging and new beginnings. As we celebrate reopening the Gallery’s doors, children and their grown-ups can imagine how they would welcome friends, neighbours and loved ones into their own homes. Once their designs are complete, families will create a colourful screenprinted souvenir poster to take home, marking this special moment in the Gallery’s history. As part of the day, families can be among the first to try our brand-new permanent collection family trail, packed with opportunities to discover fascinating objects, stories and ideas throughout the newly redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, full of creative prompts and activities to help explore the exhibition together. Sessions will take place in the Learning Rooms on the second floor, with step-free access available via lift. A quiet breakout space will be available throughout the day for anyone who would benefit from taking some time away from the activity. Sensory satchels can also be borrowed to support a comfortable and enjoyable visit.",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/3-to-2-front-door-scaled.jpeg",
+      "price_text": "FREE sessions. Open to all families with children under 18. All children must be accompanied by an adult.",
+      "sessions": [
+        "1:00pm to 4:00pm."
+      ],
+      "subtitle": null,
+      "title": "Family Day: Welcome Home",
+      "url": "https://www.wmgallery.org.uk/event/family-day-welcome-home/"
+    }
+  },
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "mini-morris-feathered-friends|2026-10-15|william-morris",
+      "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds. In October we’re celebrating the much-anticipated reopening of the Gallery following its refurbishment. Inspired by the beautiful birds that appear throughout William Morris’s designs, children will create their very own clay pot bird to take home. Children will explore shape and texture as they decorate their bird, taking inspiration from the nature and wildlife that Morris loved so much. It’s a wonderful opportunity to get creative, discover the newly reopened Gallery and enjoy some hands-on fun together. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge. Image: Strawberry Thief printed cotton, William Morris. Design registered 1883",
+      "ends_at": "2026-10-15T10:00:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/F54-Strawberry-Thief-Chintz.jpg",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-15T09:00:00Z",
+      "tags": [],
+      "title": "Mini Morris: Feathered Friends",
+      "url": "https://www.wmgallery.org.uk/event/mini-morris-feathered-friends/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/mini-morris-feathered-friends",
+    "payload": {
+      "categories": [
+        "audience",
+        "families",
+        "free-events",
+        "workshops"
+      ],
+      "dates_text": "Thursday 15 October 2026",
+      "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds. In October we’re celebrating the much-anticipated reopening of the Gallery following its refurbishment. Inspired by the beautiful birds that appear throughout William Morris’s designs, children will create their very own clay pot bird to take home. Children will explore shape and texture as they decorate their bird, taking inspiration from the nature and wildlife that Morris loved so much. It’s a wonderful opportunity to get creative, discover the newly reopened Gallery and enjoy some hands-on fun together. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge. Image: Strawberry Thief printed cotton, William Morris. Design registered 1883",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/F54-Strawberry-Thief-Chintz.jpg",
+      "price_text": "These are FREE sessions but donations in support of our public programme are always welcomed.",
+      "sessions": [
+        "10:00am to 11:00am.",
+        "11:30am to 12:30pm."
+      ],
+      "subtitle": "Feathered Friends",
+      "title": "Mini Morris",
+      "url": "https://www.wmgallery.org.uk/event/mini-morris-feathered-friends/"
+    }
+  }
+]

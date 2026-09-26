@@ -1,0 +1,22 @@
+---
+source: tests/source_william_morris_gallery.rs
+expression: "serde_json::json!({ \"listing\": listing, \"load_more\": more })"
+---
+{
+  "listing": {
+    "grid_cards": 3,
+    "page_id": "364",
+    "paths": [
+      "/event/earthly-paradise/",
+      "/event/flow-state-sessions-2026/",
+      "/event/family-day-welcome-home/",
+      "/event/mini-morris-feathered-friends/"
+    ],
+    "rejected": []
+  },
+  "load_more": [
+    "/event/flow-state-sessions-2026/",
+    "/event/family-day-welcome-home/",
+    "/event/mini-morris-feathered-friends/"
+  ]
+}
