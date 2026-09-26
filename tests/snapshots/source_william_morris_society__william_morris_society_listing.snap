@@ -1,0 +1,156 @@
+---
+source: tests/source_william_morris_society.rs
+expression: parse_listing(&listing_html())
+---
+[
+  {
+    "path": "/events/textile-tours-2026/",
+    "title": "Textile Tours",
+    "date_text": null,
+    "start_text": "1:30 pm",
+    "end_text": "4:00 pm",
+    "location": "The William Morris Society and Emery Walker's House",
+    "excerpt": "This is a rare opportunity to get up close with items that are rarely on show to the public with a specialist tour of both Emery Walker’s House and the nearby William Morris Society premises. The tour will explore the Arts & Crafts textiles in both collections, including exquisite examples of May Morris’ work. The",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/fc83896f5a9a7d5095141041e9e63ae1-xl-1.png"
+  },
+  {
+    "path": "/events/museum-exhibition-practically-magic-william-morris-at-home-in-hammersmith/",
+    "title": "Museum Exhibition “Practically Magic: William Morris at Home in Hammersmith”",
+    "date_text": null,
+    "start_text": null,
+    "end_text": null,
+    "location": "26 Upper Mall, The William Morris Society, W6 9TA",
+    "excerpt": "To celebrate the William Morris Society’s 70th anniversary, the Society has opened a new semi-permanent exhibition which explores the life and work of Victorian Designer, Poet, Activist, Craftsman, and Environmentalist, William Morris (1834-1896), at his family home overlooking the River Thames in Hammersmith. Morris lived here for eighteen years with his wife, Jane Morris (1839-1914), and",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/W9A5414-239-scaled.jpg"
+  },
+  {
+    "path": "/events/guided-tours/",
+    "title": "Guided Tours",
+    "date_text": null,
+    "start_text": "10:00 am",
+    "end_text": "11:00 am",
+    "location": "The William Morris Society",
+    "excerpt": "Step into the world of William Morris with a guided tour led by one of our expert guides. Discover the fascinating history of William Morris, Kelmscott House, Morris & Co., and the people, ideas, and craftsmanship that shaped the Arts and Crafts movement. Discover the remarkable achievements of May Morris, from her pioneering role in",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/W9A4661-96-1-scaled.jpg"
+  },
+  {
+    "path": "/events/the-useful-beautiful-art-prize/",
+    "title": "The Useful & Beautiful Art Prize",
+    "date_text": "September 30, 2026",
+    "start_text": null,
+    "end_text": null,
+    "location": "The Birmingham & Midland Institute",
+    "excerpt": "The Useful and Beautiful Art Prize is a new award established by the William Morris Society to celebrate and support emerging artists, designers, and craftspeople whose work reflects the ideas and ideals of William Morris. The Prize is guided by Morris’s belief that art is both Useful and Beautiful, inseparable from everyday life, work, and nature. Entry opens 15th July 2026 and closes",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/Untitled-design-1-e1789125756839.jpg"
+  },
+  {
+    "path": "/events/william-morris-jewelry-making-workshop-with-workingclasp/",
+    "title": "William Morris Jewellery Making Workshop with WorkingClasp",
+    "date_text": "October 13, 2026",
+    "start_text": "10:00 am",
+    "end_text": "4:00 pm",
+    "location": "The William Morris Society",
+    "excerpt": "10am-4pm, October 13th, 2026 Spend a day immersed in creativity at the William Morris Society, making two beautiful pieces of jewellery inspired by the timeless patterns and philosophy of William Morris. Guided by Birmingham jewellery designer Rebecca Cowley of Working Clasp, you'll create an elegant floral brooch inspired by Strawberry Thief during the morning, before",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/DSC_0128_cropped.jpg"
+  },
+  {
+    "path": "/events/an-evening-talk-with-dr-gavin-stoneystreet/",
+    "title": "An Evening Talk with Dr Gavin Stoneystreet",
+    "date_text": "October 21, 2026",
+    "start_text": "5:30 pm",
+    "end_text": "7:30 pm",
+    "location": "The William Morris Society",
+    "excerpt": "Wednesday October 21st, 2026 - 5:30-7:30pm An intimate evening exploring the botanical world of William Morris. Join Cultural Botanist Gavin Francis Stoneystreet on a journey into William Morris’s own gardens and the influence they had on his design work, literature, and eco-socialist thinking. Dr Stoneystreet’s forthcoming book on William Morris and his gardens explores Morris’s gardens at",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/9780300278644.jpeg"
+  },
+  {
+    "path": "/events/halloween-fun-at-kelmscott-house/",
+    "title": "October Half Term Halloween fun at The William Morris Society",
+    "date_text": "October 26, 2026",
+    "start_text": "10:30 am",
+    "end_text": "12:30 pm",
+    "location": "The William Morris Society",
+    "excerpt": "Monday 26th October 2026, 10:30am-12:30pm A workshop for 6-12 year olds We are getting ready for Halloween at Kelmscott House, with a colourful owl tree for the window, a pumpkin mobile inspired by a William Morris design and beautiful owl finger puppet. Price: £7.50 per child Please note that all children must be accompanied by an adult",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/20260906_185843crop-1-scaled.jpg"
+  },
+  {
+    "path": "/events/water-marbling-workshop-with-daunton-marbling-workshop/",
+    "title": "Water Marbling Workshop with Daunton Marbling",
+    "date_text": "October 27, 2026",
+    "start_text": "10:00 am",
+    "end_text": "4:00 pm",
+    "location": "The William Morris Society",
+    "excerpt": "Tuesday October 27th, 2026 10am-4pm Cost: £120 Join Daunton Marbling Studio and dive into the ancient art of paper marbling. In this hands-on workshop you will: * Discover the history of this centuries-old craft * Learn about materials, tools and techniques * Create traditional and contemporary patterns * Create your own hand marbled papers Paper",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/WM-Workshop-2-scaled.jpeg"
+  },
+  {
+    "path": "/events/online-talk-inderbir-bhullar-on-charles-booth/",
+    "title": "Online Talk: Charles Booth’s London Poverty Maps with Inderbir Bhullar",
+    "date_text": "October 28, 2026",
+    "start_text": "6:30 pm",
+    "end_text": "7:30 pm",
+    "location": "Online",
+    "excerpt": "Wednesday 28th October, 2026. 6:30pm-7:30pm. Online. Inderbir Bhullar is the Curator for Economics and Social Policy at LSE Library. He joined the Library in 2013, previously working as a librarian at The Women’s Library. He curates exhibitions, writes blogs, gives talks and connects collections with academics, students, and the public alike. He talks regularly about",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/Hammersmith-poverty-map-scaled.jpg"
+  },
+  {
+    "path": "/events/london-luminaries-online-talk-director-gabriella-esser-on-practically-magic-william-morris-at-home-in-hammersmith/",
+    "title": "London Luminaries Online Talk – Director Gabriella Esser on “Practically Magic: William Morris at Home in Hammersmith”",
+    "date_text": "November 5, 2026",
+    "start_text": "7:00 pm",
+    "end_text": "8:00 pm",
+    "location": "Online",
+    "excerpt": "Thursday 5th November 2026. 7:00pm - 8:00pm. Online. About the Talk At Kelmscott House in Hammersmith, overlooking the River Thames, Morris pursued new creative directions for his firm Morris & Co., experimented with book design and private printing, and became a leading voice in the Socialist League. His time there was shaped by both domestic",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/LondonLuminaries-1.jpg"
+  },
+  {
+    "path": "/events/morrisfest-2026/",
+    "title": "MorrisFest 2026",
+    "date_text": "November 20, 2026",
+    "start_text": "6:00 pm",
+    "end_text": "3:00 pm",
+    "location": "The Birmingham & Midland Institute",
+    "excerpt": "MorrisFest 2026 Friday 20 – Sunday 22 November 2026 Birmingham & Midland Institute Your MorrisFest ticket includes the full festival programme, Friday Evening Welcome Reception and 2026 Kelmscott Lecture. Join the William Morris Society for MorrisFest 2026, a three-day festival celebrating the life, work, ideas and continuing influence of William Morris. Bringing together leading speakers,",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/image.png"
+  },
+  {
+    "path": "/events/morrisfest-artisan-market/",
+    "title": "MorrisFest: Christmas Artisan Market",
+    "date_text": "November 21, 2026",
+    "start_text": null,
+    "end_text": null,
+    "location": "The Birmingham & Midland Institute",
+    "excerpt": "This November we will be hosting a new and innovative festival celebrating the life, work and influence of William Morris - MorrisFest –which will be held at the Birmingham & Midland Institute. The aim of the festival will be to promote Morris, his work and ideas as well as related topics and discuss how they are still relevant",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/Pattern.png"
+  },
+  {
+    "path": "/events/strawberry-thief-embossed-copper-garland-festive-workshop/",
+    "title": "Embossed Copper Fruit Ornament Festive Workshop",
+    "date_text": "December 2, 2026",
+    "start_text": "10:30 am",
+    "end_text": "12:30 pm",
+    "location": "The William Morris Society",
+    "excerpt": "Embossed Copper Fruit Ornament Festive Workshop 10.30am-12.30pm, Wednesday December 2nd Cost: £45 Create your own embossed metal tree decorations with this fun hands on workshop. Using lightweight copper sheets and simple techniques you will create a set of hanging ornaments inspired by William Morris fruit designs. About the Workshop: An enjoyable and relaxing workshop",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/EMBOSSED-COPPER-ORNAMENT-FRUIT-WORKSHOP.jpg"
+  },
+  {
+    "path": "/events/kelmscott-lecture-2026/",
+    "title": "Kelmscott Lecture 2026",
+    "date_text": "November 21, 2026",
+    "start_text": "6:00 pm",
+    "end_text": "9:00 pm",
+    "location": "Birmingham & Midland Institute and Online",
+    "excerpt": "The 2026 Kelmscott Lecture 6.00–9.00pm | HYBRID: Birmingham & Midland Institute - The Lyttelton Theatre & Online *Kelmscott Lecture included in cost of MorrisFest 2026 ticket This year’s lecture, ‘Morris in Our Moment’, will be delivered by Professor Michael Robertson, whose biography of William Morris is forthcoming from Thames & Hudson. While Morris’s designs have",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/Social-Media-Post-KL-MorrisFest-2026.jpg"
+  },
+  {
+    "path": "/events/morris-by-moonlight-museum-lates-2/",
+    "title": "Morris by Moonlight – Museum Lates",
+    "date_text": "December 3, 2026",
+    "start_text": "5:30 pm",
+    "end_text": "8:30 pm",
+    "location": "The William Morris Society",
+    "excerpt": "Join us for a magical Morris by Moonlight on December 3rd! As winter darkness settles over London, step inside from the cold and discover the world of William Morris by candlelight at The William Morris Society — the perfect way to kick off the festive season. Join one of our expert guides for an enchanting",
+    "image_url": "https://williammorrissociety.org/wp-content/uploads/PHOTO-2026-03-20-10-15-55.jpg"
+  }
+]

@@ -26,6 +26,7 @@ pub mod soane_museum;
 pub mod somerset_house;
 pub mod ticketmaster;
 pub mod whitechapel_gallery;
+pub mod william_morris_society;
 
 #[derive(Debug, thiserror::Error)]
 pub enum SourceError {
@@ -92,6 +93,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         whitechapel_gallery::KEY => {
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
         }
+        william_morris_society::KEY => Ok(Box::new(
+            william_morris_society::WilliamMorrisSociety::new(base),
+        )),
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
         dandad::KEY => Ok(Box::new(dandad::Dandad::new(base))),
         _ => Err(SkipReason::UnknownKey),
