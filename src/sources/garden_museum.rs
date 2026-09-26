@@ -540,6 +540,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng,
         starts_at,
         ends_at: ends_at.filter(|e| *e > starts_at),
+        all_day: line.start_time.is_none() && line.end_time.is_none(),
         price: price_from_booking(&booking, listing_is_free),
         url: payload
             .get("url")

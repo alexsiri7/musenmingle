@@ -50,12 +50,17 @@ the venue's own site before it.
    feed the health checker.
 8. **Times:** use `normalise::parse_datetime` (honours offsets) or
    `parse_london_wall_clock` when a site prints local times with a bogus
-   offset. Verify against the human-readable time on the page. A date
-   without a time is stored as London midnight, which the `when=` filters
-   read as "untimed". If the page states late opening hours for an untimed
-   event (an exhibition's "late openings" section), tag it `late opening`
-   when `normalise::mentions_late_opening` accepts that text, so it counts
-   for `when=evening`.
+   offset. Verify against the human-readable time on the page. When the
+   site gives a date but no time, set `all_day: true` with `starts_at` at
+   London midnight of the first day and `ends_at` London midnight of the
+   last day (inclusive), or `None` for a single day; pages then show no
+   time (`normalise::is_date_only` / `is_london_midnight` help, see
+   `courtauld`). Never set it for an item that has a time. These
+   London-midnight starts are still what the `when=` filters read as
+   "untimed". If the page states late opening hours for an untimed event
+   (an exhibition's "late openings" section), tag it `late opening` when
+   `normalise::mentions_late_opening` accepts that text, so it counts for
+   `when=evening`.
 9. **Content policy: set it in the seed migration.** Muse & Mingle links out; it
    does not republish. In the seed row set `display_name` (the name shown
    on pages and in image credits, e.g. `'Barbican'`) and decide
@@ -159,6 +164,7 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] Proposed `interval_minutes`
 - [ ] Category mapping (exhibition / expo / community / talk / workshop) and what to skip
 - [ ] Time-zone quirks verified against human-readable times
+- [ ] Date-only items (no time given) set `all_day`; timed items never do
 - [ ] Fixtures saved under `tests/fixtures/scrapers/<key>/`
 - [ ] Snapshot test of normalised output committed and reviewed
 - [ ] wiremock fetch test (incl. robots.txt) passes

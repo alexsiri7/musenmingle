@@ -44,8 +44,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, describes_free_entry, london_date, parse_datetime,
-    parse_price,
+    clean_description, clean_text, dedupe_key, describes_free_entry, is_date_only, london_date,
+    parse_datetime, parse_price,
 };
 
 pub const KEY: &str = "barbican";
@@ -292,6 +292,10 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at,
+        all_day: payload
+            .get("starts")
+            .and_then(Value::as_str)
+            .is_some_and(is_date_only),
         price,
         url: payload
             .get("url")

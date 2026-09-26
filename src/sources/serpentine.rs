@@ -8,7 +8,8 @@
 //!   research resources) are skipped silently.
 //! * Quirk: the site emits London wall-clock times with a `+00:00` offset even
 //!   during BST (e.g. Park Nights "8pm" appears as `T20:00:00+00:00`), so times
-//!   are parsed with [`parse_london_wall_clock`], ignoring the offset.
+//!   are parsed with [`parse_london_wall_clock`], ignoring the offset. Dates
+//!   without a time appear as `T00:00:00+00:00`, so midnight is `all_day`.
 //! * Quirk: JSON-LD `offers.price` is unreliable (e.g. `"107."` for a £10/£7
 //!   ticket). The human-readable "Price: ..." line in the page banner is
 //!   preferred (CSS fallback), JSON-LD price only when it is absent.
@@ -29,8 +30,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, map_category, parse_london_wall_clock, parse_price,
-    price_from_amounts,
+    clean_description, clean_text, dedupe_key, is_london_midnight, map_category,
+    parse_london_wall_clock, parse_price, price_from_amounts,
 };
 
 pub const KEY: &str = "serpentine-galleries";
@@ -238,6 +239,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng,
         starts_at,
         ends_at,
+        all_day: is_london_midnight(starts_at) && ends_at.is_none_or(is_london_midnight),
         price,
         url,
         image_url: image_url(ev),

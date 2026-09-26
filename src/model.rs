@@ -114,6 +114,10 @@ pub struct NewEvent {
     pub lng: Option<f64>,
     pub starts_at: DateTime<Utc>,
     pub ends_at: Option<DateTime<Utc>>,
+    /// The source gave dates but no time of day: `starts_at` is London
+    /// midnight of the first day and `ends_at` London midnight of the last
+    /// day (inclusive), or `None` for a single day.
+    pub all_day: bool,
     pub price: Price,
     pub url: Option<String>,
     pub image_url: Option<String>,

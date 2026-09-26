@@ -331,7 +331,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .ok_or_else(|| SourceError::Parse(format!("{title:?}: no instance startDate")))?;
     let date = NaiveDate::parse_from_str(&date_text, "%Y-%m-%d")
         .map_err(|_| SourceError::Parse(format!("{title:?}: bad startDate {date_text:?}")))?;
-    let (starts_at, ends_at) = match text("/time_text") {
+    let (starts_at, ends_at, all_day) = match text("/time_text") {
         Some(t) => {
             let (start, end) = parse_time_range(&t)
                 .ok_or_else(|| SourceError::Parse(format!("{title:?}: unrecognised time {t:?}")))?;
@@ -343,9 +343,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
                 };
                 london_to_utc(end_day.and_time(e))
             });
-            (london_to_utc(date.and_time(start)), end)
+            (london_to_utc(date.and_time(start)), end, false)
         }
-        None => (london_to_utc(date.and_time(NaiveTime::MIN)), None),
+        None => (london_to_utc(date.and_time(NaiveTime::MIN)), None, true),
     };
     let venue_name = location_text
         .clone()
@@ -371,6 +371,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: coord("lng"),
         starts_at,
         ends_at: ends_at.filter(|e| *e > starts_at),
+        all_day,
         price,
         url: text("/url"),
         image_url: text("/image_url"),

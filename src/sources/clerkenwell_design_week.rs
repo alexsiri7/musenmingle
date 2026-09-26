@@ -107,6 +107,7 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
         lng: None,
         starts_at,
         ends_at: ends_at.filter(|e| *e > starts_at),
+        all_day: true,
         price: Price::default(),
         url: Some(SITE.to_string()),
         image_url: image_url(node),

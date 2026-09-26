@@ -25,7 +25,7 @@ test("toggle saves with a snapshot, newest first, and unsaves", () => {
   items = app.toggle(items, { id: ID2, title: "Life drawing" }, "2026-09-26T11:00:00Z");
   assert.deepEqual(items.map((i) => i.id), [ID2, ID1]);
   assert.deepEqual(items[1].snapshot, { title: "Concrete and Clay", venue: "Barbican",
-    starts_at: "2026-10-01T18:00:00Z", ends_at: null });
+    starts_at: "2026-10-01T18:00:00Z", ends_at: null, all_day: false });
   assert.ok(app.isSaved(items, ID1));
   items = app.toggle(items, { id: ID1, title: "x" }, "2026-09-26T12:00:00Z");
   assert.deepEqual(items.map((i) => i.id), [ID2]);
@@ -90,6 +90,8 @@ test("when matches the server's wording in London time", () => {
   assert.equal(app.when("2026-11-01T00:00:00Z", "2027-01-03T00:00:00Z", now), "Sun 1 Nov 2026 – Sun 3 Jan 2027");
   assert.equal(app.when("2026-10-02T23:00:00Z", null, now), "Sat 3 Oct 2026");
   assert.equal(app.when("2026-09-28T10:09:00Z", null, now), "Mon 28 Sep 2026, 11:09");
+  assert.equal(app.when("2026-10-02T23:00:00Z", null, now, true), "Sat 3 Oct 2026, all day");
+  assert.equal(app.when("2026-11-01T00:00:00Z", "2027-01-03T00:00:00Z", now, true), "Sun 1 Nov 2026 – Sun 3 Jan 2027");
 });
 
 test("dayOfMonth is the London day, two digits (the placeholder numeral, like web::blank)", () => {
@@ -129,4 +131,29 @@ test("toICS escapes text, uses UTC and folds long lines", () => {
   assert.equal(ics.split("BEGIN:VEVENT").length - 1, 2);
   assert.ok(lines.every((l) => l.length <= 75), "folded");
   assert.ok(lines.some((l) => l.startsWith(" x")), "continuation line");
+});
+
+test("toICS writes all-day events as London dates", () => {
+  const ics = (e) => app.toICS([{ id: ID1, title: "x", ...e }], "2026-09-26T10:00:00Z", "https://m.example")
+    .split("\r\n");
+  const range = ics({ starts_at: "2026-09-23T23:00:00Z", ends_at: "2026-10-04T23:00:00Z", all_day: true });
+  assert.ok(range.includes("DTSTART;VALUE=DATE:20260924"));
+  assert.ok(range.includes("DTEND;VALUE=DATE:20261006"), "DTEND is the day after the last");
+  const oneDay = ics({ starts_at: "2026-12-01T00:00:00Z", ends_at: null, all_day: true });
+  assert.ok(oneDay.includes("DTSTART;VALUE=DATE:20261201"));
+  assert.ok(oneDay.includes("DTEND;VALUE=DATE:20261202"));
+  const legacy = ics({ starts_at: "2026-10-02T23:00:00Z", ends_at: null });
+  assert.ok(legacy.includes("DTSTART;VALUE=DATE:20261003"), "saves without all_day fall back to midnight");
+  const timed = ics({ starts_at: "2026-10-02T23:00:00Z", ends_at: null, all_day: false });
+  assert.ok(timed.includes("DTSTART:20261002T230000Z"));
+  assert.ok(!timed.some((l) => l.startsWith("DTEND")));
+});
+
+test("fromSnapshot reads saves from before all_day as the .ics does", () => {
+  const card = (snapshot) => app.fromSnapshot({ id: ID1, snapshot: { title: "x", ...snapshot } });
+  const legacy = card({ starts_at: "2026-10-02T23:00:00Z", ends_at: null });
+  assert.equal(legacy.all_day, true);
+  assert.equal(app.when(legacy.starts_at, legacy.ends_at, "2026-10-01T12:00:00Z", legacy.all_day), "Sat 3 Oct 2026, all day");
+  assert.equal(card({ starts_at: "2026-10-03T17:00:00Z", ends_at: null }).all_day, false);
+  assert.equal(card({ starts_at: "2026-10-02T23:00:00Z", ends_at: null, all_day: false }).all_day, false);
 });

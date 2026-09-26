@@ -107,6 +107,7 @@
         venue: event.venue || null,
         starts_at: event.starts_at || null,
         ends_at: event.ends_at || null,
+        all_day: event.all_day === true,
       },
     };
     return [item].concat(items);
@@ -164,7 +165,7 @@
   }
 
   /** Same wording as the server (web::when). */
-  function when(startsIso, endsIso, nowIso) {
+  function when(startsIso, endsIso, nowIso, allDay) {
     if (!startsIso) return "";
     var start = new Date(startsIso);
     var end = endsIso ? new Date(endsIso) : null;
@@ -173,6 +174,7 @@
         ? "Until " + fmtDate(endsIso)
         : fmtDate(startsIso) + " – " + fmtDate(endsIso);
     }
+    if (allDay) return fmtDate(startsIso) + ", all day";
     if (end && end > start && !isMidnight(startsIso)) {
       return fmtDateTime(startsIso) + "–" + fmtTime(endsIso);
     }
@@ -222,6 +224,31 @@
     return new Date(iso).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   }
 
+  /** Saves from before `all_day` existed: London midnight means date-only. */
+  function isAllDay(e) {
+    if (typeof e.all_day === "boolean") return e.all_day;
+    return isMidnight(e.starts_at) && (!e.ends_at || isMidnight(e.ends_at));
+  }
+
+  /** A saved item as the event fields the card needs, from its snapshot. */
+  function fromSnapshot(item) {
+    return {
+      id: item.id,
+      title: item.snapshot.title,
+      venue_name: item.snapshot.venue,
+      starts_at: item.snapshot.starts_at,
+      ends_at: item.snapshot.ends_at,
+      all_day: isAllDay(item.snapshot),
+    };
+  }
+
+  /** The London date of `iso` plus `addDays`, as an iCalendar DATE. */
+  function icsDate(iso, addDays) {
+    var p = parts(iso);
+    var d = new Date(Date.UTC(Number(p.year), Number(p.month) - 1, Number(p.day) + addDays));
+    return d.toISOString().slice(0, 10).replace(/-/g, "");
+  }
+
   /** Fold lines longer than 75 characters (RFC 5545 3.1). */
   function fold(line) {
     var out = [];
@@ -234,7 +261,8 @@
   }
 
   /**
-   * A VCALENDAR for `events` ({id, title, venue, starts_at, ends_at, url}).
+   * A VCALENDAR for `events` ({id, title, venue, starts_at, ends_at, all_day,
+   * url}). All-day events become DATE entries, whose DTEND is exclusive.
    * `origin` builds each event's Muse & Mingle link.
    */
   function toICS(events, nowIso, origin) {
@@ -249,8 +277,13 @@
       lines.push("BEGIN:VEVENT");
       lines.push("UID:" + e.id + "@musenmingle.interstellarai.net");
       lines.push("DTSTAMP:" + icsTime(nowIso));
-      lines.push("DTSTART:" + icsTime(e.starts_at));
-      if (e.ends_at) lines.push("DTEND:" + icsTime(e.ends_at));
+      if (isAllDay(e)) {
+        lines.push("DTSTART;VALUE=DATE:" + icsDate(e.starts_at, 0));
+        lines.push("DTEND;VALUE=DATE:" + icsDate(e.ends_at || e.starts_at, 1));
+      } else {
+        lines.push("DTSTART:" + icsTime(e.starts_at));
+        if (e.ends_at) lines.push("DTEND:" + icsTime(e.ends_at));
+      }
       lines.push("SUMMARY:" + icsEscape(e.title));
       if (e.venue) lines.push("LOCATION:" + icsEscape(e.venue));
       lines.push("URL:" + origin + "/events/" + e.id);
@@ -272,6 +305,7 @@
     dayOfMonth: dayOfMonth,
     price: price,
     toICS: toICS,
+    fromSnapshot: fromSnapshot,
   };
   if (typeof module === "object" && module.exports) {
     module.exports = api;
@@ -292,6 +326,7 @@
       venue: b.getAttribute("data-venue") || null,
       starts_at: b.getAttribute("data-starts") || null,
       ends_at: b.getAttribute("data-ends") || null,
+      all_day: b.getAttribute("data-all-day") === "true",
     };
   }
 
@@ -348,18 +383,12 @@
 
   function renderCard(tpl, item, event, nowIso, gone) {
     var node = tpl.content.firstElementChild.cloneNode(true);
-    var e = event || {
-      id: item.id,
-      title: item.snapshot.title,
-      venue_name: item.snapshot.venue,
-      starts_at: item.snapshot.starts_at,
-      ends_at: item.snapshot.ends_at,
-    };
+    var e = event || fromSnapshot(item);
     var href = "/events/" + encodeURIComponent(e.id);
     var title = slot(node, "title");
     title.textContent = e.title;
     title.setAttribute("href", href);
-    slot(node, "when").textContent = when(e.starts_at, e.ends_at, nowIso);
+    slot(node, "when").textContent = when(e.starts_at, e.ends_at, nowIso, e.all_day);
     var venue = slot(node, "venue");
     if (e.venue_name) venue.textContent = e.venue_name;
     else venue.hidden = true;
@@ -440,6 +469,7 @@
     btn.setAttribute("data-venue", e.venue_name || "");
     btn.setAttribute("data-starts", e.starts_at || "");
     btn.setAttribute("data-ends", e.ends_at || "");
+    btn.setAttribute("data-all-day", e.all_day ? "true" : "false");
     slot(node, "save-title").textContent = ": " + e.title;
     return node;
   }
@@ -500,13 +530,21 @@
         var events = items.map(function (item) {
           var e = byId[item.id];
           return e
-            ? { id: e.id, title: e.title, venue: e.venue_name, starts_at: e.starts_at, ends_at: e.ends_at }
+            ? {
+                id: e.id,
+                title: e.title,
+                venue: e.venue_name,
+                starts_at: e.starts_at,
+                ends_at: e.ends_at,
+                all_day: e.all_day,
+              }
             : {
                 id: item.id,
                 title: item.snapshot.title,
                 venue: item.snapshot.venue,
                 starts_at: item.snapshot.starts_at,
                 ends_at: item.snapshot.ends_at,
+                all_day: isAllDay(item.snapshot),
               };
         });
         var blob = new Blob([toICS(events, new Date().toISOString(), root.location.origin)], {

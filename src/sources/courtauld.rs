@@ -423,13 +423,14 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     {
         return Ok(None);
     }
-    let (starts_at, ends_at) = if let Some(day) = parse_single_date(date_text) {
+    let (starts_at, ends_at, all_day) = if let Some(day) = parse_single_date(date_text) {
         match s("time_text").and_then(parse_time_range) {
             Some((start, end)) => (
                 london_to_utc(day.and_time(start)),
                 end.map(|e| london_to_utc(day.and_time(e))),
+                false,
             ),
-            None => (london_to_utc(day.and_time(NaiveTime::MIN)), None),
+            None => (london_to_utc(day.and_time(NaiveTime::MIN)), None, true),
         }
     } else {
         let Some((first, last)) = parse_date_range(date_text)? else {
@@ -438,6 +439,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         (
             london_to_utc(first.and_time(NaiveTime::MIN)),
             Some(london_to_utc(last.and_time(NaiveTime::MIN))),
+            true,
         )
     };
     let price: Price = s("price_text").map(parse_price).unwrap_or_default();
@@ -460,6 +462,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(lng),
         starts_at,
         ends_at: ends_at.filter(|e| *e > starts_at),
+        all_day,
         price,
         url: s("url").map(str::to_string),
         image_url: s("image_url").map(str::to_string),
@@ -573,6 +576,23 @@ mod tests {
             times("6 Oct 2026", Some("Evening"), "talk"),
             ("2026-10-05T23:00:00+00:00".into(), None)
         );
+    }
+
+    #[test]
+    fn all_day_when_no_time_was_parsed() {
+        let all_day = |date, time, category| {
+            normalise_payload(&payload(date, time, category))
+                .unwrap()
+                .unwrap()
+                .all_day
+        };
+        assert!(!all_day("6 Oct 2026", Some("18:00"), "talk"));
+        assert!(all_day("6 Oct 2026", Some("Evening"), "talk"));
+        assert!(all_day(
+            "2 October 2026 – 10 January 2027",
+            Some("10:00 – 18:00 (last entry 17:15)"),
+            "exhibition"
+        ));
     }
 
     #[test]

@@ -380,6 +380,7 @@ pub struct Similar {
     pub venue_name: Option<String>,
     pub starts_at: DateTime<Utc>,
     pub ends_at: Option<DateTime<Utc>>,
+    pub all_day: bool,
     pub category: String,
     pub medium_tags: Vec<String>,
     pub format_tags: Vec<String>,
@@ -403,8 +404,8 @@ pub async fn more_like_this(
     // Over-fetch from the index, then drop past events.
     sqlx::query_as(
         "SELECT * FROM (
-             SELECT ev.id, ev.title, ev.venue_name, ev.starts_at, ev.ends_at, ev.category,
-                    ev.medium_tags, ev.format_tags, ev.good_for, ev.vibe_tags,
+             SELECT ev.id, ev.title, ev.venue_name, ev.starts_at, ev.ends_at, ev.all_day,
+                    ev.category, ev.medium_tags, ev.format_tags, ev.good_for, ev.vibe_tags,
                     1 - (em.embedding OPERATOR(extensions.<=>) q.embedding) AS similarity
              FROM events.event_embeddings q
              JOIN events.event_embeddings em ON em.event_id <> q.event_id

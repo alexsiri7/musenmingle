@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "West Carriage Drive, Kensington Gardens, London W2 2AR",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "amar-kanwar|2026-09-23|serpentine-north",
       "description": "This major solo exhibition unfolds as a site-specific installation, bringing together new and existing films to transform Serpentine North into a meditative visual and sonic environment.",
@@ -46,6 +47,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": true,
       "category": "community",
       "dedupe_key": "how-we-hold-rehearsals-for-art-social-change|2024-05-01|serpentine-south",
       "description": "A book inviting arts educators, cultural workers, facilitators and organisers, who want to use creative practice to work towards change, through personal and social transformation.",
@@ -74,6 +76,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "jesus-rafael-soto-penetrable-bbl-jaune|2026-06-16|serpentine-south",
       "description": "Presented in Kensington Gardens, Pénétrable BBL Jaune is a public art sculpture, part of Soto’s celebrated Pénétrable series.",
@@ -102,6 +105,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "justin-caguiat-change-ringing|2026-10-08|serpentine-south",
       "description": "Discover Justin Caguiat in his first UK institutional exhibition. Explore painting, sculpture, printmaking, sound and film in a site-responsive installation.",
@@ -136,6 +140,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "park-nights-2026-ebun-sodipo-rosa-johan-uddoh|2026-09-25|serpentine-pavilion",
       "description": "Park Nights 2026 presents Ebun Sodipo and Rosa-Johan Uddoh's Atlantic Cruises: The Sex Tour, in the 2026 Serpentine Pavilion.",
@@ -166,6 +171,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "park-nights-2026-shala-miller|2026-10-02|serpentine-pavilion",
       "description": "Park Nights 2026 presents hideandseek, an evening of improvised vocal performance with Shala Miller.",
@@ -196,6 +202,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "saturday-talks-liz-stumpf-on-lanza-ateliers-2026-serpentine-pavilion|2026-10-10|serpentine-pavilion",
       "description": "Liz Stumpf, Assistant Exhibitions Curator, leads a tour of the 2026 Serpentine Pavilion a serpentine by LANZA atelier.",
@@ -225,6 +232,7 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "serpentine-pavilion-2026-by-lanza-atelier|2026-06-06|serpentine-pavilion",
       "description": "Serpentine Pavilion 2026: a serpentine by LANZA atelier, founded by Isabel Abascal and Alessandro Arienzo",

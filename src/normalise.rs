@@ -22,7 +22,7 @@
 //! merged by `repo::upsert_event`. Near-matches (differing titles, venue names
 //! or exhibition opening dates) are handled there by `crate::matching`.
 
-use chrono::{DateTime, NaiveDate, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 use chrono_tz::Europe::London;
 use rust_decimal::Decimal;
 use std::str::FromStr;
@@ -148,6 +148,16 @@ pub fn parse_london_wall_clock(s: &str) -> Option<DateTime<Utc>> {
         .ok()
         .and_then(|d| d.and_hms_opt(0, 0, 0))
         .map(london_to_utc)
+}
+
+/// A bare ISO date (`2026-10-02`) with no time of day.
+pub fn is_date_only(s: &str) -> bool {
+    NaiveDate::parse_from_str(s.trim(), "%Y-%m-%d").is_ok()
+}
+
+/// Whether `t` is exactly midnight in London.
+pub fn is_london_midnight(t: DateTime<Utc>) -> bool {
+    t.with_timezone(&London).time() == NaiveTime::MIN
 }
 
 fn currency_for_symbol(c: char) -> Option<&'static str> {
@@ -706,6 +716,16 @@ mod tests {
             parse_london_wall_clock("2026-12-02T20:00:00+00:00"),
             Some(utc("2026-12-02T20:00:00Z"))
         );
+    }
+
+    #[test]
+    fn date_only_and_london_midnight() {
+        assert!(is_date_only("2026-10-02"));
+        assert!(is_date_only(" 2026-10-02 "));
+        assert!(!is_date_only("2026-10-02T00:00"));
+        assert!(is_london_midnight(utc("2026-10-01T23:00:00Z")));
+        assert!(is_london_midnight(utc("2026-12-01T00:00:00Z")));
+        assert!(!is_london_midnight(utc("2026-12-01T23:00:00Z")));
     }
 
     #[test]

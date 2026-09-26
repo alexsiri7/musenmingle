@@ -24,8 +24,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{NewEvent, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_to_utc, map_category, parse_datetime,
-    price_from_amounts,
+    clean_description, clean_text, dedupe_key, is_london_midnight, london_to_utc, map_category,
+    parse_datetime, price_from_amounts,
 };
 
 pub const KEY: &str = "ticketmaster";
@@ -188,6 +188,9 @@ pub fn normalise_event(ev: &Value) -> Result<Option<NewEvent>, SourceError> {
         .and_then(parse_datetime)
         .or_else(|| s(ev, "/dates/end/localDateTime").and_then(parse_datetime))
         .filter(|e| *e >= starts_at);
+    let all_day = s(ev, "/dates/start/dateTime").is_none()
+        && s(ev, "/dates/start/localTime").is_none()
+        && ends_at.is_none_or(is_london_midnight);
 
     let venue = ev.pointer("/_embedded/venues/0");
     let venue_name = venue.and_then(|v| s(v, "/name")).map(clean_text);
@@ -253,6 +256,7 @@ pub fn normalise_event(ev: &Value) -> Result<Option<NewEvent>, SourceError> {
         lng,
         starts_at,
         ends_at,
+        all_day,
         price,
         url: s(ev, "/url").map(str::to_string),
         image_url,

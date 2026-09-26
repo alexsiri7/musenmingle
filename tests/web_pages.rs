@@ -804,6 +804,44 @@ async fn detail_page_shows_all_fields_and_404s_unknown_ids() {
 }
 
 #[tokio::test]
+async fn a_stored_all_day_event_shows_no_time() {
+    let Some(db) = TestDb::create("a_stored_all_day_event_shows_no_time").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let day = days(3)
+        .with_timezone(&chrono_tz::Europe::London)
+        .date_naive()
+        .and_hms_opt(0, 0, 0)
+        .unwrap()
+        .and_local_timezone(chrono_tz::Europe::London)
+        .unwrap()
+        .with_timezone(&Utc);
+    let id = insert(&pool, Ev::new("Open studio day", day)).await;
+    sqlx::query("UPDATE events.events SET all_day = true WHERE id = $1")
+        .bind(id)
+        .execute(&pool)
+        .await
+        .unwrap();
+    let app = app(&pool);
+
+    let home = get(&app, "/").await;
+    assert_eq!(card_titles(&home.body), ["Open studio day"]);
+    assert!(home.body.contains(", all day"), "{}", home.body);
+    assert!(home.body.contains("data-all-day=\"true\""), "{}", home.body);
+
+    let detail = get(&app, &format!("/events/{id}")).await;
+    assert!(detail.body.contains(", all day"), "{}", detail.body);
+
+    let json = get(&app, &format!("/v1/events/{id}")).await;
+    let json: serde_json::Value = serde_json::from_str(&json.body).unwrap();
+    assert_eq!(json["all_day"], json!(true), "{json}");
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn sources_page_renders_the_sources_api_data() {
     let Some(db) = TestDb::create("sources_page_renders_the_sources_api_data").await else {
         return;

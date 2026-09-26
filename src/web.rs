@@ -569,9 +569,15 @@ fn time_tag(t: DateTime<Utc>, text: String) -> Markup {
     html! { time datetime=(t.to_rfc3339()) { (text) } }
 }
 
-/// "Sat 3 Oct 2026, 18:30–20:00", "Until Sun 3 Jan 2027" (a multi-day event
-/// already running) or "Sat 3 Oct 2026 – Sun 3 Jan 2027".
-fn when(start: DateTime<Utc>, end: Option<DateTime<Utc>>, now: DateTime<Utc>) -> Markup {
+/// "Sat 3 Oct 2026, 18:30–20:00", "Sat 3 Oct 2026, all day", "Until Sun 3 Jan
+/// 2027" (a multi-day event already running) or "Sat 3 Oct 2026 – Sun 3 Jan
+/// 2027".
+fn when(
+    start: DateTime<Utc>,
+    end: Option<DateTime<Utc>>,
+    all_day: bool,
+    now: DateTime<Utc>,
+) -> Markup {
     match end {
         Some(end) if london(end).date_naive() != london(start).date_naive() && end > start => {
             if start <= now {
@@ -580,6 +586,7 @@ fn when(start: DateTime<Utc>, end: Option<DateTime<Utc>>, now: DateTime<Utc>) ->
                 html! { (time_tag(start, fmt_date(start))) " – " (time_tag(end, fmt_date(end))) }
             }
         }
+        _ if all_day => html! { (time_tag(start, fmt_date(start))) ", all day" },
         Some(end) if end > start && london(start).time() != NaiveTime::MIN => html! {
             (time_tag(start, fmt_date_time(start))) "–" (london(end).format("%H:%M").to_string())
         },
@@ -996,7 +1003,8 @@ fn save_button(e: &EventJson) -> Markup {
             data-save-id=(e.id) data-title=(e.title)
             data-venue=(e.venue_name.as_deref().unwrap_or(""))
             data-starts=(e.starts_at.to_rfc3339())
-            data-ends=(e.ends_at.map(|t| t.to_rfc3339()).unwrap_or_default()) {
+            data-ends=(e.ends_at.map(|t| t.to_rfc3339()).unwrap_or_default())
+            data-all-day=(if e.all_day { "true" } else { "false" }) {
             (bookmark())
             span class="save-label" { "Save" }
             span class="vh" { ": " (e.title) }
@@ -1066,7 +1074,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
             (thumbnail_figure(e, "thumb"))
             div class="card-body" {
                 p class="card-meta" {
-                    span class="when" { (when(e.starts_at, e.ends_at, now)) }
+                    span class="when" { (when(e.starts_at, e.ends_at, e.all_day, now)) }
                     @if let Some(p) = price(e) {
                         span class={ "badge price" @if e.is_free { " free" } } { (p) }
                     }
@@ -1433,7 +1441,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                             div {
                                 dt { "When" }
                                 dd {
-                                    (when(e.starts_at, e.ends_at, now))
+                                    (when(e.starts_at, e.ends_at, e.all_day, now))
                                     @if let Some(end) = e.ends_at {
                                         span class="sub" {
                                             "Starts " (time_tag(e.starts_at, fmt_date_time(e.starts_at)))
@@ -1571,7 +1579,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                                 a href={ "/events/" (s.id) } { (s.title) }
                                                 span class="mono" {
                                                     @if let Some(v) = &s.venue_name { (v) " · " }
-                                                    (when(s.starts_at, s.ends_at, now))
+                                                    (when(s.starts_at, s.ends_at, s.all_day, now))
                                                 }
                                                 @if !s.shared_tags.is_empty() {
                                                     span class="why" {
@@ -2165,6 +2173,7 @@ mod tests {
         let one_off = when(
             t("2026-10-03T17:00:00Z"),
             Some(t("2026-10-03T19:00:00Z")),
+            false,
             now,
         );
         assert!(
@@ -2175,6 +2184,7 @@ mod tests {
         let running = when(
             t("2026-09-01T00:00:00Z"),
             Some(t("2027-01-03T00:00:00Z")),
+            false,
             now,
         );
         assert!(
@@ -2185,6 +2195,7 @@ mod tests {
         let future = when(
             t("2026-11-01T00:00:00Z"),
             Some(t("2027-01-03T00:00:00Z")),
+            false,
             now,
         );
         assert!(
@@ -2194,9 +2205,27 @@ mod tests {
         );
         let midnight = Utc.with_ymd_and_hms(2026, 10, 2, 23, 0, 0).unwrap(); // 00:00 BST
         assert!(
-            when(midnight, None, now)
+            when(midnight, None, false, now)
                 .0
-                .contains(">Sat 3 Oct 2026</time>")
+                .ends_with(">Sat 3 Oct 2026</time>")
+        );
+    }
+
+    #[test]
+    fn all_day_events_show_dates_only() {
+        let now = t("2026-10-01T12:00:00Z");
+        let midnight = t("2026-10-02T23:00:00Z"); // 00:00 BST
+        let one_day = when(midnight, None, true, now);
+        assert!(
+            one_day.0.ends_with(">Sat 3 Oct 2026</time>, all day"),
+            "{}",
+            one_day.0
+        );
+        let range = when(midnight, Some(t("2026-10-10T23:00:00Z")), true, now);
+        assert!(
+            range.0.contains("Sat 3 Oct 2026</time> – <time") && !range.0.contains("all day"),
+            "{}",
+            range.0
         );
     }
 

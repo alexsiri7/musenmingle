@@ -70,6 +70,7 @@ impl Source for FakeSource {
             lng: Some(-0.12),
             starts_at,
             ends_at: None,
+            all_day: false,
             price: Price::default(),
             url: raw.source_url.clone(),
             image_url: None,

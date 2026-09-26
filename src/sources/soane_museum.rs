@@ -16,7 +16,7 @@
 //!   30 Sep 2026 is `17:00:00Z` (BST) and "6pm" on the Late of 30 Oct 2026 is
 //!   `18:00:00Z` (GMT). Exhibitions show dates only (the attributes carry
 //!   stray times of day), so both ends are stored as London midnight of
-//!   their day, as for Whitechapel Gallery.
+//!   their day (`all_day`), as for Whitechapel Gallery.
 //! * Category comes from the type label: Exhibitions → exhibition, Talks →
 //!   talk, Workshops and Courses and Classes → workshop, Soane Lates and
 //!   Families (holiday workshops and drop-ins) → community. Tours are
@@ -301,6 +301,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng,
         starts_at,
         ends_at,
+        all_day: category == Category::Exhibition,
         price,
         url: payload
             .get("url")

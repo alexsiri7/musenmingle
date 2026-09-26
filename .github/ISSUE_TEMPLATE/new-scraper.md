@@ -31,6 +31,7 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 - [ ] Proposed `interval_minutes`
 - [ ] Category mapping (exhibition / expo / community / talk / workshop) and what to skip
 - [ ] Time-zone quirks verified against human-readable times
+- [ ] Date-only items (no time given) set `all_day`; timed items never do
 - [ ] Fixtures saved under `tests/fixtures/scrapers/<key>/`
 - [ ] Snapshot test of normalised output committed and reviewed
 - [ ] wiremock fetch test (incl. robots.txt) passes

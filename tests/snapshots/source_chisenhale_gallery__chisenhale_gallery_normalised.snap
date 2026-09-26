@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "wakaliga-uganda-kibuuka-omumbaale|2026-10-02|chisenhale",
       "description": null,
@@ -33,6 +34,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "isaac-nabwana-in-conversation-with-ryan-trecartin|2026-10-03|chisenhale",
       "description": null,
@@ -60,6 +62,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "panel-discussion-with-dr-iain-robert-smith-nadia-denton-dr-samantha-iwowo-chaired-by-dr-sarah-jilani|2026-10-29|chisenhale",
       "description": null,
@@ -87,6 +90,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "panel-discussion-with-mati-diop-dr-eva-namusoke-dr-jennifer-nansubuga-makumbi-chaired-by-dr-nobunye-levin|2026-11-05|chisenhale",
       "description": null,
@@ -114,6 +118,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "panel-discussion-with-dr-bernadette-buckley-dr-vivienne-jabri-abiba-coulibaly-chaired-by-dr-anna-adima|2026-11-12|chisenhale",
       "description": null,
@@ -141,6 +146,7 @@ expression: out
   {
     "event": {
       "address": "64 Chisenhale Road, London E3 5QZ",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "tour-of-kibuuka-omumbaale-with-tosia-leniarska-curator-exhibitions-events|2026-12-03|chisenhale",
       "description": null,

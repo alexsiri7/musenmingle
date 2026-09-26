@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "London, London, EC1A, United Kingdom",
+      "all_day": true,
       "category": "expo",
       "dedupe_key": "clerkenwell-design-week-2027|2027-05-25|clerkenwell",
       "description": "Clerkenwell Design Week is the UK's leading design festival and showcases the very best in comtemporary design products for upcoming interiors projects..",

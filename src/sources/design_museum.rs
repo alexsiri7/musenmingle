@@ -250,6 +250,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at: Some(ends_at).filter(|e| *e > starts_at),
+        all_day: true,
         price,
         url: payload
             .get("url")

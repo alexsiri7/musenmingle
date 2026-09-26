@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "cook-with-seasons-october|2026-10-10|garden",
       "description": "Join our Food Educator Ceri, for a monthly series of cookery classes for adults, exploring what it means to cook with the seasons; planning your meals around what fresh produce is in abundance from your veg box, market, or even grown yourself in your garden, balcony or allotment. Each hands on class includes a vegetarian main dish, side and a dessert, putting seasonal produce front and centre. Through cooking these dishes you will gain valuable vegetable specific knife skills, learn how to season to taste, what ‘goes’ together, and how to beautifully present your food. The class will end by sitting down to lunch together, to enjoy everything that has been prepared, plus everyone receives a recipe pack to take home. October Sample Menu Butternut squash & feta borek with harissa yoghurt Mixed roasted seasonal squash, with chickpeas, homemade labne and zhoug Kale, celeriac, apple and blue cheese salad Upside down fig cake Classes are small with just 6 participants and take place in our learning studio kitchen at the Museum. The classes are a combination of hands on and demo by Ceri and open to all levels of skills and interests. This class is suitable for adults 18 and over. Cookery class ticket includes entry to the Museum and temporary exhibition gallery. Please note this class will take place on Saturday 10 October and Wednesday 14 October.",
@@ -77,6 +78,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "garden-cafe-whos-game|2026-10-02|garden",
       "description": "Game season is upon us! An exciting time for cooks and we have a series of autumnal dinners planned to celebrate. We’re talking to our suppliers to source the best in all manner of furred and feathered game, as well as wild mushrooms and many other autumn treats. Menu TBC",
@@ -123,6 +125,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "harvest-festival-2026|2026-10-18|garden",
       "description": "The Garden Museum Harvest Festival is a day of stalls, talks and workshops exploring the world of growing and producing food in the city. For its third edition, the Garden Museum Harvest Festival 2026 – in collaboration with felloe – celebrates the people finding innovative, exciting ways to grow food in urban settings, across London and beyond. Cities now hold around 60% of the world’s population. As people have moved to urban settings, they’ve become increasingly dependent on long supply chains to access food grown far away. And yet, from community gardens that have transformed neglected land into neighbourhood hubs, to rooftop beehives, underground mushroom caves, vertical farms and windowsill fermentation jars, the world of urban growing is creative and sprawling, offering inspiring and novel ideas on how we can bring back our connection to food and growing to the cities so many of us now call home. Join us on Sunday 18 October for a day full of stalls, workshops and talks all about the world of urban growing. This year’s stalls will include: Simplicity, E5 Bakehouse, The Ferm, The China Edit, Company Drinks, Kvass, Mary’s Marmalade, The Root Co, Ki Kefir, Lamiri Harissa, Uppa Club, Vicky’s Noodles We’re also delighted to present a programme of talks and activities curated by Amy Bendel, founder of Felloe, and Ollie Whitehead, Head of Public Programmes at the Garden Museum. Please note, these talks and workshops must be booked separately in addition to the Harvest Festival entry ticket. The award-winning Garden Café will be open throughout the day serving a fresh, seasonal menu. Takeaway cakes and beverages will be available for walk-ins, booking is essential for lunch: book a table",
@@ -171,6 +174,7 @@ expression: out
   {
     "event": {
       "address": null,
+      "all_day": false,
       "category": "community",
       "dedupe_key": "harvest-festival-2026-harvest-ride-through-south-london|2026-10-18|south",
       "description": "This Harvest Festival, join George Hudson and Divya Hariramani ( Fruity Walks ) for something a little different: a slow bicycle ride through South London’s overlooked green corners, tracing the trees growing along the way. The route winds from Lambeth’s riverside edges into quieter Georgian squares and community gardens further south: Vauxhall Walk Black Prince Road Imperial War Museum Garden West Square Cottington Community Alberta Fruits Commons Kennington Park Walworth Garden We’ll pause along the way to look up and share the stories of what’s growing at each stop, finishing at Walworth Garden. Expect a relaxed pace and plenty of stopping. Suitable for confident cyclists comfortable riding on quiet city roads. This talk is part of the Harvest Festival 2026 programme. In order to purchase this talk you must also purchase a general entry ticket for the Harvest Festival 2026.",
@@ -219,6 +223,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "matthew-rice-year-in-garden|2026-10-06|garden",
       "description": "Grab a chair (and perhaps a trowel) for an evening with gardener and painter Matthew Rice, marking the launch of his new book, A Year in the Garden. 14 years ago, Matthew bought the last shred of a medieval castle gatehouse in the very edge of the Cotswolds at Bampton. Move a decade forward and where there were concrete barns, slurry lagoons, and silage pits there is a walled garden, glasshouses, hen runs, and an orchard. A Year in the Garden is a record of 12 months spent working, painting, and planning in a garden that is personal and flower filled and undisciplined but super productive. This evening Matthew will talk about the transformation and why he’s always reluctant to leave and joyful to get home. Please note that our talks now begin at 6:30pm, rather than 7pm, giving you more time to enjoy dinner at our award-winning Garden Museum Cafe. Table reservations are available here. Your talk ticket also includes entry to the Garden Museum’s temporary exhibitions from 6pm on the evening of the talk.",
@@ -268,6 +273,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "sabine-moritz-lie-down-in-green-pastures|2026-10-08|garden",
       "description": "This autumn, the Garden Museum will hold contemporary German artist Sabine Moritz’s first UK museum exhibition. Reflecting on her childhood in East Germany, Moritz explores memories and encounters with the natural world through richly textured sketches and canvases, the majority of which have not been exhibited before. Several of the works in this exhibition draw on Moritz’s recollections of growing up in Neulobeda, a satellite town filled with concrete-slab housing, where her family moved following the death of her father. Dealing with grief, Moritz searched for solace beyond the city, exploring the surrounding hills and countryside. Moritz now lives and works in Cologne. She keeps potted plants and vases of fresh flowers, which inspire her ongoing series of floral sti ll life paintings. In recent years, she has also explored relationships with the natural world through an almost total abstraction, demonstrated in a vast piece created especially for this exhibition. Moritz, whose work was described by curator Hans Ulrich Obrist in 2013 as “memories made visual – the fleeting impulses of the past rendered concrete in art”, has been widely exhibited in group and solo exhibitions in D ü sseldorf, Brussels, Paris and London. This exhibition is supported by Pilar Corrias.",
@@ -312,6 +318,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "sunday-family-sessions-clay-mushrooms|2026-10-04|garden",
       "description": "Join us for our Family Learning Sunday Drop-In Sessions. Ahead of UK Fungus Day on October 10th, we will be looking at different types of fungi and then creating our own, real and imagined from air dry clay. We will be decorating them with acrylic paints which may stain. Please wear suitable clothing.",
@@ -360,6 +367,7 @@ expression: out
   {
     "event": {
       "address": "5 Lambeth Palace Road, London SE1 7LB",
+      "all_day": false,
       "category": "exhibition",
       "dedupe_key": "winter-flowers-week-2026|2026-11-10|garden",
       "description": "Every Winter Flowers Week we deck the halls of the Garden Museum with seasonal flowers and foliage, as we invite five floral designers transform the museum into a winter wonderland. With sustainability at the heart, their installations will be created using only British-grown seasonal flowers and foliage, and environmentally-friendly materials and methods. This year’s exhibiting floral designers are Flùr, Billy Loves Flowers, Yinari, Botanical Tales and Joanne Truby, all trailblazers in the field and passionate about improving sustainability in the floristry industry. Meet the designers below! The week will also include a Late and panel talk on Thursday 12 November, a chance to mingle among the flowers with a drink in hand, live music and floral activities.",

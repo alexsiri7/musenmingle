@@ -190,8 +190,9 @@ pub fn display_name(key: &str, display_name: Option<&str>) -> String {
 /// Columns bound in the same order by [`bind_event`].
 const EVENT_INSERT: &str = "INSERT INTO events.events (
         title, description, venue_name, address, lat, lng, starts_at, ends_at,
-        is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)";
+        is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key,
+        all_day)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)";
 
 type PgQuery<'q> = sqlx::query::Query<'q, Postgres, sqlx::postgres::PgArguments>;
 type PgQueryAs<'q, O> = sqlx::query::QueryAs<'q, Postgres, O, sqlx::postgres::PgArguments>;
@@ -214,6 +215,7 @@ fn bind_event<'q>(q: PgQuery<'q>, e: &'q NewEvent) -> PgQuery<'q> {
         .bind(e.category.as_str())
         .bind(&e.tags)
         .bind(&e.dedupe_key)
+        .bind(e.all_day)
 }
 
 fn bind_event_as<'q, O>(q: PgQueryAs<'q, O>, e: &'q NewEvent) -> PgQueryAs<'q, O> {
@@ -234,45 +236,47 @@ fn bind_event_as<'q, O>(q: PgQueryAs<'q, O>, e: &'q NewEvent) -> PgQueryAs<'q, O
         .bind(e.category.as_str())
         .bind(&e.tags)
         .bind(&e.dedupe_key)
+        .bind(e.all_day)
 }
 
 /// Merge used when a DIFFERENT source reports an event we already have
 /// (`x` is the existing row, `n` the incoming values). Existing values win
 /// and the newcomer only fills gaps, except where the incoming source has
-/// precedence: `$19` (a venue site) wins dates, description and image; `$20`
+/// precedence: `$20` (a venue site) wins dates, description and image; `$21`
 /// (an API) wins price and URL. Tags are unioned. The `ends_at` guards keep
 /// `events_ends_after_start` true when fuzzy-merged start dates differ.
 const MERGE: &str = "
-    description = CASE WHEN $19::bool THEN COALESCE(n.description, x.description)
+    description = CASE WHEN $20::bool THEN COALESCE(n.description, x.description)
                        ELSE COALESCE(x.description, n.description) END,
     venue_name  = COALESCE(x.venue_name, n.venue_name),
     address     = COALESCE(x.address, n.address),
     lat         = COALESCE(x.lat, n.lat),
     lng         = COALESCE(x.lng, n.lng),
-    starts_at   = CASE WHEN $19::bool THEN n.starts_at ELSE x.starts_at END,
-    ends_at     = CASE WHEN $19::bool
+    starts_at   = CASE WHEN $20::bool THEN n.starts_at ELSE x.starts_at END,
+    all_day     = CASE WHEN $20::bool THEN n.all_day ELSE x.all_day END,
+    ends_at     = CASE WHEN $20::bool
                        THEN (CASE WHEN n.ends_at IS NOT NULL THEN n.ends_at
                                   WHEN x.ends_at >= n.starts_at THEN x.ends_at END)
                        ELSE COALESCE(x.ends_at,
                                      CASE WHEN n.ends_at >= x.starts_at THEN n.ends_at END) END,
-    is_free     = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+    is_free     = CASE WHEN $21::bool AND (n.is_free OR n.price_min IS NOT NULL
                                            OR n.price_max IS NOT NULL) THEN n.is_free
                        WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.is_free ELSE x.is_free END,
-    price_min   = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+    price_min   = CASE WHEN $21::bool AND (n.is_free OR n.price_min IS NOT NULL
                                            OR n.price_max IS NOT NULL) THEN n.price_min
                        WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.price_min ELSE x.price_min END,
-    price_max   = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+    price_max   = CASE WHEN $21::bool AND (n.is_free OR n.price_min IS NOT NULL
                                            OR n.price_max IS NOT NULL) THEN n.price_max
                        WHEN x.price_min IS NULL AND x.price_max IS NULL AND NOT x.is_free
                        THEN n.price_max ELSE x.price_max END,
-    currency    = CASE WHEN $20::bool AND (n.is_free OR n.price_min IS NOT NULL
+    currency    = CASE WHEN $21::bool AND (n.is_free OR n.price_min IS NOT NULL
                                            OR n.price_max IS NOT NULL)
                        THEN COALESCE(n.currency, x.currency)
                        ELSE COALESCE(x.currency, n.currency) END,
-    url         = CASE WHEN $20::bool THEN COALESCE(n.url, x.url) ELSE COALESCE(x.url, n.url) END,
-    image_url   = CASE WHEN $19::bool THEN COALESCE(n.image_url, x.image_url)
+    url         = CASE WHEN $21::bool THEN COALESCE(n.url, x.url) ELSE COALESCE(x.url, n.url) END,
+    image_url   = CASE WHEN $20::bool THEN COALESCE(n.image_url, x.image_url)
                        ELSE COALESCE(x.image_url, n.image_url) END,
     tags        = ARRAY(SELECT DISTINCT t FROM unnest(x.tags || n.tags) AS t ORDER BY t),
     updated_at  = now()";
@@ -289,6 +293,7 @@ const REFRESH: &str = "
     lat         = COALESCE(n.lat, x.lat),
     lng         = COALESCE(n.lng, x.lng),
     starts_at   = n.starts_at,
+    all_day     = n.all_day,
     ends_at     = COALESCE(n.ends_at, CASE WHEN x.ends_at >= n.starts_at THEN x.ends_at END),
     is_free     = CASE WHEN n.price_min IS NULL AND n.price_max IS NULL AND NOT n.is_free
                        THEN x.is_free ELSE n.is_free END,
@@ -304,17 +309,18 @@ const REFRESH: &str = "
     dedupe_key  = n.dedupe_key,
     updated_at  = now()";
 
-/// `UPDATE events.events x SET <set> FROM (VALUES ...) n(...) WHERE x.id = $18`.
+/// `UPDATE events.events x SET <set> FROM (VALUES ...) n(...) WHERE x.id = $19`.
 fn update_from_values(set: &str) -> String {
     format!(
         "UPDATE events.events AS x SET {set}
          FROM (VALUES ($1::text, $2::text, $3::text, $4::text, $5::float8, $6::float8,
                        $7::timestamptz, $8::timestamptz, $9::bool, $10::numeric, $11::numeric,
-                       $12::text, $13::text, $14::text, $15::text, $16::text[], $17::text))
+                       $12::text, $13::text, $14::text, $15::text, $16::text[], $17::text,
+                       $18::bool))
               AS n(title, description, venue_name, address, lat, lng, starts_at, ends_at,
                    is_free, price_min, price_max, currency, url, image_url, category, tags,
-                   dedupe_key)
-         WHERE x.id = $18"
+                   dedupe_key, all_day)
+         WHERE x.id = $19"
     )
 }
 
@@ -726,6 +732,7 @@ pub struct EventRow {
     pub lng: Option<f64>,
     pub starts_at: DateTime<Utc>,
     pub ends_at: Option<DateTime<Utc>>,
+    pub all_day: bool,
     pub is_free: bool,
     pub price_min: Option<Decimal>,
     pub price_max: Option<Decimal>,
@@ -750,8 +757,8 @@ pub struct EventRow {
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
-    ends_at, is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key,
-    medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
+    ends_at, all_day, is_free, price_min, price_max, currency, url, image_url, category, tags,
+    dedupe_key, medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
     ai_grounding, ai_model, ai_enriched_at";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {

@@ -768,6 +768,12 @@ async fn more_like_this_excludes_the_event_itself_and_past_events() {
         .await
         .unwrap();
 
+    sqlx::query("UPDATE events.events SET all_day = true WHERE id = $1")
+        .bind(near)
+        .execute(&pool)
+        .await
+        .unwrap();
+
     let app = app(&pool);
     let (status, body) = get(&app, &format!("/v1/events/{target}/similar")).await;
     assert_eq!(status, StatusCode::OK);
@@ -783,10 +789,13 @@ async fn more_like_this_excludes_the_event_itself_and_past_events() {
         body["similar"][0]["shared_tags"],
         json!(["painting", "talk"])
     );
+    assert_eq!(body["similar"][0]["all_day"], json!(true));
+    assert_eq!(body["similar"][1]["all_day"], json!(false));
 
     let (_, html) = get(&app, &format!("/events/{target}")).await;
     assert!(html.contains("More like this"), "{html}");
     assert!(html.contains("Similar because: shared painting, talk"));
+    assert!(html.contains(", all day"), "{html}");
     assert!(!html.contains("Past twin"));
 
     // The internal hybrid-search step: nearest to a query vector, filtered.

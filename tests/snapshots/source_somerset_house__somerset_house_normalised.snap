@@ -6,6 +6,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "jenkin-van-zyl-enclosure|2026-09-24|somerset-house",
       "description": "A newly commissioned film and installation by Somerset House Studios artist Jenkin van Zyl.",
@@ -33,6 +34,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "community",
       "dedupe_key": "skate-at-somerset-house-with-virgin-atlantic-holidays|2026-11-11|somerset-house",
       "description": "Now on sale. Skate at Somerset House with Virgin Atlantic Holidays returns this November.",
@@ -71,6 +73,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "there-are-no-honest-poems-about-dead-women-jemma-desai|2026-07-30|somerset-house",
       "description": "A new body of work by Somerset House Studios artist Jemma Desai, presented as an installation in G31.",
@@ -98,6 +101,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "fleurs-de-villes-diana-in-support-of-diana-award|2026-09-16|somerset-house",
       "description": "The world premiere of Fleurs de Villes DIANA in support of The Diana Award.",
@@ -125,6 +129,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "reviving-craft-reflection-of-mind|2026-09-16|somerset-house",
       "description": "Featuring more than 60 artists, a landmark exhibition that traces China’s living craft heritage, exploring objects of art and design as mirrors of the mind.",
@@ -152,6 +157,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "workshop",
       "dedupe_key": "upgrade-yourself-monthly-building-your-own-creative-path-as-artist-curator|2026-10-07|somerset-house",
       "description": "Join us for our October Upgrade Yourself Monthly with Dark Yellow Dot, to explore creating opportunities beyond traditional routes and carving out a path that works for you as an artist and curator.",
@@ -180,6 +186,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "black-business-residency-cohort-6-showcase|2026-10-08|somerset-house",
       "description": "Join us on 8 Oct as we showcase the creativity, innovation and impact of 24 Black-led businesses that have spent the past year developing their ventures through the programme.",
@@ -207,6 +214,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "upgrade-yourself-takeover-jenkin-van-zyl|2026-10-09|somerset-house",
       "description": "This October, Upgrade Yourself is taking over Jenkin van Zyl’s ‘Enclosure’ exhibition for a night full of play, imagination and connection.",
@@ -234,6 +242,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "community",
       "dedupe_key": "future-artists-programme|2026-10-14|somerset-house",
       "description": "A 6-month creative learning and artist development opportunity for aspiring young artists ages 18-25.",
@@ -259,6 +268,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "expo",
       "dedupe_key": "1-54-contemporary-african-art-fair-2026|2026-10-15|somerset-house",
       "description": "1-54 Contemporary African Art Fair returns to Somerset House for its fourteenth edition.",
@@ -287,6 +297,7 @@ expression: out
   {
     "event": {
       "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3-evenings|2026-10-16|wapping-hydraulic-power-station",
       "description": "Somerset House Studios turns 10 with three nights of experiments in performance and technology.",
@@ -315,6 +326,7 @@ expression: out
   {
     "event": {
       "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3-evenings-friday|2026-10-16|wapping-hydraulic-power-station",
       "description": "Live Performances: Gazelle Twin, Lawrence Lek, Jenkin van Zyl & Agnieszka Szczotka, SERAFINE1369. Interactive installations: Ayoung Kim, Xin Liu, Keiken and Louis Morlæ.",
@@ -342,6 +354,7 @@ expression: out
   {
     "event": {
       "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3-evenings-installations|2026-10-16|wapping-hydraulic-power-station",
       "description": "World premieres of newly commissioned interactive installations from Ayoung Kim, Xin Liu and Keiken alongside a reimagined work from Louis Morlæ.",
@@ -367,6 +380,7 @@ expression: out
   {
     "event": {
       "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3-evenings-saturday|2026-10-17|wapping-hydraulic-power-station",
       "description": "Holly Blakey & Tai Shani, Team Rolfes, Gary Zhexi Zhang, and more.",
@@ -394,6 +408,7 @@ expression: out
   {
     "event": {
       "address": "Wapping Hydraulic Power Station, E1W 3SF",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "3-evenings-sunday|2026-10-18|wapping-hydraulic-power-station",
       "description": "Ligia Lewis, Lynn Hershman Leeson, Precious Renee Tucker and dmstfctn.",
@@ -421,6 +436,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "enclosure-jenkin-van-zyl-in-conversation-with-adam-alston|2026-10-29|somerset-house",
       "description": "An in conversation between Jenkin van Zyl and Adam Alston exploring the themes and making of Van Zyl’s new exhibition Enclosure.",
@@ -448,6 +464,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "through-our-eyes-sami-art-culture|2026-11-06|somerset-house",
       "description": "Step into a completely different world this winter. Through Our Eyes is the very first group exhibition in the UK to celebrate the vibrant art and culture of the Sámi people.",
@@ -475,6 +492,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "community",
       "dedupe_key": "skate-lates-with-aperol-spritz|2026-09-24|somerset-house",
       "description": "Skate Lates with Aperol Spritz feature an extra special series of music nights throughout the season.",
@@ -500,6 +518,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "community",
       "dedupe_key": "skate-school-kids-skate-club|2026-11-14|somerset-house",
       "description": "Build confidence or improve your skills at our annual sell-out Skate School and Kids Skate Club.",
@@ -525,6 +544,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "k-pop-party|2026-11-23|somerset-house",
       "description": "On 23 November, we’re teaming up with the Korean Cultural Centre UK (KCCUK) to bring our very first K-Pop Party to the ice.",
@@ -550,6 +570,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": false,
       "category": "talk",
       "dedupe_key": "grounding-practice-access-capacity-with-iarlaith-ni-fheorais|2026-11-25|somerset-house",
       "description": "Curator and writer Iarlaith Ní Fheorais shares tangible approaches to how access can shape artistic practice, collaboration and sustainability.",
@@ -577,6 +598,7 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "wonder-why-we-believe-in-magic|2027-02-04|somerset-house",
       "description": "Our major new exhibition explores why humans continually return to magic, wonder and belief to make sense of a world we can never fully explain.",
