@@ -1,5 +1,6 @@
-//! Every seeded `events.sources` row has an implementation in
-//! `sources::build` (the keys are restated in SQL seed migrations).
+//! Every enabled seeded `events.sources` row has an implementation in
+//! `sources::build` (the keys are restated in SQL seed migrations). Retired
+//! sources (e.g. `artrabbit`, #96) stay as disabled rows with no code.
 
 mod common;
 
@@ -11,14 +12,14 @@ use musenmingle::repo::SourceRow;
 use musenmingle::sources;
 
 #[tokio::test]
-async fn every_seeded_source_has_an_implementation() {
-    let Some(db) = TestDb::create("every_seeded_source_has_an_implementation").await else {
+async fn every_enabled_seeded_source_has_an_implementation() {
+    let Some(db) = TestDb::create("every_enabled_seeded_source_has_an_implementation").await else {
         return;
     };
     let pool = db.migrated_pool().await;
     let rows: Vec<SourceRow> = sqlx::query_as(
         "SELECT id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at
-           FROM events.sources",
+           FROM events.sources WHERE enabled",
     )
     .fetch_all(&pool)
     .await

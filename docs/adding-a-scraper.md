@@ -15,9 +15,9 @@ ON CONFLICT (key) DO NOTHING;
 ```
 
 `kind` is `scraper` for a venue's own site, `api` for a third-party API and
-`aggregator` for a third-party listing site covering many venues (e.g.
-ArtRabbit): an aggregator never takes precedence in a cross-source merge and
-pages link to the venue's own site before it.
+`aggregator` for a third-party listing site covering many venues: an
+aggregator never takes precedence in a cross-source merge and pages link to
+the venue's own site before it.
 
 ## Rules (non-negotiable)
 
@@ -59,7 +59,10 @@ pages link to the venue's own site before it.
    true, which is right only when the terms don't forbid it; sites or APIs
    whose terms restrict reproduction (e.g. "personal use only", "no
    caching", "don't use images separately") are **facts + link only**:
-   `store_description = FALSE, store_image = FALSE`. Scrapers still emit
+   `store_description = FALSE, store_image = FALSE`. Terms that forbid
+   reproducing *any information* from the site (not just text and images)
+   rule out even facts + link: refuse the site (`terms`) instead, as with
+   ArtRabbit (#96) and White Cube. Scrapers still emit
    `description`/`image_url` as found — `repo::upsert_event` drops what the
    policy forbids and cuts descriptions to a 300-character excerpt, so don't
    truncate or strip in the scraper (and don't change `clean_description`).

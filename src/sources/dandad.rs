@@ -284,8 +284,7 @@ pub fn parse_time_range(text: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
     Some((start, Some(end)))
 }
 
-/// Greater London bounding box (lat_min, lat_max, lng_min, lng_max), as
-/// used by the ArtRabbit source.
+/// Greater London bounding box (lat_min, lat_max, lng_min, lng_max).
 const LONDON_BBOX: (f64, f64, f64, f64) = (51.28, 51.70, -0.52, 0.34);
 
 fn in_london_bbox(lat: f64, lng: f64) -> bool {

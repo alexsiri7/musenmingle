@@ -11,7 +11,6 @@ use crate::fetch::{FetchContext, FetchError};
 use crate::model::{NewEvent, RawEvent};
 use crate::repo::SourceRow;
 
-pub mod artrabbit;
 pub mod barbican;
 pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
@@ -77,7 +76,6 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             Some(k) => Ok(Box::new(ticketmaster::Ticketmaster::new(base, k.clone()))),
             None => Err(SkipReason::MissingConfig(TICKETMASTER_API_KEY_ENV)),
         },
-        artrabbit::KEY => Ok(Box::new(artrabbit::ArtRabbit::new(base))),
         barbican::KEY => Ok(Box::new(barbican::Barbican::new(base))),
         clerkenwell_design_week::KEY => Ok(Box::new(
             clerkenwell_design_week::ClerkenwellDesignWeek::new(base),

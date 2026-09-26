@@ -50,7 +50,7 @@ pub enum SourceKind {
     Api,
     /// A venue's own website.
     Scraper,
-    /// A third-party site listing many venues' events (e.g. ArtRabbit). It
+    /// A third-party site listing many venues' events (none at present). It
     /// never takes precedence in a merge (it only fills gaps) and is the
     /// last choice for an event's main link, after the venue's own site.
     Aggregator,
