@@ -34,7 +34,7 @@ ON CONFLICT (key) DO NOTHING;
    per-domain rate limit (default 1 request / 2 s). Never build your own
    `reqwest::Client` in a source.
 5. **Check robots.txt yourself before starting** with the bot UA:
-   `curl -A 'ThaleiaBot/0.1.0 (+https://github.com/alexsiri7/thaleia; contact via repo issues)' https://<site>/robots.txt`.
+   `curl -A 'ThaleiaBot/0.1.0 (+https://thaleia.interstellarai.net/about#for-venues)' https://<site>/robots.txt`.
    If the events pages are disallowed, do not write the scraper.
 6. **Be light.** Cap detail-page fetches per run, pick a sensible
    `interval_minutes` (daily is plenty for most venues) and keep the run
@@ -67,7 +67,7 @@ ON CONFLICT (key) DO NOTHING;
 
 ```bash
 # 1. fetch fixtures politely (2 s between requests)
-UA='ThaleiaBot/0.1.0 (+https://github.com/alexsiri7/thaleia; contact via repo issues)'
+UA='ThaleiaBot/0.1.0 (+https://thaleia.interstellarai.net/about#for-venues)'
 curl -A "$UA" -o tests/fixtures/scrapers/<key>/robots.txt https://<site>/robots.txt
 curl -A "$UA" -o tests/fixtures/scrapers/<key>/listing.html https://<site>/<events-page>
 # 2. write src/sources/<key>.rs with pure parse_* functions + Source impl
@@ -84,8 +84,10 @@ If the investigation shows a site must not or cannot be scraped — robots.txt
 disallows the events pages (`robots_disallowed`), it blocks the ThaleiaBot
 User-Agent (`bot_blocked`; we never evade blocks), it has no usable event
 data (`no_event_data`), its terms forbid it (`terms`), its events only
-render with JavaScript (`js_only`; we never run a browser), or something else
-(`other`) — record the decision instead of leaving it in a closed issue:
+render with JavaScript (`js_only`; we never run a browser), its owner asked
+us not to list it (`owner_request`; see [venue-requests.md](venue-requests.md)
+for the full removal procedure), or something else (`other`) — record the
+decision instead of leaving it in a closed issue:
 
 1. Add a **new** migration inserting a row into `events.refused_sources`:
    ```sql

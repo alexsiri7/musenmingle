@@ -27,7 +27,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 header.site, main, footer.site { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 header.site { display: flex; gap: 16px; align-items: baseline; justify-content: space-between; padding-top: 16px; }
-header.site nav { display: flex; gap: 16px; }
+header.site nav { display: flex; flex-wrap: wrap; gap: 4px 16px; }
 .brand { font-weight: 700; font-size: 1.25rem; text-decoration: none; }
 h1 { font-size: 1.6rem; line-height: 1.25; margin: 24px 0 8px; }
 .lede, .small, .when, .venue { color: var(--muted); }
@@ -109,3 +109,9 @@ a.button {
   color: var(--accent-fg); text-decoration: none; font-weight: 600;
 }
 a.button:hover { filter: brightness(1.1); }
+
+/* About page */
+.about { max-width: 70ch; }
+.about h2 { font-size: 1.2rem; margin: 28px 0 8px; }
+.about section { scroll-margin-top: 16px; }
+.about li { margin: 4px 0; }

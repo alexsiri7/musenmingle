@@ -116,6 +116,7 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/", get(home))
         .route("/events/{id}", get(event_detail))
         .route("/sources", get(sources))
+        .route("/about", get(about))
         .route("/suggest", post(suggest))
         .route("/static/style.css", get(stylesheet))
         .route("/static/app.js", get(app_js))
@@ -228,6 +229,7 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                             " " span class="count" data-saved-count hidden { "0" }
                         }
                         a href="/sources" { "Sources" }
+                        a href="/about" { "About & our approach" }
                     }
                 }
                 main id="main" {
@@ -237,7 +239,9 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                 footer class="site" {
                     (suggest_form())
                     p class="small" {
-                        "Data from venue sites and ticketing APIs. Also available as "
+                        "Data from venue sites and ticketing APIs, credited and linked. "
+                        a href="/about" { "About & our approach" }
+                        " · Also available as "
                         a href="/v1/events" { "JSON" } "."
                     }
                 }
@@ -1002,6 +1006,119 @@ async fn sources(State(state): State<AppState>) -> Response {
                             }
                         }
                     }
+                }
+            }
+        },
+    )
+}
+
+// ---------------------------------------------------------------- about
+
+/// Label of the `venue-request` issue template (see
+/// `.github/ISSUE_TEMPLATE/venue-request.md` and `docs/venue-requests.md`).
+pub const VENUE_REQUEST_LABEL: &str = "venue-request";
+
+/// `GET /about`: what the site is for and how it treats venues and their
+/// content. Every statement must stay true for the code (crawler rules in
+/// `fetch.rs`, content policy in `repo.rs`/`thumbs.rs`, suggestions in
+/// `suggestions.rs`, saved events in `web.js`); update it when they change.
+async fn about(State(state): State<AppState>) -> Response {
+    let request_url = format!(
+        "https://github.com/{}/issues/new?template=venue-request.md&labels={VENUE_REQUEST_LABEL}",
+        state.github_repo
+    );
+    let rate_secs = crate::config::DEFAULT_RATE_LIMIT_MS as f64 / 1000.0;
+    page(
+        StatusCode::OK,
+        "About & our approach",
+        html! {
+            article class="about" {
+                h1 { "About " (BRAND) " & our approach" }
+                section id="objective" aria-labelledby="objective-h" {
+                    h2 id="objective-h" { "What we're for" }
+                    p {
+                        (BRAND) " is a free, non-commercial, just-for-fun guide to exhibitions, "
+                        "talks, workshops and community events in London for creative people."
+                    }
+                    p { "No ads, no ticket sales, no affiliate links. We want to send you to the venues, not keep you here." }
+                }
+                section id="how-we-collect" aria-labelledby="how-we-collect-h" {
+                    h2 id="how-we-collect-h" { "How we collect listings" }
+                    ul {
+                        li { "We read public event listings on venue websites and ticketing APIs." }
+                        li { "We check each site's robots.txt and obey it." }
+                        li {
+                            "Our crawler says who it is: it identifies itself as "
+                            strong { (crate::fetch::ROBOTS_AGENT) } " with a link to this page."
+                        }
+                        li {
+                            "We go slowly: by default one request every " (rate_secs)
+                            " seconds per site, and slower where a site asks us to."
+                        }
+                        li { "We check each site on a schedule (usually once a day), not constantly." }
+                        li {
+                            "We never log in or get around blocks, CAPTCHAs or bot protection. "
+                            "If a site blocks us, we stop and list it under "
+                            a href="/sources#refused" { "Sites we couldn't use" } " with the reason."
+                        }
+                        li {
+                            "We follow each site's terms. Where they restrict reuse, we keep only "
+                            "the basic facts (title, dates, venue) and a link."
+                        }
+                        li { "We don't use AI to rewrite or summarise venues' content." }
+                    }
+                }
+                section id="for-venues" aria-labelledby="for-venues-h" {
+                    h2 id="for-venues-h" { "For venues" }
+                    p { "For each event we show:" }
+                    ul {
+                        li { "the facts: title, dates, venue, price and category;" }
+                        li { "a short excerpt of the description, not the full text;" }
+                        li {
+                            "a small thumbnail, made once from your image and served from our own "
+                            "server so we don't use your bandwidth. It's always credited "
+                            "\u{201c}Image: <your venue>\u{201d} and linked to your own event page."
+                        }
+                    }
+                    p {
+                        "The main button on every event is \u{201c}See it on <your venue>\u{201d}. "
+                        "Our links are ordinary links, so your analytics can see visits came from us."
+                    }
+                    p {
+                        "If you'd rather we didn't list your events, or want something changed "
+                        "(wrong details, or you'd prefer we didn't use your images), tell us and "
+                        "we'll act on it. We remove a venue's listings within 7 days of a request."
+                    }
+                }
+                section id="your-data" aria-labelledby="your-data-h" {
+                    h2 id="your-data-h" { "Your data" }
+                    ul {
+                        li { "There are no accounts, and no tracking or analytics cookies." }
+                        li {
+                            "Saved events live only in your browser. We don't store them; the Saved "
+                            "page just asks us for those events' current details, like any other page."
+                        }
+                        li {
+                            "If you suggest a venue, we store the website address and your note, "
+                            "plus a salted hash of your IP address (not the address itself) to stop spam. "
+                            "The address and note are posted as a public GitHub issue so we can review it."
+                        }
+                        li { "Nothing is sold or shared for advertising." }
+                    }
+                }
+                section id="contact" aria-labelledby="contact-h" {
+                    h2 id="contact-h" { "Contact" }
+                    p {
+                        "Venue requests and corrections: "
+                        a href=(request_url) rel="noopener" { "open a venue request" }
+                        " (a GitHub issue, so for now you need a free GitHub account). "
+                        "We plan to add an email address so you won't need one."
+                    }
+                    p { "Anything else: " a href={ "https://github.com/" (state.github_repo) "/issues" } rel="noopener" { "our issue tracker" } "." }
+                }
+                p class="small" {
+                    "Sources and credits: every venue and service we use, and the sites we "
+                    "couldn't use, are listed on " a href="/sources" { "Sources" } "."
                 }
             }
         },

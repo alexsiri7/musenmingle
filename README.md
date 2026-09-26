@@ -50,7 +50,7 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
     talks & events listings (paginated) → detail pages for times, art-form
     tags (category) and the standard ticket price.
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
-  Sends `ThaleiaBot/<version> (+https://github.com/alexsiri7/thaleia; contact via repo issues)`,
+  Sends `ThaleiaBot/<version> (+https://thaleia.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
   honoured) and rate-limits per domain (default 1 request / 2 s).
 - **Normalisation** (`src/normalise.rs`): HTML/whitespace cleanup,
@@ -110,7 +110,13 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   every filtered view is a shareable URL; results are cards with a "More"
   link on the same cursor as the API. `GET /events/{id}` shows every field,
   the description as escaped paragraphs, each source link and an
-  OpenStreetMap link. `GET /sources` is the `/v1/sources` data as a table;
+  OpenStreetMap link. `GET /about` ("About & our approach", linked from
+  the header and footer) states the site's objective and how it treats
+  venues, their content and visitors' data (anchors `#objective`,
+  `#how-we-collect`, `#for-venues`, `#your-data`, `#contact`); keep it true
+  when crawler or content-policy behaviour changes. Venue requests use the
+  `venue-request` issue template ([docs/venue-requests.md](docs/venue-requests.md)).
+  `GET /sources` is the `/v1/sources` data as a table;
   each source links to `/?source=<key>` (only its events, with a clearable
   "From: <source>" chip), and "Sites we couldn't use" lists
   `events.refused_sources` (why a venue is missing; suggestions for those

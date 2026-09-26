@@ -861,3 +861,95 @@ async fn saved_page_is_a_script_enhanced_shell() {
     }
     assert!(tpl.contains("<article class=\"card\">") && tpl.contains("class=\"save\""));
 }
+
+#[tokio::test]
+async fn about_page_states_our_approach_with_all_anchors() {
+    let Some(db) = TestDb::create("about_page_states_our_approach").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let app = app(&pool);
+    let p = get(&app, "/about").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert!(
+        p.body
+            .contains("<title>About &amp; our approach · Muse &amp; Mingle</title>")
+    );
+    for anchor in [
+        "objective",
+        "for-venues",
+        "how-we-collect",
+        "your-data",
+        "contact",
+    ] {
+        assert!(
+            p.body.contains(&format!("<section id=\"{anchor}\"")),
+            "#{anchor}"
+        );
+    }
+    for text in [
+        "free, non-commercial",
+        "No ads, no ticket sales, no affiliate links.",
+        "robots.txt",
+        "<strong>ThaleiaBot</strong>",
+        "one request every 2 seconds per site",
+        "a short excerpt of the description",
+        "Image: &lt;your venue&gt;",
+        "See it on &lt;your venue&gt;",
+        "within 7 days",
+        "no tracking or analytics cookies",
+        "salted hash of your IP address",
+        "href=\"/sources#refused\"",
+        "href=\"https://github.com/alexsiri7/thaleia/issues/new?template=venue-request.md&amp;labels=venue-request\"",
+    ] {
+        assert!(p.body.contains(text), "missing {text:?}");
+    }
+    // No cookies are set, here or on the home page.
+    assert!(p.headers.get(header::SET_COOKIE).is_none());
+    // Header and footer link to it on every page.
+    let home = get(&app, "/").await;
+    assert_eq!(
+        home.body
+            .matches("<a href=\"/about\">About &amp; our approach</a>")
+            .count(),
+        2,
+        "{}",
+        home.body
+    );
+    assert!(home.headers.get(header::SET_COOKIE).is_none());
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn owner_request_is_a_refused_reason() {
+    let Some(db) = TestDb::create("owner_request_is_a_refused_reason").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query(
+        "INSERT INTO events.refused_sources (domain, name, url, reason_code, reason_text, checked_on)
+         VALUES ('owner.example', 'Owner Gallery', 'https://owner.example/', 'owner_request',
+                 'the venue asked us not to list their events, so we don''t', '2026-10-01')",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    let p = get(&app(&pool), "/sources").await;
+    assert!(p.body.contains("Owner Gallery"), "{}", p.body);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[test]
+fn venue_request_issue_template_exists() {
+    let t = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/.github/ISSUE_TEMPLATE/venue-request.md"
+    ))
+    .unwrap();
+    assert!(t.starts_with("---\nname: Venue request\n"), "{t}");
+    assert!(t.contains("\nlabels: venue-request\n"));
+    assert!(t.contains("within 7 days"));
+}
