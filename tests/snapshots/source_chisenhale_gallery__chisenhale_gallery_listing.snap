@@ -1,0 +1,90 @@
+---
+source: tests/source_chisenhale_gallery.rs
+expression: raws
+---
+[
+  {
+    "source_event_id": "project/wakaliga-uganda",
+    "source_url": "https://chisenhale.org.uk/project/wakaliga-uganda/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": "Wakaliga Uganda",
+      "date_text": "2 October – 6 December",
+      "image_url": "https://chisenhale.org.uk/img/scale/818/460/2026/09/17/20_iii",
+      "listed_on": "2026-09-26",
+      "title": "Kibuuka Omumbaale",
+      "type": "Exhibition",
+      "url": "https://chisenhale.org.uk/project/wakaliga-uganda/"
+    }
+  },
+  {
+    "source_event_id": "whats-on/isaac-nabwana-in-conversation-with-ryan-trecartin",
+    "source_url": "https://chisenhale.org.uk/whats-on/isaac-nabwana-in-conversation-with-ryan-trecartin/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": null,
+      "date_text": "3 October, 3–5pm",
+      "image_url": null,
+      "listed_on": "2026-09-26",
+      "title": "Isaac Nabwana in conversation with Ryan Trecartin",
+      "type": "Artist Talk",
+      "url": "https://chisenhale.org.uk/whats-on/isaac-nabwana-in-conversation-with-ryan-trecartin/"
+    }
+  },
+  {
+    "source_event_id": "whats-on/panel-discussion-with-dr-iain-robert-smith-nadia-denton-and-dr-samantha-iwowo-chaired-by-d",
+    "source_url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-dr-iain-robert-smith-nadia-denton-and-dr-samantha-iwowo-chaired-by-d/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": null,
+      "date_text": "29 October, 7–8:30pm",
+      "image_url": null,
+      "listed_on": "2026-09-26",
+      "title": "Panel discussion with Dr Iain Robert Smith, Nadia Denton, and Dr Samantha Iwowo, chaired by Dr Sarah Jilani.",
+      "type": "Panel Discussion",
+      "url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-dr-iain-robert-smith-nadia-denton-and-dr-samantha-iwowo-chaired-by-d/"
+    }
+  },
+  {
+    "source_event_id": "whats-on/panel-discussion-with-mati-diop-dr-eva-namusoke-and-dr-jennifer-nansubuga-makumbi-chaired",
+    "source_url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-mati-diop-dr-eva-namusoke-and-dr-jennifer-nansubuga-makumbi-chaired/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": null,
+      "date_text": "5 November, 7–8:30pm",
+      "image_url": null,
+      "listed_on": "2026-09-26",
+      "title": "Panel discussion with Mati Diop, Dr Eva Namusoke, and Dr Jennifer Nansubuga Makumbi, chaired by Dr Nobunye Levin.",
+      "type": "Panel Discussion",
+      "url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-mati-diop-dr-eva-namusoke-and-dr-jennifer-nansubuga-makumbi-chaired/"
+    }
+  },
+  {
+    "source_event_id": "whats-on/panel-discussion-with-dr-bernadette-buckley-dr-vivienne-jabri-and-abiba-coulibaly-chaired",
+    "source_url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-dr-bernadette-buckley-dr-vivienne-jabri-and-abiba-coulibaly-chaired/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": null,
+      "date_text": "12 November, 7–8:30pm",
+      "image_url": null,
+      "listed_on": "2026-09-26",
+      "title": "Panel discussion with Dr Bernadette Buckley, Dr Vivienne Jabri, and Abiba Coulibaly, chaired by Dr Anna Adima.",
+      "type": "Panel Discussion",
+      "url": "https://chisenhale.org.uk/whats-on/panel-discussion-with-dr-bernadette-buckley-dr-vivienne-jabri-and-abiba-coulibaly-chaired/"
+    }
+  },
+  {
+    "source_event_id": "whats-on/tour-of-kibuuka-omumbaale-with-tosia-leniarska-curator-exhibitions-and-events",
+    "source_url": "https://chisenhale.org.uk/whats-on/tour-of-kibuuka-omumbaale-with-tosia-leniarska-curator-exhibitions-and-events/",
+    "payload": {
+      "admission_text": "Free Entry",
+      "artist": null,
+      "date_text": "3 December, 7–8:30pm",
+      "image_url": null,
+      "listed_on": "2026-09-26",
+      "title": "Tour of Kibuuka Omumbaale with Tosia Leniarska, Curator: Exhibitions and Events",
+      "type": "Curatorial Tour",
+      "url": "https://chisenhale.org.uk/whats-on/tour-of-kibuuka-omumbaale-with-tosia-leniarska-curator-exhibitions-and-events/"
+    }
+  }
+]
