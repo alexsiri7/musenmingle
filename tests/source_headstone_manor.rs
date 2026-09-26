@@ -318,3 +318,30 @@ async fn bad_cards_are_reported() {
     assert_eq!(errors.len(), 1, "{errors:?}");
     assert!(errors[0].contains("Off Site"), "{errors:?}");
 }
+
+#[tokio::test]
+async fn cards_that_fail_to_classify_are_kept_for_normalise() {
+    // A card with an unparseable time is kept without its detail page, so
+    // that normalise reports it as a run error rather than it vanishing.
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    let listing = talk_card("bad-time", "A Talk").replace("2026-10-06T14:00:00+01:00", "6 Oct");
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(listing))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/events/bad-time/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("<html></html>"))
+        .expect(0)
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = HeadstoneManor::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["events/bad-time"]);
+    assert!(ctx.take_errors().is_empty());
+    assert!(s.normalise(&raws[0]).is_err());
+}

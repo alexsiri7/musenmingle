@@ -10,7 +10,8 @@
 //!   `location`), has no `endDate`, and exhibitions have none at all, so CSS
 //!   selectors are used instead.
 //! * `/whats-on/` is paginated (`/whats-on/page-2`, …) with an
-//!   `a.c-pagination__next` link that has no `href` on the last page. Each
+//!   `a.c-pagination__next` link that has no `href` on the last page (an
+//!   unreadable `href` is reported, not taken for the last page). Each
 //!   card (`a.c-media--event`) has the title, one `<time datetime>` (start)
 //!   or two (start, end) or free text with no `<time>`, and the genre
 //!   (`Family Events`, `Events for Adults`, `Special Events`,
@@ -23,14 +24,16 @@
 //!   2026 cards switch to `+00:00`. Exhibitions show dates only (their times
 //!   are London midnight), so both ends are stored as London midnight of
 //!   their day (`all_day`).
-//! * Category: exhibitions → exhibition. Other cards are skipped when they
-//!   have no `<time>` (programmes with free-text dates) or span more than
-//!   one London day (weekly clubs, trails and workshops held on several
-//!   days: a range of sessions, not one continuous event), and so are tours.
-//!   Then `map_category` on the title and slug (`hmm-tuesday-talk-…` →
-//!   talk, "… Workshop" → workshop); otherwise `Family Events` and `Events
-//!   for Adults` → community, and anything else (`Special Events`: concerts
-//!   and performances) is skipped.
+//! * Category: cards with no `<time>` (programmes with free-text dates,
+//!   undated exhibitions) are skipped; then exhibitions → exhibition. Other
+//!   cards are skipped when they span more than one London day (weekly
+//!   clubs, trails and workshops held on several days: a range of sessions,
+//!   not one continuous event), and so are tours. Then `map_category` on the
+//!   title and slug (`hmm-tuesday-talk-…` → talk, "… Workshop" → workshop),
+//!   except that only the `/exhibitions/` path makes an exhibition (its
+//!   times are dates); otherwise `Family Events` and `Events for Adults` →
+//!   community, and anything else (`Special Events`: concerts and
+//!   performances) is skipped.
 //! * The detail page of every in-scope card is fetched for the description
 //!   (the `#page-content` text blocks: all of them on untabbed pages such as
 //!   exhibitions, only the "Details" tab's on tabbed ones) and the sidebar's
@@ -179,12 +182,17 @@ pub fn parse_listing(html: &str) -> Listing {
             Err(problem) => problems.push(problem),
         }
     }
-    let next_path = doc
+    let next_href = doc
         .select(&selector("a.c-pagination__next[href]"))
         .next()
-        .and_then(|a| on_site_path(a.value().attr("href")?))
+        .and_then(|a| a.value().attr("href"));
+    let next_path = next_href
+        .and_then(on_site_path)
         .filter(|p| p.starts_with("/whats-on/page-"))
         .map(|p| format!("{p}/"));
+    if let (Some(href), None) = (next_href, &next_path) {
+        problems.push(format!("unreadable next-page link {href:?}"));
+    }
     Listing {
         cards,
         next_path,
@@ -262,12 +270,12 @@ fn classify(
 ) -> Result<Option<Category>, SourceError> {
     let start = parse_time(title, "start", start)?;
     let end = parse_time(title, "end", end)?;
-    if path.starts_with("/exhibitions/") {
-        return Ok(Some(Category::Exhibition));
-    }
     let Some(start) = start else {
         return Ok(None);
     };
+    if path.starts_with("/exhibitions/") {
+        return Ok(Some(Category::Exhibition));
+    }
     if end.is_some_and(|e| london_date(e) != london_date(start)) || is_tour(title) {
         return Ok(None);
     }
@@ -276,7 +284,8 @@ fn classify(
         .next()
         .unwrap_or_default()
         .replace('-', " ");
-    Ok(map_category(&[title, slug_words.as_str()]).or(match genre {
+    let mapped = map_category(&[title, slug_words.as_str()]).filter(|c| *c != Category::Exhibition);
+    Ok(mapped.or(match genre {
         Some(FAMILY_EVENTS | "Events for Adults") => Some(Category::Community),
         _ => None,
     }))
@@ -578,10 +587,73 @@ mod tests {
                 ),
                 Some(Category::Exhibition),
             ),
+            (
+                card(
+                    "/events/x",
+                    "Fine Art Printing",
+                    FAMILY_EVENTS,
+                    Some("2026-10-24T10:00:00+01:00"),
+                    Some("2026-10-24T12:00:00+01:00"),
+                ),
+                Some(Category::Community),
+            ),
+            (
+                card(
+                    "/exhibitions/x",
+                    "Permanent Display",
+                    "Exhibitions",
+                    None,
+                    None,
+                ),
+                None,
+            ),
         ];
         for (card, expected) in cases {
             assert_eq!(category(&card).unwrap(), expected, "{card:?}");
         }
+    }
+
+    #[test]
+    fn exhibition_words_on_an_event_keep_its_times() {
+        let e = event(&card(
+            "/events/x",
+            "Exhibition Preview",
+            "Events for Adults",
+            Some("2026-10-06T18:00:00+01:00"),
+            Some("2026-10-06T20:00:00+01:00"),
+        ));
+        assert_eq!(e.category, Category::Community);
+        assert!(!e.all_day);
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-10-06T17:00:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-10-06T19:00:00+00:00");
+    }
+
+    #[test]
+    fn an_undated_exhibition_is_a_skip() {
+        let raw = card_event(
+            &card(
+                "/exhibitions/x",
+                "Permanent Display",
+                "Exhibitions",
+                None,
+                None,
+            ),
+            &site(),
+            None,
+        );
+        assert!(normalise_payload(&raw.payload).unwrap().is_none());
+    }
+
+    #[test]
+    fn an_unreadable_next_link_is_a_problem() {
+        let listing = parse_listing(
+            r#"<html><body><a class="c-pagination__next" href="/whats-on/?page=2">Next</a></body></html>"#,
+        );
+        assert_eq!(listing.next_path, None);
+        assert_eq!(listing.problems.len(), 1, "{:?}", listing.problems);
+        let last =
+            parse_listing(r#"<html><body><a class="c-pagination__next">Next</a></body></html>"#);
+        assert!(last.problems.is_empty());
     }
 
     #[test]
