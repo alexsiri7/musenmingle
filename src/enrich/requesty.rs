@@ -53,16 +53,17 @@ pub enum CallError {
     BadResponse(String),
 }
 
-/// Words in an error body that mean money, not request rate.
+/// Words in an error body that unambiguously mean money, not request rate.
+/// ("quota" and "budget" are left out: providers use them for per-minute
+/// rate limits, e.g. Vertex's "Quota exceeded for ... per minute".)
 const CREDIT_WORDS: &[&str] = &[
     "credit",
     "balance",
-    "insufficient",
+    "insufficient funds",
+    "insufficient credit",
     "payment",
-    "quota",
     "spend limit",
     "spending limit",
-    "budget",
     "billing",
     "top up",
     "top-up",
@@ -82,12 +83,22 @@ fn excerpt(body: &str) -> String {
 }
 
 /// Classify a non-success response. 402 is always credit exhaustion; a 403
-/// or 429 is when its message talks about credits, balance, quota or
-/// spend limits (a plain 429 is rate limiting).
+/// or 429 is when its message talks about credits, balance, payment,
+/// billing or spend limits and not about a rate (a plain 429, or one about
+/// a per-minute quota, is rate limiting).
 pub fn classify_error(status: StatusCode, body: &str) -> CallError {
     let message = excerpt(body);
     let lower = message.to_lowercase();
-    let about_money = CREDIT_WORDS.iter().any(|w| lower.contains(w));
+    let about_rate = [
+        "rate limit",
+        "per minute",
+        "per second",
+        "requests per",
+        "too many requests",
+    ]
+    .iter()
+    .any(|w| lower.contains(w));
+    let about_money = !about_rate && CREDIT_WORDS.iter().any(|w| lower.contains(w));
     let code = status.as_u16();
     match code {
         402 => CallError::CreditsExhausted {
@@ -260,6 +271,17 @@ mod tests {
         assert!(matches!(e, CallError::Http { status: 403, .. }));
         let e = classify_error(StatusCode::FORBIDDEN, "monthly spend limit reached");
         assert!(matches!(e, CallError::CreditsExhausted { .. }));
+        // Provider quotas per minute are rate limits, not money.
+        let e = classify_error(
+            StatusCode::TOO_MANY_REQUESTS,
+            r#"{"error":{"message":"Quota exceeded for aiplatform.googleapis.com/generate_content_requests_per_minute"}}"#,
+        );
+        assert!(matches!(e, CallError::RateLimited(_)), "{e:?}");
+        let e = classify_error(
+            StatusCode::TOO_MANY_REQUESTS,
+            r#"{"error":{"message":"Resource exhausted: token budget per minute"}}"#,
+        );
+        assert!(matches!(e, CallError::RateLimited(_)), "{e:?}");
     }
 
     #[test]

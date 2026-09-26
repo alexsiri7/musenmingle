@@ -45,7 +45,8 @@ pub struct Candidate {
     pub failed_version: Option<i32>,
 }
 
-/// Events still running at or after `since`, soonest first.
+/// Events still running at or after `since`: those with a stored excerpt
+/// first, then soonest first.
 pub async fn candidates(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Vec<Candidate>> {
     sqlx::query_as(
         "SELECT e.id, e.title, e.venue_name, e.starts_at, e.ends_at, e.category, e.tags,
@@ -61,7 +62,9 @@ pub async fn candidates(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Vec
          LEFT JOIN events.enrichments en ON en.event_id = e.id
          LEFT JOIN events.enrichment_failures f ON f.event_id = e.id
          WHERE COALESCE(e.ends_at, e.starts_at) >= $1
-         ORDER BY e.starts_at, e.id",
+         -- Events with an excerpt first: they get the most out of a call,
+         -- while facts-only listings often come back \"insufficient\".
+         ORDER BY (NULLIF(btrim(e.description), '') IS NULL), e.starts_at, e.id",
     )
     .bind(since)
     .fetch_all(pool)

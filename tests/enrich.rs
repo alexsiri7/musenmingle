@@ -889,6 +889,7 @@ async fn tag_filters_facets_and_the_labelled_ai_note() {
     let (_, about) = get(&app, "/about").await;
     assert!(about.contains(r#"<section id="ai""#));
     assert!(about.contains("zero data retention"));
+    assert!(about.contains("Requesty itself may keep a log of our requests"));
     assert!(!about.contains("We don't use AI"));
     pool.close().await;
     db.drop_db().await;

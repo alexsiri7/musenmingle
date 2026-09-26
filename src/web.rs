@@ -1267,7 +1267,9 @@ async fn about() -> Response {
                         }
                         li {
                             "We reach the model through Requesty, an AI gateway, and only use models "
-                            "whose provider keeps no copy of what we send (zero data retention). To "
+                            "whose provider keeps no copy of what we send (zero data retention). "
+                            "Requesty itself may keep a log of our requests (event facts and the AI's "
+                            "answers) in our account. To "
                             "find similar events we also turn each event's facts and tags into an "
                             "embedding (a list of numbers) with OpenAI's embedding model through the "
                             "same gateway; OpenAI may keep API inputs for up to 30 days for abuse "
