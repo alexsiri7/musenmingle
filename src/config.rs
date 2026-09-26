@@ -7,7 +7,7 @@ use anyhow::{Context, Result, bail};
 use axum::http::HeaderValue;
 
 /// Default GitHub repository for health issues.
-pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/thaleia";
+pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/musenmingle";
 /// Default minimum interval between two requests to the same domain.
 pub const DEFAULT_RATE_LIMIT_MS: u64 = 2_000;
 /// Built-in minimum intervals between requests to particular hosts, in ms.
@@ -273,13 +273,13 @@ mod tests {
     fn cors_origins_parse_to_browser_origins() {
         assert!(parse_cors_origins(None).unwrap().is_empty());
         let origins = parse_cors_origins(Some(
-            "https://Thaleia.example/, http://localhost:5173 ,https://a.example:443",
+            "https://MuseNMingle.example/, http://localhost:5173 ,https://a.example:443",
         ))
         .unwrap();
         assert_eq!(
             origins,
             [
-                "https://thaleia.example",
+                "https://musenmingle.example",
                 "http://localhost:5173",
                 "https://a.example"
             ]
@@ -290,11 +290,11 @@ mod tests {
     fn cors_origins_reject_non_origins() {
         for bad in [
             "*",
-            "thaleia.example",
-            "https://thaleia.example/app",
-            "https://thaleia.example?x=1",
+            "musenmingle.example",
+            "https://musenmingle.example/app",
+            "https://musenmingle.example?x=1",
             "file:///tmp",
-            "ftp://thaleia.example",
+            "ftp://musenmingle.example",
         ] {
             assert!(parse_cors_origins(Some(bad)).is_err(), "{bad}");
         }

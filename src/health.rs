@@ -224,8 +224,8 @@ pub fn issue_body(source: &SourceRow, trips: &[Trip], runs: &[RunRow]) -> String
          ### Reason\n{reasons}\n\
          ### Recent runs (newest first)\n{table}\n\
          Implementation: `src/sources/` (key `{key}`). Fix the source, then re-run \
-         `thaleia-ingest`; this issue is closed automatically once a run is healthy again.\n\n\
-         _Filed automatically by thaleia-ingest._",
+         `musenmingle-ingest`; this issue is closed automatically once a run is healthy again.\n\n\
+         _Filed automatically by musenmingle-ingest._",
         key = source.key,
         kind = source.kind,
         url = source.base_url,

@@ -13,21 +13,21 @@ use axum::extract::connect_info::MockConnectInfo;
 use axum::http::{Request, StatusCode, header};
 use chrono::Utc;
 use common::TestDb;
+use musenmingle::api::ApiSettings;
+use musenmingle::config::{RateLimitConfig, SuggestionConfig};
+use musenmingle::fetch::FetchContext;
+use musenmingle::github::{GitHubIssueFiler, IssueFiler};
+use musenmingle::health::{HealthChecker, HealthConfig};
+use musenmingle::runner::Runner;
+use musenmingle::sources::SkipReason;
+use musenmingle::suggestions::{MAX_NOTE_CHARS, RETRY_GRACE, Suggestions, ip_hash};
 use serde_json::{Value, json};
 use sqlx::PgPool;
-use thaleia::api::ApiSettings;
-use thaleia::config::{RateLimitConfig, SuggestionConfig};
-use thaleia::fetch::FetchContext;
-use thaleia::github::{GitHubIssueFiler, IssueFiler};
-use thaleia::health::{HealthChecker, HealthConfig};
-use thaleia::runner::Runner;
-use thaleia::sources::SkipReason;
-use thaleia::suggestions::{MAX_NOTE_CHARS, RETRY_GRACE, Suggestions, ip_hash};
 use tower::ServiceExt;
 use wiremock::matchers::{body_partial_json, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
-const REPO: &str = "alexsiri7/thaleia";
+const REPO: &str = "alexsiri7/musenmingle";
 
 fn filer(server: &MockServer) -> Box<dyn IssueFiler> {
     Box::new(GitHubIssueFiler::new(&server.uri(), REPO, "test-token").unwrap())
@@ -42,7 +42,7 @@ fn app(pool: &PgPool, config: SuggestionConfig, filer: Option<Box<dyn IssueFiler
         github_repo: REPO.into(),
         cors_origins: Vec::new(),
     };
-    thaleia::api::router(
+    musenmingle::api::router(
         pool.clone(),
         Suggestions::new(config, filer).unwrap(),
         settings,
@@ -230,15 +230,15 @@ async fn refused_sites_are_answered_with_the_reason_and_not_filed() {
         json!({
             "status": "refused",
             "message": "We looked at Southbank Centre on 25 September 2026 and couldn't include it: \
-                        it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+                        it returns 403 to our crawler's User-Agent; we don't evade blocks",
             "refused": {
                 "name": "Southbank Centre",
                 "domain": "southbankcentre.co.uk",
                 "url": "https://www.southbankcentre.co.uk/whats-on",
                 "reason_code": "bot_blocked",
-                "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+                "reason_text": "it returns 403 to our crawler's User-Agent; we don't evade blocks",
                 "checked_on": "2026-09-25",
-                "issue_url": "https://github.com/alexsiri7/thaleia/issues/6",
+                "issue_url": "https://github.com/alexsiri7/musenmingle/issues/6",
             },
         })
     );
@@ -387,7 +387,7 @@ async fn submissions_from_one_client_wait_for_its_lock() {
     let app = app(&pool, SuggestionConfig::default(), None);
     let mut holder = pool.begin().await.unwrap();
     let client = ip_hash([10, 0, 0, 1].into(), "test-salt");
-    thaleia::repo::lock_suggestion_submitter(&mut holder, &client)
+    musenmingle::repo::lock_suggestion_submitter(&mut holder, &client)
         .await
         .unwrap();
 

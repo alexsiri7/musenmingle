@@ -49,8 +49,7 @@ use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 pub const CSP: &str = "default-src 'self'; script-src 'self'; img-src 'self'; \
      style-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
 
-/// Site name shown in page titles and the header (the product name; the
-/// project/crate stays `thaleia`).
+/// Site name shown in page titles and the header (the crate is `musenmingle`).
 pub const BRAND: &str = "Muse & Mingle";
 
 const TAGLINE: &str = "What's on in London for creative people";
@@ -125,6 +124,9 @@ pub(crate) fn routes() -> Router<AppState> {
         )
         .route("/suggest", post(suggest))
         .route("/static/style.css", get(stylesheet))
+        .route("/favicon.ico", get(favicon_ico))
+        .route("/favicon.svg", get(favicon_svg))
+        .route("/apple-touch-icon.png", get(apple_touch_icon))
         .route("/static/app.js", get(app_js))
         .route("/saved", get(saved))
         .route("/thumbs/{name}", get(thumbnail))
@@ -185,6 +187,34 @@ async fn thumbnail(
     resp
 }
 
+/// Site icons, served from our own origin (`img-src 'self'`).
+const FAVICON_SVG: &str = include_str!("icons/favicon.svg");
+const FAVICON_ICO: &[u8] = include_bytes!("icons/favicon.ico");
+const APPLE_TOUCH_ICON: &[u8] = include_bytes!("icons/apple-touch-icon.png");
+
+fn icon(content_type: &'static str, body: impl IntoResponse) -> Response {
+    (
+        [
+            (header::CONTENT_TYPE, content_type),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        body,
+    )
+        .into_response()
+}
+
+async fn favicon_svg() -> Response {
+    icon("image/svg+xml", FAVICON_SVG)
+}
+
+async fn favicon_ico() -> Response {
+    icon("image/x-icon", FAVICON_ICO)
+}
+
+async fn apple_touch_icon() -> Response {
+    icon("image/png", APPLE_TOUCH_ICON)
+}
+
 async fn stylesheet() -> Response {
     (
         [
@@ -221,6 +251,9 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                 title {
                     @if title.is_empty() { (BRAND) " — " (TAGLINE) } @else { (title) " · " (BRAND) }
                 }
+                link rel="icon" href="/favicon.ico" sizes="32x32";
+                link rel="icon" href="/favicon.svg" type="image/svg+xml";
+                link rel="apple-touch-icon" href="/apple-touch-icon.png";
                 link rel="stylesheet" href="/static/style.css";
                 script src=(APP_JS_URL.as_str()) defer {}
             }

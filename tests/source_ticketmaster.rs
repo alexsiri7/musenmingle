@@ -3,10 +3,10 @@
 mod common;
 
 use common::fixture;
-use thaleia::config::RateLimitConfig;
-use thaleia::fetch::{FetchContext, user_agent};
-use thaleia::sources::Source;
-use thaleia::sources::ticketmaster::Ticketmaster;
+use musenmingle::config::RateLimitConfig;
+use musenmingle::fetch::{FetchContext, user_agent};
+use musenmingle::sources::Source;
+use musenmingle::sources::ticketmaster::Ticketmaster;
 use wiremock::matchers::{header, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 

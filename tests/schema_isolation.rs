@@ -1,4 +1,4 @@
-//! Proves Thaleia never touches anything outside the `events` schema.
+//! Proves Muse & Mingle never touches anything outside the `events` schema.
 
 mod common;
 
@@ -67,8 +67,8 @@ async fn migrations_create_nothing_outside_events_schema() {
     let raw = db.raw_pool().await;
     let before = catalog_snapshot(&raw).await;
 
-    thaleia::db::migrate(&raw).await.expect("first migrate");
-    thaleia::db::migrate(&raw)
+    musenmingle::db::migrate(&raw).await.expect("first migrate");
+    musenmingle::db::migrate(&raw)
         .await
         .expect("second migrate is a no-op");
 
@@ -104,7 +104,7 @@ async fn migrations_create_nothing_outside_events_schema() {
             .fetch_one(&raw)
             .await
             .unwrap();
-    assert_eq!(applied as usize, thaleia::db::migrator().iter().count());
+    assert_eq!(applied as usize, musenmingle::db::migrator().iter().count());
 
     // Sanity: the tables we expect exist.
     for t in [
@@ -129,9 +129,9 @@ async fn migrations_create_nothing_outside_events_schema() {
     db.drop_db().await;
 }
 
-/// `thaleia` is a cluster-wide role, so tests that create or drop it must
+/// `musenmingle` is a cluster-wide role, so tests that create or drop it must
 /// not overlap.
-static THALEIA_ROLE: Mutex<()> = Mutex::const_new(());
+static MUSENMINGLE_ROLE: Mutex<()> = Mutex::const_new(());
 
 fn create_role_script() -> String {
     std::fs::read_to_string(
@@ -171,12 +171,12 @@ async fn run_create_role(pool: &PgPool) {
         .expect("create-role.sql rerun");
 }
 
-/// Checks the `thaleia` role's attributes, then migrates AS the role and
+/// Checks the `musenmingle` role's attributes, then migrates AS the role and
 /// checks it cannot reach other schemas.
-async fn assert_thaleia_confined(db: &TestDb, admin: &PgPool) {
+async fn assert_musenmingle_confined(db: &TestDb, admin: &PgPool) {
     let attrs: (bool, bool, bool, bool, bool, bool, bool) = sqlx::query_as(
         "SELECT rolcanlogin, rolsuper, rolcreatedb, rolcreaterole, rolinherit, rolreplication, rolbypassrls
-           FROM pg_catalog.pg_roles WHERE rolname = 'thaleia'",
+           FROM pg_catalog.pg_roles WHERE rolname = 'musenmingle'",
     )
     .fetch_one(admin)
     .await
@@ -194,21 +194,21 @@ async fn assert_thaleia_confined(db: &TestDb, admin: &PgPool) {
 
     let as_role = pool_as(
         db.options.clone().options([("search_path", "events")]),
-        "thaleia",
+        "musenmingle",
     )
     .await;
     let who: String = sqlx::query_scalar("SELECT current_user::text")
         .fetch_one(&as_role)
         .await
         .unwrap();
-    assert_eq!(who, "thaleia");
+    assert_eq!(who, "musenmingle");
 
-    thaleia::db::migrate(&as_role)
+    musenmingle::db::migrate(&as_role)
         .await
-        .expect("migrate as thaleia");
-    thaleia::db::migrate(&as_role)
+        .expect("migrate as musenmingle");
+    musenmingle::db::migrate(&as_role)
         .await
-        .expect("re-migrate as thaleia");
+        .expect("re-migrate as musenmingle");
     let n: i64 = sqlx::query_scalar("SELECT count(*) FROM events.sources")
         .fetch_one(&as_role)
         .await
@@ -222,7 +222,7 @@ async fn assert_thaleia_confined(db: &TestDb, admin: &PgPool) {
         ("CREATE SCHEMA another", "create schema"),
     ] {
         let r = sqlx::raw_sql(sql).execute(&as_role).await;
-        assert!(r.is_err(), "thaleia role should not be able to {what}");
+        assert!(r.is_err(), "musenmingle role should not be able to {what}");
     }
 
     as_role.close().await;
@@ -231,7 +231,7 @@ async fn assert_thaleia_confined(db: &TestDb, admin: &PgPool) {
 /// Runs ops/sql/create-role.sql as the superuser.
 #[tokio::test]
 async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
-    let _role = THALEIA_ROLE.lock().await;
+    let _role = MUSENMINGLE_ROLE.lock().await;
     let Some(db) = TestDb::create("restricted_role_can_migrate_but_not_touch_other_schemas").await
     else {
         return;
@@ -239,12 +239,12 @@ async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
     let admin = db.raw_pool().await;
     run_create_role(&admin).await;
     // A superuser operator re-running the script strips SUPERUSER again.
-    sqlx::raw_sql("ALTER ROLE thaleia SUPERUSER")
+    sqlx::raw_sql("ALTER ROLE musenmingle SUPERUSER")
         .execute(&admin)
         .await
         .unwrap();
     run_create_role(&admin).await;
-    assert_thaleia_confined(&db, &admin).await;
+    assert_musenmingle_confined(&db, &admin).await;
 
     admin.close().await;
     db.drop_db().await;
@@ -255,18 +255,18 @@ async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
 /// BYPASSRLS).
 #[tokio::test]
 async fn create_role_script_runs_as_non_superuser_owner() {
-    let _role = THALEIA_ROLE.lock().await;
+    let _role = MUSENMINGLE_ROLE.lock().await;
     let Some(db) = TestDb::create("create_role_script_runs_as_non_superuser_owner").await else {
         return;
     };
     let admin = db.raw_pool().await;
-    // A `thaleia` left by another test (or run) was created by the superuser;
+    // A `musenmingle` left by another test (or run) was created by the superuser;
     // this owner must create its own.
-    sqlx::raw_sql("DROP ROLE IF EXISTS thaleia")
+    sqlx::raw_sql("DROP ROLE IF EXISTS musenmingle")
         .execute(&admin)
         .await
-        .expect("drop stale thaleia role");
-    let owner = format!("thaleia_test_owner_{}", uuid::Uuid::new_v4().simple());
+        .expect("drop stale musenmingle role");
+    let owner = format!("musenmingle_test_owner_{}", uuid::Uuid::new_v4().simple());
     sqlx::raw_sql(AssertSqlSafe(format!(
         "CREATE ROLE {owner} LOGIN NOSUPERUSER CREATEDB CREATEROLE REPLICATION BYPASSRLS;
          ALTER DATABASE {} OWNER TO {owner};",
@@ -286,7 +286,7 @@ async fn create_role_script_runs_as_non_superuser_owner() {
     run_create_role(&as_owner).await;
     as_owner.close().await;
 
-    assert_thaleia_confined(&db, &admin).await;
+    assert_musenmingle_confined(&db, &admin).await;
 
     admin.close().await;
     let admin_url = db.admin_url.clone();
@@ -297,7 +297,7 @@ async fn create_role_script_runs_as_non_superuser_owner() {
         .await
         .unwrap();
     sqlx::raw_sql(AssertSqlSafe(format!(
-        "DROP ROLE thaleia; DROP ROLE {owner};"
+        "DROP ROLE musenmingle; DROP ROLE {owner};"
     )))
     .execute(&mut conn)
     .await

@@ -7,7 +7,10 @@
 (function (root) {
   "use strict";
 
-  var STORAGE_KEY = "letsart.saved.v1";
+  var STORAGE_KEY = "musenmingle.saved.v1";
+  // Keys used by earlier versions of this script (the site was "LetsArt" and
+  // then "Thaleia" before it was Muse & Mingle); moved to STORAGE_KEY once.
+  var LEGACY_STORAGE_KEYS = ["letsart.saved.v1"];
   var MAX_ITEMS = 500;
   var IDS_PER_REQUEST = 100; // GET /v1/events?ids= cap (listing::MAX_IDS)
   var TZ = "Europe/London";
@@ -31,6 +34,29 @@
       x.snapshot &&
       typeof x.snapshot.title === "string"
     );
+  }
+
+  /**
+   * Moves saved items from a legacy key to STORAGE_KEY: when STORAGE_KEY is
+   * absent and a legacy key is present, its value is copied over and the
+   * legacy key removed. Never overwrites existing data under STORAGE_KEY
+   * (legacy keys are then left alone). true if anything was moved.
+   */
+  function migrateStorage(storage) {
+    if (!storage) return false;
+    try {
+      if (storage.getItem(STORAGE_KEY) !== null) return false;
+      for (var i = 0; i < LEGACY_STORAGE_KEYS.length; i++) {
+        var old = storage.getItem(LEGACY_STORAGE_KEYS[i]);
+        if (old === null) continue;
+        storage.setItem(STORAGE_KEY, old);
+        storage.removeItem(LEGACY_STORAGE_KEYS[i]);
+        return true;
+      }
+    } catch (e) {
+      // Blocked or over quota: keep the legacy key; try again next load.
+    }
+    return false;
   }
 
   /** Saved items (newest first); [] when storage is missing or corrupt. */
@@ -215,7 +241,7 @@
     events.forEach(function (e) {
       if (!e.starts_at) return;
       lines.push("BEGIN:VEVENT");
-      lines.push("UID:" + e.id + "@letsart");
+      lines.push("UID:" + e.id + "@musenmingle.interstellarai.net");
       lines.push("DTSTAMP:" + icsTime(nowIso));
       lines.push("DTSTART:" + icsTime(e.starts_at));
       if (e.ends_at) lines.push("DTEND:" + icsTime(e.ends_at));
@@ -230,6 +256,8 @@
 
   var api = {
     STORAGE_KEY: STORAGE_KEY,
+    LEGACY_STORAGE_KEYS: LEGACY_STORAGE_KEYS,
+    migrateStorage: migrateStorage,
     loadSaved: loadSaved,
     storeSaved: storeSaved,
     isSaved: isSaved,
@@ -248,6 +276,7 @@
   if (!doc) return;
 
   var storage = getStorage();
+  migrateStorage(storage);
 
   function eventFromButton(b) {
     return {
@@ -462,7 +491,7 @@
         });
         var a = doc.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "letsart-saved.ics";
+        a.download = "musenmingle-saved.ics";
         doc.body.appendChild(a);
         a.click();
         setTimeout(function () {

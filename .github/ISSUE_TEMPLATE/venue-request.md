@@ -6,7 +6,7 @@ labels: venue-request
 ---
 
 Thanks for getting in touch. We act on every venue request, and remove a venue's listings within 7 days.
-See https://thaleia.interstellarai.net/about#for-venues for what we show and how we collect it.
+See https://musenmingle.interstellarai.net/about#for-venues for what we show and how we collect it.
 
 **Venue / site:** <name and website>
 

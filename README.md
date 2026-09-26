@@ -1,17 +1,23 @@
-# Thaleia
+# Muse & Mingle
 
 London cultural events for creative people: exhibitions, expos, talks,
 workshops and community events (CreativeMornings, writing groups, ...).
 
 This repository is the **ingestion backend**, the **read API** and a
-minimal server-rendered **web page** (https://thaleia.interstellarai.net),
+minimal server-rendered **web page** (https://musenmingle.interstellarai.net),
 written in Rust (axum, tokio, sqlx, reqwest, maud).
+
+The project was called **Thaleia** until 2026-09-26. The old host
+`thaleia.interstellarai.net` stays attached and redirects to the new one
+(`CANONICAL_HOST`, see `src/host_redirect.rs`); the Docker image keeps
+`thaleia-api`/`thaleia-ingest` aliases for the renamed binaries, and the
+Saved-events script moves the old `letsart.saved.v1` key to the new one.
 
 ## Architecture
 
 ```
             +-------------------+        +---------------------------+
-cron ─────▶ |  thaleia-ingest   |        |       thaleia-api         |
+cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api         |
 (15 min)    |  (one-shot run)   |        |  GET /healthz,            |
             +---------+---------+        |  GET /v1/events[/{id}],   |
                       │                  |  GET /v1/sources,         |
@@ -62,7 +68,7 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
     Crawl-delay 20, so no detail pages): year-less card dates resolved
     against the run date.
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
-  Sends `ThaleiaBot/<version> (+https://thaleia.interstellarai.net/about#for-venues)`,
+  Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
   honoured) and rate-limits per domain (default 1 request / 2 s; built-in
   floors in `config::BUILTIN_MIN_INTERVALS`, e.g. 5 s for ArtRabbit, can't be
@@ -153,7 +159,7 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   **Saved events** (`/saved`, `src/web.js` served as `/static/app.js?v=<hash>`):
   the only script, and progressive enhancement — without it every page
   works and the save buttons stay `hidden`. Saves live only in the
-  visitor's browser (`localStorage` key `letsart.saved.v1`: id, saved time
+  visitor's browser (`localStorage` key `musenmingle.saved.v1`: id, saved time
   and a title/venue/dates snapshot; no accounts, cookies or server
   storage). `/saved` is a server-rendered shell whose script fetches the
   saved events with `GET /v1/events?ids=…`, renders them from a `<template>`,
@@ -232,7 +238,7 @@ time either listing is ingested.
 
 ### Schema isolation
 
-Thaleia will run inside an existing, shared production Postgres (Supabase).
+Muse & Mingle will run inside an existing, shared production Postgres (Supabase).
 Everything it owns lives in the **`events`** schema:
 
 - every migration object is schema-qualified `events.`;
@@ -248,7 +254,7 @@ Everything it owns lives in the **`events`** schema:
   restricted role to prove it cannot touch other schemas.
 
 `ops/sql/create-role.sql` is run once by the database owner; it creates the
-`thaleia` login role with USAGE + CREATE on `events` only (plus default
+`musenmingle` login role with USAGE + CREATE on `events` only (plus default
 privileges) and nothing elsewhere.
 
 ## Local development
@@ -263,7 +269,7 @@ There is no Docker requirement. Database integration tests read
 `TEST_DATABASE_URL`, pointing at **any** Postgres (15+) where the user may
 `CREATE DATABASE`; each test creates and drops its own database. Without it
 they print `SKIPPING ...` and pass. CI runs them against a `postgres:17`
-service with `THALEIA_REQUIRE_DB=1`, which turns a missing URL into a failure.
+service with `MUSENMINGLE_REQUIRE_DB=1`, which turns a missing URL into a failure.
 
 ```bash
 TEST_DATABASE_URL=postgres://postgres@localhost:5432/postgres cargo test
@@ -279,8 +285,8 @@ Running the binaries locally:
 
 ```bash
 set -a; . ./.env; set +a
-cargo run --bin thaleia-ingest   # one ingestion pass
-cargo run --bin thaleia-api      # http://localhost:8080/healthz
+cargo run --bin musenmingle-ingest   # one ingestion pass
+cargo run --bin musenmingle-api      # http://localhost:8080/healthz
 ```
 
 Both binaries apply pending migrations on start (sqlx takes a migration lock).
@@ -289,15 +295,17 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 
 | Variable | Used by | Default | Purpose |
 |---|---|---|---|
-| `DATABASE_URL` | both | — (required) | Postgres URL (the `thaleia` role in prod) |
+| `DATABASE_URL` | both | — (required) | Postgres URL (the `musenmingle` role in prod) |
 | `TICKETMASTER_API_KEY` | ingest | unset → source skipped | Discovery API key |
 | `GITHUB_TOKEN` | both | unset → trips only logged; suggestions stay pending | Issues read/write on `GITHUB_REPO` |
-| `GITHUB_REPO` | both | `alexsiri7/thaleia` | Where health and new-scraper issues are filed |
+| `GITHUB_REPO` | both | `alexsiri7/musenmingle` | Where health and new-scraper issues are filed |
 | `SUGGESTION_IP_SALT` | api | — (required) | Secret salt for hashing submitter IPs |
 | `SUGGESTION_RATE_PER_HOUR` | api | `5` | Stored suggestions per client IP per hour |
 | `SUGGESTION_RATE_PER_DAY` | api | `20` | Stored suggestions per client IP per day |
 | `TRUSTED_PROXY_COUNT` | api | `0` | Proxies whose `X-Forwarded-For` entries are trusted (Railway: `1`) |
 | `PORT` | api | `8080` | HTTP port |
+| `CANONICAL_HOST` | api | unset → no redirect | Host that requests to `LEGACY_HOSTS` are redirected to (301 for GET/HEAD, 308 otherwise; path and query kept; `/healthz` never redirects) |
+| `LEGACY_HOSTS` | api | `thaleia.interstellarai.net` | Comma-separated old host names that redirect to `CANONICAL_HOST` |
 | `CORS_ORIGINS` | api | unset → no cross-origin access | Comma-separated browser origins allowed to call the API |
 | `RUST_LOG` | both | `info` | tracing filter |
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
@@ -309,16 +317,16 @@ See `.env.example`.
 
 ## Deployment (Railway)
 
-Railway project `thaleia`, environment `production`, region
+Railway project `musenmingle`, environment `production`, region
 `europe-west4-drams3a` (EU West), runs two services. Both deploy from
-`alexsiri7/thaleia` `main`, are built from the same `Dockerfile` (multi-stage;
+`alexsiri7/musenmingle` `main`, are built from the same `Dockerfile` (multi-stage;
 the runtime image contains both binaries), and are declared in
 `.railway/railway.ts`:
 
-1. **thaleia-api** — start command `thaleia-api`, health check `GET /healthz`
+1. **musenmingle-api** — start command `musenmingle-api`, health check `GET /healthz`
    (30 s timeout), restart on failure (max 5 retries).
-2. **thaleia-ingest** — cron job `*/15 * * * *` (every 15 minutes), start
-   command `thaleia-ingest`, no healthcheck, never restarted. The process
+2. **musenmingle-ingest** — cron job `*/15 * * * *` (every 15 minutes), start
+   command `musenmingle-ingest`, no healthcheck, never restarted. The process
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
@@ -337,7 +345,7 @@ TypeScript SDK the file imports, not the CLI:
 
 ```bash
 cd .railway && npm ci
-railway link            # project thaleia, environment production
+railway link            # project musenmingle, environment production
 railway config plan     # review the diff
 railway config apply
 ```

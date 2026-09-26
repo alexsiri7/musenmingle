@@ -8,18 +8,18 @@ use axum::body::Body;
 use axum::http::{HeaderValue, Request, StatusCode, header};
 use chrono::{DateTime, Utc};
 use common::TestDb;
+use musenmingle::api::ApiSettings;
+use musenmingle::config::{SuggestionConfig, parse_cors_origins};
+use musenmingle::suggestions::Suggestions;
 use serde_json::{Value, json};
 use sqlx::PgPool;
-use thaleia::api::ApiSettings;
-use thaleia::config::{SuggestionConfig, parse_cors_origins};
-use thaleia::suggestions::Suggestions;
 use tower::ServiceExt;
 use uuid::Uuid;
 
 fn app(pool: &PgPool) -> Router {
     app_with_cors(
         pool,
-        parse_cors_origins(Some("https://thaleia.example")).unwrap(),
+        parse_cors_origins(Some("https://musenmingle.example")).unwrap(),
     )
 }
 
@@ -33,10 +33,10 @@ fn app_with_cors(pool: &PgPool, cors_origins: Vec<HeaderValue>) -> Router {
     )
     .unwrap();
     let settings = ApiSettings {
-        github_repo: "alexsiri7/thaleia".into(),
+        github_repo: "alexsiri7/musenmingle".into(),
         cors_origins,
     };
-    thaleia::api::router(pool.clone(), suggestions, settings)
+    musenmingle::api::router(pool.clone(), suggestions, settings)
 }
 
 async fn get(app: &Router, uri: &str) -> (StatusCode, Value) {
@@ -587,16 +587,16 @@ async fn sources_lists_refused_sites() {
                 "reason_code": "robots_disallowed",
                 "reason_text": "robots.txt disallows /happening and the site answers our bot with an empty 202",
                 "checked_on": "2026-09-25",
-                "issue_url": "https://github.com/alexsiri7/thaleia/issues/4",
+                "issue_url": "https://github.com/alexsiri7/musenmingle/issues/4",
             },
             {
                 "name": "Southbank Centre",
                 "domain": "southbankcentre.co.uk",
                 "url": "https://www.southbankcentre.co.uk/whats-on",
                 "reason_code": "bot_blocked",
-                "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+                "reason_text": "it returns 403 to our crawler's User-Agent; we don't evade blocks",
                 "checked_on": "2026-09-25",
-                "issue_url": "https://github.com/alexsiri7/thaleia/issues/6",
+                "issue_url": "https://github.com/alexsiri7/musenmingle/issues/6",
             },
         ])
     );
@@ -662,13 +662,13 @@ async fn invalid_list_parameters_are_400() {
 
 async fn run(pool: &PgPool, key: &str, started_at: &str, events_found: i32, errors: i32, ok: bool) {
     let started_at = t(started_at);
-    let source = thaleia::repo::source_by_key(pool, key)
+    let source = musenmingle::repo::source_by_key(pool, key)
         .await
         .unwrap()
         .unwrap();
-    thaleia::repo::record_run(
+    musenmingle::repo::record_run(
         pool,
-        &thaleia::repo::NewRun {
+        &musenmingle::repo::NewRun {
             source_id: source.id,
             started_at,
             finished_at: started_at + chrono::Duration::milliseconds(1500),
@@ -708,22 +708,27 @@ async fn sources_report_last_run_and_health() {
     let source_id = |key: &'static str| {
         let pool = pool.clone();
         async move {
-            thaleia::repo::source_by_key(&pool, key)
+            musenmingle::repo::source_by_key(&pool, key)
                 .await
                 .unwrap()
                 .unwrap()
                 .id
         }
     };
-    thaleia::repo::insert_health_issue(&pool, source_id("whitechapel-gallery").await, 32, "errors")
-        .await
-        .unwrap();
+    musenmingle::repo::insert_health_issue(
+        &pool,
+        source_id("whitechapel-gallery").await,
+        32,
+        "errors",
+    )
+    .await
+    .unwrap();
     let ticketmaster_id = source_id("ticketmaster").await;
-    thaleia::repo::insert_health_issue(&pool, ticketmaster_id, 31, "errors")
+    musenmingle::repo::insert_health_issue(&pool, ticketmaster_id, 31, "errors")
         .await
         .unwrap();
     let skipped_at = t("2026-09-26T06:30:00Z");
-    thaleia::repo::record_skip(
+    musenmingle::repo::record_skip(
         &pool,
         ticketmaster_id,
         "TICKETMASTER_API_KEY not set",
@@ -732,7 +737,7 @@ async fn sources_report_last_run_and_health() {
     .await
     .unwrap();
     // Unconfigured without any run.
-    thaleia::repo::record_skip(
+    musenmingle::repo::record_skip(
         &pool,
         source_id("somerset-house").await,
         "no implementation for this source key",
@@ -741,10 +746,10 @@ async fn sources_report_last_run_and_health() {
     .await
     .unwrap();
     let serpentine = source_id("serpentine-galleries").await;
-    thaleia::repo::insert_health_issue(&pool, serpentine, 7, "old")
+    musenmingle::repo::insert_health_issue(&pool, serpentine, 7, "old")
         .await
         .unwrap();
-    thaleia::repo::close_health_issues(&pool, serpentine)
+    musenmingle::repo::close_health_issues(&pool, serpentine)
         .await
         .unwrap();
     let app = app(&pool);
@@ -790,7 +795,7 @@ async fn sources_report_last_run_and_health() {
     assert_eq!(whitechapel["status"], "broken");
     assert_eq!(
         whitechapel["issue_url"],
-        "https://github.com/alexsiri7/thaleia/issues/32"
+        "https://github.com/alexsiri7/musenmingle/issues/32"
     );
     let somerset = source("somerset-house");
     assert_eq!(somerset["status"], "unconfigured");
@@ -812,7 +817,7 @@ async fn sources_report_last_run_and_health() {
     assert_eq!(ticketmaster["last_run"]["ok"], false);
     assert_eq!(
         ticketmaster["issue_url"],
-        "https://github.com/alexsiri7/thaleia/issues/31"
+        "https://github.com/alexsiri7/musenmingle/issues/31"
     );
     pool.close().await;
     db.drop_db().await;
@@ -885,8 +890,8 @@ async fn cors_allows_only_configured_origins() {
         }
     };
     assert_eq!(
-        allow_origin("https://thaleia.example").await.as_deref(),
-        Some("https://thaleia.example")
+        allow_origin("https://musenmingle.example").await.as_deref(),
+        Some("https://musenmingle.example")
     );
     assert_eq!(allow_origin("https://evil.example").await, None);
 
@@ -895,7 +900,7 @@ async fn cors_allows_only_configured_origins() {
         .clone()
         .oneshot(
             Request::options("/v1/suggestions")
-                .header(header::ORIGIN, "https://thaleia.example")
+                .header(header::ORIGIN, "https://musenmingle.example")
                 .header(header::ACCESS_CONTROL_REQUEST_METHOD, "POST")
                 .header(header::ACCESS_CONTROL_REQUEST_HEADERS, "content-type")
                 .body(Body::empty())
@@ -907,7 +912,7 @@ async fn cors_allows_only_configured_origins() {
     let h = resp.headers();
     assert_eq!(
         h[header::ACCESS_CONTROL_ALLOW_ORIGIN],
-        "https://thaleia.example"
+        "https://musenmingle.example"
     );
     assert!(
         h[header::ACCESS_CONTROL_ALLOW_METHODS]

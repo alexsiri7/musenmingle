@@ -1,7 +1,7 @@
 # CLAUDE.md — guidance for coding agents
 
-Thaleia: London cultural events ingestion backend + read API. Rust,
-single crate `thaleia` (lib) with binaries `thaleia-api` and `thaleia-ingest`.
+Muse & Mingle: London cultural events ingestion backend + read API. Rust,
+single crate `musenmingle` (lib) with binaries `musenmingle-api` and `musenmingle-ingest`.
 Read `README.md` for the architecture.
 
 ## Commands
@@ -15,7 +15,7 @@ INSTA_UPDATE=always cargo test --test <name>                 # rewrite snapshots
 ```
 
 CI (`.github/workflows/ci.yml`) runs fmt, clippy and tests against a
-`postgres:17` service with `THALEIA_REQUIRE_DB=1`, plus a `docker build`.
+`postgres:17` service with `MUSENMINGLE_REQUIRE_DB=1`, plus a `docker build`.
 There is no local Docker; never try to use testcontainers.
 
 ## Invariants — do not break these
@@ -33,7 +33,7 @@ There is no local Docker; never try to use testcontainers.
 4. **Every scraper needs a saved fixture + an `insta` snapshot test** of its
    normalised output (see `docs/adding-a-scraper.md`), and a wiremock fetch
    test. Tests never hit the real network.
-5. **robots.txt, the ThaleiaBot User-Agent and the per-domain rate limit are
+5. **robots.txt, the MuseNMingleBot User-Agent and the per-domain rate limit are
    enforced by `FetchContext` and must not be bypassed.** Sources get network
    access only through `FetchContext`; do not create a `reqwest::Client` in a
    source or expose FetchContext's client. (The GitHub issue filer in
@@ -71,7 +71,7 @@ There is no local Docker; never try to use testcontainers.
     `clean_description`/sources to do it. Venue links use `rel="noopener"`
     (not `noreferrer`) and the primary call to action is the source's page.
 11. **`/about` must stay true.** It makes public promises (robots.txt, the
-    ThaleiaBot UA linking to `/about#for-venues`, 2 s default rate limit,
+    MuseNMingleBot UA linking to `/about#for-venues`, 2 s default rate limit,
     excerpts, credited thumbnails, no cookies, removal within 7 days via
     `docs/venue-requests.md`, the `/contact` form). If you change any of that
     behaviour, update the page (`web::about`) in the same PR. Public HTML

@@ -6,9 +6,9 @@ mod common;
 use std::time::Duration;
 
 use common::TestDb;
-use thaleia::config::{Config, RateLimitConfig};
-use thaleia::repo::SourceRow;
-use thaleia::sources;
+use musenmingle::config::{Config, RateLimitConfig};
+use musenmingle::repo::SourceRow;
+use musenmingle::sources;
 
 #[tokio::test]
 async fn every_seeded_source_has_an_implementation() {

@@ -1,6 +1,6 @@
 //! Database connection and migrations.
 //!
-//! Schema isolation: Thaleia shares a production Postgres with other apps, so
+//! Schema isolation: Muse & Mingle shares a production Postgres with other apps, so
 //! everything it creates lives in the `events` schema. That includes sqlx's
 //! migration bookkeeping table, which is configured as
 //! `events._sqlx_migrations` in `sqlx.toml` (read by `migrate!` at compile
@@ -12,7 +12,7 @@ use std::time::Duration;
 use sqlx::migrate::Migrator;
 use sqlx::postgres::{PgConnectOptions, PgPool, PgPoolOptions};
 
-/// The only schema Thaleia may touch.
+/// The only schema Muse & Mingle may touch.
 pub const SCHEMA: &str = "events";
 /// Fully-qualified migration bookkeeping table.
 pub const MIGRATIONS_TABLE: &str = "events._sqlx_migrations";
@@ -52,7 +52,7 @@ pub async fn connect(url: &str) -> Result<PgPool, sqlx::Error> {
 ///
 /// We deliberately do not use `CREATE SCHEMA IF NOT EXISTS` unconditionally:
 /// Postgres checks CREATE-on-database before the IF NOT EXISTS short-circuit,
-/// so it fails for the restricted `thaleia` role even when the schema exists.
+/// so it fails for the restricted `musenmingle` role even when the schema exists.
 pub async fn ensure_schema(pool: &PgPool) -> Result<(), DbError> {
     let exists: bool = sqlx::query_scalar(
         "SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname = $1)",

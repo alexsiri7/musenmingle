@@ -17,7 +17,7 @@ COPY src ./src
 # Tests reference fixtures via include_bytes! only under #[cfg(test)], so
 # they are not needed for a release build.
 RUN cargo build --release --locked --bins \
-    && strip target/release/thaleia-api target/release/thaleia-ingest
+    && strip target/release/musenmingle-api target/release/musenmingle-ingest
 
 # ---- runtime ----
 FROM debian:bookworm-slim AS runtime
@@ -25,12 +25,18 @@ FROM debian:bookworm-slim AS runtime
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
-    && useradd --system --uid 10001 --no-create-home thaleia
-COPY --from=build /app/target/release/thaleia-api /usr/local/bin/thaleia-api
-COPY --from=build /app/target/release/thaleia-ingest /usr/local/bin/thaleia-ingest
-USER thaleia
+    && useradd --system --uid 10001 --no-create-home musenmingle
+COPY --from=build /app/target/release/musenmingle-api /usr/local/bin/musenmingle-api
+COPY --from=build /app/target/release/musenmingle-ingest /usr/local/bin/musenmingle-ingest
+# Transitional aliases for the pre-rename binary names (the project was called
+# Thaleia), so a deploy whose Railway start command still says
+# `thaleia-api`/`thaleia-ingest` keeps working. Remove once both services'
+# start commands are `musenmingle-*`.
+RUN ln -s musenmingle-api /usr/local/bin/thaleia-api \
+    && ln -s musenmingle-ingest /usr/local/bin/thaleia-ingest
+USER musenmingle
 ENV RUST_LOG=info PORT=8080
 EXPOSE 8080
 # The API is the default; the Railway cron service overrides the start
-# command with `thaleia-ingest`.
-CMD ["thaleia-api"]
+# command with `musenmingle-ingest`.
+CMD ["musenmingle-api"]

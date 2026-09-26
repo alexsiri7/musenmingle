@@ -9,7 +9,7 @@ updated: '2026-09-26'
 
 ## Why
 
-The same exhibition or talk often appears in several sources (Ticketmaster, the venue's own site, a listings site), each with slightly different titles, times and venue names. Showing it three times clutters results and makes Thaleia feel untrustworthy; exact matching alone misses most of these duplicates.
+The same exhibition or talk often appears in several sources (Ticketmaster, the venue's own site, a listings site), each with slightly different titles, times and venue names. Showing it three times clutters results and makes Muse & Mingle feel untrustworthy; exact matching alone misses most of these duplicates.
 
 ## What
 

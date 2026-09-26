@@ -1,4 +1,4 @@
-//! Thaleia: London cultural events for creative people.
+//! Muse & Mingle: London cultural events for creative people.
 //!
 //! This crate contains the ingestion backend (sources, normalisation, the
 //! ingest runner and health checks) and the HTTP API. See
@@ -11,6 +11,7 @@ pub mod db;
 pub mod fetch;
 pub mod github;
 pub mod health;
+pub mod host_redirect;
 pub mod listing;
 pub mod matching;
 pub mod model;

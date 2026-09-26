@@ -1,4 +1,4 @@
-//! The ingestion runner behind `thaleia-ingest`.
+//! The ingestion runner behind `musenmingle-ingest`.
 //!
 //! One invocation (a Railway cron tick) does:
 //!
@@ -28,8 +28,10 @@ use crate::suggestions;
 use crate::thumbs::{self, ThumbConfig};
 
 /// Arbitrary constant key for `pg_try_advisory_lock` (session-level locks
-/// are not schema objects).
-pub const INGEST_LOCK_KEY: i64 = 0x0074_6861_6c65_6961; // "thaleia"
+/// are not schema objects). The value spells "thaleia", the project's former
+/// name; it was deliberately kept by the rename to Muse & Mingle, because a new
+/// key would let an old and a new ingest run overlap while a deploy rolls out.
+pub const INGEST_LOCK_KEY: i64 = 0x0074_6861_6c65_6961;
 
 /// Events that ended (or, without an end, started) more than this long ago
 /// are skipped.
