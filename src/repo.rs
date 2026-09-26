@@ -487,7 +487,7 @@ impl<'a> From<&'a CandidateRow> for MatchInput<'a> {
 /// Events whose date range comes within two days of `ev`'s (slack for
 /// London-day rounding; `matching` does the exact check), excluding events
 /// that carry a different listing of this source: one source's distinct
-/// listings are distinct events.
+/// listings are never fuzzy-joined.
 async fn fuzzy_candidates(
     tx: &mut Transaction<'_, Postgres>,
     ev: &NewEvent,

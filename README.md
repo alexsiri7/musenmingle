@@ -75,14 +75,14 @@ London day, or overlapping ranges when both run over several days), the venue
 agrees (same or contained normalised name, or coordinates within 150 m) and
 the titles agree (after dropping stop words, "exhibition"/"tickets"/"london",
 years and venue words: token Jaccard ≥ 0.8 or bigram Sørensen–Dice ≥ 0.9).
-Distinct listings of the same source are never merged. Every fuzzy merge is
-logged at `info` ("fuzzy merge") with both titles and scores.
+Fuzzy matching never joins two distinct listings of the same source. Every
+fuzzy merge is logged at `info` ("fuzzy merge") with both titles and scores.
 
 When a second source joins an event, fields are merged by source kind:
 
 | Field | Winner |
 | --- | --- |
-| title | first source (never overwritten) |
+| title | first source (merges never change it) |
 | dates, description, image | venue site (`scraper`) |
 | price, URL | `api` (price only when it reports one) |
 | everything else | existing value; newcomer fills gaps; tags unioned |
