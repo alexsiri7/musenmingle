@@ -461,6 +461,7 @@ async fn home_filters_are_applied_and_reflected_in_the_form() {
         ("category=concert".into(), "unknown category"),
         ("near=mars".into(), "unknown area"),
         ("from=yesterday".into(), "from must be a date"),
+        ("when=night".into(), "unknown when"),
     ] {
         let p = get(&app, &format!("/?{q}")).await;
         assert_eq!(p.status, StatusCode::BAD_REQUEST, "{q}");
@@ -468,6 +469,62 @@ async fn home_filters_are_applied_and_reflected_in_the_form() {
         assert!(p.body.contains(msg), "{q}: {}", p.body);
         assert!(p.body.contains("<form class=\"filters\""));
     }
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn home_filters_by_time_of_day_and_price_with_counts() {
+    let Some(db) = TestDb::create("home_filters_by_time_of_day_and_price_with_counts").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let day = chrono::NaiveDate::parse_from_str(&date(days(3)), "%Y-%m-%d").unwrap();
+    let at = |h| musenmingle::normalise::london_to_utc(day.and_hms_opt(h, 0, 0).unwrap());
+    insert(&pool, Ev::new("Evening talk", at(19))).await;
+    insert(&pool, Ev::new("Morning talk", at(11))).await;
+    let unknown = insert(&pool, Ev::new("Unknown price talk", at(12))).await;
+    sqlx::query(
+        "UPDATE events.events SET price_min = NULL, price_max = NULL, currency = NULL
+         WHERE id = $1",
+    )
+    .bind(unknown)
+    .execute(&pool)
+    .await
+    .unwrap();
+    let app = app(&pool);
+
+    let p = get(&app, "/?when=evening").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert_eq!(card_titles(&p.body), ["Evening talk"]);
+    assert!(
+        p.body
+            .contains("<option value=\"evening\" selected>Evenings (1)</option>"),
+        "{}",
+        p.body
+    );
+    assert!(
+        p.body
+            .contains("<option value=\"daytime\">Daytime (2)</option>")
+    );
+    assert!(!p.body.contains("unknown price"));
+
+    let p = get(&app, "/?price_max=10").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    let mut titles = card_titles(&p.body);
+    titles.sort();
+    assert_eq!(titles, ["Evening talk", "Morning talk"]);
+    assert!(
+        p.body
+            .contains("<option value=\"10\" selected>Under £10 (2)</option>")
+    );
+    assert!(
+        p.body
+            .contains("1 event with an unknown price is not shown."),
+        "{}",
+        p.body
+    );
     pool.close().await;
     db.drop_db().await;
 }

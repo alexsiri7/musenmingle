@@ -38,8 +38,8 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
-use crate::api::{self, AppState, EventJson, SourceLinkJson};
-use crate::listing;
+use crate::api::{self, AppState, CountsJson, EventJson, SourceLinkJson};
+use crate::listing::{self, When};
 use crate::model::{Category, SourceKind};
 use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
@@ -487,6 +487,10 @@ struct Filters {
     to: String,
     category: String,
     free: bool,
+    /// `when=` bucket (`evening`, …); empty = any time.
+    when: String,
+    /// `price_max=` amount; empty = any price.
+    price_max: String,
     near: String,
     /// Source keys (repeatable), e.g. from a link on `/sources`.
     sources: Vec<String>,
@@ -508,6 +512,8 @@ impl Filters {
                 "to" => f.to = v,
                 "category" => f.category = v,
                 "free" => f.free = matches!(v.as_str(), "true" | "on" | "1"),
+                "when" => f.when = v,
+                "price_max" => f.price_max = v,
                 "near" => f.near = v,
                 "medium" => f.medium = v,
                 "format" => f.format = v,
@@ -534,6 +540,8 @@ impl Filters {
         for (k, v) in [
             ("to", &self.to),
             ("category", &self.category),
+            ("when", &self.when),
+            ("price_max", &self.price_max),
             ("near", &self.near),
             ("medium", &self.medium),
             ("format", &self.format),
@@ -560,6 +568,8 @@ impl Filters {
             to: self.to.clone(),
             category: self.category.clone(),
             free: self.free,
+            when: self.when.clone(),
+            price_max: self.price_max.clone(),
             near: self.near.clone(),
             medium: self.medium.clone(),
             format: self.format.clone(),
@@ -581,6 +591,11 @@ impl Filters {
         }
         if self.free {
             s.append_pair("free", "true");
+        }
+        for (k, v) in [("when", &self.when), ("price_max", &self.price_max)] {
+            if !v.is_empty() {
+                s.append_pair(k, v);
+            }
         }
         for src in &self.sources {
             s.append_pair("source", src);
@@ -648,8 +663,32 @@ fn label_of(tag: &str) -> &str {
     crate::enrich::output::label(tag)
 }
 
-fn filter_form(f: &Filters, facets: Option<&serde_json::Value>) -> Markup {
+/// `label`, followed by ` (n)` when the count is known.
+fn with_count(label: &str, n: Option<i64>) -> Markup {
+    html! {
+        (label)
+        @if let Some(n) = n { " (" (n) ")" }
+    }
+}
+
+/// The `when=` options of the filter form, with their counts.
+fn when_options(counts: Option<&CountsJson>) -> [(When, &'static str, Option<i64>); 4] {
+    let n = |pick: fn(&CountsJson) -> i64| counts.map(pick);
+    [
+        (When::Evening, "Evenings", n(|c| c.when.evening)),
+        (When::AfterWork, "After work", n(|c| c.when.after_work)),
+        (When::Weekend, "Weekends", n(|c| c.when.weekend)),
+        (When::Daytime, "Daytime", n(|c| c.when.daytime)),
+    ]
+}
+
+fn filter_form(
+    f: &Filters,
+    facets: Option<&serde_json::Value>,
+    counts: Option<&CountsJson>,
+) -> Markup {
     use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
+    let price = |pick: fn(&CountsJson) -> i64| counts.map(pick);
     html! {
         form class="filters" method="get" action="/" {
             div class="field" {
@@ -672,6 +711,29 @@ fn filter_form(f: &Filters, facets: Option<&serde_json::Value>) -> Markup {
                 }
             }
             div class="field" {
+                label for="when" { "When" }
+                select id="when" name="when" {
+                    option value="" selected[f.when.is_empty()] { "Any time" }
+                    @for (w, label, n) in when_options(counts) {
+                        option value=(w.as_str()) selected[f.when == w.as_str()] {
+                            (with_count(label, n))
+                        }
+                    }
+                }
+            }
+            div class="field" {
+                label for="price_max" { "Max price" }
+                select id="price_max" name="price_max" {
+                    option value="" selected[f.price_max.is_empty()] { "Any" }
+                    option value="10" selected[f.price_max == "10"] {
+                        (with_count("Under £10", price(|c| c.price.max_10)))
+                    }
+                    option value="20" selected[f.price_max == "20"] {
+                        (with_count("Under £20", price(|c| c.price.max_20)))
+                    }
+                }
+            }
+            div class="field" {
                 label for="near" { "Near" }
                 select id="near" name="near" {
                     option value="" selected[f.near.is_empty()] { "Anywhere in London" }
@@ -685,7 +747,7 @@ fn filter_form(f: &Filters, facets: Option<&serde_json::Value>) -> Markup {
             (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for"))))
             div class="field check" {
                 input id="free" name="free" type="checkbox" value="true" checked[f.free];
-                label for="free" { "Free only" }
+                label for="free" { (with_count("Free only", price(|c| c.price.free))) }
             }
             @for src in &f.sources {
                 input type="hidden" name="source" value=(src);
@@ -827,21 +889,35 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         },
         Err(_) => None,
     };
-    let heading = html! {
-        h1 { (TAGLINE) }
-        p class="lede" {
-            "Exhibitions, talks, workshops, expos and community events, gathered from venue sites."
-        }
-        (filter_form(&filters, facets.as_ref()))
-        @if !filters.sources.is_empty() {
-            p class="chips" aria-label="Active filters" {
-                @for src in &filters.sources {
-                    @let name = source_names.iter().find(|(k, _)| k == src).map_or_else(|| repo::display_name(src, None), |(_, n)| n.clone());
-                    span class="chip" {
-                        "From: " strong { (name) } " "
-                        a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (name) } { "×" }
+    let heading = |counts: Option<&CountsJson>| {
+        let hidden_unknown = counts
+            .map(|c| c.price.unknown)
+            .filter(|n| *n > 0 && !filters.price_max.is_empty());
+        html! {
+            h1 { (TAGLINE) }
+            p class="lede" {
+                "Exhibitions, talks, workshops, expos and community events, gathered from venue sites."
+            }
+            (filter_form(&filters, facets.as_ref(), counts))
+            @if let Some(n) = hidden_unknown {
+                p class="small" {
+                    @if n == 1 {
+                        "1 event with an unknown price is not shown."
+                    } @else {
+                        (n) " events with an unknown price are not shown."
                     }
-                    " "
+                }
+            }
+            @if !filters.sources.is_empty() {
+                p class="chips" aria-label="Active filters" {
+                    @for src in &filters.sources {
+                        @let name = source_names.iter().find(|(k, _)| k == src).map_or_else(|| repo::display_name(src, None), |(_, n)| n.clone());
+                        span class="chip" {
+                            "From: " strong { (name) } " "
+                            a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (name) } { "×" }
+                        }
+                        " "
+                    }
                 }
             }
         }
@@ -852,12 +928,16 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             return page(
                 StatusCode::BAD_REQUEST,
                 "",
-                html! { (heading) p class="error" role="alert" { "Check the filters: " (msg) } },
+                html! { (heading(None)) p class="error" role="alert" { "Check the filters: " (msg) } },
             );
         }
     };
     let (events, next_cursor) = match api::event_page(&state.pool, &query).await {
         Ok(r) => r,
+        Err(e) => return internal_error(e),
+    };
+    let counts = match api::event_counts(&state.pool, &query).await {
+        Ok(c) => c,
         Err(e) => return internal_error(e),
     };
     let now = Utc::now();
@@ -875,7 +955,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         StatusCode::OK,
         "",
         html! {
-            (heading)
+            (heading(Some(&counts)))
             @if events.is_empty() {
                 p class="empty" { "No events match these filters." }
                 @if !filters.near.is_empty() {
@@ -1666,5 +1746,20 @@ mod tests {
         assert!(f.page_query().contains("near=kings-cross"));
         assert!(Filters::parse("near=mars").api_query().is_err());
         assert!(Filters::parse("category=concert").api_query().is_err());
+    }
+
+    #[test]
+    fn filters_pass_when_and_price_max_through() {
+        let f = Filters::parse("when=evening&price_max=10");
+        let q = f.api_query().unwrap();
+        assert_eq!(q.filter.when, Some(When::Evening));
+        assert_eq!(q.filter.price_max, Some(Decimal::from(10)));
+        let page = f.page_query();
+        assert!(
+            page.contains("when=evening") && page.contains("price_max=10"),
+            "{page}"
+        );
+        assert!(f.without_source("x").contains("when=evening"));
+        assert!(Filters::parse("when=night").api_query().is_err());
     }
 }

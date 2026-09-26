@@ -73,6 +73,9 @@ struct Ev {
     category: &'static str,
     is_free: bool,
     at: Option<(f64, f64)>,
+    price_min: Option<&'static str>,
+    currency: Option<&'static str>,
+    tags: &'static [&'static str],
 }
 
 impl Ev {
@@ -84,6 +87,9 @@ impl Ev {
             category: "talk",
             is_free: false,
             at: None,
+            price_min: None,
+            currency: None,
+            tags: &[],
         }
     }
 }
@@ -91,8 +97,9 @@ impl Ev {
 async fn insert(pool: &PgPool, e: Ev) -> Uuid {
     sqlx::query_scalar(
         "INSERT INTO events.events
-            (title, starts_at, ends_at, category, is_free, lat, lng, dedupe_key)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $1) RETURNING id",
+            (title, starts_at, ends_at, category, is_free, lat, lng, dedupe_key,
+             price_min, currency, tags)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $1, $8::numeric, $9, $10::text[]) RETURNING id",
     )
     .bind(e.title)
     .bind(t(e.starts_at))
@@ -101,6 +108,9 @@ async fn insert(pool: &PgPool, e: Ev) -> Uuid {
     .bind(e.is_free)
     .bind(e.at.map(|a| a.0))
     .bind(e.at.map(|a| a.1))
+    .bind(e.price_min)
+    .bind(e.currency)
+    .bind(e.tags)
     .fetch_one(pool)
     .await
     .unwrap()
@@ -657,10 +667,252 @@ async fn invalid_list_parameters_are_400() {
         "limit=101",
         "cursor=nonsense",
         "colour=red",
+        "when=night",
+        "price_max=-1",
     ] {
         let (status, body) = get(&app, &format!("/v1/events?{q}")).await;
         assert_eq!(status, StatusCode::BAD_REQUEST, "{q}: {body}");
         assert!(body["error"].is_string(), "{q}: {body}");
+    }
+    pool.close().await;
+    db.drop_db().await;
+}
+
+async fn sorted_titles(app: &Router, query: &str) -> Vec<String> {
+    let (status, body) = get(app, &format!("/v1/events?{query}")).await;
+    assert_eq!(status, StatusCode::OK, "{query}: {body}");
+    let mut titles: Vec<String> = titles(&body).into_iter().map(str::to_string).collect();
+    titles.sort();
+    titles
+}
+
+/// Each count reported by `GET /v1/events?{base}` is the number of events
+/// listed when that option is added to `base`.
+async fn assert_counts_match_results(app: &Router, base: &str) {
+    let (_, body) = get(app, &format!("/v1/events?{base}")).await;
+    let counts = &body["counts"];
+    for (option, count) in [
+        ("when=evening", &counts["when"]["evening"]),
+        ("when=after_work", &counts["when"]["after_work"]),
+        ("when=weekend", &counts["when"]["weekend"]),
+        ("when=daytime", &counts["when"]["daytime"]),
+        ("free=true", &counts["price"]["free"]),
+        ("price_max=10", &counts["price"]["max_10"]),
+        ("price_max=20", &counts["price"]["max_20"]),
+    ] {
+        let listed = sorted_titles(app, &format!("{base}&{option}&limit=100")).await;
+        assert_eq!(
+            count.as_u64(),
+            Some(listed.len() as u64),
+            "{base}&{option}: {counts}"
+        );
+    }
+}
+
+#[tokio::test]
+async fn when_buckets_use_london_time() {
+    let Some(db) = TestDb::create("when_buckets_use_london_time").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    // BST ends 2026-10-25 01:00Z.
+    let exhibition = |title, tags| Ev {
+        ends_at: Some("2026-10-04T23:00:00Z"),
+        category: "exhibition",
+        tags,
+        // Thu 1 – Mon 5 October, London dates only.
+        ..Ev::one_off(title, "2026-09-30T23:00:00Z")
+    };
+    for e in [
+        Ev::one_off("BST 17:30Z Thu", "2026-10-01T17:30:00Z"),
+        Ev::one_off("GMT 17:30Z Mon", "2026-11-02T17:30:00Z"),
+        Ev::one_off("BST 16:30Z Sat", "2026-10-24T16:30:00Z"),
+        Ev::one_off("GMT 18:00Z Fri", "2026-11-06T18:00:00Z"),
+        Ev::one_off("BST 19:45Z Mon", "2026-10-05T19:45:00Z"),
+        Ev::one_off("BST 23:00Z untimed", "2026-10-01T23:00:00Z"),
+        Ev::one_off("GMT 23:00Z Thu", "2026-11-05T23:00:00Z"),
+        exhibition("untimed exhibition", &[]),
+        exhibition("late exhibition", &["late opening"]),
+    ] {
+        insert(&pool, e).await;
+    }
+    let app = app(&pool);
+    for (when, expected) in [
+        (
+            "evening",
+            vec![
+                "BST 17:30Z Thu",
+                "BST 19:45Z Mon",
+                "GMT 18:00Z Fri",
+                "GMT 23:00Z Thu",
+                "late exhibition",
+            ],
+        ),
+        (
+            "after_work",
+            vec![
+                "BST 17:30Z Thu",
+                "GMT 17:30Z Mon",
+                "GMT 18:00Z Fri",
+                "late exhibition",
+            ],
+        ),
+        (
+            "daytime",
+            vec![
+                "BST 16:30Z Sat",
+                "BST 23:00Z untimed",
+                "GMT 17:30Z Mon",
+                "late exhibition",
+                "untimed exhibition",
+            ],
+        ),
+        (
+            "weekend",
+            vec!["BST 16:30Z Sat", "late exhibition", "untimed exhibition"],
+        ),
+    ] {
+        assert_eq!(
+            sorted_titles(&app, &format!("when={when}")).await,
+            expected,
+            "{when}"
+        );
+    }
+    assert_counts_match_results(&app, "limit=1").await;
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn weekend_uses_the_clipped_london_date_range() {
+    let Some(db) = TestDb::create("weekend_uses_the_clipped_london_date_range").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let run = |title, starts_at, ends_at| Ev {
+        ends_at: Some(ends_at),
+        category: "exhibition",
+        ..Ev::one_off(title, starts_at)
+    };
+    for e in [
+        run(
+            "Mon–Fri run",
+            "2026-10-18T23:00:00Z",
+            "2026-10-22T23:00:00Z",
+        ),
+        run(
+            "Fri–Sat run",
+            "2026-10-22T23:00:00Z",
+            "2026-10-23T23:00:00Z",
+        ),
+        Ev::one_off("UTC Friday, London Saturday", "2026-10-23T23:30:00Z"),
+        run("long run", "2026-09-01T00:00:00Z", "2026-12-31T00:00:00Z"),
+    ] {
+        insert(&pool, e).await;
+    }
+    let app = app(&pool);
+    assert_eq!(
+        sorted_titles(&app, "when=weekend&from=2026-10-19&to=2026-10-31").await,
+        ["Fri–Sat run", "UTC Friday, London Saturday", "long run"]
+    );
+    // Monday to Wednesday: the long run is open, but not on a weekend day.
+    assert_eq!(
+        sorted_titles(&app, "when=weekend&from=2026-10-26&to=2026-10-28").await,
+        Vec::<String>::new()
+    );
+    assert_eq!(
+        sorted_titles(&app, "from=2026-10-26&to=2026-10-28").await,
+        ["long run"]
+    );
+    assert_counts_match_results(&app, "from=2026-10-19&to=2026-10-31").await;
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn price_max_and_counts() {
+    let Some(db) = TestDb::create("price_max_and_counts").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let priced = |title, price_min, currency| Ev {
+        price_min: Some(price_min),
+        currency: Some(currency),
+        ..Ev::one_off(title, "2026-10-01T18:00:00Z")
+    };
+    for e in [
+        Ev {
+            is_free: true,
+            ..Ev::one_off("free", "2026-10-01T18:00:00Z")
+        },
+        priced("£5", "5", "GBP"),
+        priced("£15", "15", "GBP"),
+        priced("£25", "25", "GBP"),
+        priced("€5", "5", "EUR"),
+        Ev::one_off("unknown", "2026-10-01T18:00:00Z"),
+        // An untimed daytime event, so `when` facets differ.
+        Ev {
+            is_free: true,
+            ..Ev::one_off("free daytime", "2026-10-01T23:00:00Z")
+        },
+    ] {
+        insert(
+            &pool,
+            Ev {
+                at: Some((51.5, -0.1)),
+                ..e
+            },
+        )
+        .await;
+    }
+    let app = app(&pool);
+    assert_eq!(
+        sorted_titles(&app, "price_max=10").await,
+        ["free", "free daytime", "£5"]
+    );
+    assert_eq!(
+        sorted_titles(&app, "price_max=20").await,
+        ["free", "free daytime", "£15", "£5"]
+    );
+    assert_eq!(
+        sorted_titles(&app, "price_max=10&when=evening").await,
+        ["free", "£5"]
+    );
+
+    let counts = |query: &'static str| {
+        let app = app.clone();
+        async move { get(&app, &format!("/v1/events?{query}")).await.1["counts"].clone() }
+    };
+    let price = json!({"free": 2, "max_10": 3, "max_20": 4, "unknown": 1});
+    assert_eq!(counts("").await["price"], price);
+    // Price counts ignore the active price filter.
+    assert_eq!(counts("free=true").await["price"], price);
+    assert_eq!(counts("price_max=10").await["price"], price);
+    // … but apply the active `when`.
+    assert_eq!(
+        counts("when=evening").await["price"],
+        json!({"free": 1, "max_10": 2, "max_20": 3, "unknown": 1})
+    );
+    // `when` counts apply the active price filter.
+    assert_eq!(
+        counts("").await["when"],
+        json!({"evening": 6, "after_work": 6, "weekend": 0, "daytime": 1})
+    );
+    assert_eq!(
+        counts("price_max=10").await["when"],
+        json!({"evening": 2, "after_work": 2, "weekend": 0, "daytime": 1})
+    );
+    // Counts respect `near`.
+    assert_eq!(counts("near=51.5,-0.1").await, counts("").await);
+    assert_eq!(
+        counts("near=51.6,-0.1&radius_km=2").await,
+        json!({
+            "when": {"evening": 0, "after_work": 0, "weekend": 0, "daytime": 0},
+            "price": {"free": 0, "max_10": 0, "max_20": 0, "unknown": 0},
+        })
+    );
+    for base in ["limit=1", "when=evening", "price_max=10", "near=51.5,-0.1"] {
+        assert_counts_match_results(&app, base).await;
     }
     pool.close().await;
     db.drop_db().await;

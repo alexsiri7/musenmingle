@@ -2,6 +2,7 @@
 //! is in `repo::list_events`).
 
 use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
+use rust_decimal::Decimal;
 use uuid::Uuid;
 
 use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
@@ -48,6 +49,11 @@ pub struct EventFilter {
     pub formats: Vec<String>,
     /// `good_for=` (repeatable): events with ANY of them.
     pub good_for: Vec<String>,
+    /// Time-of-day / day-of-week bucket (`when=`).
+    pub when: Option<When>,
+    /// Free events and GBP events whose lowest price is at most this;
+    /// unknown prices are excluded.
+    pub price_max: Option<Decimal>,
 }
 
 /// Add a vocabulary tag to `list` (deduped), or explain why it is invalid.
@@ -62,6 +68,37 @@ fn push_tag(list: &mut Vec<String>, name: &str, value: &str, vocab: &[&str]) -> 
         list.push(value.to_string());
     }
     Ok(())
+}
+
+/// `when=` buckets, judged on Europe/London local time. An event starting
+/// at London midnight is untimed (a date-only listing, e.g. an exhibition
+/// run); an untimed event tagged `late opening` counts as open in the
+/// evening.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum When {
+    /// Timed and starts at 18:00 or later, or untimed with late opening.
+    Evening,
+    /// Timed, starts Monday–Friday between 17:30 and 20:30 inclusive, or
+    /// untimed with late opening.
+    AfterWork,
+    /// Its London date range, clipped to the `from`/`to` window, includes a
+    /// Saturday or Sunday.
+    Weekend,
+    /// Untimed, or timed and starts before 18:00.
+    Daytime,
+}
+
+impl When {
+    pub const ALL: [When; 4] = [When::Evening, When::AfterWork, When::Weekend, When::Daytime];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            When::Evening => "evening",
+            When::AfterWork => "after_work",
+            When::Weekend => "weekend",
+            When::Daytime => "daytime",
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -192,6 +229,22 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
                     "false" => false,
                     _ => return Err("free must be true or false".into()),
                 }
+            }
+            "when" => {
+                filter.when = Some(
+                    When::ALL
+                        .into_iter()
+                        .find(|w| w.as_str() == value)
+                        .ok_or_else(|| format!("unknown when {value:?}"))?,
+                )
+            }
+            "price_max" => {
+                let err = || "price_max must be a non-negative number".to_string();
+                let max: Decimal = value.parse().map_err(|_| err())?;
+                if max < Decimal::ZERO {
+                    return Err(err());
+                }
+                filter.price_max = Some(max);
             }
             "source" => {
                 if !is_source_key(&value) {
@@ -376,6 +429,20 @@ mod tests {
     }
 
     #[test]
+    fn when_and_price_max_parse() {
+        for w in When::ALL {
+            let q = parse_query(&format!("when={}", w.as_str())).unwrap();
+            assert_eq!(q.filter.when, Some(w));
+        }
+        let q = parse_query("when=evening&when=weekend").unwrap();
+        assert_eq!(q.filter.when, Some(When::Weekend));
+        let price = |raw: &str| parse_query(raw).unwrap().filter.price_max;
+        assert_eq!(price("price_max=10"), Some(Decimal::from(10)));
+        assert_eq!(price("price_max=12.5"), Some(Decimal::new(125, 1)));
+        assert_eq!(price("price_max=0"), Some(Decimal::ZERO));
+    }
+
+    #[test]
     fn ids_parse_dedupe_and_cap() {
         let (a, b) = (Uuid::new_v4(), Uuid::new_v4());
         let q = parse_query(&format!("ids={a},{b},%20{a}")).unwrap();
@@ -406,6 +473,11 @@ mod tests {
             "source=a%20b",
             "ids=",
             "ids=not-a-uuid",
+            "when=night",
+            "when=",
+            "price_max=abc",
+            "price_max=-1",
+            "price_max=",
         ] {
             assert!(parse_query(raw).is_err(), "{raw}");
         }

@@ -9,7 +9,7 @@ use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
 use uuid::Uuid;
 
-use crate::listing::{EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery};
+use crate::listing::{EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery, Near, When};
 use crate::matching::{self, MatchInput, TitleScore};
 use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
@@ -774,10 +774,10 @@ pub struct ListedEvent {
 
 /// `$1`..`$9` of every listing query (on `events.events ev`). An event with
 /// an end (`ends_at` set), whatever its category, matches when its range
-/// overlaps the window, a one-off when it starts inside it. `$5` (source
-/// keys) matches an event listed by ANY of those sources; `$6` restricts to
-/// the given event ids; `$7`/`$8`/`$9` (medium, format, good_for) match an
-/// event with ANY of the given tags.
+/// overlaps the window, a one-off when it starts inside it. `$4` is
+/// `free_only`; `$5` (source keys) matches an event listed by ANY of those
+/// sources; `$6` restricts to the given event ids; `$7`/`$8`/`$9` (medium,
+/// format, good_for) match an event with ANY of the given tags.
 const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, ev.starts_at) >= $1)
     AND ($2::timestamptz IS NULL OR ev.starts_at < $2)
     AND (cardinality($3::text[]) = 0 OR ev.category = ANY($3))
@@ -810,22 +810,89 @@ const DISTANCE_KM: &str = "2 * $12::float8 * asin(least(1, sqrt(
         + cos(radians($10)) * cos(radians(lat))
           * power(sin(radians(lng - $11) / 2), 2))))";
 
+/// The event's start in London wall-clock time.
+const LOCAL_START: &str = "(ev.starts_at AT TIME ZONE 'Europe/London')";
+
+/// Neither free nor priced.
+const PRICE_UNKNOWN: &str = "(NOT ev.is_free AND ev.price_min IS NULL)";
+
+/// `free=true` (`free`, a boolean) and `price_max=` (`max`, a numeric or
+/// NULL for no limit) as SQL over `events.events ev`.
+fn price_filter_sql(free: &str, max: &str) -> String {
+    format!(
+        "((NOT {free} OR ev.is_free) AND ({max}::numeric IS NULL OR ev.is_free
+            OR (ev.price_min <= {max} AND COALESCE(ev.currency, 'GBP') = 'GBP')))"
+    )
+}
+
+/// `price_max=` (`max`, a numeric or NULL for no limit) as SQL over
+/// `events.events ev`; free events always pass. `free_only` itself is
+/// already enforced by [`LISTING_FILTER`]'s `$4`.
+fn price_max_sql(max: &str) -> String {
+    format!(
+        "({max}::numeric IS NULL OR ev.is_free
+            OR (ev.price_min <= {max} AND COALESCE(ev.currency, 'GBP') = 'GBP'))"
+    )
+}
+
+/// The [`When`] bucket as SQL over `events.events ev` (`TRUE` for none);
+/// `weekend` clips to the window in `$1`/`$2`.
+fn when_sql(when: Option<When>) -> String {
+    let late = format!("({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags))");
+    match when {
+        None => "TRUE".into(),
+        Some(When::Evening) => format!("({LOCAL_START}::time >= '18:00' OR {late})"),
+        Some(When::AfterWork) => format!(
+            "((extract(isodow FROM {LOCAL_START}) <= 5
+                AND {LOCAL_START}::time BETWEEN '17:30' AND '20:30') OR {late})"
+        ),
+        Some(When::Daytime) => format!("({LOCAL_START}::time < '18:00')"),
+        // At most the first 7 days of the clipped range need checking.
+        Some(When::Weekend) => format!(
+            "EXISTS (SELECT 1
+                FROM (SELECT GREATEST({LOCAL_START}::date,
+                                      ($1::timestamptz AT TIME ZONE 'Europe/London')::date) AS d0,
+                             LEAST((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date,
+                                   ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) r,
+                     generate_series(0, LEAST(r.d1 - r.d0, 6)) AS k
+                WHERE extract(isodow FROM r.d0 + k) >= 6)"
+        ),
+    }
+}
+
+/// Haversine distance in km from the event to the point in placeholders
+/// `$lat`/`$lng`, on a sphere of radius `$earth_radius`.
+fn distance_km_sql(lat: usize, lng: usize, earth_radius: usize) -> String {
+    format!(
+        "2 * ${earth_radius}::float8 * asin(least(1, sqrt(
+            power(sin(radians(lat - ${lat}) / 2), 2)
+            + cos(radians(${lat})) * cos(radians(lat))
+              * power(sin(radians(lng - ${lng}) / 2), 2))))"
+    )
+}
+
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
+    let filter = format!(
+        "{LISTING_FILTER} AND {} AND {}",
+        price_max_sql("$10"),
+        when_sql(f.when)
+    );
     let fetch = query.limit + 1;
     match &query.order {
         EventOrder::ByStart { after } => {
             bind_filter(
                 sqlx::query_as(AssertSqlSafe(format!(
                     "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
-                     WHERE {LISTING_FILTER}
-                       AND ($10::timestamptz IS NULL OR (starts_at, id) > ($10, $11::uuid))
-                     ORDER BY starts_at, id LIMIT $12"
+                     WHERE {filter}
+                       AND ($11::timestamptz IS NULL OR (starts_at, id) > ($11, $12::uuid))
+                     ORDER BY starts_at, id LIMIT $13"
                 ))),
                 f,
             )
+            .bind(f.price_max)
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
             .bind(fetch)
@@ -837,17 +904,19 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             bind_filter(
                 sqlx::query_as(AssertSqlSafe(format!(
                     "SELECT * FROM (
-                         SELECT {EVENT_COLS}, {DISTANCE_KM} AS distance_km
+                         SELECT {EVENT_COLS}, {} AS distance_km
                          FROM events.events ev
-                         WHERE {LISTING_FILTER}
-                           AND lat BETWEEN $13 AND $14 AND lng BETWEEN $15 AND $16
+                         WHERE {filter}
+                           AND lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17
                      ) e
-                     WHERE distance_km <= $17
-                       AND ($18::float8 IS NULL OR (distance_km, id) > ($18, $19::uuid))
-                     ORDER BY distance_km, id LIMIT $20"
+                     WHERE distance_km <= $18
+                       AND ($19::float8 IS NULL OR (distance_km, id) > ($19, $20::uuid))
+                     ORDER BY distance_km, id LIMIT $21",
+                    distance_km_sql(11, 12, 13)
                 ))),
                 f,
             )
+            .bind(f.price_max)
             .bind(near.lat)
             .bind(near.lng)
             .bind(EARTH_RADIUS_KM)
@@ -934,6 +1003,79 @@ pub async fn facet_counts(
     .bind(b.map(|b| b.max_lng))
     .bind(near.map(|n| n.radius_km))
     .fetch_all(pool)
+    .await
+}
+
+/// How many events each `when=` and price option would list, given the
+/// other active filters.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, FromRow)]
+pub struct ListingCounts {
+    pub evening: i64,
+    pub after_work: i64,
+    pub weekend: i64,
+    pub daytime: i64,
+    pub free: i64,
+    pub max_10: i64,
+    pub max_20: i64,
+    /// Neither free nor priced (left out by any `price_max`).
+    pub unknown: i64,
+}
+
+/// Facet counts for a listing: each `when` count applies every filter in
+/// `filter` except `when`, each price count every filter except the price
+/// ones (`free_only`, `price_max`). `near` restricts to its radius. `$4` in
+/// [`LISTING_FILTER`] is pinned to `false` (the free/price dimensions are
+/// only applied per-count, below, via `$10`/`$11`) but the other filters
+/// (dates, category, sources, ids, tags) still apply to the base rows.
+pub async fn listing_counts(
+    pool: &PgPool,
+    filter: &EventFilter,
+    near: Option<&Near>,
+) -> sqlx::Result<ListingCounts> {
+    let categories: Vec<&str> = filter.categories.iter().map(|c| c.as_str()).collect();
+    let sources: Vec<&str> = filter.sources.iter().map(String::as_str).collect();
+    let price = price_filter_sql("$10", "$11");
+    let when = when_sql(filter.when);
+    let when_count = |w: When| format!("count(*) FILTER (WHERE {} AND {price})", when_sql(Some(w)));
+    let price_count = |p: &str| format!("count(*) FILTER (WHERE {p} AND {when})");
+    let b = near.map(Near::bounding_box);
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT {} AS evening, {} AS after_work, {} AS weekend, {} AS daytime,
+                {} AS free, {} AS max_10, {} AS max_20, {} AS unknown
+         FROM events.events ev
+         WHERE {LISTING_FILTER}
+           AND ($12::float8 IS NULL OR (lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17
+                AND {} <= $19))",
+        when_count(When::Evening),
+        when_count(When::AfterWork),
+        when_count(When::Weekend),
+        when_count(When::Daytime),
+        price_count(&price_filter_sql("TRUE", "NULL")),
+        price_count(&price_filter_sql("FALSE", "10")),
+        price_count(&price_filter_sql("FALSE", "20")),
+        price_count(PRICE_UNKNOWN),
+        distance_km_sql(12, 13, 18)
+    )))
+    .bind(filter.from)
+    .bind(filter.until)
+    .bind(&categories)
+    .bind(false)
+    .bind(&sources)
+    .bind(&filter.ids)
+    .bind(&filter.mediums)
+    .bind(&filter.formats)
+    .bind(&filter.good_for)
+    .bind(filter.free_only)
+    .bind(filter.price_max)
+    .bind(near.map(|n| n.lat))
+    .bind(near.map(|n| n.lng))
+    .bind(b.map(|b| b.min_lat))
+    .bind(b.map(|b| b.max_lat))
+    .bind(b.map(|b| b.min_lng))
+    .bind(b.map(|b| b.max_lng))
+    .bind(EARTH_RADIUS_KM)
+    .bind(near.map(|n| n.radius_km))
+    .fetch_one(pool)
     .await
 }
 
