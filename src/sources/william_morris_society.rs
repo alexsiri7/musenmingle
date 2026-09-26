@@ -239,6 +239,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at,
+        all_day: start.is_none(),
         price: excerpt.map(price).unwrap_or_default(),
         url: text("url").map(str::to_string),
         image_url: text("image_url").map(str::to_string),
