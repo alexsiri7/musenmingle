@@ -28,6 +28,8 @@
 //! * Card dates are date-only ranges (`26 Sep 2026 – 07 Nov 2026`), stored
 //!   as London midnight of each day, as for the other exhibition sources.
 //!   "Opening: Today, 17:00" is relative to the fetch time and is ignored.
+//! * Shows running longer than [`MAX_RUN_DAYS`] (permanent collection
+//!   displays, online shows ending "2030") are open-ended and skipped.
 //! * Category: "Exhibition" → exhibition, "Art Fair" → expo; anything else
 //!   is skipped.
 //! * Many shows are also listed by a venue scraper; the cross-source merge
@@ -52,6 +54,10 @@ pub const KEY: &str = "artrabbit";
 pub const MAX_PAGES: u32 = 20;
 const LISTING_PATH: &str = "/all-shows/united-kingdom/london";
 const SITE: &str = "https://www.artrabbit.com";
+/// Listings running longer than this are permanent displays, public-art
+/// programmes or online shows with placeholder end dates (e.g. 2020 → 2030),
+/// i.e. open-ended programmes, which are skipped.
+pub const MAX_RUN_DAYS: i64 = 730;
 /// Greater London bounding box (lat_min, lat_max, lng_min, lng_max).
 const LONDON_BBOX: (f64, f64, f64, f64) = (51.28, 51.70, -0.52, 0.34);
 const MONTHS: [&str; 12] = [
@@ -199,8 +205,8 @@ fn in_london(lat: f64, lng: f64) -> bool {
 }
 
 /// Normalise an ArtRabbit card payload. Out-of-scope categories, cards
-/// outside Greater London (or without coordinates) and open-ended dates are
-/// skips (`Ok(None)`).
+/// outside Greater London (or without coordinates), open-ended dates and
+/// runs longer than [`MAX_RUN_DAYS`] are skips (`Ok(None)`).
 pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
     let text = |k: &str| {
         payload
@@ -227,6 +233,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let Some((first_day, last_day)) = parse_date_range(&date_text)? else {
         return Ok(None);
     };
+    if (last_day - first_day).num_days() > MAX_RUN_DAYS {
+        return Ok(None);
+    }
     let starts_at = london_to_utc(first_day.and_time(NaiveTime::MIN));
     let ends_at = london_to_utc(last_day.and_time(NaiveTime::MIN));
     let venue = text("venue");
@@ -407,6 +416,27 @@ mod tests {
         let blackheath = card(json!({"lat": 51.4680034, "lng": 0.0039603,
                                      "place": "Blackheath, United Kingdom"}));
         assert!(normalise_payload(&blackheath).unwrap().is_some());
+    }
+
+    #[test]
+    fn permanent_displays_are_skipped() {
+        for text in ["13 May 2020 – 31 Dec 2030", "31 May 2025 – 29 Jun 2030"] {
+            assert!(
+                normalise_payload(&card(json!({"date_text": text})))
+                    .unwrap()
+                    .is_none(),
+                "{text}"
+            );
+        }
+        // A long commission (just under a year) and a two-year run are kept.
+        for text in ["25 Sep 2026 – 14 Aug 2027", "1 Jan 2026 – 1 Jan 2028"] {
+            assert!(
+                normalise_payload(&card(json!({"date_text": text})))
+                    .unwrap()
+                    .is_some(),
+                "{text}"
+            );
+        }
     }
 
     #[test]
