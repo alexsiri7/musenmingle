@@ -1,0 +1,3 @@
+# Clerkenwell Design Week 2020 robots.txt
+User-agent: *
+Allow: /

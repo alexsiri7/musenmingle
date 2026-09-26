@@ -69,6 +69,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   - `barbican` — CSS-selector scraper (no JSON-LD): the art & design and
     talks & events listings (paginated) → detail pages for times, art-form
     tags (category) and the standard ticket price.
+  - `clerkenwell-design-week` — the annual design festival: one homepage
+    request for its schema.org JSON-LD `Event` (category expo).
   - `artrabbit` — aggregator (kind `aggregator`) of current London art shows,
     listing pages only (paginated, capped, one request per 5 s): facts + link
     only, per its terms (no descriptions, images or raw payloads).
