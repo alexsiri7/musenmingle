@@ -9,6 +9,7 @@ use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
 use uuid::Uuid;
 
+use crate::listing::{EARTH_RADIUS_KM, EventOrder, EventQuery};
 use crate::matching::{self, MatchInput, TitleScore};
 use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
@@ -559,7 +560,7 @@ async fn merge_into(
     Ok(())
 }
 
-/// A stored event (subset used by tests and, later, the read API).
+/// A stored event.
 #[derive(Debug, Clone, FromRow)]
 pub struct EventRow {
     pub id: Uuid,
@@ -582,15 +583,120 @@ pub struct EventRow {
     pub dedupe_key: String,
 }
 
+const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
+    ends_at, is_free, price_min, price_max, currency, url, image_url, category, tags, dedupe_key";
+
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
-    sqlx::query_as(
-        "SELECT id, title, description, venue_name, address, lat, lng, starts_at, ends_at,
-                is_free, price_min, price_max, currency, url, image_url, category, tags,
-                dedupe_key
-         FROM events.events WHERE id = $1",
-    )
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT {EVENT_COLS} FROM events.events WHERE id = $1"
+    )))
     .bind(id)
     .fetch_optional(pool)
+    .await
+}
+
+/// An event on a `GET /v1/events` page.
+#[derive(Debug, Clone, FromRow)]
+pub struct ListedEvent {
+    #[sqlx(flatten)]
+    pub event: EventRow,
+    /// Set when ordering by distance.
+    pub distance_km: Option<f64>,
+}
+
+/// `$1`..`$4` of both listing queries. An event with an end (`ends_at` set),
+/// whatever its category, matches when its range overlaps the window, a
+/// one-off when it starts inside it.
+const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ends_at, starts_at) >= $1)
+    AND ($2::timestamptz IS NULL OR starts_at < $2)
+    AND (cardinality($3::text[]) = 0 OR category = ANY($3))
+    AND (NOT $4 OR is_free)";
+
+/// One page of events plus one more row (the caller's "has next page" probe):
+/// `query.limit + 1` rows at most.
+pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
+    let f = &query.filter;
+    let categories: Vec<&str> = f.categories.iter().map(|c| c.as_str()).collect();
+    let fetch = query.limit + 1;
+    match &query.order {
+        EventOrder::ByStart { after } => {
+            sqlx::query_as(AssertSqlSafe(format!(
+                "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events
+                 WHERE {LISTING_FILTER}
+                   AND ($5::timestamptz IS NULL OR (starts_at, id) > ($5, $6::uuid))
+                 ORDER BY starts_at, id LIMIT $7"
+            )))
+            .bind(f.from)
+            .bind(f.until)
+            .bind(&categories)
+            .bind(f.free_only)
+            .bind(after.map(|a| a.0))
+            .bind(after.map(|a| a.1))
+            .bind(fetch)
+            .fetch_all(pool)
+            .await
+        }
+        EventOrder::ByDistance { near, after } => {
+            let b = near.bounding_box();
+            sqlx::query_as(AssertSqlSafe(format!(
+                "SELECT * FROM (
+                     SELECT {EVENT_COLS},
+                         2 * $11::float8 * asin(least(1, sqrt(
+                             power(sin(radians(lat - $5) / 2), 2)
+                             + cos(radians($5)) * cos(radians(lat))
+                               * power(sin(radians(lng - $6) / 2), 2)))) AS distance_km
+                     FROM events.events
+                     WHERE {LISTING_FILTER}
+                       AND lat BETWEEN $7 AND $8 AND lng BETWEEN $9 AND $10
+                 ) e
+                 WHERE distance_km <= $12
+                   AND ($13::float8 IS NULL OR (distance_km, id) > ($13, $14::uuid))
+                 ORDER BY distance_km, id LIMIT $15"
+            )))
+            .bind(f.from)
+            .bind(f.until)
+            .bind(&categories)
+            .bind(f.free_only)
+            .bind(near.lat)
+            .bind(near.lng)
+            .bind(b.min_lat)
+            .bind(b.max_lat)
+            .bind(b.min_lng)
+            .bind(b.max_lng)
+            .bind(EARTH_RADIUS_KM)
+            .bind(near.radius_km)
+            .bind(after.map(|a| a.0))
+            .bind(after.map(|a| a.1))
+            .bind(fetch)
+            .fetch_all(pool)
+            .await
+        }
+    }
+}
+
+/// Where an event was found (one row per listing in `events.event_sources`).
+#[derive(Debug, Clone, FromRow)]
+pub struct EventSourceLink {
+    pub event_id: Uuid,
+    pub source: String,
+    pub source_url: Option<String>,
+    pub first_seen_at: DateTime<Utc>,
+    pub last_seen_at: DateTime<Utc>,
+}
+
+/// Source links of the given events, oldest listing first per event.
+pub async fn event_source_links(
+    pool: &PgPool,
+    event_ids: &[Uuid],
+) -> sqlx::Result<Vec<EventSourceLink>> {
+    sqlx::query_as(
+        "SELECT es.event_id, s.key AS source, es.source_url, es.first_seen_at, es.last_seen_at
+         FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
+         WHERE es.event_id = ANY($1)
+         ORDER BY es.event_id, es.first_seen_at, s.key, es.source_event_id",
+    )
+    .bind(event_ids)
+    .fetch_all(pool)
     .await
 }
 
@@ -713,6 +819,40 @@ pub async fn close_health_issues(pool: &PgPool, source_id: i64) -> sqlx::Result<
     .execute(pool)
     .await?
     .rows_affected())
+}
+
+/// A source with its latest run and open health issue, for `GET /v1/sources`.
+#[derive(Debug, Clone, FromRow)]
+pub struct SourceStatusRow {
+    pub key: String,
+    pub kind: SourceKind,
+    pub interval_minutes: i32,
+    pub enabled: bool,
+    pub run_started_at: Option<DateTime<Utc>>,
+    pub run_events_found: Option<i32>,
+    pub run_errors: Option<i32>,
+    pub run_duration_ms: Option<i64>,
+    pub run_ok: Option<bool>,
+    pub open_issue_number: Option<i64>,
+}
+
+pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>> {
+    sqlx::query_as(
+        "SELECT s.key, s.kind, s.interval_minutes, s.enabled,
+                r.started_at AS run_started_at, r.events_found AS run_events_found,
+                r.errors AS run_errors, r.duration_ms AS run_duration_ms, r.ok AS run_ok,
+                h.github_issue_number AS open_issue_number
+         FROM events.sources s
+         LEFT JOIN LATERAL (
+             SELECT started_at, events_found, errors, duration_ms, ok
+             FROM events.source_runs WHERE source_id = s.id
+             ORDER BY started_at DESC, id DESC LIMIT 1
+         ) r ON TRUE
+         LEFT JOIN events.health_issues h ON h.source_id = s.id AND h.closed_at IS NULL
+         ORDER BY s.key",
+    )
+    .fetch_all(pool)
+    .await
 }
 
 /// A site suggestion about to be stored.

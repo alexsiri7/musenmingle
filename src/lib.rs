@@ -1,7 +1,7 @@
 //! Thaleia: London cultural events for creative people.
 //!
 //! This crate contains the ingestion backend (sources, normalisation, the
-//! ingest runner and health checks) and the HTTP API skeleton. See
+//! ingest runner and health checks) and the HTTP API. See
 //! `README.md` for the architecture overview and `CLAUDE.md` for invariants.
 
 pub mod api;
@@ -10,6 +10,7 @@ pub mod db;
 pub mod fetch;
 pub mod github;
 pub mod health;
+pub mod listing;
 pub mod matching;
 pub mod model;
 pub mod normalise;

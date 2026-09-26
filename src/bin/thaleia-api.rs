@@ -1,4 +1,4 @@
-//! `thaleia-api`: the HTTP service (`GET /healthz`, `POST /v1/suggestions`).
+//! `thaleia-api`: the HTTP service (health check, read API, site suggestions).
 
 use std::net::SocketAddr;
 
@@ -33,7 +33,12 @@ async fn main() -> anyhow::Result<()> {
         .await
         .with_context(|| format!("binding {addr}"))?;
     tracing::info!(%addr, version = thaleia::VERSION, "thaleia-api listening");
-    let app = api::router(pool, suggestions).into_make_service_with_connect_info::<SocketAddr>();
+    let settings = api::ApiSettings {
+        github_repo: config.github_repo.clone(),
+        cors_origins: config.cors_origins.clone(),
+    };
+    let app = api::router(pool, suggestions, settings)
+        .into_make_service_with_connect_info::<SocketAddr>();
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())
         .await?;

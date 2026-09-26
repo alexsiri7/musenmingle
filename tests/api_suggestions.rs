@@ -15,6 +15,7 @@ use chrono::Utc;
 use common::TestDb;
 use serde_json::{Value, json};
 use sqlx::PgPool;
+use thaleia::api::ApiSettings;
 use thaleia::config::{RateLimitConfig, SuggestionConfig};
 use thaleia::fetch::FetchContext;
 use thaleia::github::{GitHubIssueFiler, IssueFiler};
@@ -36,8 +37,16 @@ fn app(pool: &PgPool, config: SuggestionConfig, filer: Option<Box<dyn IssueFiler
         ip_salt: Some("test-salt".into()),
         ..config
     };
-    thaleia::api::router(pool.clone(), Suggestions::new(config, filer).unwrap())
-        .layer(MockConnectInfo(SocketAddr::from(([10, 0, 0, 1], 4000))))
+    let settings = ApiSettings {
+        github_repo: REPO.into(),
+        cors_origins: Vec::new(),
+    };
+    thaleia::api::router(
+        pool.clone(),
+        Suggestions::new(config, filer).unwrap(),
+        settings,
+    )
+    .layer(MockConnectInfo(SocketAddr::from(([10, 0, 0, 1], 4000))))
 }
 
 async fn post(

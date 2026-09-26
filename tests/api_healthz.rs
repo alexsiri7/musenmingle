@@ -21,7 +21,11 @@ async fn healthz_ok_with_database() {
         None,
     )
     .unwrap();
-    let resp = thaleia::api::router(pool.clone(), suggestions)
+    let settings = thaleia::api::ApiSettings {
+        github_repo: "alexsiri7/thaleia".into(),
+        cors_origins: Vec::new(),
+    };
+    let resp = thaleia::api::router(pool.clone(), suggestions, settings)
         .oneshot(Request::get("/healthz").body(Body::empty()).unwrap())
         .await
         .unwrap();

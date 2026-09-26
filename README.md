@@ -3,7 +3,7 @@
 London cultural events for creative people: exhibitions, expos, talks,
 workshops and community events (CreativeMornings, writing groups, ...).
 
-This repository is the **ingestion backend** and (later) the **read API**,
+This repository is the **ingestion backend** and the **read API**,
 written in Rust (axum, tokio, sqlx, reqwest). There is no frontend yet.
 
 ## Architecture
@@ -12,7 +12,9 @@ written in Rust (axum, tokio, sqlx, reqwest). There is no frontend yet.
             +-------------------+        +---------------------------+
 cron ─────▶ |  thaleia-ingest   |        |       thaleia-api         |
 (15 min)    |  (one-shot run)   |        |  GET /healthz,            |
-            +---------+---------+        |  POST /v1/suggestions     |
+            +---------+---------+        |  GET /v1/events[/{id}],   |
+                      │                  |  GET /v1/sources,         |
+                      │                  |  POST /v1/suggestions     |
                       │                  +-------------+-------------+
        ┌──────────────┼──────────────┐                 │
        ▼              ▼              ▼                 ▼
@@ -81,6 +83,14 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   `invalid`. Each client IP (stored only as `sha256(ip + salt)`) may make 5
   stored submissions per hour and 20 per day, duplicates included; beyond
   that, 429 with `Retry-After`. The URL is never fetched.
+- **Read API** (`src/api.rs`, `src/listing.rs`; documented in
+  [`docs/api.md`](docs/api.md)): `GET /v1/events` filters by London date
+  window (events with an end date match on range overlap), category, free,
+  and `near`+`radius_km` (bounding-box prefilter on the lat/lng index, then
+  haversine, nearest first), with keyset cursor pagination and every event's
+  source links; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
+  and `healthy`/`degraded`/`broken` status. Read-only; browser access is
+  limited to `CORS_ORIGINS`.
 
 ### Merging and overrides
 
@@ -188,6 +198,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `SUGGESTION_RATE_PER_DAY` | api | `20` | Stored suggestions per client IP per day |
 | `TRUSTED_PROXY_COUNT` | api | `0` | Proxies whose `X-Forwarded-For` entries are trusted (Railway: `1`) |
 | `PORT` | api | `8080` | HTTP port |
+| `CORS_ORIGINS` | api | unset → no cross-origin access | Comma-separated browser origins allowed to call the API |
 | `RUST_LOG` | both | `info` | tracing filter |
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
 | `RATE_LIMIT_OVERRIDES` | ingest | — | `host=ms,host=ms` per-host overrides |
@@ -206,8 +217,8 @@ contains both binaries):
    start command `thaleia-api`, health check `GET /healthz`, restart on
    failure. Env: `DATABASE_URL`, `RUST_LOG`, `SUGGESTION_IP_SALT`,
    `TRUSTED_PROXY_COUNT=1` (Railway's edge proxy appends the client to
-   `X-Forwarded-For`), `GITHUB_TOKEN`, `GITHUB_REPO`, optionally
-   `SUGGESTION_RATE_*`.
+   `X-Forwarded-For`), `GITHUB_TOKEN`, `GITHUB_REPO`, `CORS_ORIGINS` (the
+   frontend's origin), optionally `SUGGESTION_RATE_*`.
 2. **Ingest cron service** — same repo and Dockerfile; in its service
    settings set the *config-as-code file path* to `/railway.ingest.toml`
    (config in code overrides the dashboard, so it must not read
@@ -227,8 +238,6 @@ role's password, and use a **session**-mode (or direct) connection string for
 
 ## Roadmap
 
-- **Read API** — list/filter events by date range, category, free, bounding
-  box (lat/lng index is in place).
 - **More sources** — CreativeMornings London, galleries/museums, writing groups;
   each via a `new-scraper` issue (`docs/adding-a-scraper.md`).
 - **Railway deployment** — API + ingest cron services as described above.

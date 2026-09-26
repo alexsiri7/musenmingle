@@ -32,6 +32,7 @@ async fn every_seeded_source_has_an_implementation() {
         rate_limit: RateLimitConfig::disabled(),
         source_timeout: Duration::from_secs(1),
         suggestions: Default::default(),
+        cors_origins: Vec::new(),
     };
     assert!(!rows.is_empty());
     for row in &rows {
