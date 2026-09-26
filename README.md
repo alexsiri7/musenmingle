@@ -216,26 +216,24 @@ the runtime image contains both binaries), and are declared in
 `.railway/railway.ts`:
 
 1. **thaleia-api** — start command `thaleia-api`, health check `GET /healthz`
-   (30 s timeout), restart on failure (max 5 retries). Env: `DATABASE_URL`,
-   `RUST_LOG`, `SUGGESTION_IP_SALT`, `TRUSTED_PROXY_COUNT=1` (Railway's edge
-   proxy appends the client to `X-Forwarded-For`), `GITHUB_TOKEN`,
-   `GITHUB_REPO`, `CORS_ORIGINS` (the frontend's origin), `PORT`, optionally
-   `SUGGESTION_RATE_*`.
+   (30 s timeout), restart on failure (max 5 retries).
 2. **thaleia-ingest** — cron job `*/15 * * * *` (every 15 minutes), start
    command `thaleia-ingest`, no healthcheck, never restarted. The process
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
    Gallery and the Barbican daily), and an advisory lock prevents overlapping
-   runs. Env: `DATABASE_URL`, `TICKETMASTER_API_KEY`, `GITHUB_TOKEN`,
-   `GITHUB_REPO`, `RUST_LOG`, optionally `RATE_LIMIT_*`, `SOURCE_TIMEOUT_SECS`.
+   runs.
 
-See the environment variable table above for defaults.
+See the environment variable table above (`Used by` column) for the full
+per-service list and defaults.
 
 **Infrastructure as Code.** Railway retired `railway.toml` config-as-code
 (cutoff 2026-12-01); service settings now live in `.railway/railway.ts`, which
 Railway does **not** read on deploy. To change a setting, edit the file, then
-with Railway CLI 5.42.1 or newer:
+run the steps below with the global `railway` CLI at 5.42.1 or newer (check
+`railway --version`; upgrade it if needed). `npm ci` installs only the
+TypeScript SDK the file imports, not the CLI:
 
 ```bash
 cd .railway && npm ci
