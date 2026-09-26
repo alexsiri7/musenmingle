@@ -116,13 +116,14 @@ Every configured source, ordered by `key`.
         "duration_ms": 1500,
         "ok": true
       },
+      "skip": null,
       "status": "healthy",
       "issue_url": null
     },
     {
-      "key": "ticketmaster",
-      "kind": "api",
-      "interval_minutes": 360,
+      "key": "serpentine-galleries",
+      "kind": "scraper",
+      "interval_minutes": 1440,
       "enabled": true,
       "last_run": {
         "started_at": "2026-09-26T06:00:00Z",
@@ -131,18 +132,40 @@ Every configured source, ordered by `key`.
         "duration_ms": 1500,
         "ok": false
       },
+      "skip": null,
       "status": "broken",
       "issue_url": "https://github.com/alexsiri7/thaleia/issues/31"
+    },
+    {
+      "key": "ticketmaster",
+      "kind": "api",
+      "interval_minutes": 360,
+      "enabled": true,
+      "last_run": null,
+      "skip": {
+        "at": "2026-09-26T06:00:00Z",
+        "reason": "TICKETMASTER_API_KEY not set"
+      },
+      "status": "unconfigured",
+      "issue_url": null
     }
   ]
 }
 ```
 
 - `kind`: `api` or `scraper`.
-- `last_run`: the most recent run, or `null` if the source never ran.
-- `status`: `broken` while a `scraper-broken` issue is open (its link is in
-  `issue_url`, otherwise `null`); else `degraded` when the last run failed or
-  had errors; else `healthy` (including a source that never ran).
+- `last_run`: the most recent real run, or `null` if the source never ran.
+  Skips never appear here.
+- `skip`: set when the latest ingest attempt could not build the source
+  (missing credentials, an invalid `base_url`, or no implementation for the
+  key), with the time and reason; `null` otherwise. The next run clears it.
+  Skipped sources are retried every ingest tick.
+- `status`, first match wins: `unconfigured` while `skip` is set; `broken`
+  while a `scraper-broken` issue is open; `pending` when the source never ran
+  (regardless of `enabled`); `degraded` when the last run failed or had
+  errors; otherwise `healthy`.
+- `issue_url`: link to the open `scraper-broken` issue, or `null`. Set
+  whenever an issue is open, even if `status` is `unconfigured`.
 
 ## `GET /healthz`
 

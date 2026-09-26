@@ -45,35 +45,96 @@ pub trait Source: Send + Sync {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError>;
 }
 
-/// Build the implementation for a `events.sources` row, if one exists and is
-/// configured. Unknown keys and missing credentials return `Ok(None)` with a
-/// warning so a misconfigured source never blocks the others.
-pub fn build(row: &SourceRow, config: &Config) -> Option<Box<dyn Source>> {
-    let base = match url::Url::parse(&row.base_url) {
-        Ok(u) => u,
-        Err(e) => {
-            tracing::warn!(source = %row.key, error = %e, "invalid base_url; skipping");
-            return None;
-        }
-    };
+/// Why a `events.sources` row could not be turned into a [`Source`].
+/// Never contains secret values.
+#[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
+pub enum SkipReason {
+    #[error("{0} not set")]
+    MissingConfig(&'static str),
+    #[error("invalid base_url: {0}")]
+    InvalidBaseUrl(String),
+    #[error("no implementation for this source key")]
+    UnknownKey,
+}
+
+/// Build the implementation for a `events.sources` row. Unknown keys, bad
+/// `base_url`s and missing credentials return a [`SkipReason`], which the
+/// runner records on the source; a misconfigured source never blocks the
+/// others.
+pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipReason> {
+    let base =
+        url::Url::parse(&row.base_url).map_err(|e| SkipReason::InvalidBaseUrl(e.to_string()))?;
     match row.key.as_str() {
         ticketmaster::KEY => match &config.ticketmaster_api_key {
-            Some(k) => Some(Box::new(ticketmaster::Ticketmaster::new(base, k.clone()))),
-            None => {
-                tracing::warn!("TICKETMASTER_API_KEY not set; skipping ticketmaster");
-                None
-            }
+            Some(k) => Ok(Box::new(ticketmaster::Ticketmaster::new(base, k.clone()))),
+            None => Err(SkipReason::MissingConfig("TICKETMASTER_API_KEY")),
         },
-        barbican::KEY => Some(Box::new(barbican::Barbican::new(base))),
-        serpentine::KEY => Some(Box::new(serpentine::Serpentine::new(base))),
-        design_museum::KEY => Some(Box::new(design_museum::DesignMuseum::new(base))),
-        somerset_house::KEY => Some(Box::new(somerset_house::SomersetHouse::new(base))),
+        barbican::KEY => Ok(Box::new(barbican::Barbican::new(base))),
+        serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
+        design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
+        somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
         whitechapel_gallery::KEY => {
-            Some(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
+            Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
         }
-        other => {
-            tracing::warn!(source = other, "no implementation for source key; skipping");
-            None
+        _ => Err(SkipReason::UnknownKey),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::time::Duration;
+
+    use super::*;
+    use crate::config::RateLimitConfig;
+    use crate::model::SourceKind;
+
+    fn row(key: &str, base_url: &str) -> SourceRow {
+        SourceRow {
+            id: 1,
+            key: key.into(),
+            kind: SourceKind::Api,
+            base_url: base_url.into(),
+            domain: "example.com".into(),
+            interval_minutes: 60,
+            enabled: true,
+            last_run_at: None,
         }
+    }
+
+    fn skip_reason(row: &SourceRow) -> SkipReason {
+        let config = Config {
+            database_url: String::new(),
+            ticketmaster_api_key: None,
+            github_token: None,
+            github_repo: "owner/repo".into(),
+            port: 0,
+            rate_limit: RateLimitConfig::disabled(),
+            source_timeout: Duration::from_secs(1),
+            suggestions: Default::default(),
+            cors_origins: Vec::new(),
+        };
+        match build(row, &config) {
+            Ok(_) => panic!("{:?} unexpectedly built", row.key),
+            Err(reason) => reason,
+        }
+    }
+
+    #[test]
+    fn unbuildable_rows_say_why() {
+        let missing_key = skip_reason(&row(ticketmaster::KEY, "https://app.ticketmaster.com/"));
+        assert_eq!(
+            missing_key,
+            SkipReason::MissingConfig("TICKETMASTER_API_KEY")
+        );
+        assert_eq!(missing_key.to_string(), "TICKETMASTER_API_KEY not set");
+
+        assert_eq!(
+            skip_reason(&row("nope", "https://example.com/")),
+            SkipReason::UnknownKey
+        );
+        assert!(matches!(
+            skip_reason(&row(barbican::KEY, "not a url")),
+            SkipReason::InvalidBaseUrl(_)
+        ));
     }
 }

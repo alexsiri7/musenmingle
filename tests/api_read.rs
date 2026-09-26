@@ -538,6 +538,16 @@ async fn sources_report_last_run_and_health() {
     // Degraded: latest run had errors, no open issue.
     run(&pool, "design-museum", "2026-09-26T06:00:00Z", 12, 2, true).await;
     // Broken: open issue (a closed one on another source does not count).
+    run(
+        &pool,
+        "whitechapel-gallery",
+        "2026-09-26T06:00:00Z",
+        0,
+        1,
+        false,
+    )
+    .await;
+    // Unconfigured wins over broken: an issue is open, but ingest now skips it.
     run(&pool, "ticketmaster", "2026-09-26T06:00:00Z", 0, 1, false).await;
     let source_id = |key: &'static str| {
         let pool = pool.clone();
@@ -549,9 +559,31 @@ async fn sources_report_last_run_and_health() {
                 .id
         }
     };
-    thaleia::repo::insert_health_issue(&pool, source_id("ticketmaster").await, 31, "errors")
+    thaleia::repo::insert_health_issue(&pool, source_id("whitechapel-gallery").await, 32, "errors")
         .await
         .unwrap();
+    let ticketmaster_id = source_id("ticketmaster").await;
+    thaleia::repo::insert_health_issue(&pool, ticketmaster_id, 31, "errors")
+        .await
+        .unwrap();
+    let skipped_at = t("2026-09-26T06:30:00Z");
+    thaleia::repo::record_skip(
+        &pool,
+        ticketmaster_id,
+        "TICKETMASTER_API_KEY not set",
+        skipped_at,
+    )
+    .await
+    .unwrap();
+    // Unconfigured without any run.
+    thaleia::repo::record_skip(
+        &pool,
+        source_id("somerset-house").await,
+        "no implementation for this source key",
+        skipped_at,
+    )
+    .await
+    .unwrap();
     let serpentine = source_id("serpentine-galleries").await;
     thaleia::repo::insert_health_issue(&pool, serpentine, 7, "old")
         .await
@@ -586,17 +618,41 @@ async fn sources_report_last_run_and_health() {
                 "duration_ms": 1500,
                 "ok": true,
             },
+            "skip": null,
             "status": "healthy",
             "issue_url": null,
         })
     );
     assert_eq!(source("design-museum")["status"], "degraded");
     assert_eq!(source("design-museum")["issue_url"], Value::Null);
-    assert_eq!(source("serpentine-galleries")["status"], "healthy");
+    // Pending: never ran (its only issue is closed).
+    assert_eq!(source("serpentine-galleries")["status"], "pending");
     assert_eq!(source("serpentine-galleries")["last_run"], Value::Null);
+    assert_eq!(source("serpentine-galleries")["skip"], Value::Null);
+    let whitechapel = source("whitechapel-gallery");
+    assert_eq!(whitechapel["status"], "broken");
+    assert_eq!(
+        whitechapel["issue_url"],
+        "https://github.com/alexsiri7/thaleia/issues/32"
+    );
+    let somerset = source("somerset-house");
+    assert_eq!(somerset["status"], "unconfigured");
+    assert_eq!(somerset["last_run"], Value::Null);
+    assert_eq!(
+        somerset["skip"],
+        json!({
+            "at": "2026-09-26T06:30:00Z",
+            "reason": "no implementation for this source key",
+        })
+    );
     let ticketmaster = source("ticketmaster");
     assert_eq!(ticketmaster["kind"], "api");
-    assert_eq!(ticketmaster["status"], "broken");
+    assert_eq!(ticketmaster["status"], "unconfigured");
+    assert_eq!(
+        ticketmaster["skip"]["reason"],
+        "TICKETMASTER_API_KEY not set"
+    );
+    assert_eq!(ticketmaster["last_run"]["ok"], false);
     assert_eq!(
         ticketmaster["issue_url"],
         "https://github.com/alexsiri7/thaleia/issues/31"

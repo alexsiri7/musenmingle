@@ -37,7 +37,7 @@ async fn every_seeded_source_has_an_implementation() {
     assert!(!rows.is_empty());
     for row in &rows {
         let source = sources::build(row, &config)
-            .unwrap_or_else(|| panic!("no implementation for seeded source {:?}", row.key));
+            .unwrap_or_else(|reason| panic!("cannot build seeded source {:?}: {reason}", row.key));
         assert_eq!(source.key(), row.key);
     }
     pool.close().await;

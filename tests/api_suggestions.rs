@@ -21,6 +21,7 @@ use thaleia::fetch::FetchContext;
 use thaleia::github::{GitHubIssueFiler, IssueFiler};
 use thaleia::health::{HealthChecker, HealthConfig};
 use thaleia::runner::Runner;
+use thaleia::sources::SkipReason;
 use thaleia::suggestions::{MAX_NOTE_CHARS, RETRY_GRACE, Suggestions, ip_hash};
 use tower::ServiceExt;
 use wiremock::matchers::{body_partial_json, method, path, query_param};
@@ -348,7 +349,7 @@ fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
     Runner {
         pool: pool.clone(),
         ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
-        factory: Box::new(|_| None),
+        factory: Box::new(|_| Err(SkipReason::UnknownKey)),
         health: HealthChecker::new(HealthConfig::default(), Some(filer)),
         source_timeout: Duration::from_secs(1),
     }

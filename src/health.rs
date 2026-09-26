@@ -69,21 +69,25 @@ impl RunStats {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum HealthStatus {
+    Pending,
+    Unconfigured,
     Healthy,
     Degraded,
     Broken,
 }
 
 impl HealthStatus {
-    /// Broken while a `scraper-broken` issue is open, degraded when the
-    /// latest run was not clean, otherwise healthy (also before the first run).
-    pub fn of(open_issue: bool, latest_run: Option<RunStats>) -> Self {
-        if open_issue {
-            HealthStatus::Broken
-        } else if latest_run.is_some_and(|r| !r.is_clean()) {
-            HealthStatus::Degraded
-        } else {
-            HealthStatus::Healthy
+    /// In order of precedence: unconfigured when the latest ingest attempt
+    /// skipped the source, broken while a `scraper-broken` issue is open,
+    /// pending before the first run, degraded when the latest run was not
+    /// clean, otherwise healthy.
+    pub fn of(skipped: bool, open_issue: bool, latest_run: Option<RunStats>) -> Self {
+        match latest_run {
+            _ if skipped => HealthStatus::Unconfigured,
+            _ if open_issue => HealthStatus::Broken,
+            None => HealthStatus::Pending,
+            Some(r) if !r.is_clean() => HealthStatus::Degraded,
+            Some(_) => HealthStatus::Healthy,
         }
     }
 }
@@ -385,7 +389,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn reported_status_prefers_open_issue_then_latest_run() {
+    fn reported_status_precedence() {
         let clean = RunStats {
             events_found: 3,
             errors: 0,
@@ -393,17 +397,36 @@ mod tests {
         };
         let errored = RunStats { errors: 1, ..clean };
         let failed = RunStats { ok: false, ..clean };
-        assert_eq!(HealthStatus::of(false, None), HealthStatus::Healthy);
-        assert_eq!(HealthStatus::of(false, Some(clean)), HealthStatus::Healthy);
+        assert_eq!(HealthStatus::of(false, false, None), HealthStatus::Pending);
         assert_eq!(
-            HealthStatus::of(false, Some(errored)),
+            HealthStatus::of(false, false, Some(clean)),
+            HealthStatus::Healthy
+        );
+        assert_eq!(
+            HealthStatus::of(false, false, Some(errored)),
             HealthStatus::Degraded
         );
         assert_eq!(
-            HealthStatus::of(false, Some(failed)),
+            HealthStatus::of(false, false, Some(failed)),
             HealthStatus::Degraded
         );
-        assert_eq!(HealthStatus::of(true, Some(clean)), HealthStatus::Broken);
+        assert_eq!(
+            HealthStatus::of(false, true, Some(clean)),
+            HealthStatus::Broken
+        );
+        assert_eq!(HealthStatus::of(false, true, None), HealthStatus::Broken);
+        assert_eq!(
+            HealthStatus::of(true, false, None),
+            HealthStatus::Unconfigured
+        );
+        assert_eq!(
+            HealthStatus::of(true, false, Some(clean)),
+            HealthStatus::Unconfigured
+        );
+        assert_eq!(
+            HealthStatus::of(true, true, Some(clean)),
+            HealthStatus::Unconfigured
+        );
     }
 
     fn r(events: i32, errors: i32, ok: bool) -> RunStats {
