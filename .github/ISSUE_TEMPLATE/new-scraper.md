@@ -19,6 +19,8 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 - JSON-LD `Event` markup: yes / no / partial (where?)
 - Pagination / detail pages:
 - Time-zone quirks:
+- Terms of use URL and what they allow (excerpt? images?) → `store_description` / `store_image`:
+- Display name (for pages and image credits):
 
 ### Checklist
 
@@ -33,5 +35,8 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 - [ ] Snapshot test of normalised output committed and reviewed
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
+- [ ] Seed sets `display_name` (shown on pages and in "Image: …" credits)
+- [ ] Site's terms of use checked: `store_description` / `store_image` decided (default true only if the terms don't forbid it; restrictive terms → both false, facts + link only) and `policy_note` records the terms URL + date
+- [ ] No image hotlinking or image fetching in the source (thumbnails come only from the thumbnailer); no truncation of descriptions in the source (upsert does the excerpt)
 - [ ] No LLM parsing; all requests go through `FetchContext`
 - [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it, events only render with JavaScript): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)

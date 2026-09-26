@@ -454,6 +454,57 @@ pub fn dedupe_key(title: &str, starts_at: DateTime<Utc>, venue: Option<&str>) ->
     )
 }
 
+/// Maximum length (characters, ellipsis included) of a stored description.
+/// We keep only a short excerpt and link out to the venue for the rest.
+pub const EXCERPT_MAX_CHARS: usize = 300;
+
+/// A sentence boundary earlier than this is too short to be a useful
+/// excerpt; cut at a word boundary instead.
+const EXCERPT_MIN_SENTENCE_CHARS: usize = 80;
+
+/// Cut `text` to a short excerpt of at most [`EXCERPT_MAX_CHARS`]
+/// characters. Text that already fits is returned unchanged (trimmed).
+/// Longer text is cut after the last complete sentence that fits
+/// (followed by " …"), else at the last word boundary, else mid-word
+/// (followed by "…"). Applied to every description at persistence time
+/// (`repo::upsert_event`), not by sources.
+pub fn excerpt(text: &str) -> String {
+    let text = text.trim();
+    if text.chars().count() <= EXCERPT_MAX_CHARS {
+        return text.to_string();
+    }
+    let chars: Vec<(usize, char)> = text.char_indices().collect();
+    // Room for " …" after a sentence.
+    let sentence_room = EXCERPT_MAX_CHARS - 2;
+    let mut sentence_end: Option<usize> = None;
+    for i in EXCERPT_MIN_SENTENCE_CHARS.saturating_sub(1)..sentence_room.min(chars.len()) {
+        let c = chars[i].1;
+        let next = chars.get(i + 1).map(|(_, c)| *c);
+        let ends = match c {
+            '.' | '!' | '?' | '…' => next.is_none_or(char::is_whitespace),
+            '。' | '！' | '？' => true,
+            _ => false,
+        };
+        if ends {
+            sentence_end = Some(i);
+        }
+    }
+    if let Some(i) = sentence_end {
+        let end = chars[i].0 + chars[i].1.len_utf8();
+        return format!("{} …", &text[..end]);
+    }
+    // Room for "…".
+    let room = EXCERPT_MAX_CHARS - 1;
+    let cut = chars[room].0;
+    let head = &text[..cut];
+    let head = match head.rfind(char::is_whitespace) {
+        Some(ws) if ws > 0 => &head[..ws],
+        _ => head,
+    };
+    let head = head.trim_end_matches(|c: char| c.is_whitespace() || ",;:-–—".contains(c));
+    format!("{head}…")
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -779,5 +830,56 @@ mod tests {
         let b = dedupe_key("Cafe and Conversation", utc("2026-10-02T18:00:00Z"), None);
         assert_eq!(a, b);
         assert!(a.ends_with("|unknown"));
+    }
+
+    #[test]
+    fn excerpt_rule() {
+        let n = EXCERPT_MAX_CHARS;
+        let long_words = "word ".repeat(100);
+        let sentences = format!(
+            "{} First sentence ends here. {}",
+            "a".repeat(100),
+            "b ".repeat(200)
+        );
+        let short_sentence_then_words = format!("Hi. {}", "word ".repeat(100));
+        let cjk = "日本語".repeat(150);
+        let accented = format!("{}. {}", "é".repeat(150), "ü ".repeat(200));
+        // (input, expected output or None = check rule only)
+        let cases: Vec<(String, String)> = vec![
+            ("".into(), "".into()),
+            ("  Short text.  ".into(), "Short text.".into()),
+            ("x".repeat(n), "x".repeat(n)),
+            (
+                sentences.clone(),
+                format!("{} First sentence ends here. …", "a".repeat(100)),
+            ),
+            (
+                long_words.clone(),
+                format!("{}…", "word ".repeat(59).trim_end()),
+            ),
+            (
+                short_sentence_then_words.clone(),
+                format!("Hi. {}…", "word ".repeat(59).trim_end()),
+            ),
+            (
+                cjk.clone(),
+                format!("{}…", cjk.chars().take(n - 1).collect::<String>()),
+            ),
+            (accented.clone(), format!("{}. …", "é".repeat(150))),
+            (
+                format!("{}。{}", "日".repeat(100), "本".repeat(300)),
+                format!("{}。 …", "日".repeat(100)),
+            ),
+        ];
+        for (input, want) in cases {
+            let got = excerpt(&input);
+            assert_eq!(got, want, "input {input:?}");
+            assert!(got.chars().count() <= n, "{} chars", got.chars().count());
+        }
+        // Idempotent: an excerpt is its own excerpt.
+        for s in [long_words, sentences, cjk, accented] {
+            let once = excerpt(&s);
+            assert_eq!(excerpt(&once), once);
+        }
     }
 }

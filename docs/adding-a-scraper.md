@@ -3,7 +3,16 @@
 Every source lives in `src/sources/<name>.rs`, implements the `Source` trait
 and is registered in `sources::build` plus a seed row in a **new** migration
 (`INSERT INTO events.sources ... ON CONFLICT (key) DO NOTHING`). Migrations are
-append-only: never edit an existing one.
+append-only: never edit an existing one. A seed row looks like:
+
+```sql
+INSERT INTO events.sources (key, kind, base_url, domain, interval_minutes, enabled,
+                            display_name, store_description, store_image, policy_note)
+VALUES ('example-gallery', 'scraper', 'https://www.example.org', 'www.example.org', 1440, TRUE,
+        'Example Gallery', TRUE, TRUE,
+        'Terms (https://www.example.org/terms, checked 2026-10-01) don''t restrict listings')
+ON CONFLICT (key) DO NOTHING;
+```
 
 ## Rules (non-negotiable)
 
@@ -37,6 +46,22 @@ append-only: never edit an existing one.
 8. **Times:** use `normalise::parse_datetime` (honours offsets) or
    `parse_london_wall_clock` when a site prints local times with a bogus
    offset. Verify against the human-readable time on the page.
+9. **Content policy: set it in the seed migration.** Muse & Mingle links out; it
+   does not republish. In the seed row set `display_name` (the name shown
+   on pages and in image credits, e.g. `'Barbican'`) and decide
+   `store_description` / `store_image` from the site's terms of use, with a
+   `policy_note` saying why (terms URL + date checked). Both default to
+   true, which is right only when the terms don't forbid it; sites or APIs
+   whose terms restrict reproduction (e.g. "personal use only", "no
+   caching", "don't use images separately") are **facts + link only**:
+   `store_description = FALSE, store_image = FALSE`. Scrapers still emit
+   `description`/`image_url` as found — `repo::upsert_event` drops what the
+   policy forbids and cuts descriptions to a 300-character excerpt, so don't
+   truncate or strip in the scraper (and don't change `clean_description`).
+10. **Never hotlink images.** Pages and JSON never use a source's image URL;
+    the ingest thumbnailer (`src/thumbs.rs`) fetches each image once via
+    `FetchContext`, stores a small credited thumbnail and the pages serve
+    that. Don't add image fetching or resizing to a source.
 
 ## Workflow
 
@@ -48,7 +73,8 @@ curl -A "$UA" -o tests/fixtures/scrapers/<key>/listing.html https://<site>/<even
 # 2. write src/sources/<key>.rs with pure parse_* functions + Source impl
 # 3. write tests/source_<key>.rs (snapshot + wiremock fetch test)
 INSTA_UPDATE=always cargo test --test source_<key>   # then REVIEW the .snap files
-# 4. register in sources::build, add a seed migration, update README's source list
+# 4. register in sources::build, add a seed migration (with display_name,
+#    store_description, store_image, policy_note), update README's source list
 cargo fmt && cargo clippy --all-targets --all-features -- -D warnings && cargo test
 ```
 
@@ -91,5 +117,8 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] Snapshot test of normalised output committed and reviewed
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
+- [ ] Seed sets `display_name` (shown on pages and in "Image: …" credits)
+- [ ] Site's terms of use checked: `store_description` / `store_image` decided (default true only if the terms don't forbid it; restrictive terms → both false, facts + link only) and `policy_note` records the terms URL + date
+- [ ] No image hotlinking or image fetching in the source (thumbnails come only from the thumbnailer); no truncation of descriptions in the source (upsert does the excerpt)
 - [ ] No LLM parsing; all requests go through `FetchContext`
 - [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it, events only render with JavaScript): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)

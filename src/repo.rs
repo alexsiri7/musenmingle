@@ -89,6 +89,92 @@ pub struct UpsertOutcome {
     pub created: bool,
 }
 
+/// What we may keep from a source (`events.sources` content policy columns).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, FromRow)]
+pub struct SourcePolicy {
+    pub store_description: bool,
+    pub store_image: bool,
+}
+
+impl Default for SourcePolicy {
+    fn default() -> Self {
+        Self {
+            store_description: true,
+            store_image: true,
+        }
+    }
+}
+
+impl SourcePolicy {
+    /// Drop what the source's terms don't let us keep and cut the
+    /// description to a short excerpt (we link out for the full text).
+    pub fn apply(&self, ev: &mut NewEvent) {
+        ev.description = if self.store_description {
+            ev.description
+                .as_deref()
+                .map(crate::normalise::excerpt)
+                .filter(|d| !d.is_empty())
+        } else {
+            None
+        };
+        if !self.store_image {
+            ev.image_url = None;
+        }
+    }
+}
+
+async fn source_policy_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    source_id: i64,
+) -> sqlx::Result<SourcePolicy> {
+    Ok(
+        sqlx::query_as("SELECT store_description, store_image FROM events.sources WHERE id = $1")
+            .bind(source_id)
+            .fetch_optional(&mut **tx)
+            .await?
+            .unwrap_or_default(),
+    )
+}
+
+/// Set a source's display name and content policy (tests and tooling; in
+/// production these come from migrations).
+pub async fn set_source_policy(
+    pool: &PgPool,
+    key: &str,
+    display_name: Option<&str>,
+    policy: SourcePolicy,
+) -> sqlx::Result<()> {
+    sqlx::query(
+        "UPDATE events.sources SET display_name = $2, store_description = $3, store_image = $4
+         WHERE key = $1",
+    )
+    .bind(key)
+    .bind(display_name)
+    .bind(policy.store_description)
+    .bind(policy.store_image)
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
+/// A source's human-readable name: `display_name`, else the key title-cased
+/// ("design-museum" → "Design Museum").
+pub fn display_name(key: &str, display_name: Option<&str>) -> String {
+    if let Some(d) = display_name.map(str::trim).filter(|d| !d.is_empty()) {
+        return d.to_string();
+    }
+    key.split(['-', '_'])
+        .filter(|w| !w.is_empty())
+        .map(|w| {
+            let mut c = w.chars();
+            c.next()
+                .map(|f| f.to_uppercase().chain(c).collect::<String>())
+                .unwrap_or_default()
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
 /// Columns bound in the same order by [`bind_event`].
 const EVENT_INSERT: &str = "INSERT INTO events.events (
         title, description, venue_name, address, lat, lng, starts_at, ends_at,
@@ -292,6 +378,7 @@ async fn upsert_event_tx(
         .map(|(_, id)| *id);
 
     let mut ev = event.clone();
+    source_policy_tx(tx, source_id).await?.apply(&mut ev);
     let mut holder = key_holder(tx, &ev.dedupe_key).await?;
     if holder.is_some_and(|h| forbidden.contains(&h)) {
         // The dedupe key index is UNIQUE, so a never-merge partner holding
@@ -329,7 +416,7 @@ async fn upsert_event_tx(
             created: false,
         }
     } else if let Some(l) = linked_ok.filter(|l| !shared && holder.is_none_or(|h| h == *l)) {
-        refresh(tx, l, &ev).await?;
+        refresh(tx, l, source_id, &ev).await?;
         UpsertOutcome {
             event_id: l,
             created: false,
@@ -389,6 +476,7 @@ async fn upsert_event_tx(
             )
             .fetch_one(&mut **tx)
             .await?;
+            set_image_source(tx, id, source_id, &ev, None).await?;
             UpsertOutcome {
                 event_id: id,
                 created: true,
@@ -515,13 +603,58 @@ async fn fuzzy_candidates(
 async fn refresh(
     tx: &mut Transaction<'_, Postgres>,
     id: Uuid,
+    source_id: i64,
     event: &NewEvent,
 ) -> sqlx::Result<()> {
+    let prior = prior_image_url(tx, id).await?;
     let sql = update_from_values(REFRESH);
     bind_event(sqlx::query(AssertSqlSafe(sql)), event)
         .bind(id)
         .execute(&mut **tx)
         .await?;
+    set_image_source(tx, id, source_id, event, prior.as_deref()).await
+}
+
+async fn prior_image_url(
+    tx: &mut Transaction<'_, Postgres>,
+    id: Uuid,
+) -> sqlx::Result<Option<String>> {
+    Ok(
+        sqlx::query_scalar::<_, Option<String>>(
+            "SELECT image_url FROM events.events WHERE id = $1",
+        )
+        .bind(id)
+        .fetch_optional(&mut **tx)
+        .await?
+        .flatten(),
+    )
+}
+
+/// Record `source_id` as the provenance of event `id`'s image when the
+/// stored `image_url` is now the one this source sent and it is new (or had
+/// no recorded provenance), so identical URLs from two sources never
+/// flip-flop the credit.
+async fn set_image_source(
+    tx: &mut Transaction<'_, Postgres>,
+    id: Uuid,
+    source_id: i64,
+    event: &NewEvent,
+    prior_image_url: Option<&str>,
+) -> sqlx::Result<()> {
+    let Some(incoming) = event.image_url.as_deref() else {
+        return Ok(());
+    };
+    sqlx::query(
+        "UPDATE events.events SET image_source_id = $2
+         WHERE id = $1 AND image_url = $3
+           AND (image_url IS DISTINCT FROM $4 OR image_source_id IS NULL)",
+    )
+    .bind(id)
+    .bind(source_id)
+    .bind(incoming)
+    .bind(prior_image_url)
+    .execute(&mut **tx)
+    .await?;
     Ok(())
 }
 
@@ -550,6 +683,7 @@ async fn merge_into(
         SourceKind::Scraper => (!other_same_kind, false),
         SourceKind::Api => (false, !other_same_kind),
     };
+    let prior = prior_image_url(tx, id).await?;
     let sql = update_from_values(MERGE);
     bind_event(sqlx::query(AssertSqlSafe(sql)), event)
         .bind(id)
@@ -557,7 +691,7 @@ async fn merge_into(
         .bind(api_wins)
         .execute(&mut **tx)
         .await?;
-    Ok(())
+    set_image_source(tx, id, source_id, event, prior.as_deref()).await
 }
 
 /// A stored event.
@@ -690,6 +824,8 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
 pub struct EventSourceLink {
     pub event_id: Uuid,
     pub source: String,
+    pub display_name: Option<String>,
+    pub kind: SourceKind,
     pub source_url: Option<String>,
     pub first_seen_at: DateTime<Utc>,
     pub last_seen_at: DateTime<Utc>,
@@ -701,7 +837,8 @@ pub async fn event_source_links(
     event_ids: &[Uuid],
 ) -> sqlx::Result<Vec<EventSourceLink>> {
     sqlx::query_as(
-        "SELECT es.event_id, s.key AS source, es.source_url, es.first_seen_at, es.last_seen_at
+        "SELECT es.event_id, s.key AS source, s.display_name, s.kind, es.source_url,
+                es.first_seen_at, es.last_seen_at
          FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
          WHERE es.event_id = ANY($1)
          ORDER BY es.event_id, es.first_seen_at, s.key, es.source_event_id",
@@ -857,6 +994,7 @@ pub async fn close_health_issues(pool: &PgPool, source_id: i64) -> sqlx::Result<
 #[derive(Debug, Clone, FromRow)]
 pub struct SourceStatusRow {
     pub key: String,
+    pub display_name: Option<String>,
     pub kind: SourceKind,
     pub interval_minutes: i32,
     pub enabled: bool,
@@ -872,7 +1010,7 @@ pub struct SourceStatusRow {
 
 pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>> {
     sqlx::query_as(
-        "SELECT s.key, s.kind, s.interval_minutes, s.enabled,
+        "SELECT s.key, s.display_name, s.kind, s.interval_minutes, s.enabled,
                 r.started_at AS run_started_at, r.events_found AS run_events_found,
                 r.errors AS run_errors, r.duration_ms AS run_duration_ms, r.ok AS run_ok,
                 h.github_issue_number AS open_issue_number, s.skip_reason, s.skipped_at
@@ -1066,4 +1204,232 @@ pub async fn pending_suggestions(
     .bind(before)
     .fetch_all(pool)
     .await
+}
+
+// ------------------------------------------------------------ content policy
+
+/// What [`enforce_content_policy`] changed.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct PolicyReport {
+    pub descriptions_cleared: u64,
+    pub descriptions_trimmed: u64,
+    pub images_cleared: u64,
+    pub thumbnails_deleted: u64,
+}
+
+/// Bring stored rows in line with the current content policy (idempotent,
+/// cheap when nothing changed; run by every ingest tick):
+///
+/// * images whose provenance source may not be stored are cleared;
+/// * descriptions of events whose linked sources ALL forbid storing them are
+///   cleared (a merged event may hold another source's text);
+/// * descriptions longer than the excerpt rule are trimmed with
+///   [`crate::normalise::excerpt`];
+/// * thumbnails whose event lost its image or whose source may no longer be
+///   stored are deleted.
+pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport> {
+    let images_cleared = sqlx::query(
+        "UPDATE events.events e SET image_url = NULL, image_source_id = NULL
+         FROM events.sources s
+         WHERE s.id = e.image_source_id AND NOT s.store_image",
+    )
+    .execute(pool)
+    .await?
+    .rows_affected();
+    let mut report = PolicyReport {
+        images_cleared,
+        ..PolicyReport::default()
+    };
+    report.descriptions_cleared = sqlx::query(
+        "UPDATE events.events e SET description = NULL
+         WHERE e.description IS NOT NULL
+           AND EXISTS (SELECT 1 FROM events.event_sources es WHERE es.event_id = e.id)
+           AND NOT EXISTS (SELECT 1 FROM events.event_sources es
+                           JOIN events.sources s ON s.id = es.source_id
+                           WHERE es.event_id = e.id AND s.store_description)",
+    )
+    .execute(pool)
+    .await?
+    .rows_affected();
+    let long: Vec<(Uuid, String)> = sqlx::query_as(
+        "SELECT id, description FROM events.events WHERE char_length(description) > $1",
+    )
+    .bind(i32::try_from(crate::normalise::EXCERPT_MAX_CHARS).unwrap_or(i32::MAX))
+    .fetch_all(pool)
+    .await?;
+    for (id, d) in long {
+        report.descriptions_trimmed += sqlx::query(
+            "UPDATE events.events SET description = $2 WHERE id = $1 AND description = $3",
+        )
+        .bind(id)
+        .bind(crate::normalise::excerpt(&d))
+        .bind(&d)
+        .execute(pool)
+        .await?
+        .rows_affected();
+    }
+    report.thumbnails_deleted = sqlx::query(
+        "DELETE FROM events.thumbnails t
+         USING events.events e
+         WHERE t.event_id = e.id
+           AND (e.image_url IS NULL
+                OR EXISTS (SELECT 1 FROM events.sources s
+                           WHERE s.id = t.source_id AND NOT s.store_image))",
+    )
+    .execute(pool)
+    .await?
+    .rows_affected();
+    Ok(report)
+}
+
+// ---------------------------------------------------------------- thumbnails
+
+/// An event whose image needs a (new) thumbnail.
+#[derive(Debug, Clone, FromRow, PartialEq, Eq)]
+pub struct ThumbnailJob {
+    pub event_id: Uuid,
+    pub image_url: String,
+    pub source_id: i64,
+}
+
+/// Current or upcoming events with an image from a source that allows
+/// storing images and no thumbnail for that exact image URL yet (failed
+/// attempts are retried after `retry_failed_before`). Soonest first.
+pub async fn thumbnail_jobs(
+    pool: &PgPool,
+    now: DateTime<Utc>,
+    retry_failed_before: DateTime<Utc>,
+    limit: i64,
+) -> sqlx::Result<Vec<ThumbnailJob>> {
+    sqlx::query_as(
+        "SELECT e.id AS event_id, e.image_url, e.image_source_id AS source_id
+         FROM events.events e
+         JOIN events.sources s ON s.id = e.image_source_id AND s.store_image
+         LEFT JOIN events.thumbnails t ON t.event_id = e.id
+         WHERE e.image_url IS NOT NULL
+           AND COALESCE(e.ends_at, e.starts_at) >= $1 - interval '1 day'
+           AND (t.event_id IS NULL
+                OR t.source_image_url <> e.image_url
+                OR (t.bytes IS NULL AND t.fetched_at < $2))
+         ORDER BY e.starts_at, e.id
+         LIMIT $3",
+    )
+    .bind(now)
+    .bind(retry_failed_before)
+    .bind(limit)
+    .fetch_all(pool)
+    .await
+}
+
+/// A thumbnail made by the thumbnailer.
+#[derive(Debug, Clone)]
+pub struct NewThumbnail {
+    pub bytes: Vec<u8>,
+    pub content_type: String,
+    pub width: i32,
+    pub height: i32,
+    pub content_hash: String,
+    pub etag: Option<String>,
+    pub last_modified: Option<String>,
+}
+
+/// Store the thumbnail (`Ok`) or the failure (`Err(message)`) for a job.
+pub async fn save_thumbnail(
+    pool: &PgPool,
+    job: &ThumbnailJob,
+    result: Result<&NewThumbnail, &str>,
+) -> sqlx::Result<()> {
+    let (t, error) = match result {
+        Ok(t) => (Some(t), None),
+        Err(e) => (None, Some(e)),
+    };
+    sqlx::query(
+        "INSERT INTO events.thumbnails (event_id, source_id, source_image_url, bytes, content_type,
+             width, height, content_hash, etag, last_modified, error, fetched_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+         ON CONFLICT (event_id) DO UPDATE SET
+             source_id = EXCLUDED.source_id, source_image_url = EXCLUDED.source_image_url,
+             bytes = EXCLUDED.bytes, content_type = EXCLUDED.content_type,
+             width = EXCLUDED.width, height = EXCLUDED.height,
+             content_hash = EXCLUDED.content_hash, etag = EXCLUDED.etag,
+             last_modified = EXCLUDED.last_modified, error = EXCLUDED.error,
+             fetched_at = EXCLUDED.fetched_at",
+    )
+    .bind(job.event_id)
+    .bind(job.source_id)
+    .bind(&job.image_url)
+    .bind(t.map(|t| &t.bytes))
+    .bind(t.map(|t| &t.content_type))
+    .bind(t.map(|t| t.width))
+    .bind(t.map(|t| t.height))
+    .bind(t.map(|t| &t.content_hash))
+    .bind(t.and_then(|t| t.etag.as_ref()))
+    .bind(t.and_then(|t| t.last_modified.as_ref()))
+    .bind(error)
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
+/// A stored thumbnail's bytes, for `GET /thumbs/...`.
+#[derive(Debug, Clone, FromRow)]
+pub struct ThumbnailBytes {
+    pub bytes: Vec<u8>,
+    pub content_type: String,
+    pub content_hash: String,
+}
+
+pub async fn get_thumbnail(pool: &PgPool, event_id: Uuid) -> sqlx::Result<Option<ThumbnailBytes>> {
+    sqlx::query_as(
+        "SELECT t.bytes, t.content_type, t.content_hash FROM events.thumbnails t
+         LEFT JOIN events.sources s ON s.id = t.source_id
+         WHERE t.event_id = $1 AND t.bytes IS NOT NULL AND COALESCE(s.store_image, FALSE)",
+    )
+    .bind(event_id)
+    .fetch_optional(pool)
+    .await
+}
+
+/// What pages and JSON need to show a thumbnail and its credit (no bytes).
+#[derive(Debug, Clone, FromRow)]
+pub struct ThumbnailMeta {
+    pub event_id: Uuid,
+    pub content_hash: String,
+    pub width: i32,
+    pub height: i32,
+    pub credit_key: String,
+    pub credit_display_name: Option<String>,
+    /// The listing's page on that source, else the source's site.
+    pub credit_url: String,
+}
+
+pub async fn thumbnail_meta(pool: &PgPool, event_ids: &[Uuid]) -> sqlx::Result<Vec<ThumbnailMeta>> {
+    sqlx::query_as(
+        "SELECT t.event_id, t.content_hash, t.width, t.height,
+                s.key AS credit_key, s.display_name AS credit_display_name,
+                COALESCE((SELECT es.source_url FROM events.event_sources es
+                          WHERE es.event_id = t.event_id AND es.source_id = t.source_id
+                            AND es.source_url IS NOT NULL
+                          ORDER BY es.first_seen_at LIMIT 1), s.base_url) AS credit_url
+         FROM events.thumbnails t JOIN events.sources s ON s.id = t.source_id
+         WHERE t.event_id = ANY($1) AND t.bytes IS NOT NULL AND s.store_image",
+    )
+    .bind(event_ids)
+    .fetch_all(pool)
+    .await
+}
+
+/// `(key, display name)` of every source, for filter chips.
+pub async fn source_names(pool: &PgPool) -> sqlx::Result<Vec<(String, String)>> {
+    let rows: Vec<(String, Option<String>)> =
+        sqlx::query_as("SELECT key, display_name FROM events.sources ORDER BY key")
+            .fetch_all(pool)
+            .await?;
+    Ok(rows
+        .into_iter()
+        .map(|(k, d)| {
+            let name = display_name(&k, d.as_deref());
+            (k, name)
+        })
+        .collect())
 }

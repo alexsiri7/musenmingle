@@ -448,18 +448,21 @@ async fn event_by_id_includes_every_source_link_and_unknown_ids_are_404() {
             "price_max": "12.50",
             "currency": "GBP",
             "url": null,
-            "image_url": null,
+            "thumbnail_url": null,
+            "image_credit": null,
             "category": "talk",
             "tags": ["art", "drawing"],
             "sources": [
                 {
                     "source": "barbican",
+                    "display_name": "Barbican",
                     "url": "https://www.barbican.org.uk/life-drawing",
                     "first_seen_at": "2026-09-01T00:00:00Z",
                     "last_seen_at": "2026-09-01T00:00:00Z",
                 },
                 {
                     "source": "ticketmaster",
+                    "display_name": "Ticketmaster",
                     "url": "https://www.ticketmaster.co.uk/x",
                     "first_seen_at": "2026-09-02T00:00:00Z",
                     "last_seen_at": "2026-09-02T00:00:00Z",
@@ -753,6 +756,7 @@ async fn sources_report_last_run_and_health() {
         source("barbican"),
         &json!({
             "key": "barbican",
+            "display_name": "Barbican",
             "kind": "scraper",
             "interval_minutes": 1440,
             "enabled": true,
