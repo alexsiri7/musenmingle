@@ -13,6 +13,7 @@
 //! so validation is identical.
 
 use std::net::SocketAddr;
+use std::sync::LazyLock;
 
 use axum::Router;
 use axum::extract::rejection::FormRejection;
@@ -26,6 +27,7 @@ use maud::{DOCTYPE, Markup, html};
 use rust_decimal::Decimal;
 use serde::Deserialize;
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
 use crate::api::{self, AppState, EventJson};
@@ -35,8 +37,8 @@ use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 
 /// Content-Security-Policy for every HTML response.
-pub const CSP: &str = "default-src 'self'; img-src https: data:; style-src 'self'; \
-     form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
+pub const CSP: &str = "default-src 'self'; script-src 'self'; img-src https: data:; \
+     style-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'";
 
 /// Site name shown in page titles and the header (the product name; the
 /// project/crate stays `thaleia`).
@@ -48,6 +50,17 @@ const TAGLINE: &str = "What's on in London for creative people";
 pub const PAGE_SIZE: i64 = 24;
 
 const STYLESHEET: &str = include_str!("web.css");
+
+/// The one first-party script ("Saved" events; progressive enhancement).
+const APP_JS: &str = include_str!("web.js");
+
+/// `/static/app.js?v=<content hash>`: the URL changes with the content, so
+/// the script can be cached for a year.
+static APP_JS_URL: LazyLock<String> = LazyLock::new(|| {
+    let hash = Sha256::digest(APP_JS.as_bytes());
+    let v: String = hash[..6].iter().map(|b| format!("{b:02x}")).collect();
+    format!("/static/app.js?v={v}")
+});
 
 /// A preset "near" area for the home-page filter.
 pub struct Area {
@@ -96,6 +109,8 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/sources", get(sources))
         .route("/suggest", post(suggest))
         .route("/static/style.css", get(stylesheet))
+        .route("/static/app.js", get(app_js))
+        .route("/saved", get(saved))
 }
 
 async fn stylesheet() -> Response {
@@ -105,6 +120,17 @@ async fn stylesheet() -> Response {
             (header::CACHE_CONTROL, "public, max-age=3600"),
         ],
         STYLESHEET,
+    )
+        .into_response()
+}
+
+async fn app_js() -> Response {
+    (
+        [
+            (header::CONTENT_TYPE, "text/javascript; charset=utf-8"),
+            (header::CACHE_CONTROL, "public, max-age=31536000, immutable"),
+        ],
+        APP_JS,
     )
         .into_response()
 }
@@ -124,6 +150,7 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                     @if title.is_empty() { (BRAND) " — " (TAGLINE) } @else { (title) " · " (BRAND) }
                 }
                 link rel="stylesheet" href="/static/style.css";
+                script src=(APP_JS_URL.as_str()) defer {}
             }
             body {
                 a class="skip" href="#main" { "Skip to content" }
@@ -131,10 +158,17 @@ fn page(status: StatusCode, title: &str, main: Markup) -> Response {
                     a class="brand" href="/" { (BRAND) }
                     nav aria-label="Site" {
                         a href="/" { "Events" }
+                        a href="/saved" {
+                            "Saved"
+                            " " span class="count" data-saved-count hidden { "0" }
+                        }
                         a href="/sources" { "Sources" }
                     }
                 }
-                main id="main" { (main) }
+                main id="main" {
+                    (main)
+                    p id="save-status" class="vh" role="status" aria-live="polite" {}
+                }
                 footer class="site" {
                     (suggest_form())
                     p class="small" {
@@ -463,6 +497,63 @@ fn filter_form(f: &Filters) -> Markup {
     }
 }
 
+/// Heart icon for the save toggle (decorative; the button has a text label).
+fn heart() -> Markup {
+    html! {
+        svg class="save-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" {
+            path d="M12 20.5l-1.3-1.2C5.6 14.7 2.5 11.9 2.5 8.4 2.5 5.6 4.7 3.5 7.4 3.5c1.8 0 3.5.9 4.6 2.2 1.1-1.3 2.8-2.2 4.6-2.2 2.7 0 4.9 2.1 4.9 4.9 0 3.5-3.1 6.3-8.2 10.9L12 20.5z";
+        }
+    }
+}
+
+/// Save/unsave toggle. Rendered `hidden`; `/static/app.js` shows it and keeps
+/// `aria-pressed` in sync with localStorage. The data attributes are the
+/// snapshot kept with a save.
+fn save_button(e: &EventJson) -> Markup {
+    html! {
+        button type="button" class="save" hidden aria-pressed="false"
+            data-save-id=(e.id) data-title=(e.title)
+            data-venue=(e.venue_name.as_deref().unwrap_or(""))
+            data-starts=(e.starts_at.to_rfc3339())
+            data-ends=(e.ends_at.map(|t| t.to_rfc3339()).unwrap_or_default()) {
+            (heart())
+            span class="save-label" { "Save" }
+            span class="vh" { ": " (e.title) }
+        }
+    }
+}
+
+/// The card markup for the Saved page, filled in by `/static/app.js` (via
+/// the `data-slot`s). Keep it in step with [`card`].
+fn card_template() -> Markup {
+    html! {
+        template id="card-template" {
+            article class="card" {
+                img data-slot="image" alt="" loading="lazy" decoding="async" width="320" height="180" hidden;
+                div class="card-body" {
+                    h2 { a data-slot="title" href="/" {} }
+                    p class="when" data-slot="when" {}
+                    p class="venue" data-slot="venue" {}
+                    p class="tags" {
+                        span class="badge" data-slot="category" {}
+                        " " span class="badge" data-slot="price" {}
+                        " " span class="badge gone" data-slot="gone" hidden { "No longer listed" }
+                    }
+                    p class="links" {
+                        a data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
+                        span data-slot="sources" {}
+                    }
+                    button type="button" class="save" aria-pressed="true" data-save-id="" data-title="" {
+                        (heart())
+                        span class="save-label" { "Save" }
+                        span class="vh" data-slot="save-title" {}
+                    }
+                }
+            }
+        }
+    }
+}
+
 fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
     html! {
@@ -491,6 +582,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                         }
                     }
                 }
+                (save_button(e))
             }
         }
     }
@@ -563,6 +655,32 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
     )
 }
 
+// ---------------------------------------------------------------- saved
+
+async fn saved() -> Response {
+    page(
+        StatusCode::OK,
+        "Saved events",
+        html! {
+            h1 { "Saved events" }
+            p class="lede" {
+                "Events you save are kept only in this browser on this device — no account, "
+                "nothing stored on our server. Clearing your browser data removes them."
+            }
+            noscript {
+                p class="error" { "Saving events needs JavaScript. Everything else on this site works without it." }
+            }
+            p id="saved-status" role="status" aria-live="polite" {}
+            p id="saved-empty" class="empty" hidden {
+                "Nothing saved yet. Use the Save button on any event, then come back here."
+            }
+            section id="saved-list" class="cards" aria-label="Saved events" {}
+            p { button id="export-ics" type="button" hidden { "Export saved as .ics" } }
+            (card_template())
+        },
+    )
+}
+
 // ---------------------------------------------------------------- detail
 
 async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> Response {
@@ -595,6 +713,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
             p class="small" { a href="/" { "← All events" } }
             article class="detail" {
                 h1 { (e.title) }
+                (save_button(&e))
                 @if let Some(img) = safe_image(e.image_url.as_deref()) {
                     img class="hero" src=(img) alt="" loading="lazy" decoding="async";
                 }

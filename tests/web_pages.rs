@@ -92,6 +92,7 @@ fn assert_html(p: &Page) {
     let csp = p.headers[header::CONTENT_SECURITY_POLICY].to_str().unwrap();
     for d in [
         "default-src 'self'",
+        "script-src 'self'",
         "img-src https: data:",
         "style-src 'self'",
         "form-action 'self'",
@@ -102,7 +103,15 @@ fn assert_html(p: &Page) {
     assert!(!csp.contains("unsafe-inline"), "{csp}");
     assert!(p.body.starts_with("<!DOCTYPE html>"));
     assert!(p.body.contains("<a class=\"brand\" href=\"/\">LetsArt</a>"));
-    assert!(!p.body.contains("<script"), "{}", p.body);
+    // Exactly one script: the first-party, versioned app.js (no inline code).
+    assert_eq!(p.body.matches("<script").count(), 1, "{}", p.body);
+    assert!(
+        p.body.contains("<script src=\"/static/app.js?v="),
+        "{}",
+        p.body
+    );
+    assert!(p.body.contains("\" defer></script>"));
+    assert!(!p.body.contains(" onclick="));
     assert!(!p.body.contains("style=\""), "{}", p.body);
 }
 
@@ -287,11 +296,34 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
         "name=\"from\" type=\"date\" value=\"{}\"",
         date(Utc::now())
     )));
+    // Save toggles: rendered hidden (shown by app.js), with the snapshot.
+    assert!(p.body.contains(&format!(
+        "<button type=\"button\" class=\"save\" hidden aria-pressed=\"false\" data-save-id=\"{drawing}\" data-title=\"Life drawing\" data-venue=\"Barbican\""
+    )), "{}", p.body);
+    assert!(
+        p.body
+            .contains("data-title=\"&lt;script&gt;alert(1)&lt;/script&gt;\"")
+    );
+    assert!(p.body.contains(
+        "<a href=\"/saved\">Saved <span class=\"count\" data-saved-count hidden>0</span></a>"
+    ));
     // Footer suggestion form.
     assert!(
         p.body
             .contains("<form class=\"suggest\" method=\"post\" action=\"/suggest\">")
     );
+
+    let js = get(&app, "/static/app.js?v=whatever").await;
+    assert_eq!(js.status, StatusCode::OK);
+    assert_eq!(
+        js.headers[header::CONTENT_TYPE],
+        "text/javascript; charset=utf-8"
+    );
+    assert_eq!(
+        js.headers[header::CACHE_CONTROL],
+        "public, max-age=31536000, immutable"
+    );
+    assert!(js.body.contains("letsart.saved.v1"));
 
     let css = get(&app, "/static/style.css").await;
     assert_eq!(css.status, StatusCode::OK);
@@ -579,6 +611,9 @@ async fn detail_page_shows_all_fields_and_404s_unknown_ids() {
     assert!(p.body.contains("href=\"https://www.ticketmaster.co.uk/x\""));
     assert!(p.body.contains("£5–£12.50"), "{}", p.body);
     assert!(p.body.contains("Talk"));
+    assert!(p.body.contains(&format!(
+        "class=\"save\" hidden aria-pressed=\"false\" data-save-id=\"{id}\""
+    )));
 
     for uri in [
         format!("/events/{}", Uuid::new_v4()),
@@ -759,4 +794,54 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     assert!(p.body.contains("Too many suggestions"));
     pool.close().await;
     db.drop_db().await;
+}
+
+#[tokio::test]
+async fn saved_page_is_a_script_enhanced_shell() {
+    // No database needed: the page is static (a lazy pool never connects).
+    let pool = sqlx::postgres::PgPoolOptions::new()
+        .connect_lazy("postgres://nobody@127.0.0.1:1/none")
+        .unwrap();
+    let app = app(&pool);
+    let p = get(&app, "/saved").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert!(p.body.contains("<title>Saved events · LetsArt</title>"));
+    assert!(p.body.contains("only in this browser on this device"));
+    assert!(p.body.contains("<noscript>"));
+    assert!(
+        p.body
+            .contains("<p id=\"saved-empty\" class=\"empty\" hidden>")
+    );
+    assert!(p.body.contains(
+        "<section id=\"saved-list\" class=\"cards\" aria-label=\"Saved events\"></section>"
+    ));
+    assert!(p.body.contains(
+        "<button id=\"export-ics\" type=\"button\" hidden>Export saved as .ics</button>"
+    ));
+    // The card markup lives in one <template>, with the slots app.js fills.
+    let tpl = &p.body[p
+        .body
+        .find("<template id=\"card-template\">")
+        .expect("template")..];
+    let tpl = &tpl[..tpl.find("</template>").unwrap()];
+    for slot in [
+        "image",
+        "title",
+        "when",
+        "venue",
+        "category",
+        "price",
+        "gone",
+        "details",
+        "details-title",
+        "sources",
+        "save-title",
+    ] {
+        assert!(
+            tpl.contains(&format!("data-slot=\"{slot}\"")),
+            "slot {slot}"
+        );
+    }
+    assert!(tpl.contains("<article class=\"card\">") && tpl.contains("class=\"save\""));
 }

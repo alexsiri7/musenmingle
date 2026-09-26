@@ -49,10 +49,14 @@ There is no local Docker; never try to use testcontainers.
 9. **HTML is server-rendered, escaped and self-contained.** Pages in
    `src/web.rs` are `maud` templates: never wrap data in `PreEscaped`;
    emit `href`/`src` only via `safe_link`/`safe_image` (http(s) only). No
-   JavaScript, no third-party assets (CDNs, fonts, embeds), no inline
-   `style=` or `<style>` (CSS lives in `src/web.css`, served from
-   `/static/style.css`); keep the `CSP` constant strict. Pages read data
-   through the same `api.rs` helpers as the JSON API, never over HTTP.
+   third-party assets (CDNs, fonts, embeds, scripts), no inline `style=`,
+   `<style>`, inline `<script>` or `on*=` handlers (CSS lives in
+   `src/web.css`, the one script in `src/web.js`, served from `/static/`);
+   keep the `CSP` constant strict. JavaScript is progressive enhancement
+   only: every page must work without it (JS-only controls render
+   `hidden`), and it builds DOM with `textContent`, never `innerHTML`. Pages
+   read data through the same `api.rs` helpers as the JSON API, never over
+   HTTP. `node --test tests/js/*.test.js` tests `web.js`.
 10. **Sites we decided not to scrape go in `events.refused_sources`** (via a
     new migration, with reason and issue link) when a `new-scraper` issue is
     closed as not possible; see `docs/adding-a-scraper.md`. Never retry them.
@@ -68,6 +72,6 @@ There is no local Docker; never try to use testcontainers.
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it
 - `src/listing.rs` — `GET /v1/events` parameter parsing and cursors (pure)
-- `src/web.rs` + `src/web.css` — HTML pages (`/`, `/events/{id}`, `/sources`, `POST /suggest`)
+- `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/sources`, `/saved`, `POST /suggest`) and the Saved-events script
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

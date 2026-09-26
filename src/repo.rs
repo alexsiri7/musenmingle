@@ -604,17 +604,19 @@ pub struct ListedEvent {
     pub distance_km: Option<f64>,
 }
 
-/// `$1`..`$5` of both listing queries (on `events.events ev`). An event with
+/// `$1`..`$6` of both listing queries (on `events.events ev`). An event with
 /// an end (`ends_at` set), whatever its category, matches when its range
 /// overlaps the window, a one-off when it starts inside it. `$5` (source
-/// keys) matches an event listed by ANY of those sources.
+/// keys) matches an event listed by ANY of those sources; `$6` restricts to
+/// the given event ids.
 const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, ev.starts_at) >= $1)
     AND ($2::timestamptz IS NULL OR ev.starts_at < $2)
     AND (cardinality($3::text[]) = 0 OR ev.category = ANY($3))
     AND (NOT $4 OR ev.is_free)
     AND (cardinality($5::text[]) = 0 OR EXISTS (
         SELECT 1 FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
-        WHERE es.event_id = ev.id AND s.key = ANY($5)))";
+        WHERE es.event_id = ev.id AND s.key = ANY($5)))
+    AND (cardinality($6::uuid[]) = 0 OR ev.id = ANY($6))";
 
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
@@ -628,14 +630,15 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             sqlx::query_as(AssertSqlSafe(format!(
                 "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
                  WHERE {LISTING_FILTER}
-                   AND ($6::timestamptz IS NULL OR (starts_at, id) > ($6, $7::uuid))
-                 ORDER BY starts_at, id LIMIT $8"
+                   AND ($7::timestamptz IS NULL OR (starts_at, id) > ($7, $8::uuid))
+                 ORDER BY starts_at, id LIMIT $9"
             )))
             .bind(f.from)
             .bind(f.until)
             .bind(&categories)
             .bind(f.free_only)
             .bind(&sources)
+            .bind(&f.ids)
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
             .bind(fetch)
@@ -647,23 +650,24 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             sqlx::query_as(AssertSqlSafe(format!(
                 "SELECT * FROM (
                      SELECT {EVENT_COLS},
-                         2 * $12::float8 * asin(least(1, sqrt(
-                             power(sin(radians(lat - $6) / 2), 2)
-                             + cos(radians($6)) * cos(radians(lat))
-                               * power(sin(radians(lng - $7) / 2), 2)))) AS distance_km
+                         2 * $13::float8 * asin(least(1, sqrt(
+                             power(sin(radians(lat - $7) / 2), 2)
+                             + cos(radians($7)) * cos(radians(lat))
+                               * power(sin(radians(lng - $8) / 2), 2)))) AS distance_km
                      FROM events.events ev
                      WHERE {LISTING_FILTER}
-                       AND lat BETWEEN $8 AND $9 AND lng BETWEEN $10 AND $11
+                       AND lat BETWEEN $9 AND $10 AND lng BETWEEN $11 AND $12
                  ) e
-                 WHERE distance_km <= $13
-                   AND ($14::float8 IS NULL OR (distance_km, id) > ($14, $15::uuid))
-                 ORDER BY distance_km, id LIMIT $16"
+                 WHERE distance_km <= $14
+                   AND ($15::float8 IS NULL OR (distance_km, id) > ($15, $16::uuid))
+                 ORDER BY distance_km, id LIMIT $17"
             )))
             .bind(f.from)
             .bind(f.until)
             .bind(&categories)
             .bind(f.free_only)
             .bind(&sources)
+            .bind(&f.ids)
             .bind(near.lat)
             .bind(near.lng)
             .bind(b.min_lat)

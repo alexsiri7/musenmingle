@@ -594,6 +594,38 @@ async fn sources_lists_refused_sites() {
 }
 
 #[tokio::test]
+async fn ids_filter_returns_only_those_events() {
+    let Some(db) = TestDb::create("ids_filter_returns_only_those_events").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let a = insert(&pool, Ev::one_off("a", "2026-10-01T18:00:00Z")).await;
+    let b = insert(&pool, Ev::one_off("b", "2020-01-01T18:00:00Z")).await;
+    insert(&pool, Ev::one_off("c", "2026-10-02T18:00:00Z")).await;
+    let app = app(&pool);
+
+    // Past events too (no implicit date window); unknown ids are just absent.
+    let (status, body) = get(&app, &format!("/v1/events?ids={a},{b},{}", Uuid::new_v4())).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(titles(&body), ["b", "a"]);
+    // Combines with other filters.
+    let (_, body) = get(&app, &format!("/v1/events?ids={a},{b}&from=2026-01-01")).await;
+    assert_eq!(titles(&body), ["a"]);
+
+    let too_many: Vec<String> = (0..101).map(|_| Uuid::new_v4().to_string()).collect();
+    for q in [
+        format!("ids={}", too_many.join(",")),
+        "ids=nope".into(),
+        "ids=".into(),
+    ] {
+        let (status, body) = get(&app, &format!("/v1/events?{q}")).await;
+        assert_eq!(status, StatusCode::BAD_REQUEST, "{q}: {body}");
+    }
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn invalid_list_parameters_are_400() {
     let Some(db) = TestDb::create("invalid_list_parameters_are_400").await else {
         return;

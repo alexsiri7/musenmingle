@@ -13,6 +13,7 @@
   }
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   margin: 0; background: var(--bg); color: var(--fg);
   font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -81,3 +82,16 @@ footer.site { margin-top: 40px; padding-bottom: 32px; border-top: 1px solid var(
   dd { margin-bottom: 8px; }
   .filters .field { flex: 1 1 100%; }
 }
+
+/* Saved events (JS-enhanced; buttons are hidden without JS) */
+.save {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;
+  background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px;
+}
+.save[hidden] { display: none; }
+.save-icon path { fill: none; stroke: currentColor; stroke-width: 2; }
+.save[aria-pressed="true"] .save-icon path { fill: currentColor; }
+.save[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+.count { display: inline-block; min-width: 1.4em; padding: 0 5px; border-radius: 999px; background: var(--accent); color: var(--accent-fg); font-size: 0.8rem; text-align: center; }
+.count[hidden] { display: none; }
+.badge.gone { color: var(--bad); border-color: currentColor; }

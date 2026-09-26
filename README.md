@@ -110,10 +110,18 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   The footer's "Suggest a venue site" form posts to `POST /suggest`, which
   runs the same validation, dedupe, rate limit and issue filing as
   `POST /v1/suggestions`. Templates are [maud](https://maud.lambda.xyz)
-  (compile-time checked, HTML-escaped by default); no JavaScript, no
-  third-party assets (images are the sources' own `https` URLs), and a strict
-  Content-Security-Policy (`default-src 'self'`, no `unsafe-inline`: the CSS
-  is served from `/static/style.css`).
+  (compile-time checked, HTML-escaped by default); no third-party scripts or
+  assets (images are the sources' own `https` URLs), and a strict
+  Content-Security-Policy (`default-src 'self'`, `script-src 'self'`, no
+  `unsafe-inline`: the CSS is served from `/static/style.css`).
+  **Saved events** (`/saved`, `src/web.js` served as `/static/app.js?v=<hash>`):
+  the only script, and progressive enhancement — without it every page
+  works and the save buttons stay `hidden`. Saves live only in the
+  visitor's browser (`localStorage` key `letsart.saved.v1`: id, saved time
+  and a title/venue/dates snapshot; no accounts, cookies or server
+  storage). `/saved` is a server-rendered shell whose script fetches the
+  saved events with `GET /v1/events?ids=…`, renders them from a `<template>`,
+  marks vanished ones "No longer listed", and can export them as `.ics`.
 
 ### Merging and overrides
 

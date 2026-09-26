@@ -11,6 +11,8 @@ pub const DEFAULT_LIMIT: i64 = 50;
 pub const MAX_LIMIT: i64 = 100;
 pub const DEFAULT_RADIUS_KM: f64 = 5.0;
 pub const MAX_RADIUS_KM: f64 = 100.0;
+/// Most ids one `ids=` filter may name.
+pub const MAX_IDS: usize = 100;
 
 /// Mean Earth radius used for haversine distances.
 pub const EARTH_RADIUS_KM: f64 = 6371.0088;
@@ -35,6 +37,8 @@ pub struct EventFilter {
     /// Source keys; empty = any. An event matches if any of its listings
     /// comes from one of them.
     pub sources: Vec<String>,
+    /// Only these events (`ids=<uuid>,<uuid>`); empty = no restriction.
+    pub ids: Vec<Uuid>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -161,6 +165,21 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
                 }
                 if !filter.sources.iter().any(|s| *s == value) {
                     filter.sources.push(value.into_owned());
+                }
+            }
+            "ids" => {
+                for part in value.split(',').map(str::trim).filter(|p| !p.is_empty()) {
+                    let id = Uuid::parse_str(part)
+                        .map_err(|_| format!("ids must be comma-separated UUIDs, got {part:?}"))?;
+                    if !filter.ids.contains(&id) {
+                        filter.ids.push(id);
+                    }
+                }
+                if filter.ids.len() > MAX_IDS {
+                    return Err(format!("ids may name at most {MAX_IDS} events"));
+                }
+                if filter.ids.is_empty() {
+                    return Err("ids must name at least one event".into());
                 }
             }
             "near" => near = Some(parse_near(&value)?),
@@ -302,6 +321,16 @@ mod tests {
     }
 
     #[test]
+    fn ids_parse_dedupe_and_cap() {
+        let (a, b) = (Uuid::new_v4(), Uuid::new_v4());
+        let q = parse_query(&format!("ids={a},{b},%20{a}")).unwrap();
+        assert_eq!(q.filter.ids, [a, b]);
+        let many: Vec<String> = (0..=MAX_IDS).map(|_| Uuid::new_v4().to_string()).collect();
+        assert!(parse_query(&format!("ids={}", many[..MAX_IDS].join(","))).is_ok());
+        assert!(parse_query(&format!("ids={}", many.join(","))).is_err());
+    }
+
+    #[test]
     fn rejects_bad_input() {
         for raw in [
             "from=2026-10-2x",
@@ -320,6 +349,8 @@ mod tests {
             "source=",
             "source=Barbican",
             "source=a%20b",
+            "ids=",
+            "ids=not-a-uuid",
         ] {
             assert!(parse_query(raw).is_err(), "{raw}");
         }
