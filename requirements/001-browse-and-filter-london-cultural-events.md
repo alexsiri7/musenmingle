@@ -1,8 +1,8 @@
 ---
 created: '2026-09-26'
-github_issue: null
+github_issue: 1
 id: '001'
-status: draft
+status: idea
 title: Browse and filter London cultural events
 updated: '2026-09-26'
 ---
@@ -29,4 +29,4 @@ The response format is documented with examples and doesn't change field names w
 
 ## Issues
 
-_None yet._
+- #1 — Read API: list events with filters, event by id, sources with health
