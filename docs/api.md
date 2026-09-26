@@ -10,8 +10,9 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `from`, `to`, `category`, `free`, `near=<area>`, `source`, `medium`,
-`format`, `good_for` and `cursor`),
+takes `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`,
+`source`, `medium`, `format`, `good_for` and `cursor`, and shows the
+`counts`/facet counts next to its options),
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
@@ -54,6 +55,8 @@ Lists events. Every parameter is optional; they combine freely.
 | `to` | `2026-10-05` | Events starting on or before this London date (inclusive) |
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
+| `price_max` | `10` | Free events and events whose lowest price (`price_min`) is at most this many pounds. Events with an unknown price, or priced in another currency, are left out |
+| `when` | `evening` | One of `evening`, `after_work`, `weekend`, `daytime` (see below) |
 | `source` | `source=barbican&source=ticketmaster` | Events listed by any of the given sources (keys as in `GET /v1/sources`). Repeatable; an event found by several sources appears under each |
 | `ids` | `ids=1f3632de-…,0414a989-…` | Only these events (comma-separated UUIDs, at most 100; unknown ids are simply absent). Combine with `limit=100` to get them all in one page. Used by the Saved page |
 | `medium` | `medium=photography&medium=painting` | Events with any of these medium tags: `photography`, `painting`, `drawing`, `sculpture`, `installation`, `design`, `architecture`, `illustration`, `textiles_craft`, `ceramics`, `film_video`, `performance`, `sound_music`, `writing_poetry`, `digital_new_media`, `printmaking`. Repeatable |
@@ -70,6 +73,21 @@ when `[starts_at, ends_at]` overlaps the window; an event without an end
 matches when `starts_at` is inside the window. Dates are Europe/London
 calendar days, so `from=2026-10-01` starts at `2026-09-30T23:00:00Z` (BST).
 An exhibition whose last day is 1 October matches `from=2026-10-01`.
+
+Time of day (`when`), in Europe/London local time. An event starting at
+exactly London midnight is treated as **untimed** (a date-only listing,
+such as an exhibition run without opening hours):
+
+- `evening`: starts at 18:00 or later; untimed events only if the source
+  states late opening hours (they carry the tag `late opening`).
+- `after_work`: starts Monday–Friday between 17:30 and 20:30 (inclusive);
+  untimed events only with late opening, as for `evening`.
+- `daytime`: starts before 18:00, and every untimed event.
+- `weekend`: the event's London dates (`starts_at` to `ends_at`), clipped to
+  the `from`/`to` window, include a Saturday or Sunday. An exhibition that
+  runs through a weekend matches unless the window holds only weekdays.
+
+`evening`, `after_work` and `daytime` look at the start time only.
 
 Order: by `starts_at` (then `id`); with `near`, by distance (then `id`).
 
@@ -139,9 +157,21 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       ]
     }
   ],
-  "next_cursor": "643a343030..."
+  "next_cursor": "643a343030...",
+  "counts": {
+    "when": { "evening": 12, "after_work": 9, "weekend": 30, "daytime": 41 },
+    "price": { "free": 18, "max_10": 25, "max_20": 33, "unknown": 7 }
+  }
 }
 ```
+
+`counts` says how many events each `when` and price option would list,
+over all pages (`cursor` and `limit` are ignored). Each `when` count applies
+every other filter in the request, including `free`/`price_max`, but not
+`when` itself; each price count applies every other filter, including
+`when`, but not `free`/`price_max`. `price.free` counts `free=true`,
+`max_10`/`max_20` count `price_max=10`/`20`, and `unknown` counts events that
+are neither free nor priced (which any `price_max` leaves out).
 
 Event fields: `description`, `venue_name`, `address`, `lat`, `lng`,
 `ends_at`, `price_min`, `price_max`, `currency`, `url`, `thumbnail_url` and

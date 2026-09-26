@@ -50,7 +50,12 @@ the venue's own site before it.
    feed the health checker.
 8. **Times:** use `normalise::parse_datetime` (honours offsets) or
    `parse_london_wall_clock` when a site prints local times with a bogus
-   offset. Verify against the human-readable time on the page.
+   offset. Verify against the human-readable time on the page. A date
+   without a time is stored as London midnight, which the `when=` filters
+   read as "untimed". If the page states late opening hours for an untimed
+   event (an exhibition's "late openings" section), tag it `late opening`
+   when `normalise::mentions_late_opening` accepts that text, so it counts
+   for `when=evening`.
 9. **Content policy: set it in the seed migration.** Muse & Mingle links out; it
    does not republish. In the seed row set `display_name` (the name shown
    on pages and in image credits, e.g. `'Barbican'`) and decide
