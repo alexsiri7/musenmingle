@@ -239,6 +239,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at,
+        all_day: start.is_none(),
         price: excerpt.map(price).unwrap_or_default(),
         url: text("url").map(str::to_string),
         image_url: text("image_url").map(str::to_string),
@@ -361,7 +362,7 @@ mod tests {
     }
 
     #[test]
-    fn end_not_after_start_is_dropped_and_untimed_cards_start_at_midnight() {
+    fn end_not_after_start_is_dropped_and_untimed_cards_are_all_day_from_midnight() {
         let event = normalise(&talk(
             Some("November 20, 2026"),
             Some("6:00 pm"),
@@ -370,10 +371,12 @@ mod tests {
         .unwrap();
         assert_eq!(event.starts_at.to_rfc3339(), "2026-11-20T18:00:00+00:00");
         assert_eq!(event.ends_at, None);
+        assert!(!event.all_day);
 
         let event = normalise(&talk(Some("October 21, 2026"), None, Some("7:30 pm"))).unwrap();
         assert_eq!(event.starts_at.to_rfc3339(), "2026-10-20T23:00:00+00:00");
         assert_eq!(event.ends_at, None);
+        assert!(event.all_day);
     }
 
     #[test]
