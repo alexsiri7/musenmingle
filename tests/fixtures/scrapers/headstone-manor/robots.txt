@@ -1,0 +1,12 @@
+# robots.txt for https://headstonemanor.org/
+
+Sitemap: https://headstonemanor.org/sitemap.xml
+
+
+User-agent: *
+# production - allow all except listed:
+Disallow: /cpresources/
+Disallow: /vendor/
+Disallow: /.env
+Disallow: /cache/
+
