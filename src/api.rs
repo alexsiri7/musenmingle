@@ -62,11 +62,40 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
         .route("/v1/suggestions", post(suggest))
         .merge(crate::web::routes())
         .layer(cors)
+        .layer(axum::middleware::map_response(security_headers))
         .with_state(AppState {
             pool,
             suggestions: Arc::new(suggestions),
             github_repo: settings.github_repo.into(),
         })
+}
+
+/// Response headers every response carries (JSON, static assets, errors and
+/// HTML alike). A handler that sets one of them itself (the HTML pages set
+/// the page CSP) keeps its own value.
+pub const SECURITY_HEADERS: [(&str, &str); 5] = [
+    ("strict-transport-security", "max-age=31536000"),
+    ("x-content-type-options", "nosniff"),
+    ("referrer-policy", "strict-origin-when-cross-origin"),
+    (
+        "permissions-policy",
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+    ),
+    // Non-HTML responses load nothing and are never framed.
+    (
+        "content-security-policy",
+        "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+    ),
+];
+
+async fn security_headers(mut resp: Response) -> Response {
+    let h = resp.headers_mut();
+    for (name, value) in SECURITY_HEADERS {
+        if !h.contains_key(name) {
+            h.insert(name, HeaderValue::from_static(value));
+        }
+    }
+    resp
 }
 
 /// 200 when the database answers `SELECT 1` within 3 s, 503 otherwise.
@@ -529,8 +558,8 @@ mod tests {
     use sqlx::postgres::PgPoolOptions;
     use tower::ServiceExt;
 
-    #[tokio::test]
-    async fn healthz_returns_503_when_db_unreachable() {
+    /// A router whose database is never reachable (a lazy pool).
+    fn offline_router() -> Router {
         let pool = PgPoolOptions::new()
             .acquire_timeout(Duration::from_millis(300))
             .connect_lazy("postgres://nobody@127.0.0.1:1/none")
@@ -547,10 +576,68 @@ mod tests {
             github_repo: "owner/repo".into(),
             cors_origins: Vec::new(),
         };
-        let resp = router(pool, suggestions, settings)
+        router(pool, suggestions, settings)
+    }
+
+    #[tokio::test]
+    async fn healthz_returns_503_when_db_unreachable() {
+        let resp = offline_router()
             .oneshot(Request::get("/healthz").body(Body::empty()).unwrap())
             .await
             .unwrap();
         assert_eq!(resp.status(), StatusCode::SERVICE_UNAVAILABLE);
+    }
+
+    #[tokio::test]
+    async fn every_response_carries_the_security_headers() {
+        for uri in [
+            "/healthz",
+            "/static/app.js",
+            "/favicon.svg",
+            "/no-such-page",
+        ] {
+            let resp = offline_router()
+                .oneshot(Request::get(uri).body(Body::empty()).unwrap())
+                .await
+                .unwrap();
+            for (name, value) in SECURITY_HEADERS {
+                assert_eq!(resp.headers().get(name).unwrap(), value, "{uri} {name}");
+            }
+        }
+        // HTML pages keep their own CSP.
+        let resp = offline_router()
+            .oneshot(Request::get("/saved").body(Body::empty()).unwrap())
+            .await
+            .unwrap();
+        assert_eq!(resp.status(), StatusCode::OK);
+        assert_eq!(
+            resp.headers().get(header::CONTENT_SECURITY_POLICY).unwrap(),
+            crate::web::CSP
+        );
+        assert!(
+            resp.headers()
+                .contains_key(header::STRICT_TRANSPORT_SECURITY)
+        );
+    }
+
+    #[tokio::test]
+    async fn cross_site_form_posts_are_refused() {
+        use axum::extract::connect_info::MockConnectInfo;
+        let peer = SocketAddr::from(([203, 0, 113, 7], 4000));
+        for uri in ["/suggest", "/contact"] {
+            let resp = offline_router()
+                .layer(MockConnectInfo(peer))
+                .oneshot(
+                    Request::post(uri)
+                        .header(header::CONTENT_TYPE, "application/x-www-form-urlencoded")
+                        .header("sec-fetch-site", "cross-site")
+                        .body(Body::from("url=https%3A%2F%2Fexample.org%2F"))
+                        .unwrap(),
+                )
+                .await
+                .unwrap();
+            // Refused before the database is touched (it is unreachable here).
+            assert_eq!(resp.status(), StatusCode::FORBIDDEN, "{uri}");
+        }
     }
 }
