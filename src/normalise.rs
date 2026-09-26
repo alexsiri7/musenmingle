@@ -259,6 +259,43 @@ pub fn parse_price(text: &str) -> Price {
     }
 }
 
+/// Admission phrases, as lower-case token sequences, that make prose say an
+/// event is free. Bare "free", "free access" ("step-free access") and
+/// "for free" ("join Young Barbican for free") are deliberately absent.
+const FREE_PHRASES: &[&[&str]] = &[
+    &["free", "entry"],
+    &["free", "admission"],
+    &["free", "event"],
+    &["free", "exhibition"],
+    &["free", "installation"],
+    &["free", "display"],
+    &["free", "talk"],
+    &["free", "tour"],
+    &["free", "to", "attend"],
+    &["free", "to", "enter"],
+    &["free", "to", "visit"],
+    &["entry", "is", "free"],
+    &["admission", "is", "free"],
+    &["free", "of", "charge"],
+];
+
+/// Whether a description explicitly says the event is free to attend
+/// ("This free installation…", "Entry is free"). A fallback for sources with
+/// no structured price: it only understands explicit admission wording, and
+/// any positive currency amount in the text vetoes it.
+pub fn describes_free_entry(text: &str) -> bool {
+    let lower = text.to_lowercase();
+    // Hyphens stay inside tokens so "step-free" and "debt-free" never read as "free".
+    let tokens: Vec<&str> = lower
+        .split(|c: char| !c.is_alphanumeric() && c != '-')
+        .filter(|t| !t.is_empty())
+        .collect();
+    FREE_PHRASES
+        .iter()
+        .any(|p| tokens.windows(p.len()).any(|w| w == *p))
+        && !parse_price(text).max.is_some_and(|m| m > Decimal::ZERO)
+}
+
 /// Build a [`Price`] from structured min/max amounts (e.g. an API).
 pub fn price_from_amounts(
     min: Option<Decimal>,
@@ -604,6 +641,42 @@ mod tests {
             parse_london_wall_clock("2026-12-02T20:00:00+00:00"),
             Some(utc("2026-12-02T20:00:00Z"))
         );
+    }
+
+    #[test]
+    fn free_wording_table() {
+        let cases = [
+            (
+                "This free installation invites visitors to orient themselves in the buildings",
+                true,
+            ),
+            (
+                "This free exhibition presents video works by Lawrence Abu Hamdan",
+                true,
+            ),
+            ("Free entry", true),
+            ("Free admission, donations welcome", true),
+            ("A free event for all ages", true),
+            ("Free to attend, booking recommended", true),
+            ("Entry is free", true),
+            ("FREE ENTRY", true),
+            ("free drink with ticket £12", false),
+            (
+                "This free installation is accompanied by a workshop, £12",
+                false,
+            ),
+            ("Step-free access from the Pit floor foyer", false),
+            ("16–29? Join Young Barbican for free", false),
+            ("went from nothing to debt-free", false),
+            ("a supportive, judgment-free space", false),
+            ("goes deep on sound, beauty and creative freedom", false),
+            ("check bags into our free cloakrooms", false),
+            ("we're giving away FREE advance copies", false),
+            ("", false),
+        ];
+        for (input, expected) in cases {
+            assert_eq!(describes_free_entry(input), expected, "{input:?}");
+        }
     }
 
     #[test]

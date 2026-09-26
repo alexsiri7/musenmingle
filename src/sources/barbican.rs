@@ -28,7 +28,9 @@
 //! * Price is the first ticket-price row only ("Standard £20.50 (£19 + £1.50
 //!   transaction fee)" → £20.50, or a bare "Free"); the other rows are
 //!   member and concession prices ("Free entry", "Free"). Pages without a
-//!   ticket-price block have an unknown price.
+//!   ticket-price block are free only when their description says so
+//!   explicitly ("This free installation…", see
+//!   `normalise::describes_free_entry`); otherwise the price is unknown.
 //! * Every item is placed at the Barbican Centre; the room ("Art Gallery",
 //!   "The Pit") is kept in the payload only. An off-site item would get the
 //!   wrong venue.
@@ -40,9 +42,10 @@ use url::Url;
 
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
-use crate::model::{Category, NewEvent, RawEvent};
+use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_date, parse_datetime, parse_price,
+    clean_description, clean_text, dedupe_key, describes_free_entry, london_date, parse_datetime,
+    parse_price,
 };
 
 pub const KEY: &str = "barbican";
@@ -272,15 +275,16 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let Some(category) = category(&forms, multi_day) else {
         return Ok(None);
     };
-    let price = payload
-        .get("price_text")
-        .and_then(Value::as_str)
-        .map(|t| parse_price(t.split('(').next().unwrap_or(t)))
-        .unwrap_or_default();
+    let description = clean_description(payload.get("description").and_then(Value::as_str));
+    let price = match payload.get("price_text").and_then(Value::as_str) {
+        Some(t) => parse_price(t.split('(').next().unwrap_or(t)),
+        None if description.as_deref().is_some_and(describes_free_entry) => parse_price("Free"),
+        None => Price::default(),
+    };
 
     Ok(Some(NewEvent {
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
-        description: clean_description(payload.get("description").and_then(Value::as_str)),
+        description,
         title,
         venue_name: Some(VENUE_NAME.to_string()),
         address: Some(VENUE_ADDRESS.to_string()),
@@ -363,6 +367,39 @@ impl Source for Barbican {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rust_decimal::Decimal;
+
+    fn concrete_and_clay(description: &str) -> Value {
+        json!({
+            "title": "Concrete and Clay: Archiving the Barbican",
+            "starts": "2025-02-10T10:00:00Z",
+            "ends": "2027-01-01T10:00:00Z",
+            "art_forms": ["art-design"],
+            "description": description,
+        })
+    }
+
+    #[test]
+    fn description_free_wording_is_a_fallback() {
+        let mut payload = concrete_and_clay(
+            "<p>This free installation invites visitors to orient themselves.</p>",
+        );
+        let price = normalise_payload(&payload).unwrap().unwrap().price;
+        assert!(price.is_free);
+        assert_eq!(price.min, Some(Decimal::ZERO));
+
+        payload["price_text"] = json!("£20.50 (£19 + £1.50 transaction fee)");
+        let price = normalise_payload(&payload).unwrap().unwrap().price;
+        assert!(!price.is_free);
+        assert_eq!(price.min, Some(Decimal::new(2050, 2)));
+    }
+
+    #[test]
+    fn description_without_free_wording_has_unknown_price() {
+        let payload = concrete_and_clay("<p>An installation drawn from the Barbican archive.</p>");
+        let price = normalise_payload(&payload).unwrap().unwrap().price;
+        assert_eq!(price, Price::default());
+    }
 
     #[test]
     fn header_times_are_utc_instants() {
