@@ -100,11 +100,23 @@ async fn fetches_listings_and_details_via_fetch_context() {
             .await;
     }
     let slugs = detail_slugs();
-    // One detail page fails: reported as a soft error, the rest still parse.
-    let (broken, ok) = slugs.split_first().unwrap();
+    // One detail page fails over HTTP and one returns an unparseable page:
+    // both are reported as soft errors, the rest still parse.
+    let [broken, malformed, ok @ ..] = slugs.as_slice() else {
+        panic!("need at least three detail fixtures");
+    };
     Mock::given(method("GET"))
         .and(path(format!("/exhibitions/{broken}")))
         .respond_with(ResponseTemplate::new(500))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path(format!("/exhibitions/{malformed}")))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .set_body_string("<html><body>not an exhibition page</body></html>"),
+        )
+        .expect(1)
         .mount(&server)
         .await;
     for slug in ok {
@@ -123,8 +135,17 @@ async fn fetches_listings_and_details_via_fetch_context() {
     let s = DesignMuseum::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     let errors = ctx.take_errors();
-    assert_eq!(errors.len(), 1, "{errors:?}");
-    assert!(errors[0].contains(broken.as_str()));
+    assert_eq!(errors.len(), 2, "{errors:?}");
+    assert!(
+        errors.iter().any(|e| e.contains(broken.as_str())),
+        "{errors:?}"
+    );
+    assert!(
+        errors
+            .iter()
+            .any(|e| e.contains(malformed.as_str()) && e.contains("no page title")),
+        "{errors:?}"
+    );
     let mut ids: Vec<String> = raws.into_iter().map(|r| r.source_event_id).collect();
     ids.sort();
     assert_eq!(&ids, ok);
