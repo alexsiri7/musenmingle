@@ -1,4 +1,4 @@
-//! Minimal GitHub REST client for health issues.
+//! Minimal GitHub REST client for health and new-scraper issues.
 //!
 //! This is NOT a scraping client and deliberately does not use
 //! [`crate::fetch::FetchContext`]: it talks to an authenticated API
@@ -16,7 +16,7 @@ pub struct IssueRef {
     pub title: String,
 }
 
-/// Where health issues are filed. A trait so tests can use wiremock or fakes.
+/// Where issues are filed. A trait so tests can use wiremock or fakes.
 #[async_trait]
 pub trait IssueFiler: Send + Sync {
     /// Open issues (not PRs) carrying `label`.

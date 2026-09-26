@@ -7,7 +7,8 @@
 //! 3. for each (sequentially, so per-domain politeness is trivially kept):
 //!    fetch with a timeout, normalise, drop past events, upsert, and record
 //!    an `events.source_runs` row (events found, errors, duration);
-//! 4. run the health checker for that source.
+//! 4. run the health checker for that source;
+//! 5. file GitHub issues for site suggestions the API left `pending`.
 
 use std::time::Duration;
 
@@ -18,6 +19,7 @@ use crate::fetch::FetchContext;
 use crate::health::{HealthAction, HealthChecker};
 use crate::repo::{self, NewRun, SourceRow};
 use crate::sources::Source;
+use crate::suggestions;
 
 /// Arbitrary constant key for `pg_try_advisory_lock` (session-level locks
 /// are not schema objects).
@@ -95,6 +97,19 @@ impl Runner {
             };
             tracing::info!(?report, "source finished");
             reports.push(report);
+        }
+        if let Some(filer) = self.health.filer() {
+            match suggestions::file_pending(&self.pool, filer, now).await {
+                Ok(filed) if !filed.is_empty() => {
+                    tracing::info!(issues = ?filed, "filed pending site suggestions")
+                }
+                Ok(_) => {}
+                Err(e) => tracing::error!(error = %e, "filing pending site suggestions failed"),
+            }
+        } else {
+            tracing::warn!(
+                "no GitHub filer configured; pending site suggestions will not be filed"
+            );
         }
         Ok(reports)
     }

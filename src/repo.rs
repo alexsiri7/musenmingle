@@ -714,3 +714,129 @@ pub async fn close_health_issues(pool: &PgPool, source_id: i64) -> sqlx::Result<
     .await?
     .rows_affected())
 }
+
+/// A site suggestion about to be stored.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct NewSuggestion {
+    pub url: String,
+    pub domain: String,
+    pub note: Option<String>,
+    pub submitter_ip_hash: String,
+}
+
+#[derive(Debug, Clone, FromRow, PartialEq, Eq)]
+pub struct SuggestionRow {
+    pub id: i64,
+    pub url: String,
+    pub domain: String,
+    pub note: Option<String>,
+}
+
+/// Serialise submissions from one client until the transaction ends, so
+/// concurrent requests cannot all pass the rate-limit check.
+pub async fn lock_suggestion_submitter(
+    tx: &mut Transaction<'_, Postgres>,
+    ip_hash: &str,
+) -> sqlx::Result<()> {
+    sqlx::query("SELECT pg_advisory_xact_lock(hashtextextended($1, 0))")
+        .bind(ip_hash)
+        .execute(&mut **tx)
+        .await?;
+    Ok(())
+}
+
+/// When `limit` submissions from `ip_hash` already fall inside the last
+/// `window`, the seconds until the oldest of those leaves it; else `None`.
+pub async fn suggestion_retry_after(
+    tx: &mut Transaction<'_, Postgres>,
+    ip_hash: &str,
+    window: std::time::Duration,
+    limit: u32,
+) -> sqlx::Result<Option<f64>> {
+    sqlx::query_scalar(
+        "SELECT EXTRACT(EPOCH FROM created_at + make_interval(secs => $2) - now())::float8
+           FROM events.site_suggestions
+          WHERE submitter_ip_hash = $1 AND created_at > now() - make_interval(secs => $2)
+          ORDER BY created_at DESC
+         OFFSET $3 - 1 LIMIT 1",
+    )
+    .bind(ip_hash)
+    .bind(window.as_secs_f64())
+    .bind(i64::from(limit))
+    .fetch_optional(&mut **tx)
+    .await
+}
+
+/// `(key, domain)` of every source, enabled or not.
+pub async fn source_domains(
+    tx: &mut Transaction<'_, Postgres>,
+) -> sqlx::Result<Vec<(String, String)>> {
+    sqlx::query_as("SELECT key, domain FROM events.sources ORDER BY key")
+        .fetch_all(&mut **tx)
+        .await
+}
+
+/// Insert a `pending` suggestion; `None` if the domain already has a
+/// pending or accepted one.
+pub async fn insert_pending_suggestion(
+    tx: &mut Transaction<'_, Postgres>,
+    s: &NewSuggestion,
+) -> sqlx::Result<Option<i64>> {
+    sqlx::query_scalar(
+        "INSERT INTO events.site_suggestions (url, domain, note, submitter_ip_hash, status)
+         VALUES ($1, $2, $3, $4, 'pending')
+         ON CONFLICT (domain) WHERE status IN ('pending', 'accepted') DO NOTHING
+         RETURNING id",
+    )
+    .bind(&s.url)
+    .bind(&s.domain)
+    .bind(&s.note)
+    .bind(&s.submitter_ip_hash)
+    .fetch_optional(&mut **tx)
+    .await
+}
+
+pub async fn insert_duplicate_suggestion(
+    tx: &mut Transaction<'_, Postgres>,
+    s: &NewSuggestion,
+) -> sqlx::Result<()> {
+    sqlx::query(
+        "INSERT INTO events.site_suggestions (url, domain, note, submitter_ip_hash, status)
+         VALUES ($1, $2, $3, $4, 'duplicate')",
+    )
+    .bind(&s.url)
+    .bind(&s.domain)
+    .bind(&s.note)
+    .bind(&s.submitter_ip_hash)
+    .execute(&mut **tx)
+    .await?;
+    Ok(())
+}
+
+/// Record the GitHub issue filed for a pending suggestion.
+pub async fn mark_suggestion_filed(pool: &PgPool, id: i64, issue: i64) -> sqlx::Result<()> {
+    sqlx::query(
+        "UPDATE events.site_suggestions SET status = 'accepted', github_issue_number = $2
+         WHERE id = $1 AND status = 'pending'",
+    )
+    .bind(id)
+    .bind(issue)
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
+/// Pending suggestions created before `before`, oldest first.
+pub async fn pending_suggestions(
+    pool: &PgPool,
+    before: DateTime<Utc>,
+) -> sqlx::Result<Vec<SuggestionRow>> {
+    sqlx::query_as(
+        "SELECT id, url, domain, note FROM events.site_suggestions
+          WHERE status = 'pending' AND created_at < $1
+          ORDER BY created_at",
+    )
+    .bind(before)
+    .fetch_all(pool)
+    .await
+}

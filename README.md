@@ -11,13 +11,14 @@ written in Rust (axum, tokio, sqlx, reqwest). There is no frontend yet.
 ```
             +-------------------+        +---------------------------+
 cron ─────▶ |  thaleia-ingest   |        |       thaleia-api         |
-(15 min)    |  (one-shot run)   |        |  GET /healthz (read API   |
-            +---------+---------+        |  is a later phase)        |
+(15 min)    |  (one-shot run)   |        |  GET /healthz,            |
+            +---------+---------+        |  POST /v1/suggestions     |
                       │                  +-------------+-------------+
        ┌──────────────┼──────────────┐                 │
        ▼              ▼              ▼                 ▼
   Source trait   normalise     health checker ──▶ GitHub issues
-  (API/scraper)  + dedupe key  (3 rules)          (scraper-broken)
+  (API/scraper)  + dedupe key  (3 rules)          (scraper-broken,
+                                                   new-scraper)
        │              │              │
        ▼              ▼              ▼
   FetchContext   repo::upsert_event / source_runs / health_issues
@@ -58,7 +59,8 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   [Merging and overrides](#merging-and-overrides).
 - **Ingest runner** (`src/runner.rs`): takes an advisory lock, runs enabled
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
-  records `events.source_runs`, then runs the health checker.
+  records `events.source_runs`, then runs the health checker, and finally
+  files issues for site suggestions the API left `pending`.
 - **Health checks** (`src/health.rs`, `src/github.rs`): after each run a source
   trips if (1) a successful run found 0 events while its trailing average is > 0, (2) it had
   errors on 2 consecutive runs, or (3) its count dropped > 60 % vs the trailing
@@ -66,6 +68,19 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
   issues by label + title, so it survives DB resets). Recovery comments on and
   closes the issue.
+- **Site suggestions** (`src/suggestions.rs`, `POST /v1/suggestions` with
+  `{"url": "...", "note": "optional, ≤ 500 chars"}`): http(s) URLs on a
+  public domain (no IPs, `localhost`, `.local`, …) are reduced to their
+  registrable domain (public suffix list; `www.example.org/x` →
+  `example.org`) and deduped against `events.sources.domain` (409
+  `already_covered`) and pending/accepted suggestions (200
+  `already_suggested`). New domains get 201 `accepted` and one GitHub issue
+  labelled `new-scraper` from `.github/ISSUE_TEMPLATE/new-scraper.md`; if
+  GitHub fails the row stays `pending` and the next ingest run files it
+  (adopting an open issue with the same title). Invalid input gets 400
+  `invalid`. Each client IP (stored only as `sha256(ip + salt)`) may make 5
+  stored submissions per hour and 20 per day, duplicates included; beyond
+  that, 429 with `Retry-After`. The URL is never fetched.
 
 ### Merging and overrides
 
@@ -166,8 +181,12 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 |---|---|---|---|
 | `DATABASE_URL` | both | — (required) | Postgres URL (the `thaleia` role in prod) |
 | `TICKETMASTER_API_KEY` | ingest | unset → source skipped | Discovery API key |
-| `GITHUB_TOKEN` | ingest | unset → trips only logged | Issues read/write on `GITHUB_REPO` |
-| `GITHUB_REPO` | ingest | `alexsiri7/thaleia` | Where health issues are filed |
+| `GITHUB_TOKEN` | both | unset → trips only logged; suggestions stay pending | Issues read/write on `GITHUB_REPO` |
+| `GITHUB_REPO` | both | `alexsiri7/thaleia` | Where health and new-scraper issues are filed |
+| `SUGGESTION_IP_SALT` | api | — (required) | Secret salt for hashing submitter IPs |
+| `SUGGESTION_RATE_PER_HOUR` | api | `5` | Stored suggestions per client IP per hour |
+| `SUGGESTION_RATE_PER_DAY` | api | `20` | Stored suggestions per client IP per day |
+| `TRUSTED_PROXY_COUNT` | api | `0` | Proxies whose `X-Forwarded-For` entries are trusted (Railway: `1`) |
 | `PORT` | api | `8080` | HTTP port |
 | `RUST_LOG` | both | `info` | tracing filter |
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
@@ -185,7 +204,10 @@ contains both binaries):
 
 1. **API service** — reads `railway.toml` (the default config file):
    start command `thaleia-api`, health check `GET /healthz`, restart on
-   failure. Env: `DATABASE_URL`, `RUST_LOG`.
+   failure. Env: `DATABASE_URL`, `RUST_LOG`, `SUGGESTION_IP_SALT`,
+   `TRUSTED_PROXY_COUNT=1` (Railway's edge proxy appends the client to
+   `X-Forwarded-For`), `GITHUB_TOKEN`, `GITHUB_REPO`, optionally
+   `SUGGESTION_RATE_*`.
 2. **Ingest cron service** — same repo and Dockerfile; in its service
    settings set the *config-as-code file path* to `/railway.ingest.toml`
    (config in code overrides the dashboard, so it must not read
@@ -207,9 +229,6 @@ role's password, and use a **session**-mode (or direct) connection string for
 
 - **Read API** — list/filter events by date range, category, free, bounding
   box (lat/lng index is in place).
-- **Site submissions endpoint** — public "suggest a site" form writing to
-  `events.site_suggestions` (table exists), deduped per domain, filed as
-  `new-scraper` issues.
 - **More sources** — CreativeMornings London, galleries/museums, writing groups;
   each via a `new-scraper` issue (`docs/adding-a-scraper.md`).
 - **Railway deployment** — API + ingest cron services as described above.

@@ -78,6 +78,54 @@ impl RateLimitConfig {
     }
 }
 
+/// Public site submissions (`POST /v1/suggestions`).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SuggestionConfig {
+    /// Salt for the stored client-IP hash; the API refuses to start without it.
+    pub ip_salt: Option<String>,
+    pub per_hour: u32,
+    pub per_day: u32,
+    /// Reverse proxies in front of the API whose `X-Forwarded-For` entries
+    /// are trusted (Railway: 1). 0 = use the TCP peer address.
+    pub trusted_proxies: usize,
+}
+
+impl Default for SuggestionConfig {
+    fn default() -> Self {
+        Self {
+            ip_salt: None,
+            per_hour: 5,
+            per_day: 20,
+            trusted_proxies: 0,
+        }
+    }
+}
+
+fn parse_env<T: std::str::FromStr>(name: &str, default: T) -> Result<T> {
+    match non_empty(name) {
+        Some(v) => v
+            .parse()
+            .map_err(|_| anyhow::anyhow!("{name} is not a valid number: {v:?}")),
+        None => Ok(default),
+    }
+}
+
+impl SuggestionConfig {
+    fn from_env() -> Result<Self> {
+        let d = Self::default();
+        let c = Self {
+            ip_salt: non_empty("SUGGESTION_IP_SALT"),
+            per_hour: parse_env("SUGGESTION_RATE_PER_HOUR", d.per_hour)?,
+            per_day: parse_env("SUGGESTION_RATE_PER_DAY", d.per_day)?,
+            trusted_proxies: parse_env("TRUSTED_PROXY_COUNT", d.trusted_proxies)?,
+        };
+        if c.per_hour == 0 || c.per_day == 0 {
+            bail!("SUGGESTION_RATE_PER_HOUR and SUGGESTION_RATE_PER_DAY must be at least 1");
+        }
+        Ok(c)
+    }
+}
+
 /// Process configuration shared by both binaries.
 #[derive(Debug, Clone)]
 pub struct Config {
@@ -89,6 +137,7 @@ pub struct Config {
     pub rate_limit: RateLimitConfig,
     /// Per-source fetch timeout for the ingest runner.
     pub source_timeout: Duration,
+    pub suggestions: SuggestionConfig,
 }
 
 fn non_empty(name: &str) -> Option<String> {
@@ -126,6 +175,7 @@ impl Config {
                 non_empty("RATE_LIMIT_OVERRIDES").as_deref(),
             )?,
             source_timeout,
+            suggestions: SuggestionConfig::from_env()?,
         })
     }
 }

@@ -31,6 +31,7 @@ async fn every_seeded_source_has_an_implementation() {
         port: 0,
         rate_limit: RateLimitConfig::disabled(),
         source_timeout: Duration::from_secs(1),
+        suggestions: Default::default(),
     };
     assert!(!rows.is_empty());
     for row in &rows {
