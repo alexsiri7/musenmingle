@@ -542,6 +542,25 @@ pub fn excerpt(text: &str) -> String {
     format!("{head}…")
 }
 
+/// Outward code (e.g. `E1W`) of the first UK postcode in `text`.
+pub fn postcode_outward(text: &str) -> Option<String> {
+    let tokens: Vec<&str> = text
+        .split(|c: char| c.is_whitespace() || c == ',')
+        .filter(|t| !t.is_empty())
+        .collect();
+    tokens.windows(2).find_map(|pair| {
+        let (outward, inward) = (pair[0], pair[1].as_bytes());
+        let outward_ok = (2..=4).contains(&outward.len())
+            && outward.chars().all(|c| c.is_ascii_alphanumeric())
+            && outward.starts_with(|c: char| c.is_ascii_alphabetic())
+            && outward.chars().any(|c| c.is_ascii_digit());
+        let inward_ok = inward.len() == 3
+            && inward[0].is_ascii_digit()
+            && inward[1..].iter().all(u8::is_ascii_alphabetic);
+        (outward_ok && inward_ok).then(|| outward.to_ascii_uppercase())
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

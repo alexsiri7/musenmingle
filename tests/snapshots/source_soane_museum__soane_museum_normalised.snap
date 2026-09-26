@@ -1,0 +1,595 @@
+---
+source: tests/source_soane_museum.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "id": "exhibitions/queer-revelations",
+    "payload": {
+      "date_text": "01 Jun 2024 - 31 Dec 2026",
+      "ends": "2026-12-31T00:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/SoaneTimberlinaSamChurchill-9644%20thumb_1.jpg?itok=gCC0Z9lT",
+      "path": "/exhibitions/queer-revelations",
+      "price_text": "Online only; free to explore.",
+      "starts": "2024-05-31T23:00:00Z",
+      "teaser": "This online exhibition showcases the voices of Museum staff and uncovers some of the queer histories hiding in plain view at Sir John Soane’s Museum.",
+      "title": "Queer Revelations",
+      "url": "https://www.soane.org/exhibitions/queer-revelations"
+    }
+  },
+  {
+    "event": null,
+    "id": "exhibitions/golden-age-architecture",
+    "payload": {
+      "date_text": "17 Oct 2025 - 31 Dec 2026",
+      "ends": "2026-12-31T16:35:27Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Thorpe%20Symthons%20web%20thumbnail.png?itok=kCKjMEon",
+      "path": "/exhibitions/golden-age-architecture",
+      "price_text": "Online only; free to explore",
+      "starts": "2025-10-17T10:00:27Z",
+      "teaser": "This online exhibition presents findings from two major cataloguing projects: one on the ‘Book of Architecture of John Thorpe’ in Sir John Soane’s Museum, and the second on the Smythson drawings at the Royal Institute of British Architects.",
+      "title": "A Golden Age of Architecture: Rare Elizabethan and Early Jacobean Drawings by Thorpe and the Smythsons",
+      "url": "https://www.soane.org/exhibitions/golden-age-architecture"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/highlights-tour",
+    "payload": {
+      "date_text": "1 January, 2026 - 31 December, 2026",
+      "ends": "2026-12-31T13:00:00Z",
+      "event_type": "Tours",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Highlights%20Tour%20web%20thumbnail.png?itok=QvQsLKnQ",
+      "path": "/whats-on/highlights-tour",
+      "price_text": "Tickets: £25",
+      "starts": "2026-01-01T12:00:00Z",
+      "teaser": "The classic tour of the Museum, our Highlights Tours will transport you back to Regency London, taking you through Sir John Soane’s extraordinary home, left as it was at the time of his death in 1837.",
+      "title": "Highlights Tour",
+      "url": "https://www.soane.org/whats-on/highlights-tour"
+    }
+  },
+  {
+    "event": null,
+    "id": "exhibitions/reveries-ruin-value-and-future-museums",
+    "payload": {
+      "date_text": "19 Jun 2026 - 01 Jan 2027",
+      "ends": "2027-01-01T16:52:39Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Reveries_on_Ruin_Value_and_the_Future_of_a_Museum_web_thumbnail.png?itok=Ru8zYV2d",
+      "path": "/exhibitions/reveries-ruin-value-and-future-museums",
+      "price_text": null,
+      "starts": "2026-06-18T23:00:00Z",
+      "teaser": "This online exhibition showcases work produced by artist Simon Faride, one of the 2025 Jerwood Artists in Residence at the Soane. His work, a scrapbook of playful experimentation, explores 'ruin value' and speculates on the long-term future of the Museum.",
+      "title": "Reveries on Ruin Value and the Future of (a) Museum(s)",
+      "url": "https://www.soane.org/exhibitions/reveries-ruin-value-and-future-museums"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "talk",
+      "dedupe_key": "soane-museum-study-group-olivia-mcconnell|2026-09-30|sir-john-soanes",
+      "description": "The Soane Museum Study Group is an open forum for scholars – both established and emerging – to present new research into an aspect of architectural history and/or Soane’s collection",
+      "ends_at": null,
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/September_Study_Group_web_thumbnail.png?itok=-la6lPCX",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-30T17:00:00Z",
+      "tags": [
+        "Talks"
+      ],
+      "title": "Soane Museum Study Group: Olivia McConnell",
+      "url": "https://www.soane.org/whats-on/soane-museum-study-group-olivia-mcconnell",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "whats-on/soane-museum-study-group-olivia-mcconnell",
+    "payload": {
+      "date_text": "30 September, 2026",
+      "ends": null,
+      "event_type": "Talks",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/September_Study_Group_web_thumbnail.png?itok=-la6lPCX",
+      "location": "No. 14 Lincoln's Inn Fields",
+      "path": "/whats-on/soane-museum-study-group-olivia-mcconnell",
+      "price_text": "Tickets are free, but please be sure to book your place so as to ensure capacity.",
+      "starts": "2026-09-30T17:00:00Z",
+      "teaser": "The Soane Museum Study Group is an open forum for scholars – both established and emerging – to present new research into an aspect of architectural history and/or Soane’s collection",
+      "title": "Soane Museum Study Group: Olivia McConnell",
+      "url": "https://www.soane.org/whats-on/soane-museum-study-group-olivia-mcconnell"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/young-architects-club",
+    "payload": {
+      "date_text": "3 October, 2026 - 3 July, 2027",
+      "ends": "2027-07-03T11:00:00Z",
+      "event_type": "Families",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Young-Architects-Club-thumbnail.png?itok=XBQltg0N",
+      "path": "/whats-on/young-architects-club",
+      "price_text": "Annual membership: £90",
+      "starts": "2026-10-03T09:00:00Z",
+      "teaser": "Join our monthly architecture club for 7 - 10 yrs, held on the first Saturday of each month!",
+      "title": "Young Architects Club",
+      "url": "https://www.soane.org/whats-on/young-architects-club"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/new-architects-club",
+    "payload": {
+      "date_text": "3 October, 2026 - 3 July, 2027",
+      "ends": "2027-07-03T14:30:00Z",
+      "event_type": "Families",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/New-Architects-Club-thumbnail.png?itok=2WNiBxTQ",
+      "path": "/whats-on/new-architects-club",
+      "price_text": "Annual membership: £90",
+      "starts": "2026-10-03T12:30:00Z",
+      "teaser": "Join our monthly architecture club for 11 - 14 yrs, held on the first Saturday of each month!",
+      "title": "New Architects Club",
+      "url": "https://www.soane.org/whats-on/new-architects-club"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/architectural-drawing-course",
+    "payload": {
+      "date_text": "10 October, 2026 - 20 March, 2027",
+      "ends": "2027-03-20T15:00:00Z",
+      "event_type": "Families",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Architectural-Drawing-Course-thumbnail.png?itok=-KyfoI1E",
+      "path": "/whats-on/architectural-drawing-course",
+      "price_text": "Full course: £60",
+      "starts": "2026-10-10T10:00:00Z",
+      "teaser": "Join our course for young people aged 15 - 18 yrs, held on the second or third Saturday of the month.",
+      "title": "Architectural Drawing Course",
+      "url": "https://www.soane.org/whats-on/architectural-drawing-course"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "michael-landy-future-ruins|2026-10-14|sir-john-soanes",
+      "description": "Future Ruins at Sir John Soane’s Museum will feature new and recent work showcasing the detailed drawings that continue Michael Landy's reputation as one of the most talented draughtsman of his generation.",
+      "ends_at": "2027-01-17T00:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Michael%20Landy%20John%20Soane%20in%20ruins%20web%20thumbnail%20v1.png?itok=qyCfwGVi",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Michael Landy: Future Ruins",
+      "url": "https://www.soane.org/exhibitions/michael-landy-future-ruins",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/michael-landy-future-ruins",
+    "payload": {
+      "date_text": "14 Oct 2026 - 17 Jan 2027",
+      "ends": "2027-01-17T11:24:58Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Michael%20Landy%20John%20Soane%20in%20ruins%20web%20thumbnail%20v1.png?itok=qyCfwGVi",
+      "path": "/exhibitions/michael-landy-future-ruins",
+      "price_text": null,
+      "starts": "2026-10-14T10:24:58Z",
+      "teaser": "Future Ruins at Sir John Soane’s Museum will feature new and recent work showcasing the detailed drawings that continue Michael Landy's reputation as one of the most talented draughtsman of his generation.",
+      "title": "Michael Landy: Future Ruins",
+      "url": "https://www.soane.org/exhibitions/michael-landy-future-ruins"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "community",
+      "dedupe_key": "3d-portraits-holiday-workshop|2026-10-28|sir-john-soanes",
+      "description": "Join us for an engaging 4-hour art workshop where we will be using a variety of craft material to create portraits in 3D.",
+      "ends_at": null,
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/October_Holiday_Workshop_2026_thumbnail.png?itok=x-8Oh6Tl",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "12",
+        "min": "12"
+      },
+      "starts_at": "2026-10-28T11:00:00Z",
+      "tags": [
+        "Families"
+      ],
+      "title": "3D Portraits: Holiday Workshop",
+      "url": "https://www.soane.org/whats-on/3d-portraits-holiday-workshop",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "whats-on/3d-portraits-holiday-workshop",
+    "payload": {
+      "date_text": "28 October, 2026",
+      "ends": null,
+      "event_type": "Families",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/October_Holiday_Workshop_2026_thumbnail.png?itok=x-8Oh6Tl",
+      "location": "Art Room at No. 14 Lincoln's Inn Fields.",
+      "path": "/whats-on/3d-portraits-holiday-workshop",
+      "price_text": "£12 p/p",
+      "starts": "2026-10-28T11:00:00Z",
+      "teaser": "Join us for an engaging 4-hour art workshop where we will be using a variety of craft material to create portraits in 3D.",
+      "title": "3D Portraits: Holiday Workshop",
+      "url": "https://www.soane.org/whats-on/3d-portraits-holiday-workshop"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "community",
+      "dedupe_key": "haunted-ruins-halloween-family-drop-in|2026-10-29|sir-john-soanes",
+      "description": "Join us for our October Family Drop-in session, where we'll be using craft materials to create haunted ruins - spooky!",
+      "ends_at": null,
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Haunted_Ruins_Workshop_2026_thumbnail.png?itok=P2t9bTaC",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-29T11:00:00Z",
+      "tags": [
+        "Families"
+      ],
+      "title": "Haunted Ruins Halloween Family Drop-in",
+      "url": "https://www.soane.org/whats-on/haunted-ruins-halloween-family-drop",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "whats-on/haunted-ruins-halloween-family-drop",
+    "payload": {
+      "date_text": "29 October, 2026",
+      "ends": null,
+      "event_type": "Families",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Haunted_Ruins_Workshop_2026_thumbnail.png?itok=P2t9bTaC",
+      "location": "Art Room, No. 14 Lincoln's Inn Fields",
+      "path": "/whats-on/haunted-ruins-halloween-family-drop",
+      "price_text": "Free Family Drop-in",
+      "starts": "2026-10-29T11:00:00Z",
+      "teaser": "Join us for our October Family Drop-in session, where we'll be using craft materials to create haunted ruins - spooky!",
+      "title": "Haunted Ruins Halloween Family Drop-in",
+      "url": "https://www.soane.org/whats-on/haunted-ruins-halloween-family-drop"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "community",
+      "dedupe_key": "soane-late-halloween-special|2026-10-30|sir-john-soanes",
+      "description": "Venture through the candlelit corridors of Sir John Soane's Museum on this eerie evening, for a special Halloween Late. Explore the eclectic collection after dark and learn more about the house's otherworldly artefacts.",
+      "ends_at": null,
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/halloween%20thumbnail.jpg?itok=DL59UAKn",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-10-30T18:00:00Z",
+      "tags": [
+        "Soane Lates"
+      ],
+      "title": "Soane Late: Halloween Special",
+      "url": "https://www.soane.org/whats-on/soane-late-halloween-special-30-october-2026",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "whats-on/soane-late-halloween-special-30-october-2026",
+    "payload": {
+      "date_text": "30 October, 2026",
+      "ends": null,
+      "event_type": "Soane Lates",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/halloween%20thumbnail.jpg?itok=DL59UAKn",
+      "location": "Sir John Soane's Museum",
+      "path": "/whats-on/soane-late-halloween-special-30-october-2026",
+      "price_text": "Tickets: £25",
+      "starts": "2026-10-30T18:00:00Z",
+      "teaser": "Venture through the candlelit corridors of Sir John Soane's Museum on this eerie evening, for a special Halloween Late. Explore the eclectic collection after dark and learn more about the house's otherworldly artefacts.",
+      "title": "Soane Late: Halloween Special",
+      "url": "https://www.soane.org/whats-on/soane-late-halloween-special-30-october-2026"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/twilight-tour-descent-underworld",
+    "payload": {
+      "date_text": "31 October, 2026",
+      "ends": null,
+      "event_type": "Tours",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/halloween%20event.jpg?itok=5kgaQmwi",
+      "path": "/whats-on/twilight-tour-descent-underworld",
+      "price_text": "Tickets: £35",
+      "starts": "2026-10-31T18:00:00Z",
+      "teaser": "On Halloween, join our expert guides for an exclusive, after-hours Twilight Tour – a journey through Soane's labyrinthine home, sharing stories of the underworld, from ancient Egyptian gods to the rise of Gothic literature.",
+      "title": "Twilight Tour: Descent into the Underworld",
+      "url": "https://www.soane.org/whats-on/twilight-tour-descent-underworld"
+    }
+  },
+  {
+    "event": {
+      "address": "6 Burlington Gardens, Mayfair, London, W1J 0PE",
+      "category": "talk",
+      "dedupe_key": "2026-soane-medal-lecture|2026-11-24|royal-academy-of-arts",
+      "description": "Join us for this special event celebrating our 2026 Soane Medallist, Farshid Moussavi, at the Royal Academy of Arts.",
+      "ends_at": null,
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/2026_Soane_Medal_Lecture_thumbnail.png?itok=s4JT3VXA",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "starts_at": "2026-11-24T18:30:00Z",
+      "tags": [
+        "Talks"
+      ],
+      "title": "2026 Soane Medal Lecture",
+      "url": "https://www.soane.org/whats-on/2026-soane-medal-lecture",
+      "venue_name": "Royal Academy of Arts"
+    },
+    "id": "whats-on/2026-soane-medal-lecture",
+    "payload": {
+      "date_text": "24 November, 2026",
+      "ends": null,
+      "event_type": "Talks",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/2026_Soane_Medal_Lecture_thumbnail.png?itok=s4JT3VXA",
+      "location": "Royal Academy of Arts (Burlington Gardens entrance), 6 Burlington Gardens, Mayfair, London, W1J 0PE",
+      "path": "/whats-on/2026-soane-medal-lecture",
+      "price_text": "Tickets: £15 (£5 students)",
+      "starts": "2026-11-24T18:30:00Z",
+      "teaser": "Join us for this special event celebrating our 2026 Soane Medallist, Farshid Moussavi, at the Royal Academy of Arts.",
+      "title": "2026 Soane Medal Lecture",
+      "url": "https://www.soane.org/whats-on/2026-soane-medal-lecture"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "sir-john-soane-poetry-of-architecture|2027-01-14|sir-john-soanes",
+      "description": "In 2027, a landmark collaboration between Sir John Soane’s Museum and Yale School of Architecture will bring Sir John Soane: The Poetry of Architecture to the United States.",
+      "ends_at": "2027-07-02T23:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Yale_Exhibition_2027_thumbnail.png?itok=TiCm44iJ",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-14T00:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Sir John Soane: The Poetry of Architecture",
+      "url": "https://www.soane.org/exhibitions/sir-john-soane-poetry-architecture",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/sir-john-soane-poetry-architecture",
+    "payload": {
+      "date_text": "14 Jan 2027 - 03 Jul 2027",
+      "ends": "2027-07-03T16:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Yale_Exhibition_2027_thumbnail.png?itok=TiCm44iJ",
+      "path": "/exhibitions/sir-john-soane-poetry-architecture",
+      "price_text": null,
+      "starts": "2027-01-14T09:00:00Z",
+      "teaser": "In 2027, a landmark collaboration between Sir John Soane’s Museum and Yale School of Architecture will bring Sir John Soane: The Poetry of Architecture to the United States.",
+      "title": "Sir John Soane: The Poetry of Architecture",
+      "url": "https://www.soane.org/exhibitions/sir-john-soane-poetry-architecture"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "sam-belinfante-all-that-i-have-to-say-is|2027-01-27|sir-john-soanes",
+      "description": "Sam Belinfante’s new film All that I have to say is... explores how changing light can affect our perception of space and create a sense of drama.",
+      "ends_at": "2027-02-28T00:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Sam_Belinfante_Exhibition_thumbnail.png?itok=YBCJi4br",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-27T00:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Sam Belinfante: All that I have to say is…",
+      "url": "https://www.soane.org/exhibitions/sam-belinfante-all-i-have-say",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/sam-belinfante-all-i-have-say",
+    "payload": {
+      "date_text": "27 Jan 2027 - 28 Feb 2027",
+      "ends": "2027-02-28T17:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Sam_Belinfante_Exhibition_thumbnail.png?itok=YBCJi4br",
+      "path": "/exhibitions/sam-belinfante-all-i-have-say",
+      "price_text": null,
+      "starts": "2027-01-27T10:00:00Z",
+      "teaser": "Sam Belinfante’s new film All that I have to say is . . .&nbsp;&nbsp;explores how changing light can affect our perception of space and create a sense of drama.",
+      "title": "Sam Belinfante: All that I have to say is…",
+      "url": "https://www.soane.org/exhibitions/sam-belinfante-all-i-have-say"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "architecture-drawing-prize-2026|2027-01-27|sir-john-soanes",
+      "description": "A selection of winning works from the 9th edition of The Architecture Drawing Prize will go on display at Sir John Soane’s Museum in January 2027.",
+      "ends_at": "2027-02-28T00:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/The_Architecture_Drawing_Prize_2026_thumbnail.png?itok=wPhLIaFP",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-27T00:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "The Architecture Drawing Prize 2026",
+      "url": "https://www.soane.org/exhibitions/architecture-drawing-prize-2026-0",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/architecture-drawing-prize-2026-0",
+    "payload": {
+      "date_text": "27 Jan 2027 - 28 Feb 2027",
+      "ends": "2027-02-28T17:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/The_Architecture_Drawing_Prize_2026_thumbnail.png?itok=wPhLIaFP",
+      "path": "/exhibitions/architecture-drawing-prize-2026-0",
+      "price_text": null,
+      "starts": "2027-01-27T10:00:00Z",
+      "teaser": "A selection of winning works from the 9th edition of The Architecture Drawing Prize will go on display at Sir John Soane’s Museum in January 2027.",
+      "title": "The Architecture Drawing Prize 2026",
+      "url": "https://www.soane.org/exhibitions/architecture-drawing-prize-2026-0"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "zaha-hadid-visionary-museum-designs|2027-03-24|sir-john-soanes",
+      "description": "This major exhibition will explore the work of Iraqi-British architect Zaha Hadid through the lens of the many museum’s she worked on throughout her career.",
+      "ends_at": "2027-06-19T23:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Zaha_Hadid_Exhibition_thumbnail.png?itok=l5I7fkpP",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-24T00:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Zaha Hadid: Visionary Museum Designs",
+      "url": "https://www.soane.org/exhibitions/zaha-hadid-visionary-museum-designs",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/zaha-hadid-visionary-museum-designs",
+    "payload": {
+      "date_text": "24 Mar 2027 - 20 Jun 2027",
+      "ends": "2027-06-20T16:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Zaha_Hadid_Exhibition_thumbnail.png?itok=l5I7fkpP",
+      "path": "/exhibitions/zaha-hadid-visionary-museum-designs",
+      "price_text": null,
+      "starts": "2027-03-24T10:00:00Z",
+      "teaser": "This major exhibition will explore the work of Iraqi-British architect Zaha Hadid through the lens of the many museum’s she worked on throughout her career.",
+      "title": "Zaha Hadid: Visionary Museum Designs",
+      "url": "https://www.soane.org/exhibitions/zaha-hadid-visionary-museum-designs"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "mohammed-qasim-ashfaq-drawing-in-dark|2027-03-24|sir-john-soanes",
+      "description": "This Spring, Mohammed Qasim Ashfaq will present a new series of work in the Museum’s Foyle Space that explores architectural intricacies among Soane’s collection.",
+      "ends_at": "2027-06-19T23:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Mohammed_Ashfaq_Exhibition_Thumbnail.png?itok=0dALxS2_",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-24T00:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Mohammed Qasim Ashfaq: Drawing in the Dark",
+      "url": "https://www.soane.org/exhibitions/mohammed-qasim-ashfaq-drawing-dark",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/mohammed-qasim-ashfaq-drawing-dark",
+    "payload": {
+      "date_text": "24 Mar 2027 - 20 Jun 2027",
+      "ends": "2027-06-20T16:00:00Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Mohammed_Ashfaq_Exhibition_Thumbnail.png?itok=0dALxS2_",
+      "path": "/exhibitions/mohammed-qasim-ashfaq-drawing-dark",
+      "price_text": null,
+      "starts": "2027-03-24T10:00:00Z",
+      "teaser": "This Spring, Mohammed Qasim Ashfaq will present a new series of work in the Museum’s Foyle Space that explores architectural intricacies among Soane’s collection.",
+      "title": "Mohammed Qasim Ashfaq: Drawing in the Dark",
+      "url": "https://www.soane.org/exhibitions/mohammed-qasim-ashfaq-drawing-dark"
+    }
+  },
+  {
+    "event": {
+      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
+      "category": "exhibition",
+      "dedupe_key": "gavin-turk-domestic-archaeology|2027-07-14|sir-john-soanes",
+      "description": "Gavin Turk’s intervention at Sir John Soane’s Museum brings one of Britain’s leading contemporary artists into dialogue with one of London’s most extraordinary museums, uncovering new stories of collecting, value and memory.",
+      "ends_at": "2028-01-16T00:00:00Z",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Gavin%20Turk%20at%20Sir%20John%20Soane%27s%20Museum%20web%20thumbnail.png?itok=eq-B_sJ7",
+      "lat": 51.517,
+      "lng": -0.1174,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-07-13T23:00:00Z",
+      "tags": [
+        "Exhibitions"
+      ],
+      "title": "Gavin Turk: Domestic Archaeology",
+      "url": "https://www.soane.org/exhibitions/gavin-turk-domestic-archaeology",
+      "venue_name": "Sir John Soane's Museum"
+    },
+    "id": "exhibitions/gavin-turk-domestic-archaeology",
+    "payload": {
+      "date_text": "14 Jul 2027 - 16 Jan 2028",
+      "ends": "2028-01-16T17:00:02Z",
+      "event_type": "Exhibitions",
+      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Gavin%20Turk%20at%20Sir%20John%20Soane%27s%20Museum%20web%20thumbnail.png?itok=eq-B_sJ7",
+      "path": "/exhibitions/gavin-turk-domestic-archaeology",
+      "price_text": null,
+      "starts": "2027-07-14T09:01:02Z",
+      "teaser": "Gavin Turk’s intervention at Sir John Soane’s Museum brings one of Britain’s leading contemporary artists into dialogue with one of London’s most extraordinary museums, uncovering new stories of collecting, value and memory.",
+      "title": "Gavin Turk: Domestic Archaeology",
+      "url": "https://www.soane.org/exhibitions/gavin-turk-domestic-archaeology"
+    }
+  }
+]
