@@ -105,7 +105,19 @@ impl Default for SourcePolicy {
     }
 }
 
+/// What `events.event_sources.raw` holds for sources whose terms restrict
+/// reuse (see [`SourcePolicy::restricted`]).
+pub fn redacted_raw() -> serde_json::Value {
+    serde_json::json!({ "redacted": "content policy" })
+}
+
 impl SourcePolicy {
+    /// The source's terms restrict reuse: we keep facts + link only, and
+    /// not its raw payload either.
+    pub fn restricted(&self) -> bool {
+        !self.store_description || !self.store_image
+    }
+
     /// Drop what the source's terms don't let us keep and cut the
     /// description to a short excerpt (we link out for the full text).
     pub fn apply(&self, ev: &mut NewEvent) {
@@ -378,7 +390,14 @@ async fn upsert_event_tx(
         .map(|(_, id)| *id);
 
     let mut ev = event.clone();
-    source_policy_tx(tx, source_id).await?.apply(&mut ev);
+    let policy = source_policy_tx(tx, source_id).await?;
+    policy.apply(&mut ev);
+    // A restricted source's raw payload (full text, image URLs) is not kept.
+    let payload = if policy.restricted() {
+        redacted_raw()
+    } else {
+        raw.payload.clone()
+    };
     let mut holder = key_holder(tx, &ev.dedupe_key).await?;
     if holder.is_some_and(|h| forbidden.contains(&h)) {
         // The dedupe key index is UNIQUE, so a never-merge partner holding
@@ -498,7 +517,7 @@ async fn upsert_event_tx(
     .bind(source_id)
     .bind(&raw.source_event_id)
     .bind(&raw.source_url)
-    .bind(&raw.payload)
+    .bind(&payload)
     .execute(&mut **tx)
     .await?;
 
@@ -1215,6 +1234,7 @@ pub struct PolicyReport {
     pub descriptions_trimmed: u64,
     pub images_cleared: u64,
     pub thumbnails_deleted: u64,
+    pub raw_redacted: u64,
 }
 
 /// Bring stored rows in line with the current content policy (idempotent,
@@ -1226,7 +1246,8 @@ pub struct PolicyReport {
 /// * descriptions longer than the excerpt rule are trimmed with
 ///   [`crate::normalise::excerpt`];
 /// * thumbnails whose event lost its image or whose source may no longer be
-///   stored are deleted.
+///   stored are deleted;
+/// * raw payloads of restricted sources are replaced by [`redacted_raw`].
 pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport> {
     let images_cleared = sqlx::query(
         "UPDATE events.events e SET image_url = NULL, image_source_id = NULL
@@ -1268,6 +1289,16 @@ pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport>
         .await?
         .rows_affected();
     }
+    report.raw_redacted = sqlx::query(
+        "UPDATE events.event_sources es SET raw = $1
+         FROM events.sources s
+         WHERE s.id = es.source_id AND (NOT s.store_description OR NOT s.store_image)
+           AND es.raw <> $1",
+    )
+    .bind(redacted_raw())
+    .execute(pool)
+    .await?
+    .rows_affected();
     report.thumbnails_deleted = sqlx::query(
         "DELETE FROM events.thumbnails t
          USING events.events e

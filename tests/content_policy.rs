@@ -130,6 +130,20 @@ async fn upsert_honours_policy_flags_and_cuts_descriptions_to_an_excerpt() {
         .await
         .unwrap();
     assert_eq!(stored(&pool, ob.event_id).await, (None, None, None));
+    let raws: Vec<(String, serde_json::Value)> = sqlx::query_as(
+        "SELECT source_event_id, raw FROM events.event_sources ORDER BY source_event_id",
+    )
+    .fetch_all(&pool)
+    .await
+    .unwrap();
+    assert_eq!(
+        raws,
+        [
+            ("a".to_string(), serde_json::json!({ "id": "a" })),
+            ("b".to_string(), repo::redacted_raw()),
+        ],
+        "a restricted source's raw payload is not kept"
+    );
 
     // A short description is kept verbatim.
     let mut c = event("Short talk", 5);
@@ -245,6 +259,7 @@ async fn enforce_content_policy_cleans_existing_rows() {
     .unwrap();
     let r = repo::enforce_content_policy(&pool).await.unwrap();
     assert_eq!((r.descriptions_cleared, r.images_cleared), (2, 1));
+    assert_eq!(r.raw_redacted, 2);
     assert_eq!(stored(&pool, o.event_id).await, (None, None, None));
     // Idempotent.
     assert_eq!(
