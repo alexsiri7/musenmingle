@@ -112,6 +112,37 @@ The site then appears under "Sites we couldn't use" on `/sources` (and in
 `refused` of `GET /v1/sources`), and new suggestions for that domain are
 answered with the reason (`refused`) instead of filing another issue.
 
+## Suggested sites: the `unsafe-change` check
+
+A site suggested through the public form or `POST /v1/suggestions` becomes a
+`new-scraper` issue filed by the API. The factory screens it; if screening
+passes, the issue gets `archon:auto-approved` and an agent may build the
+scraper without the owner looking first. A PR that closes such an issue
+(without the owner's `archon:approved`) must pass the `unsafe-change` check
+(`.github/workflows/unsafe-change.yml`, policy `.github/unsafe-change.yml`)
+before the factory merges it. The check is a short denylist, so a normal
+scraper or bug-fix PR passes. It fails a PR that:
+
+- touches CI, deploy, infra or agent instructions (`.github/`, `Dockerfile`,
+  `.railway/`, `railway.*`, `ops/`, `.env*`, `build.rs`, `CLAUDE.md`, ...) or
+  one of this repo's extra paths (`sqlx.toml`, `src/github.rs`,
+  `src/notify.rs`, `src/enrich/requesty.rs`);
+- touches a path naming secrets or auth handling (`auth`, `token`, `secret`,
+  `credential`, `session`, `security`, `crypto`, `permission`). Fixtures,
+  snapshots and Markdown files are exempt;
+- adds a new dependency to `Cargo.toml`. Version bumps and `Cargo.lock` are
+  fine;
+- adds code that runs processes, reads environment variables (except
+  `env!("CARGO_...")`) or opens raw sockets;
+- adds migration SQL beyond ordinary changes in the `events` schema: no
+  `GRANT`/`REVOKE`, roles, extensions, schemas, policies, `EXECUTE` or other
+  schemas.
+
+On failure the PR gets `needs-owner-review` and the owner gets one ntfy.
+PRs that close no screened issue get "not applicable" and pass. To test the
+checker against past PRs without writing anything:
+`python3 .github/unsafe-change/check.py --dry-run <pr>...`.
+
 ## Checklist for a `new-scraper` issue
 
 The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
