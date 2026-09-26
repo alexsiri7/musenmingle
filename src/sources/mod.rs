@@ -11,6 +11,7 @@ use crate::fetch::{FetchContext, FetchError};
 use crate::model::{NewEvent, RawEvent};
 use crate::repo::SourceRow;
 
+pub mod design_museum;
 pub mod jsonld;
 pub mod serpentine;
 pub mod somerset_house;
@@ -62,6 +63,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Option<Box<dyn Source>> {
             }
         },
         serpentine::KEY => Some(Box::new(serpentine::Serpentine::new(base))),
+        design_museum::KEY => Some(Box::new(design_museum::DesignMuseum::new(base))),
         somerset_house::KEY => Some(Box::new(somerset_house::SomersetHouse::new(base))),
         other => {
             tracing::warn!(source = other, "no implementation for source key; skipping");

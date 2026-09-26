@@ -1,0 +1,261 @@
+---
+source: tests/source_design_museum.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "payload": {
+      "date_text": "Open daily",
+      "description": "<p>A free exhibition introducing part of our collection, looking at the development of modern design through these three interconnected roles. Explore the free display to discover some of the designers and makers who shaped the world we live in.</p>\n",
+      "image_url": "https://designmuseum.org/image/c5aaf878-03eb-4915-8009-9719b91a9a61?width=1920",
+      "labels": [
+        "Free display",
+        "Permanent Collection - Level 2"
+      ],
+      "price_text": "Free display Designer Maker User is free to enter. No pre-booking is needed.",
+      "title": "Designer Maker User",
+      "url": "https://designmuseum.org/exhibitions/designer-maker-user"
+    },
+    "slug": "designer-maker-user"
+  },
+  {
+    "event": null,
+    "payload": {
+      "date_text": "Until June 2027",
+      "description": "<p>Visit our garden and explore a vibrant collection of birdhouses by some of London’s most innovative designers. Responding to the challenge of reimagining the humble birdhouse, the display brings together a feast of materials, shapes and concepts. Each creates a space for our feathered friends to live in, and for humans to reflect upon.</p>\n",
+      "image_url": "https://designmuseum.org/image/0954687d-0b48-4924-ae2d-db167c6a7dbb?width=1920",
+      "labels": [
+        "Free display",
+        "Design Museum Garden"
+      ],
+      "price_text": "No pre-booking is required.",
+      "title": "Dwellings, Rehomed",
+      "url": "https://designmuseum.org/exhibitions/dwellings-rehomed"
+    },
+    "slug": "dwellings-rehomed"
+  },
+  {
+    "event": {
+      "address": "224-238 Kensington High Street, London W8 6AG",
+      "category": "exhibition",
+      "dedupe_key": "es-devlin-other-worlds|2026-10-02|design",
+      "description": "Enter the imaginative world of British artist and designer Es Devlin in the first retrospective in Europe celebrating her 30-year creative practice across sculpture, stage design, music, language and light. Tickets are on sale.",
+      "ends_at": "2027-04-03T23:00:00Z",
+      "image_url": "https://designmuseum.org/image/9f022611-7f0e-46be-a6fe-18e919d760e8?width=1920",
+      "lat": 51.4994,
+      "lng": -0.2006,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "17.09",
+        "min": "8.55"
+      },
+      "starts_at": "2026-10-01T23:00:00Z",
+      "tags": [
+        "design"
+      ],
+      "title": "Es Devlin: Other Worlds",
+      "url": "https://designmuseum.org/exhibitions/es-devlin-other-worlds",
+      "venue_name": "Design Museum"
+    },
+    "payload": {
+      "date_text": "2 October 2026 – 4 April 2027",
+      "description": "<p>Enter the imaginative world of British artist and designer Es Devlin in the first retrospective in Europe celebrating her 30-year creative practice across sculpture, stage design, music, language and light.</p>\n\n<p><strong>Tickets are on sale</strong>.</p>\n",
+      "image_url": "https://designmuseum.org/image/9f022611-7f0e-46be-a6fe-18e919d760e8?width=1920",
+      "labels": [
+        "Exhibition",
+        "Coming October 2026"
+      ],
+      "price_text": "Adult: From £17.09 Student/Concession: From £12.82 Child: From £8.55",
+      "title": "Es Devlin: Other Worlds",
+      "url": "https://designmuseum.org/exhibitions/es-devlin-other-worlds"
+    },
+    "slug": "es-devlin-other-worlds"
+  },
+  {
+    "event": null,
+    "payload": {
+      "date_text": null,
+      "description": "<p>Displayed on Level 2, <strong>Fables for our Time</strong> is a triptych of stories about environmental urgencies, that uses folktales and a new collection of emoji to examine humanity’s relationship with the natural environment.</p>\n",
+      "image_url": "https://designmuseum.org/image/acf3b7b1-fe8b-4ed5-bcb1-6554096f9e54?width=1920",
+      "labels": [
+        "Level 2 Tri-wall",
+        "Free display"
+      ],
+      "price_text": null,
+      "title": "Fables for our Time",
+      "url": "https://designmuseum.org/exhibitions/fables-for-our-time"
+    },
+    "slug": "fables-for-our-time"
+  },
+  {
+    "event": null,
+    "payload": {
+      "date_text": "From December 2025 - Open daily from 9:00 – 17:00",
+      "description": "<p>An off-site installation from the Design Museum’s Future Observatory research programme. The Stone Demonstrator is a low-carbon construction prototype, which puts pre-tensioned stone building techniques to the test. \n</p><p>\n<em>Please note, this installation is not hosted at the Design Museum. It is located at Empress Place, at the Earls Court Development site, open to visit from 9:00 to 17:00</em></p>\n",
+      "image_url": "https://designmuseum.org/image/ce3a2b13-700e-4e12-b397-8ceabf17d234?width=1920",
+      "labels": [
+        "Free Display",
+        "Earl's Court"
+      ],
+      "price_text": "Please note that this is an external display located at the following address:",
+      "title": "Future Observatory: The Stone Demonstrator",
+      "url": "https://designmuseum.org/exhibitions/future-observatory-the-stone-demonstrator"
+    },
+    "slug": "future-observatory-the-stone-demonstrator"
+  },
+  {
+    "event": {
+      "address": "224-238 Kensington High Street, London W8 6AG",
+      "category": "exhibition",
+      "dedupe_key": "laika-presents-wildwood-exhibition|2026-10-15|design",
+      "description": "Step behind the scenes of LAIKA's latest stop-motion film and explore how a world is built through original props, sketches, puppets, miniature sets, and more. Tickets are on sale.",
+      "ends_at": "2027-01-10T00:00:00Z",
+      "image_url": "https://designmuseum.org/image/f6052505-49ba-4b70-9126-698c548aa5f1?width=1920",
+      "lat": 51.4994,
+      "lng": -0.2006,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15.29",
+        "min": "7.65"
+      },
+      "starts_at": "2026-10-14T23:00:00Z",
+      "tags": [
+        "design"
+      ],
+      "title": "LAIKA presents Wildwood: The Exhibition",
+      "url": "https://designmuseum.org/exhibitions/laika-presents-wildwood-the-exhibition",
+      "venue_name": "Design Museum"
+    },
+    "payload": {
+      "date_text": "15 October 2026 – 10 January 2027",
+      "description": "<p>Step behind the scenes of LAIKA's latest stop-motion film and explore how a world is built through original props, sketches, puppets, miniature sets, and more.</p>\n\n<p><strong>Tickets are on sale</strong>.</p>\n",
+      "image_url": "https://designmuseum.org/image/f6052505-49ba-4b70-9126-698c548aa5f1?width=1920",
+      "labels": [
+        "Exhibition",
+        "Coming October 2026"
+      ],
+      "price_text": "Adult: From £15.29 Student/Concession: From £11.47 Child: From £7.65",
+      "title": "LAIKA presents Wildwood: The Exhibition",
+      "url": "https://designmuseum.org/exhibitions/laika-presents-wildwood-the-exhibition"
+    },
+    "slug": "laika-presents-wildwood-the-exhibition"
+  },
+  {
+    "event": {
+      "address": "224-238 Kensington High Street, London W8 6AG",
+      "category": "exhibition",
+      "dedupe_key": "nigo-from-japan-with-love|2026-05-01|design",
+      "description": "Explore the vision and legacy of Japanese designer and creative director NIGO – from street style to music and beyond, in the first UK exhibition showcasing his multifaceted creative work, alongside vintage objects and traditional crafts from his personal collection.",
+      "ends_at": "2026-10-03T23:00:00Z",
+      "image_url": "https://designmuseum.org/image/9f82f5ba-e557-4bf9-81ad-f20ee212954b?width=1920",
+      "lat": 51.4994,
+      "lng": -0.2006,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15.29",
+        "min": "7.65"
+      },
+      "starts_at": "2026-04-30T23:00:00Z",
+      "tags": [
+        "design"
+      ],
+      "title": "NIGO: From Japan with Love",
+      "url": "https://designmuseum.org/exhibitions/nigo-from-japan-with-love",
+      "venue_name": "Design Museum"
+    },
+    "payload": {
+      "date_text": "1 May – 4 October 2026",
+      "description": "<p>Explore the vision and legacy of Japanese designer and creative director NIGO – from street style to music and beyond, in the first UK exhibition showcasing his multifaceted creative work, alongside vintage objects and traditional crafts from his personal collection.</p>\n",
+      "image_url": "https://designmuseum.org/image/9f82f5ba-e557-4bf9-81ad-f20ee212954b?width=1920",
+      "labels": [
+        "Exhibition",
+        "Book now"
+      ],
+      "price_text": "Adult: From £15.29 Child: From £7.65 Student/Concession: From £11.47",
+      "title": "NIGO: From Japan with Love",
+      "url": "https://designmuseum.org/exhibitions/nigo-from-japan-with-love"
+    },
+    "slug": "nigo-from-japan-with-love"
+  },
+  {
+    "event": {
+      "address": "224-238 Kensington High Street, London W8 6AG",
+      "category": "exhibition",
+      "dedupe_key": "platform-simone-brewster|2026-02-13|design",
+      "description": "PLATFORM is an annual display dedicated to showcasing contemporary design practice. The second edition in the series presents the fascinating work of designer Simone Brewster. Free to visit, the display is open until January 2027.",
+      "ends_at": "2027-01-31T00:00:00Z",
+      "image_url": "https://designmuseum.org/image/89fe1606-4291-492b-930e-042c71229a47?width=1920",
+      "lat": 51.4994,
+      "lng": -0.2006,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-02-13T00:00:00Z",
+      "tags": [
+        "design",
+        "free-display"
+      ],
+      "title": "PLATFORM: Simone Brewster",
+      "url": "https://designmuseum.org/exhibitions/platform-simone-brewster",
+      "venue_name": "Design Museum"
+    },
+    "payload": {
+      "date_text": "13 February 2026 – January 2027",
+      "description": "<p>PLATFORM is an annual display dedicated to showcasing contemporary design practice. The second edition in the series presents the fascinating work of designer Simone Brewster. Free to visit, the display is open until January 2027.</p>\n",
+      "image_url": "https://designmuseum.org/image/89fe1606-4291-492b-930e-042c71229a47?width=1920",
+      "labels": [
+        "Free Display",
+        "Level 1"
+      ],
+      "price_text": "A free display located at the museum's Level 1, open to the public from 13 February 2026 until January 2027.",
+      "title": "PLATFORM: Simone Brewster",
+      "url": "https://designmuseum.org/exhibitions/platform-simone-brewster"
+    },
+    "slug": "platform-simone-brewster"
+  },
+  {
+    "event": {
+      "address": "224-238 Kensington High Street, London W8 6AG",
+      "category": "exhibition",
+      "dedupe_key": "nue-black-aesthetic|2026-11-06|design",
+      "description": "Explore a major exhibition celebrating contemporary Black designers who are reshaping the design landscape, from fashion and furniture to architecture, product design and sculpture. Tickets are on sale.",
+      "ends_at": "2027-08-07T23:00:00Z",
+      "image_url": "https://designmuseum.org/image/b44e4293-bede-4de7-8e1a-3be92c2aeea5?width=1920",
+      "lat": 51.4994,
+      "lng": -0.2006,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15.29",
+        "min": "7.65"
+      },
+      "starts_at": "2026-11-06T00:00:00Z",
+      "tags": [
+        "design"
+      ],
+      "title": "The Nue Black Aesthetic",
+      "url": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic",
+      "venue_name": "Design Museum"
+    },
+    "payload": {
+      "date_text": "6 November 2026 – 8 August 2027",
+      "description": "<p>Explore a major exhibition celebrating contemporary Black designers who are reshaping the design landscape, from fashion and furniture to architecture, product design and sculpture.</p>\n\n<p><strong>Tickets are on sale</strong>.</p>\n",
+      "image_url": "https://designmuseum.org/image/b44e4293-bede-4de7-8e1a-3be92c2aeea5?width=1920",
+      "labels": [
+        "Exhibition",
+        "Coming November 2026"
+      ],
+      "price_text": "Adult: From £15.29 Student/Concession: From £11.47 Child: From £7.65",
+      "title": "The Nue Black Aesthetic",
+      "url": "https://designmuseum.org/exhibitions/the-nue-black-aesthetic"
+    },
+    "slug": "the-nue-black-aesthetic"
+  }
+]

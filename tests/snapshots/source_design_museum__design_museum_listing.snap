@@ -1,0 +1,19 @@
+---
+source: tests/source_design_museum.rs
+expression: listing_paths()
+---
+[
+  [
+    "/exhibitions/nigo-from-japan-with-love",
+    "/exhibitions/platform-simone-brewster",
+    "/exhibitions/designer-maker-user",
+    "/exhibitions/fables-for-our-time",
+    "/exhibitions/future-observatory-the-stone-demonstrator",
+    "/exhibitions/dwellings-rehomed"
+  ],
+  [
+    "/exhibitions/es-devlin-other-worlds",
+    "/exhibitions/laika-presents-wildwood-the-exhibition",
+    "/exhibitions/the-nue-black-aesthetic"
+  ]
+]
