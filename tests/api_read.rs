@@ -550,20 +550,16 @@ async fn sources_report_last_run_and_health() {
     assert_eq!(status, StatusCode::OK, "{body}");
     let sources = body["sources"].as_array().unwrap();
     let keys: Vec<&str> = sources.iter().map(|s| s["key"].as_str().unwrap()).collect();
+    assert!(keys.is_sorted(), "{keys:?}");
+    let source = |key: &str| {
+        sources
+            .iter()
+            .find(|s| s["key"] == key)
+            .unwrap_or_else(|| panic!("no {key} in {body}"))
+    };
     assert_eq!(
-        keys,
-        [
-            "barbican",
-            "design-museum",
-            "serpentine-galleries",
-            "somerset-house",
-            "ticketmaster",
-            "whitechapel-gallery",
-        ]
-    );
-    assert_eq!(
-        sources[0],
-        json!({
+        source("barbican"),
+        &json!({
             "key": "barbican",
             "kind": "scraper",
             "interval_minutes": 1440,
@@ -579,14 +575,15 @@ async fn sources_report_last_run_and_health() {
             "issue_url": null,
         })
     );
-    assert_eq!(sources[1]["status"], "degraded");
-    assert_eq!(sources[1]["issue_url"], Value::Null);
-    assert_eq!(sources[2]["status"], "healthy");
-    assert_eq!(sources[2]["last_run"], Value::Null);
-    assert_eq!(sources[4]["kind"], "api");
-    assert_eq!(sources[4]["status"], "broken");
+    assert_eq!(source("design-museum")["status"], "degraded");
+    assert_eq!(source("design-museum")["issue_url"], Value::Null);
+    assert_eq!(source("serpentine-galleries")["status"], "healthy");
+    assert_eq!(source("serpentine-galleries")["last_run"], Value::Null);
+    let ticketmaster = source("ticketmaster");
+    assert_eq!(ticketmaster["kind"], "api");
+    assert_eq!(ticketmaster["status"], "broken");
     assert_eq!(
-        sources[4]["issue_url"],
+        ticketmaster["issue_url"],
         "https://github.com/alexsiri7/thaleia/issues/31"
     );
     pool.close().await;

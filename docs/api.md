@@ -31,8 +31,7 @@ Date window: an event with an end (`ends_at`, e.g. an exhibition) matches
 when `[starts_at, ends_at]` overlaps the window; an event without an end
 matches when `starts_at` is inside the window. Dates are Europe/London
 calendar days, so `from=2026-10-01` starts at `2026-09-30T23:00:00Z` (BST).
-Multi-day exhibitions end at London midnight of their last day, so an
-exhibition closing on 1 October matches `from=2026-10-01`.
+An exhibition whose last day is 1 October matches `from=2026-10-01`.
 
 Order: by `starts_at` (then `id`); with `near`, by distance (then `id`).
 
