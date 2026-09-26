@@ -49,10 +49,15 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   - `barbican` — CSS-selector scraper (no JSON-LD): the art & design and
     talks & events listings (paginated) → detail pages for times, art-form
     tags (category) and the standard ticket price.
+  - `artrabbit` — aggregator (kind `aggregator`) of current London art shows,
+    listing pages only (paginated, capped, one request per 5 s): facts + link
+    only, per its terms (no descriptions, images or raw payloads).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `ThaleiaBot/<version> (+https://github.com/alexsiri7/thaleia; contact via repo issues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
-  honoured) and rate-limits per domain (default 1 request / 2 s).
+  honoured) and rate-limits per domain (default 1 request / 2 s; built-in
+  floors in `config::BUILTIN_MIN_INTERVALS`, e.g. 5 s for ArtRabbit, can't be
+  lowered by configuration).
 - **Normalisation** (`src/normalise.rs`): HTML/whitespace cleanup,
   Europe/London → UTC, price parsing (free detection), category mapping and
   the cross-source **dedupe key** (`title|London date|venue`, algorithm
@@ -186,7 +191,9 @@ When a second source joins an event, fields are merged by source kind:
 | everything else | existing value; newcomer fills gaps; tags unioned |
 
 A kind only wins while it is the sole linked source of that kind; otherwise
-it just fills gaps.
+it just fills gaps. An `aggregator` (a third-party listing site such as
+ArtRabbit) never wins: it only fills gaps, and pages link to the venue's own
+site (then an API) before it.
 
 Bad (or missed) merges are corrected in `events.merge_overrides`, keyed on
 the source listings `(source_id, source_event_id)`:

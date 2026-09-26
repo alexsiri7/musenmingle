@@ -1,0 +1,90 @@
+Sitemap: https://www.artrabbit.com/cache/sitemap_index.xml
+User-agent: *
+Disallow: /matrix_engine/
+Disallow: /layout/*.tpl
+Disallow: /layout/*.xml
+Disallow: /downloads/
+Disallow: /docs/
+Disallow: /auto/
+Disallow: /ajax/*.tpl
+Disallow: /ajax/*.xml
+Disallow: /modal/
+Disallow: /settings/
+Disallow: /site/
+Disallow: /uploads/
+Disallow: /account/
+Disallow: /cache/*.log
+Disallow: /cache/*.scp
+Disallow: /cache/*.cache
+Disallow: /*.sql
+Disallow: /*.php
+
+User-agent: AwarioRssBot
+User-agent: AwarioSmartBot
+Disallow: /
+
+User-agent: npbot
+Disallow: /
+
+User-agent: psbot
+Disallow: /
+
+User-agent: larbin
+Disallow: /
+
+User-agent: trendkite-akashic-crawler
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: superbot
+Disallow: /
+
+User-agent: Gaisbot
+Disallow: /
+
+User-agent: HenryTheMiragoRobot
+Disallow: /
+
+User-agent: bumblebee@relevare.com
+Disallow: /
+
+User-agent: True_Robot/1.0ll 
+Disallow: /
+
+User-agent: True_Robot
+Disallow: /
+
+User-agent: Szukacz/1.4
+Disallow: /
+
+User-agent: Zeus
+Disallow: /
+
+User-agent: Zeus 32297 Webster Pro V2.9 Win32
+Disallow: /
+
+User-agent: turnitinbot
+Disallow: /
+
+User-agent: voyager/1.0
+Disallow: /
+
+User-agent: MJ12bot/v1.0.7 (http://majestic12.co.uk/bot.php?+) [^] [^]
+Disallow: /
+
+User-agent: ASpider/0.09
+Disallow: /
+
+User-agent: appie 1.1 (www.walhello.com)
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /

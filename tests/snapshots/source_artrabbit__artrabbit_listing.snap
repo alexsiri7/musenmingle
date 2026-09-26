@@ -1,0 +1,578 @@
+---
+source: tests/source_artrabbit.rs
+expression: pages
+---
+[
+  {
+    "cards": [
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 07 Nov 2026",
+          "lat": 51.5254625,
+          "lng": -0.0840522,
+          "place": "London, United Kingdom",
+          "title": "Ana Viktoria Dzinic – Fundus: A Schizo Societys Longing for the Armchair Psychology of Visual Cohesion (An Examination)",
+          "url": "https://www.artrabbit.com/events/ana-viktoria-dzinic-fundus-a-schizo-societys-longing-for-the-armchair-psychology-of-visual-cohesion-an-examination",
+          "venue": "Nicoletti Contemporary"
+        },
+        "source_event_id": "4762731",
+        "source_url": "https://www.artrabbit.com/events/ana-viktoria-dzinic-fundus-a-schizo-societys-longing-for-the-armchair-psychology-of-visual-cohesion-an-examination"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 24 Oct 2026",
+          "lat": 51.487021,
+          "lng": -0.111628,
+          "place": "London, United Kingdom",
+          "title": "CONFIGURATIONS",
+          "url": "https://www.artrabbit.com/events/configurations",
+          "venue": "Ken Artspace"
+        },
+        "source_event_id": "1299790",
+        "source_url": "https://www.artrabbit.com/events/configurations"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 07 Nov 2026",
+          "lat": 51.5130909,
+          "lng": -0.1362275,
+          "place": "London, United Kingdom",
+          "title": "GEORGE SHAW Albion Groans Part Two",
+          "url": "https://www.artrabbit.com/events/george-shaw-albion-groans-part-two",
+          "venue": "ANTHONY WILKINSON"
+        },
+        "source_event_id": "4676592",
+        "source_url": "https://www.artrabbit.com/events/george-shaw-albion-groans-part-two"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 29 Sep 2026",
+          "lat": 51.4975467,
+          "lng": -0.0803237,
+          "place": "London, United Kingdom",
+          "title": "Gravity 3.0 Art Exhibition",
+          "url": "https://www.artrabbit.com/events/gravity-30-art-exhibition",
+          "venue": null
+        },
+        "source_event_id": "3927866",
+        "source_url": "https://www.artrabbit.com/events/gravity-30-art-exhibition"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 27 Sep 2026",
+          "lat": 51.5437303,
+          "lng": -0.1530862,
+          "place": "London, United Kingdom",
+          "title": "Passing Time",
+          "url": "https://www.artrabbit.com/events/passing-time",
+          "venue": "KOPPEL Collective"
+        },
+        "source_event_id": "4769261",
+        "source_url": "https://www.artrabbit.com/events/passing-time"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 27 Sep 2026",
+          "lat": 51.529929653307,
+          "lng": -0.054643135517836,
+          "place": "London, United Kingdom",
+          "title": "Pigeon Squirrel Spider Sparrow",
+          "url": "https://www.artrabbit.com/events/pigeon-squirrel-spider-sparrow",
+          "venue": "The Chapel at St Margarets House"
+        },
+        "source_event_id": "4697275",
+        "source_url": "https://www.artrabbit.com/events/pigeon-squirrel-spider-sparrow"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 07 Nov 2026",
+          "lat": 51.5196517,
+          "lng": -0.1170728,
+          "place": "London, United Kingdom",
+          "title": "Ryan Huggins, Jetzt im Kino",
+          "url": "https://www.artrabbit.com/events/ryan-huggins-jetzt-im-kino",
+          "venue": "a.SQUIRE"
+        },
+        "source_event_id": "4762760",
+        "source_url": "https://www.artrabbit.com/events/ryan-huggins-jetzt-im-kino"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "26 Sep 2026 – 30 Sep 2026",
+          "lat": 51.463173716733,
+          "lng": -0.051769400015473,
+          "place": "London, United Kingdom",
+          "title": "Soft Ground",
+          "url": "https://www.artrabbit.com/events/soft-ground",
+          "venue": "Nunhead Cemetery Chapel"
+        },
+        "source_event_id": "4753642",
+        "source_url": "https://www.artrabbit.com/events/soft-ground"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 11 Oct 2026",
+          "lat": 51.4749651,
+          "lng": -0.0853979,
+          "place": "London, United Kingdom",
+          "title": "a longing swell(s)",
+          "url": "https://www.artrabbit.com/events/a-longing-swells",
+          "venue": "outhouse gallery"
+        },
+        "source_event_id": "4695585",
+        "source_url": "https://www.artrabbit.com/events/a-longing-swells"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 29 Oct 2026",
+          "lat": 51.5183629,
+          "lng": -0.1337778,
+          "place": "London, United Kingdom",
+          "title": "Alice Delhanty: Invented Fire",
+          "url": "https://www.artrabbit.com/events/alice-delhanty-invented-fire",
+          "venue": "Tache Gallery"
+        },
+        "source_event_id": "4725476",
+        "source_url": "https://www.artrabbit.com/events/alice-delhanty-invented-fire"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 19 Dec 2026",
+          "lat": 51.523760365486,
+          "lng": -0.17309593849163,
+          "place": "London, United Kingdom",
+          "title": "Bahar Noorizadeh: The Debtors Portal",
+          "url": "https://www.artrabbit.com/events/bahar-noorizadeh-the-debtors-portal-2026",
+          "venue": "The Showroom"
+        },
+        "source_event_id": "4762721",
+        "source_url": "https://www.artrabbit.com/events/bahar-noorizadeh-the-debtors-portal-2026"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 06 Oct 2026",
+          "lat": 51.4680034,
+          "lng": 0.0039603,
+          "place": "Blackheath, United Kingdom",
+          "title": "Elenor Martinsen: New Patterns",
+          "url": "https://www.artrabbit.com/events/elenor-martinsen-new-patterns",
+          "venue": "Gallery White Box"
+        },
+        "source_event_id": "4708179",
+        "source_url": "https://www.artrabbit.com/events/elenor-martinsen-new-patterns"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 13 Dec 2026",
+          "lat": 51.47516859835,
+          "lng": -0.037379264831543,
+          "place": "London, United Kingdom",
+          "title": "Evelyn Taocheng Wang: Being Poetic Ruins Life",
+          "url": "https://www.artrabbit.com/events/evelyn-taocheng-wang-being-poetic-ruins-life",
+          "venue": "Goldsmiths Centre for Contemporary Art"
+        },
+        "source_event_id": "4725304",
+        "source_url": "https://www.artrabbit.com/events/evelyn-taocheng-wang-being-poetic-ruins-life"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 28 Sep 2026",
+          "lat": 51.469474756609,
+          "lng": -0.071496963500977,
+          "place": "London, United Kingdom",
+          "title": "Everything Has Four Phases",
+          "url": "https://www.artrabbit.com/events/everything-has-four-phases",
+          "venue": "Peckham Oasis Gallery"
+        },
+        "source_event_id": "4719173",
+        "source_url": "https://www.artrabbit.com/events/everything-has-four-phases"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 24 Oct 2026",
+          "lat": 51.5234359,
+          "lng": -0.1733144,
+          "place": "London, United Kingdom",
+          "title": "Mac Collins - Between the Rafters",
+          "url": "https://www.artrabbit.com/events/mac-collins-between-the-rafters",
+          "venue": "Palmer Gallery"
+        },
+        "source_event_id": "4721162",
+        "source_url": "https://www.artrabbit.com/events/mac-collins-between-the-rafters"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 16 Dec 2026",
+          "lat": 51.5239752,
+          "lng": -0.1158844,
+          "place": "London, United Kingdom",
+          "title": "Magali Reus – Swimming by Night",
+          "url": "https://www.artrabbit.com/events/magali-reus-swimming-by-night",
+          "venue": "The Perimeter"
+        },
+        "source_event_id": "4762736",
+        "source_url": "https://www.artrabbit.com/events/magali-reus-swimming-by-night"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 31 Oct 2026",
+          "lat": 51.5210148,
+          "lng": -0.1160668,
+          "place": "London, United Kingdom",
+          "title": "Marietta Mavrokordatou. Trip",
+          "url": "https://www.artrabbit.com/events/marietta-mavrokordatou-trip",
+          "venue": "Brunette Coleman"
+        },
+        "source_event_id": "4762392",
+        "source_url": "https://www.artrabbit.com/events/marietta-mavrokordatou-trip"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 29 Oct 2026",
+          "lat": 51.5150025,
+          "lng": -0.1514348,
+          "place": "London, United Kingdom",
+          "title": "Melike Kara. HUSH",
+          "url": "https://www.artrabbit.com/events/melike-kara-hush",
+          "venue": "Arcadia Missa"
+        },
+        "source_event_id": "4762755",
+        "source_url": "https://www.artrabbit.com/events/melike-kara-hush"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 31 Oct 2026",
+          "lat": 51.5231277,
+          "lng": -0.1112787,
+          "place": "London, United Kingdom",
+          "title": "Olu Ogunnaike: Did I fall here",
+          "url": "https://www.artrabbit.com/events/olu-ogunnaike-did-i-fall-here",
+          "venue": "Hollybush Gardens"
+        },
+        "source_event_id": "4716514",
+        "source_url": "https://www.artrabbit.com/events/olu-ogunnaike-did-i-fall-here"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 24 Oct 2026",
+          "lat": 51.5234359,
+          "lng": -0.1733144,
+          "place": "London, United Kingdom",
+          "title": "Philip Ewe: Inheritance",
+          "url": "https://www.artrabbit.com/events/philip-ewe-inheritance",
+          "venue": "Palmer Gallery"
+        },
+        "source_event_id": "4721175",
+        "source_url": "https://www.artrabbit.com/events/philip-ewe-inheritance"
+      }
+    ],
+    "has_next": true,
+    "page": "page-1.html"
+  },
+  {
+    "cards": [
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 01 Nov 2026",
+          "lat": 51.531293727778,
+          "lng": -0.056551694869995,
+          "place": "London, United Kingdom",
+          "title": "The Same Dust",
+          "url": "https://www.artrabbit.com/events/the-same-dust",
+          "venue": "IMT"
+        },
+        "source_event_id": "4692998",
+        "source_url": "https://www.artrabbit.com/events/the-same-dust"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 14 Aug 2027",
+          "lat": 51.523760365486,
+          "lng": -0.17309593849163,
+          "place": "London, United Kingdom",
+          "title": "The Showroom Mural Commission – Bahar Noorizadeh: In Mortua Manu / In A Dead Hand",
+          "url": "https://www.artrabbit.com/events/the-showroom-mural-commission-bahar-noorizadeh-in-mortua-manu-in-a-dead-hand",
+          "venue": "The Showroom"
+        },
+        "source_event_id": "4762726",
+        "source_url": "https://www.artrabbit.com/events/the-showroom-mural-commission-bahar-noorizadeh-in-mortua-manu-in-a-dead-hand"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 31 Dec 2026",
+          "lat": 51.507638574778,
+          "lng": -0.12589885153324,
+          "place": "London, United Kingdom",
+          "title": "The Unclassified",
+          "url": "https://www.artrabbit.com/events/the-unclassified",
+          "venue": "Korean Cultural Centre UK (KCCUK)"
+        },
+        "source_event_id": "3226651",
+        "source_url": "https://www.artrabbit.com/events/the-unclassified"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "25 Sep 2026 – 29 Oct 2026",
+          "lat": 51.5150025,
+          "lng": -0.1514348,
+          "place": "London, United Kingdom",
+          "title": "Vijay Masharani. Haymakers",
+          "url": "https://www.artrabbit.com/events/vijay-masharani-haymakers",
+          "venue": "Arcadia Missa"
+        },
+        "source_event_id": "4762748",
+        "source_url": "https://www.artrabbit.com/events/vijay-masharani-haymakers"
+      },
+      {
+        "payload": {
+          "category": "Art Fair",
+          "date_text": "24 Sep 2026 – 27 Sep 2026",
+          "lat": 51.4922703,
+          "lng": -0.1582417,
+          "place": "London, United Kingdom",
+          "title": "British Art Fair 2026",
+          "url": "https://www.artrabbit.com/events/british-art-fair-2026",
+          "venue": "Saatchi Gallery"
+        },
+        "source_event_id": "4752746",
+        "source_url": "https://www.artrabbit.com/events/british-art-fair-2026"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 07 Nov 2026",
+          "lat": 51.5211005,
+          "lng": -0.1681269,
+          "place": "London, United Kingdom",
+          "title": "Carmen Herrera",
+          "url": "https://www.artrabbit.com/events/carmen-herrera-2026",
+          "venue": "Lisson Gallery | 67 Lisson Street"
+        },
+        "source_event_id": "4702679",
+        "source_url": "https://www.artrabbit.com/events/carmen-herrera-2026"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 31 Oct 2026",
+          "lat": 51.5094758,
+          "lng": -0.14303,
+          "place": "London, United Kingdom",
+          "title": "Daichi Takagi: Suchness",
+          "url": "https://www.artrabbit.com/events/daichi-takagi-suchness",
+          "venue": "David Zwirner | London"
+        },
+        "source_event_id": "4746695",
+        "source_url": "https://www.artrabbit.com/events/daichi-takagi-suchness"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 07 Nov 2026",
+          "lat": 51.525044890892,
+          "lng": -0.056016302373979,
+          "place": "London, United Kingdom",
+          "title": "Elise Nguyen Quoc – sous ultra - vide",
+          "url": "https://www.artrabbit.com/events/elise-nguyen-quoc-sous-ultra-vide",
+          "venue": "Herald St"
+        },
+        "source_event_id": "4746999",
+        "source_url": "https://www.artrabbit.com/events/elise-nguyen-quoc-sous-ultra-vide"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 21 Nov 2026",
+          "lat": 51.525152984795,
+          "lng": -0.074028968811035,
+          "place": "London, United Kingdom",
+          "title": "Emrys Williams - 'what seas what shores what grey rocks'",
+          "url": "https://www.artrabbit.com/events/emrys-williams-what-seas-what-shores-what-grey-rocks",
+          "venue": "Benjamin Rhodes Arts"
+        },
+        "source_event_id": "4706611",
+        "source_url": "https://www.artrabbit.com/events/emrys-williams-what-seas-what-shores-what-grey-rocks"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 27 Sep 2026",
+          "lat": 51.4922703,
+          "lng": -0.1582417,
+          "place": "London, United Kingdom",
+          "title": "Field Notes, Marc Renshaw at British Art Fair, Digitalism",
+          "url": "https://www.artrabbit.com/events/field-notes-marc-renshaw-at-british-art-fair-digitalism",
+          "venue": "Saatchi Gallery"
+        },
+        "source_event_id": "4757685",
+        "source_url": "https://www.artrabbit.com/events/field-notes-marc-renshaw-at-british-art-fair-digitalism"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 27 Sep 2026",
+          "lat": 51.4769929,
+          "lng": -0.0313214,
+          "place": "London, United Kingdom",
+          "title": "FLUIDITIES",
+          "url": "https://www.artrabbit.com/events/fluidities",
+          "venue": "Art Hub Studios"
+        },
+        "source_event_id": "4730311",
+        "source_url": "https://www.artrabbit.com/events/fluidities"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 17 Oct 2026",
+          "lat": 51.533448,
+          "lng": -0.2258931,
+          "place": "London, United Kingdom",
+          "title": "Georgia Beaumont | A Place Time Cannot Touch",
+          "url": "https://www.artrabbit.com/events/georgia-beaumont-a-place-time-cannot-touch",
+          "venue": "Wilder Gallery"
+        },
+        "source_event_id": "4748689",
+        "source_url": "https://www.artrabbit.com/events/georgia-beaumont-a-place-time-cannot-touch"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 07 Nov 2026",
+          "lat": 51.520960784588,
+          "lng": -0.16962289810181,
+          "place": "London, United Kingdom",
+          "title": "Ha Chong - Hyun",
+          "url": "https://www.artrabbit.com/events/ha-chong-hyun",
+          "venue": "Lisson Gallery | 27 Bell Street"
+        },
+        "source_event_id": "4674590",
+        "source_url": "https://www.artrabbit.com/events/ha-chong-hyun"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 18 Oct 2026",
+          "lat": 51.533593,
+          "lng": -0.108824,
+          "place": "London, United Kingdom",
+          "title": "Interval Studies: Colour in Time",
+          "url": "https://www.artrabbit.com/events/interval-studies-colour-in-time",
+          "venue": "White Conduit Projects"
+        },
+        "source_event_id": "4757251",
+        "source_url": "https://www.artrabbit.com/events/interval-studies-colour-in-time"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 18 Oct 2026",
+          "lat": 51.514399883277,
+          "lng": -0.19803364310064,
+          "place": "London, United Kingdom",
+          "title": "Into The Surface",
+          "url": "https://www.artrabbit.com/events/into-the-surface",
+          "venue": "Bartha Contemporary"
+        },
+        "source_event_id": "4723846",
+        "source_url": "https://www.artrabbit.com/events/into-the-surface"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 29 Nov 2026",
+          "lat": 51.511059,
+          "lng": -0.117148,
+          "place": "London, United Kingdom",
+          "title": "Jenkin Van Zyl: Enclosure",
+          "url": "https://www.artrabbit.com/events/jenkin-van-zyl-enclosure",
+          "venue": "Somerset House Studios"
+        },
+        "source_event_id": "3037765",
+        "source_url": "https://www.artrabbit.com/events/jenkin-van-zyl-enclosure"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 20 Nov 2026",
+          "lat": 51.5198666,
+          "lng": -0.1226827,
+          "place": "London, United Kingdom",
+          "title": "Jonathan Baldock | For Your Keeping",
+          "url": "https://www.artrabbit.com/events/jonathan-baldock-for-your-keeping-canopy-collections-hq",
+          "venue": "Canopy Collections HQ"
+        },
+        "source_event_id": "4704168",
+        "source_url": "https://www.artrabbit.com/events/jonathan-baldock-for-your-keeping-canopy-collections-hq"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 13 Dec 2026",
+          "lat": 51.4951551,
+          "lng": -0.079041,
+          "place": "London, United Kingdom",
+          "title": "Listening to the earth",
+          "url": "https://www.artrabbit.com/events/listening-to-the-earth",
+          "venue": "Drawing Room"
+        },
+        "source_event_id": "4718019",
+        "source_url": "https://www.artrabbit.com/events/listening-to-the-earth"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 31 Oct 2026",
+          "lat": 51.534977776023,
+          "lng": -0.059781074523926,
+          "place": "London, United Kingdom",
+          "title": "Martin Parr : The Last Resort",
+          "url": "https://www.artrabbit.com/events/martin-parr-the-last-resort",
+          "venue": "ROCKET"
+        },
+        "source_event_id": "2285172",
+        "source_url": "https://www.artrabbit.com/events/martin-parr-the-last-resort"
+      },
+      {
+        "payload": {
+          "category": "Exhibition",
+          "date_text": "24 Sep 2026 – 08 Oct 2026",
+          "lat": 51.5895135,
+          "lng": -0.0040861,
+          "place": "London, United Kingdom",
+          "title": "Meet Me in William Morris's Garden",
+          "url": "https://www.artrabbit.com/events/meet-me-in-william-morriss-garden",
+          "venue": "Images in Frames"
+        },
+        "source_event_id": "1225120",
+        "source_url": "https://www.artrabbit.com/events/meet-me-in-william-morriss-garden"
+      }
+    ],
+    "has_next": true,
+    "page": "page-2.html"
+  }
+]

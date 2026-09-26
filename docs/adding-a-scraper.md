@@ -14,6 +14,11 @@ VALUES ('example-gallery', 'scraper', 'https://www.example.org', 'www.example.or
 ON CONFLICT (key) DO NOTHING;
 ```
 
+`kind` is `scraper` for a venue's own site, `api` for a third-party API and
+`aggregator` for a third-party listing site covering many venues (e.g.
+ArtRabbit): an aggregator never takes precedence in a cross-source merge and
+pages link to the venue's own site before it.
+
 ## Rules (non-negotiable)
 
 1. **Fixture + snapshot test are mandatory.** Save the real HTML you fetched

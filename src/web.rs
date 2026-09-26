@@ -314,10 +314,10 @@ fn safe_link(s: Option<&str>) -> Option<String> {
 /// listing with a link, else the first listing with a link.
 fn primary_source(e: &EventJson) -> Option<(&SourceLinkJson, String)> {
     let linked = |s: &'_ SourceLinkJson| safe_link(s.url.as_deref());
-    e.sources
+    // The venue's own site first, then APIs, then aggregators.
+    [SourceKind::Scraper, SourceKind::Api, SourceKind::Aggregator]
         .iter()
-        .filter(|s| s.kind == SourceKind::Scraper)
-        .chain(e.sources.iter().filter(|s| s.kind != SourceKind::Scraper))
+        .flat_map(|k| e.sources.iter().filter(move |s| s.kind == *k))
         .find_map(|s| linked(s).map(|u| (s, u)))
 }
 
