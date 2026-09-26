@@ -3,3 +3,4 @@ target
 .env
 tests
 docs
+.railway

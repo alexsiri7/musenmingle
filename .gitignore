@@ -2,3 +2,4 @@
 .env
 *.snap.new
 *.pending-snap
+/.railway/node_modules
