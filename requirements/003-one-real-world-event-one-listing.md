@@ -1,8 +1,8 @@
 ---
 created: '2026-09-26'
-github_issue: null
+github_issue: 3
 id: '003'
-status: draft
+status: idea
 title: One real-world event, one listing
 updated: '2026-09-26'
 ---
@@ -22,4 +22,4 @@ When several sources describe the same real-world event, the person sees it once
 
 ## Issues
 
-_None yet._
+- #3 — Cross-source merge beyond exact dedupe_key: fuzzy title and venue matching
