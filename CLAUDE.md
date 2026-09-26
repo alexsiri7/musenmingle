@@ -53,6 +53,9 @@ There is no local Docker; never try to use testcontainers.
    `style=` or `<style>` (CSS lives in `src/web.css`, served from
    `/static/style.css`); keep the `CSP` constant strict. Pages read data
    through the same `api.rs` helpers as the JSON API, never over HTTP.
+10. **Sites we decided not to scrape go in `events.refused_sources`** (via a
+    new migration, with reason and issue link) when a `new-scraper` issue is
+    closed as not possible; see `docs/adding-a-scraper.md`. Never retry them.
 
 ## Layout
 

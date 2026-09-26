@@ -31,6 +31,7 @@ use uuid::Uuid;
 use crate::api::{self, AppState, EventJson};
 use crate::listing;
 use crate::model::Category;
+use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 
 /// Content-Security-Policy for every HTML response.
@@ -315,6 +316,8 @@ struct Filters {
     category: String,
     free: bool,
     near: String,
+    /// Source keys (repeatable), e.g. from a link on `/sources`.
+    sources: Vec<String>,
     cursor: String,
 }
 
@@ -330,6 +333,7 @@ impl Filters {
                 "category" => f.category = v,
                 "free" => f.free = matches!(v.as_str(), "true" | "on" | "1"),
                 "near" => f.near = v,
+                "source" if !v.is_empty() && !f.sources.contains(&v) => f.sources.push(v),
                 "cursor" => f.cursor = v,
                 _ => {}
             }
@@ -360,7 +364,24 @@ impl Filters {
         if self.free {
             s.append_pair("free", "true");
         }
+        for src in &self.sources {
+            s.append_pair("source", src);
+        }
         s.finish()
+    }
+
+    /// `page_query` without one source (the chip's "clear" link).
+    fn without_source(&self, key: &str) -> String {
+        let rest = Filters {
+            sources: self.sources.iter().filter(|s| *s != key).cloned().collect(),
+            from: self.from.clone(),
+            to: self.to.clone(),
+            category: self.category.clone(),
+            free: self.free,
+            near: self.near.clone(),
+            cursor: String::new(),
+        };
+        format!("/?{}", rest.page_query())
     }
 
     /// The equivalent `GET /v1/events` query.
@@ -375,6 +396,9 @@ impl Filters {
         }
         if self.free {
             s.append_pair("free", "true");
+        }
+        for src in &self.sources {
+            s.append_pair("source", src);
         }
         if !self.near.is_empty() {
             let area = AREAS
@@ -427,6 +451,9 @@ fn filter_form(f: &Filters) -> Markup {
                 input id="free" name="free" type="checkbox" value="true" checked[f.free];
                 label for="free" { "Free only" }
             }
+            @for src in &f.sources {
+                input type="hidden" name="source" value=(src);
+            }
             div class="field" {
                 button type="submit" { "Show events" }
                 " "
@@ -477,6 +504,17 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             "Exhibitions, talks, workshops, expos and community events, gathered from venue sites."
         }
         (filter_form(&filters))
+        @if !filters.sources.is_empty() {
+            p class="chips" aria-label="Active filters" {
+                @for src in &filters.sources {
+                    span class="chip" {
+                        "From: " strong { (src) } " "
+                        a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (src) } { "×" }
+                    }
+                    " "
+                }
+            }
+        }
     };
     let query = match filters.api_query() {
         Ok(q) => q,
@@ -611,6 +649,10 @@ async fn sources(State(state): State<AppState>) -> Response {
         Ok(s) => s,
         Err(e) => return internal_error(e),
     };
+    let refused = match repo::refused_sources(&state.pool).await {
+        Ok(r) => r,
+        Err(e) => return internal_error(e),
+    };
     let text = |v: &Value| match v {
         Value::String(s) => s.clone(),
         Value::Null => String::new(),
@@ -640,7 +682,9 @@ async fn sources(State(state): State<AppState>) -> Response {
                             @let status = text(&s["status"]);
                             tr {
                                 th scope="row" {
-                                    (text(&s["key"]))
+                                    @let key = text(&s["key"]);
+                                    a href={ "/?" (url::form_urlencoded::Serializer::new(String::new()).append_pair("source", &key).finish()) }
+                                        aria-label={ "Events from " (key) } { (key) }
                                     @if s["enabled"] == Value::Bool(false) { " (disabled)" }
                                 }
                                 td { (text(&s["kind"])) }
@@ -660,6 +704,52 @@ async fn sources(State(state): State<AppState>) -> Response {
                                     // Present once sources record skips (#25).
                                     @if let Some(reason) = s["skip"]["reason"].as_str() {
                                         br; span class="small" { "Skipped: " (reason) }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            h2 id="refused" { "Sites we couldn't use" }
+            p class="lede" {
+                "We checked these sites and decided not to collect their events, so they "
+                "won't appear here. We don't retry them."
+            }
+            @if refused.is_empty() {
+                p { "None so far." }
+            } @else {
+                div class="table-wrap" {
+                    table {
+                        thead {
+                            tr {
+                                th scope="col" { "Site" }
+                                th scope="col" { "Reason" }
+                                th scope="col" { "Checked" }
+                                th scope="col" { "Decision" }
+                            }
+                        }
+                        tbody {
+                            @for r in &refused {
+                                tr {
+                                    th scope="row" {
+                                        @if let Some(u) = safe_link(Some(&r.url)) {
+                                            a href=(u) rel="noopener noreferrer" { (r.name) }
+                                        } @else {
+                                            (r.name)
+                                        }
+                                        br; span class="small" { (r.domain) }
+                                    }
+                                    td class="wrap" { (r.reason_text) }
+                                    td {
+                                        time datetime=(r.checked_on.format("%Y-%m-%d").to_string()) {
+                                            (r.checked_on.format("%-d %b %Y").to_string())
+                                        }
+                                    }
+                                    td {
+                                        @if let Some(u) = safe_link(r.issue_url.as_deref()) {
+                                            a href=(u) rel="noopener noreferrer" { "issue" }
+                                        }
                                     }
                                 }
                             }
@@ -733,6 +823,16 @@ async fn suggest(
         Ok(Outcome::AlreadyCovered { source }) => respond(
             StatusCode::CONFLICT,
             html! { p { "We already list that site (source " strong { (source) } ")." } },
+        ),
+        Ok(Outcome::Refused(r)) => respond(
+            StatusCode::CONFLICT,
+            html! {
+                p { (crate::suggestions::refused_message(&r)) "." }
+                @if let Some(u) = safe_link(r.issue_url.as_deref()) {
+                    p { a href=(u) rel="noopener noreferrer" { "Why we decided this" } }
+                }
+                p { a href="/sources#refused" { "Other sites we couldn't use" } }
+            },
         ),
         Ok(Outcome::RateLimited { retry_after_secs }) => {
             let mut resp = respond(

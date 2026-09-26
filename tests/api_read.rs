@@ -481,6 +481,109 @@ async fn event_by_id_includes_every_source_link_and_unknown_ids_are_404() {
 }
 
 #[tokio::test]
+async fn source_filter_matches_any_listing_of_an_event() {
+    let Some(db) = TestDb::create("source_filter_matches_any_listing_of_an_event").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let both = insert(&pool, Ev::one_off("on both", "2026-10-01T18:00:00Z")).await;
+    link(
+        &pool,
+        both,
+        "barbican",
+        "https://www.barbican.org.uk/a",
+        "2026-09-01T00:00:00Z",
+    )
+    .await;
+    link(
+        &pool,
+        both,
+        "ticketmaster",
+        "https://www.ticketmaster.co.uk/a",
+        "2026-09-02T00:00:00Z",
+    )
+    .await;
+    let barbican = insert(&pool, Ev::one_off("barbican only", "2026-10-02T18:00:00Z")).await;
+    link(
+        &pool,
+        barbican,
+        "barbican",
+        "https://www.barbican.org.uk/b",
+        "2026-09-01T00:00:00Z",
+    )
+    .await;
+    let tm = insert(
+        &pool,
+        Ev::one_off("ticketmaster only", "2026-10-03T18:00:00Z"),
+    )
+    .await;
+    link(
+        &pool,
+        tm,
+        "ticketmaster",
+        "https://www.ticketmaster.co.uk/c",
+        "2026-09-01T00:00:00Z",
+    )
+    .await;
+    insert(&pool, Ev::one_off("no source", "2026-10-04T18:00:00Z")).await;
+    let app = app(&pool);
+
+    for (q, expected) in [
+        ("source=barbican", vec!["on both", "barbican only"]),
+        ("source=ticketmaster", vec!["on both", "ticketmaster only"]),
+        (
+            "source=barbican&source=ticketmaster",
+            vec!["on both", "barbican only", "ticketmaster only"],
+        ),
+        ("source=design-museum", vec![]),
+        ("source=barbican&near=51.5,-0.1", vec![]),
+    ] {
+        let (status, body) = get(&app, &format!("/v1/events?{q}")).await;
+        assert_eq!(status, StatusCode::OK, "{q}: {body}");
+        assert_eq!(titles(&body), expected, "{q}");
+    }
+    let (status, _) = get(&app, "/v1/events?source=Not%20A%20Key").await;
+    assert_eq!(status, StatusCode::BAD_REQUEST);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn sources_lists_refused_sites() {
+    let Some(db) = TestDb::create("sources_lists_refused_sites").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let (status, body) = get(&app(&pool), "/v1/sources").await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(
+        body["refused"],
+        json!([
+            {
+                "name": "CreativeMornings London",
+                "domain": "creativemornings.com",
+                "url": "https://creativemornings.com/cities/lon",
+                "reason_code": "robots_disallowed",
+                "reason_text": "robots.txt disallows /happening and the site answers our bot with an empty 202",
+                "checked_on": "2026-09-25",
+                "issue_url": "https://github.com/alexsiri7/thaleia/issues/4",
+            },
+            {
+                "name": "Southbank Centre",
+                "domain": "southbankcentre.co.uk",
+                "url": "https://www.southbankcentre.co.uk/whats-on",
+                "reason_code": "bot_blocked",
+                "reason_text": "it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks",
+                "checked_on": "2026-09-25",
+                "issue_url": "https://github.com/alexsiri7/thaleia/issues/6",
+            },
+        ])
+    );
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn invalid_list_parameters_are_400() {
     let Some(db) = TestDb::create("invalid_list_parameters_are_400").await else {
         return;

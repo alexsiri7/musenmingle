@@ -428,6 +428,68 @@ impl Ev {
 }
 
 #[tokio::test]
+async fn home_filters_by_source_with_a_clearable_chip() {
+    let Some(db) = TestDb::create("home_filters_by_source_with_a_clearable_chip").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let both = insert(&pool, Ev::new("On both", days(1))).await;
+    link(&pool, both, "barbican", "https://www.barbican.org.uk/a").await;
+    link(
+        &pool,
+        both,
+        "somerset-house",
+        "https://www.somersethouse.org.uk/a",
+    )
+    .await;
+    let one = insert(&pool, Ev::new("Barbican only", days(2))).await;
+    link(&pool, one, "barbican", "https://www.barbican.org.uk/b").await;
+    let other = insert(&pool, Ev::new("Somerset only", days(3))).await;
+    link(
+        &pool,
+        other,
+        "somerset-house",
+        "https://www.somersethouse.org.uk/c",
+    )
+    .await;
+    let app = app(&pool);
+
+    let p = get(&app, "/?source=barbican").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_eq!(card_titles(&p.body), ["On both", "Barbican only"]);
+    assert!(
+        p.body.contains("From: <strong>barbican</strong>"),
+        "{}",
+        p.body
+    );
+    assert!(
+        p.body
+            .contains("<input type=\"hidden\" name=\"source\" value=\"barbican\">")
+    );
+    // The chip clears the source but keeps the other filters.
+    let start = p.body.find("<span class=\"chip\">").unwrap();
+    let chip = &p.body[start..];
+    let href_at = chip.find("href=\"").unwrap() + 6;
+    let href = chip[href_at..href_at + chip[href_at..].find('"').unwrap()].replace("&amp;", "&");
+    assert!(
+        href.starts_with("/?from=") && !href.contains("source="),
+        "{href}"
+    );
+    let p = get(&app, &href).await;
+    assert_eq!(
+        card_titles(&p.body),
+        ["On both", "Barbican only", "Somerset only"]
+    );
+
+    let p = get(&app, "/?source=somerset-house").await;
+    assert_eq!(card_titles(&p.body), ["On both", "Somerset only"]);
+    let p = get(&app, "/?source=Bad%20Key").await;
+    assert_eq!(p.status, StatusCode::BAD_REQUEST);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn home_paginates_with_a_more_link_keeping_filters() {
     let Some(db) = TestDb::create("home_paginates_with_a_more_link_keeping_filters").await else {
         return;
@@ -564,13 +626,36 @@ async fn sources_page_renders_the_sources_api_data() {
     assert!(p.body.contains("<title>Sources · LetsArt</title>"));
     let row = &p.body[p
         .body
-        .find("<th scope=\"row\">barbican")
+        .find("<a href=\"/?source=barbican\"")
         .expect("barbican row")..];
     let row = &row[..row.find("</tr>").unwrap()];
     assert!(row.contains("Sat 26 Sep 2026, 06:00"), "{row}");
     assert!(row.contains("<td>41</td><td>3</td>"), "{row}");
     assert!(row.contains("status-degraded"), "{row}");
-    assert!(p.body.contains("<th scope=\"row\">ticketmaster"));
+    assert!(
+        p.body.contains("<a href=\"/?source=ticketmaster\""),
+        "{}",
+        p.body
+    );
+    assert!(
+        p.body
+            .contains("<h2 id=\"refused\">Sites we couldn&#39;t use</h2>")
+            || p.body
+                .contains("<h2 id=\"refused\">Sites we couldn't use</h2>")
+    );
+    assert!(p.body.contains(">Southbank Centre</a>"));
+    assert!(
+        p.body
+            .contains("it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks")
+    );
+    assert!(
+        p.body
+            .contains("<time datetime=\"2026-09-25\">25 Sep 2026</time>")
+    );
+    assert!(
+        p.body
+            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/4\"")
+    );
     assert!(p.body.contains("Never"));
     pool.close().await;
     db.drop_db().await;
@@ -599,7 +684,7 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     let filer: Box<dyn IssueFiler> =
         Box::new(GitHubIssueFiler::new(&github.uri(), REPO, "test-token").unwrap());
     let config = SuggestionConfig {
-        per_hour: 3,
+        per_hour: 4,
         per_day: 20,
         ..Default::default()
     };
@@ -638,12 +723,32 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
         p.body
     );
 
+    // A refused site: the reason, not filed.
+    let p = post_form(
+        &app,
+        "url=https%3A%2F%2Fwww.southbankcentre.co.uk%2Fwhats-on",
+    )
+    .await;
+    assert_eq!(p.status, StatusCode::CONFLICT, "{}", p.body);
+    assert!(
+        p.body.contains(
+            "We looked at Southbank Centre on 25 September 2026 and couldn't include it: \
+         it returns 403 to the ThaleiaBot User-Agent; we don't evade blocks."
+        ),
+        "{}",
+        p.body
+    );
+    assert!(
+        p.body
+            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/6\"")
+    );
+
     // Missing field: a friendly 400 page, not a plain-text rejection.
     let p = post_form(&app, "note=hi").await;
     assert_eq!(p.status, StatusCode::BAD_REQUEST);
     assert_html(&p);
 
-    // Rate limit (3/hour; invalid ones do not count): 429 + Retry-After.
+    // Rate limit (4/hour; refused ones count, invalid ones do not): 429 + Retry-After.
     // (GitHub rejects this one: accepted but left pending for the ingest run.)
     let p = post_form(&app, "url=https%3A%2F%2Fanother-venue.org.uk").await;
     assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);

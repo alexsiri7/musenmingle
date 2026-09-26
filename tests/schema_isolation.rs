@@ -115,6 +115,7 @@ async fn migrations_create_nothing_outside_events_schema() {
         "health_issues",
         "site_suggestions",
         "merge_overrides",
+        "refused_sources",
     ] {
         assert!(
             added

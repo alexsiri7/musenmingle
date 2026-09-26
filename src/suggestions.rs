@@ -20,7 +20,7 @@ use sqlx::PgPool;
 
 use crate::config::SuggestionConfig;
 use crate::github::IssueFiler;
-use crate::repo::{self, NewSuggestion};
+use crate::repo::{self, NewSuggestion, RefusedSourceRow};
 
 pub const LABEL: &str = "new-scraper";
 pub const MAX_URL_LEN: usize = 2048;
@@ -155,6 +155,16 @@ pub fn issue_body(url: &str, domain: &str, note: Option<&str>) -> String {
     )
 }
 
+/// "We looked at <name> on <date> and couldn't include it: <reason>".
+pub fn refused_message(r: &RefusedSourceRow) -> String {
+    format!(
+        "We looked at {} on {} and couldn't include it: {}",
+        r.name,
+        r.checked_on.format("%-d %B %Y"),
+        r.reason_text
+    )
+}
+
 /// `text` in a code fence it cannot close early.
 fn fenced(text: &str) -> String {
     let longest_run = text.split(|c| c != '`').map(str::len).max().unwrap_or(0);
@@ -176,6 +186,9 @@ pub enum Outcome {
     AlreadyCovered {
         source: String,
     },
+    /// We looked at this site before and decided not to scrape it
+    /// (`events.refused_sources`); nothing is filed.
+    Refused(Box<RefusedSourceRow>),
     RateLimited {
         retry_after_secs: u64,
     },
@@ -251,6 +264,15 @@ impl Suggestions {
             .await?
             .into_iter()
             .find(|(_, d)| registrable_domain(d).as_deref() == Some(sub.domain.as_str()));
+        let refused = repo::refused_source_list(&mut tx)
+            .await?
+            .into_iter()
+            .find(|r| registrable_domain(&r.domain).as_deref() == Some(sub.domain.as_str()));
+        if let Some(refused) = refused {
+            repo::insert_refused_suggestion(&mut tx, &new).await?;
+            tx.commit().await?;
+            return Ok(Outcome::Refused(Box::new(refused)));
+        }
         if let Some((source, _)) = covered_by {
             repo::insert_duplicate_suggestion(&mut tx, &new).await?;
             tx.commit().await?;

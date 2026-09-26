@@ -19,7 +19,7 @@ use axum::http::{HeaderMap, HeaderValue, Method, StatusCode, header};
 use axum::response::{IntoResponse, Response};
 use axum::routing::{get, post};
 use axum::{Json, Router};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -29,7 +29,7 @@ use uuid::Uuid;
 
 use crate::health::{HealthStatus, RunStats};
 use crate::listing::{self, Cursor, EventOrder};
-use crate::repo::{self, EventRow, SourceStatusRow};
+use crate::repo::{self, EventRow, RefusedSourceRow, SourceStatusRow};
 use crate::suggestions::{Outcome, Suggestions};
 
 #[derive(Clone)]
@@ -94,7 +94,7 @@ struct SuggestionRequest {
 }
 
 /// Responses: 201 `accepted`, 200 `already_suggested`, 409 `already_covered`,
-/// 400 `invalid`, 429 `rate_limited` (with `Retry-After`).
+/// 409 `refused`, 400 `invalid`, 429 `rate_limited` (with `Retry-After`).
 async fn suggest(
     State(state): State<AppState>,
     ConnectInfo(peer): ConnectInfo<SocketAddr>,
@@ -126,6 +126,15 @@ async fn suggest(
         Ok(Outcome::AlreadyCovered { source }) => (
             StatusCode::CONFLICT,
             Json(json!({ "status": "already_covered", "source": source })),
+        )
+            .into_response(),
+        Ok(Outcome::Refused(r)) => (
+            StatusCode::CONFLICT,
+            Json(json!({
+                "status": "refused",
+                "message": crate::suggestions::refused_message(&r),
+                "refused": RefusedJson::from(*r),
+            })),
         )
             .into_response(),
         Ok(Outcome::RateLimited { retry_after_secs }) => (
@@ -404,7 +413,40 @@ impl SourceJson {
 }
 
 async fn list_sources(State(state): State<AppState>) -> Result<Json<Value>, ApiError> {
-    Ok(Json(json!({ "sources": source_values(&state).await? })))
+    let refused: Vec<RefusedJson> = repo::refused_sources(&state.pool)
+        .await?
+        .into_iter()
+        .map(RefusedJson::from)
+        .collect();
+    Ok(Json(
+        json!({ "sources": source_values(&state).await?, "refused": refused }),
+    ))
+}
+
+/// A site we decided not to scrape (`refused` in `GET /v1/sources`).
+#[derive(Serialize)]
+pub(crate) struct RefusedJson {
+    pub(crate) name: String,
+    pub(crate) domain: String,
+    pub(crate) url: String,
+    pub(crate) reason_code: String,
+    pub(crate) reason_text: String,
+    pub(crate) checked_on: NaiveDate,
+    pub(crate) issue_url: Option<String>,
+}
+
+impl From<RefusedSourceRow> for RefusedJson {
+    fn from(r: RefusedSourceRow) -> Self {
+        Self {
+            name: r.name,
+            domain: r.domain,
+            url: r.url,
+            reason_code: r.reason_code,
+            reason_text: r.reason_text,
+            checked_on: r.checked_on,
+            issue_url: r.issue_url,
+        }
+    }
 }
 
 /// Every source exactly as `GET /v1/sources` serialises it (the HTML page

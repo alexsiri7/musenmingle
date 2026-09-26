@@ -52,6 +52,29 @@ INSTA_UPDATE=always cargo test --test source_<key>   # then REVIEW the .snap fil
 cargo fmt && cargo clippy --all-targets --all-features -- -D warnings && cargo test
 ```
 
+## When a site can't be used
+
+If the investigation shows a site must not or cannot be scraped — robots.txt
+disallows the events pages (`robots_disallowed`), it blocks the ThaleiaBot
+User-Agent (`bot_blocked`; we never evade blocks), it has no usable event
+data (`no_event_data`), its terms forbid it (`terms`), or something else
+(`other`) — record the decision instead of leaving it in a closed issue:
+
+1. Add a **new** migration inserting a row into `events.refused_sources`:
+   ```sql
+   INSERT INTO events.refused_sources (domain, name, url, reason_code, reason_text, checked_on, issue_url)
+   VALUES ('example.org', 'Example Gallery', 'https://www.example.org/whats-on', 'bot_blocked',
+           'it returns 403 to the ThaleiaBot User-Agent; we don''t evade blocks',
+           DATE '2026-10-01', 'https://github.com/alexsiri7/thaleia/issues/NN');
+   ```
+   `domain` is the registrable domain (no `www.`); `reason_text` completes
+   the sentence "We looked at <name> on <date> and couldn't include it: …".
+2. Merge that PR and close the `new-scraper` issue as not planned, linking it.
+
+The site then appears under "Sites we couldn't use" on `/sources` (and in
+`refused` of `GET /v1/sources`), and new suggestions for that domain are
+answered with the reason (`refused`) instead of filing another issue.
+
 ## Checklist for a `new-scraper` issue
 
 The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
@@ -68,3 +91,4 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
 - [ ] No LLM parsing; all requests go through `FetchContext`
+- [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)
