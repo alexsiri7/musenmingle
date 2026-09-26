@@ -604,8 +604,9 @@ pub struct ListedEvent {
     pub distance_km: Option<f64>,
 }
 
-/// `$1`..`$4` of both listing queries. An exhibition (`ends_at` set) matches
-/// when its range overlaps the window, a one-off when it starts inside it.
+/// `$1`..`$4` of both listing queries. An event with an end (`ends_at` set),
+/// whatever its category, matches when its range overlaps the window, a
+/// one-off when it starts inside it.
 const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ends_at, starts_at) >= $1)
     AND ($2::timestamptz IS NULL OR starts_at < $2)
     AND (cardinality($3::text[]) = 0 OR category = ANY($3))

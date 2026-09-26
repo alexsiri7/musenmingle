@@ -85,8 +85,8 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
   that, 429 with `Retry-After`. The URL is never fetched.
 - **Read API** (`src/api.rs`, `src/listing.rs`; documented in
   [`docs/api.md`](docs/api.md)): `GET /v1/events` filters by London date
-  window (exhibitions match on range overlap), category, free, and
-  `near`+`radius_km` (bounding-box prefilter on the lat/lng index, then
+  window (events with an end date match on range overlap), category, free,
+  and `near`+`radius_km` (bounding-box prefilter on the lat/lng index, then
   haversine, nearest first), with keyset cursor pagination and every event's
   source links; `GET /v1/events/{id}`; `GET /v1/sources` with the last run
   and `healthy`/`degraded`/`broken` status. Read-only; browser access is
