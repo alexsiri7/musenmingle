@@ -279,3 +279,67 @@ async fn listing_and_detail_fetches_stop_at_their_caps() {
     assert!(raws.is_empty());
     assert_eq!(ctx.take_errors().len(), MAX_DETAIL_PAGES);
 }
+
+#[tokio::test]
+async fn cards_with_bad_times_or_sidebars_become_errors() {
+    // Template drift must reach the health checker: a card whose date no
+    // longer parses is kept for normalise to reject, and a detail page whose
+    // last sidebar line is not a location is reported, not taken as a venue.
+    let card = |slug: &str, event_type: &str, datetime: &str| {
+        format!(
+            r#"<article about="/whats-on/{slug}"><div class="o-teaser">
+            <span class="o-teaser__event-type">{event_type}</span>
+            <div class="o-teaser__content"><h2 class="o-teaser__title"><a href="/whats-on/{slug}">{slug}</a></h2>
+            <div class="o-teaser__date"><p><time datetime="{datetime}">24 November, 2026</time></p></div>
+            </div></div></article>"#
+        )
+    };
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
+        )
+        .mount(&server)
+        .await;
+    let cards = [
+        card("undated-talk", "Talks", "24 November"),
+        card("priced-talk", "Talks", "2026-11-24T18:30:00Z"),
+    ]
+    .concat();
+    Mock::given(method("GET"))
+        .and(path("/whats-on"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(format!(
+            r#"<html><body><div class="o-view__listing">{cards}</div></body></html>"#
+        )))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/priced-talk"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(
+            r#"<html><body><aside class="o-sidebar__info-box">
+            <p>18:00 - 19:30</p><p>Tickets: £15</p></aside></body></html>"#,
+        ))
+        .expect(1)
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/undated-talk"))
+        .respond_with(ResponseTemplate::new(200))
+        .expect(0)
+        .mount(&server)
+        .await;
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = SoaneMuseum::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+
+    let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["whats-on/undated-talk"]);
+    let err = s.normalise(&raws[0]).unwrap_err().to_string();
+    assert!(err.contains("bad starts time"), "{err}");
+    assert_eq!(
+        ctx.take_errors(),
+        ["whats-on/priced-talk: no location on the detail page"]
+    );
+}

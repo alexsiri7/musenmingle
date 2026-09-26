@@ -39,7 +39,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
-    parse_london_wall_clock, parse_price,
+    parse_london_wall_clock, parse_price, postcode_outward,
 };
 
 pub const KEY: &str = "somerset-house";
@@ -214,25 +214,6 @@ pub fn parse_start_time(text: &str) -> Option<NaiveTime> {
         return NaiveTime::from_hms_opt(hour, minute, 0);
     }
     None
-}
-
-/// Outward code (e.g. `E1W`) of the first UK postcode in `text`.
-fn postcode_outward(text: &str) -> Option<String> {
-    let tokens: Vec<&str> = text
-        .split(|c: char| c.is_whitespace() || c == ',')
-        .filter(|t| !t.is_empty())
-        .collect();
-    tokens.windows(2).find_map(|pair| {
-        let (outward, inward) = (pair[0], pair[1].as_bytes());
-        let outward_ok = (2..=4).contains(&outward.len())
-            && outward.chars().all(|c| c.is_ascii_alphanumeric())
-            && outward.starts_with(|c: char| c.is_ascii_alphabetic())
-            && outward.chars().any(|c| c.is_ascii_digit());
-        let inward_ok = inward.len() == 3
-            && inward[0].is_ascii_digit()
-            && inward[1..].iter().all(u8::is_ascii_alphabetic);
-        (outward_ok && inward_ok).then(|| outward.to_ascii_uppercase())
-    })
 }
 
 struct Venue {

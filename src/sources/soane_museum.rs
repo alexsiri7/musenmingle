@@ -31,10 +31,11 @@
 //!   the Royal Academy), so the detail page of every in-scope
 //!   non-exhibition card is fetched for its location: the last paragraph of
 //!   the "Event Info" sidebar. A location naming the Soane or Lincoln's Inn
-//!   (the museum and its No. 14 annex) is the museum; anything else becomes
-//!   the venue ("name (entrance), address…", the entrance dropped so the
-//!   name matches other listings) with no coordinates. Exhibitions are in
-//!   the museum and need no detail page.
+//!   (the museum and its No. 14 annex) is the museum; any other line with a
+//!   postcode becomes the venue ("name (entrance), address…", the entrance
+//!   dropped so the name matches other listings) with no coordinates; a line
+//!   that is neither is an error, since it means the sidebar has changed.
+//!   Exhibitions are in the museum and need no detail page.
 
 use async_trait::async_trait;
 use chrono::{DateTime, NaiveTime, Utc};
@@ -47,7 +48,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, parse_datetime,
-    parse_price,
+    parse_price, postcode_outward,
 };
 
 pub const KEY: &str = "soane-museum";
@@ -163,14 +164,21 @@ pub fn parse_listing(html: &str) -> ListingPage {
     ListingPage { cards, next_page }
 }
 
+/// Whether a location line names the museum or its No. 14 annex.
+fn at_museum(location: &str) -> bool {
+    let l = location.to_lowercase().replace('’', "'");
+    l.contains("soane") || l.contains("lincoln's inn")
+}
+
 /// The location line of a detail page: the last paragraph of the "Event
-/// Info" sidebar.
+/// Info" sidebar. It follows the time, price and age lines, so one that
+/// neither names the museum nor carries a postcode is not a location.
 pub fn parse_detail_location(html: &str) -> Option<String> {
     let doc = Html::parse_document(html);
     doc.select(&selector("aside.o-sidebar__info-box > p"))
         .next_back()
         .map(element_text)
-        .filter(|t| !t.is_empty())
+        .filter(|t| at_museum(t) || postcode_outward(t).is_some())
 }
 
 fn is_online_only(price_text: Option<&str>, teaser: Option<&str>) -> bool {
@@ -236,10 +244,6 @@ fn london_midnight(t: DateTime<Utc>) -> DateTime<Utc> {
 /// `(name, address, lat, lng)` for a detail page's location line; `None`
 /// (exhibitions) or a line naming the museum is the museum itself.
 fn venue(location: Option<&str>) -> (String, Option<String>, Option<f64>, Option<f64>) {
-    let at_museum = |l: &str| {
-        let l = l.to_lowercase().replace('’', "'");
-        l.contains("soane") || l.contains("lincoln's inn")
-    };
     match location {
         Some(l) if !at_museum(l) => {
             let (name, address) = match l.split_once(", ") {
@@ -505,6 +509,25 @@ mod tests {
             let event = normalise_payload(&payload).unwrap().unwrap();
             assert_eq!(event.venue_name.as_deref(), Some(VENUE_NAME), "{at_museum}");
             assert_eq!(event.lat, Some(VENUE_LAT));
+        }
+    }
+
+    #[test]
+    fn detail_location_must_name_the_museum_or_have_a_postcode() {
+        let sidebar = |last: &str| {
+            parse_detail_location(&format!(
+                r#"<aside class="o-sidebar__info-box"><p>11am - 3pm</p><p>{last}</p></aside>"#
+            ))
+        };
+        for location in [
+            "Art Room at No. 14 Lincoln's Inn Fields.",
+            "Sir John Soane's Museum",
+            "Royal Academy of Arts, 6 Burlington Gardens, Mayfair, London, W1J 0PE",
+        ] {
+            assert_eq!(sidebar(location).as_deref(), Some(location));
+        }
+        for not_a_location in ["£12 p/p", "Suitable for ages 8-12", "18:00 - 19:30", ""] {
+            assert_eq!(sidebar(not_a_location), None, "{not_a_location}");
         }
     }
 
