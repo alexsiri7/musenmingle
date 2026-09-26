@@ -237,6 +237,12 @@ async fn restricted_role_can_migrate_but_not_touch_other_schemas() {
     };
     let admin = db.raw_pool().await;
     run_create_role(&admin).await;
+    // A superuser operator re-running the script strips SUPERUSER again.
+    sqlx::raw_sql("ALTER ROLE thaleia SUPERUSER")
+        .execute(&admin)
+        .await
+        .unwrap();
+    run_create_role(&admin).await;
     assert_thaleia_confined(&db, &admin).await;
 
     admin.close().await;
