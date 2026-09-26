@@ -80,6 +80,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   - `dandad` — D&AD's creative-industry events: reads the embedded
     `script#props` page data (no JSON-LD) of the events listing → detail
     pages for time and address; London only; facts + link only (terms).
+  - `soane-museum` — CSS-selector scraper (no JSON-LD): the paginated
+    "What's on" listing (dates, type label, price line), plus detail pages
+    of talks and events for their location (some are off-site).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay

@@ -23,6 +23,7 @@ pub mod goldsmiths_cca;
 pub mod jsonld;
 pub mod mall_galleries;
 pub mod serpentine;
+pub mod soane_museum;
 pub mod somerset_house;
 pub mod ticketmaster;
 pub mod whitechapel_gallery;
@@ -88,6 +89,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
         goldsmiths_cca::KEY => Ok(Box::new(goldsmiths_cca::GoldsmithsCca::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
+        soane_museum::KEY => Ok(Box::new(soane_museum::SoaneMuseum::new(base))),
         somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
         whitechapel_gallery::KEY => {
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
