@@ -1,0 +1,33 @@
+---
+source: tests/source_somerset_house.rs
+expression: "serde_json::json!({ \"total_pages\": page.total_pages, \"ids\": ids })"
+---
+{
+  "ids": [
+    "jenkin-van-zyl-enclosure",
+    "skate-somerset-house",
+    "courtauld-gallery",
+    "historical-highlights-tour",
+    "g31-jemma-desai-there-are-no-honest-poems-about-dead-women",
+    "fleurs-de-villes-diana-in-support-of-the-diana-award",
+    "reviving-craft-reflection-of-the-mind",
+    "upgrade-yourself-monthly-sessions/upgrade-yourself-monthly-build-your-own-creative-path",
+    "black-business-residency-cohort-6-showcase",
+    "upgrade-yourself-takeovers/jenkin-upgrade-yourself-takeover-2026",
+    "future-artists-programme/future-artists-programme",
+    "1-54-contemporary-african-art-fair-2026",
+    "3-evenings-somerset-house-studios",
+    "3-evenings-friday",
+    "3-evenings-installations",
+    "3-evenings-saturday",
+    "3-evenings-sunday",
+    "jenkin-van-zyl-enclosure-in-conversation",
+    "through-our-eyes",
+    "skate-lates-26-27",
+    "skate-school",
+    "k-pop-party",
+    "grounding-practice/grounding-practice-access-capacity-with-iarlaith-ní-fheorais",
+    "wonder"
+  ],
+  "total_pages": 2
+}
