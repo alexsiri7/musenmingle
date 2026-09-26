@@ -13,7 +13,15 @@ async fn healthz_ok_with_database() {
         return;
     };
     let pool = db.migrated_pool().await;
-    let resp = thaleia::api::router(pool.clone())
+    let suggestions = thaleia::suggestions::Suggestions::new(
+        thaleia::config::SuggestionConfig {
+            ip_salt: Some("salt".into()),
+            ..Default::default()
+        },
+        None,
+    )
+    .unwrap();
+    let resp = thaleia::api::router(pool.clone(), suggestions)
         .oneshot(Request::get("/healthz").body(Body::empty()).unwrap())
         .await
         .unwrap();

@@ -232,6 +232,11 @@ impl HealthChecker {
         }
     }
 
+    /// The GitHub filer, shared with other ingest-run steps.
+    pub fn filer(&self) -> Option<&dyn IssueFiler> {
+        self.filer.as_deref()
+    }
+
     /// Open `scraper-broken` issues on GitHub, listed once per checker
     /// (i.e. once per ingest run) and kept up to date locally.
     async fn open_issue_with_title(

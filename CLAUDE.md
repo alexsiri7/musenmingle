@@ -55,6 +55,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/sources/` — `Source` trait, `jsonld` helpers, `ticketmaster`, `serpentine`
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
-- `src/api.rs` — axum router (`/healthz`)
+- `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
+- `src/api.rs` — axum router (`/healthz`, `POST /v1/suggestions`)
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

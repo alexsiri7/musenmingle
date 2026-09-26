@@ -16,6 +16,7 @@ pub mod normalise;
 pub mod repo;
 pub mod runner;
 pub mod sources;
+pub mod suggestions;
 
 /// Crate version, used in the bot User-Agent.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

@@ -8,9 +8,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends cmake clang pkg-config \
     && rm -rf /var/lib/apt/lists/*
 # Everything `cargo build` needs: `sqlx::migrate!` embeds ./migrations and
-# reads ./sqlx.toml at compile time.
+# reads ./sqlx.toml at compile time; src/suggestions.rs embeds the new-scraper
+# issue template.
 COPY Cargo.toml Cargo.lock sqlx.toml ./
 COPY migrations ./migrations
+COPY .github/ISSUE_TEMPLATE/new-scraper.md ./.github/ISSUE_TEMPLATE/new-scraper.md
 COPY src ./src
 # Tests reference fixtures via include_bytes! only under #[cfg(test)], so
 # they are not needed for a release build.
