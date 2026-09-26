@@ -567,8 +567,16 @@ async fn sources_lists_refused_sites() {
     .unwrap();
     let (status, mut body) = get(&app(&pool), "/v1/sources").await;
     assert_eq!(status, StatusCode::OK, "{body}");
-    assert_eq!(body["refused"][2]["reason_code"], "js_only");
-    body["refused"].as_array_mut().unwrap().pop();
+    let refused = body["refused"].as_array_mut().unwrap();
+    // Most recently checked first (later migrations add more refusals).
+    let checked: Vec<&str> = refused
+        .iter()
+        .map(|r| r["checked_on"].as_str().unwrap())
+        .collect();
+    assert!(checked.is_sorted_by(|a, b| a >= b), "{checked:?}");
+    assert_eq!(refused.last().unwrap()["reason_code"], "js_only");
+    // The two refusals seeded by migration ..08.
+    refused.retain(|r| r["checked_on"] == "2026-09-25");
     assert_eq!(
         body["refused"],
         json!([
