@@ -9,9 +9,8 @@ written in Rust (axum, tokio, sqlx, reqwest, maud).
 
 The project was called **Thaleia** until 2026-09-26. The old host
 `thaleia.interstellarai.net` stays attached and redirects to the new one
-(`CANONICAL_HOST`, see `src/host_redirect.rs`); the Docker image keeps
-`thaleia-api`/`thaleia-ingest` aliases for the renamed binaries, and the
-Saved-events script moves the old `letsart.saved.v1` key to the new one.
+(`CANONICAL_HOST`, see `src/host_redirect.rs`), and the Saved-events
+script moves the old `letsart.saved.v1` key to the new one.
 
 ## Architecture
 
