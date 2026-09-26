@@ -12,7 +12,7 @@ The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
 takes `from`, `to`, `category`, `free`, `near=<area>`, `source` and
 `cursor`),
-`GET /events/{id}`, `GET /sources`, `GET /saved`, `POST /suggest` (form-encoded `url`,
+`GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
 `Content-Security-Policy` (`img-src 'self'`). See `src/web.rs`.
@@ -220,7 +220,7 @@ scrape, most recently checked first:
 ```
 
 `reason_code` is one of `robots_disallowed`, `bot_blocked`,
-`no_event_data`, `terms`, `js_only`, `other`; `checked_on` is a date; `issue_url` may be
+`no_event_data`, `terms`, `js_only`, `owner_request`, `other`; `checked_on` is a date; `issue_url` may be
 `null`.
 
 - `display_name`: human-readable name (falls back to the title-cased key).

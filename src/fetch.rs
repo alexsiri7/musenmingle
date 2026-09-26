@@ -29,12 +29,13 @@ use crate::config::RateLimitConfig;
 /// Robots.txt product token.
 pub const ROBOTS_AGENT: &str = "ThaleiaBot";
 
+/// Where site owners learn what the bot does and how to reach us (the
+/// "For venues" section of the public About page).
+pub const BOT_INFO_URL: &str = "https://thaleia.interstellarai.net/about#for-venues";
+
 /// The User-Agent sent with every request.
 pub fn user_agent() -> String {
-    format!(
-        "ThaleiaBot/{} (+https://github.com/alexsiri7/thaleia; contact via repo issues)",
-        crate::VERSION
-    )
+    format!("{ROBOTS_AGENT}/{} (+{BOT_INFO_URL})", crate::VERSION)
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -345,9 +346,13 @@ mod tests {
     #[test]
     fn user_agent_is_descriptive() {
         let ua = user_agent();
-        assert!(ua.starts_with("ThaleiaBot/"));
-        assert!(ua.contains("+https://github.com/alexsiri7/thaleia"));
-        assert!(ua.contains("contact via repo issues"));
+        assert_eq!(
+            ua,
+            format!(
+                "ThaleiaBot/{} (+https://thaleia.interstellarai.net/about#for-venues)",
+                crate::VERSION
+            )
+        );
     }
 
     #[test]

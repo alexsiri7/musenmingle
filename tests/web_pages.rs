@@ -115,6 +115,8 @@ fn assert_html(p: &Page) {
     );
     assert!(p.body.contains("\" defer></script>"));
     assert!(!p.body.contains(" onclick="));
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     // Never hotlink: every image is one of our own thumbnails.
     for img in p.body.split("<img ").skip(1) {
         let tag = &img[..img.find('>').unwrap()];
@@ -700,10 +702,8 @@ async fn sources_page_renders_the_sources_api_data() {
         p.body
             .contains("<time datetime=\"2026-09-25\">25 Sep 2026</time>")
     );
-    assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/4\"")
-    );
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     assert!(p.body.contains("Never"));
     pool.close().await;
     db.drop_db().await;
@@ -746,9 +746,11 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
     assert_html(&p);
     assert!(p.body.contains("<strong>example-gallery.org.uk</strong>"));
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/42\"")
+        p.body.contains("Thanks — we&#39;ll take a look at")
+            || p.body.contains("Thanks — we'll take a look at")
     );
     let note: Option<String> =
         sqlx::query_scalar("SELECT note FROM events.site_suggestions ORDER BY id LIMIT 1")
@@ -786,10 +788,8 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
         "{}",
         p.body
     );
-    assert!(
-        p.body
-            .contains("href=\"https://github.com/alexsiri7/thaleia/issues/6\"")
-    );
+    // Never link into the private repo (#57).
+    assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
 
     // Missing field: a friendly 400 page, not a plain-text rejection.
     let p = post_form(&app, "note=hi").await;
@@ -800,7 +800,7 @@ async fn suggestion_form_files_an_issue_and_reports_outcomes() {
     // (GitHub rejects this one: accepted but left pending for the ingest run.)
     let p = post_form(&app, "url=https%3A%2F%2Fanother-venue.org.uk").await;
     assert_eq!(p.status, StatusCode::CREATED, "{}", p.body);
-    assert!(p.body.contains("queued for review"), "{}", p.body);
+    assert!(p.body.contains("take a look at"), "{}", p.body);
     let p = post_form(&app, "url=https%3A%2F%2Fthird-venue.org.uk").await;
     assert_eq!(p.status, StatusCode::TOO_MANY_REQUESTS, "{}", p.body);
     assert!(p.headers.contains_key(header::RETRY_AFTER));
@@ -860,4 +860,96 @@ async fn saved_page_is_a_script_enhanced_shell() {
         );
     }
     assert!(tpl.contains("<article class=\"card\">") && tpl.contains("class=\"save\""));
+}
+
+#[tokio::test]
+async fn about_page_states_our_approach_with_all_anchors() {
+    let Some(db) = TestDb::create("about_page_states_our_approach").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let app = app(&pool);
+    let p = get(&app, "/about").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_html(&p);
+    assert!(
+        p.body
+            .contains("<title>About &amp; our approach · Muse &amp; Mingle</title>")
+    );
+    for anchor in [
+        "objective",
+        "for-venues",
+        "how-we-collect",
+        "your-data",
+        "contact",
+    ] {
+        assert!(
+            p.body.contains(&format!("<section id=\"{anchor}\"")),
+            "#{anchor}"
+        );
+    }
+    for text in [
+        "free, non-commercial",
+        "No ads, no ticket sales, no affiliate links.",
+        "robots.txt",
+        "<strong>ThaleiaBot</strong>",
+        "one request every 2 seconds per website",
+        "a short excerpt of the description",
+        "Image: &lt;your venue&gt;",
+        "See it on &lt;your venue&gt;",
+        "within 7 days",
+        "no tracking or analytics cookies",
+        "salted hash of your IP address",
+        "href=\"/sources#refused\"",
+        "<a href=\"/contact\">use our contact form</a>",
+    ] {
+        assert!(p.body.contains(text), "missing {text:?}");
+    }
+    // No cookies are set, here or on the home page.
+    assert!(p.headers.get(header::SET_COOKIE).is_none());
+    // Header and footer link to it on every page.
+    let home = get(&app, "/").await;
+    assert_eq!(
+        home.body
+            .matches("<a href=\"/about\">About &amp; our approach</a>")
+            .count(),
+        2,
+        "{}",
+        home.body
+    );
+    assert!(home.headers.get(header::SET_COOKIE).is_none());
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn owner_request_is_a_refused_reason() {
+    let Some(db) = TestDb::create("owner_request_is_a_refused_reason").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query(
+        "INSERT INTO events.refused_sources (domain, name, url, reason_code, reason_text, checked_on)
+         VALUES ('owner.example', 'Owner Gallery', 'https://owner.example/', 'owner_request',
+                 'the venue asked us not to list their events, so we don''t', '2026-10-01')",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    let p = get(&app(&pool), "/sources").await;
+    assert!(p.body.contains("Owner Gallery"), "{}", p.body);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[test]
+fn venue_request_issue_template_exists() {
+    let t = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/.github/ISSUE_TEMPLATE/venue-request.md"
+    ))
+    .unwrap();
+    assert!(t.starts_with("---\nname: Venue request\n"), "{t}");
+    assert!(t.contains("\nlabels: venue-request\n"));
+    assert!(t.contains("within 7 days"));
 }

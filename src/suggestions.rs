@@ -166,7 +166,7 @@ pub fn refused_message(r: &RefusedSourceRow) -> String {
 }
 
 /// `text` in a code fence it cannot close early.
-fn fenced(text: &str) -> String {
+pub(crate) fn fenced(text: &str) -> String {
     let longest_run = text.split(|c| c != '`').map(str::len).max().unwrap_or(0);
     let fence = "`".repeat(longest_run.max(2) + 1);
     format!("{fence}text\n{text}\n{fence}")
@@ -218,6 +218,16 @@ impl Suggestions {
             trusted_proxies: config.trusted_proxies,
             filer,
         })
+    }
+
+    /// The GitHub issue filer, if configured (shared with the contact form).
+    pub fn filer(&self) -> Option<&dyn IssueFiler> {
+        self.filer.as_deref()
+    }
+
+    /// Salt for client-IP hashes (shared with the contact form).
+    pub fn ip_salt(&self) -> &str {
+        &self.ip_salt
     }
 
     pub fn client_ip<'a>(
