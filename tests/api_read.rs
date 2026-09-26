@@ -554,8 +554,18 @@ async fn sources_lists_refused_sites() {
         return;
     };
     let pool = db.migrated_pool().await;
-    let (status, body) = get(&app(&pool), "/v1/sources").await;
+    // `js_only` is an accepted reason code (migration ..09).
+    sqlx::query(
+        "INSERT INTO events.refused_sources (domain, name, url, reason_code, reason_text, checked_on)
+         VALUES ('js.example', 'JS Site', 'https://js.example/', 'js_only', 'needs JS', '2026-01-01')",
+    )
+    .execute(&pool)
+    .await
+    .unwrap();
+    let (status, mut body) = get(&app(&pool), "/v1/sources").await;
     assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(body["refused"][2]["reason_code"], "js_only");
+    body["refused"].as_array_mut().unwrap().pop();
     assert_eq!(
         body["refused"],
         json!([

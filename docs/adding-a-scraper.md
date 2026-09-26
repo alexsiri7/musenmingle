@@ -57,7 +57,8 @@ cargo fmt && cargo clippy --all-targets --all-features -- -D warnings && cargo t
 If the investigation shows a site must not or cannot be scraped — robots.txt
 disallows the events pages (`robots_disallowed`), it blocks the ThaleiaBot
 User-Agent (`bot_blocked`; we never evade blocks), it has no usable event
-data (`no_event_data`), its terms forbid it (`terms`), or something else
+data (`no_event_data`), its terms forbid it (`terms`), its events only
+render with JavaScript (`js_only`; we never run a browser), or something else
 (`other`) — record the decision instead of leaving it in a closed issue:
 
 1. Add a **new** migration inserting a row into `events.refused_sources`:
@@ -91,4 +92,4 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
 - [ ] No LLM parsing; all requests go through `FetchContext`
-- [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)
+- [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it, events only render with JavaScript): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)
