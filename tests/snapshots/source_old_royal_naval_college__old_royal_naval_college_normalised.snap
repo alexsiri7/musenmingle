@@ -1,0 +1,407 @@
+---
+source: tests/source_old_royal_naval_college.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "id": "whats-on/social-media-mondays",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/01/Social-Media-Mondays-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "What's On",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/social-media-mondays/",
+      "title": "Social Media Mondays",
+      "url": "https://ornc.org/whats-on/social-media-mondays/",
+      "when": "Every Monday | 10am–11am"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/first-sundays",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2020/09/ORNC_NOV_23-12-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "What's On",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/first-sundays/",
+      "title": "First Sundays | £5 tickets",
+      "url": "https://ornc.org/whats-on/first-sundays/",
+      "when": "First Sunday of the month | 10am–5pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/wigs-weddings-powder-and-palaces-film-tour",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/02/Tigz-Rice-Old-Royal-Naval-College-2025-37-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/wigs-weddings-powder-and-palaces-film-tour/",
+      "title": "Film Tour: Wigs, Weddings, Powder and Palaces",
+      "url": "https://ornc.org/whats-on/wigs-weddings-powder-and-palaces-film-tour/",
+      "when": "Saturdays | 11.30am & 1.30pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/600-years-of-history",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/02/ORNC_NOV_23-58-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/600-years-of-history/",
+      "title": "Official tour: 600 Years of History",
+      "url": "https://ornc.org/whats-on/600-years-of-history/",
+      "when": "Daily | 11am, 12pm, 1pm, 2pm & 3pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/painted-hall-talks",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/10/ONRC_1-182-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/painted-hall-talks/",
+      "title": "Painted Hall Talks",
+      "url": "https://ornc.org/whats-on/painted-hall-talks/",
+      "when": "Daily | Various times"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/cornwallis-cloth-exhibition-in-the-visitor-centre",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/09/Cornwallis-Cloth-1203-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/cornwallis-cloth-exhibition-in-the-visitor-centre/",
+      "title": "Cornwallis Cloth | Exhibition in the Visitor Centre",
+      "url": "https://ornc.org/whats-on/cornwallis-cloth-exhibition-in-the-visitor-centre/",
+      "when": "Open Daily | 10am–5pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/film-tour-spies",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/10/Thor-Cosplay-25-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/film-tour-spies/",
+      "title": "Film tour: Spies, Sleuths and Superheroes",
+      "url": "https://ornc.org/whats-on/film-tour-spies/",
+      "when": "Sundays | 11.30am"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/yoga-in-the-painted-hall",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/12/YOGA_PAINTED_HALL-06312-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Wellbeing",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/yoga-in-the-painted-hall/",
+      "title": "Feel Good Friday | Yoga in the Painted Hall",
+      "url": "https://ornc.org/whats-on/yoga-in-the-painted-hall/",
+      "when": "Last Friday of the month | 8am–8.45am"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/behind-the-scenes-secret-dome-tour",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/05/6-ORNC-Dome-Tours.-Photo-credits-Annabel-Moeller-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Talks & Tours",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/behind-the-scenes-secret-dome-tour/",
+      "title": "Behind the Scenes | Secret Dome Tour",
+      "url": "https://ornc.org/whats-on/behind-the-scenes-secret-dome-tour/",
+      "when": "Mon & Fri | 11.30am & 1.30pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/visitor-centre-display-a-journey-through-the-stars",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/10/The-Observatory-at-Kew-illustration-by-John-Gulich-from-Weather-Watchers-and-Their-Work-The-Strand-Magazine-1892-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/visitor-centre-display-a-journey-through-the-stars/",
+      "title": "Visitor Centre Display | A Journey Through the Stars",
+      "url": "https://ornc.org/whats-on/visitor-centre-display-a-journey-through-the-stars/",
+      "when": "Daily | 10am–5pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/lie-down-and-listen-illumination",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/07/image00004-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Wellbeing",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/lie-down-and-listen-illumination/",
+      "title": "Lie Down and Listen",
+      "url": "https://ornc.org/whats-on/lie-down-and-listen-illumination/",
+      "when": "Various dates in 2026 | 6.30pm & 8.30pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/family-day",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/01/IMG_9792-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/family-day/",
+      "title": "Family Day in the Painted Hall",
+      "url": "https://ornc.org/whats-on/family-day/",
+      "when": "Third Sunday of the month | 11am-4pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/silent-disco",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/10/Silent-Disco-Helios-73-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/silent-disco/",
+      "title": "Silent Disco in the Painted Hall",
+      "url": "https://ornc.org/whats-on/silent-disco/",
+      "when": "Various dates | 8pm–11pm"
+    }
+  },
+  {
+    "event": {
+      "address": "King William Walk, London SE10 9NN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "art-of-directing-creating-your-own-path-with-adjani-salmon|2026-10-06|old-royal-naval-college",
+      "description": "Join us for an exclusive evening with writer-director Adjani Salmon, whose breakthrough TV series, Dreaming Whilst Black, garnered a slew of critical acclaim including a BAFTA & RTS Award and an International Emmy Nomination. Exploring the fine balance between creative craft and non-traditional pathways, this exclusive masterclass focuses on Adjani’s journey towards creating his breakthrough TV Series with the BBC – and how you can create your own path to success. Hosted by The Old Royal Naval College in partnership with the University of Greenwich, the masterclass will take place in the stunning surroundings of the Chapel of St Peter and St Paul, which has featured in many blockbuster hits including Bridgerton and Four Weddings and a Funeral. The talk will start at 7pm, with all ticketholders having exclusive access to the Painted Hall from 6pm-7pm. About Adjani Hailing from Jamaica, Adjani is a writer-director and actor who only writes “what he likes.” As well as being an avid reader, he spends his time people-watching, eavesdropping and chatting up strangers, not putting his Architecture degree to good use. In 2023, his breakthrough TV series, Dreaming Whilst Black, garnered a slew of critical acclaim including a BAFTA & RTS Award and an International Emmy Nomination. In collaboration with A24, Season 1 & 2 are available globally (including being spotted in an illegal DVD shop in Uganda). Despite his accolades, Adjani is most proud of the fact that he can finally pay rent from his once passion turned profession.” The Centre for Creative Futures at the University of Greenwich This event forms part of The Centre for Creative Futures’ ‘Creative Conversations’ series which brings researchers into conversation with industry leaders to share knowledge with the public. Recent projects run by the Centre for Creative Futures include, Animations for Creative Health, Spirits of the Black Meridian, the Creative Health Network and Thamesmead Playscapes. Please visit https://www.gre.ac.uk/research/centres/creative-futures Studying Film and TV Production at the University of Greenwich Fortuitously based at the Old Royal Naval College at Greenwich, the FILM & PRODUCTION DEGREES offered by the University of Greenwich are very well placed to benefit from our historic location. Film Students are periodically offered paid Location Marshalling jobs on visiting film crews – often large-scale Hollywood productions who come to Greenwich to shoot period dramas. In addition, students often use the grand location themselves for their own films. To find out more, visit the University of Greenwich website.",
+      "ends_at": "2026-10-06T19:30:00Z",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/08/Art-of-Location-final-edit-1035-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": 51.4829,
+      "lng": -0.0066,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "20"
+      },
+      "starts_at": "2026-10-06T17:00:00Z",
+      "tags": [],
+      "title": "The Art of Directing: Creating Your Own Path with Adjani Salmon",
+      "url": "https://ornc.org/whats-on/art-of-directing-adjani-salmon/",
+      "venue_name": "Old Royal Naval College"
+    },
+    "id": "whats-on/art-of-directing-adjani-salmon",
+    "payload": {
+      "description": "Join us for an exclusive evening with writer-director Adjani Salmon, whose breakthrough TV series, Dreaming Whilst Black, garnered a slew of critical acclaim including a BAFTA & RTS Award and an International Emmy Nomination. Exploring the fine balance between creative craft and non-traditional pathways, this exclusive masterclass focuses on Adjani’s journey towards creating his breakthrough TV Series with the BBC – and how you can create your own path to success. Hosted by The Old Royal Naval College in partnership with the University of Greenwich, the masterclass will take place in the stunning surroundings of the Chapel of St Peter and St Paul, which has featured in many blockbuster hits including Bridgerton and Four Weddings and a Funeral. The talk will start at 7pm, with all ticketholders having exclusive access to the Painted Hall from 6pm-7pm. About Adjani Hailing from Jamaica, Adjani is a writer-director and actor who only writes “what he likes.” As well as being an avid reader, he spends his time people-watching, eavesdropping and chatting up strangers, not putting his Architecture degree to good use. In 2023, his breakthrough TV series, Dreaming Whilst Black, garnered a slew of critical acclaim including a BAFTA & RTS Award and an International Emmy Nomination. In collaboration with A24, Season 1 & 2 are available globally (including being spotted in an illegal DVD shop in Uganda). Despite his accolades, Adjani is most proud of the fact that he can finally pay rent from his once passion turned profession.” The Centre for Creative Futures at the University of Greenwich This event forms part of The Centre for Creative Futures’ ‘Creative Conversations’ series which brings researchers into conversation with industry leaders to share knowledge with the public. Recent projects run by the Centre for Creative Futures include, Animations for Creative Health, Spirits of the Black Meridian, the Creative Health Network and Thamesmead Playscapes. Please visit https://www.gre.ac.uk/research/centres/creative-futures Studying Film and TV Production at the University of Greenwich Fortuitously based at the Old Royal Naval College at Greenwich, the FILM & PRODUCTION DEGREES offered by the University of Greenwich are very well placed to benefit from our historic location. Film Students are periodically offered paid Location Marshalling jobs on visiting film crews – often large-scale Hollywood productions who come to Greenwich to shoot period dramas. In addition, students often use the grand location themselves for their own films. To find out more, visit the University of Greenwich website.",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/08/Art-of-Location-final-edit-1035-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Film and TV",
+      "listed_on": "2026-09-26",
+      "page_title": "Film Talk Adjani Salmon | Event | Old Royal Naval College",
+      "path": "/whats-on/art-of-directing-adjani-salmon/",
+      "price_text": "Tickets: £25 (Concessions £20)",
+      "title": "The Art of Directing: Creating Your Own Path with Adjani Salmon",
+      "url": "https://ornc.org/whats-on/art-of-directing-adjani-salmon/",
+      "when": "Tue 6 Oct | 6pm-8.30pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/halloween-film-music-concert",
+    "payload": {
+      "description": "Prepare to be spellbound as the Docklands Sinfonia take you on a spine-tingling journey this Halloween. From haunting classics to magical adventures and supernatural favourites, the programme celebrates the mysterious, the macabre, and the wonderfully whimsical. This 75-minute concert features some of the most recognisable and powerful film scores – some of which were filmed on-site here, at the UK’s No. 1 heritage filming location. So, sit back, embrace the Halloween spirit, and enjoy an unforgettable evening of music that is sure to delight, surprise, and send a shiver down your spine. Age Recommendation: 5+ Programme (subject to change) Toccata and Fugue in D Minor Hocus Pocus Psycho: Intro Credits and Shower Scene Jaws Harry Potter Dark Knight Davy Jones (Pirates of the Caribbean) The Mummy Night on Bald Mountain Charlie and the Chocolate Factory Edward Scissor Hands Addams Family Scooby Doo Beetlejuice Nightmare Before Christmas Ghostbusters About Docklands Sinfonia Docklands Sinfonia is a diverse, dynamic and versatile orchestra working with composers, producers and promoters across film, rock, pop and classic music. A major cultural force in Docklands and beyond – the orchestra brings high-quality music to the area, staging ground-breaking concerts and creating a lasting legacy by inspiring generations of young people. Since its formation in 2009, Docklands Sinfonia has enjoyed incredible success with performances for Queen Elizabeth II at Buckingham Palace and with Grammy-award winner Imogen Heap at the Royal Albert Hall. The orchestra received standing ovations for its world premiere performances of Roy Budd’s score to the 1925 silent film, Phantom of the Opera at the Barbican and London Coliseum. It has appeared on BBC Radio 3 and BBC1 and performed the first-ever concerts in the Tower Bridge’s Bascule Chamber under the Thames. About the Chapel of St Peter & St Paul The concert takes place in the beautiful Chapel of St Peter & St Paul, part of Sir Christopher Wren’s original design for the Royal Hospital for Seamen at Greenwich. After a devastating fire, the Chapel was rebuilt in 1779 by James ‘Athenian’ Stuart. With its richly decorated ceiling, naval themes, and exceptional altarpiece painted by ‘the Raphael of America’, Benjamin West, the Chapel is now regarded as one of the finest intact neo-classical interiors in existence. Find out more Event T&Cs Tickets are non-refundable once purchased and cannot be exchanged. By attending this event, you acknowledge that photography and filming may take place for promotional and archival purposes. If you do not wish to be photographed or filmed, please inform a member of staff upon arrival. We reserve the right to refuse service to anyone that does not respect our site, staff, or other visitors. For full T&Cs please check our website here. Food is not permitted inside the Chapel. Only bottled water is permitted inside the Chapel.",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/ORNC_Chapel-Concert_Credit-Docklands-Sinfonia_1-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "listed_on": "2026-09-26",
+      "page_title": "Halloween Film Music LIVE! - Old Royal Naval College",
+      "path": "/whats-on/halloween-film-music-concert/",
+      "price_text": "Tickets: £35 (Adults), £10 (Child), £68-£75 (Family)",
+      "title": "Halloween Film Music LIVE!",
+      "url": "https://ornc.org/whats-on/halloween-film-music-concert/",
+      "when": "Sat 31 Oct | 6.30pm-7.45pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/murder-mystery-halloween-edition",
+    "payload": {
+      "description": "A haunting Halloween murder mystery in Admiral’s House. Step into a world of shadows, secrets, and suspense this Halloween, with a thrilling, after-hours murder mystery experience, set within the historic walls of Admiral’s House. As darkness falls, assemble your team of detectives to explore our historic buildings under the cover of night. You’ll need to hunt for hidden clues and interrogate enigmatic, spine-chilling suspects to piece together the puzzle before the witching hour. With 90 minutes to investigate, interrogate, and deduce, will your team crack the case, or will the culprit slip away into the night? Please note: Recommended age 16 and above. About the venue Admiral’s House is the oldest building of the Old Royal Naval College site, originally commissioned by King Charles II to be his King’s House in 1660. In 1745 the rooms became the official residence of the Governor of Greenwich Hospital. It then became known as Admiral’s House, as the Governor was almost always an Admiral.",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/03/PAINTED_HALL_MURDER_MYSTERY-05555-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "listed_on": "2026-09-26",
+      "page_title": "Murder Mystery Halloween Edition - Old Royal Naval College",
+      "path": "/whats-on/murder-mystery-halloween-edition/",
+      "price_text": "Tickets: £30 (Adults), £27 (Concession)",
+      "title": "Murder Mystery Halloween Edition",
+      "url": "https://ornc.org/whats-on/murder-mystery-halloween-edition/",
+      "when": "Sat 31 Oct | 7pm-10pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/lost-worlds-by-luxmuralis",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/DSF0476-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/lost-worlds-by-luxmuralis/",
+      "title": "Lost Worlds by Luxmuralis",
+      "url": "https://ornc.org/whats-on/lost-worlds-by-luxmuralis/",
+      "when": "6–8 & 11–15 Nov | 5.45pm-9pm"
+    }
+  },
+  {
+    "event": {
+      "address": "King William Walk, London SE10 9NN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "peace-doves-by-peter-walker|2026-11-20|old-royal-naval-college",
+      "description": "For millennia, doves have been symbols of hope, peace and love across many cultures. Taking inspiration from this, Peace Doves is a mass participation artwork from renowned artist Peter Walker Sculptor. Made up of individual doves created by members of the public, complete with handwritten messages of peace, this promises to be an art installation like no other. Peace Doves will be on display in the Painted Hall from 20 November until 7 February 2027. Book now to view this breathtaking installation, as we celebrate 300 years of this astonishing Baroque masterpiece. Be part of it Leave your mark in the Painted Hall and be a part of our legacy, as we celebrate the 300th anniversary of our Baroque masterpiece. All you need to do is visit us between July and November 2026 and make your own peace dove to feature in the final artwork. Peace dove making stations will be located in the Painted Hall and in the Chapel. We will also be inviting schools in the region to take part. Painted Hall 300 Over the last 3 centuries, artists and storytellers have invited visitors to look up, pause, and imagine inside the Painted Hall. One of the world’s most breathtaking Baroque interiors, it remains a place where creativity continues to thrive. We invite you to join us and help us write the next chapter of our story together.",
+      "ends_at": "2027-02-07T00:00:00Z",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/06/ORNC_Peave-Doves-Render-2_Peter-Walker-Sculptor-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": 51.4829,
+      "lng": -0.0066,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "19",
+        "min": "2"
+      },
+      "starts_at": "2026-11-20T00:00:00Z",
+      "tags": [],
+      "title": "Peace Doves by Peter Walker",
+      "url": "https://ornc.org/whats-on/peace-doves-by-peter-walker/",
+      "venue_name": "Old Royal Naval College"
+    },
+    "id": "whats-on/peace-doves-by-peter-walker",
+    "payload": {
+      "description": "For millennia, doves have been symbols of hope, peace and love across many cultures. Taking inspiration from this, Peace Doves is a mass participation artwork from renowned artist Peter Walker Sculptor. Made up of individual doves created by members of the public, complete with handwritten messages of peace, this promises to be an art installation like no other. Peace Doves will be on display in the Painted Hall from 20 November until 7 February 2027. Book now to view this breathtaking installation, as we celebrate 300 years of this astonishing Baroque masterpiece. Be part of it Leave your mark in the Painted Hall and be a part of our legacy, as we celebrate the 300th anniversary of our Baroque masterpiece. All you need to do is visit us between July and November 2026 and make your own peace dove to feature in the final artwork. Peace dove making stations will be located in the Painted Hall and in the Chapel. We will also be inviting schools in the region to take part. Painted Hall 300 Over the last 3 centuries, artists and storytellers have invited visitors to look up, pause, and imagine inside the Painted Hall. One of the world’s most breathtaking Baroque interiors, it remains a place where creativity continues to thrive. We invite you to join us and help us write the next chapter of our story together.",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/06/ORNC_Peave-Doves-Render-2_Peter-Walker-Sculptor-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Exhibition",
+      "listed_on": "2026-09-26",
+      "page_title": "Peace Doves | Art Installation | Old Royal Naval College",
+      "path": "/whats-on/peace-doves-by-peter-walker/",
+      "price_text": "Tickets: £19 (adults), £9.50 (concessions), £2 (universal credit)",
+      "title": "Peace Doves by Peter Walker",
+      "url": "https://ornc.org/whats-on/peace-doves-by-peter-walker/",
+      "when": "20 Nov 2026 - 7 Feb 2027"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/opera-rara-celebrating-tosti",
+    "payload": {
+      "description": "Opera Rara continues its 2026/27 Salon Series with a day celebrating the life and music of composer Paolo Tosti (1846-1916). Alumni artists from the Tosti International Singing Academy, in a new partnership with the Academy, will present songs by Tosti alongside songs by his contemporaries. Born in Italy but with an influential career in London, Tosti was once the singing-master to the British royal family, and his compositions were staples in the salons of Europe and elsewhere. The pre-concert talk with music historian Flora Willson and a panel of Tosti scholars begins at 6:15pm. The entire day also includes a lunch and masterclass with various packages available to book. Day schedule 1:00pm | Lunch 3:00pm | Masterclass 6:15pm | Lives in Song: Tosti pre-concert talk 7:30pm | Celebrating Tosti Salon Concert CONCERT PROGRAMME Aprile Ideale Marechiare Scetate (Mario Costa) Se (Luigi Denza) Venetian Song (Italian or English, duet) Chitarrata Abruzzese Tutto per me sei tu (Bagni di Lucca) Melanconia (Giacomo Puccini) La serenata del Arlechin (Jules Burgmein/Giulio Ricordi) Se dirti una parola • L’alba separa — INTERVAL — Allons voir (duet) Avec Toi Le parfum impérissable (Gabriel Fauré) Chanson de Fortunio Les Yeux Bleus (Isidore De Lara) En Septembre (Liza Lehmann) Passing Shadows Beauty’s Eyes The Brook (Charlotte Alington Barbard/Claribel) The Lost Chord (Arthur Sullivan) Ask Me No More Rose Way (Ruggero Leoncavallo, duet) Goodbye!",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/09/6735404b-3d62-40ec-b89d-edeaaa80a98c-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Performance",
+      "listed_on": "2026-09-26",
+      "page_title": "Opera Rara presents: Celebrating Tosti - Old Royal Naval College",
+      "path": "/whats-on/opera-rara-celebrating-tosti/",
+      "price_text": null,
+      "title": "Opera Rara presents: Celebrating Tosti",
+      "url": "https://ornc.org/whats-on/opera-rara-celebrating-tosti/",
+      "when": "Thu 26 Nov | 1pm-10pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/father-christmas-greenwich",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2024/10/Unknown-2-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/father-christmas-greenwich/",
+      "title": "Father Christmas | Family Festive Magic in Greenwich",
+      "url": "https://ornc.org/whats-on/father-christmas-greenwich/",
+      "when": "Sat 28 Nov– Tue 22 Dec | Various times"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/christmas-social-media-days",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/08/Unknown-640x640.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/christmas-social-media-days/",
+      "title": "Christmas Social Media Days",
+      "url": "https://ornc.org/whats-on/christmas-social-media-days/",
+      "when": "1 Dec–3 Dec, 8 Dec–10 Dec & 15 Dec–17 Dec| Various times"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/murder-mystery",
+    "payload": {
+      "description": "Step into a world of intrigue and excitement for a thrilling after-hours murder mystery experience in Admiral’s House. Assemble your team of detectives, explore our historic buildings at nighttime, and interrogate enigmatic suspects to piece together the scattered clues before the time is up! With 90 minutes to investigate, interrogate, and deduce, will your team crack the case, or will the culprit slip through your fingers? This event consists of two sessions, one starting at 7pm, and the following at 8.30pm. Please note: Recommended age 16 and above. Running time: 90 minutes. About the venue Admiral’s House is the oldest building of the Old Royal Naval College site, originally commissioned by King Charles II to be his King’s House in 1660. In 1745 the rooms became the official residence of the Governor of Greenwich Hospital. It then became known as Admiral’s House, as the Governor was almost always an Admiral.",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2025/04/PAINTED_HALL_MURDER_MYSTERY-05345-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "After Hours",
+      "listed_on": "2026-09-26",
+      "page_title": "Murder Mystery Experience - Old Royal Naval College",
+      "path": "/whats-on/murder-mystery/",
+      "price_text": "Tickets: £25",
+      "title": "Murder Mystery Experience",
+      "url": "https://ornc.org/whats-on/murder-mystery/",
+      "when": "Sat 12 Dec | 7pm & 8.30pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/the-elves-and-the-jingle-bell-ball",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/07/9685dd8b-a362-4a15-bbe2-c462ea36ac47-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Christmas",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/the-elves-and-the-jingle-bell-ball/",
+      "title": "The Elves and the Jingle Bell Ball",
+      "url": "https://ornc.org/whats-on/the-elves-and-the-jingle-bell-ball/",
+      "when": "Sat 19 - Wed 23 Dec 2026 | Various Times"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/tudor-takeover",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/03/ORNC_Tudor-Takeover_1-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/tudor-takeover/",
+      "title": "Tudor Takeover",
+      "url": "https://ornc.org/whats-on/tudor-takeover/",
+      "when": "Sat 3 Apr & Sun 4 Apr 2027 | 10am-5pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/greenwich-dog-show",
+    "payload": {
+      "description": "Thank you to everyone who joined us for 2026, next year’s will take place on Sunday 2 May 2027. The Greenwich Dog Show is back – and it’s set to be bigger, better, and more tail-waggingly fun than ever before! Join us for a spectacular celebration of all things canine. This year, we’re going all out with an expanded competition, more paw-some prizes, and an exciting marketplace packed with everything a dog (or their human) could wish for – from gourmet pet bakeries and boutique pet hotels to canine fertility clinics and specialist retailers. All dogs, big and small, well-behaved or wonderfully mischievous, are welcome to join in the fun! Places are limited with 30 dogs per class, so don’t miss out your chance to participate. Competition Categories Waggiest Tail: 10am & 2pm Prettiest Bitch: 10.20am & 2.20pm Handsome Hound: 10.40am & 2.40pm Glorious Golden Oldie: 11am & 3pm Cutest Pup: 11.20am & 3.20pm Best Unique Feature: 11.40am & 3.40pm Best Baroque*: 12pm & 4pm Best Rescue Dog: 12.20pm & 4.20pm Best Trick: 12.40pm & 4.40pm Best in Show: 5pm Press call photoshoot with the winners – 5.30pm Please note, we cannot accommodate any on the day entries to categories sold out in advance of the competition. All profits and proceeds from this event will go to Greenwich Foundation for the Old Royal Naval College to conserve and protect our beautiful site for future generations of humans and pups. Thank you to our sponsor Virtue Vets for supporting this year’s dog show. * This year, we are celebrating the Painted Hall’s 300th anniversary. The Best Baroque category is a nod to this, as the Painted Hall – often cited as the UK’s Sistine Chapel – remains one of the finest examples of Baroque interiors in the UK. Please note, we do not encourage the dressing up of dogs in costumes. Dog welfare The Old Royal Naval College is proud to host the Greenwich Dog Show, now in its fourth year. It has become a much-loved part of our programme, bringing together residents, families, visitors and their dogs for a fun and inclusive day out. We understand that on a hot day some people may have concerns, and we want to reassure everyone that animal welfare is central to how the event is planned and managed. The wellbeing of every dog attending is our top priority. There is ample shade across the site, fresh water is available in prominent locations and will be replenished throughout the day, and dog-friendly refreshments are available from stallholders. We also have vets on site, alongside first aid provision for people, to help ensure the day is safe, comfortable and enjoyable for everyone. Additionally, there is a dedicated space with the London House of Wellbeing, inviting visitors to explore preventative and holistic health in a relaxed and engaging setting. While the Old Brewery, our dog-friendly on-site pub, is a welcoming place for owners and their dogs to take a break during the day. All activities are entirely optional and always at the owner’s discretion, and our team will continue to monitor conditions closely throughout the event. If at any point we believe the weather or any activity could affect animal welfare, we will take immediate action. Healthy Dog Wellbeing Area A standout feature of the Greenwich Dog Show 2026, this dedicated space celebrates the vital link between human and canine wellbeing. Designed as a premium, experience-led environment, the area invites visitors to explore preventative and holistic health in a relaxed and engaging setting. On-the-day health testing for owners, delivered by qualified professionals, offers immediate personal insights in a non-clinical atmosphere. A programme of expert-led talks will run throughout the day, covering mental wellbeing, nutrition, longevity and the evolving relationship between owner and dog health. Selected sessions will be delivered in partnership with the London House of Wellbeing. Complementary wellbeing content for dogs will focus on behaviour, movement and nutrition, bringing the shared wellbeing ethos to life. Dog friendly foodie fun The Old Brewery, our dog-friendly on-site pub, is ready to welcome you and your furry friends over a cappuccino and puppaccino. Important notes All dogs need to be on lead at all times on our grounds. Owners must be respectful to the code of conduct There will be free poo bags around the site for our canine attendees Photos of the event will be taken on the day. These may feature on our social media, website and promotional material. Useful documents Dog Show FAQs Code of Conduct Event Map If you are interested in having a stall at this event please email events@ornc.org Photos by Olive Tree Photography",
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2023/04/Greenwich-Dog-Show-2024-136-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "listed_on": "2026-09-26",
+      "page_title": "Greenwich Dog Show presented by Virtue Vets - Old Royal Naval College",
+      "path": "/whats-on/greenwich-dog-show/",
+      "price_text": null,
+      "title": "Greenwich Dog Show presented by Virtue Vets",
+      "url": "https://ornc.org/whats-on/greenwich-dog-show/",
+      "when": "Sun 2 May 2027 | 10am–6pm"
+    }
+  },
+  {
+    "event": null,
+    "id": "whats-on/pirates-takeover",
+    "payload": {
+      "image_url": "https://et38c4vicjh.exactdn.com/wp-content/uploads/2026/02/e58523a7-3367-4699-905c-108f9c5c6b10-640x640.jpg?strip=all&quality=90&webp=90&avif=80",
+      "label": "Family Fun",
+      "listed_on": "2026-09-26",
+      "path": "/whats-on/pirates-takeover/",
+      "title": "Pirate’s Takeover",
+      "url": "https://ornc.org/whats-on/pirates-takeover/",
+      "when": "Sat 28 Aug - Mon 30 Aug 2027 | 10am-5pm"
+    }
+  }
+]
