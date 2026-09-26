@@ -10,13 +10,13 @@ use std::collections::HashSet;
 use uuid::Uuid;
 
 use crate::matching::{self, MatchInput, TitleScore};
-use crate::model::{NewEvent, RawEvent};
+use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
 #[derive(Debug, Clone, FromRow)]
 pub struct SourceRow {
     pub id: i64,
     pub key: String,
-    pub kind: String,
+    pub kind: SourceKind,
     pub base_url: String,
     pub domain: String,
     pub interval_minutes: i32,
@@ -53,7 +53,7 @@ pub async fn source_by_key(pool: &PgPool, key: &str) -> sqlx::Result<Option<Sour
 pub async fn upsert_source(
     pool: &PgPool,
     key: &str,
-    kind: &str,
+    kind: SourceKind,
     base_url: &str,
     interval_minutes: i32,
     enabled: bool,
@@ -282,12 +282,12 @@ async fn upsert_event_tx(
     let overrides = load_overrides(tx, source_id, &raw.source_event_id).await?;
     let forbidden: HashSet<Uuid> = overrides
         .iter()
-        .filter(|(action, _)| action == "never_merge")
+        .filter(|(action, _)| *action == OverrideAction::NeverMerge)
         .map(|(_, id)| *id)
         .collect();
     let force = overrides
         .iter()
-        .find(|(action, id)| action == "force_merge" && !forbidden.contains(id))
+        .find(|(action, id)| *action == OverrideAction::ForceMerge && !forbidden.contains(id))
         .map(|(_, id)| *id);
 
     let mut ev = event.clone();
@@ -441,7 +441,7 @@ async fn load_overrides(
     tx: &mut Transaction<'_, Postgres>,
     source_id: i64,
     source_event_id: &str,
-) -> sqlx::Result<Vec<(String, Uuid)>> {
+) -> sqlx::Result<Vec<(OverrideAction, Uuid)>> {
     sqlx::query_as(
         "SELECT o.action, es.event_id
          FROM events.merge_overrides o
@@ -534,7 +534,7 @@ async fn merge_into(
     source_id: i64,
     event: &NewEvent,
 ) -> sqlx::Result<()> {
-    let (kind, other_same_kind): (String, bool) = sqlx::query_as(
+    let (kind, other_same_kind): (SourceKind, bool) = sqlx::query_as(
         "SELECT s.kind, EXISTS (SELECT 1 FROM events.event_sources es
                                 JOIN events.sources o ON o.id = es.source_id
                                 WHERE es.event_id = $2 AND es.source_id <> $1
@@ -545,8 +545,10 @@ async fn merge_into(
     .bind(id)
     .fetch_one(&mut **tx)
     .await?;
-    let site_wins = kind == "scraper" && !other_same_kind;
-    let api_wins = kind == "api" && !other_same_kind;
+    let (site_wins, api_wins) = match kind {
+        SourceKind::Scraper => (!other_same_kind, false),
+        SourceKind::Api => (false, !other_same_kind),
+    };
     let sql = update_from_values(MERGE);
     bind_event(sqlx::query(AssertSqlSafe(sql)), event)
         .bind(id)

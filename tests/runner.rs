@@ -10,7 +10,7 @@ use common::TestDb;
 use thaleia::config::RateLimitConfig;
 use thaleia::fetch::FetchContext;
 use thaleia::health::{HealthAction, HealthChecker, HealthConfig};
-use thaleia::model::{Category, NewEvent, Price, RawEvent};
+use thaleia::model::{Category, NewEvent, Price, RawEvent, SourceKind};
 use thaleia::normalise::dedupe_key;
 use thaleia::repo;
 use thaleia::runner::{INGEST_LOCK_KEY, RunSummary, Runner};
@@ -106,9 +106,16 @@ async fn runs_due_sources_records_runs_and_respects_intervals() {
         .execute(&pool)
         .await
         .unwrap();
-    let src = repo::upsert_source(&pool, "fake", "scraper", "https://fake.test", 60, true)
-        .await
-        .unwrap();
+    let src = repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
 
     let now = Utc::now();
     let r = runner(pool.clone(), now, None, Duration::from_secs(5));
@@ -178,9 +185,16 @@ async fn timeouts_are_recorded_as_failed_runs() {
         .execute(&pool)
         .await
         .unwrap();
-    let src = repo::upsert_source(&pool, "fake", "scraper", "https://fake.test", 60, true)
-        .await
-        .unwrap();
+    let src = repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
     let now = Utc::now();
     let r = runner(
         pool.clone(),

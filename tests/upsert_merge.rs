@@ -9,7 +9,7 @@ use chrono::{DateTime, Utc};
 use common::{TestDb, fixture};
 use rust_decimal::Decimal;
 use sqlx::PgPool;
-use thaleia::model::{Category, NewEvent, Price, RawEvent};
+use thaleia::model::{Category, NewEvent, OverrideAction, Price, RawEvent};
 use thaleia::repo;
 use thaleia::sources::serpentine::parse_detail;
 use thaleia::sources::{serpentine, ticketmaster};
@@ -251,7 +251,7 @@ async fn link_count(pool: &PgPool, event_id: uuid::Uuid) -> i64 {
         .unwrap()
 }
 
-async fn add_override(pool: &PgPool, action: &str, x: (i64, &str), y: (i64, &str)) {
+async fn add_override(pool: &PgPool, action: OverrideAction, x: (i64, &str), y: (i64, &str)) {
     let (a, b) = if x < y { (x, y) } else { (y, x) };
     sqlx::query(
         "INSERT INTO events.merge_overrides
@@ -439,7 +439,7 @@ async fn never_merge_override_splits_fuzzy_and_exact_merges() {
     assert_eq!(a.event_id, b.event_id);
     add_override(
         &pool,
-        "never_merge",
+        OverrideAction::NeverMerge,
         (tm_src, "tm-kusama"),
         (sp_src, "sp-kusama"),
     )
@@ -482,7 +482,7 @@ async fn never_merge_override_splits_fuzzy_and_exact_merges() {
     assert_eq!(event_count(&pool).await, 3);
     add_override(
         &pool,
-        "never_merge",
+        OverrideAction::NeverMerge,
         (tm_src, &tm_raw.source_event_id),
         (sp_src, &sp_raw.source_event_id),
     )
@@ -551,7 +551,7 @@ async fn force_merge_override_joins_non_matching_listings() {
 
     add_override(
         &pool,
-        "force_merge",
+        OverrideAction::ForceMerge,
         (tm_src, "tm-noor"),
         (sp_src, "sp-noor"),
     )

@@ -41,6 +41,41 @@ impl std::fmt::Display for Category {
     }
 }
 
+/// How a source gets its events. Stored as text with a CHECK constraint in
+/// `events.sources`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, sqlx::Type)]
+#[sqlx(type_name = "text", rename_all = "lowercase")]
+pub enum SourceKind {
+    /// A third-party API (e.g. Ticketmaster).
+    Api,
+    /// A venue's own website.
+    Scraper,
+}
+
+impl SourceKind {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            SourceKind::Api => "api",
+            SourceKind::Scraper => "scraper",
+        }
+    }
+}
+
+impl std::fmt::Display for SourceKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+/// A manual merge correction. Stored as text with a CHECK constraint in
+/// `events.merge_overrides`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, sqlx::Type)]
+#[sqlx(type_name = "text", rename_all = "snake_case")]
+pub enum OverrideAction {
+    NeverMerge,
+    ForceMerge,
+}
+
 /// One item as fetched from a source, before normalisation.
 ///
 /// `payload` is whatever the source found (API JSON object, JSON-LD node,
