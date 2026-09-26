@@ -44,6 +44,9 @@ cron ─────▶ |  thaleia-ingest   |        |       thaleia-api        
     `script#props` JSON (the site has no JSON-LD), paginated, no detail pages.
   - `design-museum` — CSS-selector scraper (the site has no JSON-LD): the
     current and future exhibition listings → detail pages for the date range.
+  - `garden-museum` — reads the what's-on listing's embedded `script#json-data`
+    (no JSON-LD) → event pages for times, location, booking prices and
+    description; exhibitions, talks, workshops, festivals and lates.
   - `whitechapel-gallery` — CSS-selector scraper (no JSON-LD): exhibitions
     listing → detail pages for dates and free-entry status.
   - `barbican` — CSS-selector scraper (no JSON-LD): the art & design and

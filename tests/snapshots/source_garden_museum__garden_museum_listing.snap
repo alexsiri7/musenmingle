@@ -1,0 +1,718 @@
+---
+source: tests/source_garden_museum.rs
+expression: listing()
+---
+[
+  {
+    "path": "/whats-on/garden-art-garden/",
+    "title": "Garden/Art/Garden: a series of talks exploring gardens as an artform",
+    "types": [
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/GM_social_blank_02-916x516.png"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-family-yoga-september/",
+    "title": "Sunday Family Sessions Family Yoga September",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Breathwork-in-Nature-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/book-launch-the-amazing-lady-p-with-sonja-waites-and-shane-connolly/",
+    "title": "Book Launch | The Amazing Lady P with Sonja Waites and Shane Connolly",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/Pulbrook_Gould_5500-scaled-e1785419736691-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/garden-cafe-whos-game/",
+    "title": "Garden Café: Who’s Game?!",
+    "types": [
+      "lates"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/GMC_Whos-Game-2026_1080x1350-1-916x474.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-clay-mushrooms/",
+    "title": "Sunday Family Sessions Clay Mushrooms",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Sunday-sessions-fungi-4-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-anansi-the-spider-storytelling/",
+    "title": "Tuesday Tots Anansi the Spider Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/spiders-4-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/matthew-rice-a-year-in-the-garden/",
+    "title": "Matthew Rice: A Year in the Garden",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-13-at-11.56.54-pm-e1786691280421-916x516.png"
+  },
+  {
+    "path": "/whats-on/sabine-moritz/",
+    "title": "Sabine Moritz: Lie Down in Green Pastures",
+    "types": [
+      "exhibitions"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/SML00034-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/branch-out-gallery-design-workshop/",
+    "title": "Branch Out | Gallery Design Workshop",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults",
+      "young-adults"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/IMG_0249-scaled-1-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/threads-of-ascent-tapestries-by-clare-woods/",
+    "title": "Threads of Ascent: Tapestries by Clare Woods",
+    "types": [
+      "exhibitions"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/TheTakeOver2026_DovecotxClareWoods_cDovecotStudios_PhotobyPhilWilkinson_crop-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tour-celebrating-400-years-of-tapestries/",
+    "title": "Tour Celebrating 400 Years of Tapestries",
+    "types": [
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2025/09/Tapestry_web-banner-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/garden-museum-late-clare-woods-sabine-moritz/",
+    "title": "Garden Museum Late: Clare Woods & Sabine Moritz",
+    "types": [
+      "lates"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/bfw-edited-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/cook-with-the-seasons-october/",
+    "title": "Cook with the Seasons October",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/Veg-Box-Ceri-Jones-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/cookery-masterclass-autumn-in-italy-with-olivia-cavalli/",
+    "title": "Cookery Masterclass | Autumn in Italy with Olivia Cavalli",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/edit-3-136-scaled-e1790325702465-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-circular-weaving/",
+    "title": "Sunday Family Sessions Circular Weaving",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/circular-weaving-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-hello-autumn-storytelling/",
+    "title": "Tuesday Tots Hello Autumn Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/leaf-crowns-2025-e1788958886884-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/botanical-embroidery-workshop-book-celebration-with-katerina-knight/",
+    "title": "Botanical Embroidery Workshop & Book Celebration with Katerina Knight",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/artist-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/the-creative-gardener-stephanie-mahon-in-conversation-with-bex-partridge-declan-buckley-and-joshua-sparkes/",
+    "title": "The Creative Gardener: Stephanie Mahon in Conversation with Bex Partridge, Declan Buckley, and Joshua Sparkes",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/CG-Book-Bex-Partridge-1582-of-1591-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-a-harvest-ride-through-south-london/",
+    "title": "Harvest Festival 2026 |A Harvest Ride Through South London",
+    "types": [
+      "festivals"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/Screenshot-2026-08-20-at-6.31.32-pm-e1787248761885-916x516.png"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026/",
+    "title": "Harvest Festival 2026",
+    "types": [
+      "festivals"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/DSC_5031_gwl-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-chefs-in-schools-project-spotlight/",
+    "title": "Harvest Festival 2026 | Chefs in Schools",
+    "types": [
+      "festivals",
+      "talks"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-flat-friendly-fermentation/",
+    "title": "Harvest Festival 2026 | Flat-Friendly Fermentation",
+    "types": [
+      "festivals",
+      "workshops"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-a-window-into-seasonality/",
+    "title": "Harvest Festival 2026 | A Window into Seasonality",
+    "types": [
+      "festivals",
+      "talks"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-the-land-use-framework-a-debate-on-how-to-make-our-land-multifunctional/",
+    "title": "Harvest Festival 2026 | The Land Use Framework",
+    "types": [
+      "festivals",
+      "talks"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-windowsill-farmers-101-intro-to-at-home-growing/",
+    "title": "Harvest Festival 2026 | Cookery Workshop: Herbs at Home",
+    "types": [
+      "festivals",
+      "workshops"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-growing-communities-the-role-of-shared-allotments-gardens-and-urban-farms-in-our-cities-community-building/",
+    "title": "Harvest Festival 2026 | Growing Communities",
+    "types": [
+      "festivals",
+      "talks"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/harvest-festival-2026-growing-fruit-in-the-city-an-urban-fruit-tree-panel/",
+    "title": "Harvest Festival 2026 | Growing Fruit in the City: An Urban Fruit Tree Panel",
+    "types": [
+      "festivals",
+      "talks"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/banner-1-scaled-e1787240593923-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-harvest-day-storytelling/",
+    "title": "Tuesday Tots Harvest Day Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Tots-pumpkins-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/ben-pentreath-a-year-at-the-parsonage-the-story-of-a-house-garden/",
+    "title": "Ben Pentreath: A Year at the Parsonage",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/P036_A-Year-at-the-Parsonage-by-Ben-Pentreath-and-Charlie-McCormick-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/garden-art-garden-art-and-climate-change/",
+    "title": "Garden/Art/Garden | Art and Climate Change",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/Veile-Thorn-2026-07-15-at-11.46.15-916x516.png"
+  },
+  {
+    "path": "/whats-on/into-the-garden-private-sanctuaries-around-the-world/",
+    "title": "Into the Garden: Private Sanctuaries Around the World",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/08/094-5-Caisson-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/margaret-mee-and-the-moonflower/",
+    "title": "Margaret Mee and the Moonflower",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/mmxb0093-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-family-yoga-november/",
+    "title": "Sunday Family Sessions Family Yoga November",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Breathwork-in-Nature-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/urban-greening-symposium-part-3-gardening-the-public-landscape/",
+    "title": "Urban Greening Symposium Part 3 |Gardening the Public Landscape : Connecting Policy and Planning with Funding and Local Delivery",
+    "types": [
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2025/10/garden-museum-revD-small-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-the-sun-thief-storytelling/",
+    "title": "Tuesday Tots The Sun Thief Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/bat-prints-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/botanical-perfume-masterclass/",
+    "title": "Botanical Perfume Masterclass",
+    "types": [
+      "workshops"
+    ],
+    "audience": [],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/plant-in-bottle-pink-1280-916x476.jpg"
+  },
+  {
+    "path": "/whats-on/garden-art-garden-plants-places-growth-decay/",
+    "title": "Garden/Art/Garden | Plants, Places, Growth Decay",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/2.-A-Gentle-Colapsing-II-2016-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-clay-animal-sculptures/",
+    "title": "Sunday Family Sessions Clay Animal Sculptures",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Rhino-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/winter-flowers-week-2026/",
+    "title": "Winter Flowers Week 2026",
+    "types": [
+      "exhibitions"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/DSC_4866-GWL-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/the-james-and-joe-garden-show-at-the-garden-museum/",
+    "title": "The James and Joe Garden Show World Tour continues…Concrete and Clay – Urban plots versus Country lots",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/006-e1789037113736-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/winter-flowers-week-2026-late/",
+    "title": "Winter Flowers Week 2026 Late",
+    "types": [
+      "lates"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/DSC_2992-GWL-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/cookery-masterclass-malaysian-vegetarian-with-norman-musa/",
+    "title": "Cookery Masterclass | Malaysian Vegetarian with Norman Musa",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/07/Norman-Musa-landscape-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-tulip-planting-and-pot-decorating/",
+    "title": "Sunday Family Sessions Tulip Planting and Pot Decorating",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2025/10/seed-planting_web-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-the-leaf-thief-storytelling/",
+    "title": "Tuesday Tots The Leaf Thief Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Tulip-Bulb-Planting-3-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/garden-art-garden-the-japanese-garden-as-a-work-of-art-the-modern-era/",
+    "title": "Garden/Art/Garden | The Japanese Garden as a work of art — the modern era",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/Marylebone-Basement-Patio-1-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-charcoal-and-oil-pastel-chrysanthemums-2/",
+    "title": "Sunday Family Sessions Charcoal and Oil Pastel Chrysanthemums",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Chrysanthemums-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-storm-storytelling/",
+    "title": "Tuesday Tots Storm Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/kite-and-telescope-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/cook-with-the-seasons-november-december/",
+    "title": "Cook with the Seasons November & December",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/Veg-Box-Ceri-Jones-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/sunday-family-sessions-charcoal-and-oil-pastel-chrysanthemums/",
+    "title": "Sunday Family Sessions Lino and Foam Printed Christmas Cards",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Lino-print-xmas-card-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-hello-winter-storytelling/",
+    "title": "Tuesday Tots Hello Winter Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/winter-crown-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/garden-art-garden-plants-portraits/",
+    "title": "Garden/Art/Garden | Plants & Portraits",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/06/To-Pick-a-Flower-1-scaled-e1789047851514-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/the-british-cemetery-architecture-landscape-sculpture/",
+    "title": "The British Cemetery: Architecture, Landscape, Sculpture",
+    "types": [
+      "livestreams",
+      "talks"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/cemetary-4.jpg"
+  },
+  {
+    "path": "/whats-on/beautiful-useful-craft-fair-2026/",
+    "title": "Beautiful & Useful Craft Fair 2026",
+    "types": [
+      "festivals"
+    ],
+    "audience": [
+      "adults",
+      "family",
+      "young-adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Kate-Sampson-Ceramics-Dishes-copy-scaled-e1788446815248-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/beautiful-useful-craft-fair-2026-bauble-making/",
+    "title": "Beautiful & Useful Craft Fair 2026 | Bauble making",
+    "types": [
+      "workshops"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/image-18-1-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/beautiful-useful-craft-fair-2026-decorative-box-workshop/",
+    "title": "Beautiful & Useful Craft Fair 2026 | Decorative box workshop",
+    "types": [
+      "workshops"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/1000047536-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/tuesday-tots-the-snowflake-storytelling/",
+    "title": "Tuesday Tots The Snowflake Storytelling",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "family"
+    ],
+    "is_free": true,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Tots-xmas-card-916x516.jpg"
+  },
+  {
+    "path": "/whats-on/cookery-masterclass-eastern-european-comfort-with-alissa-timoshkina/",
+    "title": "Cookery Masterclass | Eastern European Comfort with Alissa Timoshkina",
+    "types": [
+      "workshops"
+    ],
+    "audience": [
+      "adults"
+    ],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/09/Alissa-Comfort-916x516.jpg"
+  }
+]
