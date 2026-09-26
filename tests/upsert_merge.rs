@@ -9,7 +9,8 @@ use chrono::{DateTime, Utc};
 use common::{TestDb, fixture};
 use rust_decimal::Decimal;
 use sqlx::PgPool;
-use thaleia::model::{Category, NewEvent, OverrideAction, Price, RawEvent};
+use thaleia::matching::{self, MatchInput};
+use thaleia::model::{Category, NewEvent, OverrideAction, Price, RawEvent, SourceKind};
 use thaleia::repo;
 use thaleia::sources::serpentine::parse_detail;
 use thaleia::sources::{serpentine, ticketmaster};
@@ -568,6 +569,224 @@ async fn force_merge_override_joins_non_matching_listings() {
         assert_eq!(o.event_id, a.event_id);
     }
     assert_eq!(event_count(&pool).await, 1);
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+async fn starts_price_url(
+    pool: &PgPool,
+    id: uuid::Uuid,
+) -> (DateTime<Utc>, Option<Decimal>, Option<String>) {
+    let row = repo::get_event(pool, id).await.unwrap().unwrap();
+    (row.starts_at, row.price_min, row.url)
+}
+
+#[tokio::test]
+async fn sources_of_the_same_kind_only_fill_gaps() {
+    let Some(db) = TestDb::create("sources_of_the_same_kind_only_fill_gaps").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let sp_src = source_id(&pool, "serpentine-galleries").await;
+    let wc_src = source_id(&pool, "whitechapel-gallery").await;
+    let tm_src = source_id(&pool, "ticketmaster").await;
+    let other_api = repo::upsert_source(
+        &pool,
+        "other-api",
+        SourceKind::Api,
+        "https://api.example",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+
+    // Two venue sites list the same show at different times of one day.
+    let at = |starts: &str| {
+        ev(
+            "Cecilia Vicuña: Living Threads",
+            "Whitechapel Gallery",
+            (51.5160, -0.0700),
+            starts,
+            None,
+        )
+    };
+    let first = repo::upsert_event(&pool, sp_src, &at("2026-10-10T10:00:00Z"), &raw("sp"))
+        .await
+        .unwrap();
+    for (src, id, starts) in [
+        (wc_src, "wc", "2026-10-10T11:00:00Z"),
+        (sp_src, "sp", "2026-10-10T12:00:00Z"),
+        (wc_src, "wc", "2026-10-10T13:00:00Z"),
+    ] {
+        let o = repo::upsert_event(&pool, src, &at(starts), &raw(id))
+            .await
+            .unwrap();
+        assert_eq!(o.event_id, first.event_id);
+        let (starts_at, ..) = starts_price_url(&pool, first.event_id).await;
+        assert_eq!(
+            starts_at,
+            t("2026-10-10T10:00:00Z"),
+            "after {id} at {starts}"
+        );
+    }
+
+    // Two APIs list the same event with different prices and ticket URLs.
+    let priced = |price: i64, url: &str| {
+        let mut e = ev(
+            "Noor: Light Installations",
+            "Barbican Centre",
+            (51.5201, -0.0955),
+            "2026-10-11T18:00:00Z",
+            None,
+        );
+        e.price = Price {
+            is_free: false,
+            min: Some(Decimal::from(price)),
+            max: Some(Decimal::from(price)),
+            currency: Some("GBP".into()),
+        };
+        e.url = Some(url.into());
+        e
+    };
+    let first = repo::upsert_event(&pool, tm_src, &priced(20, "https://tm/a"), &raw("tm"))
+        .await
+        .unwrap();
+    for (src, id, price, url) in [
+        (other_api, "other", 30, "https://other/b"),
+        (tm_src, "tm", 25, "https://tm/c"),
+        (other_api, "other", 35, "https://other/d"),
+    ] {
+        let o = repo::upsert_event(&pool, src, &priced(price, url), &raw(id))
+            .await
+            .unwrap();
+        assert_eq!(o.event_id, first.event_id);
+        let (_, price_min, url) = starts_price_url(&pool, first.event_id).await;
+        assert_eq!(
+            (price_min, url.as_deref()),
+            (Some(Decimal::from(20)), Some("https://tm/a")),
+            "after {id}"
+        );
+    }
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn a_later_start_drops_an_end_that_would_precede_it() {
+    let Some(db) = TestDb::create("a_later_start_drops_an_end_that_would_precede_it").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let tm_src = source_id(&pool, "ticketmaster").await;
+    let sp_src = source_id(&pool, "serpentine-galleries").await;
+    let venue = (51.5045, -0.1751);
+    let ends_at = |id: uuid::Uuid| {
+        let pool = &pool;
+        async move { repo::get_event(pool, id).await.unwrap().unwrap().ends_at }
+    };
+
+    // Sole owner moves its start past the end it reported before.
+    let show = |starts: &str, ends: Option<&str>| {
+        ev("Soto: Pénétrable", "Serpentine South", venue, starts, ends)
+    };
+    let a = repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-01T10:00:00Z", Some("2026-10-05T18:00:00Z")),
+        &raw("sp-soto"),
+    )
+    .await
+    .unwrap();
+    let a2 = repo::upsert_event(
+        &pool,
+        sp_src,
+        &show("2026-10-20T10:00:00Z", None),
+        &raw("sp-soto"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(a2.event_id, a.event_id);
+    assert_eq!(ends_at(a.event_id).await, None);
+
+    // The venue site's later start wins over the API's earlier end, and the
+    // API's end does not come back on its next run.
+    let talk = |starts: &str, ends: Option<&str>| {
+        ev(
+            "Park Nights: Talk",
+            "Serpentine Pavilion",
+            venue,
+            starts,
+            ends,
+        )
+    };
+    let tm_talk = talk("2026-10-12T10:00:00Z", Some("2026-10-12T12:00:00Z"));
+    let b = repo::upsert_event(&pool, tm_src, &tm_talk, &raw("tm-talk"))
+        .await
+        .unwrap();
+    let b2 = repo::upsert_event(
+        &pool,
+        sp_src,
+        &talk("2026-10-12T18:00:00Z", None),
+        &raw("sp-talk"),
+    )
+    .await
+    .unwrap();
+    assert_eq!(b2.event_id, b.event_id);
+    assert_eq!(ends_at(b.event_id).await, None);
+    let b3 = repo::upsert_event(&pool, tm_src, &tm_talk, &raw("tm-talk"))
+        .await
+        .unwrap();
+    assert_eq!(b3.event_id, b.event_id);
+    let row = repo::get_event(&pool, b.event_id).await.unwrap().unwrap();
+    assert_eq!(
+        (row.starts_at, row.ends_at),
+        (t("2026-10-12T18:00:00Z"), None)
+    );
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn fuzzy_merge_prefers_the_closest_title_over_the_oldest() {
+    let Some(db) = TestDb::create("fuzzy_merge_prefers_the_closest_title_over_the_oldest").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let tm_src = source_id(&pool, "ticketmaster").await;
+    let sp_src = source_id(&pool, "serpentine-galleries").await;
+    let at = |title: &str| ev(title, "Tate Modern", TATE, "2026-10-10T18:00:00Z", None);
+
+    let older = at("Yayoi Kusama: Infinity Mirror Rooms");
+    let newer = at("Yayoi Kusama - Infinity Room");
+    let incoming = at("Yayoi Kusama: Infinity Rooms");
+    let score = |e: &NewEvent| {
+        matching::match_score(&MatchInput::from(&incoming), &MatchInput::from(e))
+            .expect("both candidates match")
+    };
+    assert!(score(&newer).dice > score(&older).dice);
+    assert_ne!(incoming.dedupe_key, older.dedupe_key);
+    assert_ne!(incoming.dedupe_key, newer.dedupe_key);
+
+    let o = repo::upsert_event(&pool, sp_src, &older, &raw("sp-older"))
+        .await
+        .unwrap();
+    let n = repo::upsert_event(&pool, sp_src, &newer, &raw("sp-newer"))
+        .await
+        .unwrap();
+    assert!(n.created);
+    assert_ne!(o.event_id, n.event_id);
+
+    let joined = repo::upsert_event(&pool, tm_src, &incoming, &raw("tm"))
+        .await
+        .unwrap();
+    assert_eq!(joined.event_id, n.event_id);
+    assert_eq!(event_count(&pool).await, 2);
 
     pool.close().await;
     db.drop_db().await;
