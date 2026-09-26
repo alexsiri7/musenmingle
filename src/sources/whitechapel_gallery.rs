@@ -343,6 +343,18 @@ mod tests {
     }
 
     #[test]
+    fn single_day_exhibition_has_no_end() {
+        let event = normalise_payload(&json!({
+            "title": "One day only",
+            "date_text": "07 Oct - 07 Oct 2026",
+        }))
+        .unwrap()
+        .unwrap();
+        assert_eq!(event.starts_at.to_rfc3339(), "2026-10-06T23:00:00+00:00");
+        assert_eq!(event.ends_at, None);
+    }
+
+    #[test]
     fn open_ended_ranges_are_skips() {
         for text in ["Until 14 Feb 2027", "Ongoing", "From 7 Oct 2026"] {
             assert_eq!(range(text), None, "{text}");

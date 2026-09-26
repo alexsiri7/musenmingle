@@ -194,3 +194,29 @@ async fn robots_disallow_blocks_the_scraper() {
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
 }
+
+#[tokio::test]
+async fn empty_listing_is_an_error() {
+    // Only past-exhibition cards: a template change must reach the health
+    // checker instead of producing clean, empty runs.
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
+        )
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/exhibitions/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(
+            r#"<html><body><div class="packeryItem"><a href="/exhibitions/old-show/">Old show</a></div></body></html>"#,
+        ))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = WhitechapelGallery::new(server.uri().parse().unwrap());
+    let err = s.fetch(&ctx).await.unwrap_err().to_string();
+    assert!(err.contains("no exhibition links"), "{err}");
+}
