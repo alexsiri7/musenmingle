@@ -11,7 +11,9 @@ use common::fixture;
 use thaleia::config::RateLimitConfig;
 use thaleia::fetch::FetchContext;
 use thaleia::sources::Source;
-use thaleia::sources::barbican::{Barbican, MAX_DETAIL_PAGES, parse_detail, parse_listing};
+use thaleia::sources::barbican::{
+    Barbican, MAX_DETAIL_PAGES, MAX_LISTING_PAGES, parse_detail, parse_listing,
+};
 use url::Url;
 use wiremock::matchers::{method, path, query_param, query_param_is_missing};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -233,4 +235,48 @@ async fn empty_listings_are_an_error() {
     let s = Barbican::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event links"), "{err}");
+}
+
+#[tokio::test]
+async fn listing_pagination_stops_at_the_page_cap() {
+    // Every listing page links to a further one; the page past the cap must
+    // never be requested.
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
+        )
+        .mount(&server)
+        .await;
+    for form in ["art-design", "talks-events"] {
+        for page in 0..=MAX_LISTING_PAGES {
+            let body = format!(
+                r#"<html><body>
+                <article class="listing--event"><a class="search-listing__link" href="/whats-on/2026/event/{form}-{page}"></a></article>
+                <div class="pager"><a rel="next" href="?page={}">Load More</a></div>
+                </body></html>"#,
+                page + 1
+            );
+            let listing = Mock::given(method("GET")).and(path(format!("/whats-on/{form}")));
+            let listing = if page == 0 {
+                listing.and(query_param_is_missing("page"))
+            } else {
+                listing.and(query_param("page", page.to_string()))
+            };
+            listing
+                .respond_with(ResponseTemplate::new(200).set_body_string(body))
+                .expect(u64::from(page < MAX_LISTING_PAGES))
+                .mount(&server)
+                .await;
+        }
+    }
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = Barbican::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+
+    // Detail pages are unmocked (404), so each collected event is one error.
+    assert!(raws.is_empty());
+    assert_eq!(ctx.take_errors().len(), 2 * MAX_LISTING_PAGES);
 }
