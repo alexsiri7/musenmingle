@@ -1,12 +1,13 @@
-# safe-change: scope check for PRs built from issues that only the factory's
-# automated screening vetted (see .github/safe-change/check.py). The factory's
-# pr-maintenance merges such a PR only when this check is green.
+# unsafe-change: denylist check for PRs built from issues that only the
+# factory's automated screening vetted (see .github/unsafe-change/check.py and
+# the policy .github/unsafe-change.yml). The factory's pr-maintenance merges
+# such a PR only when this check is green; anything else passes at once.
 #
 # pull_request_target on purpose: the checker and the policy come from the
 # base branch, so a PR cannot edit the check that judges it. The PR's code is
-# never checked out or run; the checker reads the file list and patches from
-# the API as data. Read-only token.
-name: safe-change
+# never checked out or run; the checker reads the file list, patches and
+# manifest contents from the API as data. Read-only token.
+name: unsafe-change
 
 on:
   pull_request_target:
@@ -18,12 +19,12 @@ permissions:
   issues: read
 
 concurrency:
-  group: safe-change-${{ github.event.pull_request.number }}
+  group: unsafe-change-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
-  safe-change:
-    name: safe-change
+  unsafe-change:
+    name: unsafe-change
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -32,9 +33,9 @@ jobs:
           ref: ${{ github.event.pull_request.base.sha }}
           persist-credentials: false
       - name: Self-test the checker
-        run: python3 -m unittest discover -s .github/safe-change
-      - name: Check the PR's scope
+        run: python3 -m unittest discover -s .github/unsafe-change
+      - name: Check the PR against the denylist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: python3 .github/safe-change/check.py
+        run: python3 .github/unsafe-change/check.py
