@@ -34,4 +34,4 @@ Read `docs/adding-a-scraper.md` first. Every box must be ticked before the PR is
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
 - [ ] No LLM parsing; all requests go through `FetchContext`
-- [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)
+- [ ] **Or, if the site can't be used** (robots.txt disallows the events pages, the site blocks our bot, no usable event data, terms forbid it, events only render with JavaScript): close the issue as not planned and, in the same PR, add an `events.refused_sources` row via a NEW migration (registrable domain, name, URL, `reason_code`, `reason_text`, `checked_on`, link to this issue)

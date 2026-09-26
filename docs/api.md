@@ -166,7 +166,7 @@ scrape, most recently checked first:
 ```
 
 `reason_code` is one of `robots_disallowed`, `bot_blocked`,
-`no_event_data`, `terms`, `other`; `checked_on` is a date; `issue_url` may be
+`no_event_data`, `terms`, `js_only`, `other`; `checked_on` is a date; `issue_url` may be
 `null`.
 
 - `kind`: `api` or `scraper`.
