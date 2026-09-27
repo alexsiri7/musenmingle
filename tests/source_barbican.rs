@@ -319,3 +319,47 @@ async fn listing_pagination_stops_at_the_page_cap() {
     assert!(raws.is_empty());
     assert_eq!(ctx.take_errors().len(), 2 * MAX_LISTING_PAGES);
 }
+
+#[tokio::test]
+async fn a_cross_listed_event_keeps_its_first_card_image() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
+        )
+        .mount(&server)
+        .await;
+    let id = "2026/robert-ryman-the-real-thing";
+    for (form, image) in [("art-design", "first.jpg"), ("talks-events", "second.jpg")] {
+        let body = format!(
+            r#"<html><body><article class="listing--event">
+            <div class="search-listing__image"><img src="/{image}"></div>
+            <a class="search-listing__link" href="{}"></a>
+            </article></body></html>"#,
+            event_path(id)
+        );
+        Mock::given(method("GET"))
+            .and(path(format!("/whats-on/{form}")))
+            .respond_with(ResponseTemplate::new(200).set_body_string(body))
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
+    Mock::given(method("GET"))
+        .and(path(event_path(id)))
+        .respond_with(ResponseTemplate::new(200).set_body_string(detail_html(id)))
+        .expect(1)
+        .mount(&server)
+        .await;
+
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let s = Barbican::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+
+    assert_eq!(raws.len(), 1);
+    assert_eq!(
+        raws[0].payload["image_url"].as_str(),
+        Some(format!("{SITE}/first.jpg").as_str())
+    );
+}
