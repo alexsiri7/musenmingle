@@ -154,7 +154,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/calendar.rs` + `src/web/calendar_page.rs` + `src/ics.rs` — calendar views (`/calendar`, `/saved/calendar`: London date ranges, placement of long-running events) and the `/calendar.ics` feed
 - `static/fonts/` — self-hosted, subset woff2 fonts (SIL OFL, licences alongside), embedded and served at `/static/fonts/`
 - `src/share.rs` — event hand-offs (pure): `.ics`, Google Calendar link, Google/Apple Maps links
-- `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/sources`, `/saved`, `/about`, `POST /suggest`, `/thumbs/...`) and the Saved-events script
+- `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/venues/{slug}`, `/sources`, `/saved`, `/about`, `POST /suggest`, `/thumbs/...`) and the Saved-events script
 - `src/web/map.rs` + `src/map.mjs` — `/map` ("Near me, right now"), `/tiles/london.pmtiles` (range requests) and the vendored map assets; `docs/map.md` (tiles refresh, licences, privacy)
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

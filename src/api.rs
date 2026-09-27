@@ -413,6 +413,10 @@ pub(crate) struct EventJson {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) distance_km: Option<f64>,
     pub(crate) sources: Vec<SourceLinkJson>,
+    /// The venue's page on this site is `/venues/<venue_slug>` (#204);
+    /// absent when the event has no venue (e.g. an area or no name).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) venue_slug: Option<String>,
 }
 
 /// One line of an event's weekly opening hours.
@@ -525,6 +529,7 @@ impl EventJson {
             hours: e.opening_hours.map(|h| h.0),
             distance_km,
             sources,
+            venue_slug: e.venue_slug,
         }
     }
 }
@@ -792,6 +797,27 @@ pub(crate) async fn event_by_id(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<
         .unwrap_or_default();
     let thumb = thumbnails(pool, &[id]).await?.remove(&id);
     Ok(Some(EventJson::new(event, None, sources, thumb)))
+}
+
+/// A venue's upcoming events (at most `limit`), soonest first, for its page.
+pub(crate) async fn venue_events(
+    pool: &PgPool,
+    venue_id: i64,
+    now: DateTime<Utc>,
+    limit: i64,
+) -> sqlx::Result<Vec<EventJson>> {
+    let rows = repo::venue_events(pool, venue_id, now, limit).await?;
+    let ids: Vec<Uuid> = rows.iter().map(|r| r.id).collect();
+    let mut links = source_links(pool, &ids).await?;
+    let mut thumbs = thumbnails(pool, &ids).await?;
+    Ok(rows
+        .into_iter()
+        .map(|r| {
+            let sources = links.remove(&r.id).unwrap_or_default();
+            let thumb = thumbs.remove(&r.id);
+            EventJson::new(r, None, sources, thumb)
+        })
+        .collect())
 }
 
 /// Ids that are not UUIDs are unknown ids too: 404, not 400.

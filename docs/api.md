@@ -274,7 +274,10 @@ set or both `null`). `thumbnail_url` is a path on this server (see
 the image belongs to and the event's page there. `distance_km` is present
 only with `near`. `sources` lists every place the event was found (oldest
 first); `display_name` is the source's human-readable name and `url` is the
-listing on that source (may be `null`).
+listing on that source (may be `null`). `venue_slug` (absent when the event
+has no venue, e.g. an area name) names the venue's page on this site,
+`/venues/<venue_slug>` (HTML: address, area, type, usual hours, map links and
+upcoming events).
 
 `all_day` is `true` when the source gave dates but no time of day:
 `starts_at` and `ends_at` are then London midnight of the first and last day

@@ -655,7 +655,13 @@
     title.setAttribute("href", href);
     slot(node, "when").textContent = when(e.starts_at, e.ends_at, nowIso, e.all_day);
     var venue = slot(node, "venue");
-    if (e.venue_name) venue.textContent = e.venue_name;
+    if (e.venue_name && e.venue_slug) {
+      var va = venue.ownerDocument.createElement("a");
+      va.className = "venue-page";
+      va.setAttribute("href", "/venues/" + encodeURIComponent(e.venue_slug));
+      va.textContent = e.venue_name;
+      venue.appendChild(va);
+    } else if (e.venue_name) venue.textContent = e.venue_name;
     else venue.hidden = true;
     var category = slot(node, "category");
     if (e.category) category.textContent = titleCase(e.category);
