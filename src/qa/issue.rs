@@ -95,11 +95,38 @@ pub struct Report<'a> {
     pub fetched_on: NaiveDate,
 }
 
+/// `https://<host>/` of the checked listing page (else the first page, else
+/// the source's base URL). The factory screener (interstellarai.net
+/// `ops/cron/lib/screen.sh`, `_screen_hosts`) reads the venue's host from the
+/// `**Source:** https://<host>` line and allows links on that host only.
+fn source_origin(r: &Report<'_>) -> String {
+    let listing = r.pages.iter().find(|(kind, _)| kind == "listing");
+    listing
+        .or(r.pages.first())
+        .map(|(_, url)| url.as_str())
+        .into_iter()
+        .chain([r.row.base_url.as_str()])
+        .filter_map(|u| url::Url::parse(u).ok())
+        .find_map(|u| {
+            let host = u.host_str()?.to_ascii_lowercase();
+            Some(format!("{}://{host}/", u.scheme()))
+        })
+        .unwrap_or_else(|| format!("https://{}/", r.row.domain))
+}
+
+/// The model's name without its vendor prefix (`vendor/name` → `name`):
+/// vendor names such as the model provider's are on the screener's secrets
+/// deny-list.
+fn model_name(model: &str) -> &str {
+    model.rsplit('/').next().unwrap_or(model)
+}
+
 pub fn body(r: &Report<'_>) -> String {
     let key = &r.row.key;
     let mut s = format!(
         "The scraper check found differences between what **`{key}`** stored and \
-         the venue's pages.\n\n**Why checked:** {}\n\n### Pages checked ({})\n",
+         the venue's pages.\n\n**Source:** {}\n\n**Why checked:** {}\n\n### Pages checked ({})\n",
+        source_origin(r),
         r.reason,
         r.fetched_on.format("%Y-%m-%d"),
     );
@@ -143,7 +170,7 @@ pub fn body(r: &Report<'_>) -> String {
          verify on the page before changing the scraper. The model never changes stored data.\n\n\
          _Filed automatically by musenmingle-ingest (scraper check #{id})._",
         date = r.fetched_on.format("%Y-%m-%d"),
-        model = r.model,
+        model = model_name(r.model),
         id = r.check_id,
     ));
     s
@@ -230,9 +257,8 @@ mod tests {
         assert!(cell(&long).ends_with('…'));
     }
 
-    #[test]
-    fn body_has_the_table_the_fixture_path_and_no_live_mentions() {
-        let row = SourceRow {
+    fn sample_row() -> SourceRow {
+        SourceRow {
             id: 1,
             key: "fake".into(),
             kind: SourceKind::Scraper,
@@ -243,8 +269,11 @@ mod tests {
             last_run_at: None,
             platform: None,
             config: None,
-        };
-        let verdict = Verdict {
+        }
+    }
+
+    fn sample_verdict() -> Verdict {
+        Verdict {
             findings: vec![FieldVerdict {
                 id: "r1".into(),
                 record: "Night Talk".into(),
@@ -258,17 +287,25 @@ mod tests {
                 title: "Print Fair".into(),
                 evidence_quote: "Print Fair — 20 November".into(),
             }],
-        };
-        let pages = [("detail".to_string(), "https://venue.test/e/1".to_string())];
-        let b = body(&Report {
-            row: &row,
+        }
+    }
+
+    fn sample_body(model: &str, pages: &[(String, String)]) -> String {
+        body(&Report {
+            row: &sample_row(),
             check_id: 7,
             reason: "first",
-            model: "m",
-            pages: &pages,
-            verdict: &verdict,
+            model,
+            pages,
+            verdict: &sample_verdict(),
             fetched_on: NaiveDate::from_ymd_opt(2026, 10, 1).unwrap(),
-        });
+        })
+    }
+
+    #[test]
+    fn body_has_the_table_the_fixture_path_and_no_live_mentions() {
+        let pages = [("detail".to_string(), "https://venue.test/e/1".to_string())];
+        let b = sample_body("m", &pages);
         assert!(b.contains(
             "| `Night Talk` | starts_at | `2026-11-12 00:00` | `12 Nov, 8pm @someone #12` | `12 November \\| 8pm` |"
         ));
@@ -276,5 +313,62 @@ mod tests {
         assert!(b.contains("tests/fixtures/scrapers/fake/qa-2026-10-01.html"));
         assert!(b.contains("<https://venue.test/e/1>"));
         assert!(b.contains("scraper check #7"));
+    }
+
+    /// Words from the factory screener's H-SECRETS deny-list (interstellarai.net
+    /// `ops/cron/lib/screen.sh`) that our own template text could plausibly
+    /// contain. Any hit holds the issue for the owner.
+    const SCREENER_DENY: &[&str] = &[
+        "anthropic",
+        "requesty",
+        "api_key",
+        "api key",
+        "api-key",
+        "apikey",
+        "token",
+        "secret",
+        "credential",
+        "password",
+        "passwd",
+        ".env",
+        ".config/",
+        "environment variable",
+        "system prompt",
+        "as an ai",
+    ];
+
+    #[test]
+    fn body_passes_the_factory_screener() {
+        let pages = [
+            (
+                "listing".to_string(),
+                "https://WWW.Venue.test/whats-on?page=2".to_string(),
+            ),
+            (
+                "detail".to_string(),
+                "https://www.venue.test/e/1".to_string(),
+            ),
+        ];
+        let b = sample_body("anthropic/claude-opus-5-5", &pages);
+        // `_screen_hosts` parses `\*\*Source:\*\* https?://<host>`.
+        assert!(b.contains("\n**Source:** https://www.venue.test/\n"), "{b}");
+        assert!(b.contains("(`claude-opus-5-5`)"));
+        let lower = b.to_lowercase();
+        for word in SCREENER_DENY {
+            assert!(!lower.contains(word), "body contains {word:?}:\n{b}");
+        }
+    }
+
+    #[test]
+    fn source_falls_back_to_the_first_page_then_the_base_url() {
+        let pages = [("api".to_string(), "http://api.venue.test/v1".to_string())];
+        assert!(sample_body("m", &pages).contains("**Source:** http://api.venue.test/\n"));
+        assert!(sample_body("m", &[]).contains("**Source:** https://venue.test/\n"));
+    }
+
+    #[test]
+    fn model_names_lose_the_vendor_prefix() {
+        assert_eq!(model_name("anthropic/claude-opus-5-5"), "claude-opus-5-5");
+        assert_eq!(model_name("claude-opus-5-5"), "claude-opus-5-5");
     }
 }
