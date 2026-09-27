@@ -9,7 +9,10 @@
 //!   (`.o-teaser__post-type`: "Exhibition", "Talks & Events", "Tours",
 //!   "Workshops & Courses", "Soho Photography Quarter", sometimes two joined
 //!   by a comma), a date line (`p.o-teaser__date`), the title link
-//!   (`h3.o-teaser__title a`, to `/whats-on/<slug>`) and a summary. The
+//!   (`h3.o-teaser__title a`, to `/whats-on/<slug>`) and a summary
+//!   (`.o-teaser__body-text`; the site nests a stray `<p>` inside it, which
+//!   HTML5 tree construction closes early, so the real text lands in the
+//!   following sibling `<p>` instead — handled in [`parse_listing`]). The
 //!   pager's `rel="next"` link is followed, at most [`MAX_PAGES`] pages.
 //!   Detail pages add only longer prose (tickets are sold on another site),
 //!   so no detail page is fetched.
@@ -118,10 +121,24 @@ pub fn parse_listing(html: &str, page_url: &Url) -> Vec<RawEvent> {
                 "title": title,
                 "post_type": first(".o-teaser__post-type"),
                 "date_text": first(".o-teaser__date"),
+                // The site's markup nests a stray `<p>` inside
+                // `.o-teaser__body-text`; per the HTML5 tree-construction
+                // algorithm that implicitly closes the outer `<p>`, so the
+                // real prose ends up as a following, unclassed sibling `<p>`
+                // rather than inside the matched node. Prefer the matched
+                // node's own text (in case the markup is ever fixed), and
+                // fall back to that sibling.
                 "summary": card
                     .select(&selector(".o-teaser__body-text"))
                     .next()
-                    .map(|b| b.inner_html()),
+                    .map(element_text)
+                    .filter(|t| !t.is_empty())
+                    .or_else(|| {
+                        card.select(&selector(".o-teaser__body-text ~ p"))
+                            .next()
+                            .map(element_text)
+                            .filter(|t| !t.is_empty())
+                    }),
                 "image_url": card
                     .select(&selector(".o-teaser__thumb img[data-srcset]"))
                     .next()
