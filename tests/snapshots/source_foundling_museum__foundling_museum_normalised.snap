@@ -1,0 +1,531 @@
+---
+source: tests/source_foundling_museum.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "where-we-grow-nature-nurture-childhood|2026-11-17|foundling",
+      "description": "This exhibition features contemporary art, photography, archival material and historic objects, exploring the powerful relationship between childhood, childcare and the natural world.",
+      "ends_at": "2027-04-17T23:00:00Z",
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/08/192_ANDY-HOLDEN_Nov-21-2024_M8R8S-STUDIO_8bit-TIFF_M8R8S-STUDIO-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-17T00:00:00Z",
+      "tags": [],
+      "title": "Where We Grow: nature, nurture & childhood",
+      "url": "https://foundlingmuseum.org.uk/event/where-we-grow/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "where-we-grow"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "300-years-of-rival-queens-handels-1726-opera-season|2026-06-30|foundling",
+      "description": "300 years ago London audiences were treated to two new operas by Handel. This display looks at the music and people involved.",
+      "ends_at": "2026-10-24T23:00:00Z",
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/06/6918-Triomphe-du-gout-moderne-BAL_84563-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-06-29T23:00:00Z",
+      "tags": [],
+      "title": "300 Years of the ‘Rival Queens’: Handel’s 1726 Opera Season",
+      "url": "https://foundlingmuseum.org.uk/event/handels-1726-opera-season/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "handels-1726-opera-season"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "voices-in-room|2026-06-16|foundling",
+      "description": "See a small display of three contemporary works by Rachel Kneebone, Tamsin van Essen and Grayson Perry recently acquired by the Museum.",
+      "ends_at": "2026-11-01T00:00:00Z",
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/06/O3A0024-copy-960x854.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-06-15T23:00:00Z",
+      "tags": [],
+      "title": "Voices in the Room",
+      "url": "https://foundlingmuseum.org.uk/event/voices-in-the-room/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "voices-in-the-room"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "harlots-strumpets-tarts-walking-tour|2026-09-25|foundling",
+      "description": "Eighteenth-century London's sordid sex industry is dramatically brought to life in this immersive, theatrical walking tour.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/03/William_Hogarth_-_A_Rakes_Progress_-_Tavern_Scene-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-25T17:00:00Z",
+      "tags": [],
+      "title": "Harlots, Strumpets & Tarts Walking Tour",
+      "url": "https://foundlingmuseum.org.uk/event/harlots-strumpets-tarts-walking-tour-25-september/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "harlots-strumpets-tarts-walking-tour-25-september"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "across-generations-90-years-of-care-system|2026-09-28|foundling",
+      "description": "Join Foundling Hospital pupil John Caldicott and care-experienced storyteller and theatre-maker Isabelle Kirkham for an in-conversation event linking generations and narratives of care.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/08/JC-09-1-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-28T17:30:00Z",
+      "tags": [],
+      "title": "Across the Generations: 90 Years of the Care System",
+      "url": "https://foundlingmuseum.org.uk/event/across-the-generations-90-years-of-the-care-system/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "across-the-generations-90-years-of-the-care-system"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "creative-conversations-networking-reimagined|2026-10-04|foundling",
+      "description": "Take the stress out of meeting new people in this relaxed, creative networking event for adults aged 18–30.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/07/Assemblage-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-04T12:00:00Z",
+      "tags": [],
+      "title": "Creative Conversations: Networking Reimagined",
+      "url": "https://foundlingmuseum.org.uk/event/creative-conversations-networking-reimagined/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "creative-conversations-networking-reimagined"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "meet-experts-wet-nursing-foundling-babies|2026-10-09|foundling",
+      "description": "Who nursed the babies brought to the Foundling Hospital? Discover the lives of the Hospital's wet nurses in this talk.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/07/receiving-day-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-09T14:00:00Z",
+      "tags": [],
+      "title": "Meet the Experts: Wet-Nursing the Foundling Babies",
+      "url": "https://foundlingmuseum.org.uk/event/wet-nursing-foundling-babies/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "wet-nursing-foundling-babies"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "walking-tour-bloomsburys-best-kept-secrets|2026-10-11|foundling",
+      "description": "Artists, academics and Russell Square... Think you know Bloomsbury? Think again.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/07/FOUNDLING_7_6_25_TOUR_MED-104websize-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-11T10:00:00Z",
+      "tags": [],
+      "title": "Walking Tour: Bloomsbury’s Best-Kept Secrets",
+      "url": "https://foundlingmuseum.org.uk/event/bloomsburys-best-kept-secrets-oct-11/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "bloomsburys-best-kept-secrets-oct-11"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "sunday-drop-in-tours|2026-10-18|foundling",
+      "description": "Join our Sunday drop-in tours to learn more about the Foundling Museum and the history of the Foundling Hospital.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2021/10/film-still-1-%C2%A9Fernando-Manoso-Borgason-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-18T10:30:00Z",
+      "tags": [],
+      "title": "Sunday Drop-In Tours",
+      "url": "https://foundlingmuseum.org.uk/event/sunday-drop-in-tours-18-oct/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "sunday-drop-in-tours-18-oct"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "holding-child-mothers-madonnas-loss-in-renaissance-art|2026-10-23|foundling",
+      "description": "Join us for an in-depth but accessible talk on representations of mothers and motherhood, love, loss and hope, in Renaissance art. Book in person tickets here.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/09/Madonna_and_Child_MET_DP221238-CROPPED-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-23T14:00:00Z",
+      "tags": [],
+      "title": "Holding the Child: Mothers, Madonnas & Loss in Renaissance Art",
+      "url": "https://foundlingmuseum.org.uk/event/holding-the-child-mothers-madonnas-loss/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "holding-the-child-mothers-madonnas-loss"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-tour-of-foundling-museum|2026-10-24|foundling",
+      "description": "Explore the history and collection of the Foundling Museum with Alan Murray MBE on this British Sign Language tour. The tour will cover the main collection of the Museum, but the ticket also includes entry to our temporary exhibitions.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/02/Foundling_A_Grand_Chorus-137-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-24T11:00:00Z",
+      "tags": [],
+      "title": "BSL Tour of the Foundling Museum",
+      "url": "https://foundlingmuseum.org.uk/event/bsl-tour-of-the-foundling-museum/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "bsl-tour-of-the-foundling-museum"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "sunday-drop-in-tours|2026-10-25|foundling",
+      "description": "Join our Sunday drop-in tours to learn more about the Foundling Museum and the history of the Foundling Hospital.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2023/02/Visitors-at-the-Foundling-Museum.-Photo-by-Fernando-Borgas-Manoso-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-25T11:30:00Z",
+      "tags": [],
+      "title": "Sunday Drop-In Tours",
+      "url": "https://foundlingmuseum.org.uk/event/sunday-drop-in-tours-25-oct/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "sunday-drop-in-tours-25-oct"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "hidden-gardens-of-london-walking-tour|2026-10-25|foundling",
+      "description": "Join us for a special walking tour as we discover the City's unexpected green spaces and their fascinating history.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/02/green-spaces-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-25T11:00:00Z",
+      "tags": [],
+      "title": "Hidden Gardens of London Walking Tour",
+      "url": "https://foundlingmuseum.org.uk/event/hidden-gardens-of-london-25-oct/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "hidden-gardens-of-london-25-oct"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "upcycling-sign-painting-workshop|2026-10-25|foundling",
+      "description": "Learn to paint your own wooden sign in this creative typography workshop for young adults aged 18-30.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/09/signpainting-workshop-04-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-25T13:00:00Z",
+      "tags": [],
+      "title": "Upcycling Sign-Painting Workshop",
+      "url": "https://foundlingmuseum.org.uk/event/upcycling-sign-painting-workshop/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "upcycling-sign-painting-workshop"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "women-gin-sin-immersive-tour-gin-tasting|2026-11-06|foundling",
+      "description": "As the nights draw in, step into the shadowy world of 18th-century London for an immersive evening of women’s stories, gin and 'sin'.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/08/Madam001-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-06T18:00:00Z",
+      "tags": [],
+      "title": "Women, Gin and ‘Sin’: Immersive Tour and Gin Tasting",
+      "url": "https://foundlingmuseum.org.uk/event/women-gin-and-sin-immersive-tour-and-gin-tasting/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "women-gin-and-sin-immersive-tour-and-gin-tasting"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "sunday-drop-in-tours|2026-11-08|foundling",
+      "description": "Join our Sunday drop-in tours to learn more about the Foundling Museum and the history of the Foundling Hospital.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/02/foundling_museum_credit_audreydamier-7-960x960.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-08T11:30:00Z",
+      "tags": [],
+      "title": "Sunday Drop-In Tours",
+      "url": "https://foundlingmuseum.org.uk/event/sunday-drop-in-tours-8-nov/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "sunday-drop-in-tours-8-nov"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "meet-experts-learning-in-gardens-of-foundling-hospital|2026-11-13|foundling",
+      "description": "Step into the gardens of the Foundling Hospital and discover the historic role of the natural world in children's education in this talk.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/07/Boys-in-the-kitchen-garden-at-the-Foundling-Hospital-London-early-20th-century-courtesy-the-Foundling-Museum-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T15:00:00Z",
+      "tags": [],
+      "title": "Meet the Experts: Learning in the Gardens of the Foundling Hospital",
+      "url": "https://foundlingmuseum.org.uk/event/learning-gardens-foundling-hospital/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "learning-gardens-foundling-hospital"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "drink-death-debauchery-walking-tour|2026-11-22|foundling",
+      "description": "Join this walking tour to learn about the debauched and boozy history of 18th-century London, where half a pint of gin only set you back a penny.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/01/DDD-walking-tour-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T11:00:00Z",
+      "tags": [],
+      "title": "Drink, Death & Debauchery Walking Tour",
+      "url": "https://foundlingmuseum.org.uk/event/drink-death-and-debauchery-walking-tour-22-november/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "drink-death-and-debauchery-walking-tour-22-november"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "sunday-drop-in-tours|2026-11-22|foundling",
+      "description": "Join our Sunday drop-in tours to learn more about the Foundling Museum and the history of the Foundling Hospital.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2021/10/film-still-1-%C2%A9Fernando-Manoso-Borgason-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T11:30:00Z",
+      "tags": [],
+      "title": "Sunday Drop-In Tours",
+      "url": "https://foundlingmuseum.org.uk/event/sunday-drop-in-tours-22-nov/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "sunday-drop-in-tours-22-nov"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "photograph-embroidery-workshop|2026-11-22|foundling",
+      "description": "Learn how to apply hand embroidery to photographs in this workshop for young adults aged 18-30.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/09/image-3-960x960.jpeg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T13:00:00Z",
+      "tags": [],
+      "title": "Photograph Embroidery Workshop",
+      "url": "https://foundlingmuseum.org.uk/event/photograph-embroidery-workshop/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "photograph-embroidery-workshop"
+  },
+  {
+    "event": {
+      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "42nd-annual-conference-on-music-in-18th-century-britain|2026-11-27|foundling",
+      "description": "Join us in November for a conference celebrating 18th-century music in Britain.",
+      "ends_at": null,
+      "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/09/7080-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-27T10:00:00Z",
+      "tags": [],
+      "title": "The 42nd Annual Conference on Music in 18th-Century Britain",
+      "url": "https://foundlingmuseum.org.uk/event/the-42nd-annual-conference-on-music-in-18th-century-britain/",
+      "venue_name": "Foundling Museum"
+    },
+    "source_event_id": "the-42nd-annual-conference-on-music-in-18th-century-britain"
+  }
+]
