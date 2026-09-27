@@ -1,7 +1,9 @@
 //! AI enrichment and embeddings, run by the ingest job after the sources.
 //!
 //! Scrapers never use a language model: extraction stays deterministic. This
-//! pass runs afterwards, only on data we already store (see [`input`]): it
+//! pass runs afterwards, on data we already store plus, for listings the
+//! same ingest run just scraped, their full page text held in memory
+//! ([`input::PageText`], never stored or logged; see [`input`]): it
 //! asks a model (via Requesty, [`requesty`]) for tags from fixed
 //! vocabularies and a short "What's cool" note (see [`output`]), validates
 //! the answer strictly, and stores it in `events.enrichments`, materialised
@@ -13,8 +15,11 @@
 //! is recorded in `events.enrichment_calls` with its cost from the
 //! catalogue prices in `events.model_prices`, and a call is only made when
 //! its pessimistic estimate fits under both the daily cap (London day) and
-//! the per-run cap. An event is re-enriched only when its input hash or the
-//! prompt version changes; a give-up is remembered per input hash.
+//! the per-run cap. An event is re-enriched only when its input hash, its
+//! page text (`page_text_hash`, when this run has the text) or the prompt
+//! version changes; a give-up is remembered the same way. An event whose
+//! listing has page text that this run does not hold waits for its source's
+//! next scrape instead of being enriched from the excerpt alone.
 //!
 //! When Requesty reports that credits are exhausted, the pass stops for the
 //! run, `events.alert_state` remembers it and the owner gets one ntfy per
@@ -37,7 +42,7 @@ use serde_json::{Value, json};
 use sqlx::PgPool;
 
 use crate::notify::Notifier;
-use input::EventFacts;
+use input::{EventFacts, PageText};
 use output::{BatchOutcome, Enrichment, PROMPT_VERSION, SYSTEM_PROMPT};
 use requesty::{CallError, Requesty, Usage};
 use store::{Candidate, ModelPrice};
@@ -189,15 +194,23 @@ pub fn estimate_cost(prompt_chars: usize, max_out: i64, p: &ModelPrice) -> Decim
     ) + per_mtok(max_out, p.output_usd_per_mtok)
 }
 
-/// The chat request for a batch. `reminder` (the retry) lists what was
+/// Page texts of the listings the current ingest run scraped, by event
+/// (transient: dropped at the end of the run).
+pub type PageTexts = HashMap<uuid::Uuid, PageText>;
+
+/// The chat request for a batch: each event under its batch-local id, with
+/// its page text when the run has it. `reminder` (the retry) lists what was
 /// wrong with the previous answer.
 pub fn chat_body(
     cfg: &EnrichConfig,
-    batch: &[(String, &EventFacts)],
+    batch: &[(String, &EventFacts, Option<&PageText>)],
     reminder: Option<&str>,
     cache: bool,
 ) -> Value {
-    let events: Vec<_> = batch.iter().map(|(id, f)| f.prompt_event(id)).collect();
+    let events: Vec<_> = batch
+        .iter()
+        .map(|(id, f, page)| f.prompt_event(id, *page))
+        .collect();
     let mut messages = vec![
         json!({ "role": "system", "content": SYSTEM_PROMPT }),
         json!({ "role": "user", "content": json!({ "events": events }).to_string() }),
@@ -229,12 +242,42 @@ pub fn chat_body(
     body
 }
 
-fn needs_enrichment(c: &Candidate, hash: &str) -> bool {
-    let current =
-        c.enriched_hash.as_deref() == Some(hash) && c.enriched_version == Some(PROMPT_VERSION);
-    let gave_up =
-        c.failed_hash.as_deref() == Some(hash) && c.failed_version == Some(PROMPT_VERSION);
-    !current && !gave_up
+/// The page text this run holds for `c`, if it is still the event's current
+/// one (a later listing may have taken over the stored excerpt).
+pub fn page_for<'a>(pages: &'a PageTexts, c: &Candidate) -> Option<&'a PageText> {
+    pages
+        .get(&c.facts.id)
+        .filter(|p| c.page_text_hash.as_deref() == Some(p.hash().as_str()))
+}
+
+/// Whether to enrich `c` now, given the page text this run holds for it.
+pub fn needs_enrichment(c: &Candidate, page: Option<&PageText>) -> bool {
+    let hash = c.facts.input_hash();
+    let used = page.map(PageText::hash);
+    // An attempt covers the event when it saw the same facts and prompt and,
+    // if we have the page text now, that same text.
+    let covers = |h: &Option<String>, v: Option<i32>, p: &Option<String>| {
+        h.as_deref() == Some(&hash) && v == Some(PROMPT_VERSION) && (used.is_none() || *p == used)
+    };
+    let current = covers(&c.enriched_hash, c.enriched_version, &c.enriched_page_hash);
+    let gave_up = covers(&c.failed_hash, c.failed_version, &c.failed_page_hash);
+    if current || gave_up {
+        return false;
+    }
+    // The listing has more text than the excerpt but this run did not scrape
+    // it: wait for the source's next run rather than spend on a thinner note.
+    // Before a listing is first seen with this code (hash NULL), an excerpt
+    // cut short ("…") is the sign that more text exists.
+    let waits = page.is_none()
+        && match c.page_text_hash.as_deref() {
+            Some(h) => !h.is_empty(),
+            None => c
+                .facts
+                .description
+                .as_deref()
+                .is_some_and(|d| d.trim_end().ends_with('…')),
+        };
+    !waits
 }
 
 /// The enrichment pass with its client and notifier.
@@ -253,6 +296,7 @@ enum Budget {
 struct Pass<'a> {
     e: &'a Enricher,
     pool: &'a PgPool,
+    pages: &'a PageTexts,
     now: DateTime<Utc>,
     deadline: Instant,
     spent_before: Decimal,
@@ -315,10 +359,11 @@ impl Pass<'_> {
         price: &ModelPrice,
     ) -> Option<(BatchOutcome, Decimal, Usage)> {
         let ids: Vec<String> = (1..=batch.len()).map(|i| format!("e{i}")).collect();
-        let pairs: Vec<(String, &EventFacts)> = ids
+        let pairs: Vec<(String, &EventFacts, Option<&PageText>)> = ids
             .iter()
             .cloned()
-            .zip(batch.iter().map(|c| &c.facts))
+            .zip(batch.iter())
+            .map(|(id, c)| (id, &c.facts, page_for(self.pages, c)))
             .collect();
         let body = chat_body(&self.e.config, &pairs, reminder, cache);
         let chars = body["messages"].to_string().len() + body["response_format"].to_string().len();
@@ -338,7 +383,10 @@ impl Pass<'_> {
             }
         };
         self.e.credits_ok(self.pool, self.now).await;
-        let texts: Vec<String> = batch.iter().map(|c| c.facts.grounding_text()).collect();
+        let texts: Vec<String> = pairs
+            .iter()
+            .map(|(_, f, page)| f.grounding_text(*page))
+            .collect();
         let outcome = if completion.finish_reason == "length" {
             BatchOutcome {
                 ok: Vec::new(),
@@ -378,6 +426,7 @@ impl Pass<'_> {
         u: &Usage,
     ) -> sqlx::Result<()> {
         let n = n.max(1);
+        let page_hash = page_for(self.pages, c).map(PageText::hash);
         store::save_enrichment(
             self.pool,
             &store::NewEnrichment {
@@ -389,6 +438,7 @@ impl Pass<'_> {
                 tokens_in: (u.prompt_tokens / n as i64) as i32,
                 tokens_out: (u.completion_tokens / n as i64) as i32,
                 cost_usd: (cost / Decimal::from(n)).round_dp(6),
+                page_text_hash: page_hash.as_deref(),
             },
         )
         .await?;
@@ -398,10 +448,12 @@ impl Pass<'_> {
 
     async fn give_up(&mut self, c: &Candidate, reason: &str) -> sqlx::Result<()> {
         tracing::warn!(event = %c.facts.id, title = %c.facts.title, reason, "enrichment given up");
+        let page_hash = page_for(self.pages, c).map(PageText::hash);
         store::record_failure(
             self.pool,
             c.facts.id,
             &c.facts.input_hash(),
+            page_hash.as_deref(),
             PROMPT_VERSION,
             reason,
         )
@@ -562,12 +614,20 @@ impl Pass<'_> {
 }
 
 impl Enricher {
-    /// Enrich due events, then embed, within the caps. Errors are only for
-    /// the database; provider failures stop the pass and are reported.
-    pub async fn run(&self, pool: &PgPool, now: DateTime<Utc>) -> anyhow::Result<EnrichReport> {
+    /// Enrich due events, then embed, within the caps. `pages` holds the
+    /// page texts of listings this ingest run scraped (empty outside an
+    /// ingest run). Errors are only for the database; provider failures
+    /// stop the pass and are reported.
+    pub async fn run(
+        &self,
+        pool: &PgPool,
+        now: DateTime<Utc>,
+        pages: &PageTexts,
+    ) -> anyhow::Result<EnrichReport> {
         let mut pass = Pass {
             e: self,
             pool,
+            pages,
             now,
             deadline: Instant::now() + self.config.run_budget,
             spent_before: store::spent_since(pool, london_midnight(now)).await?,
@@ -581,7 +641,7 @@ impl Enricher {
                 );
                 pass.report.stopped = Some("no price for the model".into());
             }
-            // /about promises that the model seeing excerpts keeps nothing.
+            // /about promises that the model seeing page text keeps nothing.
             Some(price) if price.retention_days != Some(0) => {
                 tracing::warn!(
                     model = %self.config.model,
@@ -592,11 +652,14 @@ impl Enricher {
             }
             Some(price) => {
                 let cands = store::candidates(pool, now - PAST_GRACE).await?;
-                let queue: Vec<&Candidate> = cands
+                let mut queue: Vec<&Candidate> = cands
                     .iter()
-                    .filter(|c| needs_enrichment(c, &c.facts.input_hash()))
-                    .take(self.config.max_events_per_run)
+                    .filter(|c| needs_enrichment(c, page_for(pages, c)))
                     .collect();
+                // Listings whose page text this run holds first: it is gone
+                // after the run.
+                queue.sort_by_key(|c| page_for(pages, c).is_none());
+                queue.truncate(self.config.max_events_per_run);
                 pass.report.queued = queue.len();
                 let size = self.config.batch_size.max(1);
                 let chunks: Vec<&[&Candidate]> = queue.chunks(size).collect();

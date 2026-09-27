@@ -2780,10 +2780,12 @@ async fn about() -> Response {
                             "\u{201c}What's cool\u{201d} note and a one-line summary."
                         }
                         li {
-                            "It only sees facts we already store: title, venue, dates, category, the "
-                            "listing's own labels, price, the short excerpt we keep (if any) and which "
-                            "sites list the event. We never fetch a page for these notes, and for sites "
-                            "whose terms limit reuse it gets just the basic facts."
+                            "It sees the facts we store (title, venue, dates, category, the listing's "
+                            "own labels, price, the short excerpt we keep and which sites list the "
+                            "event) and, while we collect, the text of the public listing page we "
+                            "read anyway. That text is used only for this and then dropped: we keep "
+                            "just the short excerpt. We never fetch a page just for these notes, and "
+                            "for sites whose terms limit reuse the AI gets only the basic facts."
                         }
                         li {
                             "To check our collectors are reading sites correctly, about once a week per "
@@ -2803,8 +2805,8 @@ async fn about() -> Response {
                         li {
                             "We reach the model through Requesty, an AI gateway, and only use models "
                             "whose provider keeps no copy of what we send (zero data retention). "
-                            "Requesty itself may keep a log of our requests (event facts and the AI's "
-                            "answers) in our account. To "
+                            "Requesty itself may keep a log of our requests (event facts, listing "
+                            "text and the AI's answers) in our account. To "
                             "find similar events we also turn each event's facts and tags into an "
                             "embedding (a list of numbers) with OpenAI's embedding model through the "
                             "same gateway; OpenAI may keep API inputs for up to 30 days for abuse "
@@ -2825,7 +2827,11 @@ async fn about() -> Response {
                     p { "For each event we show:" }
                     ul {
                         li { "the facts: title, dates, venue, price and category;" }
-                        li { "a short excerpt of the description, not the full text;" }
+                        li {
+                            "a short excerpt of the description, not the full text (our AI reads "
+                            "the full public listing text while we collect, to tag the event and "
+                            "write its note, but we don't keep it);"
+                        }
                         li {
                             "a small thumbnail, made once from your image and served from our own "
                             "server so we don't use your bandwidth. It's always credited "

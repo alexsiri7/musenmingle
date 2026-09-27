@@ -19,7 +19,7 @@
 
 use std::time::Duration;
 
-use musenmingle::enrich::input::EventFacts;
+use musenmingle::enrich::input::{EventFacts, PageText};
 use musenmingle::enrich::output::{self, Enrichment};
 use musenmingle::enrich::requesty::Requesty;
 use musenmingle::enrich::store::ModelPrice;
@@ -115,10 +115,12 @@ async fn main() -> anyhow::Result<()> {
         let mut reminder: Option<String> = None;
         for attempt in 0..2 {
             let ids: Vec<String> = (1..=todo.len()).map(|i| format!("e{i}")).collect();
-            let pairs: Vec<(String, &EventFacts)> = ids
+            // Stored facts only: the eval has no ingest run's page texts.
+            let pairs: Vec<(String, &EventFacts, Option<&PageText>)> = ids
                 .iter()
                 .cloned()
                 .zip(todo.iter().map(|i| &all[*i]))
+                .map(|(id, f)| (id, f, None))
                 .collect();
             let body = chat_body(
                 &cfg,
@@ -137,7 +139,7 @@ async fn main() -> anyhow::Result<()> {
                 "cache_write": c.usage.cache_write_tokens, "completion": c.usage.completion_tokens,
                 "cost": cost.round_dp(6).to_string(), "provider_cost": c.usage.provider_cost_usd,
             }));
-            let texts: Vec<String> = todo.iter().map(|i| all[*i].grounding_text()).collect();
+            let texts: Vec<String> = todo.iter().map(|i| all[*i].grounding_text(None)).collect();
             let out = output::parse_batch(&c.content, &ids, &texts);
             for (j, e) in out.ok {
                 results[todo[j]] = Some(e);

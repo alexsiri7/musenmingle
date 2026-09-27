@@ -43,6 +43,11 @@ pub struct Candidate {
     pub materialised: bool,
     pub failed_hash: Option<String>,
     pub failed_version: Option<i32>,
+    /// `events.events.page_text_hash` (see the #208 migration).
+    pub page_text_hash: Option<String>,
+    /// The page-text hash the stored enrichment / give-up saw.
+    pub enriched_page_hash: Option<String>,
+    pub failed_page_hash: Option<String>,
 }
 
 /// Events still running at or after `since`: those with a stored excerpt
@@ -57,7 +62,9 @@ pub async fn candidates(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Vec
                 en.input_hash AS enriched_hash, en.prompt_version AS enriched_version,
                 en.output AS enriched_output,
                 (e.ai_enriched_at IS NOT NULL) AS materialised,
-                f.input_hash AS failed_hash, f.prompt_version AS failed_version
+                f.input_hash AS failed_hash, f.prompt_version AS failed_version,
+                e.page_text_hash, en.page_text_hash AS enriched_page_hash,
+                f.page_text_hash AS failed_page_hash
          FROM events.events e
          LEFT JOIN events.enrichments en ON en.event_id = e.id
          LEFT JOIN events.enrichment_failures f ON f.event_id = e.id
@@ -116,6 +123,8 @@ pub struct NewEnrichment<'a> {
     pub tokens_in: i32,
     pub tokens_out: i32,
     pub cost_usd: Decimal,
+    /// Hash of the page text the model saw, if any.
+    pub page_text_hash: Option<&'a str>,
 }
 
 /// Store an enrichment and materialise it on the event, in one transaction
@@ -124,10 +133,12 @@ pub async fn save_enrichment(pool: &PgPool, n: &NewEnrichment<'_>) -> sqlx::Resu
     let mut tx: Transaction<'_, Postgres> = pool.begin().await?;
     sqlx::query(
         "INSERT INTO events.enrichments
-             (event_id, model, prompt_version, input_hash, output, tokens_in, tokens_out, cost_usd)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+             (event_id, model, prompt_version, input_hash, output, tokens_in, tokens_out, cost_usd,
+              page_text_hash)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          ON CONFLICT (event_id) DO UPDATE SET model = EXCLUDED.model,
              prompt_version = EXCLUDED.prompt_version, input_hash = EXCLUDED.input_hash,
+             page_text_hash = EXCLUDED.page_text_hash,
              output = EXCLUDED.output, tokens_in = EXCLUDED.tokens_in,
              tokens_out = EXCLUDED.tokens_out, cost_usd = EXCLUDED.cost_usd, created_at = now()",
     )
@@ -139,6 +150,7 @@ pub async fn save_enrichment(pool: &PgPool, n: &NewEnrichment<'_>) -> sqlx::Resu
     .bind(n.tokens_in)
     .bind(n.tokens_out)
     .bind(n.cost_usd)
+    .bind(n.page_text_hash)
     .execute(&mut *tx)
     .await?;
     let o = n.output;
@@ -176,19 +188,23 @@ pub async fn record_failure(
     pool: &PgPool,
     event_id: Uuid,
     input_hash: &str,
+    page_text_hash: Option<&str>,
     prompt_version: i32,
     error: &str,
 ) -> sqlx::Result<()> {
     sqlx::query(
-        "INSERT INTO events.enrichment_failures (event_id, input_hash, prompt_version, error)
-         VALUES ($1, $2, $3, $4)
+        "INSERT INTO events.enrichment_failures
+             (event_id, input_hash, prompt_version, error, page_text_hash)
+         VALUES ($1, $2, $3, $4, $5)
          ON CONFLICT (event_id) DO UPDATE SET input_hash = EXCLUDED.input_hash,
-             prompt_version = EXCLUDED.prompt_version, error = EXCLUDED.error, failed_at = now()",
+             prompt_version = EXCLUDED.prompt_version, error = EXCLUDED.error,
+             page_text_hash = EXCLUDED.page_text_hash, failed_at = now()",
     )
     .bind(event_id)
     .bind(input_hash)
     .bind(prompt_version)
     .bind(error.chars().take(1000).collect::<String>())
+    .bind(page_text_hash)
     .execute(pool)
     .await?;
     Ok(())
