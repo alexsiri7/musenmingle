@@ -1,6 +1,0 @@
-User-agent: *
-Disallow: /search/
-Disallow: /basket/
-Disallow: /account/
-
-Sitemap: https://www.dandad.org/sitemap.xml
