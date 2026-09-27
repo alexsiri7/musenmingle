@@ -42,6 +42,7 @@ pub mod somerset_house;
 pub mod tec;
 pub mod ticketmaster;
 pub mod two_temple_place;
+pub mod vam;
 pub mod wellcome_collection;
 pub mod whitechapel_gallery;
 pub mod william_morris_gallery;
@@ -168,6 +169,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             william_morris_society::WilliamMorrisSociety::new(base),
         )),
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
+        vam::KEY => Ok(Box::new(vam::Vam::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }
 }

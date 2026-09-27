@@ -169,6 +169,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     workshops and access sessions (the series' overall span dropped);
     performances, screenings and online-only events skipped; no
     description in the API; images are CC-BY/CC-BY-NC, credited.
+  - `vam` — schema.org microdata on the V&A's `/whatson` listing (one
+    request, no detail pages; pagination is robots-disallowed): venue from
+    the card's pin label (South Kensington, V&A East Museum and Storehouse,
+    Young V&A; online and non-London skipped); `/event/` time stamps are an
+    hour late in summer and are corrected; exhibitions all day; tours,
+    films, courses, drop-in series and members/schools events skipped;
+    facts + link only (terms).
   - `conway-hall` — the JSON-LD `Event` inside each card on `/whats-on/`
     (one request, no detail pages; control characters in the blocks are
     tolerated): London wall-clock times; the site's categories decide

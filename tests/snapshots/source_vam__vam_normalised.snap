@@ -1,0 +1,1560 @@
+---
+source: tests/source_vam.rs
+expression: out
+---
+[
+  {
+    "date_text": "Now open",
+    "event": null,
+    "id": "exhibitions/david-bowie-centre",
+    "type": "Display",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "Closes Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "community",
+      "dedupe_key": "v-x-ldf-awakenings|2026-09-12|v-south-kensington",
+      "description": "A series of installations and interventions across the museum for London Design Festival 2026 navigating how design, craft, and technology can inspire new perspectives, spark curiosity, and bring to light invisible yet interconnected forces.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/26/09/13/00/00d9cc41-11ad-44f0-b680-2d62e23c2836/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "festival"
+      ],
+      "title": "V&A x LDF: Awakenings",
+      "url": "https://www.vam.ac.uk/festival/2026/london-design-festival-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "festival/2026/london-design-festival-2026",
+    "type": "Festival",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 27 September 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "lasting-impressions-women-printmakers-1900-now|2025-09-27|v-south-kensington",
+      "description": "Celebrate the innovative printmaking techniques and bold visions of 25 women printmakers from 1900 – Now. From Käthe Kollwitz to Faith Ringgold, explore the work of artists who have used print to make their own lasting impression.",
+      "ends_at": "2026-09-26T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2025/09/08/11/01/41/ac2fc0d5-d6d8-4792-9977-a90154d34323/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-09-26T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Lasting Impressions: Women Printmakers 1900 – Now",
+      "url": "https://www.vam.ac.uk/exhibitions/lasting-impressions-women-printmakers-1900-now",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/lasting-impressions-women-printmakers-1900-now",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 1 November 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "adobe-creative-residents-on-display|2025-12-02|v-south-kensington",
+      "description": "A display of the works of Ciara Neufeldt, Jess Starns and Michael Akuagwu. The display explores each artist’s creative journey, their connections with different communities and how their experiences at the V&A changed their ways of working.",
+      "ends_at": "2026-11-01T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2025/11/25/14/01/07/0f04faaa-bbea-4bbe-8261-5c00b703ffaf/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-12-02T00:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Adobe Creative Residents On Display",
+      "url": "https://www.vam.ac.uk/exhibitions/the-adobe-creative-residents-on-display",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/the-adobe-creative-residents-on-display",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Friday, 30 April 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "urushi-now-contemporary-japanese-lacquer|2026-04-30|v-south-kensington",
+      "description": "Urushi (lacquer) has been used in Japan for over 7,000 years. For centuries, lacquer-making techniques developed locally while reflecting cross-cultural influences from Asia. This display highlights the diversity of 21st-century artistic expression.",
+      "ends_at": "2027-04-29T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/02/24/13/14/47/b8d0e8c7-4b05-4121-b98f-0754fe502170/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-29T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Urushi Now: Contemporary Japanese Lacquer",
+      "url": "https://www.vam.ac.uk/exhibitions/urushi-now-contemporary-japanese-lacquer",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/urushi-now-contemporary-japanese-lacquer",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Saturday, 30 October 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "lost-music-venues|2026-05-30|v-south-kensington",
+      "description": "Featuring around 50 ‘lost’ performance spaces from the 1980s to 2010s, this display celebrates music venues as centres of creativity, shining a light on both their cultural contribution and the challenges they face as a sector.",
+      "ends_at": "2027-10-29T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/02/16/16/07/21/e2a08889-92c8-470a-ae30-86690d93ca05/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-05-29T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Lost Music Venues",
+      "url": "https://www.vam.ac.uk/exhibitions/lost-music-venues",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/lost-music-venues",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 3 January 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "burberry-trench-crafting-icon|2026-09-21|v-south-kensington",
+      "description": "This free display offers a concise history of the Burberry trench coat from its origins as practical outerwear and military attire to a world-renowned icon of fashion, rooted in a contemporary British sensibility and celebrated globally.",
+      "ends_at": "2027-01-03T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/07/27/08/58/54/7696f04e-b2a5-4622-9f16-c6b12954bc0b/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-20T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "The Burberry Trench: Crafting an Icon",
+      "url": "https://www.vam.ac.uk/exhibitions/the-burberry-trench-crafting-an-icon",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/the-burberry-trench-crafting-an-icon",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 16 May 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "american-photographs|2025-06-14|v-south-kensington",
+      "description": "The V&A's collection of photography from the United States – one of the largest outside North America – reveals the breadth of the country's photographic traditions and the central role of image-making in American life.",
+      "ends_at": "2027-05-15T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2025/05/13/14/58/03/db6f0b78-44c3-4757-9f6f-f8a9d94ad199/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-06-13T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "American Photographs",
+      "url": "https://www.vam.ac.uk/exhibitions/american-photographs",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/american-photographs",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 26 September 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "dimensions-contemporary-chinese-studio-crafts|2025-10-28|v-south-kensington",
+      "description": "In the 1980s, Chinese artists began to reimagine craft as a medium for artistic expression. This display explores the dimensions of studio craft practice in China today, and the innovations which have grown from China's longstanding craft tradition.",
+      "ends_at": "2027-09-25T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2025/09/12/13/24/30/54ac5f38-6390-440e-a5dc-d302f1016890/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-10-28T00:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Dimensions: Contemporary Chinese Studio Crafts",
+      "url": "https://www.vam.ac.uk/exhibitions/dimensions-contemporary-chinese-studio-crafts",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/dimensions-contemporary-chinese-studio-crafts",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 24 January 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "bharti-kher-at-v|2026-07-20|v-south-kensington",
+      "description": "British Indian artist Bharti Kher is internationally recognised for her sculptures which explore the body, womanhood, mythology and cultural identity. This display brings her work into conversation with the V&A’s historic collections.",
+      "ends_at": "2027-01-24T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/07/22/15/43/51/23b1eea7-a3ae-417a-b48f-e04660010e02/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-07-19T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Bharti Kher at the V&A",
+      "url": "https://www.vam.ac.uk/exhibitions/bharti-kher-at-the-va",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/bharti-kher-at-the-va",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Friday, 17 September 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "sacred-treasures-from-kyiv|2026-09-14|v-south-kensington",
+      "description": "Reflecting centuries of devotion and craftsmanship, this display offers a rare chance to experience sacred art from one of the world’s most significant religious and cultural sites, showcasing the Lavra’s enduring artistic and cultural legacy.",
+      "ends_at": "2027-09-16T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/04/11/00/04/62e0f6c4-9a03-45f0-8692-31a321715f24/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-13T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Sacred Treasures from Kyiv",
+      "url": "https://www.vam.ac.uk/exhibitions/sacred-treasures-from-kyiv",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/sacred-treasures-from-kyiv",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Closes Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "new-work-making-east-london|2026-04-18|v-east",
+      "description": "New Work is our creative commissions programme. Twice yearly, artists create work in response to a theme, exploring how art and design intersect with daily life. Our first theme, Making East London, reflects on the area’s past and possible futures.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/14/15/10/58/5d69dcde-4847-4392-b49a-39de505d8611/320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "season"
+      ],
+      "title": "New Work: Making East London",
+      "url": "https://www.vam.ac.uk/season/2026/new-work-making-east-london",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "season/2026/new-work-making-east-london",
+    "type": "Season",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "Closes Thursday, 3 December 2026",
+    "event": null,
+    "id": "season/2026/digital-art-season-on-agency",
+    "type": "Season",
+    "venue": "No venue"
+  },
+  {
+    "date_text": "Closes Monday, 11 January 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "henri-cartier-bresson-self-published-photobook-award-shortlist|2026-09-21|v-south-kensington",
+      "description": "Visitors to this display can read and handle the shortlisted books for the Henri Cartier-Bresson Self-Published PhotoBook Award, which recognises artists who conceive, produce, and distribute their books outside traditional publishing circuits.",
+      "ends_at": "2027-01-11T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/09/18/13/11/05/e869ccd3-15af-49d4-be35-550ca48f59f6/320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-20T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Henri Cartier-Bresson Self-Published PhotoBook Award Shortlist",
+      "url": "https://www.vam.ac.uk/exhibitions/henri-cartier-bresson-self-published-photobook-award-shortlist",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "exhibitions/henri-cartier-bresson-self-published-photobook-award-shortlist",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Recording link will be sent after booking",
+    "event": null,
+    "id": "event/XLe4KJKV7x/creating-the-death-of-robin-hood-recording",
+    "type": "Talk",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Monday 28 September",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "world-of-costume-design-careers-craft-collaboration|2026-09-28|v-south-kensington",
+      "description": "Three-time Academy Award® winner Sandy Powell has designed some of the most visually stunning and iconic films of recent times including The Aviator, Cinderella, The Favourite, Mary Poppins Returns and The Wolf of Wall Street. Powell is the official ambassador of the new Costume Design for Film and Television MFA at the NFTS alongside launching The Sandy Powell Scholarship to support future students studying Costume Design. Annie Symons has worked in costume design across an eclectic mix of film, television and theatre productions, including Worried About A Boy which won a BAFTA TV Award® for Best Costume Design and Great Expectations, which garnered an Emmy Award® for Outstanding Costumes. Drawing on their extensive experience across award-winning productions, Sandy and Annie will explore the vital role costume plays in bringing characters and stories to life, and developing the creative skills needed to work in the entertainment industry, to celebrate the launch of the new Costume Design course at the NFTS which will welcome its first cohort in early 2027. As the regular host of the NFTS' Masterclass series, Jon Wardle has interviewed the likes of Paul Thomas Anderson, Sam Mendes, Phoebe Waller Bridge, Sally Wainwright and many other leading figures behind the camera, and will moderate the session. More information about the NFTS can be found at nfts.co.uk This event has sold out onsite, but livestream tickets are still available.",
+      "ends_at": "2026-09-28T19:45:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/14/15/42/37/112092f2-5d72-4080-95db-9fbf4acfaed0/the-world-of-costume-design-careers-craft-and-collaboration_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "20"
+      },
+      "starts_at": "2026-09-28T18:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "The World of Costume Design: Careers, Craft and Collaboration",
+      "url": "https://www.vam.ac.uk/event/vqDb3EY1O2e/sandy-powell-and-annie-symons",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/vqDb3EY1O2e/sandy-powell-and-annie-symons",
+    "type": "Talk",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Monday, 28 September 2026",
+    "event": null,
+    "id": "event/5jg8LmJWEN/sandy-powell-and-annie-symons-livestream",
+    "type": "Talk",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lunchtime-lectures-bringing-design-1900-now-up-to-now|2026-10-01|v-south-kensington",
+      "description": "Design 1900–Now gallery showcases around 250 objects from the V&A's collections of 20th- and 21st-century design. From the everyday to the provocative, the gallery explores and interrogates how design shapes our lives and vice versa, reflecting our past, present and future through objects we create and use across the globe. It also hosts the Rapid Response Collecting display, which invites staff and the public to suggest contemporary items for the museum’s collection while they remain part of active public discourse. Five years after the gallery’s opening in 2021, the curatorial team undertook substantial rotation in February 2026, introducing 60 new objects to keep abreast with recent technological and societal changes, while responding to conservation needs and feedback from visitors and peers. Join Anna Bates (Curator, Furniture and Product Design, 1900–Now) and William Seung (Assistant Curator, Design and Digital) as they discuss this recent update and reflect on the learnings and challenges that have emerged from maintaining a contemporary design gallery’s relevance in a rapidly changing world. If you would like to learn more with V&A Academy, please sign up to our V&A Academy Newsletter to be updated on future courses and events.",
+      "ends_at": "2026-10-01T13:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/09/18/13/21/43/878a86c1-e4f4-4c4b-a862-7acf68a836c9/lunchtime-lectures-bringing-design-1900-now-up-to-now_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-01T12:00:00Z",
+      "tags": [
+        "v&a academy talk"
+      ],
+      "title": "Lunchtime Lectures: Bringing Design 1900-Now Up to Now",
+      "url": "https://www.vam.ac.uk/event/eqa5mnwxGM/lunchtime-lecture-1-october-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/eqa5mnwxGM/lunchtime-lecture-1-october-2026",
+    "type": "V&A Academy talk",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Friday, 2 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "spotlight-on-nigeria-at-v-culture-creativity-design|2026-10-02|v-south-kensington",
+      "description": "Through curator insights, artist conversations and gallery journeys, delve into the stories behind textiles, ceramics, costume, art, sculpture, posters, print and photography. Discover the bold creativity of traditional craft practices alongside the powerful narratives embedded in both historic and contemporary works. This event invites you to explore the collections through contemporary perspectives, uncovering connections between past and present, local and global histories, and heritage and innovation. Bringing together an exceptional line-up of artists, curators and cultural practitioners, the programme includes: 12.00 - 12.15 Welcome and Opening Event Introductions. 12.15 - 13.15 Bound Together: Leather from Northern Nigeria - presentation with Dr Eva Namusoke, Senior Curator, African Collections Futures, Fitzwilliam Museum, Cambridge. 13.30 - 14.45 1. Adire Textile History and Handling Workshop with Jessica Harpley, Assistant Curator Fashion, V&A. 2. Prints, Posters and Photography with Ella Ravilious, Curator, Architecture and Design, V&A, and Isaac Huxtable, Assistant Curator, Photography, V&A. 3. Tour of Nigerian Objects across the V&A galleries, including Ceramics, Silver, and Design 1900 - Now with Nadia Denton, African Heritage Tour Guide, V&A. Please select ONE activity. Capacity is limited to 20 places per activity and will be allocated on a first-come, first-served basis. Some activities repeat later in the programme. 14.45 - 15.15 Break 15.15 - 16.15 At the Threshold: When Gods and Mortals Dance - an in conversation with Artist Oliver Enwonwu and Nike Awoyinka, Senior Higher Education Leader and Global Consultant. There will be an opportunity to view the artist's paintings. 16.15 - 17.30 1. Challenging the Lens: Artist Talk and Display Viewing with V&A & Adobe Artist Resident Michael Akuagwu. 2. Prints, Posters and Photography with Ella Ravilious, Curator, Architecture and Design, V&A, and Isaac Huxtable, Assistant Curator, Photography, V&A. 3. Tour of Nigerian Objects across the V&A galleries, including Ceramics, Silver, and Design 1900-Now with Stella-Kemi Akintan, African Heritage Tour Guide, V&A. Please select ONE activity. Capacity is limited to 20 places per activity and will be allocated on a first-come, first-served basis. 17.30 - 18.00 Final gathering, visitor comments, feedback, and networking. Whether you're encountering Nigerian culture for the first time or bringing your own knowledge and experience to the conversation, join us to celebrate the richness of Nigerian heritage and its global influence on design, creativity and culture. Expect lively discussion, fresh perspectives and a welcoming space to connect, reflect and exchange. A detailed programme will be announced shortly. This event forms part of the V&A Academy's celebration marking Nigeria's Independence.",
+      "ends_at": "2026-10-02T17:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/06/18/39/43/6d88aafe-65e1-4b14-9e66-dc7f4518fdea/spotlight-on-nigeria-at-the-v-a-culture-creativity-and-design_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "starts_at": "2026-10-02T11:00:00Z",
+      "tags": [
+        "v&a academy talk"
+      ],
+      "title": "Spotlight on Nigeria at the V&A: Culture, Creativity, and Design",
+      "url": "https://www.vam.ac.uk/event/X6Yglwm7Dq/p26055-spotlight-on-nigeria-at-the-v-a",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/X6Yglwm7Dq/p26055-spotlight-on-nigeria-at-the-v-a",
+    "type": "V&A Academy talk",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On-demand",
+    "event": null,
+    "id": "event/89nxdkZ7Kb8/l26003-pearls-on-demand",
+    "type": "V&A Academy online course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "On-demand",
+    "event": null,
+    "id": "event/KwynDJxlx6j/l26005-history-of-the-catwalk-on-demand",
+    "type": "V&A Academy online course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Friday, 18 September 2026 - Monday, 18 January 2027",
+    "event": null,
+    "id": "event/eRYAkEgmdb/o26036-taster-lecture-september-2026-steve-kershaw",
+    "type": "V&A Academy online course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "On-demand",
+    "event": null,
+    "id": "event/RJr6L8MyYn/l26002-how-to-read-a-painting-on-demand",
+    "type": "V&A Academy online course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Tuesday, 29 September 2026 – Tuesday, 1 December 2026",
+    "event": null,
+    "id": "event/B5yXw45ZR65/p26043-antique-to-early-christian-in-person",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Tuesday, 29 September 2026 – Tuesday, 1 December 2026",
+    "event": null,
+    "id": "event/gAry0dxgZ9x/p26044-arts-of-the-islamic-world-in-person",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Tuesday, 29 September 2026 – Tuesday, 15 June 2027",
+    "event": null,
+    "id": "event/v0Y763GbLQ/p26048-the-story-of-european-art-at-the-v-a-500bce-to-1250",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Tuesday, 29 September 2026 – Tuesday, 1 December 2026",
+    "event": null,
+    "id": "event/6vqm02bWz00/o26023-antique-to-early-christian-online",
+    "type": "V&A Academy year course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Tuesday, 29 September 2026 – Tuesday, 1 December 2026",
+    "event": null,
+    "id": "event/bxpljrdRND/o26024-arts-of-the-islamic-world-online",
+    "type": "V&A Academy year course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 2 December 2026",
+    "event": null,
+    "id": "event/pb7Lj0JEL2/p26042-a-history-of-london-1066-1666-in-person",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 16 June 2027",
+    "event": null,
+    "id": "event/aZJRVYRDL0/p26051-a-history-of-london-1066-to-2020",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 2 December 2026",
+    "event": null,
+    "id": "event/mBlx0yWlP0/p26046-late-medieval-in-person",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 16 June 2027",
+    "event": null,
+    "id": "event/MN5z7kz2nEO/p26049-the-story-of-european-art-at-the-v-a-1250-to-1650",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 2 December 2026",
+    "event": null,
+    "id": "event/vvOJ8zkPB9a/o26022-a-history-of-london-1066-1666-online",
+    "type": "V&A Academy year course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Wednesday, 30 September 2026 – Wednesday, 2 December 2026",
+    "event": null,
+    "id": "event/0Agb8Dj75w/o26026-late-medieval-online",
+    "type": "V&A Academy year course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026 – Thursday, 3 December 2026",
+    "event": null,
+    "id": "event/5qOL9pnV88/p26045-baroque-to-rococo-in-person",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026 – Thursday, 17 June 2027",
+    "event": null,
+    "id": "event/4yWreZE7k6P/p26050-the-story-of-european-art-at-the-v-a-1650-to-1925",
+    "type": "V&A Academy year course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026 – Thursday, 3 December 2026",
+    "event": null,
+    "id": "event/6xRwxYjYLe/o26025-baroque-to-rococo-online",
+    "type": "V&A Academy year course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Saturday, 3 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "objects-of-fashion-unravelling-stories-in-person|2026-10-03|v-south-kensington",
+      "description": "Join us as we explore Objects of fashion that hold poignant traces of makers and wearers. Unravelling these embodied clues can reveal stories of the past, provide inspiration for creative works, and generate new knowledge. Clothing and accessories like gloves, hats, or shoes are some of the most intimate and compelling of all objects of material culture because of their close connection to the body. Poignant traces of the makers and wearers embodied in objects of dress carry information from the past that might otherwise be inaccessible from written accounts. With careful study, patience, creativity and imagination, these clues can be unravelled to tell stories of the past, provide inspiration for creative works, and generate new knowledge. During this study day, we will discuss new developments in the field as well as the joys and challenges of object-based research. Not able to join us in person? You can also attend the study day online. This study day will not be recorded. For more details on how our courses work, see V&A Academy online questions · V&A. This course is suitable for participants aged 18 and over.",
+      "ends_at": "2026-10-03T15:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/06/18/11/18/59/77dfaaf5-eb43-48a8-aff7-f25f538250d8/objects-of-fashion-unravelling-stories-in-person_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "100",
+        "min": "100"
+      },
+      "starts_at": "2026-10-03T09:30:00Z",
+      "tags": [
+        "v&a academy one-day course"
+      ],
+      "title": "Objects of Fashion: Unravelling Stories (In Person)",
+      "url": "https://www.vam.ac.uk/event/Av9wewVrMNp/p26033-objects-of-fashion-unravelling-stories-in-person",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/Av9wewVrMNp/p26033-objects-of-fashion-unravelling-stories-in-person",
+    "type": "V&A Academy one-day course",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Saturday, 3 October 2026",
+    "event": null,
+    "id": "event/XpQBpQrpXR/o26019-objects-of-fashion-unravelling-stories-online",
+    "type": "V&A Academy one-day course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "On-demand",
+    "event": null,
+    "id": "event/OZDZpOZeeY/l26001-english-embroidery-on-demand",
+    "type": "V&A Academy online course",
+    "venue": "Online"
+  },
+  {
+    "date_text": "Tuesday, 25 November 2025 - Saturday, 30 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "drmm-building-from-forests|2025-11-25|v-south-kensington",
+      "description": "At a time of climate emergency, architecture practice dRMM and its partners in manufacturing and science consider how wood from UK forests could transform local production. This display presents the pioneering new products that emerged from the research, and demonstrates the potential of this underused resource. dRMM: Building from Forests follows a three-year research project by the New Model Institute for Technology and Engineering (NMITE), Edinburgh Napier University, Built Environment – Smarter Transformation (BE-ST) and EcoSystems Technologies, commissioned by the Forestry Commission England. The display forms part of the fifth iteration of Make Good: Rethinking Material Futures, a ten-year programme supported by John Makepeace OBE.",
+      "ends_at": "2026-10-30T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2025/10/09/10/24/39/7b9266ed-e116-49a7-9046-8cd689ba9ad8/drmm-building-from-forests_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-11-25T00:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "dRMM: Building from Forests",
+      "url": "https://www.vam.ac.uk/event/qVWG4OEBAR/drmm-building-from-forests-2025-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/qVWG4OEBAR/drmm-building-from-forests-2025-2026",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Every Monday until 28th December 2026, excluding 8th June and 31st August",
+    "event": null,
+    "id": "event/12K4G9e35k/national-art-library-and-archive-talks-14-00-2026",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Every Monday until 28th December 2026, excluding 8th June and 31st August",
+    "event": null,
+    "id": "event/RNow3aba9V/national-art-library-and-archive-talks-11-30-2026",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Thursday, 11 March 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "metalworking-now-2026-27|2026-03-12|v-south-kensington",
+      "description": "Contemporary metalworking is a dynamic field and today’s metalsmiths continue a long tradition of experimentation in a range of metals to create exciting and innovative work. This display highlights a selection of work by metalsmiths from across the world that have been collected by the museum since 2010.",
+      "ends_at": "2027-03-11T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/03/24/10/01/19/91a305b0-7c91-47f7-9e2a-b18f13c33e90/metalworking-now-2026-27_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-03-12T00:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Metalworking Now (2026-27)",
+      "url": "https://www.vam.ac.uk/event/4YRzJDmbavr/metalworking-now-2026-27",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/4YRzJDmbavr/metalworking-now-2026-27",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "dispersal|2026-04-18|v-east",
+      "description": "To make way for the development of 2012 Olympic Games in London, 284 trades and businesses from the Lea Valley between Stratford and Hackney Wick had to be re-located. Recognizing that a vast swathe of East London working history was about to be lost, photographers Marion Davies and Debra Rapp, set about systematically documenting these spaces. From 2005 to 2007, they had amassed a large archive of images of 80 businesses – from belt-making, zinc galvanising, and salmon smoking – and the landscape surrounding them. Looking at these images today is a potent reminder of the industrial and working-class history of the area in which V&A East now resides. The gradual erasure of spaces like these, dedicated to a rich array of industry and craft – a trend seen in many cities around the world – prompts the urgent question: How can we work to revive industries and cultures of making, while supporting new creative practices to emerge across our cities and communities? All colour photographs by Debra Rapp. All black and white photographs by Marion Davies. Dispersal was made in collaboration with Juliet Davis.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/06/22/10/54/38a06f30-6ab2-40dd-a781-e2739993a64c/dispersal_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Dispersal",
+      "url": "https://www.vam.ac.uk/event/0v0GJw8DOR/dispersal-picturing-change-in-east-london",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/0v0GJw8DOR/dispersal-picturing-change-in-east-london",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "2 Parkes Street, London E20 3AX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "guanyin-ii-caretaker-lawrence-lek|2026-04-18|v-east-storehouse",
+      "description": "In this game, set within a reconstruction of V&A East Storehouse’s conservation studio, players search for fragments of a model of ArcelorMittal Orbit, the public sculpture created for the Olympic Park. Artist Lawrence Lek’s videogame blends everyday environments with futuristic scenarios, to reflect on contemporary working conditions. Playing as a ‘carebot’ called Guanyin – named after the Buddhist goddess of compassion – visitors can access staff-only areas of V&A East Storehouse. As players gather clues about their job, the boundaries between labour and play begin to blur. Lek’s work raises questions about the role of virtual worlds in preserving physical monuments and objects.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/07/51/50/d3e0c93b-e6b7-4df3-93e1-eafa4356c36e/guanyin-ii-the-caretaker-lawrence-lek_320.jpg",
+      "lat": 51.546,
+      "lng": -0.0225,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Guanyin II: The Caretaker, Lawrence Lek",
+      "url": "https://www.vam.ac.uk/event/qRp55MmBWq/guanyin-ii-the-caretaker-lawrence-le",
+      "venue_name": "V&A East Storehouse"
+    },
+    "id": "event/qRp55MmBWq/guanyin-ii-the-caretaker-lawrence-le",
+    "type": "Display",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "heads-look-to-workers-laura-wilson|2026-04-18|v-east",
+      "description": "‘The lumper, the lurker, the baker, the weaver, the spinner, the sampler, the spark… ’ is the opening line of artist Laura Wilson’s poem, inscribed into three sculptures honouring east London’s workers and makers. The work is activated by the V&A East team with the call “Heads!” Raised and lowered by a fly system, like those used in docks and theatres, the movement reflects shift patterns and the nearby tidal flows of the River Thames. Wilson’s artwork is informed by her research into east London theatres, factories, docks and women’s workwear. You can see these objects on display at V&A East Storehouse on Level 2. The sculpture will be lowered at different times of the day, daily, by V&A East's team, and visitors will have the opportunity to read the poem on the Upper Ground floor. Please click here to listen to an audio recording of Laura Wilson reading the poem Heads! Look to the Workers, which is inscribed into her sculpture. The recording was made in February 2026 along the bank of the River Thames in East London, near Wilson's Bow Arts Trust studio at Royal Albert Wharf. Read more about Heads! Look To The Workers here: New Work: Heads! Look to the Workers by Laura Wilson • V&A Blog With thanks to everyone who helped along the way: Franck Bordese, Severina Dico-Young, Susan Doe, Rob Field, Georgia Gough, Anthony Gouldbourne, Jefford Horrigan, Brendan McMullan, Emma-Kate Matthews, Charlie Noon, Adrian Phillips, Martin O’Campo, Caroline Stevenson, Rosie Strickland, Alan Whiting, Jo Wright and Polly Wright, Andrew, Vilija and everyone at JD McDougall, Dom Fraser, Old Vic, Michael Ste-Croix and Luke Cunningham, Central Saint Martins, University of the Arts London, Benji Bailes and Dan Light, Bailes+Light, Jason Elsey, Momart, London Metropolitan Archives, OMNI, Sophie Hill, Leah Jun Oh, Amelia Maltby, João Guarantani and all at Bow Arts Trust and Royal Albert Wharf Studios, Clare Crill and Gerald Mason, Tate & Lyle, Joanna Norman, Claudia Heidebluth, Shoshanna Isaacson, VARI V&A, V&A East Youth Collective (Javier Cornejo; Joshua Dickinson; Ceylan Ismail; Maya Lewis; Shai Mitchell; Shaquan Nurse; Aniya Pramanik), Miri Ahn, Richard Boston, Gus Casley-Hayford, Rhea Chandratreya, Brendan Cormier, Sylvia Empsom, Matthew Fancy, Madeleine Haddon, Karen Hart, Georgia Haseldine, Kat Healey, Chris Larner, Laura Parker, Tim Reeve, Rubén Salgado Pérez, Kristian Volsing and all the staff and volunteers at V&A East. A pin badge has been produced and given to everyone involved as an acknowledgement of their labour. Research supported by Andrew W. Mellon Foundation and Bow Arts Trust.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/07/58/04/50991a56-5fdc-4f39-b651-4281437bd06f/heads-look-to-the-workers-laura-wilson_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Heads! Look To The Workers, Laura Wilson",
+      "url": "https://www.vam.ac.uk/event/ZdNm7okqb2/heads-look-to-the-workers-laura-wilson",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/ZdNm7okqb2/heads-look-to-the-workers-laura-wilson",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "heard-rene-matić|2026-04-18|v-east",
+      "description": "Artist Rene Matić asks: ‘Can an image be heard? How do the records we carry with us — songs, movements, basslines — define us?’ In this sculpture, Matić brings together photographs taken across east London, the wider city, Plymouth and Peterborough, evidencing how the love of friends and family is expressed through music and movement. Their photographs trace Black British music as a connective tissue through which communities across Britain gather, remember and move together. Matić assembled these images into the shape of a sound system, a Jamaican cultural legacy brought to the UK through the migration of the Windrush Generation. In this form, the photographs coalesce like sounds echoing from a sound system. Commissioned with the support of The V&A Parasol Foundation Women in Photography Project",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/14/15/38/23/50985222-3b6a-44df-b813-cbbc6478df0e/heard-rene-matic_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "HEARD, Rene Matić",
+      "url": "https://www.vam.ac.uk/event/DR2J32QlRb/heard-rene-matic",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/DR2J32QlRb/heard-rene-matic",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "2 Parkes Street, London E20 3AX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "i-was-born-here-shahed-saleem|2026-04-18|v-east-storehouse",
+      "description": "Artist Shahed Saleem asks ‘How do ideas of ethnic and cultural purity, prevalent at the time the Torrijos ceiling was created, continue to echo in our language and politics today?’ The Torrijos ceiling at V&A East Storehouse was made in the late 1400s, a period that saw the rise of Spain’s colonial empire and the replacement of centuries of multi-cultural exchange with a monarchy that prioritised religious and ethnic purity. The tapestries in this gallery question how anti-immigration policies and language draw on longer histories of exclusion. The first tapestry, Queen’s Market, celebrates the diversity, creativity and commerce of Newham’s Queens Market. The second tapestry, Home Office, references the Home Office vans that circulated east London in 2013 encouraging self-deportation. The third tapestry, For God and Gold, combines political references from late fifteenth-century Spain with racialised struggles in east London. Read more about I Was Born Here here: New Work: I Was Born Here by Shahed Saleem • V&A Blog",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/07/48/59/162ce34d-8172-4a8b-8f5e-1393c39dd3c9/i-was-born-here-shahed-saleem_320.jpg",
+      "lat": 51.546,
+      "lng": -0.0225,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "I Was Born Here, Shahed Saleem",
+      "url": "https://www.vam.ac.uk/event/jW9w0wBZbwN/i-was-born-here-shahed-saleem",
+      "venue_name": "V&A East Storehouse"
+    },
+    "id": "event/jW9w0wBZbwN/i-was-born-here-shahed-saleem",
+    "type": "Display",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "2 Parkes Street, London E20 3AX",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "everythingists-es-devlin|2026-04-18|v-east-storehouse",
+      "description": "‘Like Natalia Goncharova, many of us consider ourselves ‘everythingists': centaurs: human animals dancing with our machine shadows’ -Es Devlin Commissioned to respond to Natalia Goncharova's 1926 painted backcloth for the Ballets Russes production of The Firebird, artist Es Devlin has drawn and painted this shadow dance within the movements of east London based dancer Joshua Shanny-Wynter, suspended between enlarged iPhone boxes that echo the architecture of Igor Stravinsky’s The Firebird score and V&A East Storehouse storage crates. Over a soundtrack by Polyphonia, rooted in The Firebird’s horn theme, Devlin reads Natalia Goncharova’s techno-optimistic 1913 manifesto, Cory Doctorow’s 2026 reflections on centaurs and reverse centaurs in animatronics, the 1958 poem Centaur by Clark Ashton Smith, and Adrienne Rich’s 1971 poem Centaur’s Requiem. The term ‘everythingism’ was used to describe Goncharova’s painting, theatre design and performance art. It can also be applied to Devlin’s own practice encompassing sculpture, music, performance design, poetry and painting Goncharova’s 15m wide painted backdrop was made for Diaghilev’s 1926 production of The Firebird, choreographed by Mikhail Fokine and composed by Igor Stravinsky in 1910. Wynter’s movements were choreographed by East London based choreographer Botis Seva. Every 90 seconds the artwork is animated by illumination and underscored by Devlin’s voice reading a series of texts over a soundtrack composed by Polyphonia. Stravinsky's horn theme was conceived to signify the lifting of the sorcerer Koschei’s curse, the return of light and life, transcendence after chaos. It was based on a traditional folk song found in a collection by Nikolai Rimsky Korsakov. LOCATION AND DATE: London 2025–26 MATERIALS AND TECHNIQUES: Painted and printed plywood, sound Read more about The Everythingists here: New Work: The Everythingists by Es Devlin • V&A Blog Fabrication by Scena Sound by Polyphonia With special thanks to the V&A East Collective Community for their generous feedback",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/07/50/22/60157457-f155-4eb4-85f3-16f23ce8a233/the-everythingists-es-devlin_320.jpg",
+      "lat": 51.546,
+      "lng": -0.0225,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "The Everythingists, Es Devlin",
+      "url": "https://www.vam.ac.uk/event/Lw3G7Vr8AO/the-everythingists-es-devlin",
+      "venue_name": "V&A East Storehouse"
+    },
+    "id": "event/Lw3G7Vr8AO/the-everythingists-es-devlin",
+    "type": "Display",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "towards-civic-museum-tania-bruguera|2026-04-18|v-east",
+      "description": "What does it mean for a museum to arrive in a place shaped by layered histories? How might an institution listen before it speaks? Developed through conversations between artist Tania Bruguera and young people from east London, this work takes the form of a statement of shared principles. Stained glass — traditionally associated with permanence and authority — is reframed as a fragile and transparent medium, reminding us that institutions are shaped by trust and collective responsibility. The composition draws on Walthamstow-born artist William Morris’s designs, reimagined through the lens of the many cultural traditions that reflect east London’s global population. The names of all participants appear on the glass as seeds, marking the possibility of common ground nurtured over time. Created with the V&A East Youth Collective and realised by Richard Paton at Rainbow Glass Studio. Read more about Towards a Civic Museum here: Towards a Civic Museum • V&A Blog Text on the stained glass: We want V&A East to be more than a destination. We want a civic museum. Where transparency, advocacy, generosity, equity, accountability, sustainability and collaboration are not empty slogans, but the way we exist within the institution. A civic museum does not only resemble the community, but belongs to the community. It does not speak in the name of others. It gives the floor to those who live outside its walls. A civic museum recognises local knowledge as expertise and gives credit for its use. A civic museum is interested not only in our production of knowledge, but provides meaningful opportunities to drive and care about our conditions of life. A civic museum resists urban displacement and alienation. A civic museum prioritises people over investments. In a civic museum, each member of the community is accepted in all their complex uniqueness and intersectional identities, never forced into a generic group. A civic museum designs its programmes with the community instead of for the community. A civic museum re-examines itself, questions its own goals and remains accountable over time. A civic museum is not here to save anyone, but it is a place where everyone feels safe. This is the museum we are ready to build together, because the true legacy of V&A East will be the impact it has on the local community.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/14/14/40/06/ed14ab43-9783-421e-a96f-bd38db6fdaf8/towards-a-civic-museum-tania-bruguera_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-04-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Towards A Civic Museum, Tania Bruguera",
+      "url": "https://www.vam.ac.uk/event/9Yr9wrD3ge/towards-a-civic-museum-tania-bruguera",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/9Yr9wrD3ge/towards-a-civic-museum-tania-bruguera",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 9 May 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "sun-artists-serial-of-artistic-photography|2026-05-14|v-south-kensington",
+      "description": "Sun Artists (1889–91) was an innovative but short-lived publication that promoted photography as an art form. Each issue focused on one British photographer and presented four of their best works as finely crafted photogravure prints. An accompanying essay helped further the artistic claims for the medium. The high-quality printing and design also served to elevate the photographs. Subscribers could enjoy the reproductions as standalone prints or bind them together for their libraries. Sun Artists ceased publication after just eight issues, perhaps due to the high cost of producing such a deluxe periodical. Yet it set a precedent for later publications, such as Alfred Stieglitz's Camera Work< (1903–17). This display includes all eight featured photographers, including Julia Margaret Cameron, a pioneer of artistic photography, and Eveleen Myers, who had been taking photographs for just three years at the time of publication. You'll find this display in Room 98 of the Photography Centre, in the Kusuma Gallery. This gallery is dedicated to theme of Photography and the Book and explores how books have been fundamental to photography since the 1840s. Surrounding the display you'll find the library of the Royal Photographic Society collection alongside the current browsing library display. Photographers include: Julia Margaret Cameron, Joseph Gale, Eveleen Myers, Henry Peach Robinson, Lyddell Sawyer, Frank Meadow Sutcliffe, J. B. B. Wellington and Benjamin Gay Wilkinson. Supported by The Bern Schwartz Family Foundation",
+      "ends_at": "2027-05-08T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/05/13/16/40/13/7c180d2a-86ee-4cff-bf11-dcfcca9822bf/sun-artists-a-serial-of-artistic-photography_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-05-13T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Sun Artists: A Serial of Artistic Photography",
+      "url": "https://www.vam.ac.uk/event/KmjLWoZjEa/sun-artists-a-serial-of-artistic-photography",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/KmjLWoZjEa/sun-artists-a-serial-of-artistic-photography",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "tom-hunter-selects|2026-06-15|v-east",
+      "description": "Co-curated by east London photographer Tom Hunter and the V&A East Youth Collective (2023-24), this display takes a deep dive into Tom’s relationship with east London, first and foremost, as his home for over 40 years and as the setting, subject and inspiration for his work. The display draws from the V&A’s collections and Tom’s personal archive to explore east London as a place of radical thinking and resilience, and to reflect on the role of photography as a tool for documenting underrepresented communities. Objects range from the cut-and-paste graphics of Peter Kennard, Jamie Reid (for the Sex Pistols) and Gee Vaucher (for Crass) to posters and ephemera from local events like the first ‘Carnival Against the Nazis’ in Victoria Park in 1978 (designed by David King) and campaigns like the M11 Link Road protests in the 1990s. Contemplating his own route into photography, through documenting his squatting community in east London, Tom’s selections also include the work of photographers such as Dorothea Lange and Paul Trevor for the Half Moon Photography Workshop. Each year, X Selects invites two creative practitioners (artists, designers, collectives) to delve into the V&A’s collections and develop their own capsule display in the Why We Make galleries at V&A East Museum. The inaugural displays respond to the V&A East season theme of ‘Making East London.’",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/09/25/14/13/02/2a11856e-c8c0-4d43-ac8a-d98d473d38fa/tom-hunter-selects_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-06-14T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Tom Hunter Selects",
+      "url": "https://www.vam.ac.uk/event/61KvA3gqEnb/tom-hunter-selects-2026",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/61KvA3gqEnb/tom-hunter-selects-2026",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 30 May 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "golden-threads-dress-from-saudi-arabia|2026-06-18|v-south-kensington",
+      "description": "In 1932, Abdulaziz bin Abdul Rahman Al Saud founded the Kingdom of Saudi Arabia. During his reign, King Abdulaziz followed the long-standing Islamic tradition of rulers presenting fine garments as gifts, including to foreign visitors. He gave the colourful and voluminous thobes (outer dresses) featured in this display to the daughter of the British Ambassador to Saudi Arabia in 1942 and 1952. The dresses are all embellished with metal-wrapped thread, adding a golden shimmer. A short film has been made to accompany the display. Watch to learn more about the 1940s Bridal Thobes in the V&A collection: Traditional Saudi Arabian Dress Explained | 1940s Bridal Thobes This display is part of the V&A’s Jameel Programme, celebrating 20 years of The Jameel Gallery with Community Jameel.",
+      "ends_at": "2027-05-29T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/06/18/09/30/57/84657423-e4b7-425a-ba60-17da5ff95009/golden-threads-dress-from-saudi-arabia_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-06-17T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Golden Threads: Dress from Saudi Arabia",
+      "url": "https://www.vam.ac.uk/event/51BvLy3MQ2J/golden-threads-dress-from-saudi-arabia-2026-2027",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/51BvLy3MQ2J/golden-threads-dress-from-saudi-arabia-2026-2027",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Saturday, 18 April 2026 - Sunday, 18 October 2026",
+    "event": {
+      "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "on-sly-justinien-tribillon|2026-06-28|v-east",
+      "description": "Can workers reclaim independence through thetools in their workplaces? In factories and workshops, materials and machinery are often left idle for substantial parts of the day. When workers find ways of using them ‘on the sly’, a secret world of creativity emerges. In this film, artist Justinien Tribillon draws inspiration from the French word perruque, a term used to describe the practice of covertly making things for yourself, while at work. Researching and filmingthese practices in east London, Tribillon focuses on the precise and repetitive movement of hands. These motions become slow and tender as these individuals craft one piece of work they can bring home.",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/16/43/38/7e4a5afa-c3f2-4aa4-b3d9-945b363924b1/on-the-sly-justinien-tribillon_320.jpg",
+      "lat": 51.5396,
+      "lng": -0.0107,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-06-27T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "On the Sly, Justinien Tribillon",
+      "url": "https://www.vam.ac.uk/event/7QWn70064G/on-the-sly-justinien-tribillon",
+      "venue_name": "V&A East Museum"
+    },
+    "id": "event/7QWn70064G/on-the-sly-justinien-tribillon",
+    "type": "Display",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "On now until Sunday, 4 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "v-illustration-awards-2026|2026-07-02|v-south-kensington",
+      "description": "The V&A Illustration Awards is a free, biennial competition celebrating excellence in illustration and contemporary practice, and judged by a panel of prominent illustrators and industry experts. The awards highlight a broad range of illustration styles and subjects. This display features the work of this year's winners and runners-up from each of the five categories: Adult Factual, Adult Fiction, Advertising and Commercial, Emerging Illustrator and Illustration for Children. The Awards are generously supported by The Linder Foundation and the Moira Gemmill Memorial fund.",
+      "ends_at": "2026-10-03T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/03/18/15/24/38/c4b40da5-711d-4617-801f-02e3cb2af444/v-a-illustration-awards-2026_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-07-01T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "V&A Illustration Awards 2026",
+      "url": "https://www.vam.ac.uk/event/y9ajmavpR9k/v-a-illustration-awards-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/y9ajmavpR9k/v-a-illustration-awards-2026",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "albert-yonathan-setyawan-metamorphic-modulation|2026-09-12|v-south-kensington",
+      "description": "Setyawan has built an artistic practice in contemporary ceramic art which addresses the experience of repeating forms, pattern-making and the material qualities of clay. The artwork centres on two enigmatic forms, one evoking a leaf and the other a flower. The installation comprises over 700 individual pieces hand-modelled in clay, slip-cast in red terracotta, and left unglazed to celebrate the clay’s particular material qualities. This installation invites us to experience the work from different vantage points, as it shifts in appearance, playing with light and shadow. Artwork commissioned in partnership with The Peninsula Hotels’ ‘Art in Resonance’ programme. The installation was first presented in Hong Kong. The installation was adapted for the V&A, curated by Louis Copplestone in collaboration with Carrie Chan. Produced by Katya Spiers. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/27/15/03/50/324ea444-0bc7-42db-b53a-ac3c92936483/albert-yonathan-setyawan-metamorphic-modulation_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Albert Yonathan Setyawan - Metamorphic Modulation",
+      "url": "https://www.vam.ac.uk/event/jeN2o5AzzJ/ldf-sept-2026-albert-yonathan-setyawan",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/jeN2o5AzzJ/ldf-sept-2026-albert-yonathan-setyawan",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "andre-williams-time-after-time|2026-09-12|v-south-kensington",
+      "description": "Time After Time by Andre Williams fuses the traditions of clockmaking and soundsystem design. Williams’ longcase clock sits on the zigzag parquet floor of the unique 18th century mirrored room in the V&A’s Europe 1600-1800 galleries. In this gilded, oval room, time is marked by the hands of the clock and audible through encased speakers playing mixtapes selected by Williams throughout the day. Decorated with motifs from Ndebele (Southern Africa) and Bamiléké (Cameroon) the clock is accompanied by an easel designed by Williams, which holds a framed drawing by artist Dawn Wilson of Birmingham Soundsystem Youthman Promotion. Curated by Kristian Volsing. Produced by Faunsia Tucker. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/19/12/51/33/4dceabc5-f856-4260-9459-4f05e30ef35c/andre-williams-time-after-time_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Andre Williams - Time After Time",
+      "url": "https://www.vam.ac.uk/event/M5LGq41KVa/ldf-sept-2026-intoart",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/M5LGq41KVa/ldf-sept-2026-intoart",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Saturday, 9 January 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "aziza-kadyri-sender-unknown|2026-09-12|v-south-kensington",
+      "description": "The art of suzani – intricately hand-embroidered textiles traditionally made for a bride’s dowry – is one of Uzbekistan’s most significant cultural traditions. While suzani itself has long evolved through shared cultural exchange, AI models introduce a different kind of borrowing – one that can strip away layers of context, disconnecting images of the embroideries from the lived experiences that produced them: women’s labour, migration, and intergenerational knowledge. By absorbing images into datasets, authorship disappears, contexts collapse and meaning becomes simply pattern. Moving between handcrafted and digital processes, Sender Unknown addresses this uncertainty and asks whether technologies that risk erasing histories can instead be reimagined as tools for preservation and reinterpretation. Sender Unknown combines suzani (embroidery) techniques with digital textile printing, evoking deconstructed sense of information transmission. Using a bespoke AI model, the artists developed a new language of suzani symbols. Female artisans in Nurota, Uzbekistan, hand-embroidered these contemporary motifs. Artistic collaborators include: Yulduz Mukhiddinova and team (suzani embroidery); Kacper Reicher (digital development); Fabrication Facility (3D structures); Canclini Tessile (printed textiles). The display is part of the V&A’s Jameel Programme, celebrating 20 years of The Jameel Gallery with Community Jameel. With further support from the Sarikhani Family. Curated by Carrie Chan and Fuchsia Hart. Produced by Faunsia Tucker.",
+      "ends_at": "2027-01-09T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/09/08/14/26/47/4d43ed68-3841-4904-a129-da8f9c589c20/aziza-kadyri-sender-unknown_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Aziza Kadyri - Sender Unknown",
+      "url": "https://www.vam.ac.uk/event/B9k2ex7pwq2/ldf-sept-2026-aziza-kadyri-sender-unknown",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/B9k2ex7pwq2/ldf-sept-2026-aziza-kadyri-sender-unknown",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "emerging-designer-commission-playfool-server|2026-09-12|v-south-kensington",
+      "description": "Our online lives unfold as a constant stream of stimulation. Behind the restlessness lies a quiet physical infrastructure. Data centres keep our world running, and the AI race has accelerated their construction. In UK alone, nearly 100 new facilities are reportedly planned for completion in 2030. Highly automated, Playfool zeroes in on the one task in these places that resists automation: cleaning. Through alternative game design approaches, Playfool encourages visitors to explore the physical upkeep that sustains both the museum collections and the AI infrastructure, reflecting on what has been overlooked in the pursuit of progress. Visitors are invited to participate in the act of maintenance and care. Co-founded by Daniel Coppen and Saki Maruyama, Playfool is the recipient of V&A’s annual Emerging Design Commission. Their practice explores the transforming dynamic between human agency and technology through the medium of play, inviting critical reimagination of technology. The new commission was curated by Carrie Chan and produced by Katya Spiers. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/20/12/45/11/5bb96100-86c4-40a4-891a-742cc20cf313/emerging-designer-commission-playfool-the-server_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Emerging Designer Commission: Playfool The Server",
+      "url": "https://www.vam.ac.uk/event/GyBvKmY9gL/ldf-sept-2026-emerging-designer-commission",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/GyBvKmY9gL/ldf-sept-2026-emerging-designer-commission",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "eunjo-lee-when-void-gazes-back|2026-09-12|v-south-kensington",
+      "description": "By fusing ancient heritage with contemporary technology, the installation asks questions about our relationship with non-human consciousness and spiritual truths Through a digitally sculpted film, Lee delves into concepts of Zen, karma andimpermanence rooted in Buddhism, reframing digital, shamanistic deities as ever-changing cosmic worlds within themselves. The deities also come alive as sculptures that are partially 3D printed from recycled clay. They are embedded with interactive design elements that invite audiences into an interactive and reflective dialogue. Eunjo Lee, an artist and filmmaker based in London and Seoul, is known for utilising gaming-graphics software to build complex worlds. Artistic collaborators include Josef Stöger (Digital Ceramics), Kiryung Arrddon Nam (Interactive Development), Gunho Hyun (Music), Harry Charlton (Sound Design), Steph Hartop (Voiceover) Curated by Carrie Chan. Produced by Faunsia Tucker Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/24/08/08/53/2e4d7a78-f7ad-4446-b4b8-8ccdd8804270/eunjo-lee-when-the-void-gazes-back_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Eunjo Lee - When the Void Gazes Back",
+      "url": "https://www.vam.ac.uk/event/NQLX3Zer90P/ldf-sept-2026-eunjo-lee",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/NQLX3Zer90P/ldf-sept-2026-eunjo-lee",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "henry-svendsen-lovers-hold|2026-09-12|v-south-kensington",
+      "description": "Drawing on furniture designed for closeness, such as the loveseat, a series of viscous, grotto-like forms are suspended around stainless steel armatures, supporting multiple bodies in states of repose. Evoking the improvised and temporary nature of outdoor cruising sites, the sculptures materialise fleeting moments of contact, appearing as accumulated traces of desire. The work considers how bodies gather through structures not originally designed to hold them, and what it means to rest, lean, linger, and make contact in public space. Curated by Kristian Volsing. Produced by Katya Spiers. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/19/12/04/18/2effcc25-3d8f-4fe6-8e3c-5c8638b26fca/henry-svendsen-lovers-hold_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Henry Svendsen - Lovers Hold",
+      "url": "https://www.vam.ac.uk/event/7vMb8br63m3/ldf-sept-2026-henry-svendsen",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/7vMb8br63m3/ldf-sept-2026-henry-svendsen",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "linda-dounia-once-upon-garden|2026-09-12|v-south-kensington",
+      "description": "This work is a speculative archive of critically endangered and extinct flora that we have little to no records of, and therefore no way to remember. The artist uses AI as a time machine to piece together visual data about flowers we didn’t bother recording using sparse and fragmented available records. This final chapter of Dounia’s Once Upon A Garden project presents 50 emergent species of speculative flora made using image-to-image technology, tracing generative AI model evolution over time. The resulting flowers expose how AI models rely on mediated data and are made possible by machinery built with natural resources. During Digital Design Weekend (18-20 September), join a drop-in activity inspired by the artist's speculative flora and use collage to imagine a new flower shaped by memory, nature and imagination. Curated by Laura Herman and Marc Barto, produced by Nick Murray. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/07/31/16/35/06/05855b95-fa3b-496d-9a7a-b782ccbaacc7/once-upon-a-garden-display-by-linda-dounia-rebeiz_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Linda Dounia - Once Upon A Garden",
+      "url": "https://www.vam.ac.uk/event/GnxBVLnLN2v/once-upon-a-garden-sept-oct-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/GnxBVLnLN2v/once-upon-a-garden-sept-oct-2026",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "nina-davies-image-syncers|2026-09-12|v-south-kensington",
+      "description": "The artist examines a near future where images no longer depict the world. Grounded in viral TikTok trends where users mimic uncanny AI-generated dances, the work considers how people can adapt themselves to computational aesthetics. Presented as an episode of a fictional podcast, the central video essay charts a mysterious collective attempting to physically transform themselves into AI-generated figures. Holographic forms appear as spectral stand-ins for the film’s characters, while surrounding vitrines display their personal belongings, smartphones, and analogue props such as costume and makeup used in their transformation process. Curated by Carrie Chan and produced by Faunsia Tucker. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/18/16/52/34/d6b7ad7e-b665-4f48-acbb-38f0c1a6cb92/nina-davies-image-syncers_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Nina Davies - Image Syncers",
+      "url": "https://www.vam.ac.uk/event/yx2N4pxNeDe/ldf-sept-2026-nina-davies",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/yx2N4pxNeDe/ldf-sept-2026-nina-davies",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 18 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "sam-ghantous-your-golf-course-made-my-gpu|2026-09-12|v-south-kensington",
+      "description": "The installation considers sand as the substrate onto which societies repeatedly project their desires and aspirations for progress. Works in the show draw together imagery and material products that capture the travel and state changes of sand. The microchip industry, artificial islands, and quartz crystals implicate computing with earthly transformation. By reconnecting digital technologies to their geological origins, the project asks how visions of progress become embedded in matter, and how the futures we imagine remain inseparable from the earth that makes them possible. Curated by Kristian Volsing. Produced by Katya Spiers. Part of V&A x LDF 2026 #LDF26",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/08/17/14/44/08/bdcbdb04-9a5c-4321-8815-084c927b94e6/ldf-sept-2026-sam-ghantous_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Sam Ghantous - your golf course made my gpu",
+      "url": "https://www.vam.ac.uk/event/mbyKoqRwZR3/ldf-sept-2026-sam-ghantous",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/mbyKoqRwZR3/ldf-sept-2026-sam-ghantous",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Sunday, 28 February 2027",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "saodat-ismailova-melted-into-sun|2026-09-12|v-south-kensington",
+      "description": "Saodat Ismailova's work explores the relationships between memory, perception, mythology, and the moving image. Drawing on the intellectual and oral traditions of Central Asia, she investigates how different forms of knowledge are transmitted, transformed, and contested across time. Melted Into the Sun is inspired by the enigmatic figure of Al-Muqannaʿ (‘The Veiled One’), an eighth-century mystic and political rebel from southern Central Asia. His legacy is marked by conflicting interpretations: celebrated by Soviet historians as a proto-socialist revolutionary, yet remembered in many Islamic traditions as an impostor. The film traces the echoes of his presence through landscapes associated with his life and legend. According to legend, Al-Muqannaʿ concealed a light so intense that it would blind anyone who looked upon it. Ismailova transforms the veil into a meditation on the instability of truth, exploring how myths, histories, and images continually shape—and reshape—our understanding of reality.",
+      "ends_at": "2027-02-28T00:00:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/07/14/16/09/42/d024dc51-2e72-4a74-9129-323160c7c9be/saodat-ismailova-melted-into-the-sun_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-11T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Saodat Ismailova: Melted Into the Sun",
+      "url": "https://www.vam.ac.uk/event/qNX8p578x5/saodat-ismailova-melted-into-the-sun-2026-27",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/qNX8p578x5/saodat-ismailova-melted-into-the-sun-2026-27",
+    "type": "Display",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026",
+    "event": null,
+    "id": "event/GMgr53KE7K/educators-connect-the-music-is-black",
+    "type": "Special event",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "Friday, 2 October 2026 – Monday, 19 October 2026",
+    "event": null,
+    "id": "event/N1YgO46xz5/yva-mini-play-for-babies-oct-2026",
+    "type": "Special event",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "Friday, 2 October 2026 – Monday, 19 October 2026",
+    "event": null,
+    "id": "event/mOkbmW80vl/yva-mini-play-for-toddlers-oct-2026",
+    "type": "Special event",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "Saturday, 3 October 2026",
+    "event": {
+      "address": "2 Parkes Street, London E20 3AX",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "sansetsukon-x-es-devlin-milk|2026-10-03|v-east-storehouse",
+      "description": "In MILK, Sansetsukon brings movement into the gallery, creating a dialogue between the performers, The Everythingists and the surrounding space. The performance draws on influences behind Devlin’s installation, including Rayonism and its idea of ‘new’ art doing battle with the old. It also responds to Devlin’s ideas of ‘centaurs’ (humans empowered by machines) and ‘reverse-centaurs’ (machines empowered by humans), exploring the relationship between people, technology and creativity. Dancers move through and around the gallery to a soundscape created by layering and reworking audio from The Everythingists. Light and shadow interact with the performers and surrounding space, offering audiences a new way to experience Devlin’s installation. MILK is a 25–30 minute performance taking place at 2pm, 5pm and 8pm. Dancers: Joshua Shanny-Wynter Deavion Brown Robbie Ordoña Peter Butler Tania Dimbelolo Lois Samphier Anna Watanabe Production Assistant: Becky Wong Composer: Serian Griffiths Sound Designer: Nana Nakashima Lighting Designer/operator: Oliver Pritchard @sansetsukon.mtm",
+      "ends_at": "2026-10-03T19:30:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/09/22/10/49/39/bb023a56-ae6b-4e5c-9034-bf95f2193cbe/sansetsukon-x-es-devlin-milk_320.jpg",
+      "lat": 51.546,
+      "lng": -0.0225,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-03T13:00:00Z",
+      "tags": [
+        "special event"
+      ],
+      "title": "Sansetsukon x Es Devlin: MILK",
+      "url": "https://www.vam.ac.uk/event/D2WelY5wzd5/sansetsukon-x-es-devlin-milk-oct-2026",
+      "venue_name": "V&A East Storehouse"
+    },
+    "id": "event/D2WelY5wzd5/sansetsukon-x-es-devlin-milk-oct-2026",
+    "type": "Special event",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "Every Saturday until 19 December 2026",
+    "event": null,
+    "id": "event/d65jAdYWxaK/remarkable-women-tour",
+    "type": "Tour",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Saturday, 12 December 2026",
+    "event": null,
+    "id": "event/7wZNrLkxP1/african-caribbean-heritage-tour-past-meets-present",
+    "type": "Tour",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Monday, 30 November 2026",
+    "event": null,
+    "id": "event/DADWAlMRm9R/dementia-friendly-closer-look-tour-june-nov-2026",
+    "type": "Tour",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Monday, 28 September 2026",
+    "event": null,
+    "id": "event/L5O6ANEEL3a/members-tour-inspired-by-animals-1",
+    "type": "V&A Membership tour",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Thursday, 1 October 2026",
+    "event": null,
+    "id": "event/lOqlxAKVGM9/members-welcome-tour-01-10-2026",
+    "type": "V&A Membership tour",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Wednesday, 30 September 2026",
+    "event": null,
+    "id": "event/QKxoJPqP0y/v-a-illustration-awards-collections-workshop-2026",
+    "type": "Workshop",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "Wednesday, 23 September 2026 – Thursday, 10 December 2026",
+    "event": null,
+    "id": "event/a49kb4P2Je2/sto-schools-colleges-in-person-workshops-autumn-2026",
+    "type": "Workshop",
+    "venue": "V&A East Storehouse"
+  },
+  {
+    "date_text": "Saturday, 3 October 2026",
+    "event": {
+      "address": "Cromwell Road, London SW7 2RL",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "making-from-fragments-ceramics-workshop|2026-10-03|v-south-kensington",
+      "description": "Pottery fragments are among some of the most common discoveries in archaeology, offering clues about everyday life and craft traditions. Join artist Charlie Brookes for this hands-on workshop, where you will take on the role of experimental archaeologists. Explore ceramic fragments from the museum’s collection and use them as inspiration to imagine and reconstruct new forms. Working with clay and coloured slips, you will design and model your own ceramic vessels and forms inspired by the shapes, textures, and decorative traces found in historic shards. Through guided making and discussion, the workshop will explore the processes of archaeological interpretation, conservation, and traditional pottery production. Finished pieces will be fired at the museum and available for collection at a later date. There are 2 workshops on this day: 10:30 - 13:00 for ages 13-17 14:00 - 16:30 for ages 18-26 Book the relevant course on the right For participants under 18, please get a parent or guardian to download the brochure on this page (located above the \"Book Now\" button) and email the completed form to youngpeople@vam.ac.uk before the event.",
+      "ends_at": "2026-10-03T15:30:00Z",
+      "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/10/37/54/77d3d223-44b5-4025-8f20-9fe63feaf2d6/making-from-fragments-ceramics-workshop_320.jpg",
+      "lat": 51.4966,
+      "lng": -0.1722,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "20"
+      },
+      "starts_at": "2026-10-03T09:30:00Z",
+      "tags": [
+        "workshop"
+      ],
+      "title": "Making from Fragments Ceramics Workshop",
+      "url": "https://www.vam.ac.uk/event/jkJy24ob5y/making-from-fragments-ceramic-workshop-oct-2026",
+      "venue_name": "V&A South Kensington"
+    },
+    "id": "event/jkJy24ob5y/making-from-fragments-ceramic-workshop-oct-2026",
+    "type": "Workshop",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "date_text": "On now until Friday, 23 October 2026",
+    "event": null,
+    "id": "event/Znv9amob1v/sound-explorers-sept-oct-2026",
+    "type": "Drop-in",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "On now until Friday, 23 October 2026",
+    "event": null,
+    "id": "event/EOak9MOewWL/play-after-school-sept-oct-2026",
+    "type": "Drop-in",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "On now until Saturday, 19 December 2026",
+    "event": null,
+    "id": "event/7RD9X6lEyB/play-saturdays-sept-dec-2026",
+    "type": "Drop-in",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "Saturday, 1 August 2026 – Saturday, 5 December 2026",
+    "event": null,
+    "id": "event/Q007lPeed6d/send-play-jul-dec-2026",
+    "type": "Drop-in",
+    "venue": "Young V&A"
+  },
+  {
+    "date_text": "Saturday, 18 April 2026 - Sunday, 18 October 2026",
+    "event": null,
+    "id": "event/YzLZqyM196/the-long-goodbye-carrie-mae-weems",
+    "type": "Film screening",
+    "venue": "V&A East Museum"
+  },
+  {
+    "date_text": "Sunday 27 September",
+    "event": null,
+    "id": "event/3GeoXj4zQJ/film-club-labyrinth-q-a",
+    "type": "Film screening",
+    "venue": "V&A South Kensington"
+  }
+]
