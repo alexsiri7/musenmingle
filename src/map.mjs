@@ -42,6 +42,26 @@ export function walkLabel(km) {
   return "≈ " + walkMinutes(km) + " min walk · " + km.toFixed(1) + " km";
 }
 
+/// Public-transport time is only worth asking for from this far (km; the
+/// server's transit::MIN_TRANSIT_KM).
+export const MIN_TRANSIT_KM = 1.5;
+
+/// "lat,lng" on the ~200 m grid the server rounds transit origins to, so
+/// the exact position never leaves the device.
+export function transitOrigin(here) {
+  const snap = (x, g) => {
+    const s = (Math.round(x / g) * g).toFixed(3);
+    return s === "-0.000" ? "0.000" : s;
+  };
+  return snap(here.lat, 0.002) + "," + snap(here.lng, 0.003);
+}
+
+/// " · 🚇 18 min" for a `/v1/transit` answer with a journey, else "".
+export function transitSuffix(r) {
+  const t = r && r.transit;
+  return t && typeof t.minutes === "number" ? " · 🚇 " + t.minutes + " min" : "";
+}
+
 /// Same as `area_distance` in src/web/map.rs.
 export function areaLabel(km) {
   return km < 0.1 ? "At the area centre" : km.toFixed(1) + " km from area centre";
@@ -334,6 +354,56 @@ function start() {
     });
   }
 
+  // Public-transport time for the cards in view (from the ~200 m-rounded
+  // position, two lookups at a time); walking only when it isn't quicker
+  // or the planner doesn't answer.
+  let transitObserver = null;
+  function transitForCards(events) {
+    if (transitObserver) transitObserver.disconnect();
+    if (!state.here || typeof IntersectionObserver === "undefined" || typeof fetch !== "function") return;
+    const from = transitOrigin(state.here);
+    const queue = [];
+    let active = 0;
+    const pump = () => {
+      while (active < 2 && queue.length) {
+        const { art, id } = queue.shift();
+        active++;
+        fetch("/v1/transit?from=" + encodeURIComponent(from) + "&event=" + encodeURIComponent(id), {
+          headers: { Accept: "application/json" },
+        })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((r) => {
+            const suffix = transitSuffix(r);
+            const walk = art.querySelector('[data-slot="walk"]');
+            if (suffix && walk && walk.textContent) walk.textContent += suffix;
+          })
+          .catch(() => {})
+          .finally(() => {
+            active--;
+            pump();
+          });
+      }
+    };
+    const byArt = new Map();
+    for (const e of events) {
+      if (typeof e.km !== "number" || e.km < MIN_TRANSIT_KM) continue;
+      const art = list.querySelector("#ev-" + CSS.escape(e.id));
+      if (art) byArt.set(art, e.id);
+    }
+    transitObserver = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          if (!en.isIntersecting) continue;
+          transitObserver.unobserve(en.target);
+          queue.push({ art: en.target, id: byArt.get(en.target) });
+        }
+        pump();
+      },
+      { rootMargin: "100px" }
+    );
+    for (const art of byArt.keys()) transitObserver.observe(art);
+  }
+
   async function loadHere() {
     status.textContent = "Loading what's on in London…";
     let raw;
@@ -349,7 +419,7 @@ function start() {
       raw.map((e) => eventFromJson(e, nowIso))
     ).slice(0, LIST_MAX);
     status.textContent =
-      "Sorted by walking distance from where you are. Your location stays on this device.";
+      "Sorted by walking distance from where you are. Public transport times use your position rounded to about 200 m.";
     renderHere();
   }
 
@@ -361,6 +431,7 @@ function start() {
     list.replaceChildren();
     for (const e of events) list.appendChild(renderCard(tpl, e));
     enhanceCards(list);
+    transitForCards(events);
     const empty = doc.getElementById("near-empty");
     if (empty) empty.hidden = true;
     if (count) {

@@ -255,3 +255,50 @@ test("roundPosition keeps about 100 m of precision", () => {
   assert.equal(app.roundPosition(51.5, -0.0001), "51.500,0.000");
   assert.equal(app.roundPosition(51.5325, -0.1), "51.533,-0.100");
 });
+
+test("transitOrigin snaps to the server's ~200 m grid", () => {
+  assert.equal(app.transitOrigin(51.53212, -0.12348), "51.532,-0.123");
+  assert.equal(app.transitOrigin(51.5074, -0.1278), "51.508,-0.129");
+  assert.equal(app.transitOrigin(0.0004, -0.0001), "0.000,0.000");
+});
+
+test("walkEstimate matches the map's walking pace", () => {
+  const w = app.walkEstimate(51.5074, -0.1278, 51.532, -0.106);
+  assert.equal(Math.round(w.km * 10) / 10, 3.1);
+  assert.equal(w.minutes, Math.round(((w.km * 1.3) / 5) * 60));
+});
+
+test("transitView shows transit only when there is a journey", () => {
+  const ok = app.transitView({
+    status: "ok",
+    walk: { minutes: 34, km: 2.2 },
+    transit: {
+      minutes: 18,
+      summary: "Overground + 5 min walk",
+      provider: "TfL",
+      links: [
+        { label: "Plan on TfL", url: "https://tfl.gov.uk/plan-a-journey/results?x=1" },
+        { label: "Bad", url: "javascript:alert(1)" },
+      ],
+    },
+  });
+  assert.equal(ok.walk, "≈ 34 min walk · 2.2 km");
+  assert.equal(ok.transit, "🚇 18 min by public transport");
+  assert.equal(ok.detail, "Overground + 5 min walk · via TfL");
+  assert.deepEqual(
+    ok.links.map((l) => l.label),
+    ["Plan on TfL"]
+  );
+  const walkOnly = app.transitView({ status: "not_faster", walk: { minutes: 12, km: 0.9 }, transit: null });
+  assert.deepEqual(walkOnly, { walk: "≈ 12 min walk · 0.9 km", transit: "", detail: "", links: [] });
+  // The server didn't answer: the browser's own walking estimate.
+  const fallback = app.transitView(null, { minutes: 20, km: 1.33 });
+  assert.equal(fallback.walk, "≈ 20 min walk · 1.3 km");
+  assert.equal(app.transitView(null, null), null);
+});
+
+test("transitBadge", () => {
+  assert.equal(app.transitBadge({ transit: { minutes: 18 } }), "🚇 18 min");
+  assert.equal(app.transitBadge({ status: "short_walk", transit: null }), "");
+  assert.equal(app.transitBadge(null), "");
+});

@@ -44,6 +44,8 @@ pub struct AppState {
     pub(crate) quick_picks: Arc<crate::web::QuickPickCache>,
     /// The London map tiles (`/tiles/london.pmtiles`), when present.
     pub tiles: Option<Arc<crate::web::map::TileFile>>,
+    /// Public-transport times (`/v1/transit`); `None` = walking only.
+    pub transit: Option<Arc<crate::transit::Transit>>,
 }
 
 /// Settings for [`router`] beyond the database and suggestions.
@@ -68,6 +70,18 @@ pub fn router_with_tiles(
     settings: ApiSettings,
     tiles: Option<&std::path::Path>,
 ) -> Router {
+    router_with(pool, suggestions, settings, tiles, None)
+}
+
+/// [`router_with_tiles`] plus the public-transport service behind
+/// `GET /v1/transit` (without it, the endpoint answers "unavailable").
+pub fn router_with(
+    pool: PgPool,
+    suggestions: Suggestions,
+    settings: ApiSettings,
+    tiles: Option<&std::path::Path>,
+    transit: Option<crate::transit::Transit>,
+) -> Router {
     let tiles = tiles.and_then(crate::web::map::TileFile::open);
     let cors = CorsLayer::new()
         .allow_origin(AllowOrigin::list(settings.cors_origins))
@@ -79,6 +93,7 @@ pub fn router_with_tiles(
         .route("/v1/events/{id}", get(get_event))
         .route("/v1/events/{id}/similar", get(get_similar))
         .route("/v1/sources", get(list_sources))
+        .route("/v1/transit", get(get_transit))
         .route("/v1/suggestions", post(suggest))
         .merge(crate::web::routes())
         .merge(
@@ -95,6 +110,7 @@ pub fn router_with_tiles(
             github_repo: settings.github_repo.into(),
             quick_picks: Arc::default(),
             tiles,
+            transit: transit.map(Arc::new),
         })
 }
 
@@ -235,6 +251,89 @@ pub(crate) async fn submit_suggestion(
         .suggestions
         .submit(&state.pool, url, note, client)
         .await
+}
+
+/// `GET /v1/transit?from=lat,lng&event=<id>`: walking and (when it's
+/// quicker) public-transport time from `from` to the event's venue. `from`
+/// is rounded to ~200 m before it is used and is never logged or stored.
+/// Always 200 for a known event with valid parameters; `status` says why
+/// `transit` is null (`short_walk`, `not_faster`, `unavailable`,
+/// `outside_area`, `no_location`).
+async fn get_transit(
+    State(state): State<AppState>,
+    ConnectInfo(peer): ConnectInfo<SocketAddr>,
+    headers: HeaderMap,
+    RawQuery(raw): RawQuery,
+) -> Response {
+    use crate::transit::{LatLng, Outcome, distance_km, round_origin, walk_minutes};
+    let bad = |msg: &str| (StatusCode::BAD_REQUEST, Json(json!({ "error": msg }))).into_response();
+    let mut from = None;
+    let mut event = None;
+    for (k, v) in url::form_urlencoded::parse(raw.as_deref().unwrap_or("").as_bytes()) {
+        match k.as_ref() {
+            "from" => from = Some(v.into_owned()),
+            "event" => event = Some(v.into_owned()),
+            _ => {}
+        }
+    }
+    let Some(from) = from.as_deref().and_then(LatLng::parse) else {
+        return bad("from must be lat,lng");
+    };
+    let Some(id) = event.as_deref().and_then(|e| Uuid::parse_str(e).ok()) else {
+        return bad("event must be an event id");
+    };
+    let e = match repo::get_event(&state.pool, id).await {
+        Ok(Some(e)) => e,
+        Ok(None) => return ApiError::NotFound.into_response(),
+        Err(err) => return ApiError::Internal(err).into_response(),
+    };
+    let (Some(lat), Some(lng)) = (e.lat, e.lng) else {
+        return transit_json(Value::Null, Value::Null, "no_location");
+    };
+    let to = LatLng { lat, lng };
+    let (origin, _) = round_origin(from);
+    let km = distance_km(origin, to);
+    let walk = json!({ "minutes": walk_minutes(km), "km": (km * 10.0).round() / 10.0 });
+    let Some(transit) = &state.transit else {
+        return transit_json(walk, Value::Null, "unavailable");
+    };
+    let forwarded_for = headers
+        .get_all("x-forwarded-for")
+        .iter()
+        .filter_map(|v| v.to_str().ok());
+    let client = state.suggestions.client_ip(peer.ip(), forwarded_for);
+    let outcome = transit
+        .lookup(origin, to, e.venue_name.as_deref(), client, Utc::now())
+        .await;
+    match outcome {
+        Outcome::Journey {
+            journey,
+            provider,
+            links,
+        } => transit_json(
+            walk,
+            json!({
+                "minutes": journey.minutes,
+                "summary": journey.summary,
+                "modes": journey.modes,
+                "provider": provider,
+                "links": links,
+            }),
+            "ok",
+        ),
+        Outcome::ShortWalk => transit_json(walk, Value::Null, "short_walk"),
+        Outcome::NotFaster => transit_json(walk, Value::Null, "not_faster"),
+        Outcome::OutsideArea => transit_json(walk, Value::Null, "outside_area"),
+        Outcome::Unavailable => transit_json(walk, Value::Null, "unavailable"),
+    }
+}
+
+fn transit_json(walk: Value, transit: Value, status: &str) -> Response {
+    (
+        [(header::CACHE_CONTROL, "private, max-age=300")],
+        Json(json!({ "status": status, "walk": walk, "transit": transit })),
+    )
+        .into_response()
 }
 
 /// Read-API failures, rendered as `{"error": "..."}`.

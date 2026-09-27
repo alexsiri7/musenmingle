@@ -79,12 +79,15 @@ a new versioned directory, update `MAPLIBRE_DIR`/`PMTILES_DIR` and
 ## Location privacy
 
 "Use my exact coordinates" calls the browser's Geolocation API only when
-tapped (the `/map` and `/` responses set `Permissions-Policy:
+tapped (the `/map`, `/` and `/events/{id}` responses set `Permissions-Policy:
 geolocation=(self)`; every other response keeps `geolocation=()`). The
 position never leaves the browser: `map.mjs` fetches the London-wide
 `GET /v1/events?at=now` (or `at=today`) listing, which has no location in
 it, and computes distances and walking times itself. Without JavaScript,
 or if location is refused, the page lists events near an area preset.
+The one exception is public-transport times (issue #169): for cards in
+view that are at least 1.5 km away, `map.mjs` sends the position snapped
+to the ~200 m transit grid to `GET /v1/transit` (see below).
 
 The home page's "Near me" filter (issue #173) is different: "Use my
 location" rounds the position to 3 decimals (about 100 m) in `web.js` and
@@ -92,6 +95,27 @@ submits it as `here=<lat>,<lng>&walk=<10|20|30>`, which the server rounds
 again and turns into `near=` + `within_walk_min=` (the same 5 km/h × 1.3
 detour estimate as the map's "≈ N min walk"). The server keeps no request
 logs, so the position is not stored anywhere.
+
+## Public-transport times (`/v1/transit`)
+
+Issue #169. `src/transit.rs` puts journey planners behind a
+`TransitProvider` trait, chosen per city (`City`, a bounding box; London →
+`TflProvider`, the TfL Unified API Journey Planner, `TFL_APP_KEY`
+optional; `TRANSIT_LONDON=off` switches it off). The browser never calls a
+planner. The server snaps the origin to a 0.002° × 0.003° grid (~200 m)
+before anything else, skips the planner under 1.5 km (walking wins),
+caches answers in memory per (origin cell, venue, 15-minute departure
+bucket) for 15 minutes (failures for 2), throttles planner calls per client
+(40/min) and globally (250/min; TfL allows 500/min with a key), and gives up
+after 3 s. Any failure is "walking only". Nothing logs coordinates or the
+key (reqwest errors are mapped, never displayed).
+
+Where it shows: the event page's "Getting there" (automatic when the
+location permission is already granted, else a "Transit time" button; the
+event page therefore sets `geolocation=(self)` too), the home list's cards
+when sorted closest first from "Near me" (from the `here=` position), and
+`/map` cards in "Use my exact coordinates" mode. Cards look up only what
+scrolls into view, two at a time.
 
 ## Venue coordinates: `events.venues`
 

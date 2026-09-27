@@ -42,7 +42,17 @@ async fn main() -> anyhow::Result<()> {
     if redirect.is_active() {
         tracing::info!("redirecting legacy hosts to CANONICAL_HOST");
     }
-    let router = api::router_with_tiles(pool, suggestions, settings, Some(&config.tiles_path));
+    let transit = musenmingle::transit::Transit::from_config(&config.transit)?;
+    if transit.is_none() {
+        tracing::info!("public-transport times are switched off");
+    }
+    let router = api::router_with(
+        pool,
+        suggestions,
+        settings,
+        Some(&config.tiles_path),
+        transit,
+    );
     let app =
         host_redirect::apply(router, redirect).into_make_service_with_connect_info::<SocketAddr>();
     axum::serve(listener, app)

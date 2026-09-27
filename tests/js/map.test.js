@@ -173,3 +173,12 @@ test("London-wide fetch pages by cursor and never sends a location", async () =>
   for (const u of urls) assert.ok(!/near|lat|lng/.test(u), u);
   await assert.rejects(m.fetchLondon(async () => ({ ok: false, status: 500 }), "now"));
 });
+
+test("transit origin and card suffix", async () => {
+  const m = await load();
+  assert.equal(m.transitOrigin({ lat: 51.5074, lng: -0.1278 }), "51.508,-0.129");
+  assert.equal(m.transitSuffix({ status: "ok", transit: { minutes: 18 } }), " · 🚇 18 min");
+  assert.equal(m.transitSuffix({ status: "unavailable", transit: null }), "");
+  assert.equal(m.transitSuffix(null), "");
+  assert.equal(m.MIN_TRANSIT_KM, 1.5);
+});

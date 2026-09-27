@@ -638,6 +638,8 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `RATE_LIMIT_OVERRIDES` | ingest | — | `host=ms,host=ms` per-host overrides |
 | `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout |
 | `REQUESTY_API_KEY` | ingest | unset → AI enrichment and embeddings off | Requesty key ([AI enrichment](#ai-enrichment)) |
+| `TFL_APP_KEY` | api | unset → TfL's anonymous limits | TfL Unified API key for public-transport times (`/v1/transit`, docs/map.md) |
+| `TRANSIT_LONDON` | api | `tfl` | `off` switches London public-transport times off |
 | `ENRICH_MODEL` | ingest | `anthropic/claude-opus-5-5` | Chat model (needs a zero-retention `events.model_prices` row) |
 | `ENRICH_DAILY_CAP_USD` | ingest | `1.00` | Max Requesty spend per London day (enrichment + embeddings) |
 | `QA_MODEL` | ingest | `anthropic/claude-opus-5-5` | [Scraper QA](#scraper-qa) chat model (needs a zero-retention `events.model_prices` row) |
