@@ -416,6 +416,18 @@ async fn spend_caps_stop_calls_before_they_are_made() {
         .execute(&pool)
         .await
         .unwrap();
+    // The scraper QA check's spend has its own cap and never blocks enrichment.
+    store::record_pass_call(
+        &pool,
+        store::LedgerPass::Qa,
+        &store::CallRecord {
+            cost_usd: Decimal::from(50),
+            ..rec.clone()
+        },
+        now() - chrono::Duration::hours(1),
+    )
+    .await
+    .unwrap();
     let cands = store::candidates(&pool, now()).await.unwrap();
     let price = store::model_price(&pool, "anthropic/claude-opus-5-5")
         .await
@@ -902,6 +914,9 @@ async fn tag_filters_facets_and_the_labelled_ai_note() {
     assert!(about.contains(r#"<section id="ai""#));
     assert!(about.contains("zero data retention"));
     assert!(about.contains("Requesty itself may keep a log of our requests"));
+    // The scraper QA check is the one AI pass that sees page text.
+    assert!(about.contains("we send the text of the public event"));
+    assert!(about.contains("not the pages."));
     assert!(!about.contains("We don't use AI"));
     pool.close().await;
     db.drop_db().await;

@@ -13,6 +13,7 @@ use musenmingle::fetch::FetchContext;
 use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
 use musenmingle::health::{HealthChecker, HealthConfig};
 use musenmingle::notify::{LogNotifier, Notifier, Ntfy};
+use musenmingle::qa::QaChecker;
 use musenmingle::runner::{RunSummary, Runner};
 use musenmingle::{db, sources};
 
@@ -61,6 +62,17 @@ async fn main() -> anyhow::Result<()> {
         }
     };
 
+    let qa = match &config.requesty_api_key {
+        Some(key) if config.qa.max_checks_per_run > 0 => Some(QaChecker {
+            client: Requesty::new(&config.requesty_base_url, key)?,
+            config: config.qa.clone(),
+        }),
+        _ => {
+            tracing::info!("QA checks off (needs REQUESTY_API_KEY and QA_MAX_CHECKS_PER_RUN > 0)");
+            None
+        }
+    };
+
     let factory_config = config.clone();
     let runner = Runner {
         pool,
@@ -69,6 +81,7 @@ async fn main() -> anyhow::Result<()> {
         health: HealthChecker::new(HealthConfig::default(), filer),
         source_timeout: config.source_timeout,
         enrich,
+        qa,
     };
     match runner.run_once(Utc::now()).await? {
         RunSummary::Locked => tracing::info!("skipped: another run in progress"),
@@ -77,6 +90,7 @@ async fn main() -> anyhow::Result<()> {
                 tracing::info!(
                     source = %r.key, ok = r.ok, events = r.events_found, created = r.created,
                     skipped = r.skipped, errors = r.errors, health = ?r.health,
+                    qa_findings = r.qa_findings, qa_check = ?r.qa_check,
                     "source summary"
                 );
             }

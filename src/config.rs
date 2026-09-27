@@ -8,6 +8,7 @@ use axum::http::HeaderValue;
 use rust_decimal::Decimal;
 
 use crate::enrich::{EnrichConfig, OutputMode};
+use crate::qa::QaConfig;
 
 /// Default GitHub repository for health issues.
 pub const DEFAULT_GITHUB_REPO: &str = "alexsiri7/musenmingle";
@@ -195,6 +196,8 @@ pub struct Config {
     /// `REQUESTY_BASE_URL` (tests point it at a mock server).
     pub requesty_base_url: String,
     pub enrich: EnrichConfig,
+    /// Scraper QA checks (`QA_*`; they also need `REQUESTY_API_KEY`).
+    pub qa: QaConfig,
     /// ntfy topic for owner alerts (`NTFY_TOPIC`); unset = alerts are logged.
     pub ntfy_topic: Option<String>,
     pub ntfy_base_url: String,
@@ -267,6 +270,19 @@ impl EnrichConfig {
     }
 }
 
+impl QaConfig {
+    /// `QA_MODEL`, `QA_DAILY_CAP_USD` and `QA_MAX_CHECKS_PER_RUN` (see README).
+    pub fn from_env() -> Result<Self> {
+        let d = QaConfig::default();
+        Ok(QaConfig {
+            model: non_empty("QA_MODEL").unwrap_or(d.model),
+            daily_cap_usd: parse_usd("QA_DAILY_CAP_USD", d.daily_cap_usd)?,
+            max_checks_per_run: parse_env("QA_MAX_CHECKS_PER_RUN", d.max_checks_per_run)?,
+            ..d
+        })
+    }
+}
+
 fn non_empty(name: &str) -> Option<String> {
     std::env::var(name)
         .ok()
@@ -308,6 +324,7 @@ impl Config {
             requesty_base_url: non_empty("REQUESTY_BASE_URL")
                 .unwrap_or_else(|| crate::enrich::requesty::DEFAULT_BASE_URL.into()),
             enrich: EnrichConfig::from_env()?,
+            qa: QaConfig::from_env()?,
             ntfy_topic: non_empty("NTFY_TOPIC"),
             ntfy_base_url: non_empty("NTFY_BASE_URL")
                 .unwrap_or_else(|| crate::notify::DEFAULT_NTFY_BASE.into()),

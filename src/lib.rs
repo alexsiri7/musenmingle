@@ -21,6 +21,7 @@ pub mod matching;
 pub mod model;
 pub mod normalise;
 pub mod notify;
+pub mod qa;
 pub mod repo;
 pub mod runner;
 pub mod search;

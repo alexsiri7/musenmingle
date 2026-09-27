@@ -419,6 +419,7 @@ fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
         health: HealthChecker::new(HealthConfig::default(), Some(filer)),
         source_timeout: Duration::from_secs(1),
         enrich: None,
+        qa: None,
     }
 }
 

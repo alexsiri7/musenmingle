@@ -1759,6 +1759,13 @@ pub struct SourceStatusRow {
     pub open_issue_number: Option<i64>,
     pub skip_reason: Option<String>,
     pub skipped_at: Option<DateTime<Utc>>,
+    /// The latest scraper QA check that ran to a conclusion.
+    pub qa_checked_at: Option<DateTime<Utc>>,
+    pub qa_status: Option<String>,
+    /// Wrong fields + missed events it found.
+    pub qa_problems: Option<i32>,
+    /// QA rules hit by the latest run.
+    pub qa_rule_flags: i64,
 }
 
 pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>> {
@@ -1766,16 +1773,26 @@ pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>
         "SELECT s.key, s.display_name, s.kind, s.interval_minutes, s.enabled,
                 r.started_at AS run_started_at, r.events_found AS run_events_found,
                 r.errors AS run_errors, r.duration_ms AS run_duration_ms, r.ok AS run_ok,
-                h.github_issue_number AS open_issue_number, s.skip_reason, s.skipped_at
+                h.github_issue_number AS open_issue_number, s.skip_reason, s.skipped_at,
+                q.checked_at AS qa_checked_at, q.status AS qa_status,
+                q.wrong_fields + q.missed_events AS qa_problems,
+                (SELECT count(*) FROM events.qa_findings f WHERE f.run_id = r.id) AS qa_rule_flags
          FROM events.sources s
          LEFT JOIN LATERAL (
-             SELECT started_at, events_found, errors, duration_ms, ok
+             SELECT id, started_at, events_found, errors, duration_ms, ok
              FROM events.source_runs WHERE source_id = s.id
              ORDER BY started_at DESC, id DESC LIMIT 1
          ) r ON TRUE
+         LEFT JOIN LATERAL (
+             SELECT checked_at, status, wrong_fields, missed_events
+             FROM events.qa_checks
+             WHERE source_id = s.id AND status = ANY($1)
+             ORDER BY checked_at DESC, id DESC LIMIT 1
+         ) q ON TRUE
          LEFT JOIN events.health_issues h ON h.source_id = s.id AND h.closed_at IS NULL
          ORDER BY s.key",
     )
+    .bind(crate::qa::store::COMPLETED)
     .fetch_all(pool)
     .await
 }

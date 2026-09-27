@@ -2472,6 +2472,7 @@ async fn sources(State(state): State<AppState>) -> Response {
                             th scope="col" { "Events found" }
                             th scope="col" { "Errors" }
                             th scope="col" { "Health" }
+                            th scope="col" { "Checked" }
                         }
                     }
                     tbody {
@@ -2505,6 +2506,25 @@ async fn sources(State(state): State<AppState>) -> Response {
                                     // Present once sources record skips (#25).
                                     @if let Some(reason) = s["skip"]["reason"].as_str() {
                                         br; span class="small" { "Skipped: " (reason) }
+                                    }
+                                }
+                                td {
+                                    @let check = &s["qa"]["last_check"];
+                                    @match check["checked_at"].as_str().and_then(|t| t.parse::<DateTime<Utc>>().ok()) {
+                                        Some(t) => {
+                                            (time_tag(t, fmt_date(t)))
+                                            @match check["status"].as_str() {
+                                                Some("ok") => ": OK",
+                                                Some("issues") => {
+                                                    ": " (text(&check["problems"])) " issue(s) found"
+                                                }
+                                                _ => ": inconclusive",
+                                            }
+                                        }
+                                        None => "Not yet",
+                                    }
+                                    @if let Some(n) = s["qa"]["rule_flags"].as_i64().filter(|n| *n > 0) {
+                                        br; span class="small" { (n) " automatic check(s) flagged the last run" }
                                     }
                                 }
                             }
@@ -2644,8 +2664,16 @@ async fn about() -> Response {
                         li {
                             "It only sees facts we already store: title, venue, dates, category, the "
                             "listing's own labels, price, the short excerpt we keep (if any) and which "
-                            "sites list the event. We never fetch a page for it, and for sites whose "
-                            "terms limit reuse it gets just the basic facts."
+                            "sites list the event. We never fetch a page for these notes, and for sites "
+                            "whose terms limit reuse it gets just the basic facts."
+                        }
+                        li {
+                            "To check our collectors are reading sites correctly, about once a week per "
+                            "site (and after we change a collector) we send the text of the public event "
+                            "pages we collected, and what we extracted from them, to the same kind of "
+                            "zero-retention model to compare. It only flags mistakes for us to fix in our "
+                            "code: nothing it says is published or copied into listings, and we keep only "
+                            "its verdict with short quotes, not the pages."
                         }
                         li {
                             "Notes are labelled \u{201c}\u{2728} AI note\u{201d} and link here. They are our "

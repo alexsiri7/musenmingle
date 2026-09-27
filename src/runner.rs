@@ -8,7 +8,10 @@
 //!    check), and for the rest (sequentially, so per-domain politeness is trivially kept):
 //!    fetch with a timeout, normalise, drop past events, upsert, and record
 //!    an `events.source_runs` row (events found, errors, duration);
-//! 4. run the health checker for that source;
+//! 4. run the health checker for that source, then the scraper QA rules on
+//!    its normalised events (`crate::qa::rules`) and, when the source is due
+//!    one, the AI check of the pages its run fetched (`crate::qa`; page
+//!    capture is on only for that run);
 //! 5. bring stored rows in line with the sources' content policy
 //!    (`repo::enforce_content_policy`) and make missing thumbnails
 //!    (`crate::thumbs`) — every tick, even when no source was due;
@@ -24,7 +27,9 @@ use chrono::{DateTime, Utc};
 use sqlx::PgPool;
 
 use crate::fetch::FetchContext;
-use crate::health::{HealthAction, HealthChecker};
+use crate::health::{HealthAction, HealthChecker, RunStats};
+use crate::model::NewEvent;
+use crate::qa::rules::{self, Finding, RuleEvent};
 use crate::repo::{self, NewRun, SourceRow};
 use crate::sources::{SkipReason, Source};
 use crate::suggestions;
@@ -53,6 +58,9 @@ pub struct Runner {
     pub source_timeout: Duration,
     /// AI enrichment + embeddings (`None` without `REQUESTY_API_KEY`).
     pub enrich: Option<crate::enrich::Enricher>,
+    /// Scraper QA AI checks (`None` without `REQUESTY_API_KEY` or with
+    /// `QA_MAX_CHECKS_PER_RUN=0`); the rules run regardless.
+    pub qa: Option<crate::qa::QaChecker>,
 }
 
 /// Outcome of one source within a run.
@@ -65,6 +73,28 @@ pub struct SourceReport {
     pub skipped: i32,
     pub errors: i32,
     pub health: Option<HealthAction>,
+    /// Scraper QA rules hit by this run.
+    pub qa_findings: usize,
+    /// Status of the scraper QA check made after this run, if any.
+    pub qa_check: Option<String>,
+}
+
+/// A normalised event of a run, for the scraper QA rules and check.
+#[derive(Debug, Clone, PartialEq)]
+pub struct RunEvent {
+    pub source_event_id: String,
+    pub source_url: Option<String>,
+    pub event: NewEvent,
+    /// Stored (false: dropped as past, or the upsert failed).
+    pub kept: bool,
+}
+
+/// A source's run: its report, `events.source_runs` id and events.
+#[derive(Debug, Clone)]
+pub struct SourceRun {
+    pub report: SourceReport,
+    pub run_id: i64,
+    pub events: Vec<RunEvent>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -98,6 +128,7 @@ impl Runner {
         let due = repo::due_sources(&self.pool, now).await?;
         tracing::info!(count = due.len(), "sources due");
         let mut reports = Vec::new();
+        let mut qa_tick = crate::qa::QaTick::default();
         for row in due {
             let source = match (self.factory)(&row) {
                 Ok(source) => source,
@@ -107,14 +138,69 @@ impl Runner {
                     continue;
                 }
             };
-            let mut report = self.run_source(&row, source.as_ref(), now).await?;
-            report.health = match self.health.check_source(&self.pool, &row).await {
+            let qa_due = match &self.qa {
+                Some(qa) => qa
+                    .plan(&self.pool, &row, source.as_ref(), now, &qa_tick)
+                    .await
+                    .unwrap_or_else(|e| {
+                        tracing::error!(source = %row.key, error = %e, "planning the scraper check failed");
+                        None
+                    }),
+                None => None,
+            };
+            if qa_due.is_some() {
+                self.ctx.start_capture();
+            }
+            let run = self.run_source(&row, source.as_ref(), now).await;
+            let captured = self.ctx.finish_capture();
+            let mut run = run?;
+            run.report.health = match self.health.check_source(&self.pool, &row).await {
                 Ok(a) => Some(a),
                 Err(e) => {
                     tracing::error!(source = %row.key, error = %e, "health check failed");
                     None
                 }
             };
+            if run.report.ok {
+                let findings = self.qa_rules(&row, &run, now).await;
+                run.report.qa_findings = findings.len();
+                if let (Some(qa), Some(due)) = (&self.qa, qa_due) {
+                    let reason = due.reason.as_str();
+                    match qa
+                        .check(
+                            &self.pool,
+                            &self.ctx,
+                            &row,
+                            &run,
+                            captured,
+                            &findings,
+                            due,
+                            self.health.filer(),
+                            now,
+                            &mut qa_tick,
+                        )
+                        .await
+                    {
+                        Ok(o) => {
+                            tracing::info!(
+                                source = %row.key,
+                                reason,
+                                status = o.status,
+                                wrong = o.wrong,
+                                missed = o.missed,
+                                cost_usd = crate::enrich::usd(o.cost_usd),
+                                issue = ?o.issue,
+                                "scraper check finished"
+                            );
+                            run.report.qa_check = Some(o.status.to_string());
+                        }
+                        Err(e) => {
+                            tracing::error!(source = %row.key, error = %e, "scraper check failed")
+                        }
+                    }
+                }
+            }
+            let report = run.report;
             tracing::info!(?report, "source finished");
             reports.push(report);
         }
@@ -183,17 +269,76 @@ impl Runner {
         Ok(reports)
     }
 
+    /// Apply the scraper QA rules to a successful run and store their hits
+    /// (errors are logged: they never fail the tick).
+    async fn qa_rules(&self, row: &SourceRow, run: &SourceRun, now: DateTime<Utc>) -> Vec<Finding> {
+        let events: Vec<RuleEvent> = run
+            .events
+            .iter()
+            .map(|r| RuleEvent {
+                source_event_id: r.source_event_id.clone(),
+                title: r.event.title.clone(),
+                starts_at: r.event.starts_at,
+                ends_at: r.event.ends_at,
+                all_day: r.event.all_day,
+                venue_missing: r
+                    .event
+                    .venue_name
+                    .as_deref()
+                    .is_none_or(|v| v.trim().is_empty()),
+                coords_missing: r.event.lat.is_none() || r.event.lng.is_none(),
+                kept: r.kept,
+            })
+            .collect();
+        match self.store_rules(row, run.run_id, &events, now).await {
+            Ok(findings) => {
+                for f in &findings {
+                    tracing::warn!(
+                        source = %row.key,
+                        rule = f.rule.as_str(),
+                        affected = f.affected,
+                        detail = %f.detail,
+                        "QA rule hit"
+                    );
+                }
+                findings
+            }
+            Err(e) => {
+                tracing::error!(source = %row.key, error = %e, "scraper QA rules failed");
+                Vec::new()
+            }
+        }
+    }
+
+    async fn store_rules(
+        &self,
+        row: &SourceRow,
+        run_id: i64,
+        events: &[RuleEvent],
+        now: DateTime<Utc>,
+    ) -> sqlx::Result<Vec<Finding>> {
+        let history = crate::qa::store::run_history(&self.pool, row.id, run_id, 5).await?;
+        let runs = repo::recent_runs(&self.pool, row.id, 10).await?;
+        let stats: Vec<RunStats> = runs.iter().map(RunStats::from).collect();
+        let findings = rules::evaluate(events, &history, &stats, now);
+        crate::qa::store::record_run_stats(&self.pool, run_id, rules::RunCounts::of(events))
+            .await?;
+        crate::qa::store::insert_findings(&self.pool, run_id, row.id, &findings).await?;
+        Ok(findings)
+    }
+
     /// Run one source and record its `source_runs` row.
     pub async fn run_source(
         &self,
         row: &SourceRow,
         source: &dyn Source,
         now: DateTime<Utc>,
-    ) -> anyhow::Result<SourceReport> {
+    ) -> anyhow::Result<SourceRun> {
         let started_at = Utc::now();
         let _ = self.ctx.take_errors();
         let mut errors: Vec<String> = Vec::new();
         let (mut found, mut created, mut skipped) = (0i32, 0i32, 0i32);
+        let mut events: Vec<RunEvent> = Vec::new();
 
         let fetched = tokio::time::timeout(self.source_timeout, source.fetch(&self.ctx)).await;
         let ok = match fetched {
@@ -210,18 +355,27 @@ impl Runner {
                     match source.normalise(raw) {
                         Ok(None) => skipped += 1,
                         Ok(Some(ev)) => {
+                            let run_event = |kept| RunEvent {
+                                source_event_id: raw.source_event_id.clone(),
+                                source_url: raw.source_url.clone(),
+                                event: ev.clone(),
+                                kept,
+                            };
                             let last = ev.ends_at.unwrap_or(ev.starts_at);
                             if last < now - PAST_GRACE {
                                 skipped += 1;
+                                events.push(run_event(false));
                                 continue;
                             }
                             match repo::upsert_event(&self.pool, row.id, &ev, raw).await {
                                 Ok(o) => {
                                     found += 1;
                                     created += i32::from(o.created);
+                                    events.push(run_event(true));
                                 }
                                 Err(e) => {
-                                    errors.push(format!("upsert {}: {e}", raw.source_event_id))
+                                    errors.push(format!("upsert {}: {e}", raw.source_event_id));
+                                    events.push(run_event(false));
                                 }
                             }
                         }
@@ -248,7 +402,7 @@ impl Runner {
             Some(s)
         };
         let n_errors = i32::try_from(errors.len()).unwrap_or(i32::MAX);
-        repo::record_run(
+        let run_id = repo::record_run(
             &self.pool,
             &NewRun {
                 source_id: row.id,
@@ -261,14 +415,20 @@ impl Runner {
             },
         )
         .await?;
-        Ok(SourceReport {
-            key: row.key.clone(),
-            ok,
-            events_found: found,
-            created,
-            skipped,
-            errors: n_errors,
-            health: None,
+        Ok(SourceRun {
+            report: SourceReport {
+                key: row.key.clone(),
+                ok,
+                events_found: found,
+                created,
+                skipped,
+                errors: n_errors,
+                health: None,
+                qa_findings: 0,
+                qa_check: None,
+            },
+            run_id,
+            events,
         })
     }
 }
