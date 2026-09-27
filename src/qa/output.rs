@@ -196,12 +196,6 @@ pub fn validate(
         }
     }
 
-    if raw_missed.len() > MAX_MISSED {
-        problems.push(format!(
-            "missed_events: at most {MAX_MISSED}, got {}",
-            raw_missed.len()
-        ));
-    }
     let mut missed = Vec::new();
     for (i, m) in raw_missed.iter().enumerate() {
         let at = format!("missed_events[{i}]");
@@ -231,10 +225,17 @@ pub fn validate(
         }
     }
 
+    missed.retain(|m| !is_run_record(&m.title, all_records));
+    if missed.len() > MAX_MISSED {
+        problems.push(format!(
+            "missed_events: at most {MAX_MISSED} that aren't our records, got {}",
+            missed.len()
+        ));
+    }
+
     if !problems.is_empty() {
         return Err(problems.join("\n"));
     }
-    missed.retain(|m| !is_run_record(&m.title, all_records));
     Ok(Verdict { findings, missed })
 }
 
@@ -344,6 +345,18 @@ mod tests {
         .unwrap();
         assert!(v.missed.is_empty());
         assert_eq!(v.status(), "ok");
+    }
+
+    #[test]
+    fn the_missed_events_cap_counts_only_events_that_are_not_ours() {
+        let all = records();
+        let input = input(&all);
+        let ours = json!({"title": "Kept show", "evidence_quote": "Kept Show — 1 December"});
+        let other = json!({"title": "Print Fair", "evidence_quote": "Print Fair"});
+        let mut missed = vec![ours.clone(), ours];
+        missed.extend(std::iter::repeat_n(other, MAX_MISSED - 1));
+        let v = validate(&answer(json!([wrong_start()]), json!(missed)), &input, &all).unwrap();
+        assert_eq!(v.missed.len(), MAX_MISSED - 1);
     }
 
     #[test]
