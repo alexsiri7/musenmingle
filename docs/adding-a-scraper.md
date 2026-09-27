@@ -96,6 +96,43 @@ INSTA_UPDATE=always cargo test --test source_<key>   # then REVIEW the .snap fil
 cargo fmt && cargo clippy --all-targets --all-features -- -D warnings && cargo test
 ```
 
+## Adding a venue on The Events Calendar
+
+Many venue sites run WordPress with The Events Calendar (TEC). They share
+one implementation, `src/sources/tec.rs`, so a new TEC venue is a seed row,
+not code: `events.sources.platform` names the shared implementation
+(`'tec'`) and `events.sources.config` holds the venue's settings, which
+`sources::build` hands to it. Other shared platforms should reuse
+`platform`/`config` the same way (e.g. Artlogic, #52).
+
+1. Check robots.txt as above, against the exact URLs the source requests:
+   `/wp-json/tribe/events/v1/events?ends_after=…&per_page=50&page=1` and,
+   if used, the list view. Sites often disallow `/wp-json/` or `/*?`; then
+   the API is out and only the list view can be used.
+2. Probe the API once: `curl -A "$UA" 'https://<site>/wp-json/tribe/events/v1/events?per_page=1'`.
+   If it is off (404) or disallowed, find the TEC list view (usually
+   `/events/`, possibly redirected) and check that it has JSON-LD `Event`s.
+3. Note the venue's category slugs (from the API's `categories`) and
+   whether events carry a venue (`venue: []` means they don't).
+4. Read the terms and decide the content policy as for any other source.
+5. Save fixtures under `tests/fixtures/scrapers/tec-<venue>/` (robots.txt
+   plus `api-page-1.json` or `list.html`) and add a snapshot test to
+   `tests/source_tec.rs`; it normalises with the seed row's `config`.
+6. Add the row in a new migration with `platform = 'tec'` and a `config`
+   holding only what differs from the defaults:
+
+   | field | default | meaning |
+   |---|---|---|
+   | `api_path` | `"/wp-json/tribe/events/v1/events"` | `null` reads only the list view |
+   | `list_path` | none | list view to read when the API is off |
+   | `venue` | none | `{"name", "address"}` for events without a venue; also marks them as in London |
+   | `category_map` | `{}` | TEC category slug → category, checked first |
+   | `skip_categories` | `[]` | TEC category slugs to skip (films, music, tours, …) |
+   | `default_category` | none | category when neither the map nor keywords match |
+
+   An unknown field or category makes the row a recorded skip
+   (`invalid config`), not a crash.
+
 ## When a site can't be used
 
 If the investigation shows a site must not or cannot be scraped — robots.txt
