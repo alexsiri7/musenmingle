@@ -1,0 +1,417 @@
+---
+source: tests/source_horse_hospital.rs
+expression: out
+---
+[
+  {
+    "admission": "Doors 7pm Tickets £10-14 Sliding Scale",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "audrey-lyrics-helica"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets £10-18",
+    "categories": [
+      "Music",
+      "Improvisation",
+      "Performance",
+      "Sound"
+    ],
+    "event": null,
+    "source_event_id": "feedback-to-feedback"
+  },
+  {
+    "admission": "Doors 8pm Tickets £4-8",
+    "categories": [
+      "Music",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "clipping"
+  },
+  {
+    "admission": "Doors 7pm Tickets £10-14",
+    "categories": [
+      "Music",
+      "Dance"
+    ],
+    "event": null,
+    "source_event_id": "reona-ivor-kallin-aga-ujma-meat-strap"
+  },
+  {
+    "admission": "Doors 7pm Tickets £8-12",
+    "categories": [
+      "Music",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "un/stable-8"
+  },
+  {
+    "admission": "Doors 7pm Tickets £28.95",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "jay-jay-johanson"
+  },
+  {
+    "admission": "Doors 7pm Tickets £6-20 Sliding Scale",
+    "categories": [
+      "Talk"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "beyond-failure|2026-10-08|horse-hospital",
+      "description": "15 years ago, Failed Architecture launched. Through articles, podcasts, and events, FA reconnects architecture with the real world. Expect: poetry with Edwina Attlee ; panel discussion with Charlie Clemoes, Shumi Bose, Phineas Harper, Abiba Coulibaly and Kitya Mark ; DJ set with Lay Kus.",
+      "ends_at": "2026-10-08T21:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6a91602e71fd59428dce22f1/1790342903510/FA_EventPoster_Oct2026+-+mod+rev+1.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "6"
+      },
+      "starts_at": "2026-10-08T18:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Beyond Failure",
+      "url": "https://www.thehorsehospital.com/events/beyond-failure",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "beyond-failure"
+  },
+  {
+    "admission": "Doors 8pm Tickets £4",
+    "categories": [
+      "Talk"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "re-enchantment-readings-gab-torr-rory-mccarthy-imogen-cassels-waithera-sebatindira-julia-merican|2026-10-09|horse-hospital",
+      "description": "Re-Enchantment Readings return to The Horse Hospital, with readings from Gab Torr, Rory McCarthy, Imogen Cassels, Waithera Sebatindira, and Julia Merican.",
+      "ends_at": "2026-10-09T21:00:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6aa910c395ad0f53a3367ec1/1789465326626/Final+Oct+poster.png?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "4",
+        "min": "4"
+      },
+      "starts_at": "2026-10-09T18:30:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Re-Enchantment Readings: Gab Torr | Rory McCarthy | Imogen Cassels | Waithera Sebatindira | Julia Merican",
+      "url": "https://www.thehorsehospital.com/events/re-enchantment-readings-ocotber-2026",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "re-enchantment-readings-ocotber-2026"
+  },
+  {
+    "admission": "Doors 7pm Tickets £10-15",
+    "categories": [
+      "Music",
+      "Talk"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "either-ore-presents-odes-featuring-ted-milton-ron-seal-ish-meantime-shirley-crowe-matt-thorne|2026-10-13|horse-hospital",
+      "description": "Either Ore presents an evening of talk and live music. Featuring The Odes (featuring Ted Milton ), Ron Seal, Ish & The Meantime, Shirley Crowe, and Matt Thorne.",
+      "ends_at": "2026-10-13T21:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6a9e8daaffc02814450075c8/1788776599944/image.webp?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "10"
+      },
+      "starts_at": "2026-10-13T18:00:00Z",
+      "tags": [
+        "music",
+        "talk"
+      ],
+      "title": "Either Ore Presents: The Odes (featuring Ted Milton) | Ron Seal | Ish & The Meantime | Shirley Crowe | Matt Thorne",
+      "url": "https://www.thehorsehospital.com/events/either-ore-presents-the-odes-featuring-ted-milton-ron-seal-ish-the-meantime-shirley-crowe-matt-thorne",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "either-ore-presents-the-odes-featuring-ted-milton-ron-seal-ish-the-meantime-shirley-crowe-matt-thorne"
+  },
+  {
+    "admission": "Doors 7pm Tickets £12.70",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "sophia-djebel-rose"
+  },
+  {
+    "admission": "Doors 3:30pm Tickets £10-14",
+    "categories": [
+      "Music",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "david-birchall-kate-carr-tullis-rennie"
+  },
+  {
+    "admission": "Doors 7pm Free entry/donations OTD",
+    "categories": [
+      "Music",
+      "Performance",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "maggie-nicols-the-gathering-16"
+  },
+  {
+    "admission": "Doors 7pm Tickets £8-16",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "plus-minus-the-mad-moon-and-the-owls"
+  },
+  {
+    "admission": "Doors 6pm Tickets £15 standard, £10 concession, £20 solidarity",
+    "categories": [
+      "Music",
+      "Talk",
+      "Visual Art",
+      "Performance"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "rumours|2026-10-22|horse-hospital",
+      "description": "Rumours is a live programme tracing oral histories across the margins, engaging gossip as a form of insurgent knowledge, collective memory, and survival strategy. Live performances from āssia ghendir, The Landing Strip, Cliché Toupée, Meera Shakti Osborne, and Opashona Ghosh. With live visuals by Ⓐ DUDLEY Ⓔ",
+      "ends_at": "2026-10-22T22:00:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6ab10cb44f54bd081a49f25c/1789995014673/gossip-full-ig+FINAL-F.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "10"
+      },
+      "starts_at": "2026-10-22T17:00:00Z",
+      "tags": [
+        "music",
+        "talk",
+        "visual art",
+        "performance"
+      ],
+      "title": "Rumours",
+      "url": "https://www.thehorsehospital.com/events/rumoursii",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "rumoursii"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets £9-12",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "publicity-department"
+  },
+  {
+    "admission": "Doors 2pm Tickets: £10",
+    "categories": [
+      "Music",
+      "Talk"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "concrete-atlantis-present-megalithic-imperative|2026-10-25|horse-hospital",
+      "description": "Concrete Atlantis Present: The Megalithic Imperative- A Journey to the Centre of the Earth Mysteries, with Neil Mortimer editor of 3rd Stone magazine in conversation with Patricia Brien & Urthona in live performance",
+      "ends_at": "2026-10-25T17:00:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6aa119e5b7dfee42f966f44f/1790248155871/MI-cover-for-Travis+%281%29.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-10-25T14:00:00Z",
+      "tags": [
+        "music",
+        "talk"
+      ],
+      "title": "Concrete Atlantis Present: The Megalithic Imperative",
+      "url": "https://www.thehorsehospital.com/events/concrete-atlantis-the-megalithic-imperative",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "concrete-atlantis-the-megalithic-imperative"
+  },
+  {
+    "admission": "Doors 7pm Tickets £9-12",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "peiriant-osgled-amberant"
+  },
+  {
+    "admission": "Doors 7pm Tickets £10-14 Sliding Scale",
+    "categories": [
+      "Music",
+      "Performance",
+      "Sound"
+    ],
+    "event": null,
+    "source_event_id": "halloween-2026"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets: £13.77",
+    "categories": [
+      "Talk",
+      "Film"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "upset-rhythm-peoples-history-of-music|2026-11-03|horse-hospital",
+      "description": "Upset The Rhythm present a A People’s History of Music, a slideshow / lecture / film presentation which draws from archival film, sound clips and images to tell a history of global music scenes that struggled and endeavoured during periods of authoritarianism.",
+      "ends_at": "2026-11-03T23:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6a672c939def543c0f54aa91/1785492361846/MR%2Ba%2Bpeople%2527s%2Bhistory%2Bof%2Bmusic%2Bposter.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "13.77",
+        "min": "13.77"
+      },
+      "starts_at": "2026-11-03T19:30:00Z",
+      "tags": [
+        "talk",
+        "film"
+      ],
+      "title": "Upset The Rhythm: A People's History of Music",
+      "url": "https://www.thehorsehospital.com/events/a-peoples-history-of-music",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "a-peoples-history-of-music"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets £12-16",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "jasper"
+  },
+  {
+    "admission": "Doors 7pm Tickets £8-12 Sliding Scale",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "catholic-block"
+  },
+  {
+    "admission": "Doors 7pm Tickets £12",
+    "categories": [
+      "Music"
+    ],
+    "event": null,
+    "source_event_id": "odda-tara-cunningham-fohn"
+  },
+  {
+    "admission": "Doors 7pm Free entry/donations OTD",
+    "categories": [
+      "Music",
+      "Performance",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "maggie-nicols-the-gathering-17"
+  },
+  {
+    "admission": "Doors 7pm Tickets: £10",
+    "categories": [
+      "Music",
+      "Talk"
+    ],
+    "event": {
+      "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "concrete-atlantis-odditorium-present-ghosts-of-medicine-show|2026-12-07|horse-hospital",
+      "description": "A seasonally spooky outing from Concrete Atlantis and the Odditorium. Expect tales of the unexpected and out of this world glitchy TV signals and ethereal music. Words & pictures from Jak Hutchcraft and David Bramwell on the sounds of the afterlife and the shaman in showbiz, and a live set from Emma Tricca.",
+      "ends_at": "2026-12-07T22:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6ab504dbd0665d01fcc6e31b/1790261431407/19+very+final+image.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-12-07T19:00:00Z",
+      "tags": [
+        "music",
+        "talk"
+      ],
+      "title": "Concrete Atlantis and Odditorium present: Ghosts of the Medicine Show",
+      "url": "https://www.thehorsehospital.com/events/concrete-atlantis-odditorium",
+      "venue_name": "The Horse Hospital"
+    },
+    "source_event_id": "concrete-atlantis-odditorium"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets: £10-15",
+    "categories": [
+      "Music",
+      "Performance",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "discus-music-1"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets: £10-15",
+    "categories": [
+      "Music",
+      "Performance",
+      "Improvisation"
+    ],
+    "event": null,
+    "source_event_id": "discus-music-2"
+  },
+  {
+    "admission": "Doors 7:30pm Tickets: £10-15",
+    "categories": [
+      "Music",
+      "Performance",
+      "Improvisation",
+      "Dance"
+    ],
+    "event": null,
+    "source_event_id": "discus-music-3"
+  }
+]
