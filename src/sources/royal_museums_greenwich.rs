@@ -179,15 +179,22 @@ pub fn category<S: AsRef<str>>(types: &[S], title: &str) -> Option<Category> {
     }
 }
 
-/// A printed day, "Thursday 1 October 2026" or "Wednesday 7 October" (the
-/// year then taken from `year`).
-pub fn parse_day(s: &str, year: i32) -> Option<NaiveDate> {
+/// A printed day, "Thursday 1 October 2026" or "Wednesday 7 October". A
+/// day without a year is taken within half a year of `near` (the feed's
+/// possibly stale `start_date`); `None` if its printed weekday matches no
+/// such day.
+pub fn parse_day(s: &str, near: NaiveDate) -> Option<NaiveDate> {
+    const FORMATS: [&str; 2] = ["%A %d %B %Y", "%d %B %Y"];
     let s = clean_text(s);
-    let with_year = format!("{s} {year}");
-    ["%A %d %B %Y", "%d %B %Y"].iter().find_map(|f| {
-        NaiveDate::parse_from_str(&s, f)
-            .or_else(|_| NaiveDate::parse_from_str(&with_year, f))
-            .ok()
+    let parse = |text: &str| {
+        FORMATS
+            .iter()
+            .find_map(|f| NaiveDate::parse_from_str(text, f).ok())
+    };
+    parse(&s).or_else(|| {
+        (near.year() - 1..=near.year() + 1)
+            .filter_map(|year| parse(&format!("{s} {year}")))
+            .find(|day| (*day - near).num_days().abs() <= 183)
     })
 }
 
@@ -252,7 +259,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         }
         let times = item.times.as_deref().unwrap_or_default();
         let mut parts = times.split('|').map(clean_text).filter(|p| !p.is_empty());
-        let Some(day) = parts.next().and_then(|p| parse_day(&p, first.year())) else {
+        let Some(day) = parts.next().and_then(|p| parse_day(&p, first)) else {
             return Ok(None);
         };
         let rest: Vec<String> = parts.collect();
@@ -357,17 +364,19 @@ mod tests {
 
     #[test]
     fn parses_days_and_times() {
+        let near = d("2026-10-01");
         assert_eq!(
-            parse_day("Thursday 1 October 2026", 2026),
+            parse_day("Thursday 1 October 2026", near),
             Some(d("2026-10-01"))
         );
         assert_eq!(
-            parse_day("Wednesday 7 October", 2026),
+            parse_day("Wednesday 7 October", near),
             Some(d("2026-10-07"))
         );
-        assert_eq!(parse_day("12 November", 2026), Some(d("2026-11-12")));
-        assert_eq!(parse_day("Friday 1 October 2026", 2026), None);
-        assert_eq!(parse_day("Saturdays from October 2026", 2026), None);
+        assert_eq!(parse_day("12 November", near), Some(d("2026-11-12")));
+        assert_eq!(parse_day("Friday 1 October 2026", near), None);
+        assert_eq!(parse_day("Friday 1 October", near), None);
+        assert_eq!(parse_day("Saturdays from October 2026", near), None);
         assert_eq!(parse_time("6.30pm"), Some((t("18:30"), None)));
         assert_eq!(parse_time("6-8pm"), Some((t("18:00"), Some(t("20:00")))));
         assert_eq!(
@@ -460,6 +469,28 @@ mod tests {
         .unwrap()
         .unwrap();
         assert_eq!(e.starts_at.to_rfc3339(), "2027-01-26T19:00:00+00:00");
+    }
+
+    #[test]
+    fn yearless_day_takes_the_year_nearest_a_stale_start_date() {
+        let start = |days: (&str, &str), times: &str| {
+            normalise_payload(&item(&["Talks and tours"], days, times))
+                .unwrap()
+                .map(|e| e.starts_at.to_rfc3339())
+        };
+        let stale = ("2026-12-28", "2026-12-28");
+        assert_eq!(
+            start(stale, "Tuesday 5 January | 7pm").as_deref(),
+            Some("2027-01-05T19:00:00+00:00")
+        );
+        assert_eq!(
+            start(stale, "5 January | 7pm").as_deref(),
+            Some("2027-01-05T19:00:00+00:00")
+        );
+        assert_eq!(
+            start(("2027-01-04", "2027-01-04"), "Monday 28 December | 7pm").as_deref(),
+            Some("2026-12-28T19:00:00+00:00")
+        );
     }
 
     #[test]
