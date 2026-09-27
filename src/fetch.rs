@@ -12,6 +12,11 @@
 //!
 //! The underlying `reqwest::Client` is private on purpose; do not add an
 //! accessor for it.
+//!
+//! While capture is on ([`FetchContext::start_capture`]), the bodies of
+//! [`FetchContext::get_text`] and [`FetchContext::get_json`] responses are
+//! also kept for the scraper QA check (`crate::qa`), which compares them with
+//! what the run extracted: bodies only, the client stays private.
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex as StdMutex};
@@ -66,6 +71,21 @@ pub struct FetchedBytes {
     pub etag: Option<String>,
     pub last_modified: Option<String>,
 }
+
+/// A response body kept while capture is on.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CapturedPage {
+    /// Redacted ([`redact`]): query strings may hold API keys.
+    pub url: String,
+    pub body: String,
+    /// Fetched with [`FetchContext::get_json`] (an API response, not HTML).
+    pub json: bool,
+}
+
+/// Bodies larger than this are not captured.
+pub const MAX_CAPTURE_BYTES: usize = 2_000_000;
+/// At most this many pages are captured per capture.
+pub const MAX_CAPTURED_PAGES: usize = 60;
 
 /// Strip the query string (which may contain API keys) for logs and errors.
 pub fn redact(url: &Url) -> String {
@@ -159,6 +179,7 @@ pub struct FetchContext {
     limiter: RateLimiter,
     robots: Mutex<HashMap<String, Arc<RobotsPolicy>>>,
     soft_errors: StdMutex<Vec<String>>,
+    capture: StdMutex<Option<Vec<CapturedPage>>>,
 }
 
 impl FetchContext {
@@ -173,6 +194,7 @@ impl FetchContext {
             limiter: RateLimiter::new(rate_limit),
             robots: Mutex::new(HashMap::new()),
             soft_errors: StdMutex::new(Vec::new()),
+            capture: StdMutex::new(None),
         })
     }
 
@@ -190,6 +212,34 @@ impl FetchContext {
     /// Drain the non-fatal errors reported since the last call.
     pub fn take_errors(&self) -> Vec<String> {
         std::mem::take(&mut *self.soft_errors.lock().expect("soft errors poisoned"))
+    }
+
+    /// Start keeping the bodies of `get_text` / `get_json` responses.
+    pub fn start_capture(&self) {
+        *self.capture.lock().expect("capture poisoned") = Some(Vec::new());
+    }
+
+    /// Stop capturing and return what was kept, in fetch order.
+    pub fn finish_capture(&self) -> Vec<CapturedPage> {
+        self.capture
+            .lock()
+            .expect("capture poisoned")
+            .take()
+            .unwrap_or_default()
+    }
+
+    fn keep(&self, url: &Url, body: &str, json: bool) {
+        let mut capture = self.capture.lock().expect("capture poisoned");
+        if let Some(pages) = capture.as_mut()
+            && body.len() <= MAX_CAPTURE_BYTES
+            && pages.len() < MAX_CAPTURED_PAGES
+        {
+            pages.push(CapturedPage {
+                url: redact(url),
+                body: body.to_string(),
+                json,
+            });
+        }
     }
 
     fn origin_and_host(url: &Url) -> Result<(String, String), FetchError> {
@@ -257,14 +307,17 @@ impl FetchContext {
 
     /// GET and return the body as text.
     pub async fn get_text(&self, url: &Url) -> Result<String, FetchError> {
-        self.get(url)
+        let body = self
+            .get(url)
             .await?
             .text()
             .await
             .map_err(|e| FetchError::Http {
                 url: redact(url),
                 source: e.without_url(),
-            })
+            })?;
+        self.keep(url, &body, false);
+        Ok(body)
     }
 
     /// GET a binary body (e.g. an image for the thumbnailer), refusing
@@ -325,6 +378,7 @@ impl FetchContext {
                 url: redact(url),
                 source: e.without_url(),
             })?;
+        self.keep(url, &String::from_utf8_lossy(&bytes), true);
         serde_json::from_slice(&bytes).map_err(|e| FetchError::Decode {
             url: redact(url),
             message: e.to_string(),
@@ -399,6 +453,56 @@ mod tests {
         assert_eq!(
             redact(&u("https://api.test/x.json?apikey=SECRET&page=1")),
             "https://api.test/x.json"
+        );
+    }
+
+    #[tokio::test]
+    async fn capture_keeps_text_and_json_bodies_only_while_on() {
+        use wiremock::matchers::{method, path};
+        use wiremock::{Mock, MockServer, ResponseTemplate};
+
+        let server = MockServer::start().await;
+        Mock::given(method("GET"))
+            .and(path("/page"))
+            .respond_with(ResponseTemplate::new(200).set_body_string("<p>Hi</p>"))
+            .mount(&server)
+            .await;
+        Mock::given(method("GET"))
+            .and(path("/api"))
+            .respond_with(ResponseTemplate::new(200).set_body_string(r#"{"a":1}"#))
+            .mount(&server)
+            .await;
+        let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+        let page = u(&format!("{}/page?key=SECRET", server.uri()));
+        let api = u(&format!("{}/api?apikey=SECRET", server.uri()));
+
+        ctx.get_text(&page).await.unwrap();
+        assert!(ctx.finish_capture().is_empty(), "capture is off by default");
+
+        ctx.start_capture();
+        ctx.get_text(&page).await.unwrap();
+        let _: serde_json::Value = ctx.get_json(&api).await.unwrap();
+        let pages = ctx.finish_capture();
+        assert_eq!(
+            pages,
+            vec![
+                CapturedPage {
+                    url: format!("{}/page", server.uri()),
+                    body: "<p>Hi</p>".into(),
+                    json: false,
+                },
+                CapturedPage {
+                    url: format!("{}/api", server.uri()),
+                    body: r#"{"a":1}"#.into(),
+                    json: true,
+                },
+            ]
+        );
+
+        ctx.get_text(&page).await.unwrap();
+        assert!(
+            ctx.finish_capture().is_empty(),
+            "finish_capture turns it off"
         );
     }
 
