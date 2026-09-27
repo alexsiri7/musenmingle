@@ -10,7 +10,7 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`,
+takes `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`,
 `source`, `medium`, `format`, `good_for` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
@@ -63,8 +63,9 @@ Lists events. Every parameter is optional; they combine freely.
 | `format` | `format=talk` | Events with any of these format tags: `hands_on`, `talk`, `social`, `opening`, `late`, `family_friendly`, `course`, `tour`, `screening`, `fair_market`. Repeatable |
 | `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
-| `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>`, nearest first. Events without coordinates are left out |
+| `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` is absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
+| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added` or `surprise` (see below). Default `nearest` with `near`, else `soonest` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
 
@@ -89,11 +90,31 @@ such as an exhibition run without opening hours):
 
 `evening`, `after_work` and `daytime` look at the start time only.
 
-Order: by `starts_at` (then `id`); with `near`, by distance (then `id`).
+Order (`sort`), ties broken by `id`:
+
+- `soonest` ("Starting soonest"): `starts_at` ascending, so events already
+  running come first.
+- `nearest` ("Closest to me"): distance from `near` ascending. Without
+  `near` it falls back to `soonest`; the response then says
+  `"sort": "soonest"` and `"sort_fallback": {"requested": "nearest", ...}`.
+- `ending` ("Last chance"): effective end ascending, and only events whose
+  effective end is still ahead. The effective end is `ends_at`; for an
+  all-day event (`all_day`) the London midnight after its last (or only)
+  day; for a timed event without `ends_at`, `starts_at` + 3 hours.
+- `added` ("Just added"): when Muse & Mingle first saw the event (its
+  earliest `sources[].first_seen_at`), newest first. This is "new to us",
+  not "recently opened".
+- `surprise` ("Surprise me"): a random order (`md5(id || London date)`),
+  the same all day and reshuffled each London day.
+
+The response's `sort` says which sort was applied. There is no popularity
+sort: saves stay in the visitor's browser and the server does not track them.
 
 Pagination: `next_cursor` is `null` on the last page. Otherwise, repeat the
-request with the **same filters** plus `cursor=<next_cursor>`. Cursors are
-opaque; one issued without `near` is rejected with `near` and vice versa.
+request with the **same filters and sort** plus `cursor=<next_cursor>`.
+Cursors are opaque and only valid for the sort that issued them (anything
+else is a 400). A `surprise` cursor carries its day's shuffle, so paging
+across midnight keeps the order.
 Unknown parameters are rejected with 400.
 
 ```http
@@ -159,6 +180,7 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
     }
   ],
   "next_cursor": "643a343030...",
+  "sort": "nearest",
   "counts": {
     "when": { "evening": 12, "after_work": 9, "weekend": 30, "daytime": 41 },
     "price": { "free": 18, "max_10": 25, "max_20": 33, "unknown": 7 }

@@ -39,7 +39,7 @@ use sha2::{Digest, Sha256};
 use uuid::Uuid;
 
 use crate::api::{self, AppState, CountsJson, EventJson, SourceLinkJson};
-use crate::listing::{self, When};
+use crate::listing::{self, Sort, When};
 use crate::model::{Category, SourceKind};
 use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
@@ -659,6 +659,8 @@ struct Filters {
     /// `price_max=` amount; empty = any price.
     price_max: String,
     near: String,
+    /// `sort=` value; empty = the default (nearest with an area, else soonest).
+    sort: String,
     /// Source keys (repeatable), e.g. from a link on `/sources`.
     sources: Vec<String>,
     /// AI/default tag filters (one value each on the page; the API repeats).
@@ -682,6 +684,7 @@ impl Filters {
                 "when" => f.when = v,
                 "price_max" => f.price_max = v,
                 "near" => f.near = v,
+                "sort" => f.sort = v,
                 "medium" => f.medium = v,
                 "format" => f.format = v,
                 "good_for" => f.good_for = v,
@@ -710,6 +713,7 @@ impl Filters {
             ("when", &self.when),
             ("price_max", &self.price_max),
             ("near", &self.near),
+            ("sort", &self.sort),
             ("medium", &self.medium),
             ("format", &self.format),
             ("good_for", &self.good_for),
@@ -738,6 +742,7 @@ impl Filters {
             when: self.when.clone(),
             price_max: self.price_max.clone(),
             near: self.near.clone(),
+            sort: self.sort.clone(),
             medium: self.medium.clone(),
             format: self.format.clone(),
             good_for: self.good_for.clone(),
@@ -759,7 +764,11 @@ impl Filters {
         if self.free {
             s.append_pair("free", "true");
         }
-        for (k, v) in [("when", &self.when), ("price_max", &self.price_max)] {
+        for (k, v) in [
+            ("when", &self.when),
+            ("price_max", &self.price_max),
+            ("sort", &self.sort),
+        ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
             }
@@ -881,6 +890,27 @@ fn date_presets(today: NaiveDate) -> [(&'static str, String, String); 4] {
     ]
 }
 
+/// The sort the form shows as chosen: `sort=` if valid, else the default
+/// (closest first with an area, soonest otherwise).
+fn effective_sort(f: &Filters) -> Sort {
+    Sort::parse(&f.sort).unwrap_or(if f.near.is_empty() {
+        Sort::Soonest
+    } else {
+        Sort::Nearest
+    })
+}
+
+/// How the results are ordered, in words (the status line).
+fn order_text(sort: Sort) -> &'static str {
+    match sort {
+        Sort::Soonest => "Starting soonest",
+        Sort::Nearest => "Closest first",
+        Sort::Ending => "Last chance: ending soonest",
+        Sort::Added => "Just added: newest to Muse & Mingle first",
+        Sort::Surprise => "Surprise me: random order, reshuffled daily",
+    }
+}
+
 /// The filter bar: date and type quick links (plain links, so they work
 /// without JavaScript), then the full form for everything else.
 fn filter_form(
@@ -953,6 +983,14 @@ fn filter_form(
                             }
                             option value="20" selected[f.price_max == "20"] {
                                 (with_count("Under £20", price(|c| c.price.max_20)))
+                            }
+                        }
+                    }
+                    div class="field" {
+                        label for="sort" { "Sort" }
+                        select id="sort" name="sort" {
+                            @for s in Sort::ALL {
+                                option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
                             }
                         }
                     }
@@ -1253,11 +1291,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         );
         format!("/?{q}")
     });
-    let order = if filters.near.is_empty() {
-        "By start date"
-    } else {
-        "Nearest first"
-    };
+    let order = order_text(query.order.sort());
     page(
         StatusCode::OK,
         "",
@@ -1268,6 +1302,12 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                 div class="wrap-x" {
                     @if !filters.sources.is_empty() { div class="results-status" { (chips) } }
                     (hidden_unknown(&counts))
+                    @if query.fell_back_from == Some(Sort::Nearest) {
+                        p class="results-status hint" role="status" {
+                            "Closest to me needs a place to measure from: pick an area. "
+                            "Showing events starting soonest."
+                        }
+                    }
                     @if events.is_empty() {
                         p class="empty" { "No events match these filters." }
                         @if !filters.near.is_empty() {
@@ -2293,6 +2333,22 @@ mod tests {
         assert!(f.page_query().contains("near=kings-cross"));
         assert!(Filters::parse("near=mars").api_query().is_err());
         assert!(Filters::parse("category=concert").api_query().is_err());
+    }
+
+    #[test]
+    fn filters_keep_the_sort() {
+        let f = Filters::parse("sort=ending&near=central");
+        assert!(f.page_query().contains("sort=ending"));
+        assert!(f.without_source("x").contains("sort=ending"));
+        let q = f.api_query().unwrap();
+        assert_eq!(q.order.sort(), Sort::Ending);
+        assert!(q.near.is_some());
+        assert_eq!(
+            effective_sort(&Filters::parse("near=central")),
+            Sort::Nearest
+        );
+        assert_eq!(effective_sort(&Filters::parse("")), Sort::Soonest);
+        assert!(Filters::parse("sort=popular").api_query().is_err());
     }
 
     #[test]

@@ -2,6 +2,7 @@
 //! is in `repo::list_events`).
 
 use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
+use chrono_tz::Europe::London;
 use rust_decimal::Decimal;
 use uuid::Uuid;
 
@@ -23,7 +24,13 @@ pub const EARTH_RADIUS_KM: f64 = 6371.0088;
 #[derive(Debug, Clone, PartialEq)]
 pub struct EventQuery {
     pub filter: EventFilter,
+    /// Area filter (`near=` + `radius_km=`): only events within the radius.
+    /// Applies to every sort, not only `nearest`.
+    pub near: Option<Near>,
     pub order: EventOrder,
+    /// The sort the client asked for when it could not be applied
+    /// (`sort=nearest` without `near` falls back to `soonest`).
+    pub fell_back_from: Option<Sort>,
     pub limit: i64,
     /// Also return tag counts for the other filters (`facets=true`).
     pub facets: bool,
@@ -101,6 +108,57 @@ impl When {
     }
 }
 
+/// `sort=` values.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Sort {
+    /// Starting soonest: `starts_at` ascending (ongoing events first).
+    Soonest,
+    /// Closest to `near` first; needs `near`.
+    Nearest,
+    /// Last chance: effective end ascending, only events not yet ended.
+    Ending,
+    /// Just added: first time Muse & Mingle saw the event, newest first.
+    Added,
+    /// Surprise me: a random order, reshuffled each London day.
+    Surprise,
+}
+
+impl Sort {
+    pub const ALL: [Sort; 5] = [
+        Sort::Soonest,
+        Sort::Nearest,
+        Sort::Ending,
+        Sort::Added,
+        Sort::Surprise,
+    ];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Sort::Soonest => "soonest",
+            Sort::Nearest => "nearest",
+            Sort::Ending => "ending",
+            Sort::Added => "added",
+            Sort::Surprise => "surprise",
+        }
+    }
+
+    /// The label shown in the "Sort" control.
+    pub fn label(self) -> &'static str {
+        match self {
+            Sort::Soonest => "Starting soonest",
+            Sort::Nearest => "Closest to me",
+            Sort::Ending => "Last chance",
+            Sort::Added => "Just added",
+            Sort::Surprise => "Surprise me",
+        }
+    }
+
+    pub fn parse(s: &str) -> Option<Sort> {
+        Sort::ALL.into_iter().find(|v| v.as_str() == s)
+    }
+}
+
+/// The sort of a listing and where the previous page stopped.
 #[derive(Debug, Clone, PartialEq)]
 pub enum EventOrder {
     ByStart {
@@ -110,6 +168,35 @@ pub enum EventOrder {
         near: Near,
         after: Option<(f64, Uuid)>,
     },
+    /// By effective end ([`crate::repo`] `EFFECTIVE_END`), only events
+    /// ending after `now`.
+    ByEnd {
+        now: DateTime<Utc>,
+        after: Option<(DateTime<Utc>, Uuid)>,
+    },
+    /// By first-seen time, newest first.
+    ByAdded {
+        after: Option<(DateTime<Utc>, Uuid)>,
+    },
+    /// By `md5(id || seed)`: a shuffle that is stable for a London day. The
+    /// seed comes from the cursor on later pages, so a walk that crosses
+    /// midnight keeps its order.
+    Shuffled {
+        seed: NaiveDate,
+        after: Option<Uuid>,
+    },
+}
+
+impl EventOrder {
+    pub fn sort(&self) -> Sort {
+        match self {
+            EventOrder::ByStart { .. } => Sort::Soonest,
+            EventOrder::ByDistance { .. } => Sort::Nearest,
+            EventOrder::ByEnd { .. } => Sort::Ending,
+            EventOrder::ByAdded { .. } => Sort::Added,
+            EventOrder::Shuffled { .. } => Sort::Surprise,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -155,6 +242,10 @@ impl Near {
 pub enum Cursor {
     Start(DateTime<Utc>, Uuid),
     Distance(f64, Uuid),
+    End(DateTime<Utc>, Uuid),
+    Added(DateTime<Utc>, Uuid),
+    /// The shuffle's seed day and the last id (its key is `md5(id || seed)`).
+    Shuffle(NaiveDate, Uuid),
 }
 
 impl Cursor {
@@ -162,6 +253,9 @@ impl Cursor {
         let plain = match self {
             Cursor::Start(t, id) => format!("s:{}:{id}", t.timestamp_micros()),
             Cursor::Distance(d, id) => format!("d:{:016x}:{id}", d.to_bits()),
+            Cursor::End(t, id) => format!("e:{}:{id}", t.timestamp_micros()),
+            Cursor::Added(t, id) => format!("a:{}:{id}", t.timestamp_micros()),
+            Cursor::Shuffle(day, id) => format!("r:{}:{id}", day.format("%Y%m%d")),
         };
         plain.bytes().map(|b| format!("{b:02x}")).collect()
     }
@@ -178,13 +272,17 @@ impl Cursor {
         let mut parts = plain.splitn(3, ':');
         let (kind, pos, id) = (parts.next()?, parts.next()?, parts.next()?);
         let id = Uuid::parse_str(id).ok()?;
+        let micros = || DateTime::from_timestamp_micros(pos.parse().ok()?);
         match kind {
-            "s" => Some(Cursor::Start(
-                DateTime::from_timestamp_micros(pos.parse().ok()?)?,
-                id,
-            )),
+            "s" => Some(Cursor::Start(micros()?, id)),
             "d" => Some(Cursor::Distance(
                 f64::from_bits(u64::from_str_radix(pos, 16).ok()?),
+                id,
+            )),
+            "e" => Some(Cursor::End(micros()?, id)),
+            "a" => Some(Cursor::Added(micros()?, id)),
+            "r" => Some(Cursor::Shuffle(
+                NaiveDate::parse_from_str(pos, "%Y%m%d").ok()?,
                 id,
             )),
             _ => None,
@@ -192,14 +290,26 @@ impl Cursor {
     }
 }
 
+/// Today's date in London (the "Surprise me" seed).
+pub fn london_today(now: DateTime<Utc>) -> NaiveDate {
+    now.with_timezone(&London).date_naive()
+}
+
 /// Parse a raw query string (`category` may repeat). Errors are messages
 /// for the client.
 pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
+    parse_query_at(raw, Utc::now())
+}
+
+/// [`parse_query`] with the clock given (`ending` hides events that ended
+/// before `now`; `surprise` shuffles by `now`'s London date).
+pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, String> {
     let mut filter = EventFilter::default();
     let (mut from, mut to) = (None, None);
     let (mut near, mut radius_km) = (None, None);
     let (mut limit, mut cursor) = (None, None);
     let mut facets = false;
+    let mut sort = None;
     for (key, value) in url::form_urlencoded::parse(raw.as_bytes()) {
         match key.as_ref() {
             "medium" => push_tag(&mut filter.mediums, "medium", &value, MEDIUM_TAGS)?,
@@ -211,6 +321,12 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
                     "false" => false,
                     _ => return Err("facets must be true or false".into()),
                 }
+            }
+            "sort" => {
+                sort = Some(Sort::parse(&value).ok_or_else(|| {
+                    let all: Vec<&str> = Sort::ALL.iter().map(|s| s.as_str()).collect();
+                    format!("unknown sort {value:?} (one of: {})", all.join(", "))
+                })?)
             }
             "from" => from = Some(parse_date("from", &value)?),
             "to" => to = Some(parse_date("to", &value)?),
@@ -302,31 +418,68 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
     filter.from = from.map(london_midnight);
     filter.until = to.and_then(|t| t.succ_opt()).map(london_midnight);
 
-    let order = match (near, radius_km) {
-        (None, Some(_)) => return Err("radius_km requires near".into()),
-        (None, None) => EventOrder::ByStart {
-            after: match cursor {
-                None => None,
-                Some(Cursor::Start(t, id)) => Some((t, id)),
-                Some(Cursor::Distance(..)) => return Err("cursor does not match the sort".into()),
-            },
+    if near.is_none() && radius_km.is_some() {
+        return Err("radius_km requires near".into());
+    }
+    let near = near.map(|(lat, lng)| Near {
+        lat,
+        lng,
+        radius_km: radius_km.unwrap_or(DEFAULT_RADIUS_KM),
+    });
+    // Without `sort`, an area means nearest first (as before `sort` existed).
+    let requested = sort.unwrap_or(if near.is_some() {
+        Sort::Nearest
+    } else {
+        Sort::Soonest
+    });
+    let (applied, fell_back_from) = match (requested, near) {
+        (Sort::Nearest, None) => (Sort::Soonest, Some(Sort::Nearest)),
+        (s, _) => (s, None),
+    };
+    let mismatch = || Err("cursor does not match the sort".to_string());
+    let order = match (applied, cursor) {
+        (Sort::Soonest, None) => EventOrder::ByStart { after: None },
+        (Sort::Soonest, Some(Cursor::Start(t, id))) => EventOrder::ByStart {
+            after: Some((t, id)),
         },
-        (Some((lat, lng)), radius_km) => EventOrder::ByDistance {
-            near: Near {
-                lat,
-                lng,
-                radius_km: radius_km.unwrap_or(DEFAULT_RADIUS_KM),
-            },
-            after: match cursor {
+        (Sort::Nearest, c) => EventOrder::ByDistance {
+            near: near.expect("nearest without near falls back above"),
+            after: match c {
                 None => None,
                 Some(Cursor::Distance(d, id)) => Some((d, id)),
-                Some(Cursor::Start(..)) => return Err("cursor does not match the sort".into()),
+                Some(_) => return mismatch(),
             },
         },
+        (Sort::Ending, c) => EventOrder::ByEnd {
+            now,
+            after: match c {
+                None => None,
+                Some(Cursor::End(t, id)) => Some((t, id)),
+                Some(_) => return mismatch(),
+            },
+        },
+        (Sort::Added, c) => EventOrder::ByAdded {
+            after: match c {
+                None => None,
+                Some(Cursor::Added(t, id)) => Some((t, id)),
+                Some(_) => return mismatch(),
+            },
+        },
+        (Sort::Surprise, None) => EventOrder::Shuffled {
+            seed: london_today(now),
+            after: None,
+        },
+        (Sort::Surprise, Some(Cursor::Shuffle(seed, id))) => EventOrder::Shuffled {
+            seed,
+            after: Some(id),
+        },
+        (Sort::Soonest | Sort::Surprise, Some(_)) => return mismatch(),
     };
     Ok(EventQuery {
         filter,
+        near,
         order,
+        fell_back_from,
         limit: limit.unwrap_or(DEFAULT_LIMIT),
         facets,
     })
@@ -478,6 +631,8 @@ mod tests {
             "price_max=abc",
             "price_max=-1",
             "price_max=",
+            "sort=popular",
+            "sort=",
         ] {
             assert!(parse_query(raw).is_err(), "{raw}");
         }
@@ -491,6 +646,9 @@ mod tests {
         for c in [
             Cursor::Start(t, id),
             Cursor::Distance(1.234_567_890_123, id),
+            Cursor::End(t, id),
+            Cursor::Added(t, id),
+            Cursor::Shuffle(NaiveDate::from_ymd_opt(2026, 10, 1).unwrap(), id),
         ] {
             assert_eq!(Cursor::decode(&c.encode()), Some(c));
         }
@@ -500,6 +658,51 @@ mod tests {
         assert!(parse_query(&format!("cursor={distance}")).is_err());
         assert!(parse_query(&format!("near=51.5,-0.1&cursor={distance}")).is_ok());
         assert!(parse_query(&format!("near=51.5,-0.1&cursor={start}")).is_err());
+        // nearest without near falls back to soonest, so takes its cursors.
+        assert!(parse_query(&format!("sort=nearest&cursor={start}")).is_ok());
+        let end = Cursor::End(t, id).encode();
+        assert!(parse_query(&format!("sort=ending&cursor={end}")).is_ok());
+        assert!(parse_query(&format!("sort=added&cursor={end}")).is_err());
+        assert!(parse_query(&format!("cursor={end}")).is_err());
+    }
+
+    #[test]
+    fn sorts_parse_with_defaults_and_fallback() {
+        let now = Utc.with_ymd_and_hms(2026, 10, 10, 23, 30, 0).unwrap();
+        let q = |raw: &str| parse_query_at(raw, now).unwrap();
+        assert_eq!(q("").order.sort(), Sort::Soonest);
+        assert_eq!(q("near=51.5,-0.1").order.sort(), Sort::Nearest);
+        assert_eq!(q("near=51.5,-0.1&sort=soonest").order.sort(), Sort::Soonest);
+        assert!(q("near=51.5,-0.1&sort=soonest").near.is_some());
+        let fell = q("sort=nearest");
+        assert_eq!(fell.order.sort(), Sort::Soonest);
+        assert_eq!(fell.fell_back_from, Some(Sort::Nearest));
+        assert_eq!(q("sort=nearest&near=51.5,-0.1").fell_back_from, None);
+        assert_eq!(
+            q("sort=ending").order,
+            EventOrder::ByEnd { now, after: None }
+        );
+        // 23:30 UTC on 10 October is 00:30 on the 11th in London.
+        assert_eq!(
+            q("sort=surprise").order,
+            EventOrder::Shuffled {
+                seed: NaiveDate::from_ymd_opt(2026, 10, 11).unwrap(),
+                after: None
+            }
+        );
+        let seed = NaiveDate::from_ymd_opt(2026, 10, 9).unwrap();
+        let id = Uuid::new_v4();
+        let c = Cursor::Shuffle(seed, id).encode();
+        assert_eq!(
+            q(&format!("sort=surprise&cursor={c}")).order,
+            EventOrder::Shuffled {
+                seed,
+                after: Some(id)
+            }
+        );
+        for s in Sort::ALL {
+            assert_eq!(Sort::parse(s.as_str()), Some(s));
+        }
     }
 
     #[test]

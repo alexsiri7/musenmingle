@@ -414,12 +414,15 @@ pub(crate) async fn event_page(
     let next_cursor = rows
         .last()
         .filter(|_| has_more)
-        .and_then(|last| match (&query.order, last.distance_km) {
-            (EventOrder::ByStart { .. }, _) => {
-                Some(Cursor::Start(last.event.starts_at, last.event.id))
+        .and_then(|last| {
+            let id = last.event.id;
+            match &query.order {
+                EventOrder::ByStart { .. } => Some(Cursor::Start(last.event.starts_at, id)),
+                EventOrder::ByDistance { .. } => last.distance_km.map(|d| Cursor::Distance(d, id)),
+                EventOrder::ByEnd { .. } => last.sort_at.map(|t| Cursor::End(t, id)),
+                EventOrder::ByAdded { .. } => last.sort_at.map(|t| Cursor::Added(t, id)),
+                EventOrder::Shuffled { seed, .. } => Some(Cursor::Shuffle(*seed, id)),
             }
-            (EventOrder::ByDistance { .. }, Some(d)) => Some(Cursor::Distance(d, last.event.id)),
-            (EventOrder::ByDistance { .. }, None) => None,
         })
         .map(|c| c.encode());
     let ids: Vec<Uuid> = rows.iter().map(|r| r.event.id).collect();
@@ -484,13 +487,11 @@ pub(crate) async fn event_counts(
     pool: &PgPool,
     query: &listing::EventQuery,
 ) -> sqlx::Result<CountsJson> {
-    let near = match &query.order {
-        EventOrder::ByDistance { near, .. } => Some(near),
-        EventOrder::ByStart { .. } => None,
-    };
-    Ok(repo::listing_counts(pool, &query.filter, near)
-        .await?
-        .into())
+    Ok(
+        repo::listing_counts(pool, &query.filter, query.near.as_ref())
+            .await?
+            .into(),
+    )
 }
 
 async fn list_events(
@@ -500,7 +501,18 @@ async fn list_events(
     let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
     let (events, next_cursor) = event_page(&state.pool, &query).await?;
     let counts = event_counts(&state.pool, &query).await?;
-    let mut body = json!({ "events": events, "next_cursor": next_cursor, "counts": counts });
+    let mut body = json!({
+        "events": events,
+        "next_cursor": next_cursor,
+        "counts": counts,
+        "sort": query.order.sort().as_str(),
+    });
+    if let Some(wanted) = query.fell_back_from {
+        body["sort_fallback"] = json!({
+            "requested": wanted.as_str(),
+            "reason": "nearest needs near=<lat>,<lng>",
+        });
+    }
     if query.facets {
         body["facets"] = facets(&state.pool, &query).await?;
     }
