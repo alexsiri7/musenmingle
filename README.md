@@ -147,6 +147,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     category from keywords in the eyebrow and title (a demonstration is a
     talk); concerts and recurring or open-ended programmes skipped; facts +
     link only (the site's legal page restricts reuse).
+  - `estorick-collection` — listing-only CSS scraper (no JSON-LD) over
+    `/events`, `/exhibitions` and `/exhibitions/in-the/future`: title link,
+    labels, date line (a day with London wall-clock times, or a date-only
+    exhibition range) and summary; category from the labels (exhibition,
+    talk/tour, art class) or title keywords, else community; early-years
+    sessions skipped; descriptions but no images (artists' works, DACS).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list

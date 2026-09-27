@@ -1,0 +1,412 @@
+---
+source: tests/source_estorick_collection.rs
+expression: out
+---
+[
+  {
+    "date": "27 September 2026",
+    "event": null,
+    "source_event_id": "events/family-art-day-27-september",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S",
+      "WANDA AND MARION WULZ"
+    ],
+    "time": "10:00 - 12:00"
+  },
+  {
+    "date": "29 September 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "uncelebrated-venice-book-presentation|2026-09-29|estorick-collection",
+      "description": "Join Professor Angelo Maggi for a presentation of his latest book Uncelebrated Venice. Venezia Minore by Egle Renata Trincanato. A New Critical Edition published by Anteferma in 2025.",
+      "ends_at": "2026-09-29T19:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-29T17:00:00Z",
+      "tags": [
+        "special event"
+      ],
+      "title": "Uncelebrated Venice - Book Presentation",
+      "url": "https://www.estorickcollection.com/events/uncelebrated-venice",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/uncelebrated-venice",
+    "tags": [
+      "SPECIAL EVENT"
+    ],
+    "time": "18:00 - 20:00"
+  },
+  {
+    "date": "7 October 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "out-of-hours-tour-estorick-collection-temporary-exhibition-art-history-festival|2026-10-07|estorick-collection",
+      "description": "Join us for an after-hours guided tour of Britain’s only museum dedicated to modern Italian art.",
+      "ends_at": null,
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T17:30:00Z",
+      "tags": [
+        "wanda and marion wulz",
+        "tour"
+      ],
+      "title": "Out of Hours Tour: The Estorick Collection & Temporary Exhibition (Art History Festival)",
+      "url": "https://www.estorickcollection.com/events/art-history-festival-tour-2026",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/art-history-festival-tour-2026",
+    "tags": [
+      "WANDA AND MARION WULZ",
+      "TOUR"
+    ],
+    "time": "18:30"
+  },
+  {
+    "date": "14 October 2026",
+    "event": null,
+    "source_event_id": "events/mini-marvels-early-years-sensory-play-14-october",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S"
+    ],
+    "time": "10:00 - 11:00"
+  },
+  {
+    "date": "15 October 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "gavin-turk-morandi-still-life-catalogue-launch-panel-discussion|2026-10-15|estorick-collection",
+      "description": "To mark the launch of Gavin Turk’s latest catalogue, join us for an evening of conversation that will bring together Gavin Turk, Darian Leader, and Roberta Cremoncini, both of whom have contributed to the publication.",
+      "ends_at": "2026-10-15T19:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-15T17:00:00Z",
+      "tags": [
+        "giorgio morandi",
+        "gavin turk",
+        "special event"
+      ],
+      "title": "Gavin Turk: Morandi Still Life - Catalogue Launch & Panel Discussion",
+      "url": "https://www.estorickcollection.com/events/gavin-turk-morandi-still-life-catalogue-launch-panel-discussion",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/gavin-turk-morandi-still-life-catalogue-launch-panel-discussion",
+    "tags": [
+      "GIORGIO MORANDI",
+      "GAVIN TURK",
+      "SPECIAL EVENT"
+    ],
+    "time": "18:00 - 20:00"
+  },
+  {
+    "date": "17 October 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "wanda-marion-wulz-unlocked|2026-10-17|estorick-collection",
+      "description": "Out-of-hours exclusive tour of the exhibition Wanda and Marion Wulz: Avant-garde Photography in 20th-Century Italy",
+      "ends_at": "2026-10-17T10:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-17T09:00:00Z",
+      "tags": [
+        "talk",
+        "tour",
+        "wanda and marion wulz"
+      ],
+      "title": "Wanda and Marion Wulz Unlocked",
+      "url": "https://www.estorickcollection.com/events/wulz-unlocked-saturday-morning-tour",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/wulz-unlocked-saturday-morning-tour",
+    "tags": [
+      "TALK",
+      "TOUR",
+      "WANDA AND MARION WULZ"
+    ],
+    "time": "10:00 - 11:00"
+  },
+  {
+    "date": "21 October 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "life-drawing-at-museum|2026-10-21|estorick-collection",
+      "description": "Join us for an untutored life drawing session with a professional life model.",
+      "ends_at": "2026-10-21T19:30:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-21T17:30:00Z",
+      "tags": [
+        "adult art class",
+        "life drawing class"
+      ],
+      "title": "Life Drawing at the Museum",
+      "url": "https://www.estorickcollection.com/events/life-drawing-at-the-museum-21-october",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/life-drawing-at-the-museum-21-october",
+    "tags": [
+      "ADULT ART CLASS",
+      "LIFE DRAWING CLASS"
+    ],
+    "time": "18:30 - 20:30"
+  },
+  {
+    "date": "25 October 2026",
+    "event": null,
+    "source_event_id": "events/family-art-day-25-october",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S",
+      "WANDA AND MARION WULZ"
+    ],
+    "time": "10:00 - 12:00"
+  },
+  {
+    "date": "11 November 2026",
+    "event": null,
+    "source_event_id": "events/mini-marvels-early-years-sensory-play-11-november",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S"
+    ],
+    "time": "10:00 - 11:00"
+  },
+  {
+    "date": "18 November 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "life-drawing-at-museum|2026-11-18|estorick-collection",
+      "description": "Join us for an untutored life drawing session with a professional life model.",
+      "ends_at": "2026-11-18T20:30:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-18T18:30:00Z",
+      "tags": [
+        "adult art class",
+        "life drawing class"
+      ],
+      "title": "Life Drawing at the Museum",
+      "url": "https://www.estorickcollection.com/events/life-drawing-at-the-museum-18-november",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/life-drawing-at-the-museum-18-november",
+    "tags": [
+      "ADULT ART CLASS",
+      "LIFE DRAWING CLASS"
+    ],
+    "time": "18:30 - 20:30"
+  },
+  {
+    "date": "23 November 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "casting-modernity-symposium|2026-11-23|estorick-collection",
+      "description": "A Symposium on Umberto Boccioni’s Unique Forms of Continuity in Space and the Problem of the Cast in Twentieth-Century Art.",
+      "ends_at": "2026-11-23T19:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-23T10:00:00Z",
+      "tags": [],
+      "title": "Casting Modernity - Symposium",
+      "url": "https://www.estorickcollection.com/events/casting-modernity-symposium",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/casting-modernity-symposium",
+    "tags": [],
+    "time": "10:00 - 19:00"
+  },
+  {
+    "date": "29 November 2026",
+    "event": null,
+    "source_event_id": "events/family-art-day-29-november",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S",
+      "WANDA AND MARION WULZ"
+    ],
+    "time": "10:00 - 12:00"
+  },
+  {
+    "date": "9 December 2026",
+    "event": null,
+    "source_event_id": "events/mini-marvels-early-years-sensory-play-9-december",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S"
+    ],
+    "time": "10:00 - 11:00"
+  },
+  {
+    "date": "9 December 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "life-drawing-at-museum|2026-12-09|estorick-collection",
+      "description": "Join us for an untutored life drawing session with a professional life model.",
+      "ends_at": "2026-12-09T20:30:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-09T18:30:00Z",
+      "tags": [
+        "adult art class",
+        "life drawing class"
+      ],
+      "title": "Life Drawing at the Museum",
+      "url": "https://www.estorickcollection.com/events/life-drawing-at-the-museum-9-december",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "events/life-drawing-at-the-museum-9-december",
+    "tags": [
+      "ADULT ART CLASS",
+      "LIFE DRAWING CLASS"
+    ],
+    "time": "18:30 - 20:30"
+  },
+  {
+    "date": "13 December 2026",
+    "event": null,
+    "source_event_id": "events/family-art-day-13-december",
+    "tags": [
+      "FAMILIES",
+      "UNDER 5S",
+      "WANDA AND MARION WULZ"
+    ],
+    "time": "10:00 - 12:00"
+  },
+  {
+    "date": "16 September 2026 - 20 December 2026",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "wanda-marion-wulz-avant-garde-photography-in-20th-century-italy|2026-09-16|estorick-collection",
+      "description": "This September, the Estorick Collection presents a major exhibition exploring the pioneering work of sisters Wanda Wulz (1903–1984) and Marion Wulz (1905–1993), key figures in the development of avant-garde photography in 20th-century Italy. Organised in collaboration with the Fondazione Alinari per la Fotografia and with the support of Calliope Arts Foundation, the show also traces the wider legacy of the Wulz family, whose photographic practice spanned generations.",
+      "ends_at": "2026-12-20T00:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-15T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Wanda and Marion Wulz: Avant-garde Photography in 20th-Century Italy",
+      "url": "https://www.estorickcollection.com/exhibitions/wanda-and-marion-wulz-avant-garde-photography-in-20th-century-italy",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "exhibitions/wanda-and-marion-wulz-avant-garde-photography-in-20th-century-italy",
+    "tags": [
+      "EXHIBITION"
+    ],
+    "time": null
+  },
+  {
+    "date": "20 January 2027 - 13 June 2027",
+    "event": {
+      "address": "39a Canonbury Square, London N1 2AN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "carla-accardi|2027-01-20|estorick-collection",
+      "description": "In January 2027, the first institutional presentation in the UK dedicated to the work of Carla Accardi (Trapani, 1924–Rome, 2014) will take place across the Estorick Collection, London, and Compton Verney, Warwickshire. This unprecedented collaboration between the two institutions will spotlight one of Italy’s most influential postwar artists with two landmark exhibitions on view simultaneously.",
+      "ends_at": "2027-06-12T23:00:00Z",
+      "image_url": null,
+      "lat": 51.5437,
+      "lng": -0.1003,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-20T00:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Carla Accardi",
+      "url": "https://www.estorickcollection.com/exhibitions/carla-accardi",
+      "venue_name": "Estorick Collection"
+    },
+    "source_event_id": "exhibitions/carla-accardi",
+    "tags": [
+      "EXHIBITION"
+    ],
+    "time": null
+  }
+]
