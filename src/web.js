@@ -293,8 +293,71 @@
     return lines.map(fold).join("\r\n") + "\r\n";
   }
 
+  // ------------------------------------------------------------ calendar
+
+  // Same rules as src/calendar.rs: an event running on this many London
+  // days or more is long-running (the "ongoing" strip plus "Opens" / "Last
+  // day" markers); any other event sits on its first visible day.
+  var LONG_RUN_MIN_DAYS = 4;
+
+  function pad2(n) {
+    var s = String(Number(n));
+    return s.length < 2 ? "0" + s : s;
+  }
+
+  /** "2026-10-25": the London date of an instant. */
+  function londonDate(iso) {
+    var p = parts(iso);
+    return p.year + "-" + pad2(p.month) + "-" + pad2(p.day);
+  }
+
+  /** Whole days from London date `a` to `b` ("YYYY-MM-DD"). */
+  function daysBetween(a, b) {
+    var ua = Date.UTC(+a.slice(0, 4), +a.slice(5, 7) - 1, +a.slice(8, 10));
+    var ub = Date.UTC(+b.slice(0, 4), +b.slice(5, 7) - 1, +b.slice(8, 10));
+    return Math.round((ub - ua) / 86400000);
+  }
+
+  /** [first, last] London dates an event runs on (an end before its start is ignored). */
+  function spanOf(e) {
+    var first = londonDate(e.starts_at);
+    var last = e.ends_at ? londonDate(e.ends_at) : first;
+    return [first, last > first ? last : first];
+  }
+
+  function isLongRunning(first, last) {
+    return daysBetween(first, last) + 1 >= LONG_RUN_MIN_DAYS;
+  }
+
+  /**
+   * Where events go in a calendar showing London dates first..last:
+   * { ongoing: [index], days: { "YYYY-MM-DD": [[index, "event"|"opens"|"last"]] } }.
+   * Pass events sorted by start.
+   */
+  function placeEvents(events, first, last) {
+    var out = { ongoing: [], days: {} };
+    function add(day, i, mark) {
+      (out.days[day] = out.days[day] || []).push([i, mark]);
+    }
+    events.forEach(function (e, i) {
+      if (!e.starts_at) return;
+      var s = spanOf(e);
+      if (s[1] < first || s[0] > last) return;
+      if (isLongRunning(s[0], s[1])) {
+        out.ongoing.push(i);
+        if (s[0] >= first) add(s[0], i, "opens");
+        if (s[1] <= last) add(s[1], i, "last");
+      } else {
+        add(s[0] < first ? first : s[0], i, "event");
+      }
+    });
+    return out;
+  }
+
   var api = {
     STORAGE_KEY: STORAGE_KEY,
+    londonDate: londonDate,
+    placeEvents: placeEvents,
     LEGACY_STORAGE_KEYS: LEGACY_STORAGE_KEYS,
     migrateStorage: migrateStorage,
     loadSaved: loadSaved,
@@ -574,9 +637,111 @@
     });
   }
 
+  // ------------------------------------------------------------ /saved/calendar
+
+  function el(tag, cls, text) {
+    var n = doc.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function calendarEntry(e, mark) {
+    var li = el("li", mark === "opens" ? "cal-ev opens" : mark === "last" ? "cal-ev last-day" : "cal-ev");
+    var a = el("a");
+    a.setAttribute("href", "/events/" + encodeURIComponent(e.id));
+    var meta = el("span", "cal-meta");
+    if (mark === "opens") meta.appendChild(el("span", "cal-flag", "Opens"));
+    else if (mark === "last") meta.appendChild(el("span", "cal-flag", "Last day"));
+    else meta.appendChild(el("span", "cal-time", isAllDay(e) ? "All day" : fmtTime(e.starts_at)));
+    if (e.is_free) meta.appendChild(el("span", "cal-free", "Free"));
+    a.appendChild(meta);
+    a.appendChild(el("span", "cal-ev-title", e.title));
+    if (e.venue_name) a.appendChild(el("span", "cal-venue", e.venue_name));
+    li.appendChild(a);
+    return li;
+  }
+
+  function ongoingEntry(e) {
+    var li = el("li");
+    var a = el("a");
+    a.setAttribute("href", "/events/" + encodeURIComponent(e.id));
+    a.appendChild(el("span", "sq"));
+    a.appendChild(el("span", "og-title", e.title));
+    if (e.venue_name) a.appendChild(el("span", "og-venue", " · " + e.venue_name));
+    a.appendChild(el("span", "og-until", " until " + fmtDate(e.ends_at || e.starts_at).replace(/^\S+ /, "")));
+    if (e.is_free) a.appendChild(el("span", "cal-free", "Free"));
+    li.appendChild(a);
+    return li;
+  }
+
+  function renderSavedCalendar() {
+    var box = doc.getElementById("saved-calendar");
+    if (!box) return;
+    var first = box.getAttribute("data-first");
+    var last = box.getAttribute("data-last");
+    var status = doc.getElementById("saved-cal-status");
+    if (!storage) {
+      status.textContent = "This browser isn't letting the site store data, so saving is unavailable.";
+      return;
+    }
+    var items = loadSaved(storage);
+    if (items.length === 0) {
+      status.textContent = "Nothing saved yet. Use the Save button on any event, then come back here.";
+      return;
+    }
+    status.textContent = "Loading your saved events…";
+    var show = function (byId) {
+      var events = items
+        .map(function (item) {
+          return byId[item.id] || fromSnapshot(item);
+        })
+        .filter(function (e) {
+          return !!e.starts_at;
+        })
+        .sort(function (a, b) {
+          return a.starts_at < b.starts_at ? -1 : a.starts_at > b.starts_at ? 1 : 0;
+        });
+      var placed = placeEvents(events, first, last);
+      var shown = 0;
+      Object.keys(placed.days).forEach(function (day) {
+        var list = box.querySelector('ul[data-day="' + day + '"]');
+        if (!list) return;
+        list.replaceChildren();
+        placed.days[day].forEach(function (entry) {
+          list.appendChild(calendarEntry(events[entry[0]], entry[1]));
+          shown++;
+        });
+        if (list.parentNode) list.parentNode.classList.remove("empty");
+      });
+      var strip = doc.getElementById("saved-ongoing-strip");
+      var ongoing = doc.getElementById("saved-ongoing");
+      if (strip && ongoing) {
+        ongoing.replaceChildren();
+        placed.ongoing.forEach(function (i) {
+          ongoing.appendChild(ongoingEntry(events[i]));
+        });
+        strip.hidden = placed.ongoing.length === 0;
+      }
+      status.textContent =
+        shown === 0 && placed.ongoing.length === 0
+          ? "None of your saved events are on in these dates."
+          : "";
+    };
+    fetchEvents(
+      items.map(function (i) {
+        return i.id;
+      })
+    ).then(show, function () {
+      show({});
+      status.textContent = "Couldn't reach the server; showing what was saved.";
+    });
+  }
+
   function start() {
     refresh();
     renderSaved();
+    renderSavedCalendar();
   }
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start);
   else start();

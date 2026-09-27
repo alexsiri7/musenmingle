@@ -356,6 +356,30 @@ scrape, most recently checked first:
 - `issue_url`: link to the open `scraper-broken` issue, or `null`. Set
   whenever an issue is open, even if `status` is `unconfigured`.
 
+## `GET /calendar.ics`
+
+A subscribable iCalendar (RFC 5545) feed of upcoming events: London today
+plus 89 days (events overlapping that window, at most 1000), for the
+calendar's filters `category`, `free=true`, `near=<area key>` (the page's
+preset areas, e.g. `east`) and `source` (repeatable). The calendar page
+`/calendar` links to it as `webcal://musenmingle.interstellarai.net/calendar.ics?…`.
+
+- `Content-Type: text/calendar; charset=utf-8`, `Cache-Control: public,
+  max-age=3600`; the calendar asks apps to refresh hourly
+  (`REFRESH-INTERVAL`, `X-PUBLISHED-TTL` `PT1H`).
+- One `VEVENT` per event, `UID:<event id>@musenmingle.interstellarai.net`
+  (the same UID as the Saved page's `.ics` export). Timed events are in UTC
+  (`DTSTART:20261007T173000Z`); date-only and long-running events (4 or more
+  London days) are all-day spans of their London dates (`VALUE=DATE`, `DTEND`
+  exclusive).
+- `SUMMARY` title, `LOCATION` venue and address, `URL` the venue's own page
+  (else ours), `DESCRIPTION` the stored excerpt (none for facts-only sources;
+  never AI text) and "via Muse & Mingle: <our event page>".
+- Unknown filter values are a plain-text `400`.
+
+Saved events live only in the visitor's browser, so they have no feed: the
+Saved page exports them as a one-off `.ics` file instead.
+
 ## `GET /healthz`
 
 `200 {"status": "ok", "db": "ok", "version": "..."}` when the database

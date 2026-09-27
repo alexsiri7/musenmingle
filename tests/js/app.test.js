@@ -157,3 +157,42 @@ test("fromSnapshot reads saves from before all_day as the .ics does", () => {
   assert.equal(card({ starts_at: "2026-10-03T17:00:00Z", ends_at: null }).all_day, false);
   assert.equal(card({ starts_at: "2026-10-02T23:00:00Z", ends_at: null, all_day: false }).all_day, false);
 });
+
+test("londonDate follows Europe/London across both DST changes", () => {
+  // 23:30 UTC Sat 24 Oct 2026 is 00:30 BST on Sun 25 Oct.
+  assert.equal(app.londonDate("2026-10-24T23:30:00Z"), "2026-10-25");
+  // After the clocks go back (GMT), 23:30 UTC on the 25th is still the 25th.
+  assert.equal(app.londonDate("2026-10-25T23:30:00Z"), "2026-10-25");
+  assert.equal(app.londonDate("2027-03-27T23:30:00Z"), "2027-03-27");
+  // Spring forward: 23:30 UTC Sun 28 Mar 2027 is 00:30 BST on Mon 29 Mar.
+  assert.equal(app.londonDate("2027-03-28T23:30:00Z"), "2027-03-29");
+});
+
+test("placeEvents: long-running events once in the strip, markers on their first and last day", () => {
+  const events = [
+    // 0: a talk on 7 Oct at 18:30 BST.
+    { id: ID1, title: "Talk", starts_at: "2026-10-07T17:30:00Z", ends_at: null },
+    // 1: an exhibition running all month (London-midnight dates).
+    { id: ID2, title: "Show", starts_at: "2026-08-31T23:00:00Z", ends_at: "2027-01-30T23:00:00Z", all_day: true },
+    // 2: opens 16 Oct, closes 25 Oct (the day the clocks go back).
+    { id: ID1, title: "Short run", starts_at: "2026-10-15T23:00:00Z", ends_at: "2026-10-25T00:00:00Z", all_day: true },
+    // 3: a three-day festival that started in September: on 1 Oct.
+    { id: ID2, title: "Festival", starts_at: "2026-09-29T23:00:00Z", ends_at: "2026-10-01T23:00:00Z", all_day: true },
+    // 4: in November: not shown.
+    { id: ID1, title: "Later", starts_at: "2026-11-02T19:00:00Z", ends_at: null },
+    // 5: no start: ignored.
+    { id: ID2, title: "Broken", starts_at: null },
+  ];
+  const p = app.placeEvents(events, "2026-10-01", "2026-10-31");
+  assert.deepEqual(p.ongoing, [1, 2]);
+  assert.deepEqual(p.days, {
+    "2026-10-07": [[0, "event"]],
+    "2026-10-16": [[2, "opens"]],
+    "2026-10-25": [[2, "last"]],
+    "2026-10-01": [[3, "event"]],
+  });
+  // A week view in the middle of a long run: only in the strip.
+  const w = app.placeEvents(events, "2026-10-19", "2026-10-25");
+  assert.deepEqual(w.ongoing, [1, 2]);
+  assert.deepEqual(w.days, { "2026-10-25": [[2, "last"]] });
+});

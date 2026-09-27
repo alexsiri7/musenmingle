@@ -250,6 +250,20 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   `/static/style.css`). Sources are shown by `display_name`. The main button
   on every card and detail page is the source's own page ("See it on
   Barbican →"); our detail page is the secondary link.
+  **Calendar** (`/calendar`, `src/web/calendar_page.rs`, rules in
+  `src/calendar.rs`): month (default), week (`?view=week&date=YYYY-MM-DD`)
+  and agenda views with prev/next/today links and the listing's category,
+  free, area and source filters as plain links and a GET form. Long-running
+  events (4+ London days, mostly exhibitions) are listed once in an
+  "Ongoing across London" strip, with "Opens" / "Last day" markers on their
+  first and last visible day; other events sit on their London start day.
+  The grid is one list of days: a 7-column grid on wide screens, an agenda
+  of days with events at phone width or large text sizes (CSS only). Each
+  day links to the listing for that day. `GET /calendar.ics` is the same
+  filters as a subscribable iCalendar feed (next 90 days, cached 1 h; see
+  `docs/api.md`, writer in `src/ics.rs`). `/saved/calendar` ("My calendar")
+  is the same layout filled in by the Saved-events script from this
+  browser's saves; saves can't be subscribed to, only exported.
   **Saved events** (`/saved`, `src/web.js` served as `/static/app.js?v=<hash>`):
   the only script, and progressive enhancement — without it every page
   works and the save buttons stay `hidden`. Saves live only in the
