@@ -133,14 +133,20 @@ pub enum Pick {
     /// Workshops, the `hands_on` format tag, or a title saying class,
     /// course, drop-in, life drawing, masterclass or workshop.
     HandsOn,
+    /// Open at the moment of the request (#206): has started and not ended
+    /// and, with opening hours, is inside today's hours. Stricter than
+    /// `open_now=true`: an all-day or untimed event without known hours is
+    /// left out, since we cannot say it is open right now.
+    OpenNow,
 }
 
 impl Pick {
-    pub const ALL: [Pick; 4] = [
+    pub const ALL: [Pick; 5] = [
         Pick::Tonight,
         Pick::Openings,
         Pick::LastChance,
         Pick::HandsOn,
+        Pick::OpenNow,
     ];
 
     pub fn as_str(self) -> &'static str {
@@ -149,6 +155,7 @@ impl Pick {
             Pick::Openings => "openings",
             Pick::LastChance => "last_chance",
             Pick::HandsOn => "hands_on",
+            Pick::OpenNow => "open_now",
         }
     }
 

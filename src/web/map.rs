@@ -394,13 +394,16 @@ fn hm(t: DateTime<Utc>) -> String {
     london(t).format("%H:%M").to_string()
 }
 
-/// The status line of a card: what is happening now, in London time. We
-/// rarely know opening hours, so ongoing exhibitions say so. Mirrored by
+/// The status line of a card: what is happening now, in London time. An
+/// ongoing run with known opening hours (`crate::hours`, #206) says
+/// "Open now until 18:00", "Opens today at 11:00", "Closed now" or "Closed
+/// today"; without them it says to check the hours. Mirrored by
 /// `liveLabel` in `map.mjs`.
 pub(crate) fn live_label(
     start: DateTime<Utc>,
     end: Option<DateTime<Utc>>,
     all_day: bool,
+    hours: Option<&crate::hours::OpeningHours>,
     now: DateTime<Utc>,
 ) -> String {
     let today = london(now).date_naive();
@@ -423,7 +426,10 @@ pub(crate) fn live_label(
         return match (start > now, untimed) {
             (true, false) => format!("Opens {}{}", day(start), hm(start)),
             (true, true) => format!("Opens {} · check opening hours", on_day(start)),
-            (false, _) => "Open today · check opening hours".into(),
+            (false, _) => match hours {
+                Some(h) => h.today_status(now),
+                None => "Open today · check opening hours".into(),
+            },
         };
     }
     if untimed {
@@ -462,7 +468,7 @@ fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
                 data-lat=[e.lat] data-lng=[e.lng]
                 data-title=(e.title)
                 data-venue=(e.venue_name.as_deref().unwrap_or(""))
-                data-status=(live_label(e.starts_at, e.ends_at, e.all_day, now))
+                data-status=(live_label(e.starts_at, e.ends_at, e.all_day, e.hours.as_ref(), now))
                 data-category=(title_case(&e.category))
                 data-starts=(e.starts_at.to_rfc3339())
                 data-thumb=[e.thumbnail_url.as_deref().filter(|_| credit_url.is_some())]
@@ -482,7 +488,7 @@ fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
                 @if let Some(v) = &e.venue_name { p class="near-venue" { (v) } }
                 p class="near-status" {
                     span class="dot" {}
-                    span { (live_label(e.starts_at, e.ends_at, e.all_day, now)) }
+                    span { (live_label(e.starts_at, e.ends_at, e.all_day, e.hours.as_ref(), now)) }
                     @if let Some(p) = price(e) {
                         span class="sep" aria-hidden="true" { "/" }
                         span class={ "near-price" @if e.is_free { " free" } } { (p) }
@@ -723,7 +729,7 @@ mod tests {
         };
         // An exhibition run (date-only) that is on.
         assert_eq!(
-            live_label(day(1), Some(day(20)), true, now),
+            live_label(day(1), Some(day(20)), true, None, now),
             "Open today · check opening hours"
         );
         // Timed run (Barbican-style) that is on.
@@ -732,29 +738,37 @@ mod tests {
                 t(10, 0) - chrono::Duration::days(300),
                 Some(t(10, 0) + chrono::Duration::days(90)),
                 false,
+                None,
                 now
             ),
             "Open today · check opening hours"
         );
         assert_eq!(
-            live_label(day(3), None, true, now),
+            live_label(day(3), None, true, None, now),
             "Today · check opening hours"
         );
         assert_eq!(
-            live_label(t(16, 30), Some(t(18, 0)), false, now),
+            live_label(t(16, 30), Some(t(18, 0)), false, None, now),
             "Starts 16:30–18:00"
         );
-        assert_eq!(live_label(t(16, 30), None, false, now), "Starts 16:30");
         assert_eq!(
-            live_label(t(13, 30), Some(t(15, 0)), false, now),
+            live_label(t(16, 30), None, false, None, now),
+            "Starts 16:30"
+        );
+        assert_eq!(
+            live_label(t(13, 30), Some(t(15, 0)), false, None, now),
             "On now until 15:00"
         );
-        assert_eq!(live_label(t(13, 30), None, false, now), "Started 13:30");
+        assert_eq!(
+            live_label(t(13, 30), None, false, None, now),
+            "Started 13:30"
+        );
         assert_eq!(
             live_label(
                 t(18, 0),
                 Some(t(18, 0) + chrono::Duration::days(30)),
                 false,
+                None,
                 now
             ),
             "Opens 18:00"
@@ -762,15 +776,39 @@ mod tests {
         // After midnight: the day is named.
         let late = t(23, 0);
         assert_eq!(
-            live_label(late + chrono::Duration::hours(2), None, false, late),
+            live_label(late + chrono::Duration::hours(2), None, false, None, late),
             "Starts Sun 01:00"
         );
         assert_eq!(
-            live_label(day(4), None, true, late),
+            live_label(day(4), None, true, None, late),
             "Sun · check opening hours"
         );
         assert_eq!(
-            live_label(day(4), Some(day(30)), true, late),
+            live_label(day(4), Some(day(30)), true, None, late),
+            "Opens Sun · check opening hours"
+        );
+        // With opening hours (Sat 11:00–15:00, Sun 12:00–17:00; Mon–Fri closed).
+        let hours = crate::hours::OpeningHours::new(vec![
+            crate::hours::HoursRule {
+                days: vec![6],
+                opens: NaiveTime::from_hms_opt(11, 0, 0).unwrap(),
+                closes: NaiveTime::from_hms_opt(15, 0, 0).unwrap(),
+            },
+            crate::hours::HoursRule {
+                days: vec![7],
+                opens: NaiveTime::from_hms_opt(12, 0, 0).unwrap(),
+                closes: NaiveTime::from_hms_opt(17, 0, 0).unwrap(),
+            },
+        ])
+        .unwrap();
+        let run = |at| live_label(day(1), Some(day(20)), true, Some(&hours), at);
+        assert_eq!(run(now), "Open now until 15:00");
+        assert_eq!(run(t(10, 0)), "Opens today at 11:00");
+        assert_eq!(run(t(16, 0)), "Closed now");
+        assert_eq!(run(t(14, 0) + chrono::Duration::days(2)), "Closed today");
+        // Not started yet: the hours don't say when it opens.
+        assert_eq!(
+            live_label(day(4), Some(day(30)), true, Some(&hours), late),
             "Opens Sun · check opening hours"
         );
     }

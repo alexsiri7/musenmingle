@@ -1354,8 +1354,8 @@ async fn quick_pick_counts(
     Ok(counts)
 }
 
-/// The quick picks (Tonight, This weekend, Free, Openings this week, Last
-/// chance, Hands-on, Talks, Music) with counts; the active one links back to `/`.
+/// The quick picks (Open now, Tonight, This weekend, Free, Openings this
+/// week, Last chance, Hands-on, Talks, Music) with counts; the active one links back to `/`.
 /// Each link is a plain listing URL whose filter is the SQL its count uses.
 async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPick>> {
     let today = Utc::now().with_timezone(&London).date_naive();
@@ -1374,6 +1374,12 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
     let pick_on = |p: &str| f.pick == p && bare;
     let today_s = today.format("%Y-%m-%d").to_string();
     let picks = [
+        (
+            "Open now",
+            "/?pick=open_now".to_string(),
+            c.open_now,
+            pick_on("open_now"),
+        ),
         (
             "Tonight",
             "/?pick=tonight".to_string(),
