@@ -312,9 +312,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   assets (images are our own credited thumbnails, never the sources' URLs),
   and a strict Content-Security-Policy (`default-src 'self'`, `script-src
   'self'`, `img-src 'self'`, no `unsafe-inline`: the CSS is served from
-  `/static/style.css`). Sources are shown by `display_name`. The main button
-  on every card and detail page is the source's own page ("See it on
-  Barbican →"); our detail page is the secondary link.
+  `/static/style.css`). Sources are shown by `display_name`. Event cards
+  lead to our own detail page (title, image and "Details" button), with a
+  "See it on Barbican →" link under them; on the detail page the main button
+  is the source's own page ("See it on Barbican →").
   **Calendar** (`/calendar`, `src/web/calendar_page.rs`, rules in
   `src/calendar.rs`): month (default), week (`?view=week&date=YYYY-MM-DD`)
   and agenda views with prev/next/today links and the listing's category,
