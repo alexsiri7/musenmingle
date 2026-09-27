@@ -302,9 +302,29 @@ pub(crate) struct EventJson {
     pub(crate) is_opening: Option<bool>,
     /// AI-written notes, labelled as such; never the venue's words.
     pub(crate) ai: Option<AiNoteJson>,
+    /// Weekly opening hours in London time (`crate::hours`), for all-day
+    /// runs; absent when unknown.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) opening_hours: Option<Vec<HoursRuleJson>>,
+    /// The listing's own wording about its hours; absent when none.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) hours_note: Option<String>,
+    #[serde(skip)]
+    pub(crate) hours: Option<crate::hours::OpeningHours>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) distance_km: Option<f64>,
     pub(crate) sources: Vec<SourceLinkJson>,
+}
+
+/// One line of an event's weekly opening hours.
+#[derive(Serialize)]
+pub(crate) struct HoursRuleJson {
+    /// `mon`..`sun`.
+    pub(crate) days: Vec<&'static str>,
+    /// `HH:MM`, London time.
+    pub(crate) opens: String,
+    /// `HH:MM`, London time, after `opens`.
+    pub(crate) closes: String,
 }
 
 /// The AI-written part of an event.
@@ -392,6 +412,18 @@ impl EventJson {
                 }),
                 _ => None,
             },
+            opening_hours: e.opening_hours.as_ref().map(|h| {
+                h.0.0
+                    .iter()
+                    .map(|r| HoursRuleJson {
+                        days: r.days.iter().map(|&d| crate::hours::day_code(d)).collect(),
+                        opens: r.opens.format("%H:%M").to_string(),
+                        closes: r.closes.format("%H:%M").to_string(),
+                    })
+                    .collect()
+            }),
+            hours_note: e.hours_note,
+            hours: e.opening_hours.map(|h| h.0),
             distance_km,
             sources,
         }

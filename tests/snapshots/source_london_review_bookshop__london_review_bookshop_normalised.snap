@@ -1,0 +1,280 @@
+---
+source: tests/source_london_review_bookshop.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "simon-critchley-tom-mccarthy-heidegger-thinking|2026-09-29|review-bookshop",
+      "description": "Simon Critchley: Heidegger Thinking: ‘Being and Time’ Explained",
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1191231007%2F21481178992%2F1%2Foriginal.20260817-105333?auto=format%2Ccompress&q=75&sharp=10&s=73ded185f9763155b11816b16b861e8c",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-29T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Simon Critchley & Tom McCarthy: Heidegger Thinking",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1995703170907"
+  },
+  {
+    "event": null,
+    "id": "2000147825990"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "malcolm-gaskill-lamorna-ash-worlds-of-fear-wonder|2026-10-07|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1190972058%2F21481178992%2F1%2Foriginal.20260813-120657?auto=format%2Ccompress&q=75&sharp=10&s=1414ffa0cd4f92a5710a0b516154a61b",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Malcolm Gaskill & Lamorna Ash: Worlds of Fear and Wonder",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997556684817"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "ben-eastham-jennifer-higgie-floating-world|2026-10-08|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1191249421%2F21481178992%2F1%2Foriginal.20260817-152352?auto=format%2Ccompress&q=75&sharp=10&s=71bc16600126e7b36cd22532f5e8ed23",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-08T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Ben Eastham & Jennifer Higgie: The Floating World",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997557083008"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lynne-tillman-aea-varfis-van-warmelo-cast-in-doubt|2026-10-13|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1190785161%2F21481178992%2F1%2Foriginal.20260811-101658?auto=format%2Ccompress&q=75&sharp=10&s=4ffb49cdd16da10c7162ab28228e1ac6",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-13T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Lynne Tillman & Aea Varfis-van Warmelo: Cast in Doubt",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997557207380"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "anton-jager-william-davies-hyperpolitics|2026-10-14|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1191249614%2F21481178992%2F1%2Foriginal.20260817-152554?auto=format%2Ccompress&q=75&sharp=10&s=08b2dd0d4c901f40e1e3544d15750cdf",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-14T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Anton Jäger & William Davies: Hyperpolitics",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997844329169"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "susan-stryker-juliet-jacques-changing-gender|2026-10-20|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1190785398%2F21481178992%2F1%2Foriginal.20260811-102117?auto=format%2Ccompress&q=75&sharp=10&s=1d4a6c4a0774c30632bd083bbe2e81aa",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-20T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Susan Stryker & Juliet Jacques: Changing Gender",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997557450106"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "roisin-tapponi-amelia-abraham-scene-city|2026-10-21|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1190785884%2F21481178992%2F1%2Foriginal.20260811-102850?auto=format%2Ccompress&q=75&sharp=10&s=b2b96033dc111bc2657a3b7c810ebbe3",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-21T18:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Róisín Tapponi & Amelia Abraham: Scene City",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1997557667757"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "yiyun-li-octavia-bright-music-against-night|2026-10-27|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1194090948%2F21481178992%2F1%2Foriginal.20260922-113058?auto=format%2Ccompress&q=75&sharp=10&s=1d605fff9c803d5e33053d0f1a0f5938",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-27T19:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Yiyun Li & Octavia Bright: Music Against the Night",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "2002052938232"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "neil-bartlett-richard-scott-on-jarmans-kicking-pricks|2026-10-29|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1194098366%2F21481178992%2F1%2Foriginal.20260922-132501?auto=format%2Ccompress&q=75&sharp=10&s=c553f73c55f972591b50e62c8d0253f1",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-10-29T19:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Neil Bartlett & Richard Scott on Jarman's Kicking the Pricks",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "2002060493831"
+  },
+  {
+    "event": {
+      "address": "14 Bury Place, London WC1A 2JL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "here-is-where-we-meet-john-berger-at-100|2026-11-05|review-bookshop",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1192564426%2F21481178992%2F1%2Foriginal.20260903-115342?auto=format%2Ccompress&q=75&sharp=10&s=0e8a2264292b6b27a3f25f2be854ec62",
+      "lat": 51.5184,
+      "lng": -0.1245,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-05T19:00:00Z",
+      "tags": [
+        "books"
+      ],
+      "title": "Here Is Where We Meet - John Berger at 100",
+      "url": "https://www.londonreviewbookshop.co.uk/events",
+      "venue_name": "London Review Bookshop"
+    },
+    "id": "1999666278669"
+  }
+]

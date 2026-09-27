@@ -15,6 +15,18 @@ pub const DEFAULT_LIMIT: i64 = 50;
 pub const MAX_LIMIT: i64 = 100;
 pub const DEFAULT_RADIUS_KM: f64 = 5.0;
 pub const MAX_RADIUS_KM: f64 = 100.0;
+/// Walking pace and detour factor for straight-line distances; the same
+/// numbers as `WALK_KMH` / `DETOUR` in `src/map.mjs` (its "≈ N min walk").
+pub const WALK_KMH: f64 = 5.0;
+pub const WALK_DETOUR: f64 = 1.3;
+/// `within_walk_min=` bounds.
+pub const MAX_WALK_MIN: u32 = 60;
+
+/// The straight-line radius for "within `minutes` walk": every event whose
+/// `src/map.mjs` label rounds to at most `minutes` (hence the half minute).
+pub fn walk_radius_km(minutes: u32) -> f64 {
+    (f64::from(minutes) + 0.5) / 60.0 * WALK_KMH / WALK_DETOUR
+}
 /// Most ids one `ids=` filter may name.
 pub const MAX_IDS: usize = 100;
 
@@ -80,10 +92,16 @@ pub struct EventFilter {
     pub search: Option<Search>,
     /// A quick pick (`pick=`), judged against a London date (today).
     pub pick: Option<PickFilter>,
-    /// `at=now|today`: only events still on at this instant (and, via
-    /// `until`, starting before the end of the window). `from` is then this
-    /// instant minus [`LIVE_LOOKBACK_HOURS`].
+    /// `at=now|today` (and `open_now` / `open_at`, a window ending one
+    /// second after the instant): only events still on at this instant
+    /// (and, via `until`, starting before the end of the window), and open
+    /// then or later in the window when they have opening hours. `from` is
+    /// then this instant minus [`LIVE_LOOKBACK_HOURS`].
     pub live_at: Option<DateTime<Utc>>,
+    /// `open_on=<day>` (ISO weekday, Monday = 1): the event runs on that
+    /// weekday within the `from`/`to` window and, when it has opening
+    /// hours, is open that day.
+    pub open_on: Option<u8>,
 }
 
 /// `pick=`: the home page's quick-pick chips as listing filters. Each is
@@ -92,7 +110,8 @@ pub struct EventFilter {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Pick {
     /// Today (London): timed and starting at 17:00 or later, or an untimed
-    /// event running today tagged `late opening`.
+    /// event running today tagged `late opening`; with opening hours, open
+    /// after 18:00 today.
     Tonight,
     /// Starting within the next 7 London days (today included) and an
     /// opening: an exhibition, `is_opening` (AI, quoted from the listing),
@@ -162,7 +181,8 @@ fn push_tag(list: &mut Vec<String>, name: &str, value: &str, vocab: &[&str]) -> 
 /// `when=` buckets, judged on Europe/London local time. An event starting
 /// at London midnight is untimed (a date-only listing, e.g. an exhibition
 /// run); an untimed event tagged `late opening` counts as open in the
-/// evening.
+/// evening. An event with opening hours (`crate::hours`) is judged by them
+/// instead (`repo::when_sql`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum When {
     /// Timed and starts at 18:00 or later, or untimed with late opening.
@@ -387,6 +407,22 @@ impl Cursor {
     }
 }
 
+/// `open_at=`: RFC 3339 (`2026-10-18T11:30:00Z`) or London wall-clock time
+/// (`2026-10-18T11:30`; in the autumn clock change's repeated hour, the
+/// first).
+fn parse_instant(value: &str) -> Result<DateTime<Utc>, String> {
+    if let Ok(t) = DateTime::parse_from_rfc3339(value) {
+        return Ok(t.with_timezone(&Utc));
+    }
+    chrono::NaiveDateTime::parse_from_str(value, "%Y-%m-%dT%H:%M")
+        .ok()
+        .and_then(|t| t.and_local_timezone(London).earliest())
+        .map(|t| t.with_timezone(&Utc))
+        .ok_or_else(|| {
+            format!("open_at must be a date-time like 2026-10-18T11:30 (London) or RFC 3339, got {value:?}")
+        })
+}
+
 /// Today's date in London (the "Surprise me" seed).
 pub fn london_today(now: DateTime<Utc>) -> NaiveDate {
     now.with_timezone(&London).date_naive()
@@ -405,10 +441,11 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     let mut filter = EventFilter::default();
     let (mut at, mut within_hours) = (None, None);
     let (mut from, mut to) = (None, None);
-    let (mut near, mut radius_km) = (None, None);
+    let (mut near, mut radius_km, mut walk_min) = (None, None, None);
     let (mut limit, mut cursor) = (None, None);
     let mut facets = false;
     let mut sort = None;
+    let (mut open_now, mut open_at) = (false, None);
     for (key, value) in url::form_urlencoded::parse(raw.as_bytes()) {
         match key.as_ref() {
             "medium" => push_tag(&mut filter.mediums, "medium", &value, MEDIUM_TAGS)?,
@@ -455,6 +492,19 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                     ));
                 }
                 within_hours = Some(h);
+            }
+            "open_now" => {
+                open_now = match value.as_ref() {
+                    "true" => true,
+                    "false" => false,
+                    _ => return Err("open_now must be true or false".into()),
+                }
+            }
+            "open_at" => open_at = Some(parse_instant(&value)?),
+            "open_on" => {
+                filter.open_on = Some(crate::hours::parse_day(&value).ok_or_else(|| {
+                    format!("open_on must be a day of the week (mon..sun), got {value:?}")
+                })?)
             }
             "from" => from = Some(parse_date("from", &value)?),
             "to" => to = Some(parse_date("to", &value)?),
@@ -523,6 +573,17 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 }
                 radius_km = Some(r);
             }
+            "within_walk_min" => {
+                let m: u32 = value
+                    .parse()
+                    .map_err(|_| "within_walk_min must be a whole number".to_string())?;
+                if !(1..=MAX_WALK_MIN).contains(&m) {
+                    return Err(format!(
+                        "within_walk_min must be between 1 and {MAX_WALK_MIN}"
+                    ));
+                }
+                walk_min = Some(m);
+            }
             "limit" => {
                 let l: i64 = value
                     .parse()
@@ -545,6 +606,23 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     }
     filter.from = from.map(london_midnight);
     filter.until = to.and_then(|t| t.succ_opt()).map(london_midnight);
+    // `open_now` / `open_at`: happening at that instant and, when the
+    // event has opening hours, open then (an `at=` window that ends a
+    // second after the instant, see `repo::live_sql`).
+    if open_now && open_at.is_some() {
+        return Err("use open_now or open_at, not both".into());
+    }
+    if let Some(t) = open_at.or(open_now.then_some(now)) {
+        if at.is_some() || within_hours.is_some() {
+            return Err("open_now/open_at cannot be combined with at or within_hours".into());
+        }
+        if from.is_some() || to.is_some() || filter.when.is_some() {
+            return Err("open_now/open_at cannot be combined with from, to or when".into());
+        }
+        filter.live_at = Some(t);
+        filter.from = Some(t - chrono::Duration::hours(LIVE_LOOKBACK_HOURS));
+        filter.until = Some(t + chrono::Duration::seconds(1));
+    }
     match at {
         None if within_hours.is_some() => return Err("within_hours requires at=now".into()),
         None => {}
@@ -572,10 +650,19 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     if near.is_none() && radius_km.is_some() {
         return Err("radius_km requires near".into());
     }
+    if near.is_none() && walk_min.is_some() {
+        return Err("within_walk_min requires near".into());
+    }
+    if radius_km.is_some() && walk_min.is_some() {
+        return Err("use radius_km or within_walk_min, not both".into());
+    }
     let near = near.map(|(lat, lng)| Near {
         lat,
         lng,
-        radius_km: radius_km.unwrap_or(DEFAULT_RADIUS_KM),
+        radius_km: walk_min
+            .map(walk_radius_km)
+            .or(radius_km)
+            .unwrap_or(DEFAULT_RADIUS_KM),
     });
     // Without `sort`: best match for a search, else an area means nearest
     // first (as before `sort` existed).
@@ -712,6 +799,18 @@ mod tests {
     }
 
     #[test]
+    fn walking_time_becomes_a_radius() {
+        let q = parse_query("near=51.5,-0.1&within_walk_min=20").unwrap();
+        let near = q.near.unwrap();
+        assert_eq!(near.radius_km, walk_radius_km(20));
+        assert_eq!(q.order.sort(), Sort::Nearest);
+        // map.mjs: minutes = round(km * 1.3 / 5 * 60), so 1.3 km is "≈ 20
+        // min walk" and 1.33 km is "≈ 21 min walk".
+        assert!(walk_radius_km(20) >= 1.3 && walk_radius_km(20) < 1.33);
+        assert!(walk_radius_km(10) < walk_radius_km(30));
+    }
+
+    #[test]
     fn categories_repeat_and_dedupe() {
         let q = parse_query("category=talk&category=workshop&category=talk").unwrap();
         assert_eq!(q.filter.categories, [Category::Talk, Category::Workshop]);
@@ -797,6 +896,11 @@ mod tests {
             "near=91,0",
             "near=51.5,-0.1&radius_km=0",
             "near=51.5,-0.1&radius_km=101",
+            "within_walk_min=20",
+            "near=51.5,-0.1&within_walk_min=0",
+            "near=51.5,-0.1&within_walk_min=61",
+            "near=51.5,-0.1&within_walk_min=2.5",
+            "near=51.5,-0.1&within_walk_min=20&radius_km=2",
             "radius_km=3",
             "limit=0",
             "limit=101",
@@ -978,5 +1082,50 @@ mod tests {
         assert!((b.max_lat - 51.5 - 0.0449).abs() < 0.001, "{b:?}");
         assert!((b.max_lng + 0.1 - 0.0722).abs() < 0.001, "{b:?}");
         assert!(b.min_lat < 51.5 && b.min_lng < -0.1);
+    }
+
+    #[test]
+    fn open_now_open_at_and_open_on() {
+        let now: DateTime<Utc> = "2026-10-14T08:00:00Z".parse().unwrap();
+        let q = parse_query_at("open_now=true", now).unwrap();
+        assert_eq!(q.filter.live_at, Some(now));
+        assert_eq!(q.filter.until, Some(now + chrono::Duration::seconds(1)));
+        assert_eq!(
+            q.filter.from,
+            Some(now - chrono::Duration::hours(LIVE_LOOKBACK_HOURS))
+        );
+        // London wall clock: 11:30 BST is 10:30Z; RFC 3339 as given.
+        let at = |raw: &str| parse_query_at(raw, now).unwrap().filter.live_at;
+        assert_eq!(
+            at("open_at=2026-10-18T11:30"),
+            Some("2026-10-18T10:30:00Z".parse().unwrap())
+        );
+        assert_eq!(
+            at("open_at=2026-10-25T11:30"),
+            Some("2026-10-25T11:30:00Z".parse().unwrap())
+        );
+        assert_eq!(
+            at("open_at=2026-10-18T10:30:00Z"),
+            Some("2026-10-18T10:30:00Z".parse().unwrap())
+        );
+        assert_eq!(at("open_now=false"), None);
+        assert_eq!(
+            parse_query_at("open_on=Sunday", now)
+                .unwrap()
+                .filter
+                .open_on,
+            Some(7)
+        );
+        for bad in [
+            "open_now=yes",
+            "open_at=tomorrow",
+            "open_on=funday",
+            "open_now=true&at=now",
+            "open_now=true&open_at=2026-10-18T11:30",
+            "open_now=true&from=2026-10-01",
+            "open_at=2026-10-18T11:30&when=evening",
+        ] {
+            assert!(parse_query_at(bad, now).is_err(), "{bad}");
+        }
     }
 }

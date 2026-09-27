@@ -14,7 +14,8 @@
 
 const TZ = "Europe/London";
 const EARTH_RADIUS_KM = 6371.0088;
-/// Walking pace and a detour factor for straight-line distances.
+/// Walking pace and a detour factor for straight-line distances (the same
+/// as `WALK_KMH` / `WALK_DETOUR` in src/listing.rs, the Near me filter).
 const WALK_KMH = 5;
 const DETOUR = 1.3;
 const LIST_MAX = 50;

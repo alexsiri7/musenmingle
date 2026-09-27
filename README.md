@@ -101,6 +101,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     title and summary; exhibitions and talks only (screenings, courses,
     projects and open calls skipped); descriptions but no images (credited
     third-party photographs).
+  - `london-review-bookshop` — listing-only scraper over `/events`
+    (microdata `Event` previews, no JSON-LD; one request per run): date
+    line without a year (resolved against the fetch date and checked
+    against the printed weekday), London time, title and price; author
+    talks at the shop (late-night shopping and screenings skipped; recorded
+    podcasts on the same page ignored); links to the Events page, not
+    Eventbrite; facts + link only (LRB terms).
   - `lux` — CSS-selector scraper (no JSON-LD): the "What's on" upcoming
     cards' taxonomy, location, days and price, plus the detail page of each
     in-scope card for its time and description; exhibitions, workshops,
@@ -659,7 +666,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall, the TEC venues and the Artlogic galleries daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall, the London Review Bookshop, the TEC venues and the Artlogic galleries daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

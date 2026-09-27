@@ -209,8 +209,16 @@ input[type=checkbox]:checked::after, input[type=radio]:checked::after {
 input[type=checkbox]:focus-visible, input[type=radio]:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
 .filters .actions { flex-direction: row; align-items: center; gap: var(--md); }
 .filters .actions a { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+/* "Near me" (issue #173): walking-time select + locate button, one row */
+.near-me-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--xs) var(--sm); }
+.near-me-row .pill { min-height: 2.75rem; cursor: pointer; }
+.near-me-row .pill:disabled { cursor: progress; color: var(--ink-3); }
+.near-me-status { margin: 0; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.near-me-status:empty { display: none; }
 @media (max-width: 767px) {
   .filters .field:not(.check):not(.actions) { flex: 1 1 calc(50% - var(--md)); }
+  .filters .field.near-me:not(.check):not(.actions) { flex-basis: 100%; }
+  .filters .field.near-me .near-me-row select { width: auto; flex: 1 1 10rem; }
   .filters .field:not(.check) select, .filters .field:not(.check) input { width: 100%; max-width: none; }
 }
 @media (max-width: 340px) {
@@ -364,6 +372,8 @@ figure.thumb img { object-fit: cover; display: block; }
 .badge.free { color: var(--cobalt); }
 .badge.opening { color: var(--cobalt); border-color: var(--cobalt); }
 .badge.gone { color: var(--bad); border-color: currentColor; }
+.badge.hours { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink-3); white-space: nowrap; }
+.badge.hours.open { color: var(--cobalt); border-color: var(--cobalt); }
 .badge.distance { font-family: var(--mono); font-weight: 400; letter-spacing: 0; text-transform: none; }
 .card-actions {
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--sm); margin-top: auto; padding-top: var(--md);

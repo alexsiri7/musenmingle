@@ -706,6 +706,12 @@ struct Filters {
     /// `price_max=` amount; empty = any price.
     price_max: String,
     near: String,
+    /// "Near me": `here=<lat>,<lng>`, rounded to 3 decimals (about 100 m)
+    /// as soon as it is parsed; empty = off. An area preset wins over it.
+    here: String,
+    /// `walk=` minutes for `here` (10, 20 or 30; 20 by default); empty
+    /// without `here`.
+    walk: String,
     /// `sort=` value; empty = the default (nearest with an area, else soonest).
     sort: String,
     /// `pick=` quick pick (`tonight`, …); empty = none.
@@ -734,6 +740,8 @@ impl Filters {
                 "when" => f.when = v,
                 "price_max" => f.price_max = v,
                 "near" => f.near = v,
+                "here" => f.here = round_here(&v).unwrap_or_default(),
+                "walk" => f.walk = v,
                 "sort" => f.sort = v,
                 "pick" => f.pick = v,
                 "medium" => f.medium = v,
@@ -743,6 +751,14 @@ impl Filters {
                 "cursor" => f.cursor = v,
                 _ => {}
             }
+        }
+        if !f.near.is_empty() {
+            f.here.clear();
+        }
+        if f.here.is_empty() {
+            f.walk.clear();
+        } else if !WALK_MINUTES.contains(&f.walk.as_str()) {
+            f.walk = DEFAULT_WALK.to_string();
         }
         if f.from.is_empty() {
             f.from = Utc::now()
@@ -767,6 +783,8 @@ impl Filters {
             ("when", &self.when),
             ("price_max", &self.price_max),
             ("near", &self.near),
+            ("here", &self.here),
+            ("walk", &self.walk),
             ("sort", &self.sort),
             ("pick", &self.pick),
             ("medium", &self.medium),
@@ -798,6 +816,8 @@ impl Filters {
             when: self.when.clone(),
             price_max: self.price_max.clone(),
             near: self.near.clone(),
+            here: self.here.clone(),
+            walk: self.walk.clone(),
             sort: self.sort.clone(),
             pick: self.pick.clone(),
             medium: self.medium.clone(),
@@ -853,6 +873,9 @@ impl Filters {
                 .ok_or_else(|| format!("unknown area {:?}", self.near))?;
             s.append_pair("near", &format!("{},{}", area.lat, area.lng));
             s.append_pair("radius_km", &area.radius_km.to_string());
+        } else if !self.here.is_empty() {
+            s.append_pair("near", &self.here);
+            s.append_pair("within_walk_min", &self.walk);
         }
         if !self.cursor.is_empty() {
             s.append_pair("cursor", &self.cursor);
@@ -860,6 +883,19 @@ impl Filters {
         s.append_pair("limit", &PAGE_SIZE.to_string());
         listing::parse_query(&s.finish())
     }
+}
+
+/// "Near me" walking-time presets (minutes) and the default.
+const WALK_MINUTES: [&str; 3] = ["10", "20", "30"];
+const DEFAULT_WALK: &str = "20";
+
+/// `<lat>,<lng>` rounded to 3 decimals (about 100 m, so the page's links
+/// never carry a precise position), or None if it isn't a valid position.
+fn round_here(v: &str) -> Option<String> {
+    let (lat, lng) = v.split_once(',')?;
+    let (lat, lng): (f64, f64) = (lat.trim().parse().ok()?, lng.trim().parse().ok()?);
+    ((-90.0..=90.0).contains(&lat) && (-180.0..=180.0).contains(&lng))
+        .then(|| format!("{:.3},{:.3}", lat, lng).replace("-0.000", "0.000"))
 }
 
 /// A tag filter select whose options show how many events each would give
@@ -959,7 +995,7 @@ fn effective_sort(f: &Filters) -> Sort {
         .filter(|s| *s != Sort::Relevance || !f.q.is_empty())
         .unwrap_or(if !f.q.is_empty() {
             Sort::Relevance
-        } else if f.near.is_empty() {
+        } else if f.near.is_empty() && f.here.is_empty() {
             Sort::Soonest
         } else {
             Sort::Nearest
@@ -1062,6 +1098,15 @@ fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec
         out.push((
             format!("Area: {}", a.label),
             link_with(f, |g| g.near.clear()),
+        ));
+    }
+    if !f.here.is_empty() {
+        out.push((
+            format!("Within {} min walk", f.walk),
+            link_with(f, |g| {
+                g.here.clear();
+                g.walk.clear();
+            }),
         ));
     }
     for (name, value, clear) in [
@@ -1208,6 +1253,7 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
     let bare = f.when.is_empty()
         && f.price_max.is_empty()
         && f.near.is_empty()
+        && f.here.is_empty()
         && f.sources.is_empty()
         && f.medium.is_empty()
         && f.format.is_empty()
@@ -1412,6 +1458,7 @@ fn filter_form(
                             }
                         }
                     }
+                    (near_me_field(f))
                     (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium"))))
                     (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format"))))
                     (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for"))))
@@ -1438,6 +1485,36 @@ fn filter_form(
                 (active_chips(&active))
                 }
             }
+        }
+    }
+}
+
+/// The Area section's "Near me" group. Without `here` it renders `hidden`
+/// and `web.js` shows it (it needs the browser's location); with `here` it
+/// shows, so the walking time can be changed without JavaScript.
+fn near_me_field(f: &Filters) -> Markup {
+    let walk = if f.walk.is_empty() {
+        DEFAULT_WALK
+    } else {
+        f.walk.as_str()
+    };
+    html! {
+        div class="field near-me" data-near-me hidden[f.here.is_empty()] {
+            label for="walk" { "Near me" }
+            div class="near-me-row" {
+                select id="walk" name="walk" {
+                    @for m in WALK_MINUTES {
+                        option value=(m) selected[walk == m] { "Within " (m) " min walk" }
+                    }
+                }
+                button type="button" class="pill" data-near-me-locate hidden {
+                    @if f.here.is_empty() { "Use my location" } @else { "Update my location" }
+                }
+            }
+            @if !f.here.is_empty() {
+                input type="hidden" name="here" value=(f.here);
+            }
+            p class="small near-me-status" data-near-me-status role="status" {}
         }
     }
 }
@@ -1636,6 +1713,15 @@ fn card_template() -> Markup {
     }
 }
 
+/// The event's opening hours while its run is on (started, not over).
+fn running_hours(e: &EventJson, now: DateTime<Utc>) -> Option<&crate::hours::OpeningHours> {
+    let h = e.hours.as_ref()?;
+    // Hours are only kept for all-day runs, whose `ends_at` is London
+    // midnight of the last day (inclusive).
+    let last_day = london(e.ends_at.unwrap_or(e.starts_at)).date_naive();
+    (e.starts_at <= now && london(now).date_naive() <= last_day).then_some(h)
+}
+
 fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
     let primary = primary_source(e);
@@ -1647,6 +1733,11 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
             div class="card-body" {
                 p class="card-meta" {
                     span class="when" { (when(e.starts_at, e.ends_at, e.all_day, now)) }
+                    @if let Some(h) = running_hours(e, now) {
+                        span class={ "badge hours" @if h.is_open_at(now) { " open" } } {
+                            (h.today_status(now))
+                        }
+                    }
                     @if let Some(p) = price(e) {
                         span class={ "badge price" @if e.is_free { " free" } } { (p) }
                     }
@@ -1733,7 +1824,18 @@ fn principles() -> Markup {
     }
 }
 
-async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Response {
+/// `GET /`. Like `/map`, the page may ask for the visitor's location (only
+/// when they tap "Use my location" in the filters' Near me group).
+async fn home(state: State<AppState>, raw: RawQuery) -> Response {
+    let mut resp = home_page(state, raw).await;
+    resp.headers_mut().insert(
+        "permissions-policy",
+        HeaderValue::from_static(map::MAP_PERMISSIONS_POLICY),
+    );
+    resp
+}
+
+async fn home_page(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Response {
     let filters = Filters::parse(raw.as_deref().unwrap_or(""));
     let source_names = if filters.sources.is_empty() {
         Vec::new()
@@ -1870,7 +1972,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                     (hidden_unknown(&counts))
                     @if query.fell_back_from == Some(Sort::Nearest) {
                         p class="results-status hint" role="status" {
-                            "Closest to me needs a place to measure from: pick an area. "
+                            "Closest to me needs a place to measure from: pick an area or use Near me. "
                             "Showing events starting soonest."
                         }
                     }
@@ -1903,7 +2005,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                             @if !filters.q.is_empty() {
                                 p class="small" { a href=(link_with(&filters, |g| g.q.clear())) { "Clear the search" } }
                             }
-                            @if !filters.near.is_empty() {
+                            @if !filters.near.is_empty() || !filters.here.is_empty() {
                                 p class="small" { "Area filters only include events with a known location." }
                             }
                         }
@@ -1978,6 +2080,7 @@ async fn saved() -> Response {
 fn status_line(
     start: DateTime<Utc>,
     end: Option<DateTime<Utc>>,
+    hours: Option<&crate::hours::OpeningHours>,
     now: DateTime<Utc>,
 ) -> (String, &'static str) {
     let today = london(now).date_naive();
@@ -1990,6 +2093,14 @@ fn status_line(
         return ("Ended".into(), "past");
     }
     if start <= now {
+        // A run with opening hours is only "on" while it is open.
+        if let Some(h) = hours {
+            return if h.is_open_at(now) {
+                (h.today_status(now), "live")
+            } else {
+                (h.today_status(now), "soon")
+            };
+        }
         // Without an end time we only know it is today, not that it's still on.
         return match end {
             Some(_) => ("On now".into(), "live"),
@@ -2091,7 +2202,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
         _ => None,
     };
     let primary = primary_source(&e);
-    let (status, status_class) = status_line(e.starts_at, e.ends_at, now);
+    let (status, status_class) = status_line(e.starts_at, e.ends_at, e.hours.as_ref(), now);
     let kinds: Vec<String> = std::iter::once(title_case(&e.category))
         .chain(e.medium_tags.iter().map(|t| title_case(label_of(t))))
         .collect();
@@ -2161,6 +2272,21 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                             "Starts " (time_tag(e.starts_at, fmt_date_time(e.starts_at)))
                                             br;
                                             "Ends " (time_tag(end, fmt_date_time(end)))
+                                        }
+                                    }
+                                }
+                            }
+                            @if let Some(h) = &e.hours {
+                                div {
+                                    dt { "Opening hours" }
+                                    dd class="hours" {
+                                        "Open " (h.display())
+                                        span class="sub" {
+                                            @if let Some(n) = &e.hours_note {
+                                                "The listing says: \u{201c}" (n) "\u{201d}"
+                                                br;
+                                            }
+                                            "London time. Check the venue's page before you go."
                                         }
                                     }
                                 }
@@ -2619,6 +2745,12 @@ async fn about() -> Response {
                             "on screen."
                         }
                         li {
+                            "The events list's \u{201c}Near me\u{201d} filter also asks for your location "
+                            "only when you tap \u{201c}Use my location\u{201d}. It rounds your position to "
+                            "about 100 metres in your browser and puts that in the page address, so our "
+                            "server can list what's within walking distance; we don't log or store it."
+                        }
+                        li {
                             "If you suggest a venue, we store the website address and your note, "
                             "plus a salted hash of your IP address (not the address itself) to stop spam. "
                             "The address and note go into our project's issue tracker so we can review them."
@@ -3032,7 +3164,7 @@ mod tests {
     #[test]
     fn status_line_says_where_an_event_stands() {
         let now = t("2026-10-01T12:00:00Z");
-        let s = |a: &str, b: Option<&str>| status_line(t(a), b.map(t), now);
+        let s = |a: &str, b: Option<&str>| status_line(t(a), b.map(t), None, now);
         assert_eq!(
             s("2026-09-01T00:00:00Z", Some("2027-01-03T00:00:00Z")).1,
             "live"
@@ -3057,6 +3189,45 @@ mod tests {
         assert!(f.page_query().contains("near=kings-cross"));
         assert!(Filters::parse("near=mars").api_query().is_err());
         assert!(Filters::parse("category=concert").api_query().is_err());
+    }
+
+    #[test]
+    fn near_me_is_rounded_and_walks_20_minutes_by_default() {
+        let f = Filters::parse("here=51.53214,-0.12449");
+        assert_eq!((f.here.as_str(), f.walk.as_str()), ("51.532,-0.124", "20"));
+        assert!(f.page_query().contains("here=51.532%2C-0.124&walk=20"));
+        assert!(!f.page_query().contains("51.5321"));
+        let q = f.api_query().unwrap();
+        let near = q.near.unwrap();
+        assert_eq!((near.lat, near.lng), (51.532, -0.124));
+        assert_eq!(near.radius_km, listing::walk_radius_km(20));
+        assert_eq!(effective_sort(&f), Sort::Nearest);
+        let today = Utc::now().with_timezone(&London).date_naive();
+        let chips = relaxations(&f, today, &[]);
+        let (label, href) = chips.last().unwrap();
+        assert_eq!(label, "Within 20 min walk");
+        assert!(!href.contains("here=") && !href.contains("walk="), "{href}");
+
+        let f = Filters::parse("here=51.5,-0.1&walk=10");
+        assert_eq!(
+            f.api_query().unwrap().near.unwrap().radius_km,
+            listing::walk_radius_km(10)
+        );
+        // Only the presets; anything else is the default.
+        assert_eq!(Filters::parse("here=51.5,-0.1&walk=45").walk, "20");
+        // No position, no walk; a bad position is ignored.
+        assert!(Filters::parse("walk=10").walk.is_empty());
+        let f = Filters::parse("here=abc&walk=10");
+        assert!(f.here.is_empty() && f.api_query().unwrap().near.is_none());
+        assert!(Filters::parse("here=91,0").here.is_empty());
+        assert_eq!(Filters::parse("here=51.5,-0.0001").here, "51.500,0.000");
+        // An area preset wins (picking one in the form replaces Near me).
+        let f = Filters::parse("here=51.5,-0.1&near=central");
+        assert!(f.here.is_empty() && f.walk.is_empty());
+        assert_eq!(
+            f.api_query().unwrap().near.unwrap().radius_km,
+            AREAS[0].radius_km
+        );
     }
 
     #[test]

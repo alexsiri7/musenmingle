@@ -424,7 +424,22 @@
       );
   }
 
+  // ------------------------------------------------------------ near me
+
+  /**
+   * "lat,lng" rounded to 3 decimals (about 100 m), the precision the home
+   * page's "Near me" filter puts in the address (the server rounds too).
+   */
+  function roundPosition(lat, lng) {
+    var r = function (x) {
+      var s = (Math.round(x * 1000) / 1000).toFixed(3);
+      return s === "-0.000" ? "0.000" : s;
+    };
+    return r(lat) + "," + r(lng);
+  }
+
   var api = {
+    roundPosition: roundPosition,
     isApple: isApple,
     shareMode: shareMode,
     shareEvent: shareEvent,
@@ -869,7 +884,58 @@
     });
   }
 
+  // ------------------------------------------------------------ / (Near me)
+
+  // The filters' "Near me" group is rendered hidden (it needs the browser's
+  // location). Tapping "Use my location" asks for it once, then submits the
+  // filter form with the rounded position in `here=`, the area preset
+  // cleared and (unless one was chosen) the closest-first sort.
+  function setUpNearMe() {
+    var group = doc.querySelector("[data-near-me]");
+    var button = doc.querySelector("[data-near-me-locate]");
+    var geo = root.navigator && root.navigator.geolocation;
+    if (!group || !button || !geo) return;
+    var form = group.closest("form");
+    var status = group.querySelector("[data-near-me-status]");
+    var say = function (text) {
+      if (status) status.textContent = text;
+    };
+    group.hidden = false;
+    button.hidden = false;
+    button.addEventListener("click", function () {
+      button.disabled = true;
+      say("Finding where you are…");
+      geo.getCurrentPosition(
+        function (pos) {
+          var input = form.querySelector('input[name="here"]');
+          if (!input) {
+            input = doc.createElement("input");
+            input.type = "hidden";
+            input.name = "here";
+            form.appendChild(input);
+          }
+          input.value = roundPosition(pos.coords.latitude, pos.coords.longitude);
+          var area = form.querySelector('select[name="near"]');
+          if (area) area.value = "";
+          // Like an area, Near me lists the closest first unless a sort
+          // (or a search, ranked by match) was chosen.
+          var params = new URLSearchParams(root.location.search);
+          var sort = form.querySelector('select[name="sort"]');
+          if (sort && !params.get("sort") && !params.get("q")) sort.value = "nearest";
+          say("Showing events near you…");
+          form.submit();
+        },
+        function () {
+          button.disabled = false;
+          say("Couldn't get your location. Check the browser's location permission, or pick an area.");
+        },
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+      );
+    });
+  }
+
   function start() {
+    setUpNearMe();
     setUpHandoffs();
     refresh();
     renderSaved();

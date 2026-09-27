@@ -1,0 +1,5 @@
+# Robots.txt updated 20230717
+User-agent: *
+Allow: /
+Disallow: /account/
+Sitemap: https://londonreviewbookshop.co.uk/sitemap.xml
