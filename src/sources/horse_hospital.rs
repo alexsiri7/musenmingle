@@ -296,6 +296,26 @@ mod tests {
     }
 
     #[test]
+    fn a_missing_or_malformed_printed_start_is_a_parse_error() {
+        let mut missing = payload("2026-10-08T19:00:00+0100", "19:00", &["Talk"]);
+        missing.as_object_mut().unwrap().remove("printed_start");
+        let err = normalise_payload(&missing).unwrap_err().to_string();
+        assert!(err.contains("no printed start"), "{err}");
+        let err = normalise_payload(&payload("2026-10-08T19:00:00+0100", "7pm", &["Talk"]))
+            .unwrap_err()
+            .to_string();
+        assert!(err.contains("bad printed start"), "{err}");
+    }
+
+    #[test]
+    fn an_end_date_equal_to_the_start_is_dropped() {
+        let ev = normalise_payload(&payload("2026-10-25T17:00:00+0000", "17:00", &["Talk"]))
+            .unwrap()
+            .unwrap();
+        assert!(ev.ends_at.is_none());
+    }
+
+    #[test]
     fn categories_by_precedence_and_gigs_skipped() {
         assert_eq!(
             category(&["Music", "Talk", "Workshop"]),
