@@ -772,13 +772,12 @@ async function createMap(maplibregl, pane, state, list) {
       fig.appendChild(cap);
       box.appendChild(fig);
     }
+    // Our detail page is the main button (as on the event cards); the
+    // venue's own page is the secondary link.
     const actions = el("div", "pop-actions");
-    if (e.cta) {
-      const cta = el("a", "button", "See it on " + e.cta.name + " →");
-      cta.setAttribute("href", e.cta.url);
-      cta.setAttribute("rel", "noopener");
-      actions.appendChild(cta);
-    }
+    const det = el("a", "button", "Details");
+    det.setAttribute("href", "/events/" + encodeURIComponent(e.id));
+    actions.appendChild(det);
     // The card's Save toggle (web.js handles clicks and shows it).
     const card = doc.getElementById("ev-" + e.id);
     const save = card && card.querySelector("button.save[data-save-id]");
@@ -787,9 +786,12 @@ async function createMap(maplibregl, pane, state, list) {
       b.hidden = true;
       actions.appendChild(b);
     }
-    const det = el("a", "arrow-link", "Details");
-    det.setAttribute("href", "/events/" + encodeURIComponent(e.id));
-    actions.appendChild(det);
+    if (e.cta) {
+      const cta = el("a", "arrow-link", "See it on " + e.cta.name + " →");
+      cta.setAttribute("href", e.cta.url);
+      cta.setAttribute("rel", "noopener");
+      actions.appendChild(cta);
+    }
     box.appendChild(actions);
     return box;
   }

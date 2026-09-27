@@ -495,14 +495,16 @@ fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
                             " " span class="badge opening" { "Opening" }
                         }
                     }
+                    // Our detail page first (as on the event cards); the
+                    // venue's own page is the secondary link.
                     p class="near-links" {
+                        a class="arrow-link" href=(detail) { "Details →" span class="vh" { ": " (e.title) } }
                         @if let Some((p, u)) = &primary {
-                            a class="arrow-link" href=(u) rel="noopener" {
+                            a class="near-source" href=(u) rel="noopener" {
                                 "See it on " (p.display_name) " →"
                                 span class="vh" { ": " (e.title) }
                             }
                         }
-                        a class="near-details" href=(detail) { "Details" span class="vh" { ": " (e.title) } }
                     }
                 }
             }
@@ -537,8 +539,8 @@ fn near_card_template() -> Markup {
                     div class="near-foot" {
                         p class="tags" { span class="badge" data-slot="category" {} }
                         p class="near-links" {
-                            a class="arrow-link" data-slot="cta" rel="noopener" hidden {}
-                            a class="near-details" data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
+                            a class="arrow-link" data-slot="details" href="/" { "Details →" span class="vh" data-slot="details-title" {} }
+                            a class="near-source" data-slot="cta" rel="noopener" hidden {}
                         }
                     }
                 }

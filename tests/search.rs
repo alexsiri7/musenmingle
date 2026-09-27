@@ -255,7 +255,9 @@ async fn search_ranks_by_relevance_pages_and_counts() {
     // Title match (weight A) before an excerpt match (C), whatever the dates.
     let (_, body) = get(&app, "/v1/events?q=ceramics").await;
     assert_eq!(titles(&body), ["Ceramics now", "Studio evening"]);
-    assert_eq!(body["counts"]["when"]["daytime"], 2, "counts follow q");
+    // (Price counts, not "when" ones: those depend on the time of day the
+    // test runs, as the seeded events start at now + N days.)
+    assert_eq!(body["counts"]["price"]["unknown"], 2, "counts follow q");
 
     // Pages of one walk every match once, in the same order.
     let mut walked = Vec::new();

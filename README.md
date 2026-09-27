@@ -397,7 +397,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   self-hosted Greater London vector tiles (`/tiles/london.pmtiles`, one
   PMTiles file served with range requests; libraries, styles and glyphs
   vendored under `static/map/`, nothing from third parties), numbered and
-  clustered markers, a popover whose main button is the venue's page, and
+  clustered markers, a popover whose main button is our detail page (with a "See it on
+  <venue> →" link under it), and
   "Use my exact coordinates": the browser's position stays on the device
   (the script fetches the London-wide `at=now` listing and computes
   walking distances itself). Only `/map` allows geolocation
