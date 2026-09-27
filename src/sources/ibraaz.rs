@@ -19,7 +19,8 @@
 //!   page then prints dates only ("8 Jul – 22 Nov 2026", even where the
 //!   payload has opening hours). Otherwise the time comes from the printed
 //!   line ("Sat 3 Oct, 3–4.30pm"), which wins over the payload's end (17:00
-//!   for that talk); its start must match the payload's.
+//!   for that talk); its start must match the payload's. Anything but an
+//!   exhibition spanning more than one day is a run of sessions and skipped.
 //! * Category from the site's: talks → talk; workshops → workshop;
 //!   exhibitions and library-in-residence (a residency installed in the
 //!   library, open for months) → exhibition, in that order. Music,
@@ -275,6 +276,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         )));
     }
     let (first, last) = (start.date(), end.date());
+    if last > first && category != Category::Exhibition {
+        return Ok(None);
+    }
     let whole_day = start.time() == NaiveTime::MIN
         && end.time() == NaiveTime::from_hms_opt(23, 59, 59).unwrap();
 
@@ -474,6 +478,17 @@ mod tests {
         assert!(day.all_day);
         assert_eq!(day.starts_at.to_rfc3339(), "2026-10-09T23:00:00+00:00");
         assert_eq!(day.ends_at, None);
+    }
+
+    #[test]
+    fn multi_day_non_exhibitions_are_skipped() {
+        let payload = item(
+            &["workshops"],
+            "2026-10-10T11:00:00+00:00",
+            "2026-10-11T16:00:00+00:00",
+            "Sat 10 – Sun 11 Oct, 11am–4pm",
+        );
+        assert_eq!(normalise_payload(&payload).unwrap(), None);
     }
 
     #[test]

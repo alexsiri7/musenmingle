@@ -128,7 +128,7 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     its dates, plus each event page's payload for its description; London
     wall-clock times checked against the printed date line; exhibitions,
     library residencies, talks and workshops (music, performance and film
-    alone skipped); descriptions but no images (artists' works and credited
+    alone and multi-day non-exhibition events skipped); descriptions but no images (artists' works and credited
     photographs).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
