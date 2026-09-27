@@ -477,6 +477,19 @@ mod tests {
     }
 
     #[tokio::test(start_paused = true)]
+    async fn crawl_delay_on_one_host_does_not_slow_another() {
+        let rl = RateLimiter::new(RateLimitConfig::default());
+        let robots_slot = rl.acquire("a.test", None).await;
+        rl.acquire("b.test", None).await;
+        rl.space_after("a.test", robots_slot, Duration::from_secs(60));
+        let t = Instant::now();
+        rl.acquire("b.test", None).await;
+        assert_eq!(t.elapsed(), Duration::from_secs(2));
+        rl.acquire("c.test", None).await;
+        assert_eq!(t.elapsed(), Duration::from_secs(2));
+    }
+
+    #[tokio::test(start_paused = true)]
     async fn rate_limiter_serialises_concurrent_callers() {
         let rl = Arc::new(RateLimiter::new(RateLimitConfig::default()));
         let start = Instant::now();
