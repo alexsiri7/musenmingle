@@ -14,6 +14,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
     ("artlogic", include_str!("../sources/artlogic.rs")),
     ("barbican", include_str!("../sources/barbican.rs")),
     (
+        "camden_art_centre",
+        include_str!("../sources/camden_art_centre.rs"),
+    ),
+    (
         "chisenhale_gallery",
         include_str!("../sources/chisenhale_gallery.rs"),
     ),
