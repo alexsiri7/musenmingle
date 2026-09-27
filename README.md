@@ -104,6 +104,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     title and summary; exhibitions and talks only (screenings, courses,
     projects and open calls skipped); descriptions but no images (credited
     third-party photographs).
+  - `lux` — CSS-selector scraper (no JSON-LD): the "What's on" upcoming
+    cards' taxonomy, location, days and price, plus the detail page of each
+    in-scope card for its time and description; exhibitions, workshops,
+    talks and festivals (online, password-protected, non-London and
+    multi-day non-exhibition events skipped); descriptions but no images
+    (licensed stills of artists' works).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -461,7 +467,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery and Four Corners daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners and LUX daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
