@@ -1,0 +1,8 @@
+---
+source: tests/source_lisson_gallery.rs
+expression: listing_paths()
+---
+[
+  "/exhibitions/christopher-le-brun-lisson-london",
+  "/exhibitions/dana-awartani-lisson-london"
+]

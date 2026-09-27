@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /
+Disallow: /private-viewing-room/
+Disallow: /api/
+Disallow: /fairs/*/*
+
+Sitemap: https://lisson.com/sitemap.xml

@@ -29,6 +29,7 @@ pub mod horse_hospital;
 pub mod hunterian_museum;
 pub mod ibraaz;
 pub mod jsonld;
+pub mod lisson_gallery;
 pub mod lux;
 pub mod mall_galleries;
 pub mod october_gallery;
@@ -131,6 +132,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         horse_hospital::KEY => Ok(Box::new(horse_hospital::HorseHospital::new(base))),
         hunterian_museum::KEY => Ok(Box::new(hunterian_museum::HunterianMuseum::new(base))),
         ibraaz::KEY => Ok(Box::new(ibraaz::Ibraaz::new(base))),
+        lisson_gallery::KEY => Ok(Box::new(lisson_gallery::LissonGallery::new(base))),
         lux::KEY => Ok(Box::new(lux::Lux::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
         october_gallery::KEY => Ok(Box::new(october_gallery::OctoberGallery::new(base))),

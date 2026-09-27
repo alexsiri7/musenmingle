@@ -1,0 +1,56 @@
+---
+source: tests/source_lisson_gallery.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "27 Bell Street / 67 Lisson Street, London NW1",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "christopher-le-brun-minds-weather|2026-11-19|lisson",
+      "description": "This November, Christopher Le Brun presents a new exhibition at Lisson Gallery London, expanding his ongoing inquiry into the formal possibilities of painting. His recent works develop modular compositions that range from singular canvases to expansive, intricately structured ensembles, including triptychs and monumental multi-part paintings. Together, these works push the boundaries of abstract pictorial form. Le Brun’s practice combines a masterful command of touch and colour with a deep engagement with art history, drawing on a rich array of visual, musical, and literary sources.",
+      "ends_at": "2027-02-13T00:00:00Z",
+      "image_url": "https://d7ra36y65tyn0.cloudfront.net/image/553853451406/image_uks8t0hucd1c9534la61oqmj43/-S1200x-FJPG",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T00:00:00Z",
+      "tags": [],
+      "title": "Christopher Le Brun: The Mind's Weather",
+      "url": "https://lisson.com/exhibitions/christopher-le-brun-lisson-london",
+      "venue_name": "Lisson Gallery"
+    },
+    "source_event_id": "exhibitions/christopher-le-brun-lisson-london"
+  },
+  {
+    "event": {
+      "address": "27 Bell Street / 67 Lisson Street, London NW1",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "dana-awartani|2026-11-19|lisson",
+      "description": "Following her presentation representing Saudi Arabia in the 2026 Venice Biennale, Dana Awartani opens a new exhibition at Lisson London this November. Maintaining a deep commitment to craft and traditional art-making, Awartani addresses urgent political concerns such as cultural sustainability and the ongoing destruction of monuments globally. Across her practice, the artist initiates a process of healing through the active darning of holes in her work; punctures are spliced as metaphors for places that have been violated or destroyed in war, colonialism or acts of terror. This mending through darning also nods to the venerable tradition of repairing and revering objects, and speaks to the ethical act of repair over replacement.",
+      "ends_at": "2027-02-13T00:00:00Z",
+      "image_url": "https://d7ra36y65tyn0.cloudfront.net/image/553853451406/image_ch935c9u754ft68aq4gekpas6o/-Ro:4,w:1200,h:675,n:default-FJPG",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T00:00:00Z",
+      "tags": [],
+      "title": "Dana Awartani",
+      "url": "https://lisson.com/exhibitions/dana-awartani-lisson-london",
+      "venue_name": "Lisson Gallery"
+    },
+    "source_event_id": "exhibitions/dana-awartani-lisson-london"
+  }
+]
