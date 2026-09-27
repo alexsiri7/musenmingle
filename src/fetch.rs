@@ -7,7 +7,8 @@
 //! * robots.txt, fetched once per origin and cached for the lifetime of the
 //!   context (one ingest run). Per RFC 9309: 2xx → parse the rules, 4xx →
 //!   everything allowed, 5xx / network error → everything disallowed.
-//!   A `Crawl-delay` longer than the configured interval is honoured;
+//!   A `Crawl-delay` longer than the configured interval is honoured,
+//!   counting the robots.txt fetch itself as a request;
 //! * a per-domain rate limit (default one request every 2 s per host).
 //!
 //! The underlying `reqwest::Client` is private on purpose; do not add an
@@ -135,9 +136,10 @@ impl RateLimiter {
         }
     }
 
-    /// Wait until a request to `host` is permitted. `min_interval` (e.g. a
-    /// robots.txt Crawl-delay) raises the configured interval if larger.
-    pub async fn acquire(&self, host: &str, min_interval: Option<Duration>) {
+    /// Wait until a request to `host` is permitted and return the slot it
+    /// was given. `min_interval` (e.g. a robots.txt Crawl-delay) raises the
+    /// configured interval if larger.
+    pub async fn acquire(&self, host: &str, min_interval: Option<Duration>) -> Instant {
         let interval = self
             .config
             .interval_for(host)
@@ -150,6 +152,16 @@ impl RateLimiter {
             slot
         };
         tokio::time::sleep_until(slot).await;
+        slot
+    }
+
+    /// Hold the next request to `host` until at least `interval` after the
+    /// request made at `slot`, for an interval learned only after that
+    /// request was sent (a Crawl-delay read from robots.txt).
+    pub fn space_after(&self, host: &str, slot: Instant, interval: Duration) {
+        let mut map = self.next_slot.lock().expect("rate limiter poisoned");
+        let next = map.entry(host.to_string()).or_insert(slot);
+        *next = (*next).max(slot + interval);
     }
 }
 
@@ -208,7 +220,7 @@ impl FetchContext {
         }
         let robots_url = Url::parse(&format!("{origin}/robots.txt"))
             .map_err(|_| FetchError::InvalidUrl(origin.clone()))?;
-        self.limiter.acquire(&host, None).await;
+        let slot = self.limiter.acquire(&host, None).await;
         let policy = match self.client.get(robots_url.clone()).send().await {
             Ok(resp) => {
                 let status = resp.status();
@@ -221,6 +233,9 @@ impl FetchContext {
             }
         };
         tracing::debug!(%origin, ?policy, "loaded robots.txt");
+        if let Some(delay) = policy.crawl_delay() {
+            self.limiter.space_after(&host, slot, delay);
+        }
         let policy = Arc::new(policy);
         cache.insert(origin, policy.clone());
         Ok(policy)
@@ -419,6 +434,46 @@ mod tests {
         assert_eq!(start.elapsed(), Duration::from_secs(4));
         rl.acquire("a.test", None).await;
         assert_eq!(start.elapsed(), Duration::from_secs(14));
+    }
+
+    #[test]
+    fn robots_crawl_delay_group_precedence_and_fractions() {
+        let ours_wins =
+            b"User-agent: *\nCrawl-delay: 30\n\nUser-agent: MuseNMingleBot\nCrawl-delay: 5\n";
+        let p = RobotsPolicy::from_response(StatusCode::OK, ours_wins);
+        assert_eq!(p.crawl_delay(), Some(Duration::from_secs(5)));
+        let wildcard =
+            RobotsPolicy::from_response(StatusCode::OK, b"User-agent: *\nCrawl-delay: 7\n");
+        assert_eq!(wildcard.crawl_delay(), Some(Duration::from_secs(7)));
+        let fractional =
+            RobotsPolicy::from_response(StatusCode::OK, b"User-agent: *\nCrawl-delay: 2.5\n");
+        assert_eq!(fractional.crawl_delay(), Some(Duration::from_millis(2500)));
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn crawl_delay_spaces_the_first_request_after_robots_txt() {
+        let rl = RateLimiter::new(RateLimitConfig::default());
+        let delay = Duration::from_secs(20);
+        let start = Instant::now();
+        let robots_slot = rl.acquire("a.test", None).await;
+        rl.space_after("a.test", robots_slot, delay);
+        rl.acquire("a.test", Some(delay)).await;
+        assert_eq!(start.elapsed(), delay);
+        rl.acquire("a.test", Some(delay)).await;
+        assert_eq!(start.elapsed(), 2 * delay);
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn crawl_delay_below_the_interval_does_not_speed_us_up() {
+        let rl = RateLimiter::new(RateLimitConfig::default());
+        let delay = Duration::from_secs(1);
+        let start = Instant::now();
+        let robots_slot = rl.acquire("a.test", None).await;
+        rl.space_after("a.test", robots_slot, delay);
+        rl.acquire("a.test", Some(delay)).await;
+        assert_eq!(start.elapsed(), Duration::from_secs(2));
+        rl.acquire("a.test", Some(delay)).await;
+        assert_eq!(start.elapsed(), Duration::from_secs(4));
     }
 
     #[tokio::test(start_paused = true)]
