@@ -31,9 +31,15 @@
 //!   ticket-price block are free only when their description says so
 //!   explicitly ("This free installation…", see
 //!   `normalise::describes_free_entry`); otherwise the price is unknown.
+//! * The image is the listing card's JPEG (`img[src]`, the 728×509
+//!   `event_listing_small_jpg` style). The detail page's `og:image` is an AVIF
+//!   derivative, which the thumbnailer cannot decode, so it is only a fallback
+//!   when it is not AVIF.
 //! * Every item is placed at the Barbican Centre; the room ("Art Gallery",
 //!   "The Pit") is kept in the payload only. An off-site item would get the
 //!   wrong venue.
+
+use std::collections::BTreeMap;
 
 use async_trait::async_trait;
 use scraper::{ElementRef, Html, Selector};
@@ -80,6 +86,8 @@ pub struct ListingPage {
     /// Event paths (`/whats-on/<year>/event/<slug>`), in document order,
     /// de-duplicated.
     pub event_paths: Vec<String>,
+    /// Absolute URL of each event's card image, by event path.
+    pub image_urls: BTreeMap<String, String>,
     /// The "Load More" link (`?page=N`), relative to the page's own URL.
     pub next_page: Option<String>,
 }
@@ -108,20 +116,35 @@ fn event_path_parts(path: &str) -> Option<(&str, &str)> {
 pub fn parse_listing(html: &str) -> ListingPage {
     let doc = Html::parse_document(html);
     let base = Url::parse(SITE).expect("valid url");
+    let link = selector("a.search-listing__link[href]");
+    let image = selector(".search-listing__image img[src]");
     let mut event_paths: Vec<String> = Vec::new();
-    for a in doc.select(&selector(
-        "article.listing--event a.search-listing__link[href]",
-    )) {
-        let Some(Ok(u)) = a.value().attr("href").map(|h| base.join(h)) else {
+    let mut image_urls = BTreeMap::new();
+    for card in doc.select(&selector("article.listing--event")) {
+        let Some(Ok(u)) = card
+            .select(&link)
+            .next()
+            .and_then(|a| a.value().attr("href"))
+            .map(|h| base.join(h))
+        else {
             continue;
         };
         if u.host_str() != Some("www.barbican.org.uk") || u.query().is_some() {
             continue;
         }
         let path = u.path().to_string();
-        if event_path_parts(&path).is_some() && !event_paths.contains(&path) {
-            event_paths.push(path);
+        if event_path_parts(&path).is_none() || event_paths.contains(&path) {
+            continue;
         }
+        if let Some(Ok(img)) = card
+            .select(&image)
+            .next()
+            .and_then(|i| i.value().attr("src"))
+            .map(|src| base.join(src))
+        {
+            image_urls.insert(path.clone(), img.to_string());
+        }
+        event_paths.push(path);
     }
     let next_page = doc
         .select(&selector(".pager a[rel=next][href]"))
@@ -130,6 +153,7 @@ pub fn parse_listing(html: &str) -> ListingPage {
         .map(str::to_string);
     ListingPage {
         event_paths,
+        image_urls,
         next_page,
     }
 }
@@ -180,10 +204,15 @@ fn price_text(doc: &Html) -> Option<String> {
     text_of(".accordion-item__value").or_else(|| text_of(".accordion-item__title"))
 }
 
+fn is_avif(image_url: &str) -> bool {
+    Url::parse(image_url).is_ok_and(|u| u.path().to_ascii_lowercase().ends_with(".avif"))
+}
+
 /// Parse one detail page into a [`RawEvent`] (None if it has no title).
 /// `url` is the address the page was fetched from; `<year>/<slug>` of its
-/// path is the stable source id.
-pub fn parse_detail(html: &str, url: &Url) -> Option<RawEvent> {
+/// path is the stable source id. `listing_image` is the event's card image
+/// from [`ListingPage::image_urls`].
+pub fn parse_detail(html: &str, url: &Url, listing_image: Option<&str>) -> Option<RawEvent> {
     let doc = Html::parse_document(html);
     let first_text = |s: &str| {
         doc.select(&selector(s))
@@ -196,11 +225,13 @@ pub fn parse_detail(html: &str, url: &Url) -> Option<RawEvent> {
         .select(&selector(".event-byline .date-range time[datetime]"))
         .filter_map(|e| e.value().attr("datetime"))
         .collect();
-    let image_url = doc
-        .select(&selector(r#"meta[property="og:image"]"#))
-        .next()
-        .and_then(|e| e.value().attr("content"))
-        .map(str::to_string);
+    let image_url = listing_image.map(str::to_string).or_else(|| {
+        doc.select(&selector(r#"meta[property="og:image"]"#))
+            .next()
+            .and_then(|e| e.value().attr("content"))
+            .filter(|u| !is_avif(u))
+            .map(str::to_string)
+    });
     let path = url.path();
     let source_event_id = match event_path_parts(path) {
         Some((year, slug)) => format!("{year}/{slug}"),
@@ -319,6 +350,7 @@ impl Source for Barbican {
 
     async fn fetch(&self, ctx: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
         let mut paths: Vec<String> = Vec::new();
+        let mut images: BTreeMap<String, String> = BTreeMap::new();
         for listing in LISTING_PATHS {
             let mut url = self
                 .base_url
@@ -330,6 +362,9 @@ impl Source for Barbican {
                     if !paths.contains(&path) {
                         paths.push(path);
                     }
+                }
+                for (path, image) in page.image_urls {
+                    images.entry(path).or_insert(image);
                 }
                 let Some(next) = page.next_page else {
                     break;
@@ -354,7 +389,7 @@ impl Source for Barbican {
                 }
             };
             match ctx.get_text(&url).await {
-                Ok(html) => match parse_detail(&html, &url) {
+                Ok(html) => match parse_detail(&html, &url, images.get(path).map(String::as_str)) {
                     Some(raw) => out.push(raw),
                     None => ctx.report_error(format!("{path}: no page title")),
                 },
@@ -426,6 +461,34 @@ mod tests {
             "19:00"
         );
         assert_eq!(event.ends_at, None);
+    }
+
+    fn detail_with_og_image(og_image: &str) -> String {
+        format!(
+            r#"<html><head><meta property="og:image" content="{og_image}" /></head>
+            <body><h1 class="heading-group__primary">Talk</h1></body></html>"#
+        )
+    }
+
+    fn image_url(html: &str, listing_image: Option<&str>) -> Option<String> {
+        let url = Url::parse("https://www.barbican.org.uk/whats-on/2026/event/talk").unwrap();
+        let raw = parse_detail(html, &url, listing_image).unwrap();
+        raw.payload["image_url"].as_str().map(str::to_string)
+    }
+
+    #[test]
+    fn listing_image_wins_and_avif_og_image_is_dropped() {
+        let avif = detail_with_og_image(
+            "https://www.barbican.org.uk/sites/default/files/styles/large/public/images/x.jpg.avif?itok=a",
+        );
+        let jpeg = "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/x.jpg?itok=b";
+        assert_eq!(image_url(&avif, Some(jpeg)).as_deref(), Some(jpeg));
+        assert_eq!(image_url(&avif, None), None);
+
+        let og_jpeg = "https://www.barbican.org.uk/sites/default/files/x.JPG?itok=c";
+        let html = detail_with_og_image(og_jpeg);
+        assert_eq!(image_url(&html, None).as_deref(), Some(og_jpeg));
+        assert_eq!(image_url(&html, Some(jpeg)).as_deref(), Some(jpeg));
     }
 
     #[test]

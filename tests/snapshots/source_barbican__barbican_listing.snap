@@ -23,6 +23,23 @@ expression: pages
         "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curatorial-assistant",
         "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith"
       ],
+      "image_urls": {
+        "/whats-on/2025/event/concrete-and-clay-archiving-the-barbican": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2023-04/DSC_2433%20%281%29.jpg?itok=Kvpxbujv",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Niwa%20House-Felix%20Koch-3.jpg?itok=-lS2pOJA",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Godolphin%20and%20Latymer%20School-Jim%20Stephenson.jpg?itok=UjvPO5d5",
+        "/whats-on/2026/event/architecture-on-stage-worofila": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/20240813_SC_121%20%281%29_0.jpg?itok=qdVLvFMZ",
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Listening%20To%20Ice.jpg?h=94b58119&itok=enr1ms2G",
+        "/whats-on/2026/event/lawrence-abu-hamdan-zifzafa": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Zifzafa_%20livestream%20audio%20essay%2C%202025.%20Video%20game%20simulation%2C%204%20channel%20audio.jpg?itok=U0YDCGkR",
+        "/whats-on/2026/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Ryman%20web%20image%204.jpg?h=7adbbeb1&itok=aIEn_aZm",
+        "/whats-on/2026/event/robert-ryman-exhibition-tour-with-curatorial-assistant": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Untitled%20design%20%285%29.png?h=7adbbeb1&itok=7i62-J5Y",
+        "/whats-on/2026/event/robert-ryman-the-real-thing": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Ryman%20web%20image2.png?h=7adbbeb1&itok=lTYQr3bz",
+        "/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Sarathy_8%20by%20Keerthana%20Kunnath%20%281%29.png?h=74ba9867&itok=lJodCcx5",
+        "/whats-on/2026/event/ryman-in-rhythm-tyroneisaacstuart": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Half%20Body%20by%20Eike.png?h=d9b56038&itok=NAQoSsEu",
+        "/whats-on/2026/event/yuko-mohri-and-christian-marclay-performance": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/1.jpg?itok=Cvx_VWz2",
+        "/whats-on/2026/event/yuko-mohri-in-concert": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/Yuko%20Mohri%2C%20Decomposition%2C%202022.%20Fruits%2C%20wooden%20bowl%2C%20speakers%2C%20amplifier%2C%20computer%2C%20electrodes%2C%20cables.%20Installation%20view%20of%20Kanazawa%20Citizens%20Free%20Art%20Day%20Open%20Museum%202022%2C%2021st%20Century%20Museum%20of%20C.JPG?itok=7RpTUqrK",
+        "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Untitled%20design%20%288%29.png?h=7adbbeb1&itok=e2zV5Uyj",
+        "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curatorial-assistant": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Untitled%20design%20%287%29.png?h=7adbbeb1&itok=L7vfXwsT"
+      },
       "next_page": "?page=1"
     }
   },
@@ -38,6 +55,15 @@ expression: pages
         "/whats-on/2027/event/rosa-barba",
         "/whats-on/2027/event/alice-adams"
       ],
+      "image_urls": {
+        "/whats-on/2027/event/alice-adams": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Alice%20Adams%2C%20Resurrection%2C%201958%2C%20Cotton%2C%20wool%2C%20silk%2C%20and%20jute%2C%20Museum%20of%20Arts%20and%20Design%2C%20New%20York%2C%20gift%20of%20Kate%20Gordy%2C%201995%2C%20Ph.jpg?h=2f30cd1a&itok=-Pes11eh",
+        "/whats-on/2027/event/characters-of-fashion": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/ORL-FS-LARGE-029_1.jpg?h=b5325398&itok=SaK9PVeD",
+        "/whats-on/2027/event/dayanita-singh": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Ustad%20Museum.jpg?h=fa336cb8&itok=13K5yhci",
+        "/whats-on/2027/event/magdalene-odundo": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/2024_Magdalene%20Odundo_TDG%20DS3_ph%20Ben%20Westoby%20%2810%29.jpg?h=441f6f4f&itok=entBZKXb",
+        "/whats-on/2027/event/rosa-barba": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/BARBA_BARBICAN_PRESS_1.jpg?h=9338eda3&itok=-sdCe1lw",
+        "/whats-on/2027/event/ryman-in-rhythm-soweto-kinch": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/soweto%20kinch.jpg?h=2590c66e&itok=vY9bC3V8",
+        "/whats-on/2027/event/ximena-garrido-lecca": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/6.%20Ximena%E2%80%AFGarrido-Lecca%20%281%29.jpg?h=0b25c2cf&itok=zqX8pwYb"
+      },
       "next_page": null
     }
   },
@@ -61,6 +87,23 @@ expression: pages
         "/whats-on/2026/event/darbar-breathwork-to-energise-with-davel-patel",
         "/whats-on/2026/event/darbar-a-voice-without-borders-by-sandeep-narayan"
       ],
+      "image_urls": {
+        "/whats-on/2026/event/an-evening-with-fran-lebowitz": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2025-11/FRAN%20NEW%202026-2000x1000.jpg?itok=OthGWmlB",
+        "/whats-on/2026/event/an-evening-with-nick-park": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Nick%20Park%202000x1000.jpg?itok=uaBFN5ZU",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Niwa%20House-Felix%20Koch-3.jpg?itok=-lS2pOJA",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Godolphin%20and%20Latymer%20School-Jim%20Stephenson.jpg?itok=UjvPO5d5",
+        "/whats-on/2026/event/basic-forms-reimagining-public-space": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Barbican_Basic%20Forms_260815_38.jpeg?h=f97dbb21&itok=3VNgw830",
+        "/whats-on/2026/event/black-british-book-festival-2026": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/BBBF%20Main%20page%202026%20AUDIENCE%20Credit%20-%20Sledge%20Tshibangu.jpg?h=790c7775&itok=At2sNrKo",
+        "/whats-on/2026/event/blindboy-the-blindboy-podcast-live": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2025-06/BLINDBOY%202000X1000.jpg?itok=7KOLqzVH",
+        "/whats-on/2026/event/darbar-a-voice-without-borders-by-sandeep-narayan": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Snadeep%20Narayan_Talk_BC%20Use%20Image.jpg?h=97165ddc&itok=NllM2j_a",
+        "/whats-on/2026/event/darbar-breathwork-to-energise-with-davel-patel": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/31%20Oct%202026%20Davel%20Patel_Breathwork.jpg?h=a80ae52f&itok=JHkY8DUQ",
+        "/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Shahbaz%20Hussain%20Talk%20Cover%20Image.jpg?h=4ac06099&itok=STj51jY6",
+        "/whats-on/2026/event/darbar-yogabliss-to-live-music-with-kanwal-ahluwalia": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Kanwal%2BKirpal_BC%20Use.jpg?h=7b3d1770&itok=LU_65MUZ",
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Listening%20To%20Ice.jpg?h=94b58119&itok=enr1ms2G",
+        "/whats-on/2026/event/piano-masterclass-with-sofya-gulyak": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/gulyak-sofya-highres%20%281%29.jpg?itok=_4QjlRcu",
+        "/whats-on/2026/event/realm-of-the-rebels": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Touretteshero_Logo_RebelPlay_2ee%20%281%29.jpg?h=a9e6bb62&itok=d6hXw_Tg",
+        "/whats-on/2026/event/spirit-moves-us-sound-movement-session-with-seyi-adelekun": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Spirit%20Moves%20Us.jpg?h=7be64629&itok=ROuVtXLG"
+      },
       "next_page": "?page=1"
     }
   },
@@ -84,6 +127,23 @@ expression: pages
         "/whats-on/2027/event/total-immersion-music-for-wellbeing-talk",
         "/whats-on/2027/event/bbc-so-total-immersion-music-for-wellbeing"
       ],
+      "image_urls": {
+        "/whats-on/2026/event/an-evening-with-sir-chris-hoy": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/CHRIS%20HOY%202000X1000.jpg?itok=GbDE17rK",
+        "/whats-on/2026/event/an-evening-with-yotam-ottolenghi-simple-too": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/YOTAM%201920X1080.jpg?itok=YpvYdF4l",
+        "/whats-on/2026/event/architecture-on-stage-worofila": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/20240813_SC_121%20%281%29_0.jpg?itok=qdVLvFMZ",
+        "/whats-on/2026/event/chris-packhams-world-of-wonder-a-planet-on-the-edge": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-05/CHRIS%20PACKHAM%202000x1000%20300ppi.jpg?itok=tPxzqN-C",
+        "/whats-on/2026/event/darbar-exploring-the-beauty-of-raga-kamas-by-jayanthi-ku": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Jayanthi%20Kumaresh_Masterclass%20Image_BC%20Use.jpg?h=92197ce0&itok=nV387RqR",
+        "/whats-on/2026/event/darbar-raga-meditation-with-jason-kalidas-eartha-love": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Jason_Eartha_BC%20Use%20%281%29.jpg?h=4e330311&itok=cJMoMy5m",
+        "/whats-on/2026/event/darbar-the-benaras-gharana-by-sunanda-sharma": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Sunanda%20Sharma_Talk_BC.jpg?itok=nCIp_kz1",
+        "/whats-on/2026/event/darbar-the-science-of-slower-breathing-with-davel-patel": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Davel%20Patel_Breathwork%20%282%29%20%281%29.jpg?itok=rjOEsSZR",
+        "/whats-on/2026/event/darbar-the-singing-violin": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Kala%20Ramnath_Masterclass%20Image_BC%20Use.jpg?itok=o2Ln7rcf",
+        "/whats-on/2026/event/harry-enfield-and-no-chums-0": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2025-09/HARRY%20ENFIELD%202000x1000%20300ppi_0.jpg?itok=N86X3Ywo",
+        "/whats-on/2026/event/how-the-body-keeps-the-score-dr-bessel-van-der-kolk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-02/Bessel%20van%20der%20Kolk%202000x1000.jpg?itok=03mhncuo",
+        "/whats-on/2026/event/young-barbican-conservatory-sunday": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/_DSC9187%20%281%29.jpg?h=77d64ac2&itok=Y2ioNKMZ",
+        "/whats-on/2026/event/young-barbican-pick-mix-signal-decay-15": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/HufflePuff%20Landscape%20still%20%28filmmaker%20approved%29%29.jpeg?itok=b8n5dWVa",
+        "/whats-on/2027/event/bbc-so-total-immersion-music-for-wellbeing": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Night_Tracks_YELLOW%20%281%29.png?h=eba629ac&itok=waLg7ynj",
+        "/whats-on/2027/event/total-immersion-music-for-wellbeing-talk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Night_Tracks_YELLOW%20%281%29.png?h=eba629ac&itok=waLg7ynj"
+      },
       "next_page": "?page=2"
     }
   },
@@ -104,6 +164,20 @@ expression: pages
         "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk",
         "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk-0"
       ],
+      "image_urls": {
+        "/whats-on/2027/event/a-new-history-of-our-future-with-peter-frankopan": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Peter%20Frankopan.jpg?itok=WnVBTgP3",
+        "/whats-on/2027/event/bbc-so-total-immersion-the-music-of-rebecca-saunders-0": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Rebecca_Saunders_3_YELLOW.png?h=eba629ac&itok=gs9V76oA",
+        "/whats-on/2027/event/how-geography-explains-our-world-with-tim-marshall": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Tim%20M%20no%20text%20%281%29.png?itok=MtEa3kAu",
+        "/whats-on/2027/event/john-waters-live": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-03/-6_smallish.jpg?h=026fa359&itok=ED0B3j7S",
+        "/whats-on/2027/event/roberto-saviano-quel-che-resta-di-me": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Roberto%20Saviano.png?itok=FrmoCIlt",
+        "/whats-on/2027/event/the-amol-rajan-connection-live": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/AMOL%202000X1000.jpg?itok=dEiLjp35",
+        "/whats-on/2027/event/total-immersion-the-music-of-rebecca-saunders-talk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Rebecca_Saunders_3_YELLOW.png?h=eba629ac&itok=gs9V76oA",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/3_SO_Tove_Jansson_PURPLE_COPYRIGHT.png?h=f076139c&itok=n4ymhY1S",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk-0": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/3_SO_Tove_Jansson_PURPLE_COPYRIGHT.png?h=f076139c&itok=n4ymhY1S",
+        "/whats-on/2027/event/young-barbican-events-irl-sessions": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/26.03.29_YOUNG%20BARBICAN%20TAKEOVER_ALICE%20DENNY_022.jpg?h=133e8744&itok=W0DZuvRk",
+        "/whats-on/2027/event/young-barbican-pick-mix-the-whole-world-is-watching-18": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Incident_Still1.jpg?h=d64d5dd5&itok=n_jElLgk",
+        "/whats-on/2027/event/young-barbican-takeover-festival-2027": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/YOUNG%20BARBICAN%20TAKEOVER%2033%20%C2%A9%202026%20Jenny%20Arrowsmith%20%281%29.jpg?h=7c632e8b&itok=R2iTwctS"
+      },
       "next_page": null
     }
   }

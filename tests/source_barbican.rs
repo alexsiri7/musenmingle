@@ -14,6 +14,7 @@ use musenmingle::sources::Source;
 use musenmingle::sources::barbican::{
     Barbican, MAX_DETAIL_PAGES, MAX_LISTING_PAGES, parse_detail, parse_listing,
 };
+use std::collections::BTreeMap;
 use url::Url;
 use wiremock::matchers::{method, path, query_param, query_param_is_missing};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -61,6 +62,17 @@ fn event_path(id: &str) -> String {
     format!("/whats-on/{year}/event/{slug}")
 }
 
+/// Card image of every listed event path, from all listing fixtures.
+fn listing_images() -> BTreeMap<String, String> {
+    let mut images = BTreeMap::new();
+    for (_, _, stem) in LISTINGS {
+        for (path, image) in parse_listing(&fixture(&format!("{DIR}/{stem}.html"))).image_urls {
+            images.entry(path).or_insert(image);
+        }
+    }
+    images
+}
+
 fn scraper() -> Barbican {
     Barbican::new(SITE.parse().unwrap())
 }
@@ -82,10 +94,12 @@ fn listing_snapshot() {
 #[test]
 fn normalised_output_snapshot() {
     let s = scraper();
+    let images = listing_images();
     let mut out = Vec::new();
     for id in detail_ids() {
         let url: Url = format!("{SITE}{}", event_path(&id)).parse().unwrap();
-        let raw = parse_detail(&detail_html(&id), &url).expect("detail parses");
+        let image = images.get(&event_path(&id)).map(String::as_str);
+        let raw = parse_detail(&detail_html(&id), &url, image).expect("detail parses");
         assert_eq!(raw.source_event_id, id);
         out.push(serde_json::json!({
             "id": id,
@@ -107,6 +121,24 @@ fn every_detail_fixture_is_linked_from_a_listing() {
             linked.contains(&event_path(&id)),
             "{id} is not on any listing"
         );
+    }
+}
+
+#[test]
+fn every_listed_event_has_a_jpeg_card_image() {
+    let images = listing_images();
+    for (_, _, stem) in LISTINGS {
+        for path in parse_listing(&fixture(&format!("{DIR}/{stem}.html"))).event_paths {
+            let image = images
+                .get(&path)
+                .unwrap_or_else(|| panic!("{path}: no image"));
+            assert!(
+                image.starts_with(&format!(
+                    "{SITE}/sites/default/files/styles/event_listing_small_jpg/"
+                )),
+                "{path}: {image}"
+            );
+        }
     }
 }
 
@@ -180,9 +212,16 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
         );
     }
     let site = server.uri();
+    let images = listing_images();
     for raw in &raws {
-        let expected = format!("{site}{}", event_path(&raw.source_event_id));
+        let path = event_path(&raw.source_event_id);
+        let expected = format!("{site}{path}");
         assert_eq!(raw.source_url.as_deref(), Some(expected.as_str()));
+        assert_eq!(
+            raw.payload["image_url"].as_str(),
+            images.get(&path).map(String::as_str),
+            "{path}: the listing card's JPEG, not the AVIF og:image"
+        );
     }
     let mut got: Vec<String> = raws.into_iter().map(|r| r.source_event_id).collect();
     got.sort();
