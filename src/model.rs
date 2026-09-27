@@ -13,15 +13,20 @@ pub enum Category {
     Community,
     Talk,
     Workshop,
+    /// Concerts and live music at the 'arty' end (issue #209, option (b)):
+    /// classical, contemporary, experimental, jazz, sound art. Subtags are
+    /// `crate::music`'s.
+    Music,
 }
 
 impl Category {
-    pub const ALL: [Category; 5] = [
+    pub const ALL: [Category; 6] = [
         Category::Exhibition,
         Category::Expo,
         Category::Community,
         Category::Talk,
         Category::Workshop,
+        Category::Music,
     ];
 
     pub fn as_str(self) -> &'static str {
@@ -31,6 +36,7 @@ impl Category {
             Category::Community => "community",
             Category::Talk => "talk",
             Category::Workshop => "workshop",
+            Category::Music => "music",
         }
     }
 }

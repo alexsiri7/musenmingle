@@ -790,6 +790,40 @@ pub async fn sync_venue_types(pool: &PgPool) -> sqlx::Result<u64> {
     .rows_affected())
 }
 
+/// Set every event's `music_tags` from [`crate::music::tags_for`] (its
+/// category, source tags and title; empty unless it is `music`). Returns
+/// how many events changed. Run after each ingest run.
+pub async fn sync_music_tags(pool: &PgPool) -> sqlx::Result<u64> {
+    type Row = (Uuid, String, Vec<String>, String, Vec<String>);
+    let events: Vec<Row> =
+        sqlx::query_as("SELECT id, category, tags, title, music_tags FROM events.events")
+            .fetch_all(pool)
+            .await?;
+    let (mut ids, mut tags) = (Vec::new(), Vec::new());
+    for (id, category, source_tags, title, current) in &events {
+        let t = crate::music::tags_for(category, source_tags, title);
+        if t != *current {
+            ids.push(*id);
+            // Postgres arrays of arrays must be rectangular: send each
+            // event's tags as one comma-joined string, split in SQL.
+            tags.push(t.join(","));
+        }
+    }
+    if ids.is_empty() {
+        return Ok(0);
+    }
+    Ok(sqlx::query(
+        "UPDATE events.events ev
+         SET music_tags = CASE WHEN u.t = '' THEN '{}'::text[] ELSE string_to_array(u.t, ',') END
+         FROM unnest($1::uuid[], $2::text[]) AS u(id, t) WHERE ev.id = u.id",
+    )
+    .bind(&ids)
+    .bind(&tags)
+    .execute(pool)
+    .await?
+    .rows_affected())
+}
+
 pub async fn upsert_event(
     pool: &PgPool,
     source_id: i64,
@@ -1368,6 +1402,8 @@ pub struct EventRow {
     pub format_tags: Vec<String>,
     pub good_for: Vec<String>,
     pub vibe_tags: Vec<String>,
+    /// Music subtags (`crate::music`), only for `music` events.
+    pub music_tags: Vec<String>,
     pub is_opening: Option<bool>,
     pub whats_cool: Option<String>,
     pub one_liner: Option<String>,
@@ -1384,8 +1420,8 @@ pub struct EventRow {
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
     ends_at, all_day, is_free, price_min, price_max, currency, url, image_url, category, tags,
-    dedupe_key, medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
-    ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note,
+    dedupe_key, medium_tags, format_tags, good_for, vibe_tags, music_tags, is_opening, whats_cool,
+    one_liner, ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note,
     (SELECT vn.slug FROM events.venues vn WHERE vn.id = venue_id) AS venue_slug";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
@@ -1550,15 +1586,32 @@ const RULE_CLOSES: &str = "(r->>'closes')::time";
 /// event with opening hours is open that weekday.
 /// The filters of an [`EventFilter`] that are SQL built from constants
 /// rather than [`LISTING_FILTER`]'s placeholders: [`live_sql`] and
-/// [`venue_type_sql`], [`borough_sql`]. Every listing query applies it after
+/// [`venue_type_sql`], [`borough_sql`], [`music_sql`]. Every listing query applies it after
 /// [`LISTING_FILTER`], so counts and listings agree.
 fn filter_extra_sql(f: &EventFilter) -> String {
     format!(
-        "{} AND {} AND {}",
+        "{} AND {} AND {} AND {}",
         live_sql(f),
         venue_type_sql(f),
-        borough_sql(f)
+        borough_sql(f),
+        music_sql(f)
     )
+}
+
+/// `music=` ([`EventFilter::music`]): events with ANY of the given music
+/// subtags. Built only from [`crate::music::MUSIC_TAGS`] (unknown values
+/// are dropped; `crate::listing` rejects them).
+fn music_sql(f: &EventFilter) -> String {
+    let chosen: Vec<String> = crate::music::MUSIC_TAGS
+        .iter()
+        .filter(|t| f.music.iter().any(|v| v == *t))
+        .map(|t| format!("'{t}'"))
+        .collect();
+    if chosen.is_empty() {
+        "TRUE".into()
+    } else {
+        format!("ev.music_tags && ARRAY[{}]::text[]", chosen.join(", "))
+    }
 }
 
 /// `borough=` ([`EventFilter::boroughs`]): events in ANY of the given
@@ -1795,6 +1848,7 @@ pub struct QuickPickCounts {
     pub last_chance: i64,
     pub hands_on: i64,
     pub talks: i64,
+    pub music: i64,
 }
 
 /// One query (FILTER aggregates) for every quick pick, with the same
@@ -1814,7 +1868,8 @@ pub async fn quick_pick_counts(
                 count(*) FILTER (WHERE {}) AS openings,
                 count(*) FILTER (WHERE {}) AS last_chance,
                 count(*) FILTER (WHERE {}) AS hands_on,
-                count(*) FILTER (WHERE ev.category = 'talk') AS talks
+                count(*) FILTER (WHERE ev.category = 'talk') AS talks,
+                count(*) FILTER (WHERE ev.category = 'music') AS music
          FROM events.events ev
          WHERE COALESCE(ev.ends_at, ev.starts_at) >= $1",
         p(Pick::Tonight),
@@ -1961,15 +2016,18 @@ pub enum Facet {
     VenueType,
     /// Events without a known borough count as [`crate::borough::UNKNOWN`].
     Borough,
+    /// Music subtags ([`crate::music::MUSIC_TAGS`]).
+    Music,
 }
 
 impl Facet {
-    pub const ALL: [Facet; 5] = [
+    pub const ALL: [Facet; 6] = [
         Facet::Medium,
         Facet::Format,
         Facet::GoodFor,
         Facet::VenueType,
         Facet::Borough,
+        Facet::Music,
     ];
 
     /// The facet's values of an event (`ev`) as an SQL array.
@@ -1980,11 +2038,12 @@ impl Facet {
             Facet::GoodFor => "ev.good_for",
             Facet::VenueType => "ARRAY[ev.venue_type]",
             Facet::Borough => "ARRAY[COALESCE(ev.borough, 'unknown')]",
+            Facet::Music => "ev.music_tags",
         }
     }
 
     /// The API name (`medium`, `format`, `good_for`, `venue_type`,
-    /// `borough`).
+    /// `borough`, `music`).
     pub fn name(self) -> &'static str {
         match self {
             Facet::Medium => "medium",
@@ -1992,6 +2051,7 @@ impl Facet {
             Facet::GoodFor => "good_for",
             Facet::VenueType => "venue_type",
             Facet::Borough => "borough",
+            Facet::Music => "music",
         }
     }
 }
@@ -2011,6 +2071,7 @@ pub async fn facet_counts(
         Facet::GoodFor => f.good_for.clear(),
         Facet::VenueType => f.venue_types.clear(),
         Facet::Borough => f.boroughs.clear(),
+        Facet::Music => f.music.clear(),
     }
     let near = query.near;
     let b = near.map(|n| n.bounding_box());

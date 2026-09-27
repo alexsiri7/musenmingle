@@ -11,7 +11,7 @@ they are not renamed or removed without notice; new fields may be added.
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
 takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area or borough key>`, `sort`, `pick`,
-`source`, `medium`, `format`, `good_for`, `venue_type` and `cursor`, and shows the
+`source`, `medium`, `format`, `good_for`, `venue_type`, `music` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}` (with Open Graph tags, and Share / Directions / Add-to-calendar hand-offs from `src/share.rs`), `GET /events/{id}.ics` (the event as a one-event iCalendar file: exact UTC times, or an all-day span for date-only events; `text/calendar`, downloaded as `<slug>.ics`), `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
@@ -59,7 +59,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `open_now` | `true` | Events happening now and, when they have `opening_hours`, open now (see "Opening hours" below). Not combinable with `at`, `open_at`, `from`, `to` or `when` |
 | `open_at` | `2026-10-18T11:30` | As `open_now`, at another instant: RFC 3339 (`2026-10-18T10:30:00Z`) or London wall-clock time (`YYYY-MM-DDTHH:MM`) |
 | `open_on` | `sun` | Events whose London dates (clipped to `from`/`to`) include that day of the week and, when they have `opening_hours`, open that day: `mon`…`sun` (or the full name) |
-| `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
+| `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`, `music` (the 'arty' end: classical, contemporary, experimental, jazz, sound art). Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
 | `price_max` | `10` | Free events and events whose lowest price (`price_min`) is at most this many pounds. Events with an unknown price, or priced in another currency, are left out |
 | `when` | `evening` | One of `evening`, `after_work`, `weekend`, `daytime` (see below) |
@@ -70,6 +70,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
 | `venue_type` | `venue_type=museum` | Events at any of these kinds of venue: `museum` (museums and public, non-commercial galleries and arts centres), `commercial_gallery`, `artist_run`, `community`, `other`. Every event has exactly one (see "Venue type" below). Repeatable |
 | `borough` | `borough=southwark&borough=city-of-london` | Events in any of these London boroughs (see "Borough" below): `barking-and-dagenham`, `barnet`, `bexley`, `brent`, `bromley`, `camden`, `city-of-london`, `croydon`, `ealing`, `enfield`, `greenwich`, `hackney`, `hammersmith-and-fulham`, `haringey`, `harrow`, `havering`, `hillingdon`, `hounslow`, `islington`, `kensington-and-chelsea`, `kingston-upon-thames`, `lambeth`, `lewisham`, `merton`, `newham`, `redbridge`, `richmond-upon-thames`, `southwark`, `sutton`, `tower-hamlets`, `waltham-forest`, `wandsworth`, `westminster`. Events without a known borough never match. Repeatable |
+| `music` | `music=jazz` | Music events with any of these subtags: `classical`, `contemporary`, `experimental`, `jazz`, `sound_art` (see "Music" below). Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
@@ -221,6 +222,7 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       "format_tags": ["hands_on"],
       "good_for": ["solo", "first_timers"],
       "vibe_tags": ["intimate"],
+      "music_tags": [],
       "is_opening": false,
       "ai": {
         "label": "AI-generated",
@@ -312,7 +314,8 @@ With `facets=true` the response also has
   "format": { "talk": 9 },
   "good_for": { "friends": 14, "kids": 3 },
   "venue_type": { "museum": 120, "commercial_gallery": 64 },
-  "borough": { "westminster": 80, "southwark": 31, "unknown": 12 }
+  "borough": { "westminster": 80, "southwark": 31, "unknown": 12 },
+  "music": { "jazz": 4, "classical": 2 }
 }
 ```
 
@@ -357,6 +360,16 @@ galleries `commercial_gallery`, Luma calendars `community`, …), else a
 keyword in the venue name ("project space", "studios", "artist-run" →
 `artist_run`; "museum" → `museum`; "community", "library", "arts centre"
 → `community`), else `other`.
+
+### Music
+
+The `music` category (issue #209) covers the 'arty' end of live music.
+`music_tags` (empty for other categories) holds its subtags: deterministic
+(no AI), from `src/music.rs`, refreshed after every ingest run from the
+event's source tags and title (a source may put a subtag itself, e.g.
+`jazz`, in `tags`; keywords such as "string quartet" → `classical`,
+"free improvisation" → `experimental`, "sound installation" → `sound_art`
+catch the rest).
 
 **Breaking change (2026-09-26):** `image_url` was removed from event
 objects; use `thumbnail_url` + `image_credit`.

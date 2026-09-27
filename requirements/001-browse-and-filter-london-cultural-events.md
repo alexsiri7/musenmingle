@@ -15,7 +15,7 @@ Muse & Mingle exists to help creative people in London find exhibitions, expos a
 
 A client can ask Muse & Mingle for events and get back only the ones that match what the person is looking for:
 - A date window. A multi-week exhibition shows up for any window it overlaps, not just its opening day; a one-off event shows up if it happens inside the window.
-- One or more categories: exhibition, expo, community, talk, workshop.
+- One or more categories: exhibition, expo, community, talk, workshop, music (the 'arty' end: classical, contemporary, experimental, jazz, sound art, each a subtag that can be filtered on).
 - Free events only.
 - Near a point: events within a given radius, nearest first.
 
