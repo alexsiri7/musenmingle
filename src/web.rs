@@ -15,8 +15,10 @@
 //! Links to venues and sources use `rel="noopener"` but deliberately NOT
 //! `noreferrer`: we want venues to see (via the Referer, which our
 //! `Referrer-Policy: strict-origin-when-cross-origin` limits to our origin)
-//! that visitors came from Muse & Mingle. The primary call to action on cards and
-//! detail pages is the source's own page ("See it on Barbican →"). Everything shown comes from the same helpers as the
+//! that visitors came from Muse & Mingle. Cards lead to our own detail page
+//! (title, image and "Details" button), with the source's page as the link
+//! under them; on the detail page the primary call to action is the source's
+//! own page ("See it on Barbican →"). Everything shown comes from the same helpers as the
 //! JSON API (`api::event_page`, `api::event_by_id`, `api::source_values`,
 //! `api::submit_suggestion`), and filters go through `listing::parse_query`,
 //! so validation is identical.
@@ -538,14 +540,30 @@ fn primary_source(e: &EventJson) -> Option<(&SourceLinkJson, String)> {
 
 /// Our thumbnail with its visible credit ("Image: Barbican", linking to the
 /// event's page on that source, never to the image file).
-fn thumbnail_figure(e: &EventJson, class: &str) -> Markup {
+///
+/// With `link` (cards), the image or blank also links to that URL (our own
+/// detail page). The link is a duplicate of the title's, so it is hidden from
+/// assistive tech and the tab order; it wraps only the `img` (never the
+/// credit, which is a link of its own).
+fn thumbnail_figure(e: &EventJson, class: &str, link: Option<&str>) -> Markup {
     let (Some(src), Some(credit)) = (&e.thumbnail_url, &e.image_credit) else {
-        return blank(e, class);
+        return match link {
+            Some(l) => html! {
+                a class="thumb-link" href=(l) tabindex="-1" aria-hidden="true" { (blank(e, class)) }
+            },
+            None => blank(e, class),
+        };
     };
     let (w, h) = e.thumbnail_size.unwrap_or((480, 270));
+    let image =
+        html! { img src=(src) alt="" loading="lazy" decoding="async" width=(w) height=(h); };
     html! {
         figure class=(class) {
-            img src=(src) alt="" loading="lazy" decoding="async" width=(w) height=(h);
+            @if let Some(l) = link {
+                a class="thumb-link" href=(l) tabindex="-1" aria-hidden="true" { (image) }
+            } @else {
+                (image)
+            }
             figcaption class="credit" {
                 "Image: "
                 @if let Some(u) = safe_link(Some(&credit.url)) {
@@ -1567,16 +1585,20 @@ fn card_template() -> Markup {
         template id="card-template" {
             article class="card" {
                 figure class="thumb" data-slot="figure" hidden {
-                    img data-slot="image" alt="" loading="lazy" decoding="async" width="480" height="270";
+                    a class="thumb-link" data-slot="image-link" tabindex="-1" aria-hidden="true" {
+                        img data-slot="image" alt="" loading="lazy" decoding="async" width="480" height="270";
+                    }
                     figcaption class="credit" { "Image: " a data-slot="credit" rel="noopener" {} }
                 }
-                div class="blank thumb" data-slot="blank" aria-hidden="true" hidden {
-                    span class="blank-top" {
-                        span { "No image" }
-                        span class="blank-kind" data-slot="blank-kind" {}
+                a class="thumb-link" data-slot="blank-link" tabindex="-1" aria-hidden="true" {
+                    div class="blank thumb" data-slot="blank" aria-hidden="true" hidden {
+                        span class="blank-top" {
+                            span { "No image" }
+                            span class="blank-kind" data-slot="blank-kind" {}
+                        }
+                        span class="blank-venue" data-slot="blank-venue" {}
+                        span class="blank-numeral" data-slot="blank-numeral" {}
                     }
-                    span class="blank-venue" data-slot="blank-venue" {}
-                    span class="blank-numeral" data-slot="blank-numeral" {}
                 }
                 div class="card-body" {
                     p class="card-meta" {
@@ -1590,8 +1612,8 @@ fn card_template() -> Markup {
                         span class="badge gone" data-slot="gone" hidden { "No longer listed" }
                     }
                     div class="card-actions" {
-                        p class="cta" data-slot="cta-wrap" hidden {
-                            a class="button" data-slot="cta" rel="noopener" {}
+                        p class="cta" data-slot="details-wrap" {
+                            a class="button" data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
                         }
                         button type="button" class="save" aria-pressed="true" data-save-id="" data-title="" {
                             (bookmark())
@@ -1604,8 +1626,8 @@ fn card_template() -> Markup {
                             }
                         }
                     }
-                    p class="links" {
-                        a data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
+                    p class="links" data-slot="links" hidden {
+                        a class="venue-link" data-slot="cta" rel="noopener" {}
                         span data-slot="sources" {}
                     }
                 }
@@ -1621,7 +1643,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let maps = share::map_links(&share_event(e, &page_url));
     html! {
         article class="card" {
-            (thumbnail_figure(e, "thumb"))
+            (thumbnail_figure(e, "thumb", Some(&detail)))
             div class="card-body" {
                 p class="card-meta" {
                     span class="when" { (when(e.starts_at, e.ends_at, e.all_day, now)) }
@@ -1644,13 +1666,8 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                     }
                 }
                 div class="card-actions" {
-                    @if let Some((p, u)) = &primary {
-                        p class="cta" {
-                            a class="button" href=(u) rel="noopener" {
-                                "See it on " (p.display_name) " →"
-                                span class="vh" { ": " (e.title) }
-                            }
-                        }
+                    p class="cta" {
+                        a class="button" href=(detail) { "Details" span class="vh" { ": " (e.title) } }
                     }
                     (save_button(e))
                     span class="card-tools" {
@@ -1665,11 +1682,16 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                         }
                     }
                 }
-                p class="links" {
-                    a href=(detail) { "Details" span class="vh" { ": " (e.title) } }
-                    @for s in &e.sources {
-                        @if let Some(u) = safe_link(s.url.as_deref()).filter(|u| primary.as_ref().is_none_or(|(_, pu)| pu != u)) {
-                            " · " a href=(u) rel="noopener" { "also on " (s.display_name) }
+                @if let Some((p, primary_url)) = &primary {
+                    p class="links" {
+                        a class="venue-link" href=(primary_url) rel="noopener" {
+                            "See it on " (p.display_name) " →"
+                            span class="vh" { ": " (e.title) }
+                        }
+                        @for s in &e.sources {
+                            @if let Some(u) = safe_link(s.url.as_deref()).filter(|u| u != primary_url) {
+                                " · " a href=(u) rel="noopener" { "also on " (s.display_name) }
+                            }
                         }
                     }
                 }
@@ -1692,9 +1714,9 @@ fn principles() -> Markup {
                     p class="eyebrow" { "Principle 02" }
                     h2 { "We send you to the venue" }
                     p {
-                        "Every event's main button goes to the page where we found it: the venue's own "
-                        "site whenever we have it. We keep only the facts, a short excerpt and a small, "
-                        "credited image."
+                        "Every event's page leads with a button to the page where we found it: the "
+                        "venue's own site whenever we have it. We keep only the facts, a short excerpt "
+                        "and a small, credited image."
                     }
                 }
                 div {
@@ -2172,7 +2194,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                 }
                             }
                         }
-                        div class="hero-wrap" { (thumbnail_figure(&e, "hero")) }
+                        div class="hero-wrap" { (thumbnail_figure(&e, "hero", None)) }
                     }
                 }
                 div class="wrap-x" {
@@ -2567,7 +2589,8 @@ async fn about() -> Response {
                         }
                     }
                     p {
-                        "The main button on every event is \u{201c}See it on <your venue>\u{201d}. "
+                        "The main button on every event's page here is \u{201c}See it on <your venue>\u{201d}, "
+                        "and every event card links to your page too. "
                         "Our links are ordinary links, so your analytics can see visits came from us."
                     }
                     p {

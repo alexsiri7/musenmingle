@@ -169,6 +169,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     workshops and access sessions (the series' overall span dropped);
     performances, screenings and online-only events skipped; no
     description in the API; images are CC-BY/CC-BY-NC, credited.
+  - `vam` — schema.org microdata on the V&A's `/whatson` listing (one
+    request, no detail pages; pagination is robots-disallowed): venue from
+    the card's pin label (South Kensington, V&A East Museum and Storehouse,
+    Young V&A; online and non-London skipped); `/event/` time stamps are an
+    hour late in summer and are corrected; exhibitions all day; tours,
+    films, courses, drop-in series and members/schools events skipped;
+    facts + link only (terms).
   - `conway-hall` — the JSON-LD `Event` inside each card on `/whats-on/`
     (one request, no detail pages; control characters in the blocks are
     tolerated): London wall-clock times; the site's categories decide
@@ -308,9 +315,10 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   assets (images are our own credited thumbnails, never the sources' URLs),
   and a strict Content-Security-Policy (`default-src 'self'`, `script-src
   'self'`, `img-src 'self'`, no `unsafe-inline`: the CSS is served from
-  `/static/style.css`). Sources are shown by `display_name`. The main button
-  on every card and detail page is the source's own page ("See it on
-  Barbican →"); our detail page is the secondary link.
+  `/static/style.css`). Sources are shown by `display_name`. Event cards
+  lead to our own detail page (title, image and "Details" button), with a
+  "See it on Barbican →" link under them; on the detail page the main button
+  is the source's own page ("See it on Barbican →").
   **Calendar** (`/calendar`, `src/web/calendar_page.rs`, rules in
   `src/calendar.rs`): month (default), week (`?view=week&date=YYYY-MM-DD`)
   and agenda views with prev/next/today links and the listing's category,
