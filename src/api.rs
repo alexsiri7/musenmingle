@@ -422,6 +422,7 @@ pub(crate) async fn event_page(
                 EventOrder::ByEnd { .. } => last.sort_at.map(|t| Cursor::End(t, id)),
                 EventOrder::ByAdded { .. } => last.sort_at.map(|t| Cursor::Added(t, id)),
                 EventOrder::Shuffled { seed, .. } => Some(Cursor::Shuffle(*seed, id)),
+                EventOrder::ByRelevance { .. } => last.relevance.map(|r| Cursor::Relevance(r, id)),
             }
         })
         .map(|c| c.encode());
@@ -494,11 +495,24 @@ pub(crate) async fn event_counts(
     )
 }
 
+/// Correct typos in `query`'s search, if any (see [`crate::search`]).
+pub(crate) async fn resolve_search(
+    pool: &PgPool,
+    query: &mut listing::EventQuery,
+) -> sqlx::Result<()> {
+    if let Some(search) = query.filter.search.take() {
+        query.filter.search = Some(crate::search::resolve(pool, search).await?);
+    }
+    Ok(())
+}
+
 async fn list_events(
     State(state): State<AppState>,
     RawQuery(raw): RawQuery,
 ) -> Result<Json<Value>, ApiError> {
-    let query = listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
+    let mut query =
+        listing::parse_query(raw.as_deref().unwrap_or("")).map_err(ApiError::BadRequest)?;
+    resolve_search(&state.pool, &mut query).await?;
     let (events, next_cursor) = event_page(&state.pool, &query).await?;
     let counts = event_counts(&state.pool, &query).await?;
     let mut body = json!({
@@ -510,8 +524,14 @@ async fn list_events(
     if let Some(wanted) = query.fell_back_from {
         body["sort_fallback"] = json!({
             "requested": wanted.as_str(),
-            "reason": "nearest needs near=<lat>,<lng>",
+            "reason": match wanted {
+                listing::Sort::Relevance => "relevance needs q=<search>",
+                _ => "nearest needs near=<lat>,<lng>",
+            },
         });
+    }
+    if let Some(search) = &query.filter.search {
+        body["search"] = json!({ "q": search.text, "corrected": search.corrected });
     }
     if query.facets {
         body["facets"] = facets(&state.pool, &query).await?;

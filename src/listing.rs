@@ -9,6 +9,7 @@ use uuid::Uuid;
 use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
 use crate::model::Category;
 use crate::normalise::london_to_utc;
+use crate::search::Search;
 
 pub const DEFAULT_LIMIT: i64 = 50;
 pub const MAX_LIMIT: i64 = 100;
@@ -61,6 +62,8 @@ pub struct EventFilter {
     /// Free events and GBP events whose lowest price is at most this;
     /// unknown prices are excluded.
     pub price_max: Option<Decimal>,
+    /// Full-text search (`q=`, see [`crate::search`]).
+    pub search: Option<Search>,
 }
 
 /// Add a vocabulary tag to `list` (deduped), or explain why it is invalid.
@@ -121,15 +124,18 @@ pub enum Sort {
     Added,
     /// Surprise me: a random order, reshuffled each London day.
     Surprise,
+    /// Best match for `q` first; needs `q`. The default when `q` is set.
+    Relevance,
 }
 
 impl Sort {
-    pub const ALL: [Sort; 5] = [
+    pub const ALL: [Sort; 6] = [
         Sort::Soonest,
         Sort::Nearest,
         Sort::Ending,
         Sort::Added,
         Sort::Surprise,
+        Sort::Relevance,
     ];
 
     pub fn as_str(self) -> &'static str {
@@ -139,6 +145,7 @@ impl Sort {
             Sort::Ending => "ending",
             Sort::Added => "added",
             Sort::Surprise => "surprise",
+            Sort::Relevance => "relevance",
         }
     }
 
@@ -150,6 +157,7 @@ impl Sort {
             Sort::Ending => "Last chance",
             Sort::Added => "Just added",
             Sort::Surprise => "Surprise me",
+            Sort::Relevance => "Best match",
         }
     }
 
@@ -185,6 +193,8 @@ pub enum EventOrder {
         seed: NaiveDate,
         after: Option<Uuid>,
     },
+    /// Best match for `q` first (`ts_rank`, then id).
+    ByRelevance { after: Option<(f64, Uuid)> },
 }
 
 impl EventOrder {
@@ -195,6 +205,7 @@ impl EventOrder {
             EventOrder::ByEnd { .. } => Sort::Ending,
             EventOrder::ByAdded { .. } => Sort::Added,
             EventOrder::Shuffled { .. } => Sort::Surprise,
+            EventOrder::ByRelevance { .. } => Sort::Relevance,
         }
     }
 }
@@ -246,6 +257,8 @@ pub enum Cursor {
     Added(DateTime<Utc>, Uuid),
     /// The shuffle's seed day and the last id (its key is `md5(id || seed)`).
     Shuffle(NaiveDate, Uuid),
+    /// The search rank and the last id.
+    Relevance(f64, Uuid),
 }
 
 impl Cursor {
@@ -256,6 +269,7 @@ impl Cursor {
             Cursor::End(t, id) => format!("e:{}:{id}", t.timestamp_micros()),
             Cursor::Added(t, id) => format!("a:{}:{id}", t.timestamp_micros()),
             Cursor::Shuffle(day, id) => format!("r:{}:{id}", day.format("%Y%m%d")),
+            Cursor::Relevance(r, id) => format!("q:{:016x}:{id}", r.to_bits()),
         };
         plain.bytes().map(|b| format!("{b:02x}")).collect()
     }
@@ -283,6 +297,10 @@ impl Cursor {
             "a" => Some(Cursor::Added(micros()?, id)),
             "r" => Some(Cursor::Shuffle(
                 NaiveDate::parse_from_str(pos, "%Y%m%d").ok()?,
+                id,
+            )),
+            "q" => Some(Cursor::Relevance(
+                f64::from_bits(u64::from_str_radix(pos, 16).ok()?),
                 id,
             )),
             _ => None,
@@ -328,6 +346,7 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                     format!("unknown sort {value:?} (one of: {})", all.join(", "))
                 })?)
             }
+            "q" => filter.search = Search::parse(&value)?,
             "from" => from = Some(parse_date("from", &value)?),
             "to" => to = Some(parse_date("to", &value)?),
             "category" => {
@@ -426,14 +445,18 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
         lng,
         radius_km: radius_km.unwrap_or(DEFAULT_RADIUS_KM),
     });
-    // Without `sort`, an area means nearest first (as before `sort` existed).
-    let requested = sort.unwrap_or(if near.is_some() {
+    // Without `sort`: best match for a search, else an area means nearest
+    // first (as before `sort` existed).
+    let requested = sort.unwrap_or(if filter.search.is_some() {
+        Sort::Relevance
+    } else if near.is_some() {
         Sort::Nearest
     } else {
         Sort::Soonest
     });
     let (applied, fell_back_from) = match (requested, near) {
         (Sort::Nearest, None) => (Sort::Soonest, Some(Sort::Nearest)),
+        (Sort::Relevance, _) if filter.search.is_none() => (Sort::Soonest, Some(Sort::Relevance)),
         (s, _) => (s, None),
     };
     let mismatch = || Err("cursor does not match the sort".to_string());
@@ -472,6 +495,13 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
         (Sort::Surprise, Some(Cursor::Shuffle(seed, id))) => EventOrder::Shuffled {
             seed,
             after: Some(id),
+        },
+        (Sort::Relevance, c) => EventOrder::ByRelevance {
+            after: match c {
+                None => None,
+                Some(Cursor::Relevance(r, id)) => Some((r, id)),
+                Some(_) => return mismatch(),
+            },
         },
         (Sort::Soonest | Sort::Surprise, Some(_)) => return mismatch(),
     };
@@ -703,6 +733,37 @@ mod tests {
         for s in Sort::ALL {
             assert_eq!(Sort::parse(s.as_str()), Some(s));
         }
+    }
+
+    #[test]
+    fn q_sorts_by_relevance_unless_near() {
+        let q = parse_query("q=%20Sámi%20").unwrap();
+        assert_eq!(q.filter.search.as_ref().unwrap().text, "Sámi");
+        assert_eq!(q.order, EventOrder::ByRelevance { after: None });
+        assert_eq!(parse_query("q=%20%20").unwrap().filter.search, None);
+        // With an area too (a filter); another sort wins when chosen.
+        let q = parse_query("q=print&near=51.5,-0.1").unwrap();
+        assert_eq!(q.order, EventOrder::ByRelevance { after: None });
+        assert!(q.near.is_some());
+        assert_eq!(
+            parse_query("q=print&sort=soonest").unwrap().order.sort(),
+            Sort::Soonest
+        );
+        // relevance without q falls back to soonest.
+        let q = parse_query("sort=relevance").unwrap();
+        assert_eq!(q.order.sort(), Sort::Soonest);
+        assert_eq!(q.fell_back_from, Some(Sort::Relevance));
+        assert!(parse_query(&format!("q={}", "x".repeat(201))).is_err());
+        let id = Uuid::new_v4();
+        let rel = Cursor::Relevance(0.0607927, id);
+        assert_eq!(Cursor::decode(&rel.encode()), Some(rel));
+        let rel = rel.encode();
+        let start = Cursor::Start(Utc::now(), id).encode();
+        assert!(parse_query(&format!("q=print&cursor={rel}")).is_ok());
+        assert!(parse_query(&format!("q=print&cursor={start}")).is_err());
+        assert!(parse_query(&format!("cursor={rel}")).is_err());
+        assert!(parse_query(&format!("near=51.5,-0.1&cursor={rel}")).is_err());
+        assert!(parse_query(&format!("q=print&near=51.5,-0.1&cursor={rel}")).is_ok());
     }
 
     #[test]

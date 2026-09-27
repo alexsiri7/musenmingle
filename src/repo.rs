@@ -785,14 +785,25 @@ pub struct ListedEvent {
     /// The sort key as a time (`ending`: effective end, `added`: first
     /// seen), for the next page's cursor; NULL for other sorts.
     pub sort_at: Option<DateTime<Utc>>,
+    /// The search rank (`ts_rank`) when sorting by relevance, for the next
+    /// page's cursor; NULL for other sorts.
+    pub relevance: Option<f64>,
 }
 
-/// `$1`..`$9` of every listing query (on `events.events ev`). An event with
+/// The search query of `q=` as a tsquery, from `$10` (the text, for
+/// `websearch_to_tsquery`) and `$11` (the prefix/corrected alternatives,
+/// `to_tsquery` text built by [`crate::search`]).
+const SEARCH_TSQUERY: &str = "(websearch_to_tsquery('pg_catalog.english', events.search_fold($10))
+    || to_tsquery('pg_catalog.english', coalesce($11::text, '')))";
+
+/// `$1`..`$11` of every listing query (on `events.events ev`). An event with
 /// an end (`ends_at` set), whatever its category, matches when its range
 /// overlaps the window, a one-off when it starts inside it. `$4` is
 /// `free_only`; `$5` (source keys) matches an event listed by ANY of those
 /// sources; `$6` restricts to the given event ids; `$7`/`$8`/`$9` (medium,
-/// format, good_for) match an event with ANY of the given tags.
+/// format, good_for) match an event with ANY of the given tags; `$10`/`$11`
+/// are the search ([`SEARCH_TSQUERY`]; a query of stop words only falls back
+/// to a substring of the title or venue name).
 const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, ev.starts_at) >= $1)
     AND ($2::timestamptz IS NULL OR ev.starts_at < $2)
     AND (cardinality($3::text[]) = 0 OR ev.category = ANY($3))
@@ -803,9 +814,15 @@ const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, e
     AND (cardinality($6::uuid[]) = 0 OR ev.id = ANY($6))
     AND (cardinality($7::text[]) = 0 OR ev.medium_tags && $7)
     AND (cardinality($8::text[]) = 0 OR ev.format_tags && $8)
-    AND (cardinality($9::text[]) = 0 OR ev.good_for && $9)";
+    AND (cardinality($9::text[]) = 0 OR ev.good_for && $9)
+    AND ($10::text IS NULL
+        OR ev.search @@ (websearch_to_tsquery('pg_catalog.english', events.search_fold($10))
+                         || to_tsquery('pg_catalog.english', coalesce($11::text, '')))
+        OR (numnode(websearch_to_tsquery('pg_catalog.english', events.search_fold($10))) = 0
+            AND strpos(events.search_fold(ev.title || ' ' || coalesce(ev.venue_name, '')),
+                       events.search_fold($10)) > 0))";
 
-/// Bind `$1`..`$9` ([`LISTING_FILTER`]) for `f`.
+/// Bind `$1`..`$11` ([`LISTING_FILTER`]) for `f`.
 fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, O> {
     let categories: Vec<&'static str> = f.categories.iter().map(|c| c.as_str()).collect();
     q.bind(f.from)
@@ -817,13 +834,9 @@ fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, 
         .bind(&f.mediums)
         .bind(&f.formats)
         .bind(&f.good_for)
+        .bind(f.search.as_ref().map(|s| s.text.as_str()))
+        .bind(f.search.as_ref().and_then(|s| s.alternatives.as_deref()))
 }
-
-/// Haversine distance from (`$10`, `$11`) with Earth radius `$12`.
-const DISTANCE_KM: &str = "2 * $12::float8 * asin(least(1, sqrt(
-        power(sin(radians(lat - $10) / 2), 2)
-        + cos(radians($10)) * cos(radians(lat))
-          * power(sin(radians(lng - $11) / 2), 2))))";
 
 /// The event's start in London wall-clock time.
 const LOCAL_START: &str = "(ev.starts_at AT TIME ZONE 'Europe/London')";
@@ -903,17 +916,17 @@ const FIRST_SEEN: &str = "COALESCE((SELECT min(es.first_seen_at) FROM events.eve
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
 ///
-/// Placeholders: `$1`..`$9` [`LISTING_FILTER`], `$10` price_max, `$11`..`$18`
-/// the area (NULL without `near`), `$19`/`$20` the cursor, `$21` the limit,
-/// `$22` the sort's parameter (`now` for `ending`, the seed for `surprise`).
+/// Placeholders: `$1`..`$11` [`LISTING_FILTER`], `$12` price_max, `$13`..`$20`
+/// the area (NULL without `near`), `$21`/`$22` the cursor, `$23` the limit,
+/// `$24` the sort's parameter (`now` for `ending`, the seed for `surprise`).
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
     let near = query.near;
     let b = near.map(|n| n.bounding_box());
     let filter = format!(
         "{LISTING_FILTER} AND {} AND {}
-         AND ($11::float8 IS NULL OR (lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17))",
-        price_max_sql("$10"),
+         AND ($13::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19))",
+        price_max_sql("$12"),
         when_sql(f.when)
     );
     // (sort key expression, extra condition, cursor condition, order)
@@ -921,51 +934,61 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
         EventOrder::ByStart { .. } => (
             "NULL::timestamptz".to_string(),
             "TRUE",
-            "($19::timestamptz IS NULL OR (starts_at, id) > ($19, $20::uuid))",
+            "($21::timestamptz IS NULL OR (starts_at, id) > ($21, $22::uuid))",
             "starts_at, id",
         ),
         EventOrder::ByDistance { .. } => (
             "NULL::timestamptz".to_string(),
             "TRUE",
-            "($19::float8 IS NULL OR (distance_km, id) > ($19, $20::uuid))",
+            "($21::float8 IS NULL OR (distance_km, id) > ($21, $22::uuid))",
             "distance_km, id",
         ),
         EventOrder::ByEnd { .. } => (
             EFFECTIVE_END.to_string(),
-            "sort_at > $22::timestamptz",
-            "($19::timestamptz IS NULL OR (sort_at, id) > ($19, $20::uuid))",
+            "sort_at > $24::timestamptz",
+            "($21::timestamptz IS NULL OR (sort_at, id) > ($21, $22::uuid))",
             "sort_at, id",
         ),
         EventOrder::ByAdded { .. } => (
             FIRST_SEEN.to_string(),
             "TRUE",
-            "($19::timestamptz IS NULL OR (sort_at, id) < ($19, $20::uuid))",
+            "($21::timestamptz IS NULL OR (sort_at, id) < ($21, $22::uuid))",
             "sort_at DESC, id DESC",
         ),
         EventOrder::Shuffled { .. } => (
             "NULL::timestamptz".to_string(),
             "TRUE",
-            // $19 is unused (NULL); the key is recomputed from the last id.
-            "($20::uuid IS NULL OR (shuffle, id) > (md5($20::text || $22::text), $20))",
+            // $21 is unused (NULL); the key is recomputed from the last id.
+            "($22::uuid IS NULL OR (shuffle, id) > (md5($22::text || $24::text), $22))",
             "shuffle, id",
+        ),
+        EventOrder::ByRelevance { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            "($21::float8 IS NULL OR relevance < $21 OR (relevance = $21 AND id > $22::uuid))",
+            "relevance DESC, id",
         ),
     };
     let shuffle = match &query.order {
-        EventOrder::Shuffled { .. } => "md5(ev.id::text || $22::text)",
+        EventOrder::Shuffled { .. } => "md5(ev.id::text || $24::text)",
         _ => "NULL::text",
+    };
+    let relevance = match &query.order {
+        EventOrder::ByRelevance { .. } => format!("ts_rank(ev.search, {SEARCH_TSQUERY})::float8"),
+        _ => "NULL::float8".to_string(),
     };
     let sql = format!(
         "SELECT * FROM (
              SELECT {EVENT_COLS},
-                    CASE WHEN $11::float8 IS NULL THEN NULL::float8 ELSE {} END AS distance_km,
-                    {key} AS sort_at, {shuffle} AS shuffle
+                    CASE WHEN $13::float8 IS NULL THEN NULL::float8 ELSE {} END AS distance_km,
+                    {key} AS sort_at, {shuffle} AS shuffle, {relevance} AS relevance
              FROM events.events ev
              WHERE {filter}
          ) e
-         WHERE ($18::float8 IS NULL OR distance_km <= $18)
+         WHERE ($20::float8 IS NULL OR distance_km <= $20)
            AND {extra} AND {after}
-         ORDER BY {order} LIMIT $21",
-        distance_km_sql(11, 12, 13)
+         ORDER BY {order} LIMIT $23",
+        distance_km_sql(13, 14, 15)
     );
     let q = bind_filter(sqlx::query_as(AssertSqlSafe(sql)), f)
         .bind(f.price_max)
@@ -998,6 +1021,11 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             .bind(*after)
             .bind(query.limit + 1)
             .bind(seed.format("%Y-%m-%d").to_string()),
+        EventOrder::ByRelevance { after } => q
+            .bind(after.map(|a| a.0))
+            .bind(after.map(|a| a.1))
+            .bind(query.limit + 1)
+            .bind(None::<String>),
     };
     q.fetch_all(pool).await
 }
@@ -1050,17 +1078,18 @@ pub async fn facet_counts(
     let col = facet.column();
     let filter = format!(
         "{LISTING_FILTER} AND {} AND {}",
-        price_max_sql("$18"),
+        price_max_sql("$20"),
         when_sql(f.when)
     );
     bind_filter(
         sqlx::query_as(AssertSqlSafe(format!(
             "SELECT t, count(*) FROM events.events ev CROSS JOIN LATERAL unnest(ev.{col}) AS t
              WHERE {filter}
-               AND ($10::float8 IS NULL OR (
-                   lat BETWEEN $13 AND $14 AND lng BETWEEN $15 AND $16
-                   AND {DISTANCE_KM} <= $17))
-             GROUP BY t ORDER BY count(*) DESC, t"
+               AND ($12::float8 IS NULL OR (
+                   lat BETWEEN $15 AND $16 AND lng BETWEEN $17 AND $18
+                   AND {} <= $19))
+             GROUP BY t ORDER BY count(*) DESC, t",
+            distance_km_sql(12, 13, 14)
         ))),
         &f,
     )
@@ -1096,7 +1125,7 @@ pub struct ListingCounts {
 /// `filter` except `when`, each price count every filter except the price
 /// ones (`free_only`, `price_max`). `near` restricts to its radius. `$4` in
 /// [`LISTING_FILTER`] is pinned to `false` (the free/price dimensions are
-/// only applied per-count, below, via `$10`/`$11`) but the other filters
+/// only applied per-count, below, via `$12`/`$13`) but the other filters
 /// (dates, category, sources, ids, tags) still apply to the base rows.
 pub async fn listing_counts(
     pool: &PgPool,
@@ -1105,7 +1134,7 @@ pub async fn listing_counts(
 ) -> sqlx::Result<ListingCounts> {
     let categories: Vec<&str> = filter.categories.iter().map(|c| c.as_str()).collect();
     let sources: Vec<&str> = filter.sources.iter().map(String::as_str).collect();
-    let price = price_filter_sql("$10", "$11");
+    let price = price_filter_sql("$12", "$13");
     let when = when_sql(filter.when);
     let when_count = |w: When| format!("count(*) FILTER (WHERE {} AND {price})", when_sql(Some(w)));
     let price_count = |p: &str| format!("count(*) FILTER (WHERE {p} AND {when})");
@@ -1115,8 +1144,8 @@ pub async fn listing_counts(
                 {} AS free, {} AS max_10, {} AS max_20, {} AS unknown
          FROM events.events ev
          WHERE {LISTING_FILTER}
-           AND ($12::float8 IS NULL OR (lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17
-                AND {} <= $19))",
+           AND ($14::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19
+                AND {} <= $21))",
         when_count(When::Evening),
         when_count(When::AfterWork),
         when_count(When::Weekend),
@@ -1125,7 +1154,7 @@ pub async fn listing_counts(
         price_count(&price_filter_sql("FALSE", "10")),
         price_count(&price_filter_sql("FALSE", "20")),
         price_count(PRICE_UNKNOWN),
-        distance_km_sql(12, 13, 18)
+        distance_km_sql(14, 15, 20)
     )))
     .bind(filter.from)
     .bind(filter.until)
@@ -1136,6 +1165,13 @@ pub async fn listing_counts(
     .bind(&filter.mediums)
     .bind(&filter.formats)
     .bind(&filter.good_for)
+    .bind(filter.search.as_ref().map(|s| s.text.as_str()))
+    .bind(
+        filter
+            .search
+            .as_ref()
+            .and_then(|s| s.alternatives.as_deref()),
+    )
     .bind(filter.free_only)
     .bind(filter.price_max)
     .bind(near.map(|n| n.lat))
@@ -1147,6 +1183,40 @@ pub async fn listing_counts(
     .bind(EARTH_RADIUS_KM)
     .bind(near.map(|n| n.radius_km))
     .fetch_one(pool)
+    .await
+}
+
+/// Events a search word is checked against for typos: still on (or ended
+/// less than a day ago).
+const SEARCH_UPCOMING: &str = "COALESCE(ev.ends_at, ev.starts_at) >= now() - interval '1 day'";
+
+/// Which of `words` (folded `[a-z0-9]+`, see [`crate::search`]) match no
+/// upcoming event, even as a prefix. Stop words are never reported.
+pub async fn search_unmatched_words(pool: &PgPool, words: &[String]) -> sqlx::Result<Vec<String>> {
+    sqlx::query_scalar(AssertSqlSafe(format!(
+        "SELECT w FROM unnest($1::text[]) AS w
+         WHERE numnode(to_tsquery('pg_catalog.english', w)) > 0
+           AND NOT EXISTS (SELECT 1 FROM events.events ev
+                           WHERE {SEARCH_UPCOMING}
+                             AND ev.search @@ to_tsquery('pg_catalog.english', w || ':*'))"
+    )))
+    .bind(words)
+    .fetch_all(pool)
+    .await
+}
+
+/// The distinct folded words (3+ letters) of upcoming events' titles and
+/// venue names: what a mistyped search word is corrected to.
+pub async fn search_lexicon(pool: &PgPool) -> sqlx::Result<Vec<String>> {
+    sqlx::query_scalar(AssertSqlSafe(format!(
+        "SELECT DISTINCT w FROM events.events ev,
+             regexp_split_to_table(
+                 events.search_fold(ev.title || ' ' || coalesce(ev.venue_name, '')),
+                 '[^a-z0-9]+') AS w
+         WHERE {SEARCH_UPCOMING} AND length(w) >= 3 AND w !~ '^[0-9]+$'
+         ORDER BY w"
+    )))
+    .fetch_all(pool)
     .await
 }
 
@@ -1168,10 +1238,10 @@ pub async fn semantic_candidates(
             "SELECT ev.id, 1 - (em.embedding OPERATOR(extensions.<=>) q.v) AS similarity
              FROM events.event_embeddings em
              JOIN events.events ev ON ev.id = em.event_id
-             CROSS JOIN (SELECT $10::real[]::extensions.vector AS v) q
+             CROSS JOIN (SELECT $12::real[]::extensions.vector AS v) q
              WHERE {LISTING_FILTER}
              ORDER BY em.embedding OPERATOR(extensions.<=>) q.v, ev.id
-             LIMIT $11"
+             LIMIT $13"
         ))),
         filter,
     )

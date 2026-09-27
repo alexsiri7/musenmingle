@@ -659,6 +659,8 @@ fn paragraphs(text: &str) -> Markup {
 /// The home-page filter form, as submitted.
 #[derive(Debug, Default, Clone)]
 struct Filters {
+    /// Search words (`q=`); empty = no search.
+    q: String,
     from: String,
     to: String,
     category: String,
@@ -686,6 +688,7 @@ impl Filters {
         for (k, v) in url::form_urlencoded::parse(raw.as_bytes()) {
             let v = v.trim().to_string();
             match k.as_ref() {
+                "q" => f.q = v,
                 "from" => f.from = v,
                 "to" => f.to = v,
                 "category" => f.category = v,
@@ -715,6 +718,9 @@ impl Filters {
     /// The page's own query string (for the "More" link), without cursor.
     fn page_query(&self) -> String {
         let mut s = url::form_urlencoded::Serializer::new(String::new());
+        if !self.q.is_empty() {
+            s.append_pair("q", &self.q);
+        }
         s.append_pair("from", &self.from);
         for (k, v) in [
             ("to", &self.to),
@@ -744,6 +750,7 @@ impl Filters {
     fn without_source(&self, key: &str) -> String {
         let rest = Filters {
             sources: self.sources.iter().filter(|s| *s != key).cloned().collect(),
+            q: self.q.clone(),
             from: self.from.clone(),
             to: self.to.clone(),
             category: self.category.clone(),
@@ -763,6 +770,9 @@ impl Filters {
     /// The equivalent `GET /v1/events` query.
     fn api_query(&self) -> Result<listing::EventQuery, String> {
         let mut s = url::form_urlencoded::Serializer::new(String::new());
+        if !self.q.is_empty() {
+            s.append_pair("q", &self.q);
+        }
         s.append_pair("from", &self.from);
         if !self.to.is_empty() {
             s.append_pair("to", &self.to);
@@ -900,13 +910,18 @@ fn date_presets(today: NaiveDate) -> [(&'static str, String, String); 4] {
 }
 
 /// The sort the form shows as chosen: `sort=` if valid, else the default
-/// (closest first with an area, soonest otherwise).
+/// (best match with a search, closest first with an area, soonest
+/// otherwise).
 fn effective_sort(f: &Filters) -> Sort {
-    Sort::parse(&f.sort).unwrap_or(if f.near.is_empty() {
-        Sort::Soonest
-    } else {
-        Sort::Nearest
-    })
+    Sort::parse(&f.sort)
+        .filter(|s| *s != Sort::Relevance || !f.q.is_empty())
+        .unwrap_or(if !f.q.is_empty() {
+            Sort::Relevance
+        } else if f.near.is_empty() {
+            Sort::Soonest
+        } else {
+            Sort::Nearest
+        })
 }
 
 /// How the results are ordered, in words (the status line).
@@ -917,6 +932,109 @@ fn order_text(sort: Sort) -> &'static str {
         Sort::Ending => "Last chance: ending soonest",
         Sort::Added => "Just added: newest to Muse & Mingle first",
         Sort::Surprise => "Surprise me: random order, reshuffled daily",
+        Sort::Relevance => "Best match first",
+    }
+}
+
+/// Hidden inputs carrying every filter in `f` except `q` (so the search
+/// form keeps the other filters). A default sort (soonest, nearest, best
+/// match) is dropped too, so a new search is ranked by relevance.
+fn hidden_filters(f: &Filters) -> Markup {
+    let default_sort = |v: &str| {
+        matches!(
+            Sort::parse(v),
+            None | Some(Sort::Soonest | Sort::Nearest | Sort::Relevance)
+        )
+    };
+    html! {
+        @for (k, v) in url::form_urlencoded::parse(f.page_query().as_bytes()) {
+            @if k != "q" && !(k == "sort" && default_sort(&v)) {
+                input type="hidden" name=(k) value=(v);
+            }
+        }
+    }
+}
+
+/// For an empty result: one link per active filter that drops just that
+/// filter (`(label, href)`), keeping the search and everything else.
+fn relaxations(f: &Filters, today: NaiveDate) -> Vec<(String, String)> {
+    let mut out = Vec::new();
+    let today = today.format("%Y-%m-%d").to_string();
+    if !f.to.is_empty() || f.from != today {
+        out.push((
+            "Dates".to_string(),
+            link_with(f, |g| {
+                g.from = today.clone();
+                g.to.clear();
+            }),
+        ));
+    }
+    if !f.category.is_empty() {
+        out.push((
+            format!("Type: {}", title_case(&f.category)),
+            link_with(f, |g| g.category.clear()),
+        ));
+    }
+    if let Some((_, label, _)) = when_options(None)
+        .into_iter()
+        .find(|(w, _, _)| w.as_str() == f.when)
+    {
+        out.push((format!("When: {label}"), link_with(f, |g| g.when.clear())));
+    }
+    if !f.price_max.is_empty() {
+        out.push((
+            format!("Under £{}", f.price_max),
+            link_with(f, |g| g.price_max.clear()),
+        ));
+    }
+    if f.free {
+        out.push(("Free only".to_string(), link_with(f, |g| g.free = false)));
+    }
+    if let Some(a) = AREAS.iter().find(|a| a.key == f.near) {
+        out.push((
+            format!("Area: {}", a.label),
+            link_with(f, |g| g.near.clear()),
+        ));
+    }
+    for (name, value, clear) in [
+        (
+            "Medium",
+            &f.medium,
+            (|g: &mut Filters| g.medium.clear()) as fn(&mut Filters),
+        ),
+        ("Format", &f.format, |g: &mut Filters| g.format.clear()),
+        ("Good for", &f.good_for, |g: &mut Filters| {
+            g.good_for.clear()
+        }),
+    ] {
+        if !value.is_empty() {
+            out.push((
+                format!("{name}: {}", title_case(label_of(value))),
+                link_with(f, clear),
+            ));
+        }
+    }
+    for src in &f.sources {
+        out.push((
+            format!("Source: {}", repo::display_name(src, None)),
+            f.without_source(src),
+        ));
+    }
+    out
+}
+
+/// The search box: its own GET form, carrying the other filters.
+fn search_form(f: &Filters) -> Markup {
+    html! {
+        form class="search" role="search" method="get" action="/" {
+            label for="q" { "Search" }
+            div class="search-row" {
+                input id="q" name="q" type="search" value=(f.q) maxlength=(crate::search::MAX_QUERY_CHARS)
+                    placeholder="Title, venue, artist, medium…" autocomplete="off" spellcheck="false";
+                button type="submit" { "Search" }
+            }
+            (hidden_filters(f))
+        }
     }
 }
 
@@ -933,6 +1051,7 @@ fn filter_form(
     html! {
         section class="filter-bar" aria-label="Filters" {
             div class="wrap-x" {
+                (search_form(f))
                 p class="chip-row" {
                     span class="label" { "Dates:" }
                     @for (label, from, to) in date_presets(today) {
@@ -999,7 +1118,9 @@ fn filter_form(
                         label for="sort" { "Sort" }
                         select id="sort" name="sort" {
                             @for s in Sort::ALL {
-                                option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
+                                @if s != Sort::Relevance || !f.q.is_empty() {
+                                    option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
+                                }
                             }
                         }
                     }
@@ -1021,6 +1142,9 @@ fn filter_form(
                     }
                     @for src in &f.sources {
                         input type="hidden" name="source" value=(src);
+                    }
+                    @if !f.q.is_empty() {
+                        input type="hidden" name="q" value=(f.q);
                     }
                     div class="field actions" {
                         button type="submit" { "Show events" }
@@ -1207,7 +1331,12 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             Err(e) => return internal_error(e),
         }
     };
-    let query = filters.api_query();
+    let mut query = filters.api_query();
+    if let Ok(q) = &mut query {
+        if let Err(e) = api::resolve_search(&state.pool, q).await {
+            return internal_error(e);
+        }
+    }
     let facets = match &query {
         Ok(q) => match api::facets(&state.pool, q).await {
             Ok(f) => Some(f),
@@ -1301,6 +1430,13 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         format!("/?{q}")
     });
     let order = order_text(query.order.sort());
+    let corrected = query
+        .filter
+        .search
+        .as_ref()
+        .and_then(|s| s.corrected.clone());
+    let today = Utc::now().with_timezone(&London).date_naive();
+    let relax = relaxations(&filters, today);
     page(
         StatusCode::OK,
         "",
@@ -1318,11 +1454,40 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                         }
                     }
                     @if events.is_empty() {
-                        p class="empty" { "No events match these filters." }
-                        @if !filters.near.is_empty() {
-                            p class="small" { "Area filters only include events with a known location." }
+                        div class="empty" {
+                            @if filters.q.is_empty() {
+                                p { "No events match these filters." }
+                            } @else {
+                                p { "No events match “" (filters.q) "”" @if !relax.is_empty() { " with these filters" } "." }
+                            }
+                            @if let Some(c) = &corrected {
+                                p class="did-you-mean" {
+                                    "Did you mean "
+                                    a href=(link_with(&filters, |g| g.q = c.clone())) { "“" (c) "”" }
+                                    "?"
+                                }
+                            }
+                            @if !relax.is_empty() {
+                                p class="small" { "Try removing a filter:" }
+                                ul class="chips relax" {
+                                    @for (label, href) in &relax {
+                                        li { a class="pill" href=(href) aria-label={ "Remove filter " (label) } { "× " (label) } }
+                                    }
+                                }
+                            }
+                            @if !filters.q.is_empty() {
+                                p class="small" { a href=(link_with(&filters, |g| g.q.clear())) { "Clear the search" } }
+                            }
+                            @if !filters.near.is_empty() {
+                                p class="small" { "Area filters only include events with a known location." }
+                            }
                         }
                     } @else {
+                        @if let Some(c) = &corrected {
+                            p class="results-status did-you-mean" {
+                                span { "Including results for “" strong { (c) } "”" }
+                            }
+                        }
                         p class="results-status" {
                             span {
                                 strong { "Showing " (events.len()) @if events.len() == 1 { " event" } @else { " events" } }

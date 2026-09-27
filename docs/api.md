@@ -10,7 +10,7 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`,
+takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`,
 `source`, `medium`, `format`, `good_for` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
@@ -51,6 +51,7 @@ Lists events. Every parameter is optional; they combine freely.
 
 | Parameter | Example | Meaning |
 |---|---|---|
+| `q` | `whitechapel painting` | Full-text search (see below), at most 200 characters; blank = no search. Sorts by `relevance` unless `sort` says otherwise |
 | `from` | `2026-10-01` | Events still on at or after the start of this London date |
 | `to` | `2026-10-05` | Events starting on or before this London date (inclusive) |
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
@@ -63,9 +64,9 @@ Lists events. Every parameter is optional; they combine freely.
 | `format` | `format=talk` | Events with any of these format tags: `hands_on`, `talk`, `social`, `opening`, `late`, `family_friendly`, `course`, `tour`, `screening`, `fair_market`. Repeatable |
 | `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
-| `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` is absent). Events without coordinates are left out |
+| `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
-| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added` or `surprise` (see below). Default `nearest` with `near`, else `soonest` |
+| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise` or `relevance` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
 
@@ -90,6 +91,19 @@ such as an exhibition run without opening hours):
 
 `evening`, `after_work` and `daytime` look at the start time only.
 
+Search (`q`): matches the title (strongest), the venue name, then the
+description excerpt, category and tags, with English stemming (`painting`
+finds "Paintings") and accents ignored (`Sami` finds "Sámi"). The last word
+also matches as a prefix (`whitech`). Web-search syntax works: `"life
+drawing"` (phrase), `print or photo`, `ceramics -glaze`. A word that
+matches no upcoming event is corrected to the nearest word in upcoming
+events' titles and venue names (1 edit for 4–5 letters, 2 for longer), and
+events matching the corrected query are included; the response then has
+`"search": {"q": "Whitechaple", "corrected": "whitechapel"}` (`corrected`
+is `null` otherwise; `search` is absent without `q`). A query of stop words
+only (`the`) matches titles and venue names containing it. `counts` and
+`facets` apply the search too.
+
 Order (`sort`), ties broken by `id`:
 
 - `soonest` ("Starting soonest"): `starts_at` ascending, so events already
@@ -106,6 +120,10 @@ Order (`sort`), ties broken by `id`:
   not "recently opened".
 - `surprise` ("Surprise me"): a random order (`md5(id || London date)`),
   the same all day and reshuffled each London day.
+- `relevance` ("Best match"): the search rank (`ts_rank`) of `q`, best
+  first. The default whenever `q` is set (with or without `near`). Without
+  `q` it falls back to `soonest`, with `"sort_fallback": {"requested":
+  "relevance", ...}`.
 
 The response's `sort` says which sort was applied. There is no popularity
 sort: saves stay in the visitor's browser and the server does not track them.

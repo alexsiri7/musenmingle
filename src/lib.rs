@@ -22,6 +22,7 @@ pub mod normalise;
 pub mod notify;
 pub mod repo;
 pub mod runner;
+pub mod search;
 pub mod sources;
 pub mod suggestions;
 pub mod thumbs;
