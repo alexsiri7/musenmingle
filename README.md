@@ -195,6 +195,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     dates, single-day workshops timed (London wall clock); the sidebar
     price, not the JSON-LD `Course` offer (which says free for paid
     workshops); residencies, young people's and family programmes skipped.
+  - `estorick-collection` — CSS on three server-rendered listings
+    (`/events`, `/exhibitions`, `/exhibitions/in-the/future`; no JSON-LD,
+    no detail pages): date, time and description lines told apart by
+    content; single days with a time timed (London wall clock), ranges,
+    "From" dates and untimed days all day; families / under-5s skipped,
+    talks, tours and symposia → talk, art classes → workshop, special
+    events → community.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
