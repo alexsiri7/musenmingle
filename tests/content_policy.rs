@@ -31,6 +31,7 @@ const POSTER: &[u8] = include_bytes!("fixtures/images/poster.jpg");
 fn event(title: &str, days: i64) -> NewEvent {
     let starts_at = Utc::now() + Duration::days(days);
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: None,
         venue_name: Some("Hall".into()),

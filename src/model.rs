@@ -100,6 +100,35 @@ pub struct RawEvent {
     pub payload: serde_json::Value,
 }
 
+/// One session of a multi-session event (issue #207): a start and an
+/// optional end, both instants. Stored as a JSON array in
+/// `events.events.sessions`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct Session {
+    pub starts_at: DateTime<Utc>,
+    #[serde(default)]
+    pub ends_at: Option<DateTime<Utc>>,
+}
+
+impl Session {
+    /// When the session is over: its end, else its start plus
+    /// [`crate::listing::LIVE_GRACE_MINUTES`] (the rule for one-offs).
+    pub fn effective_end(&self) -> DateTime<Utc> {
+        self.ends_at.filter(|e| *e > self.starts_at).unwrap_or(
+            self.starts_at + chrono::Duration::minutes(crate::listing::LIVE_GRACE_MINUTES),
+        )
+    }
+}
+
+/// The sessions still to come or running at `now`: (the next one, how many
+/// sessions in all). `None` when there are no sessions or all are over.
+pub fn next_session(sessions: &[Session], now: DateTime<Utc>) -> Option<(Session, usize)> {
+    sessions
+        .iter()
+        .find(|s| s.effective_end() > now)
+        .map(|s| (*s, sessions.len()))
+}
+
 /// Price information after parsing.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Price {
@@ -124,10 +153,55 @@ pub struct NewEvent {
     /// midnight of the first day and `ends_at` London midnight of the last
     /// day (inclusive), or `None` for a single day.
     pub all_day: bool,
+    /// The separate sessions of a multi-session event (issue #207), in
+    /// order; empty for a one-off or a continuous run. When set,
+    /// `starts_at`/`ends_at` are the envelope (first session's start, last
+    /// session's end): see [`NewEvent::set_sessions`].
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub sessions: Vec<Session>,
     pub price: Price,
     pub url: Option<String>,
     pub image_url: Option<String>,
     pub category: Category,
     pub tags: Vec<String>,
     pub dedupe_key: String,
+}
+
+impl NewEvent {
+    /// Make this a multi-session event: sort and dedupe `sessions`, drop
+    /// ends not after their start, and set the envelope (`starts_at` = the
+    /// first start, `ends_at` = the last session's end, else its start when
+    /// later than the first; `all_day` only when every session is all-day,
+    /// i.e. starts at London midnight, and then `ends_at` is the last
+    /// session's day, as for any all-day run). Fewer than two sessions
+    /// leave a plain timed event (no `sessions`). The caller recomputes
+    /// `dedupe_key` from the new `starts_at` if it depends on it.
+    pub fn set_sessions(&mut self, mut sessions: Vec<Session>) {
+        for s in &mut sessions {
+            s.ends_at = s.ends_at.filter(|e| *e > s.starts_at);
+        }
+        sessions.sort();
+        sessions.dedup_by_key(|s| s.starts_at);
+        let (Some(first), Some(last)) = (sessions.first().copied(), sessions.last().copied())
+        else {
+            return;
+        };
+        self.starts_at = first.starts_at;
+        // All-day sessions (from London midnight): an all-day envelope, its
+        // `ends_at` the last day's midnight as for any all-day run.
+        self.all_day = sessions
+            .iter()
+            .all(|s| crate::normalise::is_london_midnight(s.starts_at));
+        self.ends_at = if self.all_day {
+            Some(last.starts_at)
+        } else {
+            last.ends_at.or(Some(last.starts_at))
+        }
+        .filter(|e| *e > first.starts_at);
+        self.sessions = if sessions.len() >= 2 {
+            sessions
+        } else {
+            Vec::new()
+        };
+    }
 }

@@ -284,6 +284,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
 
     let text = |key: &str| payload.get(key).and_then(Value::as_str);
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(&venue_name)),
         description: clean_description(item.description.as_deref()),
         title,

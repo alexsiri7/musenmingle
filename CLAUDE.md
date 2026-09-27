@@ -121,7 +121,8 @@ There is no local Docker; never try to use testcontainers.
 ## Layout
 
 - `src/fetch.rs` — FetchContext (UA, robots, rate limit)
-- `src/normalise.rs` — text/time/price/category helpers, dedupe key
+- `src/normalise.rs` — text/time/price/category helpers, dedupe key, multi-session day lists (`session_days`/`weekly_days`/`day_sessions`, #207)
+- Multi-session events (#207): `model::Session` + `NewEvent::set_sessions` (envelope dates); stored in `events.events.sessions` (JSONB, NULL for others) by `repo::upsert_event` (sessions follow whichever source wins the dates); the listing SQL checks them through `repo`'s `session_sql`; cards show the next session, the calendar/.ics one entry per session
 - `src/hours.rs` — weekly opening hours (pure): parsed from a listing's full text at ingest (`repo::upsert_event`), or from structured schema.org hours in its payload (`from_payload`: the event's own win over text; its `location`'s fill the venue's `events.venues.opening_hours` when empty, #206), open-at/status/display (the /map cards' "Open now until …", mirrored in `map.mjs`); the listing SQL mirrors its JSON shape, and `pick=open_now` is the home page's "Open now" chip
 - `src/borough.rs` — London borough of a point (pure): point-in-polygon against `src/london_boroughs.geojson` (ONS, OGL; credited on `/about`, regenerate with `docs/boroughs.md`); stored at upsert and by `repo::sync_boroughs` after each run; `borough=` filter, facet, and the home page's area presets (groups of boroughs, `web::AREAS`)
 - `src/venue_type.rs` — venue type facet (pure): overrides from `events.venues.venue_type`, source defaults, venue-name keywords; applied by `repo::sync_venue_types` after each ingest run

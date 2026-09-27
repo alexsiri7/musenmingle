@@ -428,6 +428,8 @@ dl.facts > div:last-child { border-right: 0; }
 dl.facts dt { font-size: 0.6875rem; line-height: 1.27; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--sm); }
 dl.facts dd { margin: 0; font-size: 1rem; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
 dl.facts dd .sub { display: block; font-family: var(--mono); font-size: 0.6875rem; line-height: 1.5; color: var(--ink-3); margin-top: var(--xs); }
+dl.facts dd ol.sessions { list-style: none; padding: 0; }
+dl.facts dd ol.sessions li.past { text-decoration: line-through; }
 dl.facts dd.free { color: var(--cobalt); }
 dl.facts dd a { color: var(--cobalt); }
 .hero-wrap { padding-top: var(--lg); }

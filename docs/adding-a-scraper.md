@@ -55,7 +55,11 @@ the venue's own site before it.
    London midnight of the first day and `ends_at` London midnight of the
    last day (inclusive), or `None` for a single day; pages then show no
    time (`normalise::is_date_only` / `is_london_midnight` help, see
-   `courtauld`). Never set it for an item that has a time. These
+   `courtauld`). Never set it for an item that has a time. An event that
+   is a few sessions over weeks or months (#207) is one event with
+   `NewEvent::set_sessions` (it sets the envelope dates): see
+   `normalise::session_days` / `weekly_days` / `day_sessions` and
+   `the_showroom` / `camden_art_centre`; never store it as one range. These
    London-midnight starts are still what the `when=` filters read as
    "untimed". If the page states late opening hours for an untimed event
    (an exhibition's "late openings" section), tag it `late opening` when

@@ -453,8 +453,22 @@ fn area_distance(km: f64) -> String {
     }
 }
 
+/// [`live_label`] for an event: a multi-session event (#207) by its
+/// current or next session (an all-day session as an untimed day).
+fn event_live_label(e: &EventJson, now: DateTime<Utc>) -> String {
+    match crate::model::next_session(&e.sessions, now) {
+        Some((s, _)) => {
+            let untimed = london(s.starts_at).time() == NaiveTime::MIN;
+            let end = if untimed { None } else { s.ends_at };
+            live_label(s.starts_at, end, untimed, None, now)
+        }
+        None => live_label(e.starts_at, e.ends_at, e.all_day, e.hours.as_ref(), now),
+    }
+}
+
 fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
+    let status = event_live_label(e, now);
     let primary = primary_source(e);
     let credit_url = e
         .image_credit
@@ -468,7 +482,7 @@ fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
                 data-lat=[e.lat] data-lng=[e.lng]
                 data-title=(e.title)
                 data-venue=(e.venue_name.as_deref().unwrap_or(""))
-                data-status=(live_label(e.starts_at, e.ends_at, e.all_day, e.hours.as_ref(), now))
+                data-status=(status)
                 data-category=(title_case(&e.category))
                 data-starts=(e.starts_at.to_rfc3339())
                 data-thumb=[e.thumbnail_url.as_deref().filter(|_| credit_url.is_some())]
@@ -488,7 +502,7 @@ fn near_card(e: &EventJson, n: usize, now: DateTime<Utc>) -> Markup {
                 @if let Some(v) = &e.venue_name { p class="near-venue" { (v) } }
                 p class="near-status" {
                     span class="dot" {}
-                    span { (live_label(e.starts_at, e.ends_at, e.all_day, e.hours.as_ref(), now)) }
+                    span { (status) }
                     @if let Some(p) = price(e) {
                         span class="sep" aria-hidden="true" { "/" }
                         span class={ "near-price" @if e.is_free { " free" } } { (p) }

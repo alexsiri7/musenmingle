@@ -76,6 +76,7 @@ impl Source for VenueSource {
 
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         Ok(Some(NewEvent {
+            sessions: Vec::new(),
             dedupe_key: dedupe_key("Night Talk", stored_start(), Some("Venue")),
             title: "Night Talk".into(),
             description: None,

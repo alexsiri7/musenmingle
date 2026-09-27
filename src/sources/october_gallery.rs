@@ -330,6 +330,7 @@ fn normalise_exhibition(payload: &Value) -> Result<Option<NewEvent>, SourceError
         .or_else(|| clean_description(ev.get("description").and_then(Value::as_str)));
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         title,
         description,
@@ -385,6 +386,7 @@ fn normalise_event(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
         .map(|e| london_to_utc(day.and_time(e)));
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         description: clean_description(text("description")),
         title,

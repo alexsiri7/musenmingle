@@ -18,6 +18,7 @@ fn t(s: &str) -> DateTime<Utc> {
 
 fn event(title: &str, venue: &str, at: Option<(f64, f64)>) -> NewEvent {
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: None,
         venue_name: Some(venue.into()),

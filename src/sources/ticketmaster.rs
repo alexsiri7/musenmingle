@@ -247,6 +247,7 @@ pub fn normalise_event(ev: &Value) -> Result<Option<NewEvent>, SourceError> {
     let description = clean_description(s(ev, "/description").or(s(ev, "/info")));
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, venue_name.as_deref()),
         title,
         description,

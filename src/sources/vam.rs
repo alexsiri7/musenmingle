@@ -315,6 +315,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         vec![kind_lower]
     };
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(venue)),
         description: clean_description(str_field(payload, "description")),
         title,

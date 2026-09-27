@@ -27,6 +27,12 @@
 //!   and every range are all-day (London midnights, `ends_at` the last day,
 //!   none for a single day or an open "From" run). Runs longer than
 //!   [`MAX_RANGE_DAYS`] are skipped.
+//! * Multi-session events (#207): a ranged event whose detail note lists
+//!   its session days ("Fortnightly on Tuesdays at 4.30 – 6.30pm / 20
+//!   October, 3 November, … 26 January") becomes one event with those
+//!   sessions (`normalise::session_days`, which requires the list to start
+//!   and end on the range's days), timed by the note's clock range when it
+//!   has one, else all-day sessions. Otherwise it stays one all-day range.
 //! * Categories: exhibitions → exhibition. Events by type label, then title:
 //!   film screenings and children's / family sessions are skipped;
 //!   otherwise `map_category` ("Artist talk" → talk, "Workshop Series" →
@@ -44,8 +50,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
-    parse_price, words,
+    clean_description, clean_text, day_sessions, dedupe_key, london_date, london_to_utc,
+    map_category, parse_price, session_days, words,
 };
 
 pub const KEY: &str = "the-showroom";
@@ -309,6 +315,30 @@ pub fn event_category(type_label: &str, title: &str) -> Option<Category> {
     }
 }
 
+/// The first clock range in `text` ("at 4.30 – 6.30pm", "2.30-4.30pm."):
+/// a run starting at a digit and ending in "am"/"pm" within 20 characters
+/// that `parse_time_range` accepts.
+pub fn find_clock_range(text: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
+    let lower = text.to_lowercase();
+    lower
+        .char_indices()
+        .filter(|(i, c)| {
+            c.is_ascii_digit()
+                && !lower[..*i]
+                    .chars()
+                    .next_back()
+                    .is_some_and(|p| p.is_ascii_digit() || p == '.' || p == ':')
+        })
+        .find_map(|(i, _)| {
+            let rest: String = lower[i..].chars().take(20).collect();
+            let end = ["am", "pm"]
+                .iter()
+                .filter_map(|m| rest.find(m).map(|j| j + 2))
+                .min()?;
+            parse_time_range(&rest[..end])
+        })
+}
+
 fn london_midnight(d: NaiveDate) -> DateTime<Utc> {
     london_to_utc(d.and_time(NaiveTime::MIN))
 }
@@ -337,11 +367,16 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
     let date_text = card["date_text"]
         .as_str()
         .ok_or_else(|| SourceError::Parse(format!("{title:?} has no date line")))?;
+    let info = detail["info"].as_str().unwrap_or_default();
+    let mut sessions = Vec::new();
     let (starts_at, ends_at, all_day) = match parse_when(date_text, listed_on)? {
         When::Days(first, last) => {
             let last = last.filter(|l| *l > first);
             if last.is_some_and(|l| (l - first).num_days() > MAX_RANGE_DAYS) {
                 return Ok(None);
+            }
+            if let Some(days) = last.and_then(|l| session_days(info, first, l)) {
+                sessions = day_sessions(&days, find_clock_range(info));
             }
             (london_midnight(first), last.map(london_midnight), true)
         }
@@ -354,8 +389,9 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         }
     };
     let price = detail["info"].as_str().map(parse_price).unwrap_or_default();
-    Ok(Some(NewEvent {
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+    let mut ev = NewEvent {
+        sessions: Vec::new(),
+        dedupe_key: String::new(),
         title,
         description: clean_description(detail["description"].as_str()),
         venue_name: Some(VENUE_NAME.to_string()),
@@ -370,7 +406,10 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         image_url: p["image_url"].as_str().map(str::to_string),
         category,
         tags: Vec::new(),
-    }))
+    };
+    ev.set_sessions(sessions);
+    ev.dedupe_key = dedupe_key(&ev.title, ev.starts_at, Some(VENUE_NAME));
+    Ok(Some(ev))
 }
 
 #[async_trait]
@@ -615,6 +654,80 @@ mod tests {
         assert_eq!(
             ev.ends_at.map(|e| e.to_rfc3339()).as_deref(),
             Some("2027-01-26T00:00:00+00:00")
+        );
+    }
+
+    #[test]
+    fn workshop_series_with_listed_days_has_sessions_across_the_clock_change() {
+        let mut p = payload(
+            "events",
+            "Made By Hands: The Fabric of Creative Action",
+            "20 October 2026 – 26 January 2027",
+            Some("Workshop Series"),
+        );
+        p["detail"]["info"] = json!(
+            "Intergenerational workshop series for under 30 year olds and over 60 year olds \
+             Fortnightly on Tuesdays at 4.30 – 6.30pm 20 October, 3 November, 17 November, \
+             1 December, 12 January, 26 January. Participants must be available for all \
+             sessions. £30 for 6 sessions / concessions available."
+        );
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        assert!(!ev.all_day);
+        let s: Vec<(String, Option<String>)> = ev
+            .sessions
+            .iter()
+            .map(|s| (s.starts_at.to_rfc3339(), s.ends_at.map(|e| e.to_rfc3339())))
+            .collect();
+        let at = |a: &str, b: &str| (a.to_string(), Some(b.to_string()));
+        assert_eq!(
+            s,
+            vec![
+                // BST (UTC+1) before 25 Oct 2026, GMT after.
+                at("2026-10-20T15:30:00+00:00", "2026-10-20T17:30:00+00:00"),
+                at("2026-11-03T16:30:00+00:00", "2026-11-03T18:30:00+00:00"),
+                at("2026-11-17T16:30:00+00:00", "2026-11-17T18:30:00+00:00"),
+                at("2026-12-01T16:30:00+00:00", "2026-12-01T18:30:00+00:00"),
+                at("2027-01-12T16:30:00+00:00", "2027-01-12T18:30:00+00:00"),
+                at("2027-01-26T16:30:00+00:00", "2027-01-26T18:30:00+00:00"),
+            ]
+        );
+        assert_eq!(ev.starts_at.to_rfc3339(), "2026-10-20T15:30:00+00:00");
+        assert_eq!(
+            ev.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2027-01-26T18:30:00+00:00")
+        );
+        assert_eq!(ev.price, parse_price("£30"));
+    }
+
+    #[test]
+    fn a_day_list_that_does_not_match_the_range_is_ignored() {
+        let mut p = payload(
+            "events",
+            "Made By Hands",
+            "20 October 2026 – 26 January 2027",
+            Some("Workshop Series"),
+        );
+        p["detail"]["info"] = json!("Tuesdays at 4.30 – 6.30pm: 20 October, 3 November.");
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        assert!(ev.all_day);
+        assert!(ev.sessions.is_empty());
+    }
+
+    #[test]
+    fn clock_ranges_in_prose() {
+        assert_eq!(
+            find_clock_range(
+                "under 30 year olds, Fortnightly on Tuesdays at 4.30 – 6.30pm 20 October"
+            ),
+            Some((t(16, 30), Some(t(18, 30))))
+        );
+        assert_eq!(
+            find_clock_range("Sessions are every Saturday, 2.30-4.30pm."),
+            Some((t(14, 30), Some(t(16, 30))))
+        );
+        assert_eq!(
+            find_clock_range("Saturdays: 10 Oct, 24 Oct, 7 Nov 2026"),
+            None
         );
     }
 

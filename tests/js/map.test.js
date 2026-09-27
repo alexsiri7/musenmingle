@@ -197,3 +197,26 @@ test("transit origin and card suffix", async () => {
   assert.equal(m.transitSuffix(null), "");
   assert.equal(m.MIN_TRANSIT_KM, 1.5);
 });
+
+test("multi-session events are labelled by their current session (#207)", async () => {
+  const m = await load();
+  const e = {
+    starts_at: "2026-10-20T15:30:00Z",
+    ends_at: "2027-01-26T18:30:00Z",
+    all_day: false,
+    sessions: [
+      { starts_at: "2026-10-20T15:30:00Z", ends_at: "2026-10-20T17:30:00Z" },
+      { starts_at: "2026-11-03T16:30:00Z", ends_at: "2026-11-03T18:30:00Z" },
+    ],
+  };
+  // In the first session (BST): until its own end, not January.
+  assert.equal(m.eventLiveLabel(e, "2026-10-20T16:00:00Z"), "On now until 18:30");
+  // Between sessions: the next one (GMT).
+  assert.equal(m.eventLiveLabel(e, "2026-10-27T12:00:00Z"), "Starts Tue 16:30–18:30");
+  assert.equal(m.currentSession(e.sessions, "2026-11-04T00:00:00Z"), null);
+  // An all-day session is an untimed day.
+  const fam = { sessions: [{ starts_at: "2026-10-09T23:00:00Z", ends_at: "2026-10-10T23:00:00Z" }, { starts_at: "2026-10-23T23:00:00Z", ends_at: "2026-10-25T00:00:00Z" }] };
+  assert.equal(m.eventLiveLabel(fam, "2026-10-10T10:00:00Z"), "Today · check opening hours");
+  // Without sessions: the event's own dates.
+  assert.equal(m.eventLiveLabel({ starts_at: "2026-10-03T12:30:00Z", ends_at: "2026-10-03T14:00:00Z" }, "2026-10-03T13:00:00Z"), "On now until 15:00");
+});

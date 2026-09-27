@@ -19,6 +19,7 @@ fn t(s: &str) -> DateTime<Utc> {
 /// 9 Sep – 1 Nov 2026 (all-day; London midnights, end inclusive).
 fn chats_palace(title: &str, venue: &str, description: Option<&str>, all_day: bool) -> NewEvent {
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: description.map(str::to_string),
         venue_name: Some(venue.into()),

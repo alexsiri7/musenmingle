@@ -230,6 +230,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .map(|(_, e)| london_to_utc(date.and_time(e)));
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         description: clean_description(excerpt),
         title,

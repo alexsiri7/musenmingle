@@ -119,18 +119,59 @@ pub fn ics_fold(line: &str) -> String {
 /// The `.ics` file for one event: a VCALENDAR with a single VEVENT.
 /// `now` is the DTSTAMP.
 pub fn ics(e: &ShareEvent<'_>, now: DateTime<Utc>) -> String {
+    ics_with_sessions(e, &[], now)
+}
+
+/// [`ics`] for an event that may have sessions (#207): one VEVENT per
+/// session (UID `<id>-<session start>@…`), else the single VEVENT.
+pub fn ics_with_sessions(
+    e: &ShareEvent<'_>,
+    sessions: &[crate::model::Session],
+    now: DateTime<Utc>,
+) -> String {
     let mut lines = vec![
         "BEGIN:VCALENDAR".to_string(),
         "VERSION:2.0".to_string(),
         "PRODID:-//Muse & Mingle//Event//EN".to_string(),
         "CALSCALE:GREGORIAN".to_string(),
         "METHOD:PUBLISH".to_string(),
-        "BEGIN:VEVENT".to_string(),
+    ];
+    if sessions.is_empty() {
         // Same UID as the Saved-events export (src/web.js), so re-adding
         // updates rather than duplicates.
-        format!("UID:{}@musenmingle.interstellarai.net", e.id),
-        format!("DTSTAMP:{}", utc_stamp(now)),
-    ];
+        let uid = format!("{}@musenmingle.interstellarai.net", e.id);
+        vevent(&mut lines, e, &uid, now);
+    }
+    for s in sessions {
+        // An all-day session starts at London midnight.
+        let untimed = s.starts_at.with_timezone(&London).time() == chrono::NaiveTime::MIN;
+        let one = ShareEvent {
+            starts_at: s.starts_at,
+            ends_at: if untimed { None } else { s.ends_at },
+            all_day: untimed,
+            ..e.clone()
+        };
+        let uid = format!(
+            "{}-{}@musenmingle.interstellarai.net",
+            e.id,
+            utc_stamp(s.starts_at)
+        );
+        vevent(&mut lines, &one, &uid, now);
+    }
+    lines.push("END:VCALENDAR".into());
+    let mut out = String::new();
+    for l in lines {
+        out.push_str(&ics_fold(&l));
+        out.push_str("\r\n");
+    }
+    out
+}
+
+/// Append one VEVENT for `e` with `uid`.
+fn vevent(lines: &mut Vec<String>, e: &ShareEvent<'_>, uid: &str, now: DateTime<Utc>) {
+    lines.push("BEGIN:VEVENT".to_string());
+    lines.push(format!("UID:{uid}"));
+    lines.push(format!("DTSTAMP:{}", utc_stamp(now)));
     if e.all_day {
         let (first, last) = e.days();
         lines.push(format!("DTSTART;VALUE=DATE:{}", date_stamp(first)));
@@ -157,13 +198,6 @@ pub fn ics(e: &ShareEvent<'_>, now: DateTime<Utc>) -> String {
         e.source_url.as_deref().unwrap_or(e.page_url)
     ));
     lines.push("END:VEVENT".into());
-    lines.push("END:VCALENDAR".into());
-    let mut out = String::new();
-    for l in lines {
-        out.push_str(&ics_fold(&l));
-        out.push_str("\r\n");
-    }
-    out
 }
 
 /// `<slug>.ics` for the Content-Disposition header: ASCII letters and

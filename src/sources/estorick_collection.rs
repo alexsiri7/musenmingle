@@ -309,6 +309,7 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         _ => (london_midnight(start), end.map(london_midnight), true),
     };
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         title,
         description: clean_description(card["description"].as_str()),

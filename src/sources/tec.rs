@@ -443,6 +443,7 @@ pub fn normalise_payload(
         return Ok(None);
     };
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&p.title, p.times.starts_at, Some(&venue.name)),
         title: p.title,
         description: p.description,

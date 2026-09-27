@@ -24,10 +24,17 @@
 //!   are skipped.
 //! * Categories by programme type: `exhibitions` → exhibition,
 //!   `courses-workshops` → workshop, talks/events → talk. Skipped: studio
-//!   `residencies` (not something the public attends), and `young-people`
-//!   and `childrenandfamilies` programmes, which run as sessions on a few
-//!   days across months ("Saturdays: 10 Oct, 24 Oct, …") and would read as
-//!   open every day if stored as one range. Skipped items are not fetched.
+//!   `residencies` (not something the public attends; their pages list no
+//!   public sessions). Skipped items are not fetched.
+//! * `young-people` and `childrenandfamilies` programmes run as sessions on
+//!   a few days across months (#207). They are workshops (tagged `family` /
+//!   `young people`) with sessions from the sidebar's "Booking information"
+//!   row: listed days ("Saturdays: 10 Oct, 24 Oct, 7 Nov, 21 Nov 2026",
+//!   `normalise::session_days`, which must start and end on the feed's
+//!   dates) or a weekly rule ("Sessions are every Saturday, 2.30-4.30pm",
+//!   `normalise::weekly_days`), timed by the row's clock range, else all-day
+//!   sessions. One whose sessions can't be read is skipped, as a single
+//!   range would read as open every day.
 //! * Everything listed here is at the Centre; `/whats-on/offsite` and
 //!   `/whats-on/on-demand` are not read.
 
@@ -38,10 +45,14 @@ use serde_json::{Value, json};
 use url::Url;
 
 use super::jsonld::str_or_name;
+use super::the_showroom::find_clock_range;
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
-use crate::normalise::{clean_description, clean_text, dedupe_key, london_to_utc, parse_price};
+use crate::normalise::{
+    clean_description, clean_text, day_sessions, dedupe_key, london_to_utc, parse_price,
+    session_days, weekly_days,
+};
 
 pub const KEY: &str = "camden-art-centre";
 /// Upper bound on feed pages read per run (9 items a page).
@@ -125,18 +136,25 @@ pub fn category(type_slug: &str) -> Option<Category> {
     match type_slug {
         "exhibitions" => Some(Category::Exhibition),
         "courses-workshops" => Some(Category::Workshop),
+        s if is_session_programme(s) => Some(Category::Workshop),
         s if s.contains("talk") || s == "events" => Some(Category::Talk),
         _ => None,
     }
 }
 
-/// What the event page adds to the feed: the sidebar's `Date` and `Price`
-/// rows and a description.
+/// Programme types that run as sessions (#207).
+fn is_session_programme(type_slug: &str) -> bool {
+    matches!(type_slug, "childrenandfamilies" | "young-people")
+}
+
+/// What the event page adds to the feed: the sidebar's `Date`, `Price` and
+/// "Booking information" rows and a description.
 pub fn parse_detail(html: &str) -> Value {
     let doc = Html::parse_document(html);
     let item_sel = selector(".sidebar__item");
     let mut date_text = None;
     let mut price_text = None;
+    let mut booking_text = None;
     for row in doc.select(&selector(".main-content__sidebar .sidebar__row")) {
         let mut cells = row.select(&item_sel);
         let (Some(label), Some(value)) = (cells.next(), cells.next()) else {
@@ -145,6 +163,9 @@ pub fn parse_detail(html: &str) -> Value {
         match element_text(label).as_str() {
             "Date" => date_text = Some(element_text(value)),
             "Price" => price_text = Some(element_text(value)),
+            "Booking information:" | "Booking information" => {
+                booking_text = Some(element_text(value))
+            }
             _ => {}
         }
     }
@@ -161,6 +182,7 @@ pub fn parse_detail(html: &str) -> Value {
     json!({
         "date_text": date_text,
         "price_text": price_text,
+        "booking_text": booking_text,
         "description": description,
     })
 }
@@ -250,6 +272,19 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
             "{title:?}: page date {date_text:?} disagrees with start_date {start}"
         )));
     }
+    let slug = type_slug(item);
+    let sessions = if is_session_programme(slug) {
+        let booking = detail["booking_text"].as_str().unwrap_or_default();
+        let days = end.and_then(|e| {
+            session_days(booking, start, e).or_else(|| weekly_days(booking, start, e))
+        });
+        match days {
+            Some(days) => day_sessions(&days, find_clock_range(booking)),
+            None => return Ok(None),
+        }
+    } else {
+        Vec::new()
+    };
     let (starts_at, ends_at, all_day) = match (end, parse_time_range(date_text)) {
         (None, Some((from, to))) => {
             let s = london_to_utc(start.and_time(from));
@@ -264,7 +299,7 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         .as_str()
         .map(parse_price)
         .unwrap_or_default();
-    let tags: Vec<String> = item["tags"]
+    let mut tags: Vec<String> = item["tags"]
         .as_array()
         .into_iter()
         .flatten()
@@ -272,8 +307,14 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         .map(|t| clean_text(t).to_lowercase())
         .filter(|t| !t.is_empty())
         .collect();
-    Ok(Some(NewEvent {
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+    match slug {
+        "childrenandfamilies" => tags.push("family".into()),
+        "young-people" => tags.push("young people".into()),
+        _ => {}
+    }
+    let mut ev = NewEvent {
+        sessions: Vec::new(),
+        dedupe_key: String::new(),
         title,
         description: clean_description(detail["description"].as_str()),
         venue_name: Some(VENUE_NAME.to_string()),
@@ -291,7 +332,10 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
             .map(str::to_string),
         category,
         tags,
-    }))
+    };
+    ev.set_sessions(sessions);
+    ev.dedupe_key = dedupe_key(&ev.title, ev.starts_at, Some(VENUE_NAME));
+    Ok(Some(ev))
 }
 
 #[async_trait]
@@ -376,9 +420,90 @@ mod tests {
         assert_eq!(category("courses-workshops"), Some(Category::Workshop));
         assert_eq!(category("talks"), Some(Category::Talk));
         assert_eq!(category("residencies"), None);
-        assert_eq!(category("young-people"), None);
-        assert_eq!(category("childrenandfamilies"), None);
+        assert_eq!(category("young-people"), Some(Category::Workshop));
+        assert_eq!(category("childrenandfamilies"), Some(Category::Workshop));
         assert_eq!(category(""), None);
+    }
+
+    fn programme(slug: &str, start: &str, end: &str, booking: &str) -> Value {
+        json!({
+            "url": "https://camdenartcentre.org/whats-on/x",
+            "item": {"title": "Programme", "start_date": start, "end_date": end,
+                     "type": {"slug": slug}},
+            "detail": {"date_text": "", "price_text": "Free", "booking_text": booking,
+                       "description": null},
+        })
+    }
+
+    #[test]
+    fn family_programme_has_all_day_sessions_on_its_listed_days() {
+        let p = programme(
+            "childrenandfamilies",
+            "2026-10-10",
+            "2026-11-21",
+            "Saturdays: 10 Oct, 24 Oct, 7 Nov, 21 Nov 2026",
+        );
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        assert_eq!(ev.category, Category::Workshop);
+        assert!(ev.tags.contains(&"family".to_string()));
+        // All-day sessions: an all-day envelope, ending on the last day.
+        assert!(ev.all_day);
+        let starts: Vec<String> = ev
+            .sessions
+            .iter()
+            .map(|s| s.starts_at.to_rfc3339())
+            .collect();
+        // London midnights: BST until 25 Oct 2026, then GMT.
+        assert_eq!(
+            starts,
+            [
+                "2026-10-09T23:00:00+00:00",
+                "2026-10-23T23:00:00+00:00",
+                "2026-11-07T00:00:00+00:00",
+                "2026-11-21T00:00:00+00:00"
+            ]
+        );
+        assert_eq!(
+            ev.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2026-11-21T00:00:00+00:00")
+        );
+        assert_eq!(
+            ev.sessions[3].ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2026-11-22T00:00:00+00:00")
+        );
+    }
+
+    #[test]
+    fn young_people_programme_repeats_weekly_at_its_time() {
+        let p = programme(
+            "young-people",
+            "2026-10-10",
+            "2026-11-07",
+            "Sessions are every Saturday, 2.30-4.30pm.",
+        );
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        assert!(ev.tags.contains(&"young people".to_string()));
+        let s: Vec<String> = ev
+            .sessions
+            .iter()
+            .map(|s| s.starts_at.to_rfc3339())
+            .collect();
+        assert_eq!(
+            s,
+            [
+                "2026-10-10T13:30:00+00:00",
+                "2026-10-17T13:30:00+00:00",
+                "2026-10-24T13:30:00+00:00",
+                "2026-10-31T14:30:00+00:00",
+                "2026-11-07T14:30:00+00:00"
+            ]
+        );
+    }
+
+    #[test]
+    fn programme_without_readable_sessions_is_skipped() {
+        let p = programme("young-people", "2026-10-10", "2026-11-07", "Book now");
+        assert_eq!(normalise_payload(&p).unwrap(), None);
     }
 
     #[test]

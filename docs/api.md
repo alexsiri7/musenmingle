@@ -302,6 +302,16 @@ upcoming events).
 `starts_at` and `ends_at` are then London midnight of the first and last day
 (the last day inclusive), so display dates without times.
 
+`sessions` (absent for other events) lists the sessions of a multi-session
+event, such as a fortnightly workshop series: `[{"starts_at":
+"2026-10-20T15:30:00Z", "ends_at": "2026-10-20T17:30:00Z"}, …]` in start
+order (at least two; `ends_at` may be `null`; an all-day session runs from
+London midnight to the next). `starts_at`/`ends_at` are then the first
+session's start and the last session's end (`all_day` is `true`, with the
+usual all-day dates, only when every session is all-day). The
+date filters (`from`/`to`, `at=`, `open_now`, `open_on`, `when=weekend`,
+`pick=tonight`) match the sessions, not the days between them.
+
 `opening_hours` (absent when unknown; only on all-day runs of more than one
 day) is a list of `{"days": ["wed", "thu", "fri", "sun"], "opens": "11:00",
 "closes": "15:00"}` in London time (`opens` before `closes`; each day in at
