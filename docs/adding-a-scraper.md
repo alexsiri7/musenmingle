@@ -93,8 +93,26 @@ curl -A "$UA" -o tests/fixtures/scrapers/<key>/listing.html https://<site>/<even
 INSTA_UPDATE=always cargo test --test source_<key>   # then REVIEW the .snap files
 # 4. register in sources::build, add a seed migration (with display_name,
 #    store_description, store_image, policy_note), update README's source list
+# 5. add the new file to qa::code::SOURCE_FILES (a test fails until you do)
 cargo fmt && cargo clippy --all-targets --all-features -- -D warnings && cargo test
 ```
+
+## Fixing a "Scraper check" issue
+
+The scraper QA check (README, "Scraper QA") files `Scraper check: <key> — …`
+issues when an AI comparison of a source's pages with what we stored finds
+wrong fields or events we missed. The issue lists the page URLs, the fetch
+date and a table of our stored value, what the page says and a verbatim
+quote. The AI can be wrong: check each row on the page first. Then:
+
+1. Save the pages listed (with the MuseNMingleBot UA, as in the workflow
+   above) as `tests/fixtures/scrapers/<key>/qa-<YYYY-MM-DD>.html` (suffix
+   `-2`, `-3`, … if several).
+2. Add a snapshot test on them whose expected values are the page's, i.e.
+   the "page says" column, and fix the scraper until it passes. This is the
+   regression test.
+3. The issue closes itself when a later check (weekly, or the next run after
+   the source's file changes) finds no problems.
 
 ## Adding a venue on The Events Calendar
 

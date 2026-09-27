@@ -934,6 +934,24 @@ async fn sources_page_renders_the_sources_api_data() {
     )
     .await
     .unwrap();
+    sqlx::query(
+        "INSERT INTO events.qa_checks (source_id, checked_at, reason, code_hash, model,
+             prompt_version, status, wrong_fields, missed_events, github_issue_number)
+         VALUES ($1, '2026-09-26T07:00:00Z', 'first', 'h', 'm', 1, 'issues', 2, 1, 99)",
+    )
+    .bind(source.id)
+    .execute(&pool)
+    .await
+    .unwrap();
+    sqlx::query(
+        "INSERT INTO events.qa_findings (run_id, source_id, rule, affected, detail)
+         SELECT id, source_id, 'same_date', 12, 'all on one day' FROM events.source_runs
+         WHERE source_id = $1",
+    )
+    .bind(source.id)
+    .execute(&pool)
+    .await
+    .unwrap();
     let app = app(&pool);
 
     let p = get(&app, "/sources").await;
@@ -951,6 +969,14 @@ async fn sources_page_renders_the_sources_api_data() {
     assert!(row.contains("Sat 26 Sep 2026, 06:00"), "{row}");
     assert!(row.contains("<td>41</td><td>3</td>"), "{row}");
     assert!(row.contains("status-degraded"), "{row}");
+    assert!(
+        row.contains(">Sat 26 Sep 2026</time>: 3 issue(s) found"),
+        "{row}"
+    );
+    assert!(
+        row.contains("1 automatic check(s) flagged the last run"),
+        "{row}"
+    );
     assert!(
         p.body.contains("<a href=\"/?source=ticketmaster\""),
         "{}",
@@ -974,6 +1000,8 @@ async fn sources_page_renders_the_sources_api_data() {
     // Never link into the private repo (#57).
     assert!(!p.body.contains("github.com/alexsiri7/"), "{}", p.body);
     assert!(p.body.contains("Never"));
+    assert!(p.body.contains("Not yet"));
+    assert!(!p.body.contains("github.com"), "{}", p.body);
     pool.close().await;
     db.drop_db().await;
 }

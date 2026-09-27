@@ -1085,6 +1085,27 @@ async fn sources_report_last_run_and_health() {
     )
     .await
     .unwrap();
+    // A scraper check that found problems, and a rule hit on the latest run.
+    let design_museum = source_id("design-museum").await;
+    sqlx::query(
+        "INSERT INTO events.qa_checks (source_id, checked_at, reason, code_hash, model,
+             prompt_version, status, wrong_fields, missed_events, github_issue_number)
+         VALUES ($1, '2026-09-26T07:00:00Z', 'first', 'h', 'm', 1, 'issues', 2, 1, 99),
+                ($1, '2026-09-26T08:00:00Z', 'weekly', 'h', 'm', 1, 'failed', 0, 0, NULL)",
+    )
+    .bind(design_museum)
+    .execute(&pool)
+    .await
+    .unwrap();
+    sqlx::query(
+        "INSERT INTO events.qa_findings (run_id, source_id, rule, affected, detail)
+         SELECT id, source_id, 'same_date', 12, 'all on one day' FROM events.source_runs
+         WHERE source_id = $1",
+    )
+    .bind(design_museum)
+    .execute(&pool)
+    .await
+    .unwrap();
     let serpentine = source_id("serpentine-galleries").await;
     musenmingle::repo::insert_health_issue(&pool, serpentine, 7, "old")
         .await
@@ -1123,9 +1144,22 @@ async fn sources_report_last_run_and_health() {
             "skip": null,
             "status": "healthy",
             "issue_url": null,
+            "qa": { "rule_flags": 0, "last_check": null },
         })
     );
     assert_eq!(source("design-museum")["status"], "degraded");
+    // The failed check is not the latest completed one; no issue link.
+    assert_eq!(
+        source("design-museum")["qa"],
+        json!({
+            "rule_flags": 1,
+            "last_check": {
+                "checked_at": "2026-09-26T07:00:00Z",
+                "status": "issues",
+                "problems": 3,
+            },
+        })
+    );
     assert_eq!(source("design-museum")["issue_url"], Value::Null);
     // Pending: never ran (its only issue is closed).
     assert_eq!(source("serpentine-galleries")["status"], "pending");

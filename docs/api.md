@@ -333,7 +333,15 @@ Every configured source, ordered by `key`.
       },
       "skip": null,
       "status": "healthy",
-      "issue_url": null
+      "issue_url": null,
+      "qa": {
+        "rule_flags": 0,
+        "last_check": {
+          "checked_at": "2026-09-26T06:04:00Z",
+          "status": "ok",
+          "problems": 0
+        }
+      }
     },
     {
       "key": "serpentine-galleries",
@@ -350,7 +358,8 @@ Every configured source, ordered by `key`.
       },
       "skip": null,
       "status": "broken",
-      "issue_url": "https://github.com/alexsiri7/musenmingle/issues/31"
+      "issue_url": "https://github.com/alexsiri7/musenmingle/issues/31",
+      "qa": { "rule_flags": 1, "last_check": null }
     },
     {
       "key": "ticketmaster",
@@ -363,7 +372,8 @@ Every configured source, ordered by `key`.
         "reason": "TICKETMASTER_API_KEY not set"
       },
       "status": "unconfigured",
-      "issue_url": null
+      "issue_url": null,
+      "qa": { "rule_flags": 0, "last_check": null }
     }
   ]
 }
@@ -404,6 +414,13 @@ scrape, most recently checked first:
   errors; otherwise `healthy`.
 - `issue_url`: link to the open `scraper-broken` issue, or `null`. Set
   whenever an issue is open, even if `status` is `unconfigured`.
+- `qa`: the scraper QA checks (see the README's "Scraper QA"). `rule_flags`
+  is how many automatic rules (e.g. events ending before they start) the
+  last run hit. `last_check` is the latest AI comparison of the source's
+  pages with what we stored that reached a verdict, or `null`: `status` is
+  `ok`, `issues` (then `problems` counts wrong fields plus missed events),
+  `no_pages` or `invalid` (both inconclusive). QA does not change `status`
+  and never links to an issue.
 
 ## `GET /calendar.ics`
 

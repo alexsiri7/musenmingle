@@ -229,7 +229,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   [Merging and overrides](#merging-and-overrides).
 - **Ingest runner** (`src/runner.rs`): takes an advisory lock, runs enabled
   sources whose `interval_minutes` has elapsed, each with a timeout, upserts,
-  records `events.source_runs`, then runs the health checker (a source that
+  records `events.source_runs`, then runs the health checker and the
+  [scraper QA](#scraper-qa) rules and check (a source that
   cannot be built, e.g. missing credentials, is instead recorded as skipped
   on `events.sources` and retried next tick). Every tick it then applies the
   content policy to stored rows, runs the thumbnailer, keeps AI fields in
@@ -247,6 +248,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
   issues by label + title, so it survives DB resets). Recovery comments on and
   closes the issue.
+- **Scraper QA** (`src/qa/`): checks that scrapers store what the page says;
+  see [Scraper QA](#scraper-qa).
 - **Site suggestions** (`src/suggestions.rs`, `POST /v1/suggestions` with
   `{"url": "...", "note": "optional, ≤ 500 chars"}`): http(s) URLs on a
   public domain (no IPs, `localhost`, `.local`, …) are reduced to their
@@ -422,7 +425,9 @@ Serpentine) send just the facts.
   calls; every call (failed ones too) is recorded in
   `events.enrichment_calls`; a call is made only if its pessimistic estimate
   fits under `ENRICH_DAILY_CAP_USD` (1.00, per London day, embeddings
-  included) and `ENRICH_RUN_CAP_USD` (0.40); `ENRICH_RUN_BUDGET_SECS` (300)
+  included; the [scraper QA](#scraper-qa) check has its own
+  `QA_DAILY_CAP_USD`, so the worst-case Requesty spend per day is the sum of
+  both caps, $2 by default) and `ENRICH_RUN_CAP_USD` (0.40); `ENRICH_RUN_BUDGET_SECS` (300)
   bounds the pass's time inside the ingest lock. Each pass logs events
   enriched, tokens and dollars. Measured 2026-09-26: ~$0.005 per event on
   Opus 5.5 (see the evaluation notes in the PR).
@@ -450,6 +455,47 @@ Serpentine) send just the facts.
 - **Evaluating prompts/models:** `cargo run --example enrich_eval -- events.json
   <model> <in> <out> <cache-read> <cache-write>` runs the production request
   builder and validator on exported events without a database.
+
+### Scraper QA
+
+Invalid data (for example a time read as midnight, or an end date that is
+really a start) usually comes from a clean run, so the health checks miss
+it. `src/qa/` looks for it in three layers:
+
+1. **Rules, every successful run, no AI** (`qa::rules`): events ending
+   before they start (including ones the database refused), dates over a year
+   in the past or three years ahead, spans over a year, timed events at
+   exactly London midnight, two events with the same title on the same day,
+   a jump of 30+ points in the share of events without a venue or
+   coordinates, five or more events all on one day, and the health checks'
+   count drop. Hits go in `events.qa_findings` (the run's counts on
+   `events.source_runs`), are logged, and show on `/sources` and
+   `GET /v1/sources`.
+2. **AI check** (`qa::QaChecker`, needs `REQUESTY_API_KEY`): a source is
+   checked after its run when it was never checked, when its file in
+   `src/sources/` changed (`qa::code`), a week after its last check, or when
+   its latest run hit a rule the last check did not see. The runner captures
+   the pages that run fetched (`FetchContext` capture: no extra requests,
+   except up to 4 detail pages when the run's own fetches don't include
+   any); the judge gets the listing and up to 2 detail pages as main-content
+   text (Readability via `dom_smoothie`, falling back to the visible text)
+   plus JSON-LD, and our records, within ~12k tokens (`qa::input`). Its
+   answer is validated strictly (`qa::output`: fixed fields and verdicts,
+   quotes copied verbatim from the pages; retried once, then `invalid`).
+   Model `QA_MODEL` (zero-retention `model_prices` row required), at most
+   `QA_MAX_CHECKS_PER_RUN` (2) checks per tick, under `QA_DAILY_CAP_USD`
+   (1.00, per London day); calls go in `events.enrichment_calls` with
+   `pass = 'qa'`. Results (page URLs and sizes, verdict with short quotes,
+   never the page text) are stored in `events.qa_checks`.
+3. **Issues** (`qa::issue`): wrong fields or missed events open **one**
+   `scraper-broken` issue per source titled `Scraper check: <key> — …`
+   (deduped via `events.qa_issues` and the title prefix), with the page
+   URLs, a table of stored value / page says / quote, and the regression
+   fixture to add (see `docs/adding-a-scraper.md`). Later checks comment on
+   it; a clean check closes it.
+
+The AI verifies but never supplies data: nothing it says is written to
+`events.events`; fixes go through the scraper's code.
 
 ### Merging and overrides
 
@@ -572,6 +618,9 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `REQUESTY_API_KEY` | ingest | unset → AI enrichment and embeddings off | Requesty key ([AI enrichment](#ai-enrichment)) |
 | `ENRICH_MODEL` | ingest | `anthropic/claude-opus-5-5` | Chat model (needs a zero-retention `events.model_prices` row) |
 | `ENRICH_DAILY_CAP_USD` | ingest | `1.00` | Max Requesty spend per London day (enrichment + embeddings) |
+| `QA_MODEL` | ingest | `anthropic/claude-opus-5-5` | [Scraper QA](#scraper-qa) chat model (needs a zero-retention `events.model_prices` row) |
+| `QA_DAILY_CAP_USD` | ingest | `1.00` | Max scraper-QA spend per London day (separate from the enrichment cap) |
+| `QA_MAX_CHECKS_PER_RUN` | ingest | `2` | Scraper-QA AI checks per ingest tick (`0` = off; the rules still run) |
 | `ENRICH_RUN_CAP_USD` | ingest | `0.40` | Max spend per ingest run |
 | `ENRICH_BATCH_SIZE` | ingest | `10` | Events per chat call (1–25) |
 | `ENRICH_MAX_EVENTS_PER_RUN` | ingest | `120` | Events queued per run |

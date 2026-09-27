@@ -46,7 +46,12 @@ There is no local Docker; never try to use testcontainers.
    caps; the chat model must have a zero-retention `events.model_prices`
    row (`/about` promises it). Changing the prompt/schema/validation means
    bumping `PROMPT_VERSION`; changing the embedding text means bumping
-   `EMBED_VERSION`.
+   `EMBED_VERSION`. The scraper QA check (`src/qa/`) is the one AI pass
+   that sees page text: it only judges our extraction against pages fetched
+   through `FetchContext` (the run's own, plus at most 4 detail pages), stores verdicts in `events.qa_checks`,
+   never writes event data, and shares the ledger (`pass = 'qa'`) under its
+   own `QA_DAILY_CAP_USD`; changing its prompt/input/validation means
+   bumping `QA_PROMPT_VERSION`.
 4. **Every scraper needs a saved fixture + an `insta` snapshot test** of its
    normalised output (see `docs/adding-a-scraper.md`), and a wiremock fetch
    test. Tests never hit the real network.
@@ -120,6 +125,12 @@ There is no local Docker; never try to use testcontainers.
   (embedding text), `store` (its SQL, "More like this"), `mod` (the pass,
   caps, ntfy alert). `examples/enrich_eval.rs` evaluates prompts/models
   without a database.
+- `src/qa/` — scraper QA: `rules` (per-run sanity rules, no AI), `code`
+  (per-source code hash; list new source files in `SOURCE_FILES`), `input`
+  (page text via Readability/visible text + JSON-LD, the judge's message),
+  `prompt.txt` + `output` (verdict validation), `issue` ("Scraper check"
+  issues), `store` (its SQL), `mod` (`QaChecker`: when a check is due,
+  caps, the check)
 - `src/notify.rs` — ntfy owner alerts
 - `src/contact.rs` — `/contact` venue requests (spam checks, `venue-request` issues, pending filing)
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues

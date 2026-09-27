@@ -686,6 +686,21 @@ struct SourceJson {
     skip: Option<SkipJson>,
     status: HealthStatus,
     issue_url: Option<String>,
+    qa: QaJson,
+}
+
+/// Scraper QA (never links to an issue).
+#[derive(Serialize)]
+struct QaJson {
+    rule_flags: i64,
+    last_check: Option<QaCheckJson>,
+}
+
+#[derive(Serialize)]
+struct QaCheckJson {
+    checked_at: DateTime<Utc>,
+    status: String,
+    problems: i32,
 }
 
 #[derive(Serialize)]
@@ -748,6 +763,17 @@ impl SourceJson {
             issue_url: r
                 .open_issue_number
                 .map(|n| format!("https://github.com/{github_repo}/issues/{n}")),
+            qa: QaJson {
+                rule_flags: r.qa_rule_flags,
+                last_check: match (r.qa_checked_at, r.qa_status) {
+                    (Some(checked_at), Some(status)) => Some(QaCheckJson {
+                        checked_at,
+                        status,
+                        problems: r.qa_problems.unwrap_or(0),
+                    }),
+                    _ => None,
+                },
+            },
         }
     }
 }
