@@ -9,7 +9,9 @@ use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
 use uuid::Uuid;
 
-use crate::listing::{EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery, Near, When};
+use crate::listing::{
+    EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery, Near, Pick, PickFilter, When,
+};
 use crate::matching::{self, MatchInput, TitleScore};
 use crate::model::{NewEvent, OverrideAction, RawEvent, SourceKind};
 
@@ -909,6 +911,96 @@ pub const EFFECTIVE_END: &str = "(CASE
         ELSE ev.starts_at + interval '3 hours'
     END)";
 
+/// The event's first and last London dates.
+const LOCAL_FIRST_DAY: &str = "((ev.starts_at AT TIME ZONE 'Europe/London')::date)";
+const LOCAL_LAST_DAY: &str =
+    "((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date)";
+
+/// Title words that mark an opening (word-bounded, case-insensitive; "PV"
+/// only in capitals, so "PVC" or "pv" in a word never match).
+const OPENING_TITLE: &str =
+    "(ev.title ~* '\\m(private view|opening reception|opening night|preview evening|launch)\\M'
+        OR ev.title ~ '\\mPV\\M')";
+
+/// Title words that mark a hands-on session (word-bounded, case-insensitive).
+const HANDS_ON_TITLE: &str =
+    "(ev.title ~* '\\m(class|classes|course|drop-in|life drawing|masterclass|workshops?)\\M')";
+
+/// A quick pick ([`Pick`]) as SQL over `events.events ev` (`TRUE` for none).
+/// Its London date is a typed `NaiveDate`, written as a date literal.
+pub fn pick_sql(pick: Option<PickFilter>) -> String {
+    let Some(PickFilter { pick, today }) = pick else {
+        return "TRUE".into();
+    };
+    let l = format!("DATE '{}'", today.format("%Y-%m-%d"));
+    let first = LOCAL_FIRST_DAY;
+    let last = LOCAL_LAST_DAY;
+    match pick {
+        Pick::Tonight => format!(
+            "({first} <= {l} AND {last} >= {l}
+              AND (({first} = {l} AND {LOCAL_START}::time >= '17:00')
+                   OR ({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags))))"
+        ),
+        Pick::Openings => format!(
+            "({first} BETWEEN {l} AND {l} + 6
+              AND (ev.category = 'exhibition' OR ev.is_opening IS TRUE
+                   OR 'opening' = ANY(ev.format_tags) OR {OPENING_TITLE}))"
+        ),
+        Pick::LastChance => format!(
+            "({last} > {first} AND {last} BETWEEN {l} AND {l} + 6 AND {EFFECTIVE_END} > now())"
+        ),
+        Pick::HandsOn => format!(
+            "(ev.category = 'workshop' OR 'hands_on' = ANY(ev.format_tags) OR {HANDS_ON_TITLE})"
+        ),
+    }
+}
+
+/// How many upcoming events (still running at or after `from`, London
+/// midnight today) each home-page quick pick would list; `weekend` is the
+/// London dates `[sat, mon)` as instants.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, FromRow)]
+pub struct QuickPickCounts {
+    pub tonight: i64,
+    pub weekend: i64,
+    pub free: i64,
+    pub openings: i64,
+    pub last_chance: i64,
+    pub hands_on: i64,
+    pub talks: i64,
+}
+
+/// One query (FILTER aggregates) for every quick pick, with the same
+/// predicates as the listings the chips open.
+pub async fn quick_pick_counts(
+    pool: &PgPool,
+    today: NaiveDate,
+    from: DateTime<Utc>,
+    weekend: (DateTime<Utc>, DateTime<Utc>),
+) -> sqlx::Result<QuickPickCounts> {
+    let p = |pick: Pick| pick_sql(Some(PickFilter { pick, today }));
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT count(*) FILTER (WHERE {}) AS tonight,
+                count(*) FILTER (WHERE COALESCE(ev.ends_at, ev.starts_at) >= $2
+                                   AND ev.starts_at < $3) AS weekend,
+                count(*) FILTER (WHERE ev.is_free) AS free,
+                count(*) FILTER (WHERE {}) AS openings,
+                count(*) FILTER (WHERE {}) AS last_chance,
+                count(*) FILTER (WHERE {}) AS hands_on,
+                count(*) FILTER (WHERE ev.category = 'talk') AS talks
+         FROM events.events ev
+         WHERE COALESCE(ev.ends_at, ev.starts_at) >= $1",
+        p(Pick::Tonight),
+        p(Pick::Openings),
+        p(Pick::LastChance),
+        p(Pick::HandsOn),
+    )))
+    .bind(from)
+    .bind(weekend.0)
+    .bind(weekend.1)
+    .fetch_one(pool)
+    .await
+}
+
 /// When Muse & Mingle first saw the event (`sort=added`).
 const FIRST_SEEN: &str = "COALESCE((SELECT min(es.first_seen_at) FROM events.event_sources es
         WHERE es.event_id = ev.id), ev.created_at)";
@@ -924,10 +1016,11 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
     let near = query.near;
     let b = near.map(|n| n.bounding_box());
     let filter = format!(
-        "{LISTING_FILTER} AND {} AND {}
+        "{LISTING_FILTER} AND {} AND {} AND {}
          AND ($13::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19))",
         price_max_sql("$12"),
-        when_sql(f.when)
+        when_sql(f.when),
+        pick_sql(f.pick)
     );
     // (sort key expression, extra condition, cursor condition, order)
     let (key, extra, after, order) = match &query.order {
@@ -1077,9 +1170,10 @@ pub async fn facet_counts(
     let b = near.map(|n| n.bounding_box());
     let col = facet.column();
     let filter = format!(
-        "{LISTING_FILTER} AND {} AND {}",
+        "{LISTING_FILTER} AND {} AND {} AND {}",
         price_max_sql("$20"),
-        when_sql(f.when)
+        when_sql(f.when),
+        pick_sql(f.pick)
     );
     bind_filter(
         sqlx::query_as(AssertSqlSafe(format!(
@@ -1143,7 +1237,7 @@ pub async fn listing_counts(
         "SELECT {} AS evening, {} AS after_work, {} AS weekend, {} AS daytime,
                 {} AS free, {} AS max_10, {} AS max_20, {} AS unknown
          FROM events.events ev
-         WHERE {LISTING_FILTER}
+         WHERE {LISTING_FILTER} AND {}
            AND ($14::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19
                 AND {} <= $21))",
         when_count(When::Evening),
@@ -1154,6 +1248,7 @@ pub async fn listing_counts(
         price_count(&price_filter_sql("FALSE", "10")),
         price_count(&price_filter_sql("FALSE", "20")),
         price_count(PRICE_UNKNOWN),
+        pick_sql(filter.pick),
         distance_km_sql(14, 15, 20)
     )))
     .bind(filter.from)

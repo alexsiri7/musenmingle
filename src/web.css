@@ -176,6 +176,9 @@ main { display: block; }
 }
 .pill:hover { background: var(--line); color: var(--ink); }
 .pill[aria-current="true"] { background: var(--ink); color: var(--on-ink); }
+.pill-count { margin-left: 0.5rem; color: var(--ink-3); }
+.pill[aria-current="true"] .pill-count { color: var(--on-ink); }
+.quick-picks .label { color: var(--ink); }
 form.filters {
   display: flex; flex-wrap: wrap; gap: var(--sm) var(--md); align-items: flex-end; margin: var(--xs) 0 0;
   padding-top: var(--sm); border-top: 1px solid var(--line-soft);

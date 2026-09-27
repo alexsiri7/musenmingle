@@ -64,6 +64,58 @@ pub struct EventFilter {
     pub price_max: Option<Decimal>,
     /// Full-text search (`q=`, see [`crate::search`]).
     pub search: Option<Search>,
+    /// A quick pick (`pick=`), judged against a London date (today).
+    pub pick: Option<PickFilter>,
+}
+
+/// `pick=`: the home page's quick-pick chips as listing filters. Each is
+/// one SQL predicate (`repo::pick_sql`), so a chip's count and the listing
+/// it opens always agree.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Pick {
+    /// Today (London): timed and starting at 17:00 or later, or an untimed
+    /// event running today tagged `late opening`.
+    Tonight,
+    /// Starting within the next 7 London days (today included) and an
+    /// opening: an exhibition, `is_opening` (AI, quoted from the listing),
+    /// the `opening` format tag, or a title saying private view, opening
+    /// reception, opening night, preview evening, launch or "PV".
+    Openings,
+    /// Runs on more than one London day and its last day is within the next
+    /// 7 (the `sort=ending` notion of an end; not yet ended).
+    LastChance,
+    /// Workshops, the `hands_on` format tag, or a title saying class,
+    /// course, drop-in, life drawing, masterclass or workshop.
+    HandsOn,
+}
+
+impl Pick {
+    pub const ALL: [Pick; 4] = [
+        Pick::Tonight,
+        Pick::Openings,
+        Pick::LastChance,
+        Pick::HandsOn,
+    ];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Pick::Tonight => "tonight",
+            Pick::Openings => "openings",
+            Pick::LastChance => "last_chance",
+            Pick::HandsOn => "hands_on",
+        }
+    }
+
+    pub fn parse(s: &str) -> Option<Pick> {
+        Pick::ALL.into_iter().find(|p| p.as_str() == s)
+    }
+}
+
+/// A [`Pick`] and the London date it is relative to.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct PickFilter {
+    pub pick: Pick,
+    pub today: NaiveDate,
 }
 
 /// Add a vocabulary tag to `list` (deduped), or explain why it is invalid.
@@ -339,6 +391,16 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                     "false" => false,
                     _ => return Err("facets must be true or false".into()),
                 }
+            }
+            "pick" => {
+                let pick = Pick::parse(&value).ok_or_else(|| {
+                    let all: Vec<&str> = Pick::ALL.iter().map(|p| p.as_str()).collect();
+                    format!("unknown pick {value:?} (one of: {})", all.join(", "))
+                })?;
+                filter.pick = Some(PickFilter {
+                    pick,
+                    today: now.with_timezone(&London).date_naive(),
+                });
             }
             "sort" => {
                 sort = Some(Sort::parse(&value).ok_or_else(|| {
@@ -623,6 +685,25 @@ mod tests {
         assert_eq!(price("price_max=10"), Some(Decimal::from(10)));
         assert_eq!(price("price_max=12.5"), Some(Decimal::new(125, 1)));
         assert_eq!(price("price_max=0"), Some(Decimal::ZERO));
+    }
+
+    #[test]
+    fn picks_parse_with_the_london_date() {
+        use chrono::TimeZone;
+        // 23:30 UTC on 24 Oct 2026 is already the 25th in London (BST).
+        let now = Utc.with_ymd_and_hms(2026, 10, 24, 23, 30, 0).unwrap();
+        for p in Pick::ALL {
+            let q = parse_query_at(&format!("pick={}", p.as_str()), now).unwrap();
+            assert_eq!(
+                q.filter.pick,
+                Some(PickFilter {
+                    pick: p,
+                    today: NaiveDate::from_ymd_opt(2026, 10, 25).unwrap(),
+                })
+            );
+        }
+        assert!(parse_query("pick=tonightly").is_err());
+        assert!(parse_query("pick=").is_err());
     }
 
     #[test]
