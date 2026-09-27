@@ -43,6 +43,7 @@ use crate::api::{self, AppState, CountsJson, EventJson, SourceLinkJson};
 use crate::listing::{self, Sort, When};
 use crate::model::{Category, SourceKind};
 use crate::repo;
+use crate::share::{self, ShareEvent};
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 
 mod calendar_page;
@@ -337,6 +338,17 @@ fn brand_mark() -> Markup {
 /// for the home page ("Muse & Mingle — What's on in London for creative people").
 /// `main` brings its own full-width sections (see [`head_band`]).
 fn page(status: StatusCode, title: &str, nav: Nav, main: Markup) -> Response {
+    page_with_head(status, title, nav, html! {}, main)
+}
+
+/// [`page`] with extra `<head>` elements (an event's Open Graph tags).
+fn page_with_head(
+    status: StatusCode,
+    title: &str,
+    nav: Nav,
+    head: Markup,
+    main: Markup,
+) -> Response {
     let item = |href: &str, label: &str, me: Nav| {
         html! {
             a href=(href) aria-current=[(nav == me).then_some("page")] { (label) }
@@ -354,6 +366,7 @@ fn page(status: StatusCode, title: &str, nav: Nav, main: Markup) -> Response {
                 link rel="icon" href="/favicon.ico" sizes="32x32";
                 link rel="icon" href="/favicon.svg" type="image/svg+xml";
                 link rel="apple-touch-icon" href="/apple-touch-icon.png";
+                (head)
                 @for url in FONT_URLS.iter() {
                     link rel="preload" href=(url) as="font" type="font/woff2" crossorigin;
                 }
@@ -386,6 +399,7 @@ fn page(status: StatusCode, title: &str, nav: Nav, main: Markup) -> Response {
                 main id="main" {
                     (main)
                     p id="save-status" class="vh" role="status" aria-live="polite" {}
+                    p id="toast" class="toast" role="status" aria-live="polite" hidden {}
                 }
                 footer class="site" {
                     div class="wrap-x" {
@@ -1349,6 +1363,110 @@ fn save_button(e: &EventJson) -> Markup {
     }
 }
 
+/// Our origin for absolute links (share URLs, Open Graph): `https://` +
+/// `CANONICAL_HOST`, else the production host.
+static SHARE_ORIGIN: LazyLock<String> = LazyLock::new(|| {
+    let host = std::env::var(crate::host_redirect::CANONICAL_HOST_ENV)
+        .ok()
+        .map(|h| h.trim().trim_end_matches('/').to_ascii_lowercase())
+        .filter(|h| {
+            !h.is_empty()
+                && h.bytes()
+                    .all(|b| b.is_ascii_alphanumeric() || b"-.:".contains(&b))
+        })
+        .unwrap_or_else(|| DEFAULT_SITE_HOST.to_string());
+    format!("https://{host}")
+});
+
+const DEFAULT_SITE_HOST: &str = "musenmingle.interstellarai.net";
+
+/// The event's canonical page on this site.
+fn event_url(id: Uuid) -> String {
+    format!("{}/events/{id}", SHARE_ORIGIN.as_str())
+}
+
+/// The event as the share/maps/calendar hand-offs see it.
+fn share_event<'a>(e: &'a EventJson, page_url: &'a str) -> ShareEvent<'a> {
+    ShareEvent {
+        id: e.id,
+        title: &e.title,
+        venue: e.venue_name.as_deref(),
+        address: e.address.as_deref(),
+        lat: e.lat,
+        lng: e.lng,
+        starts_at: e.starts_at,
+        ends_at: e.ends_at,
+        all_day: e.all_day,
+        excerpt: e.description.as_deref(),
+        source_url: primary_source(e).map(|(_, u)| u),
+        page_url,
+    }
+}
+
+/// [`when`] as plain text (the share sheet's text).
+fn when_text(
+    start: DateTime<Utc>,
+    end: Option<DateTime<Utc>>,
+    all_day: bool,
+    now: DateTime<Utc>,
+) -> String {
+    match end {
+        Some(end) if london(end).date_naive() != london(start).date_naive() && end > start => {
+            if start <= now {
+                format!("Until {}", fmt_date(end))
+            } else {
+                format!("{} – {}", fmt_date(start), fmt_date(end))
+            }
+        }
+        _ if all_day => format!("{}, all day", fmt_date(start)),
+        Some(end) if end > start && london(start).time() != NaiveTime::MIN => {
+            format!("{}–{}", fmt_date_time(start), london(end).format("%H:%M"))
+        }
+        _ => fmt_date_time(start),
+    }
+}
+
+/// Share button: rendered `hidden`; `/static/app.js` shows it when the
+/// browser can share (`navigator.share`) or copy the link, and uses the
+/// data attributes. `label` = visible text (cards show only the icon).
+fn share_button(e: &EventJson, now: DateTime<Utc>, label: bool) -> Markup {
+    let text = match &e.venue_name {
+        Some(v) => format!(
+            "{v} · {}",
+            when_text(e.starts_at, e.ends_at, e.all_day, now)
+        ),
+        None => when_text(e.starts_at, e.ends_at, e.all_day, now),
+    };
+    html! {
+        button type="button" class={ "share" @if !label { " icon-action" } } hidden
+            data-share-url=(event_url(e.id)) data-share-title=(e.title) data-share-text=(text) {
+            (icon_svg(ICON_SHARE))
+            @if label { span { "Share" } } @else { span class="vh" { "Share: " (e.title) } }
+        }
+    }
+}
+
+const ICON_SHARE: &str = "M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v8.5h14V12";
+const ICON_PIN: &str = "M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21zM12 7.3a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z";
+const ICON_CALENDAR: &str = "M4 5.5h16v15H4zM4 10h16M8.5 3v4M15.5 3v4";
+
+/// A small line icon (decorative; its control has a text label).
+fn icon_svg(d: &'static str) -> Markup {
+    html! {
+        svg class="action-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" {
+            path d=(d) {}
+        }
+    }
+}
+
+/// A maps link that `/static/app.js` points at Apple Maps on Apple devices
+/// (`data-apple-href`); Google Maps otherwise and without JavaScript.
+fn maps_link(google: &str, apple: &str, class: &str, body: Markup) -> Markup {
+    html! {
+        a class=(class) href=(google) data-apple-href=(apple) rel="noopener noreferrer" { (body) }
+    }
+}
+
 /// The "✨ AI" mark in front of AI-written text on cards.
 fn ai_mark() -> Markup {
     html! { span class="ai-mark" { "\u{2728} AI" span class="vh" { "-written summary:" } } }
@@ -1392,6 +1510,11 @@ fn card_template() -> Markup {
                             span class="save-label" { "Save" }
                             span class="vh" data-slot="save-title" {}
                         }
+                        span class="card-tools" {
+                            a class="icon-action" data-slot="ics" href="/" hidden {
+                                (icon_svg(ICON_CALENDAR)) span class="vh" data-slot="ics-title" {}
+                            }
+                        }
                     }
                     p class="links" {
                         a data-slot="details" href="/" { "Details" span class="vh" data-slot="details-title" {} }
@@ -1406,6 +1529,8 @@ fn card_template() -> Markup {
 fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
     let primary = primary_source(e);
+    let page_url = event_url(e.id);
+    let maps = share::map_links(&share_event(e, &page_url));
     html! {
         article class="card" {
             (thumbnail_figure(e, "thumb"))
@@ -1440,6 +1565,17 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                         }
                     }
                     (save_button(e))
+                    span class="card-tools" {
+                        (share_button(e, now, false))
+                        @if let Some(m) = &maps {
+                            (maps_link(&m.google_directions, &m.apple_directions, "icon-action", html! {
+                                (icon_svg(ICON_PIN)) span class="vh" { "Directions to " (e.title) }
+                            }))
+                        }
+                        a class="icon-action" href={ (detail) ".ics" } {
+                            (icon_svg(ICON_CALENDAR)) span class="vh" { "Add to calendar: " (e.title) }
+                        }
+                    }
                 }
                 p class="links" {
                     a href=(detail) { "Details" span class="vh" { ": " (e.title) } }
@@ -1773,6 +1909,27 @@ fn status_line(
     (text, "soon")
 }
 
+/// `GET /events/{id}.ics`: the event as a one-event calendar file.
+fn ics_response(e: &ShareEvent<'_>, now: DateTime<Utc>) -> Response {
+    let mut resp = share::ics(e, now).into_response();
+    let h = resp.headers_mut();
+    h.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("text/calendar; charset=utf-8"),
+    );
+    if let Ok(v) = HeaderValue::from_str(&format!(
+        "attachment; filename=\"{}\"",
+        share::ics_filename(e.title)
+    )) {
+        h.insert(header::CONTENT_DISPOSITION, v);
+    }
+    h.insert(
+        header::X_CONTENT_TYPE_OPTIONS,
+        HeaderValue::from_static("nosniff"),
+    );
+    resp
+}
+
 async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> Response {
     let not_found = || {
         error_page(
@@ -1781,7 +1938,11 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
             "This event does not exist or is no longer listed.",
         )
     };
-    let Ok(id) = Uuid::parse_str(&id) else {
+    let (id, want_ics) = match id.strip_suffix(".ics") {
+        Some(id) => (id, true),
+        None => (id.as_str(), false),
+    };
+    let Ok(id) = Uuid::parse_str(id) else {
         return not_found();
     };
     let e = match api::event_by_id(&state.pool, id).await {
@@ -1790,6 +1951,38 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
         Err(err) => return internal_error(err),
     };
     let now = Utc::now();
+    let page_url = event_url(e.id);
+    let handoff = share_event(&e, &page_url);
+    if want_ics {
+        return ics_response(&handoff, now);
+    }
+    let maps = share::map_links(&handoff);
+    let gcal = share::google_calendar_url(&handoff);
+    let og_description = e
+        .description
+        .as_deref()
+        .map(str::trim)
+        .filter(|d| !d.is_empty())
+        .map(crate::normalise::excerpt)
+        .unwrap_or_else(|| {
+            let when = when_text(e.starts_at, e.ends_at, e.all_day, now);
+            match &e.venue_name {
+                Some(v) => format!("{v} · {when}"),
+                None => when,
+            }
+        });
+    let head = html! {
+        link rel="canonical" href=(page_url);
+        meta property="og:type" content="website";
+        meta property="og:site_name" content=(BRAND);
+        meta property="og:title" content=(e.title);
+        meta property="og:description" content=(og_description);
+        meta property="og:url" content=(page_url);
+        meta name="twitter:card" content="summary";
+        meta name="twitter:title" content=(e.title);
+        meta name="twitter:description" content=(og_description);
+        meta name="description" content=(og_description);
+    };
     let similar = api::similar_events(&state.pool, &e, now)
         .await
         .unwrap_or_else(|err| {
@@ -1807,10 +2000,11 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
     let kinds: Vec<String> = std::iter::once(title_case(&e.category))
         .chain(e.medium_tags.iter().map(|t| title_case(label_of(t))))
         .collect();
-    page(
+    page_with_head(
         StatusCode::OK,
         &e.title,
         Nav::Events,
+        head,
         html! {
             nav class="crumbs" aria-label="Breadcrumb" {
                 div class="wrap-x" {
@@ -1846,7 +2040,21 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                     }
                                 }
                                 (save_button(&e))
+                                (share_button(&e, now, true))
                             }
+                        }
+                        p class="handoffs" aria-label="Directions and calendar" {
+                            @if let Some(m) = &maps {
+                                (maps_link(&m.google_directions, &m.apple_directions, "button secondary", html! {
+                                    (icon_svg(ICON_PIN)) "Directions"
+                                }))
+                                " "
+                            }
+                            a class="button secondary" href={ "/events/" (e.id) ".ics" } {
+                                (icon_svg(ICON_CALENDAR)) "Add to calendar"
+                            }
+                            " "
+                            a class="button secondary" href=(gcal) rel="noopener noreferrer" { "Google Calendar" }
                         }
                         dl class="facts" {
                             div {
@@ -1876,12 +2084,17 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                     @if let Some(a) = &e.address { span class="sub" { (a) } }
                                 }
                             }
-                            @if let (Some(m), Some(lat), Some(lng)) = (&map, e.lat, e.lng) {
+                            @if let Some(links) = &maps {
                                 div {
                                     dt { "Map" }
                                     dd {
-                                        a href=(m) rel="noopener noreferrer" { "Open in OpenStreetMap ↗" }
-                                        span class="sub" { (format!("{lat:.4}, {lng:.4}")) }
+                                        (maps_link(&links.google_view, &links.apple_view, "", html! { "Open in Maps ↗" }))
+                                        @if let (Some(m), Some(lat), Some(lng)) = (&map, e.lat, e.lng) {
+                                            span class="sub" {
+                                                (format!("{lat:.4}, {lng:.4}")) " · "
+                                                a href=(m) rel="noopener noreferrer" { "View on OpenStreetMap" }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -2286,6 +2499,12 @@ async fn about() -> Response {
                         li {
                             "Nothing about you is sent to AI services: the AI features only ever see "
                             "event listings (see " a href="#ai" { "How we use AI" } ")."
+                        }
+                        li {
+                            "The Directions, Maps and Google Calendar buttons are plain links: they "
+                            "take you to Google or Apple only when you tap them, carry just the "
+                            "event's details, and we add no tracking parameters. Share opens your "
+                            "device's share sheet, or copies the link where there isn't one."
                         }
                         li { "Nothing is sold or shared for advertising." }
                     }

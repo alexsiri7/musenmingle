@@ -23,6 +23,7 @@ pub mod notify;
 pub mod repo;
 pub mod runner;
 pub mod search;
+pub mod share;
 pub mod sources;
 pub mod suggestions;
 pub mod thumbs;

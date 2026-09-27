@@ -13,7 +13,7 @@ API's stability promise): `GET /` (upcoming events with a filter form that
 takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`, `pick`,
 `source`, `medium`, `format`, `good_for` and `cursor`, and shows the
 `counts`/facet counts next to its options),
-`GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
+`GET /events/{id}` (with Open Graph tags, and Share / Directions / Add-to-calendar hand-offs from `src/share.rs`), `GET /events/{id}.ics` (the event as a one-event iCalendar file: exact UTC times, or an all-day span for date-only events; `text/calendar`, downloaded as `<slug>.ics`), `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
 `GET /static/style.css` / `GET /static/app.js`. HTML responses carry a strict
 `Content-Security-Policy` (`img-src 'self'`). See `src/web.rs`.

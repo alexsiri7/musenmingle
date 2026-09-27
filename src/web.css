@@ -255,6 +255,25 @@ button.secondary:hover, .save:hover { background: var(--fill); color: var(--ink)
 .save-icon path { fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linejoin: miter; }
 .save[aria-pressed="true"] { border-color: var(--cobalt); color: var(--cobalt); }
 .save[aria-pressed="true"] .save-icon path { fill: currentColor; }
+/* share / directions / calendar hand-offs (#76) */
+button.share, a.button.secondary, a.icon-action {
+  background: var(--canvas); color: var(--ink); border: 1px solid var(--ink);
+}
+button.share:hover, a.button.secondary:hover, a.icon-action:hover { background: var(--fill); color: var(--ink); border-color: var(--ink); }
+.action-icon { width: 1rem; height: 1rem; flex: none; }
+.action-icon path { fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linejoin: miter; stroke-linecap: square; }
+.icon-action {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.75rem; height: 2.75rem; min-height: 2.75rem; padding: 0; border-radius: 0;
+}
+.card-tools { display: inline-flex; gap: var(--xs); margin-left: auto; }
+.handoffs { display: flex; flex-wrap: wrap; gap: var(--sm); margin: 0 0 var(--md); }
+.handoffs a.button { font-size: 0.8125rem; padding: 0.5rem 0.875rem; }
+.toast {
+  position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); z-index: 10;
+  margin: 0; padding: 0.625rem 1rem; background: var(--ink); color: var(--on-ink);
+  font-family: var(--mono); font-size: 0.75rem; border-radius: 0; max-width: calc(100vw - 2rem);
+}
 .more { display: flex; justify-content: center; margin: var(--xl) 0 0; }
 .more a {
   display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0.5rem 1.5rem; background: var(--ink);
