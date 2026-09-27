@@ -29,6 +29,7 @@ pub mod royal_museums_greenwich;
 pub mod serpentine;
 pub mod soane_museum;
 pub mod somerset_house;
+pub mod tec;
 pub mod ticketmaster;
 pub mod whitechapel_gallery;
 pub mod william_morris_gallery;
@@ -70,15 +71,30 @@ pub enum SkipReason {
     InvalidBaseUrl(String),
     #[error("no implementation for this source key")]
     UnknownKey,
+    #[error("invalid config: {0}")]
+    InvalidConfig(String),
 }
 
-/// Build the implementation for a `events.sources` row. Unknown keys, bad
-/// `base_url`s and missing credentials return a [`SkipReason`], which the
-/// runner records on the source; a misconfigured source never blocks the
-/// others.
+/// Build the implementation for a `events.sources` row: by its `platform`
+/// when it has one (one implementation shared by many venue rows), else by
+/// its `key`. Unknown keys or platforms, bad `base_url`s or `config`s and
+/// missing credentials return a [`SkipReason`], which the runner records on
+/// the source; a misconfigured source never blocks the others.
 pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipReason> {
     let base =
         url::Url::parse(&row.base_url).map_err(|e| SkipReason::InvalidBaseUrl(e.to_string()))?;
+    if let Some(platform) = row.platform.as_deref() {
+        return match platform {
+            tec::PLATFORM => Ok(Box::new(tec::Tec::from_row(
+                &row.key,
+                base,
+                row.config.as_ref(),
+            )?)),
+            other => Err(SkipReason::InvalidConfig(format!(
+                "unknown platform {other:?}"
+            ))),
+        };
+    }
     match row.key.as_str() {
         ticketmaster::KEY => match &config.ticketmaster_api_key {
             Some(k) => Ok(Box::new(ticketmaster::Ticketmaster::new(base, k.clone()))),
@@ -138,11 +154,21 @@ mod tests {
             interval_minutes: 60,
             enabled: true,
             last_run_at: None,
+            platform: None,
+            config: None,
         }
     }
 
-    fn skip_reason(row: &SourceRow) -> SkipReason {
-        let config = Config {
+    fn tec_row(key: &str, config: serde_json::Value) -> SourceRow {
+        SourceRow {
+            platform: Some(tec::PLATFORM.into()),
+            config: Some(config),
+            ..row(key, "https://venue.example/")
+        }
+    }
+
+    fn test_config() -> Config {
+        Config {
             database_url: String::new(),
             ticketmaster_api_key: None,
             github_token: None,
@@ -157,8 +183,11 @@ mod tests {
             enrich: Default::default(),
             ntfy_topic: None,
             ntfy_base_url: String::new(),
-        };
-        match build(row, &config) {
+        }
+    }
+
+    fn skip_reason(row: &SourceRow) -> SkipReason {
+        match build(row, &test_config()) {
             Ok(_) => panic!("{:?} unexpectedly built", row.key),
             Err(reason) => reason,
         }
@@ -181,5 +210,43 @@ mod tests {
             skip_reason(&row(barbican::KEY, "not a url")),
             SkipReason::InvalidBaseUrl(_)
         ));
+
+        let invalid_config = |row: &SourceRow| match skip_reason(row) {
+            SkipReason::InvalidConfig(why) => why,
+            other => panic!("{:?}: {other:?}", row.key),
+        };
+        let unknown_platform = SourceRow {
+            platform: Some("nope".into()),
+            ..row("some-venue", "https://example.com/")
+        };
+        assert_eq!(
+            invalid_config(&unknown_platform),
+            r#"unknown platform "nope""#
+        );
+        assert!(
+            invalid_config(&tec_row("tec-x", serde_json::json!({"api_pth": null})))
+                .contains("unknown field `api_pth`")
+        );
+        assert!(
+            invalid_config(&tec_row(
+                "tec-x",
+                serde_json::json!({"default_category": "film"})
+            ))
+            .contains("unknown variant `film`")
+        );
+        assert!(
+            invalid_config(&tec_row("tec-x", serde_json::json!({"api_path": null})))
+                .contains("neither api_path nor list_path")
+        );
+    }
+
+    #[test]
+    fn platform_rows_build_under_their_own_key() {
+        let source = build(
+            &tec_row("tec-some-venue", serde_json::json!({})),
+            &test_config(),
+        )
+        .unwrap_or_else(|reason| panic!("{reason}"));
+        assert_eq!(source.key(), "tec-some-venue");
     }
 }

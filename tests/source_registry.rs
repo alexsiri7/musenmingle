@@ -18,7 +18,8 @@ async fn every_enabled_seeded_source_has_an_implementation() {
     };
     let pool = db.migrated_pool().await;
     let rows: Vec<SourceRow> = sqlx::query_as(
-        "SELECT id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at
+        "SELECT id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at,
+                platform, config
            FROM events.sources WHERE enabled",
     )
     .fetch_all(&pool)

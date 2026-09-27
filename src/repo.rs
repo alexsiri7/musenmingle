@@ -23,9 +23,14 @@ pub struct SourceRow {
     pub interval_minutes: i32,
     pub enabled: bool,
     pub last_run_at: Option<DateTime<Utc>>,
+    /// Shared implementation to build instead of dispatching on `key`.
+    pub platform: Option<String>,
+    /// The platform's per-venue settings.
+    pub config: Option<serde_json::Value>,
 }
 
-const SOURCE_COLS: &str = "id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at";
+const SOURCE_COLS: &str =
+    "id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at, platform, config";
 
 /// Enabled sources whose interval has elapsed at `now` (or that never ran).
 pub async fn due_sources(pool: &PgPool, now: DateTime<Utc>) -> sqlx::Result<Vec<SourceRow>> {

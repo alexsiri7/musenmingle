@@ -1,0 +1,40 @@
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Disallow: /*?tribe-bar-date=
+Disallow: /*&eventDisplay=
+Disallow: /schedule/*/day/
+Disallow: /20
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: SiteAuditBot
+Disallow: /
+
+User-agent: SemrushBot-BA
+Disallow: /
+
+User-agent: SemrushBot-SI
+Disallow: /
+
+User-agent: SemrushBot-SWA
+Disallow: /
+
+User-agent: SplitSignalBot
+Disallow: /
+
+User-agent: SemrushBot-OCOB
+Disallow: /
+
+User-agent: SemrushBot-FT
+Disallow: /
+
+User-agent: RyteBot
+Disallow: /
+
+User-agent: SemrushBot-ESI
+Disallow: /
+
+Sitemap: https://cinemamuseum.org.uk/wp-sitemap.xml

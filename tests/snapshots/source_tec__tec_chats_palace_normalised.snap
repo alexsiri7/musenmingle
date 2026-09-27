@@ -1,0 +1,283 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-chats-palace\", &raws)"
+---
+[
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "from-first-hackney-marsh-fun-festival-to-last-hackney-carnival-exhibition-to-celebrate-50-years-of-chats-palace|2026-09-09|chats-palace-arts",
+      "description": "Chats Palace will be showing unseen images from the first Hackney Marsh Fun Festival from 1974 alongside images from the last ever Hackney Carnival in 2024. Separated by fifty years the photographs have been taken by Hackney photographer Neil Martinson. The Hackney Marsh Fun Festival led to the creation of Chats Palace because the festival grew so large that its organisers desperately needed a permanent, year-round headquarters. In 1974, the old, Grade II-listed Homerton Library closed down when a newer library opened nearby. Rather than letting the building fall into disrepair or corporate hands, community activists and festival organisers marched on and occupied the building in 1976. They reclaimed it to ensure it stayed “for the betterment of East Londoners”. By 1977, they officially named it Chats Palac e. Once established, Chats Palace became the engine room for the festival, housing its carnival committee, building floats, hosting local pensioner clubs, and providing a legendary local stage for community theatre and music. The exhibition will be showing September and October 2026. For the duration of its stay, the Exhibition will be on display on Wednesdays, Thursday, Fridays, & Sundays from 11am-3pm.",
+      "ends_at": "2026-11-01T00:00:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/08/page01-scaled-e1787238307459.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-08T23:00:00Z",
+      "tags": [
+        "chats50 festival",
+        "exhibitions",
+        "highlights"
+      ],
+      "title": "From the First Hackney Marsh Fun Festival to the last Hackney Carnival: An Exhibition to celebrate 50 years of Chats Palace",
+      "url": "https://chatspalace.com/events/from-the-first-hackney-marsh-fun-festival-to-the-last-hackney-carnival-an-exhibition-to-celebrate-50-years-of-chats-palace/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/from-the-first-hackney-marsh-fun-festival-to-the-last-hackney-carnival-an-exhibition-to-celebrate-50-years-of-chats-palace/"
+  },
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "art-chat-bayeux-tapestry|2026-09-30|chats-palace-arts",
+      "description": "To celebrate the opening of the exhibition at the British Museum: Jo Cottrell and Michael Lewis ‘In Conversation’ on the Bayeux Tapestry Jo Cottrell and Michael Lewis ‘In Conversation’ on the Bayeux Tapestry To celebrate the opening of the Bayeux Tapestry at the British Museum, art historian Jo Cottrell and Michael Lewis, Curator, Bayeux Tapestry exhibition, British Museum will discuss this most famous embroidery. We will outline what this object is, who made it, when and why, before exploring its extraordinary story and incredible detail. After 30 minutes of insightful conversation about the object, its loan to the UK, and its display at the British Museum, the audience will be invited to ask any burning questions. We hope you will join us! The bar will be open until 10.30pm.",
+      "ends_at": "2026-09-30T20:00:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/09/bayeux.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-30T18:00:00Z",
+      "tags": [
+        "culture",
+        "highlights",
+        "talks"
+      ],
+      "title": "Art Chat – The Bayeux Tapestry",
+      "url": "https://chatspalace.com/events/art-chat-the-bayeux-tapestry/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/art-chat-the-bayeux-tapestry/"
+  },
+  {
+    "event": null,
+    "id": "/events/join-us-at-the-chats-fun-palace/"
+  },
+  {
+    "event": null,
+    "id": "/events/the-each-one-teach-one-cabaret/"
+  },
+  {
+    "event": null,
+    "id": "/events/1000-rabbits-present-rabbitfete/"
+  },
+  {
+    "event": null,
+    "id": "/events/avatar-the-last-hairbender/"
+  },
+  {
+    "event": null,
+    "id": "/events/t-facta/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-presents-bruce-molsky-darol-anger/"
+  },
+  {
+    "event": null,
+    "id": "/events/prx-live/"
+  },
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "deep-listening-sound-journey|2026-10-20|chats-palace-arts",
+      "description": "Deep Listening Sound Journey Join us for a deeply relaxing sound journey, using the vibrational power of gongs and instruments to leave you energised and rejuvenated. Due to the success of initial sessions, I am happy to publish details of monthly Deep Listening Sound Journeys from June to November 2026. I am a local community artist and sound therapist, and I am delighted to continue a decades-old relationship with Chats Palace. Tuesdays 6:30pm gather, Session 7:00-8:15pm June 9th, July 14th, August 4th, September 22nd, October 20th, November 17th 3 ticket price-points according to income (no questions asked) “I loved the sonic and sensual journey that Jon created, and the qigong we did at the beginning to get our energy moving” Jacob “The sound journey was quite simply stunning! You took me to a range of places and it ended with feelings of love, joy and gratitude. “ Leena “Heaps of love to you for your sound journey. I felt a lot of you coming through, with the experience and reflection of all your life-learning and generosity of spirit.” Giles “Thank you so much for this evening – it was really special. Absolutely loved the movement to start also and the journey took me so deep! Thank you for making us feel safe and welcome.” Kate Get your place now!",
+      "ends_at": "2026-10-20T19:30:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/04/sound-bath-1.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-20T17:30:00Z",
+      "tags": [
+        "classes & workshops"
+      ],
+      "title": "Deep Listening Sound Journey",
+      "url": "https://chatspalace.com/events/deep-listening-sound-journey-4/2026-10-20/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/deep-listening-sound-journey-4/2026-10-20/"
+  },
+  {
+    "event": null,
+    "id": "/events/the-hackney-folk-club-martha-tilston/"
+  },
+  {
+    "event": null,
+    "id": "/events/cabaret-roulette-tarot/"
+  },
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "robert-elms-show-live|2026-10-25|chats-palace-arts",
+      "description": "To coincide with the 50th anniversary of east London’s illustrious art centre, Chats Palace, Robert will be presenting a live version of his much loved radio show; featuring live music and conversation with guests including Danny George Wilson (Grand Drive; Danny & The Champions of The World); Russell Clarke (the Rock ‘n’ Roll Routemaster) & local, celebrated photographer (& Chats veteran of over 40yrs) Tom Hunter.",
+      "ends_at": "2026-10-25T23:00:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/09/Robert-Elms-Poster.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "33",
+        "min": "33"
+      },
+      "starts_at": "2026-10-25T17:00:00Z",
+      "tags": [
+        "chats50 festival",
+        "culture",
+        "highlights",
+        "talks"
+      ],
+      "title": "The Robert Elms Show – Live!",
+      "url": "https://chatspalace.com/events/the-robert-elms-show-live/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/the-robert-elms-show-live/"
+  },
+  {
+    "event": null,
+    "id": "/events/a-little-shite-mare/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-interstate-express/"
+  },
+  {
+    "event": null,
+    "id": "/events/ritual-samhain-a-cabaret-of-queer-journeys-into-folklore/"
+  },
+  {
+    "event": null,
+    "id": "/events/chatslab-clerknwell-artslab-goes-to-chats-palace-john-hegley-lorraine-bowen-bob-karper-lovell-more/"
+  },
+  {
+    "event": null,
+    "id": "/events/who-poisoned-the-salt-fish-fritter/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-ak-patterson/"
+  },
+  {
+    "event": null,
+    "id": "/events/sounds-of-liberation-an-evening-of-latin-music-to-celebrate-the-womens-bands-of-the-1970s-80s/"
+  },
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "first-8-years-david-richard-fox-hosts-afternoon-with-alan-rossiter|2026-11-08|chats-palace-arts",
+      "description": "‘The First 8 Years’ David Richard Fox hosts an afternoon with Alan Rossiter – Chats Palace’s first director back in the 70s (with contributions from the floor); talking us all through the amazing arts, artists and community events in the emergence of this amazing community arts centre.",
+      "ends_at": "2026-11-08T17:00:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/09/young-alan.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-08T14:00:00Z",
+      "tags": [
+        "chats50 festival",
+        "culture",
+        "exhibitions",
+        "highlights",
+        "talks"
+      ],
+      "title": "The First 8 Years: David Richard Fox hosts an afternoon with Alan Rossiter",
+      "url": "https://chatspalace.com/events/the-first-8-years-david-richard-fox-hosts-an-afternoon-with-alan-rossiter/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/the-first-8-years-david-richard-fox-hosts-an-afternoon-with-alan-rossiter/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-anna-mcluckie/"
+  },
+  {
+    "event": null,
+    "id": "/events/mike-viola/"
+  },
+  {
+    "event": null,
+    "id": "/events/held-by-trees/"
+  },
+  {
+    "event": {
+      "address": "42-44 Brooksby's Walk, London, E9 6DF",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "deep-listening-sound-journey|2026-11-17|chats-palace-arts",
+      "description": "Deep Listening Sound Journey Join us for a deeply relaxing sound journey, using the vibrational power of gongs and instruments to leave you energised and rejuvenated. Due to the success of initial sessions, I am happy to publish details of monthly Deep Listening Sound Journeys from June to November 2026. I am a local community artist and sound therapist, and I am delighted to continue a decades-old relationship with Chats Palace. Tuesdays 6:30pm gather, Session 7:00-8:15pm June 9th, July 14th, August 4th, September 22nd, October 20th, November 17th 3 ticket price-points according to income (no questions asked) “I loved the sonic and sensual journey that Jon created, and the qigong we did at the beginning to get our energy moving” Jacob “The sound journey was quite simply stunning! You took me to a range of places and it ended with feelings of love, joy and gratitude. “ Leena “Heaps of love to you for your sound journey. I felt a lot of you coming through, with the experience and reflection of all your life-learning and generosity of spirit.” Giles “Thank you so much for this evening – it was really special. Absolutely loved the movement to start also and the journey took me so deep! Thank you for making us feel safe and welcome.” Kate Get your place now!",
+      "ends_at": "2026-11-17T20:30:00Z",
+      "image_url": "https://chatspalace.com/wp-content/uploads/2026/04/sound-bath-1.jpg",
+      "lat": 51.550211,
+      "lng": -0.042876,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-17T18:30:00Z",
+      "tags": [
+        "classes & workshops"
+      ],
+      "title": "Deep Listening Sound Journey",
+      "url": "https://chatspalace.com/events/deep-listening-sound-journey-4/2026-11-17/",
+      "venue_name": "Chats Palace Arts Centre"
+    },
+    "id": "/events/deep-listening-sound-journey-4/2026-11-17/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-chris-wood/"
+  },
+  {
+    "event": null,
+    "id": "/events/swell-maps-14-iced-bears-holr/"
+  },
+  {
+    "event": null,
+    "id": "/events/americana-chats/"
+  },
+  {
+    "event": null,
+    "id": "/events/sonny-e-ruby-throat-lazy-jane/"
+  },
+  {
+    "event": null,
+    "id": "/events/the-magic-lanterns-festival-of-feeling-london/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-tom-moore-quartet/"
+  },
+  {
+    "event": null,
+    "id": "/events/hackney-folk-club-kris-drever-cahalen-morrison/"
+  }
+]

@@ -40,7 +40,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_to_utc, map_category, parse_price,
+    clean_description, clean_text, dedupe_key, in_london_bbox, london_to_utc, map_category,
+    parse_price,
 };
 
 pub const KEY: &str = "dandad";
@@ -282,14 +283,6 @@ pub fn parse_time_range(text: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
         _ => to_time((sh, sm, spm))?,
     };
     Some((start, Some(end)))
-}
-
-/// Greater London bounding box (lat_min, lat_max, lng_min, lng_max).
-const LONDON_BBOX: (f64, f64, f64, f64) = (51.28, 51.70, -0.52, 0.34);
-
-fn in_london_bbox(lat: f64, lng: f64) -> bool {
-    let (lat_min, lat_max, lng_min, lng_max) = LONDON_BBOX;
-    (lat_min..=lat_max).contains(&lat) && (lng_min..=lng_max).contains(&lng)
 }
 
 /// Normalise a D&AD [`RawEvent`] payload.

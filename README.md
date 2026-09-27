@@ -117,6 +117,17 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     workshops and festivals (recurring programmes, courses, online,
     members-only and multi-day non-exhibition events skipped); facts + link
     only (terms).
+  - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
+    sites running WordPress + The Events Calendar: the TEC REST API
+    (`ends_after`, paginated with a page cap), falling back to the list
+    view's JSON-LD `Event`s when the API is off. Each venue is an
+    `events.sources` row with `platform = 'tec'` and its own `config`
+    (default venue, category map and skips), so a new venue is a migration
+    row, not code; London-only, online events skipped, times read as London
+    wall clock. Seeded: Housmans Bookshop, Chats Palace, Select Gallery,
+    Freud Museum London, the Cinema Museum, Bow Arts and the South London
+    Botanical Institute (the last two from the list view: their robots.txt
+    rules out the API).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -474,7 +485,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX and Royal Museums Greenwich daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich and the TEC venues daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

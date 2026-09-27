@@ -1,0 +1,142 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-bow-arts\", &raws)"
+---
+[
+  {
+    "event": null,
+    "id": "/event/bhajan-hunjan-speaking-through-materials/"
+  },
+  {
+    "event": {
+      "address": "Lakeside Centre, London, SE2 9AN",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "on-wall-exhibition|2026-09-18|lakeside",
+      "description": "Encounter landscape from an uncommon perspective - one shaped by touch, movement, and collaboration.",
+      "ends_at": "2026-10-03T17:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2023/07/1-copy-Copy.jpg",
+      "lat": 51.5009687,
+      "lng": 0.1242316,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-18T11:00:00Z",
+      "tags": [],
+      "title": "On the Wall Exhibition",
+      "url": "https://bowarts.org/event/on-the-wall-exhibition/",
+      "venue_name": "Lakeside Centre"
+    },
+    "id": "/event/on-the-wall-exhibition/"
+  },
+  {
+    "event": null,
+    "id": "/event/bow-families-creating-your-paper-lanterns-and-brightening-mid-autumn-stories-with-alison-lam/"
+  },
+  {
+    "event": null,
+    "id": "/event/expressions-of-fluidity-story-tale-map/"
+  },
+  {
+    "event": null,
+    "id": "/event/opening-night-expressions-of-fluidity-story-tale-map/"
+  },
+  {
+    "event": null,
+    "id": "/event/yoga-sessions-at-the-lakeside-centre-2/2026-10-03/"
+  },
+  {
+    "event": null,
+    "id": "/event/yoga-sessions-at-the-rum-factory/"
+  },
+  {
+    "event": {
+      "address": "49 Pennington Street, Wapping, London, E1W 2BD",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "workshop-freedom-of-press-1986-style-print-design-history|2026-10-10|rum-factory",
+      "description": "Come and make the news with doctoral researcher and graphic designer, Katherine Easthill. This will be a print design and history workshop, inspired by the Wapping dispute (1986–7).",
+      "ends_at": "2026-10-10T12:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/08/WORKSHOP_01-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-10T10:00:00Z",
+      "tags": [],
+      "title": "Workshop: Freedom of the Press, 1986 Style, Print Design & History",
+      "url": "https://bowarts.org/event/workshop-freedom-of-the-press-1986-style-print-design-history/",
+      "venue_name": "The Rum Factory"
+    },
+    "id": "/event/workshop-freedom-of-the-press-1986-style-print-design-history/"
+  },
+  {
+    "event": {
+      "address": "Lakeside Centre, London, SE2 9AN",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "open-to-ideas-workshop-table-talk|2026-10-10|lakeside",
+      "description": "Join documentary photographer and yoga teacher Amanda Eatwell for the first Open To Ideas Workshop: Talking Tables. A space to talk, be present and practice mindfulness.",
+      "ends_at": "2026-10-10T12:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/09/open-to-ideaes.jpeg",
+      "lat": 51.5009687,
+      "lng": 0.1242316,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-10T10:00:00Z",
+      "tags": [],
+      "title": "Open To Ideas Workshop: Table Talk",
+      "url": "https://bowarts.org/event/open-to-ideas-workshop-table-talk/",
+      "venue_name": "Lakeside Centre"
+    },
+    "id": "/event/open-to-ideas-workshop-table-talk/"
+  },
+  {
+    "event": {
+      "address": "49 Pennington Street, Wapping, London, E1W 2BD",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "workshop-make-your-story-into-map-using-braided-lazos-with-lucia-scarselletta|2026-10-10|rum-factory",
+      "description": "A participatory workshop to make lazos, exploring the memories, movements and stories held within everyday objects and places.",
+      "ends_at": "2026-10-10T16:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/09/Untitled-2026-Repurposed-Leather-Aluminium-Stone-credit-Lucia-Scarselletta.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-10T14:00:00Z",
+      "tags": [],
+      "title": "Workshop: Make your story into a map using braided lazos with Lucía Scarselletta",
+      "url": "https://bowarts.org/event/workshop-workshop-braided-lazos-lucia-scarselletta/",
+      "venue_name": "The Rum Factory"
+    },
+    "id": "/event/workshop-workshop-braided-lazos-lucia-scarselletta/"
+  },
+  {
+    "event": null,
+    "id": "/event/old-manor-park-library-open-studios-2026/"
+  },
+  {
+    "event": null,
+    "id": "/event/yoga-sessions-at-the-rum-factory-2/"
+  },
+  {
+    "event": null,
+    "id": "/event/developing-a-relevant-inclusive-and-diverse-primary-art-curriculum-with-jasmin-bhanji/"
+  }
+]
