@@ -29,6 +29,7 @@ pub mod hunterian_museum;
 pub mod ibraaz;
 pub mod jsonld;
 pub mod lisson_gallery;
+pub mod london_review_bookshop;
 pub mod luma;
 pub mod lux;
 pub mod mall_galleries;
@@ -141,6 +142,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         hunterian_museum::KEY => Ok(Box::new(hunterian_museum::HunterianMuseum::new(base))),
         ibraaz::KEY => Ok(Box::new(ibraaz::Ibraaz::new(base))),
         lisson_gallery::KEY => Ok(Box::new(lisson_gallery::LissonGallery::new(base))),
+        london_review_bookshop::KEY => Ok(Box::new(
+            london_review_bookshop::LondonReviewBookshop::new(base),
+        )),
         lux::KEY => Ok(Box::new(lux::Lux::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
         october_gallery::KEY => Ok(Box::new(october_gallery::OctoberGallery::new(base))),
