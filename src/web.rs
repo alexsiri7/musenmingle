@@ -1437,6 +1437,26 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         .and_then(|s| s.corrected.clone());
     let today = Utc::now().with_timezone(&London).date_naive();
     let relax = relaxations(&filters, today);
+    // With no results: how many upcoming events the corrected words find
+    // without the other filters (the "Did you mean" link drops them).
+    let suggestion = match (&corrected, events.is_empty()) {
+        (Some(c), true) => {
+            let raw = url::form_urlencoded::Serializer::new(String::new())
+                .append_pair("q", c)
+                .append_pair("from", &today.format("%Y-%m-%d").to_string())
+                .append_pair("limit", &listing::MAX_LIMIT.to_string())
+                .finish();
+            match listing::parse_query(&raw) {
+                Ok(q) => match repo::list_events(&state.pool, &q).await {
+                    Ok(rows) => Some((c.clone(), rows.len().min(q.limit as usize))),
+                    Err(e) => return internal_error(e),
+                },
+                Err(_) => None,
+            }
+        }
+        _ => None,
+    }
+    .filter(|(_, n)| *n > 0);
     page(
         StatusCode::OK,
         "",
@@ -1460,11 +1480,15 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                             } @else {
                                 p { "No events match “" (filters.q) "”" @if !relax.is_empty() { " with these filters" } "." }
                             }
-                            @if let Some(c) = &corrected {
+                            @if let Some((c, n)) = &suggestion {
+                                @let limit = *n >= listing::MAX_LIMIT as usize;
                                 p class="did-you-mean" {
                                     "Did you mean "
-                                    a href=(link_with(&filters, |g| g.q = c.clone())) { "“" (c) "”" }
-                                    "?"
+                                    a href={ "/?" (url::form_urlencoded::Serializer::new(String::new()).append_pair("q", c).finish()) } { "“" (c) "”" }
+                                    "? "
+                                    span class="small" {
+                                        "(" (n) @if limit { "+" } @if *n == 1 { " event" } @else { " events" } " without these filters)"
+                                    }
                                 }
                             }
                             @if !relax.is_empty() {

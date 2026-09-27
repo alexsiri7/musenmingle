@@ -317,7 +317,8 @@ async fn home_page_search_box_suggestions_and_filter_removal() {
     let (_, html) = get_raw(&app, "/?q=Whitechaple&category=talk").await;
     assert!(html.contains("No events match"), "{html}");
     assert!(html.contains("Did you mean"), "{html}");
-    assert!(html.contains("q=whitechapel"), "{html}");
+    assert!(html.contains(r#"href="/?q=whitechapel""#), "{html}");
+    assert!(html.contains("(1 event without these filters)"), "{html}");
     assert!(html.contains("Try removing a filter"));
     assert!(html.contains("Type: Talk"));
     // The removal link keeps the search.
