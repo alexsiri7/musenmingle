@@ -716,6 +716,70 @@ async fn home_filter_panel_is_closed_with_removable_chips() {
 }
 
 #[tokio::test]
+async fn home_near_me_filters_by_walking_time() {
+    let Some(db) = TestDb::create("home_near_me_filters_by_walking_time").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let at = |title: &str, lat_lng: Option<(f64, f64)>| Ev {
+        at: lat_lng,
+        ..Ev::new(title, days(1))
+    };
+    // From (51.532, -0.124): about 0.3 km (5 min), 1.9 km (30 min), 3.6 km.
+    insert(&pool, at("Round the corner", Some((51.535, -0.124)))).await;
+    insert(&pool, at("Half an hour", Some((51.549, -0.124)))).await;
+    insert(&pool, at("Far away", Some((51.5, -0.124)))).await;
+    insert(&pool, at("Nowhere known", None)).await;
+    let app = app(&pool);
+
+    // Without a position the group is JS-only; the page may ask for one.
+    let p = get(&app, "/").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert!(
+        p.body
+            .contains("<div class=\"field near-me\" data-near-me hidden>"),
+        "{}",
+        p.body
+    );
+    assert!(!p.body.contains("name=\"here\""));
+    assert_eq!(
+        p.headers["permissions-policy"],
+        "camera=(), microphone=(), geolocation=(self), payment=(), usb=()"
+    );
+
+    // 20 minutes by default, closest first, a rounded position everywhere.
+    let p = get(&app, "/?here=51.53214,-0.12449").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert_eq!(card_titles(&p.body), ["Round the corner"]);
+    assert!(!p.body.contains("51.5321"), "{}", p.body);
+    assert!(
+        p.body
+            .contains("<input type=\"hidden\" name=\"here\" value=\"51.532,-0.124\">")
+    );
+    assert!(
+        p.body
+            .contains("<div class=\"field near-me\" data-near-me>")
+    );
+    assert!(
+        p.body
+            .contains("<option value=\"20\" selected>Within 20 min walk</option>")
+    );
+    let chip = href_near(&p.body, "aria-label=\"Remove filter: Within 20 min walk\"");
+    assert!(!chip.contains("here=") && !chip.contains("walk="), "{chip}");
+
+    let p = get(&app, "/?here=51.532,-0.124&walk=30").await;
+    assert_eq!(card_titles(&p.body), ["Round the corner", "Half an hour"]);
+    assert!(p.body.contains("Remove filter: Within 30 min walk"));
+
+    // Choosing an area replaces Near me.
+    let p = get(&app, "/?here=51.532,-0.124&walk=30&near=kings-cross").await;
+    assert!(!p.body.contains("min walk\""), "{}", p.body);
+    assert!(p.body.contains("Remove filter: Area: King"));
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
 async fn home_filters_by_source_with_a_clearable_chip() {
     let Some(db) = TestDb::create("home_filters_by_source_with_a_clearable_chip").await else {
         return;

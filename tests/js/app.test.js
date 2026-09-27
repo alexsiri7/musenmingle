@@ -249,3 +249,9 @@ test("shareEvent falls back to copying the link, then to failing", async () => {
   assert.equal(await app.shareEvent({ clipboard: { writeText: () => Promise.reject(new Error("denied")) } }, DATA), "failed");
   assert.equal(await app.shareEvent({}, DATA), "failed");
 });
+
+test("roundPosition keeps about 100 m of precision", () => {
+  assert.equal(app.roundPosition(51.53214, -0.12449), "51.532,-0.124");
+  assert.equal(app.roundPosition(51.5, -0.0001), "51.500,0.000");
+  assert.equal(app.roundPosition(51.5325, -0.1), "51.533,-0.100");
+});

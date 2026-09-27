@@ -15,6 +15,18 @@ pub const DEFAULT_LIMIT: i64 = 50;
 pub const MAX_LIMIT: i64 = 100;
 pub const DEFAULT_RADIUS_KM: f64 = 5.0;
 pub const MAX_RADIUS_KM: f64 = 100.0;
+/// Walking pace and detour factor for straight-line distances; the same
+/// numbers as `WALK_KMH` / `DETOUR` in `src/map.mjs` (its "≈ N min walk").
+pub const WALK_KMH: f64 = 5.0;
+pub const WALK_DETOUR: f64 = 1.3;
+/// `within_walk_min=` bounds.
+pub const MAX_WALK_MIN: u32 = 60;
+
+/// The straight-line radius for "within `minutes` walk": every event whose
+/// `src/map.mjs` label rounds to at most `minutes` (hence the half minute).
+pub fn walk_radius_km(minutes: u32) -> f64 {
+    (f64::from(minutes) + 0.5) / 60.0 * WALK_KMH / WALK_DETOUR
+}
 /// Most ids one `ids=` filter may name.
 pub const MAX_IDS: usize = 100;
 
@@ -405,7 +417,7 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     let mut filter = EventFilter::default();
     let (mut at, mut within_hours) = (None, None);
     let (mut from, mut to) = (None, None);
-    let (mut near, mut radius_km) = (None, None);
+    let (mut near, mut radius_km, mut walk_min) = (None, None, None);
     let (mut limit, mut cursor) = (None, None);
     let mut facets = false;
     let mut sort = None;
@@ -523,6 +535,17 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 }
                 radius_km = Some(r);
             }
+            "within_walk_min" => {
+                let m: u32 = value
+                    .parse()
+                    .map_err(|_| "within_walk_min must be a whole number".to_string())?;
+                if !(1..=MAX_WALK_MIN).contains(&m) {
+                    return Err(format!(
+                        "within_walk_min must be between 1 and {MAX_WALK_MIN}"
+                    ));
+                }
+                walk_min = Some(m);
+            }
             "limit" => {
                 let l: i64 = value
                     .parse()
@@ -572,10 +595,19 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     if near.is_none() && radius_km.is_some() {
         return Err("radius_km requires near".into());
     }
+    if near.is_none() && walk_min.is_some() {
+        return Err("within_walk_min requires near".into());
+    }
+    if radius_km.is_some() && walk_min.is_some() {
+        return Err("use radius_km or within_walk_min, not both".into());
+    }
     let near = near.map(|(lat, lng)| Near {
         lat,
         lng,
-        radius_km: radius_km.unwrap_or(DEFAULT_RADIUS_KM),
+        radius_km: walk_min
+            .map(walk_radius_km)
+            .or(radius_km)
+            .unwrap_or(DEFAULT_RADIUS_KM),
     });
     // Without `sort`: best match for a search, else an area means nearest
     // first (as before `sort` existed).
@@ -712,6 +744,18 @@ mod tests {
     }
 
     #[test]
+    fn walking_time_becomes_a_radius() {
+        let q = parse_query("near=51.5,-0.1&within_walk_min=20").unwrap();
+        let near = q.near.unwrap();
+        assert_eq!(near.radius_km, walk_radius_km(20));
+        assert_eq!(q.order.sort(), Sort::Nearest);
+        // map.mjs: minutes = round(km * 1.3 / 5 * 60), so 1.3 km is "≈ 20
+        // min walk" and 1.33 km is "≈ 21 min walk".
+        assert!(walk_radius_km(20) >= 1.3 && walk_radius_km(20) < 1.33);
+        assert!(walk_radius_km(10) < walk_radius_km(30));
+    }
+
+    #[test]
     fn categories_repeat_and_dedupe() {
         let q = parse_query("category=talk&category=workshop&category=talk").unwrap();
         assert_eq!(q.filter.categories, [Category::Talk, Category::Workshop]);
@@ -797,6 +841,11 @@ mod tests {
             "near=91,0",
             "near=51.5,-0.1&radius_km=0",
             "near=51.5,-0.1&radius_km=101",
+            "within_walk_min=20",
+            "near=51.5,-0.1&within_walk_min=0",
+            "near=51.5,-0.1&within_walk_min=61",
+            "near=51.5,-0.1&within_walk_min=2.5",
+            "near=51.5,-0.1&within_walk_min=20&radius_km=2",
             "radius_km=3",
             "limit=0",
             "limit=101",
