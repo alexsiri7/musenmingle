@@ -724,7 +724,8 @@ struct Filters {
     /// `walk=` minutes for `here` (10, 20 or 30; 20 by default); empty
     /// without `here`.
     walk: String,
-    /// `sort=` value; empty = the default (nearest with Near me, else soonest).
+    /// `sort=` value; empty = the default (best match with a search,
+    /// nearest with Near me, else richest: soonest, fullest listings first).
     sort: String,
     /// `pick=` quick pick (`tonight`, …); empty = none.
     pick: String,
@@ -866,10 +867,17 @@ impl Filters {
         if self.free {
             s.append_pair("free", "true");
         }
+        // The home page's own default (the API's is soonest).
+        let default_sort = String::from(Sort::Richest.as_str());
+        let sort = if self.sort.is_empty() && self.q.is_empty() && self.here.is_empty() {
+            &default_sort
+        } else {
+            &self.sort
+        };
         for (k, v) in [
             ("when", &self.when),
             ("price_max", &self.price_max),
-            ("sort", &self.sort),
+            ("sort", sort),
             ("pick", &self.pick),
         ] {
             if !v.is_empty() {
@@ -1075,15 +1083,15 @@ fn date_presets(today: NaiveDate) -> [(&'static str, String, String); 4] {
 }
 
 /// The sort the form shows as chosen: `sort=` if valid, else the default
-/// (best match with a search, closest first with an area, soonest
-/// otherwise).
+/// (best match with a search, closest first with Near me, else day by
+/// day with the fullest listings first).
 fn effective_sort(f: &Filters) -> Sort {
     Sort::parse(&f.sort)
         .filter(|s| *s != Sort::Relevance || !f.q.is_empty())
         .unwrap_or(if !f.q.is_empty() {
             Sort::Relevance
         } else if f.here.is_empty() {
-            Sort::Soonest
+            Sort::Richest
         } else {
             Sort::Nearest
         })
@@ -1098,17 +1106,18 @@ fn order_text(sort: Sort) -> &'static str {
         Sort::Added => "Just added: newest to Muse & Mingle first",
         Sort::Surprise => "Surprise me: random order, reshuffled daily",
         Sort::Relevance => "Best match first",
+        Sort::Richest => "Day by day, listings with a picture and a description first",
     }
 }
 
 /// Hidden inputs carrying every filter in `f` except `q` (so the search
-/// form keeps the other filters). A default sort (soonest, nearest, best
+/// form keeps the other filters). A default sort (richest, nearest, best
 /// match) is dropped too, so a new search is ranked by relevance.
 fn hidden_filters(f: &Filters) -> Markup {
     let default_sort = |v: &str| {
         matches!(
             Sort::parse(v),
-            None | Some(Sort::Soonest | Sort::Nearest | Sort::Relevance)
+            None | Some(Sort::Richest | Sort::Nearest | Sort::Relevance)
         )
     };
     html! {
@@ -3555,7 +3564,8 @@ mod tests {
         // An area preset is a group of boroughs, not a radius (issue #79).
         assert_eq!(q.filter.boroughs, ["camden", "islington"]);
         assert!(q.near.is_none());
-        assert!(matches!(q.order, listing::EventOrder::ByStart { .. }));
+        // The home page's default: fullest listings first, day by day (#205).
+        assert!(matches!(q.order, listing::EventOrder::Richest { .. }));
         assert!(f.page_query().contains("near=kings-cross"));
         // A single borough.
         let f = Filters::parse("near=tower-hamlets");
@@ -3629,13 +3639,19 @@ mod tests {
         // An area has no point to measure from; Near me does.
         assert_eq!(
             effective_sort(&Filters::parse("near=central")),
-            Sort::Soonest
+            Sort::Richest
         );
         assert_eq!(
             effective_sort(&Filters::parse("here=51.5,-0.1")),
             Sort::Nearest
         );
-        assert_eq!(effective_sort(&Filters::parse("")), Sort::Soonest);
+        assert_eq!(effective_sort(&Filters::parse("")), Sort::Richest);
+        // Explicit sorts stay strict; a search or Near me keeps its default.
+        let order = |raw: &str| Filters::parse(raw).api_query().unwrap().order.sort();
+        assert_eq!(order("sort=soonest"), Sort::Soonest);
+        assert_eq!(order(""), Sort::Richest);
+        assert_eq!(order("q=print"), Sort::Relevance);
+        assert_eq!(order("here=51.5,-0.1"), Sort::Nearest);
         assert!(Filters::parse("sort=popular").api_query().is_err());
     }
 

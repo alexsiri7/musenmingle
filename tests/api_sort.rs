@@ -339,7 +339,9 @@ async fn every_sort_paginates_and_nearest_falls_back_without_near() {
         link(&pool, id, 0, "2026-09-20T09:00:00Z").await;
     }
     let app = app(&pool);
-    for sort in ["soonest", "nearest", "ending", "added", "surprise"] {
+    for sort in [
+        "soonest", "nearest", "ending", "added", "surprise", "richest",
+    ] {
         let base = format!("/v1/events?sort={sort}&near=51.5,-0.1");
         let (status, all) = get(&app, &base).await;
         assert_eq!(status, StatusCode::OK, "{all}");
@@ -386,6 +388,148 @@ async fn every_sort_paginates_and_nearest_falls_back_without_near() {
     let (status, body) = get(&app, "/v1/events?sort=popular").await;
     assert_eq!(status, StatusCode::BAD_REQUEST);
     assert!(body["error"].as_str().unwrap().contains("surprise"));
+    pool.close().await;
+    db.drop_db().await;
+}
+
+/// Make `event` rich or not (#205): an optional thumbnail from a source
+/// that lets us show images, a description of `desc_len` characters, and
+/// free (a known price) or not.
+async fn enrich_listing(pool: &PgPool, event: Uuid, thumb: bool, desc_len: usize, free: bool) {
+    sqlx::query("UPDATE events.events SET description = $2, is_free = $3 WHERE id = $1")
+        .bind(event)
+        .bind((desc_len > 0).then(|| "x".repeat(desc_len)))
+        .bind(free)
+        .execute(pool)
+        .await
+        .unwrap();
+    if thumb {
+        sqlx::query(
+            "INSERT INTO events.thumbnails
+                (event_id, source_id, source_image_url, bytes, content_type, width, height, content_hash)
+             SELECT $1, id, 'https://example.org/i.jpg', '\\x00', 'image/webp', 10, 10, 'h'
+             FROM events.sources WHERE store_image ORDER BY id LIMIT 1",
+        )
+        .bind(event)
+        .execute(pool)
+        .await
+        .unwrap();
+    }
+}
+
+#[tokio::test]
+async fn richest_interleaves_rich_listings_day_by_day() {
+    let Some(db) = TestDb::create("richest_interleaves_rich_listings_day_by_day").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    // (title, start, end, thumbnail, description length, free)
+    let events = [
+        (
+            "r1",
+            "2026-10-01T10:00:00Z",
+            Some("2026-10-20T17:00:00Z"),
+            true,
+            200,
+            false,
+        ),
+        (
+            "r2",
+            "2026-10-02T10:00:00Z",
+            Some("2026-10-20T17:00:00Z"),
+            true,
+            200,
+            false,
+        ),
+        (
+            "r3",
+            "2026-10-03T10:00:00Z",
+            Some("2026-10-20T17:00:00Z"),
+            true,
+            200,
+            false,
+        ),
+        (
+            "r4",
+            "2026-10-04T10:00:00Z",
+            Some("2026-10-20T17:00:00Z"),
+            true,
+            200,
+            false,
+        ),
+        ("f1", "2026-10-10T18:00:00Z", None, false, 0, false),
+        ("f2", "2026-10-10T19:00:00Z", None, false, 300, true),
+        ("tomorrow", "2026-10-11T10:00:00Z", None, true, 150, false),
+        ("thumb only", "2026-10-11T11:00:00Z", None, true, 60, false),
+        (
+            "short but priced",
+            "2026-10-11T12:00:00Z",
+            None,
+            true,
+            60,
+            true,
+        ),
+    ];
+    for (title, starts_at, ends_at, thumb, desc, free) in events {
+        let id = insert(
+            &pool,
+            Ev {
+                ends_at,
+                ..ev(title, starts_at)
+            },
+        )
+        .await;
+        enrich_listing(&pool, id, thumb, desc, free).await;
+    }
+    let now = "2026-10-10T12:00:00Z";
+    // Running exhibitions count as today. Two rich listings per facts-only
+    // one, so tonight's facts-only events stay near the top and ahead of a
+    // rich listing tomorrow. A thumbnail with a short description is not
+    // enough on its own; with a price as well it is.
+    assert_eq!(
+        list(&pool, "sort=richest", now).await,
+        [
+            "r1",
+            "r2",
+            "f1",
+            "r3",
+            "r4",
+            "f2",
+            "tomorrow",
+            "short but priced",
+            "thumb only"
+        ]
+    );
+    // Explicit sorts stay strict.
+    assert_eq!(
+        list(&pool, "sort=soonest", now).await,
+        [
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "f1",
+            "f2",
+            "tomorrow",
+            "thumb only",
+            "short but priced"
+        ]
+    );
+    // The API's default is still soonest.
+    assert_eq!(list(&pool, "", now).await[4], "f1");
+
+    // Pages (numbered over the whole listing) walk every event once.
+    let app = app(&pool);
+    let (status, all) = get(&app, "/v1/events?sort=richest").await;
+    assert_eq!(status, StatusCode::OK, "{all}");
+    assert_eq!(all["sort"], "richest");
+    let walked = walk_pages(&app, "/v1/events?sort=richest&limit=2").await;
+    assert_eq!(walked, titles(&all));
+    assert_eq!(walked.len(), events.len());
+    let (_, page) = get(&app, "/v1/events?sort=richest&limit=2").await;
+    let cursor = page["next_cursor"].as_str().unwrap();
+    let (status, _) = get(&app, &format!("/v1/events?limit=2&cursor={cursor}")).await;
+    assert_eq!(status, StatusCode::BAD_REQUEST);
     pool.close().await;
     db.drop_db().await;
 }

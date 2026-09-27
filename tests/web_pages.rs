@@ -718,9 +718,16 @@ async fn home_filter_panel_is_closed_with_removable_chips() {
     let chips = p.body.find("class=\"chips active-filters\"").unwrap();
     assert!(chips > p.body.find("</details>").unwrap());
 
-    // The default sort is not a filter.
-    let p = get(&app, "/?sort=soonest").await;
+    // The default sort is not a filter; starting soonest now is (#205).
+    let p = get(&app, "/?sort=richest").await;
     assert!(!p.body.contains("Remove filter:"), "{}", p.body);
+    let p = get(&app, "/?sort=soonest").await;
+    assert!(
+        p.body
+            .contains("aria-label=\"Remove filter: Sort: Starting soonest\""),
+        "{}",
+        p.body
+    );
     pool.close().await;
     db.drop_db().await;
 }

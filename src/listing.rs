@@ -234,10 +234,34 @@ pub enum Sort {
     Surprise,
     /// Best match for `q` first; needs `q`. The default when `q` is set.
     Relevance,
+    /// Day by day (the London day an event starts, or today if it is
+    /// already running), listings with a picture and a description first,
+    /// interleaved with facts-only ones ([`richest_slot`]). The home page's
+    /// default without a search or Near me (#205); never the API's default.
+    Richest,
+}
+
+/// How many rich listings (`repo::RICH_SQL`) come before each facts-only
+/// one within a day under [`Sort::Richest`]: interleaved, not a hard sort,
+/// so venues whose terms only allow facts stay visible.
+pub const RICH_RUN: i64 = 2;
+
+/// An event's position within its day under [`Sort::Richest`]: `rank` is
+/// its 1-based place among that day's rich (or facts-only) events by
+/// start time. Rich ones take slots 1, 2, 4, 5, 7, … and facts-only ones 3,
+/// 6, 9, …; when one kind runs out the other just carries on. Mirrored in
+/// SQL by `repo::list_events`.
+pub fn richest_slot(rich: bool, rank: i64) -> i64 {
+    if rich {
+        rank + (rank - 1) / RICH_RUN
+    } else {
+        rank * (RICH_RUN + 1)
+    }
 }
 
 impl Sort {
-    pub const ALL: [Sort; 6] = [
+    pub const ALL: [Sort; 7] = [
+        Sort::Richest,
         Sort::Soonest,
         Sort::Nearest,
         Sort::Ending,
@@ -254,6 +278,7 @@ impl Sort {
             Sort::Added => "added",
             Sort::Surprise => "surprise",
             Sort::Relevance => "relevance",
+            Sort::Richest => "richest",
         }
     }
 
@@ -266,6 +291,7 @@ impl Sort {
             Sort::Added => "Just added",
             Sort::Surprise => "Surprise me",
             Sort::Relevance => "Best match",
+            Sort::Richest => "Soonest, fullest listings first",
         }
     }
 
@@ -303,6 +329,14 @@ pub enum EventOrder {
     },
     /// Best match for `q` first (`ts_rank`, then id).
     ByRelevance { after: Option<(f64, Uuid)> },
+    /// [`Sort::Richest`]: by (day, [`richest_slot`], id). `today` is the
+    /// London date the order was computed for (running events count as on
+    /// it); like the shuffle's seed it comes from the cursor on later
+    /// pages. `after` is the last event's day and slot.
+    Richest {
+        today: NaiveDate,
+        after: Option<(NaiveDate, i64, Uuid)>,
+    },
 }
 
 impl EventOrder {
@@ -314,6 +348,7 @@ impl EventOrder {
             EventOrder::ByAdded { .. } => Sort::Added,
             EventOrder::Shuffled { .. } => Sort::Surprise,
             EventOrder::ByRelevance { .. } => Sort::Relevance,
+            EventOrder::Richest { .. } => Sort::Richest,
         }
     }
 }
@@ -367,6 +402,9 @@ pub enum Cursor {
     Shuffle(NaiveDate, Uuid),
     /// The search rank and the last id.
     Relevance(f64, Uuid),
+    /// [`Sort::Richest`]: the day the order is for, the last event's day
+    /// and slot, and its id.
+    Richest(NaiveDate, NaiveDate, i64, Uuid),
 }
 
 impl Cursor {
@@ -378,6 +416,11 @@ impl Cursor {
             Cursor::Added(t, id) => format!("a:{}:{id}", t.timestamp_micros()),
             Cursor::Shuffle(day, id) => format!("r:{}:{id}", day.format("%Y%m%d")),
             Cursor::Relevance(r, id) => format!("q:{:016x}:{id}", r.to_bits()),
+            Cursor::Richest(today, day, slot, id) => format!(
+                "f:{}-{}-{slot}:{id}",
+                today.format("%Y%m%d"),
+                day.format("%Y%m%d")
+            ),
         };
         plain.bytes().map(|b| format!("{b:02x}")).collect()
     }
@@ -411,6 +454,12 @@ impl Cursor {
                 f64::from_bits(u64::from_str_radix(pos, 16).ok()?),
                 id,
             )),
+            "f" => {
+                let mut p = pos.splitn(3, '-');
+                let day = |s: &str| NaiveDate::parse_from_str(s, "%Y%m%d").ok();
+                let (today, d, slot) = (day(p.next()?)?, day(p.next()?)?, p.next()?.parse().ok()?);
+                Some(Cursor::Richest(today, d, slot, id))
+            }
             _ => None,
         }
     }
@@ -744,7 +793,15 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 Some(_) => return mismatch(),
             },
         },
-        (Sort::Soonest | Sort::Surprise, Some(_)) => return mismatch(),
+        (Sort::Richest, None) => EventOrder::Richest {
+            today: london_today(now),
+            after: None,
+        },
+        (Sort::Richest, Some(Cursor::Richest(today, day, slot, id))) => EventOrder::Richest {
+            today,
+            after: Some((day, slot, id)),
+        },
+        (Sort::Soonest | Sort::Surprise | Sort::Richest, Some(_)) => return mismatch(),
     };
     Ok(EventQuery {
         filter,
@@ -1034,6 +1091,52 @@ mod tests {
         for s in Sort::ALL {
             assert_eq!(Sort::parse(s.as_str()), Some(s));
         }
+    }
+
+    #[test]
+    fn richest_interleaves_two_rich_per_facts_only() {
+        let rich: Vec<i64> = (1..=5).map(|r| richest_slot(true, r)).collect();
+        let facts: Vec<i64> = (1..=3).map(|r| richest_slot(false, r)).collect();
+        assert_eq!(rich, [1, 2, 4, 5, 7]);
+        assert_eq!(facts, [3, 6, 9]);
+        // Never the same slot twice in a day.
+        for r in 1..100 {
+            for f in 1..100 {
+                assert_ne!(richest_slot(true, r), richest_slot(false, f));
+            }
+        }
+    }
+
+    #[test]
+    fn richest_is_explicit_with_its_own_cursor() {
+        // 23:30 UTC on 10 October is 00:30 on the 11th in London.
+        let now = Utc.with_ymd_and_hms(2026, 10, 10, 23, 30, 0).unwrap();
+        let q = |raw: &str| parse_query_at(raw, now);
+        let today = NaiveDate::from_ymd_opt(2026, 10, 11).unwrap();
+        assert_eq!(
+            q("sort=richest").unwrap().order,
+            EventOrder::Richest { today, after: None }
+        );
+        // Never the API's default.
+        assert_eq!(q("").unwrap().order.sort(), Sort::Soonest);
+        let (seed, day, id) = (
+            NaiveDate::from_ymd_opt(2026, 10, 9).unwrap(),
+            NaiveDate::from_ymd_opt(2026, 10, 12).unwrap(),
+            Uuid::new_v4(),
+        );
+        let c = Cursor::Richest(seed, day, 7, id);
+        assert_eq!(Cursor::decode(&c.encode()), Some(c));
+        let c = c.encode();
+        assert_eq!(
+            q(&format!("sort=richest&cursor={c}")).unwrap().order,
+            EventOrder::Richest {
+                today: seed,
+                after: Some((day, 7, id))
+            }
+        );
+        assert!(q(&format!("cursor={c}")).is_err());
+        let start = Cursor::Start(now, id).encode();
+        assert!(q(&format!("sort=richest&cursor={start}")).is_err());
     }
 
     #[test]

@@ -1497,6 +1497,48 @@ pub struct ListedEvent {
     /// The search rank (`ts_rank`) when sorting by relevance, for the next
     /// page's cursor; NULL for other sorts.
     pub relevance: Option<f64>,
+    /// `sort=richest`: the event's day and slot
+    /// ([`crate::listing::richest_slot`]), for the next page's cursor; NULL
+    /// for other sorts.
+    pub rich_day: Option<NaiveDate>,
+    pub rich_slot: Option<i64>,
+}
+
+/// Richness score weights (`sort=richest`, #205): a thumbnail we may show,
+/// a description (long, or at least short), an AI note, opening hours or a
+/// known price.
+pub const RICH_WEIGHT_THUMBNAIL: i32 = 3;
+pub const RICH_WEIGHT_LONG_DESCRIPTION: i32 = 2;
+pub const RICH_WEIGHT_SHORT_DESCRIPTION: i32 = 1;
+pub const RICH_WEIGHT_AI_NOTE: i32 = 1;
+pub const RICH_WEIGHT_HOURS_OR_PRICE: i32 = 1;
+/// Description lengths (characters of the stored, at most 300-character
+/// excerpt) for the long and short description weights.
+pub const RICH_LONG_DESCRIPTION: i32 = 120;
+pub const RICH_SHORT_DESCRIPTION: i32 = 40;
+/// The score at which a listing counts as rich: a thumbnail alone is 3 and
+/// everything else together 4, so a rich listing always has a picture.
+pub const RICH_MIN_SCORE: i32 = 5;
+
+/// An event's (`ev`) richness score, from the weights above. The
+/// thumbnail test is `thumbnail_meta`'s: stored bytes from a source that
+/// lets us show images.
+pub fn richness_sql() -> String {
+    format!(
+        "(CASE WHEN EXISTS (SELECT 1 FROM events.thumbnails t
+                            JOIN events.sources s ON s.id = t.source_id
+                            WHERE t.event_id = ev.id AND t.bytes IS NOT NULL AND s.store_image)
+               THEN {RICH_WEIGHT_THUMBNAIL} ELSE 0 END
+          + CASE WHEN length(COALESCE(ev.description, '')) >= {RICH_LONG_DESCRIPTION}
+                   THEN {RICH_WEIGHT_LONG_DESCRIPTION}
+                 WHEN length(COALESCE(ev.description, '')) >= {RICH_SHORT_DESCRIPTION}
+                   THEN {RICH_WEIGHT_SHORT_DESCRIPTION}
+                 ELSE 0 END
+          + CASE WHEN ev.whats_cool IS NOT NULL OR ev.one_liner IS NOT NULL
+                 THEN {RICH_WEIGHT_AI_NOTE} ELSE 0 END
+          + CASE WHEN ev.opening_hours IS NOT NULL OR ev.is_free OR ev.price_min IS NOT NULL
+                 THEN {RICH_WEIGHT_HOURS_OR_PRICE} ELSE 0 END)"
+    )
 }
 
 /// The search query of `q=` as a tsquery, from `$10` (the text, for
@@ -1893,7 +1935,8 @@ const FIRST_SEEN: &str = "COALESCE((SELECT min(es.first_seen_at) FROM events.eve
 ///
 /// Placeholders: `$1`..`$11` [`LISTING_FILTER`], `$12` price_max, `$13`..`$20`
 /// the area (NULL without `near`), `$21`/`$22` the cursor, `$23` the limit,
-/// `$24` the sort's parameter (`now` for `ending`, the seed for `surprise`).
+/// `$24` the sort's parameter (`now` for `ending`, the seed for `surprise`,
+/// today for `richest`), `$25` the `richest` cursor's slot.
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
     let near = query.near;
@@ -1945,6 +1988,41 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             "($21::float8 IS NULL OR relevance < $21 OR (relevance = $21 AND id > $22::uuid))",
             "relevance DESC, id",
         ),
+        EventOrder::Richest { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            "($21::date IS NULL OR (rich_day, rich_slot, id) > ($21, $25::int8, $22::uuid))",
+            "rich_day, rich_slot, id",
+        ),
+    };
+    // Other sorts bind `$25` as NULL; it must still appear in the SQL.
+    let extra = match &query.order {
+        EventOrder::Richest { .. } => extra.to_string(),
+        _ => format!("{extra} AND $25::int8 IS NULL"),
+    };
+    // `richest`: each event's London day (today if already running) and
+    // whether it is rich; the slot is numbered over the whole filtered set,
+    // before the cursor, so pages don't shift.
+    let (rich_cols, slot) = match &query.order {
+        EventOrder::Richest { .. } => {
+            let (n, m) = (crate::listing::RICH_RUN, crate::listing::RICH_RUN + 1);
+            (
+                format!(
+                    "GREATEST({LOCAL_FIRST_DAY}, $24::date) AS rich_day,
+                     {} >= {RICH_MIN_SCORE} AS rich",
+                    richness_sql()
+                ),
+                format!(
+                    "CASE WHEN rich THEN rn + (rn - 1) / {n} ELSE rn * {m} END AS rich_slot
+                     FROM (SELECT *, row_number() OVER (PARTITION BY rich_day, rich
+                                                        ORDER BY starts_at, id) AS rn"
+                ),
+            )
+        }
+        _ => (
+            "NULL::date AS rich_day, NULL::bool AS rich".to_string(),
+            "NULL::int8 AS rich_slot FROM (SELECT *".to_string(),
+        ),
     };
     let shuffle = match &query.order {
         EventOrder::Shuffled { .. } => "md5(ev.id::text || $24::text)",
@@ -1956,14 +2034,17 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
     };
     let sql = format!(
         "SELECT * FROM (
-             SELECT {EVENT_COLS},
-                    CASE WHEN $13::float8 IS NULL THEN NULL::float8 ELSE {} END AS distance_km,
-                    {key} AS sort_at, {shuffle} AS shuffle, {relevance} AS relevance
-             FROM events.events ev
-             WHERE {filter}
+             SELECT *, {slot} FROM (
+                 SELECT {EVENT_COLS},
+                        CASE WHEN $13::float8 IS NULL THEN NULL::float8 ELSE {} END AS distance_km,
+                        {key} AS sort_at, {shuffle} AS shuffle, {relevance} AS relevance,
+                        {rich_cols}
+                 FROM events.events ev
+                 WHERE {filter}
+             ) e0
+             WHERE ($20::float8 IS NULL OR distance_km <= $20)) e1
          ) e
-         WHERE ($20::float8 IS NULL OR distance_km <= $20)
-           AND {extra} AND {after}
+         WHERE {extra} AND {after}
          ORDER BY {order} LIMIT $23",
         distance_km_sql(13, 14, 15)
     );
@@ -2003,8 +2084,18 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             .bind(after.map(|a| a.1))
             .bind(query.limit + 1)
             .bind(None::<String>),
+        EventOrder::Richest { today, after } => {
+            return q
+                .bind(after.map(|a| a.0))
+                .bind(after.map(|a| a.2))
+                .bind(query.limit + 1)
+                .bind(today.format("%Y-%m-%d").to_string())
+                .bind(after.map(|a| a.1))
+                .fetch_all(pool)
+                .await;
+        }
     };
-    q.fetch_all(pool).await
+    q.bind(None::<i64>).fetch_all(pool).await
 }
 
 /// Which tag column a facet counts.
