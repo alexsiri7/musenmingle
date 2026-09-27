@@ -13,7 +13,9 @@
 //!   [`MAX_DETAIL_PAGES`] pages a run.
 //! * Each page has the title (`h1`), a standfirst (the description), and a
 //!   facts block (`div.border-y p`): a date line, then a price ("£8",
-//!   "Free, drop in") or opening days. Date lines are one day with London
+//!   "Free, drop in") or opening days. Exhibitions state no price there but
+//!   their body says "included with free entry", read with
+//!   `describes_free_entry`. Date lines are one day with London
 //!   wall-clock times (`29th October 2026<br>19:00–20:15`) or a date-only
 //!   range (`10th September–31st October 2026`), stored `all_day`. A page
 //!   with no date line is a recurring programme ("every Wednesday
@@ -32,10 +34,10 @@ use url::Url;
 
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
-use crate::model::{Category, NewEvent, RawEvent};
+use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, london_to_utc, map_category, mentions_late_opening,
-    parse_price,
+    clean_description, clean_text, dedupe_key, describes_free_entry, london_to_utc, map_category,
+    mentions_late_opening, parse_price,
 };
 
 pub const KEY: &str = "hunterian-museum";
@@ -243,10 +245,10 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
 
     let exhibition = payload.get("exhibition").and_then(Value::as_bool) == Some(true);
     let standfirst = clean_description(text("standfirst"));
+    let body = clean_description(text("body"));
     let category = if exhibition {
         Category::Exhibition
     } else {
-        let body = clean_description(text("body"));
         map_category(&[
             title.as_str(),
             standfirst.as_deref().unwrap_or_default(),
@@ -255,6 +257,10 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .unwrap_or(Category::Workshop)
     };
     let other_facts = other_facts.join("; ");
+    let mut price = parse_price(&other_facts);
+    if price == Price::default() && body.as_deref().is_some_and(describes_free_entry) {
+        price = parse_price("Free");
+    }
     let tags = if exhibition && mentions_late_opening(&other_facts) {
         vec!["late opening".to_string()]
     } else {
@@ -272,7 +278,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         starts_at,
         ends_at,
         all_day,
-        price: parse_price(&other_facts),
+        price,
         url: text("url").map(str::to_string),
         image_url: text("image").map(str::to_string),
         category,
@@ -418,6 +424,14 @@ mod tests {
             Some("2026-10-31T00:00:00+00:00")
         );
         assert!(ev.tags.is_empty());
+        assert_eq!(ev.price, Price::default());
+    }
+
+    #[test]
+    fn free_entry_in_the_body_is_a_free_price() {
+        let mut ev = payload("Display", "", &["1st–30th November 2026"], true);
+        ev["body"] = json!("<p>Included with free entry to the Hunterian Museum.</p>");
+        assert!(normalise_payload(&ev).unwrap().unwrap().price.is_free);
     }
 
     #[test]

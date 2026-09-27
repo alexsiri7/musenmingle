@@ -16,9 +16,9 @@ expression: out
       "lng": -0.11548,
       "price": {
         "currency": null,
-        "is_free": false,
-        "max": null,
-        "min": null
+        "is_free": true,
+        "max": "0",
+        "min": "0"
       },
       "starts_at": "2026-09-09T23:00:00Z",
       "tags": [],
