@@ -154,6 +154,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     talks); music and multi-day non-exhibition items skipped, and an
     exhibition's run is all day (its times are opening hours);
     descriptions but no images (credited photographs).
+  - `foundling-museum` — CSS-selector scraper (no JSON-LD, no TEC API):
+    the paginated "What's on" cards (category, date, title, summary);
+    exhibitions from their card's date-only range, and the event page of
+    every talk, tour, conference or workshop for its London wall-clock
+    start time and intro; families, concerts and online editions skipped;
+    facts + link only (terms).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list

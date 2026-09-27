@@ -1,0 +1,216 @@
+---
+source: tests/source_foundling_museum.rs
+expression: summary
+---
+[
+  {
+    "category": "Exhibitions & Displays",
+    "date_text": "17 Nov 2026 – 18 Apr 2027",
+    "in_scope": true,
+    "needs_detail": false,
+    "slug": "where-we-grow"
+  },
+  {
+    "category": "Exhibitions & Displays",
+    "date_text": "30 Jun – 25 Oct 2026",
+    "in_scope": true,
+    "needs_detail": false,
+    "slug": "handels-1726-opera-season"
+  },
+  {
+    "category": "Exhibitions & Displays",
+    "date_text": "16 Jun – 1 Nov 2026",
+    "in_scope": true,
+    "needs_detail": false,
+    "slug": "voices-in-the-room"
+  },
+  {
+    "category": "Tours",
+    "date_text": "25 Sep 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "harlots-strumpets-tarts-walking-tour-25-september"
+  },
+  {
+    "category": "Talks",
+    "date_text": "28 Sep 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "across-the-generations-90-years-of-the-care-system"
+  },
+  {
+    "category": "Families",
+    "date_text": "2 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "foundling-libraries-newham-2-october"
+  },
+  {
+    "category": "Workshops",
+    "date_text": "4 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "creative-conversations-networking-reimagined"
+  },
+  {
+    "category": "Talks",
+    "date_text": "9 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "wet-nursing-foundling-babies"
+  },
+  {
+    "category": "Talks",
+    "date_text": "9 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "wet-nursing-foundling-babies-online"
+  },
+  {
+    "category": "Families",
+    "date_text": "9 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "foundling-libraries-camden-9-october"
+  },
+  {
+    "category": "Tours",
+    "date_text": "11 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "bloomsburys-best-kept-secrets-oct-11"
+  },
+  {
+    "category": "Concerts",
+    "date_text": "16 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "abolition-song"
+  },
+  {
+    "category": "Families",
+    "date_text": "16 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "foundling-libraries-newham-16-october"
+  },
+  {
+    "category": "Tours",
+    "date_text": "18 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "sunday-drop-in-tours-18-oct"
+  },
+  {
+    "category": "Talks",
+    "date_text": "23 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "holding-the-child-mothers-madonnas-loss"
+  },
+  {
+    "category": "Talks",
+    "date_text": "23 Oct 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "holding-the-child-mothers-madonnas-loss-online"
+  },
+  {
+    "category": "Tours",
+    "date_text": "24 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "bsl-tour-of-the-foundling-museum"
+  },
+  {
+    "category": "Tours",
+    "date_text": "25 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "sunday-drop-in-tours-25-oct"
+  },
+  {
+    "category": "Tours",
+    "date_text": "25 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "hidden-gardens-of-london-25-oct"
+  },
+  {
+    "category": "Workshops",
+    "date_text": "25 Oct 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "upcycling-sign-painting-workshop"
+  },
+  {
+    "category": "Tours",
+    "date_text": "6 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "women-gin-and-sin-immersive-tour-and-gin-tasting"
+  },
+  {
+    "category": "Tours",
+    "date_text": "8 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "sunday-drop-in-tours-8-nov"
+  },
+  {
+    "category": "Talks",
+    "date_text": "13 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "learning-gardens-foundling-hospital"
+  },
+  {
+    "category": "Talks",
+    "date_text": "13 Nov 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "learning-gardens-foundling-hospital-online"
+  },
+  {
+    "category": "Tours",
+    "date_text": "22 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "drink-death-and-debauchery-walking-tour-22-november"
+  },
+  {
+    "category": "Tours",
+    "date_text": "22 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "sunday-drop-in-tours-22-nov"
+  },
+  {
+    "category": "Workshops",
+    "date_text": "22 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "photograph-embroidery-workshop"
+  },
+  {
+    "category": "Conferences",
+    "date_text": "27 Nov 2026",
+    "in_scope": true,
+    "needs_detail": true,
+    "slug": "the-42nd-annual-conference-on-music-in-18th-century-britain"
+  },
+  {
+    "category": "Concerts",
+    "date_text": "27 Nov 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "brad-kella-at-the-foundling-museum"
+  },
+  {
+    "category": "Concerts",
+    "date_text": "29 Nov 2026",
+    "in_scope": false,
+    "needs_detail": false,
+    "slug": "christmas-carol-concert-2"
+  }
+]
