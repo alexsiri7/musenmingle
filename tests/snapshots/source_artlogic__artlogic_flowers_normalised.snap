@@ -1,0 +1,164 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-flowers\", &cards)"
+---
+[
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "peter-howson-salvation|2026-09-10|flowers",
+      "description": null,
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_2200,h_1000,c_fill,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/1a/1a3877e0ecfe4c15bf1a9b8456878943/flowers-gallery-peter-howson-salvation-cork-street-2026_3.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-09T23:00:00Z",
+      "tags": [],
+      "title": "Peter Howson: Salvation",
+      "url": "https://www.flowersgallery.com/exhibitions/643-peter-howson-salvation/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:643"
+  },
+  {
+    "event": null,
+    "id": "www.flowersgallery.com:649"
+  },
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "sokari-douglas-camp-all-world-is-now-richer|2026-10-06|flowers",
+      "description": null,
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/d1/d1090b021ca947db83a581da074c84ae/sal-idriss-sokari-dougles-camp.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-05T23:00:00Z",
+      "tags": [],
+      "title": "Sokari Douglas Camp: All the World is Now Richer",
+      "url": "https://www.flowersgallery.com/exhibitions/650-sokari-douglas-camp-all-the-world-is-now-richer/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:650"
+  },
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "lower-gallery-spotlight-movana-chen|2026-10-12|flowers",
+      "description": null,
+      "ends_at": "2026-10-23T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/78/7847167d8e684115992fc7dd909ab8ee/afg-65799-image.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-11T23:00:00Z",
+      "tags": [],
+      "title": "Lower Gallery Spotlight: Movana Chen",
+      "url": "https://www.flowersgallery.com/exhibitions/654-lower-gallery-spotlight-movana-chen/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:654"
+  },
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "william-crozier-dance-of-living-1961-1974|2026-10-14|flowers",
+      "description": null,
+      "ends_at": "2026-11-14T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/01/01f7ca578e6b407a8e2bf4ce7f468f1a/afg-65868-image.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [],
+      "title": "William Crozier: Dance of the Living 1961–1974",
+      "url": "https://www.flowersgallery.com/exhibitions/646-william-crozier-dance-of-the-living-19611974/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:646"
+  },
+  {
+    "event": null,
+    "id": "www.flowersgallery.com:651"
+  },
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "bianca-raffaella-between-heartbeats|2026-11-20|flowers",
+      "description": null,
+      "ends_at": "2027-01-02T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/fc/fc7f263f4b5a4763b516d0d671ad0a1b/afg-65089-install.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T00:00:00Z",
+      "tags": [],
+      "title": "Bianca Raffaella: Between Heartbeats",
+      "url": "https://www.flowersgallery.com/exhibitions/648-bianca-raffaella-between-heartbeats/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:648"
+  },
+  {
+    "event": {
+      "address": "21 Cork Street, London W1S 3LZ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "small-is-beautiful-44th-edition|2026-11-20|flowers",
+      "description": null,
+      "ends_at": "2027-01-02T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto:good/ws-flowers/usr/images/exhibitions/main_image_override/items/75/75bd76db9ebb435d9bb6a14952cec13b/usesmall-is-beautiful-2025-flowers-gallery-cork-street-install-4.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T00:00:00Z",
+      "tags": [],
+      "title": "Small is Beautiful: 44th Edition",
+      "url": "https://www.flowersgallery.com/exhibitions/653-small-is-beautiful-44th-edition/",
+      "venue_name": "Flowers Gallery"
+    },
+    "id": "www.flowersgallery.com:653"
+  }
+]

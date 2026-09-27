@@ -1,0 +1,4 @@
+# Allow all bots with 10s delay between requests
+User-agent: *
+Crawl-delay: 10
+Disallow:

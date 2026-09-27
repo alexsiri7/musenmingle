@@ -165,6 +165,18 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     tolerated): London wall-clock times; the site's categories decide
     (talks → talk, workshops → workshop, festivals → community; concerts
     and film skipped); online-only events skipped.
+  - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
+    for London commercial galleries whose sites run the Artlogic CMS (no
+    JSON-LD): reads only the listing page(s), keeping the current and
+    forthcoming sections' cards (title, date range, location label, image,
+    teaser); a listing that redirects to a single show is read from that
+    show's header. Dates are all-day ranges in many formats; multi-city
+    galleries keep only cards whose location label matches the row's
+    London `locations`; art-fair booths and biennale/museum presentations are
+    skipped. Each gallery is an `events.sources` row with
+    `platform = 'artlogic'` and its `config` (listing paths, venue, London
+    locations), so a new gallery is a migration row. 38 galleries seeded
+    (issue #52); content policy per gallery from its terms.
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
@@ -551,7 +563,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall and the TEC venues daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall, the TEC venues and the Artlogic galleries daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

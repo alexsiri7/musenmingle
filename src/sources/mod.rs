@@ -11,6 +11,7 @@ use crate::fetch::{FetchContext, FetchError};
 use crate::model::{NewEvent, RawEvent};
 use crate::repo::SourceRow;
 
+pub mod artlogic;
 pub mod barbican;
 pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
@@ -93,6 +94,11 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         url::Url::parse(&row.base_url).map_err(|e| SkipReason::InvalidBaseUrl(e.to_string()))?;
     if let Some(platform) = row.platform.as_deref() {
         return match platform {
+            artlogic::PLATFORM => Ok(Box::new(artlogic::Artlogic::from_row(
+                &row.key,
+                base,
+                row.config.as_ref(),
+            )?)),
             tec::PLATFORM => Ok(Box::new(tec::Tec::from_row(
                 &row.key,
                 base,
@@ -253,6 +259,14 @@ mod tests {
         assert!(
             invalid_config(&tec_row("tec-x", serde_json::json!({"api_path": null})))
                 .contains("neither api_path nor list_path")
+        );
+        let artlogic_without_config = SourceRow {
+            platform: Some(artlogic::PLATFORM.into()),
+            ..row("artlogic-x", "https://gallery.example/")
+        };
+        assert_eq!(
+            invalid_config(&artlogic_without_config),
+            "config is not set"
         );
     }
 
