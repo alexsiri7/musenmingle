@@ -211,13 +211,41 @@ pub struct CallRecord {
     pub error: Option<String>,
 }
 
+/// Which pass a ledger row belongs to (`events.enrichment_calls.pass`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LedgerPass {
+    /// Enrichment and embeddings.
+    Enrich,
+    /// The scraper QA check (`crate::qa`).
+    Qa,
+}
+
+impl LedgerPass {
+    fn as_str(self) -> &'static str {
+        match self {
+            LedgerPass::Enrich => "enrich",
+            LedgerPass::Qa => "qa",
+        }
+    }
+}
+
 pub async fn record_call(pool: &PgPool, c: &CallRecord, at: DateTime<Utc>) -> sqlx::Result<()> {
+    record_pass_call(pool, LedgerPass::Enrich, c, at).await
+}
+
+pub async fn record_pass_call(
+    pool: &PgPool,
+    pass: LedgerPass,
+    c: &CallRecord,
+    at: DateTime<Utc>,
+) -> sqlx::Result<()> {
     let clamp = |v: i64| i32::try_from(v).unwrap_or(i32::MAX);
     sqlx::query(
         "INSERT INTO events.enrichment_calls
              (called_at, model, prompt_version, events_requested, events_ok, tokens_in,
-              tokens_cached, tokens_cache_write, tokens_out, cost_usd, provider_cost_usd, ok, error)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
+              tokens_cached, tokens_cache_write, tokens_out, cost_usd, provider_cost_usd, ok, error,
+              pass)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
     )
     .bind(at)
     .bind(&c.model)
@@ -232,15 +260,18 @@ pub async fn record_call(pool: &PgPool, c: &CallRecord, at: DateTime<Utc>) -> sq
     .bind(c.provider_cost_usd.map(|d| d.round_dp(6)))
     .bind(c.ok)
     .bind(&c.error)
+    .bind(pass.as_str())
     .execute(pool)
     .await?;
     Ok(())
 }
 
-/// Total recorded spend (enrichment + embeddings) since `since`.
+/// Recorded spend of enrichment + embeddings since `since` (the scraper QA
+/// check has its own budget: `crate::qa::store::qa_spent_since`).
 pub async fn spent_since(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Decimal> {
     sqlx::query_scalar(
-        "SELECT COALESCE(sum(cost_usd), 0) FROM events.enrichment_calls WHERE called_at >= $1",
+        "SELECT COALESCE(sum(cost_usd), 0) FROM events.enrichment_calls
+         WHERE called_at >= $1 AND pass = 'enrich'",
     )
     .bind(since)
     .fetch_one(pool)

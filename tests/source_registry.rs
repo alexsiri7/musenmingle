@@ -38,6 +38,7 @@ async fn every_enabled_seeded_source_has_an_implementation() {
         requesty_api_key: None,
         requesty_base_url: String::new(),
         enrich: Default::default(),
+        qa: Default::default(),
         ntfy_topic: None,
         ntfy_base_url: String::new(),
         tiles_path: Default::default(),

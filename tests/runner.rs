@@ -99,6 +99,7 @@ fn runner(
         health: HealthChecker::new(HealthConfig::default(), None),
         source_timeout: timeout,
         enrich: None,
+        qa: None,
     }
 }
 
@@ -274,6 +275,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
         health: HealthChecker::new(HealthConfig::default(), None),
         source_timeout: Duration::from_secs(5),
         enrich: None,
+        qa: None,
     };
 
     let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {
@@ -341,6 +343,91 @@ async fn overlapping_runs_are_prevented_by_advisory_lock() {
     assert_eq!(r.run_once(Utc::now()).await.unwrap(), RunSummary::Locked);
     drop(holder);
     drop(r);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+/// Emits an upcoming and a past event, both ending before they start (the
+/// database refuses the upcoming one; the past one is dropped).
+struct BackwardsSource {
+    now: DateTime<Utc>,
+}
+
+#[async_trait]
+impl Source for BackwardsSource {
+    fn key(&self) -> &str {
+        "fake"
+    }
+
+    async fn fetch(&self, _: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
+        Ok(vec![raw("upcoming", 3), raw("past", -30)])
+    }
+
+    fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
+        let fake = FakeSource {
+            now: self.now,
+            delay: None,
+        };
+        let mut ev = fake.normalise(raw)?.unwrap();
+        ev.ends_at = Some(ev.starts_at - chrono::Duration::hours(1));
+        Ok(Some(ev))
+    }
+}
+
+#[tokio::test]
+async fn qa_rules_record_findings_and_counts_for_the_run() {
+    let Some(db) = TestDb::create("qa_rules_record_findings_and_counts_for_the_run").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query("UPDATE events.sources SET enabled = false")
+        .execute(&pool)
+        .await
+        .unwrap();
+    let src = repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
+    let now = Utc::now();
+    let r = Runner {
+        factory: Box::new(move |_| Ok(Box::new(BackwardsSource { now }))),
+        ..runner(pool.clone(), now, None, Duration::from_secs(5))
+    };
+    let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {
+        panic!("expected a run");
+    };
+    assert_eq!(reports[0].qa_findings, 1);
+    assert_eq!(reports[0].qa_check, None, "no AI check without a QaChecker");
+
+    let run = &repo::recent_runs(&pool, src.id, 1).await.unwrap()[0];
+    let rows: Vec<(String, i32, serde_json::Value)> =
+        sqlx::query_as("SELECT rule, affected, examples FROM events.qa_findings WHERE run_id = $1")
+            .bind(run.id)
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+    assert_eq!(rows.len(), 1);
+    assert_eq!(
+        (rows[0].0.as_str(), rows[0].1),
+        ("end_before_start", 2),
+        "events that were not stored count too"
+    );
+    assert_eq!(rows[0].2[1]["source_event_id"], "past");
+    let counts: (Option<i32>, Option<i32>, Option<i32>) = sqlx::query_as(
+        "SELECT events_checked, missing_venue, missing_coords FROM events.source_runs WHERE id = $1",
+    )
+    .bind(run.id)
+    .fetch_one(&pool)
+    .await
+    .unwrap();
+    assert_eq!(counts, (Some(0), Some(0), Some(0)), "neither was stored");
+
     pool.close().await;
     db.drop_db().await;
 }

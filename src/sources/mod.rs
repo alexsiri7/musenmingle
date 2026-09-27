@@ -71,6 +71,13 @@ pub trait Source: Send + Sync {
     /// Normalise one raw item. `Ok(None)` means "not relevant, skip"
     /// (e.g. a concert from a general-purpose API); that is not an error.
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError>;
+
+    /// The implementing type's path (`musenmingle::sources::<module>::<Type>`),
+    /// used by the scraper QA check to notice code changes
+    /// (`crate::qa::code`). Do not override.
+    fn type_path(&self) -> &'static str {
+        std::any::type_name::<Self>()
+    }
 }
 
 /// Why a `events.sources` row could not be turned into a [`Source`].
@@ -217,6 +224,7 @@ mod tests {
             requesty_api_key: None,
             requesty_base_url: String::new(),
             enrich: Default::default(),
+            qa: Default::default(),
             ntfy_topic: None,
             ntfy_base_url: String::new(),
             tiles_path: Default::default(),
@@ -293,5 +301,28 @@ mod tests {
         )
         .unwrap_or_else(|reason| panic!("{reason}"));
         assert_eq!(source.key(), "tec-some-venue");
+    }
+
+    #[test]
+    fn built_sources_have_a_code_hash_of_their_own_file() {
+        use crate::qa::code::{code_hash, module_of};
+        let barbican = build(
+            &row(barbican::KEY, "https://www.barbican.org.uk/"),
+            &test_config(),
+        )
+        .unwrap_or_else(|reason| panic!("{reason}"));
+        assert_eq!(module_of(barbican.type_path()), Some("barbican"));
+        let hash = code_hash(barbican.as_ref());
+        assert_eq!(hash.len(), 16);
+        assert!(hash.chars().all(|c| c.is_ascii_hexdigit()));
+
+        let tec = build(
+            &tec_row("tec-some-venue", serde_json::json!({})),
+            &test_config(),
+        )
+        .unwrap_or_else(|reason| panic!("{reason}"));
+        assert_eq!(module_of(tec.type_path()), Some("tec"));
+        assert_eq!(code_hash(tec.as_ref()).len(), 16);
+        assert_ne!(code_hash(tec.as_ref()), hash);
     }
 }
