@@ -1,0 +1,176 @@
+---
+source: tests/source_four_corners.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "slug": "in-solidarity-east-end-stories"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "londoni-memoirs-photographic-audio-visual-exhibition|2026-09-18|four-corners",
+      "description": "Londoni Memoirs, a new photographic and audio-visual exhibition by Seema Khalique documenting the exodus of a generation of Bangledeshi migrants from war and their hopes of a new home here in the UK.",
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1787142702.3711/Small.png",
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-17T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Londoni Memoirs: A Photographic and Audio-Visual Exhibition",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/londoni-memoirs-a-photographic-and-audio-visual-exhibition",
+      "venue_name": "Four Corners"
+    },
+    "slug": "londoni-memoirs-a-photographic-and-audio-visual-exhibition"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "solidarity-on-streets|2026-10-02|four-corners",
+      "description": "On the eve of the 90th anniversary of the Battle of Cable Street, this pop up exhibition documents East Enders’ enduring resistance to racial hatred and intolerance.",
+      "ends_at": "2026-10-31T00:00:00Z",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1789397960.4833/re%20Cable%20Street%204%20Remember%20Olympia%20copy.jpg",
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Solidarity on the Streets",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/solidarity-on-the-streets",
+      "venue_name": "Four Corners"
+    },
+    "slug": "solidarity-on-the-streets"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "battle-for-east-end|2026-10-07|four-corners",
+      "description": "David Rosenberg, Nurjahan Julie Begum and Taj Ali discuss the enduring legacy of resistance to racism and fascism in the East End.",
+      "ends_at": null,
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1790070390.9172/Screenshot.jpg",
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T17:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Battle for the East End",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/battle-for-the-east-end",
+      "venue_name": "Four Corners"
+    },
+    "slug": "battle-for-the-east-end"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "cable-street-across-borders|2026-10-08|four-corners",
+      "description": "In conversation with Asif Shakoor, Alan Kunna and Georgie Wemyss with a special screening of 'Limestone and Jute' by Tosin (GOKE Studio).",
+      "ends_at": null,
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1789994941.1748/RAD1914x.jpg",
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T17:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Cable Street: Across Borders",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/cable-street-across-borders",
+      "venue_name": "Four Corners"
+    },
+    "slug": "cable-street-across-borders"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-solidarity-participants-film-screening|2026-10-15|four-corners",
+      "description": "Screening six short films inspired by the Battle of Cable Street, made by local participants as part of the East End Stories \"In Solidarity\" project showcase.",
+      "ends_at": null,
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1790010978.5098/Featured%20Page_Participants%20In%20Solidairty%20Screening%20png.png",
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-15T17:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "In Solidarity: Participants Film Screening",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/in-solidarity-participants-film-screening-1",
+      "venue_name": "Four Corners"
+    },
+    "slug": "in-solidarity-participants-film-screening-1"
+  },
+  {
+    "event": {
+      "address": "121 Roman Road, Bethnal Green, London E2 0QN",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "hate-uprooted-diasporic-season|2026-10-21|four-corners",
+      "description": "Jacqueline Ennis-Cole is Artist-Curator in Residence at Four Corners Gallery from 3 September until 30 November 2026, as part of the gallery's Youth X Mentoring partnership and Hate Uprooted Diasporic Season (funded with the support of Arts Council England).",
+      "ends_at": "2026-11-14T00:00:00Z",
+      "image_url": null,
+      "lat": 51.5289,
+      "lng": -0.0489,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-20T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Hate Uprooted Diasporic Season",
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/coming-soon-hate-uprooted-diasporic-season",
+      "venue_name": "Four Corners"
+    },
+    "slug": "coming-soon-hate-uprooted-diasporic-season"
+  },
+  {
+    "event": null,
+    "slug": "camera-works"
+  }
+]

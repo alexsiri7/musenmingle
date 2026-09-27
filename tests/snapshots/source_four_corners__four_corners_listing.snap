@@ -1,0 +1,125 @@
+---
+source: tests/source_four_corners.rs
+expression: listing()
+---
+[
+  {
+    "source_event_id": "in-solidarity-east-end-stories",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/in-solidarity-east-end-stories",
+    "payload": {
+      "date_text": "Fri 15 May 2026 – Sat 31 October 2026",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1790011079.3736/In%20Solidarity_Project_featured.png",
+      "summary": "IN SOLIDARITY invited five&nbsp;local people&nbsp;to create&nbsp;short films&nbsp;inspired by the Battle of Cable Street.\nThe final films will be shown as part of the&nbsp;exhbition Solidarity on&nbsp;the Streets in October 2026.",
+      "title": "In Solidarity - East End Stories",
+      "types": [
+        "Open call",
+        "Training",
+        "Project"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/in-solidarity-east-end-stories"
+    }
+  },
+  {
+    "source_event_id": "londoni-memoirs-a-photographic-and-audio-visual-exhibition",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/londoni-memoirs-a-photographic-and-audio-visual-exhibition",
+    "payload": {
+      "date_text": "Fri 18 September 2026 – Sat 10 October 2026",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1787142702.3711/Small.png",
+      "summary": "Londoni Memoirs, a new photographic&nbsp;and audio-visual exhibition by Seema Khalique documenting&nbsp;the exodus of a generation of Bangledeshi migrants from war and their hopes of a new home here in the UK.",
+      "title": "Londoni Memoirs: A Photographic and Audio-Visual Exhibition",
+      "types": [
+        "Guest exhibition"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/londoni-memoirs-a-photographic-and-audio-visual-exhibition"
+    }
+  },
+  {
+    "source_event_id": "solidarity-on-the-streets",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/solidarity-on-the-streets",
+    "payload": {
+      "date_text": "Fri 2 October 2026 – Sat 31 October 2026",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1789397960.4833/re%20Cable%20Street%204%20Remember%20Olympia%20copy.jpg",
+      "summary": "On the eve of the 90th&nbsp;anniversary of the Battle of Cable Street, this&nbsp;pop up exhibition documents&nbsp;East Enders’ enduring&nbsp;resistance to racial hatred and intolerance.&nbsp;",
+      "title": "Solidarity on the Streets",
+      "types": [
+        "Exhibition",
+        "Talk",
+        "Film screening"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/solidarity-on-the-streets"
+    }
+  },
+  {
+    "source_event_id": "battle-for-the-east-end",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/battle-for-the-east-end",
+    "payload": {
+      "date_text": "Wed 7 October 2026 | 18:30",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1790070390.9172/Screenshot.jpg",
+      "summary": "David Rosenberg, Nurjahan Julie Begum and&nbsp;Taj&nbsp;Ali discuss the enduring legacy of&nbsp;resistance to racism and fascism&nbsp;in the East End.",
+      "title": "Battle for the East End",
+      "types": [
+        "Talk"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/battle-for-the-east-end"
+    }
+  },
+  {
+    "source_event_id": "cable-street-across-borders",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/cable-street-across-borders",
+    "payload": {
+      "date_text": "Thu 8 October 2026 | 18:30",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1789994941.1748/RAD1914x.jpg",
+      "summary": "In conversation with Asif Shakoor,&nbsp;Alan Kunna&nbsp;and&nbsp;Georgie Wemyss&nbsp; with a special screening of 'Limestone and Jute' by Tosin (GOKE Studio).&nbsp;",
+      "title": "Cable Street: Across Borders",
+      "types": [
+        "Talk",
+        "Film screening"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/cable-street-across-borders"
+    }
+  },
+  {
+    "source_event_id": "in-solidarity-participants-film-screening-1",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/in-solidarity-participants-film-screening-1",
+    "payload": {
+      "date_text": "Thu 15 October 2026 | 18:30",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1790010978.5098/Featured%20Page_Participants%20In%20Solidairty%20Screening%20png.png",
+      "summary": "Screening six short films&nbsp;inspired by the Battle of Cable Street, made by local participants&nbsp;as part of the East End Stories \"In Solidarity\" project showcase.&nbsp;\n&nbsp;",
+      "title": "In Solidarity: Participants Film Screening",
+      "types": [
+        "Talk",
+        "Film screening"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/in-solidarity-participants-film-screening-1"
+    }
+  },
+  {
+    "source_event_id": "coming-soon-hate-uprooted-diasporic-season",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/coming-soon-hate-uprooted-diasporic-season",
+    "payload": {
+      "date_text": "Wed 21 October 2026 – Sat 14 November 2026",
+      "image_url": null,
+      "summary": "<span style=\"font-size:medium\"><span style=\"background:white\"><span style=\"font-family:Calibri, sans-serif\"><span style=\"caret-color:#000000\"><span style=\"color:#000000\"><span style=\"font-style:normal\"><span style=\"font-variant-caps:normal\"><span style=\"font-weight:400\"><span style=\"letter-spacing:normal\"><span style=\"orphans:auto\"><span style=\"text-transform:none\"><span style=\"white-space:normal\"><span style=\"widows:auto\"><span style=\"word-spacing:0px\"><span style=\"text-decoration:none\"><span style=\"font-size:11pt\"><span style=\"font-family:Arial, sans-serif\"><span style=\"color:black\">Jacqueline Ennis-Cole is Artist-Curator in Residence at Four Corners Gallery from 3 September until 30 November 2026, as part of the gallery's Youth X Mentoring partnership and Hate Uprooted Diasporic Season (funded with the support of Arts Council England).&nbsp;</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>",
+      "title": "Coming soon... Hate Uprooted Diasporic Season",
+      "types": [
+        "Guest exhibition"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/coming-soon-hate-uprooted-diasporic-season"
+    }
+  },
+  {
+    "source_event_id": "camera-works",
+    "source_url": "https://www.fourcornersfilm.co.uk/whats-on/camera-works",
+    "payload": {
+      "date_text": "Sun 1 November 2026 – Wed 30 December 2026",
+      "image_url": "https://www.fourcornersfilm.co.uk/uploads/1787758425.3821/2.png",
+      "summary": "Camera-works is a series of FREE part-time courses in photography\nThe courses are open to Tower Hamlets residents aged under 25\nWe are currently recruiting for our 6-week&nbsp;Studio Lighting Course.&nbsp;",
+      "title": "Camera-works",
+      "types": [
+        "Training",
+        "Project"
+      ],
+      "url": "https://www.fourcornersfilm.co.uk/whats-on/camera-works"
+    }
+  }
+]
