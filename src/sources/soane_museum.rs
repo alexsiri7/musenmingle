@@ -22,8 +22,10 @@
 //!   Families (holiday workshops and drop-ins) → community. Tours are
 //!   skipped, as are non-exhibition cards spanning more than one London day
 //!   (the year-long daily Highlights Tour, termly children's clubs and
-//!   courses) and online-only exhibitions (price "Online only…" or a teaser
-//!   calling it an "online exhibition").
+//!   courses), online-only exhibitions (price "Online only…" or a teaser
+//!   calling it an "online exhibition") and exhibitions whose teaser says
+//!   they are shown elsewhere (a touring show going "to the United States",
+//!   "on tour", "touring": the feed is London-only).
 //! * Price is the card's price line ("Tickets: £15 (£5 students)" → £15,
 //!   "Tickets are free, but…", "£12 p/p"); cards without one (most
 //!   exhibitions) have an unknown price.
@@ -35,7 +37,8 @@
 //!   postcode becomes the venue ("name (entrance), address…", the entrance
 //!   dropped so the name matches other listings) with no coordinates; a line
 //!   that is neither is an error, since it means the sidebar has changed.
-//!   Exhibitions are in the museum and need no detail page.
+//!   Exhibitions are in the museum unless their teaser says they tour (and
+//!   those are skipped), so they need no detail page.
 
 use async_trait::async_trait;
 use chrono::{DateTime, NaiveTime, Utc};
@@ -188,6 +191,17 @@ fn is_online_only(price_text: Option<&str>, teaser: Option<&str>) -> bool {
     has(price_text, "online only") || has(teaser, "online exhibition")
 }
 
+/// Teaser phrases marking an exhibition staged away from the museum (a
+/// touring show).
+const ELSEWHERE_PHRASES: &[&str] = &["united states", "on tour", "touring"];
+
+fn is_elsewhere(teaser: Option<&str>) -> bool {
+    teaser.is_some_and(|t| {
+        let t = clean_text(t).to_lowercase();
+        ELSEWHERE_PHRASES.iter().any(|p| t.contains(p))
+    })
+}
+
 /// The in-scope category for a card's type label, or `None` to skip it.
 pub fn category(event_type: &str, multi_day: bool) -> Option<Category> {
     match event_type {
@@ -229,7 +243,8 @@ fn classify(payload: &Value) -> Result<Classified, SourceError> {
     let multi_day = ends_at.is_some_and(|e| london_date(e) > london_date(starts_at));
     let category = text("event_type")
         .filter(|_| !is_online_only(text("price_text"), text("teaser")))
-        .and_then(|t| category(t, multi_day));
+        .and_then(|t| category(t, multi_day))
+        .filter(|c| !(*c == Category::Exhibition && is_elsewhere(text("teaser"))));
     Ok(Classified {
         starts_at,
         ends_at,
@@ -487,6 +502,27 @@ mod tests {
         payload["teaser"] = json!(null);
         payload["price_text"] = json!("Online only; free to explore.");
         assert!(normalise_payload(&payload).unwrap().is_none());
+    }
+
+    #[test]
+    fn exhibitions_shown_elsewhere_are_skipped() {
+        let mut payload = card(
+            "Exhibitions",
+            "2027-01-01T00:00:00Z",
+            Some("2027-04-01T00:00:00Z"),
+        );
+        assert!(normalise_payload(&payload).unwrap().is_some());
+        payload["teaser"] = json!(
+            "In 2027, a landmark collaboration between Sir John Soane’s Museum and Yale School of Architecture will bring Sir John Soane: The Poetry of Architecture to the United States."
+        );
+        assert!(normalise_payload(&payload).unwrap().is_none());
+        payload["teaser"] = json!("The show goes on tour next spring.");
+        assert!(normalise_payload(&payload).unwrap().is_none());
+
+        let mut talk = card("Talks", "2026-11-24T18:30:00Z", None);
+        talk["teaser"] = json!("A curator on touring the house.");
+        talk["location"] = json!("Sir John Soane's Museum");
+        assert!(normalise_payload(&talk).unwrap().is_some());
     }
 
     #[test]

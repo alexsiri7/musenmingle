@@ -371,30 +371,7 @@ expression: out
     }
   },
   {
-    "event": {
-      "address": "13 Lincoln's Inn Fields, London WC2A 3BP",
-      "all_day": true,
-      "category": "exhibition",
-      "dedupe_key": "sir-john-soane-poetry-of-architecture|2027-01-14|sir-john-soanes",
-      "description": "In 2027, a landmark collaboration between Sir John Soane’s Museum and Yale School of Architecture will bring Sir John Soane: The Poetry of Architecture to the United States.",
-      "ends_at": "2027-07-02T23:00:00Z",
-      "image_url": "https://www.soane.org/sites/default/files/styles/person_card_image/public/thumbs/Yale_Exhibition_2027_thumbnail.png?itok=TiCm44iJ",
-      "lat": 51.517,
-      "lng": -0.1174,
-      "price": {
-        "currency": null,
-        "is_free": false,
-        "max": null,
-        "min": null
-      },
-      "starts_at": "2027-01-14T00:00:00Z",
-      "tags": [
-        "Exhibitions"
-      ],
-      "title": "Sir John Soane: The Poetry of Architecture",
-      "url": "https://www.soane.org/exhibitions/sir-john-soane-poetry-architecture",
-      "venue_name": "Sir John Soane's Museum"
-    },
+    "event": null,
     "id": "exhibitions/sir-john-soane-poetry-architecture",
     "payload": {
       "date_text": "14 Jan 2027 - 03 Jul 2027",
