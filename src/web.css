@@ -372,6 +372,8 @@ figure.thumb img { object-fit: cover; display: block; }
 .badge.free { color: var(--cobalt); }
 .badge.opening { color: var(--cobalt); border-color: var(--cobalt); }
 .badge.gone { color: var(--bad); border-color: currentColor; }
+.badge.hours { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink-3); white-space: nowrap; }
+.badge.hours.open { color: var(--cobalt); border-color: var(--cobalt); }
 .badge.distance { font-family: var(--mono); font-weight: 400; letter-spacing: 0; text-transform: none; }
 .card-actions {
   display: flex; flex-wrap: wrap; align-items: center; gap: var(--sm); margin-top: auto; padding-top: var(--md);

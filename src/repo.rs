@@ -573,7 +573,83 @@ async fn upsert_event_tx(
         .execute(&mut **tx)
         .await?;
     }
+    set_hours_tx(tx, outcome.event_id, event, policy).await?;
     Ok(outcome)
+}
+
+/// Opening hours (issue #168, `crate::hours`) for the event this listing
+/// landed in, read from the listing's FULL description (before the excerpt
+/// and content policy), else inherited from `events.venue_hours` by an
+/// exhibition that has none. Hours only apply to all-day events running
+/// more than one day (the row's final dates, after merging), and are
+/// cleared otherwise, so "doors 7pm" on a talk never becomes a schedule.
+/// The listing's own wording (`hours_note`) is kept only when the source's
+/// policy lets us keep its description.
+async fn set_hours_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    event_id: Uuid,
+    event: &NewEvent,
+    policy: SourcePolicy,
+) -> sqlx::Result<()> {
+    let parsed = event
+        .description
+        .as_deref()
+        .and_then(crate::hours::from_text);
+    let venue = match parsed {
+        Some(_) => None,
+        None => venue_hours_tx(tx, event.venue_name.as_deref()).await?,
+    };
+    let hours = parsed
+        .as_ref()
+        .map(|p| serde_json::to_value(&p.hours).unwrap_or_default());
+    let note = parsed
+        .and_then(|p| p.note)
+        .filter(|_| policy.store_description);
+    sqlx::query(
+        "UPDATE events.events e SET
+            opening_hours = CASE WHEN NOT e.all_day OR e.ends_at IS NULL OR e.ends_at <= e.starts_at
+                                 THEN NULL
+                                 ELSE COALESCE($2::jsonb, e.opening_hours,
+                                               CASE WHEN e.category = 'exhibition' THEN $4::jsonb END)
+                            END,
+            hours_note    = CASE WHEN NOT e.all_day OR e.ends_at IS NULL OR e.ends_at <= e.starts_at
+                                 THEN NULL
+                                 WHEN $2::jsonb IS NOT NULL THEN $3
+                                 ELSE e.hours_note
+                            END
+         WHERE e.id = $1
+           AND (e.opening_hours IS NOT NULL OR $2::jsonb IS NOT NULL OR $4::jsonb IS NOT NULL)",
+    )
+    .bind(event_id)
+    .bind(hours)
+    .bind(note)
+    .bind(venue)
+    .execute(&mut **tx)
+    .await?;
+    Ok(())
+}
+
+/// A venue's usual hours from `events.venue_hours` (matched like
+/// [`venue_coords_tx`]).
+async fn venue_hours_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    venue: Option<&str>,
+) -> sqlx::Result<Option<serde_json::Value>> {
+    let Some(venue) = venue.filter(|v| !v.trim().is_empty()) else {
+        return Ok(None);
+    };
+    let key = crate::normalise::normalise_venue_for_key(Some(venue));
+    if key == "unknown" {
+        return Ok(None);
+    }
+    let rows: Vec<(String, serde_json::Value)> =
+        sqlx::query_as("SELECT name, opening_hours FROM events.venue_hours ORDER BY id")
+            .fetch_all(&mut **tx)
+            .await?;
+    Ok(rows
+        .into_iter()
+        .find(|(name, _)| crate::normalise::normalise_venue_for_key(Some(name)) == key)
+        .map(|(_, h)| h))
 }
 
 async fn key_holder(
@@ -791,12 +867,16 @@ pub struct EventRow {
     pub ai_grounding: Option<String>,
     pub ai_model: Option<String>,
     pub ai_enriched_at: Option<DateTime<Utc>>,
+    /// Weekly opening hours (`crate::hours` JSON), for all-day runs.
+    pub opening_hours: Option<sqlx::types::Json<crate::hours::OpeningHours>>,
+    /// The listing's own wording about its hours.
+    pub hours_note: Option<String>,
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
     ends_at, all_day, is_free, price_min, price_max, currency, url, image_url, category, tags,
     dedupe_key, medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
-    ai_grounding, ai_model, ai_enriched_at";
+    ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
     sqlx::query_as(AssertSqlSafe(format!(
@@ -870,28 +950,85 @@ fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, 
         .bind(f.search.as_ref().and_then(|s| s.alternatives.as_deref()))
 }
 
-/// The `at=` test ([`EventFilter::live_at`]) as SQL over `events.events ev`
-/// (`TRUE` when not set): the event is still on at that instant. In `at=`
-/// mode `$1` is the instant minus [`crate::listing::LIVE_LOOKBACK_HOURS`], so the
-/// instant is recovered from it (and `$2`, the end of the window, is already
-/// applied by [`LISTING_FILTER`]). An all-day event ends at London midnight
-/// after its last day (computed in London time, so DST days are 23 or 25
-/// hours); a ranged event at its `ends_at`; an event with a start time but
-/// no end [`crate::listing::LIVE_GRACE_MINUTES`] after it starts.
+/// The event's opening hours apply (`crate::hours`): NULL means unknown,
+/// and the date-only behaviour is kept.
+const HAS_HOURS: &str = "(ev.opening_hours IS NOT NULL)";
+
+/// `EXISTS` a rule of the event's opening hours (`r`, one element of
+/// `ev.opening_hours`: `days` ISO weekdays, `opens`/`closes` `HH:MM`
+/// London) satisfying `cond`.
+fn hours_rule_sql(cond: &str) -> String {
+    format!("EXISTS (SELECT 1 FROM jsonb_array_elements(ev.opening_hours) r WHERE {cond})")
+}
+
+/// Rule `r` covers ISO weekday `day` (an integer SQL expression).
+fn rule_on_day(day: &str) -> String {
+    format!("r->'days' @> to_jsonb(({day})::int)")
+}
+
+const RULE_OPENS: &str = "(r->>'opens')::time";
+const RULE_CLOSES: &str = "(r->>'closes')::time";
+
+/// The `at=` / `open_now` / `open_at` test ([`EventFilter::live_at`]) and
+/// `open_on` ([`EventFilter::open_on`]) as SQL over `events.events ev`
+/// (`TRUE` when neither is set).
+///
+/// `at=`: the event is still on at that instant. In `at=` mode `$1` is the
+/// instant minus [`crate::listing::LIVE_LOOKBACK_HOURS`], so the instant is
+/// recovered from it (and `$2`, the end of the window, is already applied
+/// by [`LISTING_FILTER`]). An all-day event ends at London midnight after
+/// its last day (computed in London time, so DST days are 23 or 25 hours);
+/// a ranged event at its `ends_at`; an event with a start time but no end
+/// [`crate::listing::LIVE_GRACE_MINUTES`] after it starts. An event with
+/// opening hours must also be open at the instant, or open later that
+/// London day before the window ends (`open_at` is a window ending one
+/// second after its instant, so: open at it).
+///
+/// `open_on`: the event's London dates, clipped to the `$1`/`$2` window,
+/// include that weekday (at most the first 7 days need checking), and an
+/// event with opening hours is open that weekday.
 fn live_sql(f: &EventFilter) -> String {
     use crate::listing::{LIVE_GRACE_MINUTES, LIVE_LOOKBACK_HOURS};
+    let open_on = match f.open_on {
+        None => "TRUE".to_string(),
+        Some(day) => {
+            let day = u8::min(day, 7);
+            format!(
+                "(EXISTS (SELECT 1
+                    FROM (SELECT GREATEST({LOCAL_START}::date,
+                                          ($1::timestamptz AT TIME ZONE 'Europe/London')::date) AS d0,
+                                 LEAST({LOCAL_LAST_DAY},
+                                       ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) w,
+                         generate_series(0, LEAST(w.d1 - w.d0, 6)) AS k
+                    WHERE extract(isodow FROM w.d0 + k) = {day})
+                  AND (NOT {HAS_HOURS} OR {}))",
+                hours_rule_sql(&rule_on_day(&day.to_string()))
+            )
+        }
+    };
     if f.live_at.is_none() {
-        return "TRUE".into();
+        return open_on;
     }
     let now = format!("($1::timestamptz + interval '{LIVE_LOOKBACK_HOURS} hours')");
+    let lnow = format!("({now} AT TIME ZONE 'Europe/London')");
+    let lend = "($2::timestamptz AT TIME ZONE 'Europe/London')";
+    let open = hours_rule_sql(&format!(
+        "{} AND {RULE_CLOSES} > {lnow}::time
+         AND ({lend} IS NULL AND {RULE_OPENS} <= {lnow}::time
+              OR {lend}::date > {lnow}::date
+              OR {RULE_OPENS} < {lend}::time)",
+        rule_on_day(&format!("extract(isodow FROM {lnow})"))
+    ));
     format!(
-        "(CASE
+        "((CASE
             WHEN ev.all_day THEN
                 (((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date + 1)::timestamp
                     AT TIME ZONE 'Europe/London') > {now}
             WHEN ev.ends_at IS NOT NULL THEN ev.ends_at > {now}
             ELSE ev.starts_at + interval '{LIVE_GRACE_MINUTES} minutes' > {now}
-         END)"
+          END)
+          AND (NOT {HAS_HOURS} OR {open})
+          AND {open_on})"
     )
 }
 
@@ -921,26 +1058,49 @@ fn price_max_sql(max: &str) -> String {
 }
 
 /// The [`When`] bucket as SQL over `events.events ev` (`TRUE` for none);
-/// `weekend` clips to the window in `$1`/`$2`.
+/// `weekend` clips to the window in `$1`/`$2`. An event with opening hours
+/// is judged by them instead of its start time and the `late opening` tag:
+/// evening = open after 18:00 on some day, after work = open between 17:30
+/// and 20:30 on a weekday, daytime = open before 18:00, weekend = open on a
+/// Saturday or Sunday within its clipped dates.
 fn when_sql(when: Option<When>) -> String {
     let late = format!("({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags))");
+    let hours = |cond: &str| hours_rule_sql(cond);
+    let by = |with_hours: String, without: String| {
+        format!("(CASE WHEN {HAS_HOURS} THEN {with_hours} ELSE {without} END)")
+    };
     match when {
         None => "TRUE".into(),
-        Some(When::Evening) => format!("({LOCAL_START}::time >= '18:00' OR {late})"),
-        Some(When::AfterWork) => format!(
-            "((extract(isodow FROM {LOCAL_START}) <= 5
-                AND {LOCAL_START}::time BETWEEN '17:30' AND '20:30') OR {late})"
+        Some(When::Evening) => by(
+            hours(&format!("{RULE_CLOSES} > '18:00'")),
+            format!("({LOCAL_START}::time >= '18:00' OR {late})"),
         ),
-        Some(When::Daytime) => format!("({LOCAL_START}::time < '18:00')"),
+        Some(When::AfterWork) => by(
+            hours(&format!(
+                "{RULE_CLOSES} > '17:30' AND {RULE_OPENS} <= '20:30'
+                 AND EXISTS (SELECT 1 FROM jsonb_array_elements_text(r->'days') d
+                             WHERE d::int <= 5)"
+            )),
+            format!(
+                "((extract(isodow FROM {LOCAL_START}) <= 5
+                    AND {LOCAL_START}::time BETWEEN '17:30' AND '20:30') OR {late})"
+            ),
+        ),
+        Some(When::Daytime) => by(
+            hours(&format!("{RULE_OPENS} < '18:00'")),
+            format!("({LOCAL_START}::time < '18:00')"),
+        ),
         // At most the first 7 days of the clipped range need checking.
         Some(When::Weekend) => format!(
             "EXISTS (SELECT 1
                 FROM (SELECT GREATEST({LOCAL_START}::date,
                                       ($1::timestamptz AT TIME ZONE 'Europe/London')::date) AS d0,
                              LEAST((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date,
-                                   ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) r,
-                     generate_series(0, LEAST(r.d1 - r.d0, 6)) AS k
-                WHERE extract(isodow FROM r.d0 + k) >= 6)"
+                                   ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) w,
+                     generate_series(0, LEAST(w.d1 - w.d0, 6)) AS k
+                WHERE extract(isodow FROM w.d0 + k) >= 6
+                  AND (NOT {HAS_HOURS} OR {}))",
+            hours(&rule_on_day("extract(isodow FROM w.d0 + k)"))
         ),
     }
 }
@@ -991,10 +1151,17 @@ pub fn pick_sql(pick: Option<PickFilter>) -> String {
     let first = LOCAL_FIRST_DAY;
     let last = LOCAL_LAST_DAY;
     match pick {
+        // With opening hours: open after 18:00 today.
         Pick::Tonight => format!(
             "({first} <= {l} AND {last} >= {l}
-              AND (({first} = {l} AND {LOCAL_START}::time >= '17:00')
-                   OR ({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags))))"
+              AND (CASE WHEN {HAS_HOURS} THEN {}
+                   ELSE (({first} = {l} AND {LOCAL_START}::time >= '17:00')
+                         OR ({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags)))
+                   END))",
+            hours_rule_sql(&format!(
+                "{} AND {RULE_CLOSES} > '18:00'",
+                rule_on_day(&format!("extract(isodow FROM {l})"))
+            ))
         ),
         Pick::Openings => format!(
             "({first} BETWEEN {l} AND {l} + 6
