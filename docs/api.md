@@ -10,7 +10,7 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`, `pick`,
+takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area or borough key>`, `sort`, `pick`,
 `source`, `medium`, `format`, `good_for`, `venue_type` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}` (with Open Graph tags, and Share / Directions / Add-to-calendar hand-offs from `src/share.rs`), `GET /events/{id}.ics` (the event as a one-event iCalendar file: exact UTC times, or an all-day span for date-only events; `text/calendar`, downloaded as `<slug>.ics`), `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
@@ -69,6 +69,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `format` | `format=talk` | Events with any of these format tags: `hands_on`, `talk`, `social`, `opening`, `late`, `family_friendly`, `course`, `tour`, `screening`, `fair_market`. Repeatable |
 | `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
 | `venue_type` | `venue_type=museum` | Events at any of these kinds of venue: `museum` (museums and public, non-commercial galleries and arts centres), `commercial_gallery`, `artist_run`, `community`, `other`. Every event has exactly one (see "Venue type" below). Repeatable |
+| `borough` | `borough=southwark&borough=city-of-london` | Events in any of these London boroughs (see "Borough" below): `barking-and-dagenham`, `barnet`, `bexley`, `brent`, `bromley`, `camden`, `city-of-london`, `croydon`, `ealing`, `enfield`, `greenwich`, `hackney`, `hammersmith-and-fulham`, `haringey`, `harrow`, `havering`, `hillingdon`, `hounslow`, `islington`, `kensington-and-chelsea`, `kingston-upon-thames`, `lambeth`, `lewisham`, `merton`, `newham`, `redbridge`, `richmond-upon-thames`, `southwark`, `sutton`, `tower-hamlets`, `waltham-forest`, `wandsworth`, `westminster`. Events without a known borough never match. Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
@@ -307,14 +308,41 @@ With `facets=true` the response also has
   "medium": { "photography": 12, "painting": 7 },
   "format": { "talk": 9 },
   "good_for": { "friends": 14, "kids": 3 },
-  "venue_type": { "museum": 120, "commercial_gallery": 64 }
+  "venue_type": { "museum": 120, "commercial_gallery": 64 },
+  "borough": { "westminster": 80, "southwark": 31, "unknown": 12 }
 }
 ```
 
 counting the events that match every other filter (dates, category, free,
 source, area and the other facets), ignoring that facet's own
 selection, so each number says how many events choosing that tag would
-show. Tags with no events are omitted.
+show. Tags with no events are omitted. `borough.unknown` counts the
+events without a known borough (no coordinates, or outside Greater
+London); it is not a `borough=` value.
+
+### Borough
+
+`borough` is deterministic (no AI): the London borough (or the City of
+London) containing the event's coordinates, a point-in-polygon test in
+`src/borough.rs` against simplified ONS boundaries
+(`src/london_boroughs.geojson`, see `docs/boroughs.md`). It is set when a
+listing is stored and refreshed for every event after each ingest run.
+Events without coordinates, or outside Greater London, have none.
+
+The home page's area presets (`near=<key>`) are shortcuts for groups of
+whole boroughs (a group is wider than its name):
+
+| Key | Label | Boroughs |
+| --- | --- | --- |
+| `central` | Central & South Bank | Westminster, City of London, Lambeth, Southwark |
+| `east` | East (City, Shoreditch, Whitechapel) | City of London, Hackney, Tower Hamlets |
+| `kings-cross` | King's Cross | Camden, Islington |
+| `south-kensington` | South Kensington & Hyde Park | Kensington and Chelsea, Westminster |
+
+The page's `near=` also takes a borough key. Either way it sends
+`borough=` to the listing (no distance and no nearest-first sort; "Near
+me" is the one that measures distance). `/map` keeps using the presets'
+centres.
 
 ### Venue type
 
@@ -491,7 +519,7 @@ scrape, most recently checked first:
 
 A subscribable iCalendar (RFC 5545) feed of upcoming events: London today
 plus 89 days (events overlapping that window, at most 1000), for the
-calendar's filters `category`, `free=true`, `near=<area key>` (the page's
+calendar's filters `category`, `free=true`, `near=<area or borough key>` (the page's
 preset areas, e.g. `east`) and `source` (repeatable). The calendar page
 `/calendar` links to it as `webcal://musenmingle.interstellarai.net/calendar.ics?…`.
 

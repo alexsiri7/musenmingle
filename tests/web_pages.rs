@@ -515,6 +515,10 @@ async fn home_filters_are_applied_and_reflected_in_the_form() {
         .titled("Free KX workshop later"),
     )
     .await;
+    // Inserted directly: boroughs come from the sync (an area is a group
+    // of boroughs, King's Cross = Camden + Islington; the Barbican is in
+    // the City).
+    musenmingle::repo::sync_boroughs(&pool).await.unwrap();
     let app = app(&pool);
 
     let (from, to) = (date(days(1)), date(days(10)));
@@ -540,7 +544,13 @@ async fn home_filters_are_applied_and_reflected_in_the_form() {
     );
     assert!(p.body.contains("<option value=\"kings-cross\" selected>"));
     assert!(p.body.contains("type=\"checkbox\" value=\"true\" checked"));
-    assert!(p.body.contains(" km</span>"), "distance shown with near");
+    // An area is a group of boroughs, not a point: no distances.
+    assert!(!p.body.contains(" km</span>"), "no distance for an area");
+    assert!(p.body.contains("<optgroup label=\"Boroughs\">"));
+    assert!(
+        p.body
+            .contains("<option value=\"camden\">Camden (1)</option>")
+    );
 
     // Checkbox "on" and empty fields (a plain browser submit) are accepted.
     let p = get(&app, &format!("/?from={from}&to=&category=&free=on&near=")).await;

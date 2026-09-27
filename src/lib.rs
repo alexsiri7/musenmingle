@@ -5,6 +5,7 @@
 //! `README.md` for the architecture overview and `CLAUDE.md` for invariants.
 
 pub mod api;
+pub mod borough;
 pub mod calendar;
 pub mod config;
 pub mod contact;

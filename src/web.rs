@@ -121,13 +121,18 @@ static APP_JS_URL: LazyLock<String> = LazyLock::new(|| {
     format!("/static/app.js?v={v}")
 });
 
-/// A preset "near" area for the home-page filter.
+/// A preset area: a shortcut for a group of boroughs in the home-page
+/// filter (`near=<key>`, issue #79), and a map view on `/map` (its centre
+/// and radius).
 pub struct Area {
     pub key: &'static str,
     pub label: &'static str,
     pub lat: f64,
     pub lng: f64,
     pub radius_km: f64,
+    /// The boroughs (`crate::borough::BOROUGHS` keys) the home page lists
+    /// for it. Whole boroughs only, so a group is wider than its label.
+    pub boroughs: &'static [&'static str],
 }
 
 pub const AREAS: [Area; 4] = [
@@ -137,6 +142,7 @@ pub const AREAS: [Area; 4] = [
         lat: 51.5074,
         lng: -0.1225,
         radius_km: 2.5,
+        boroughs: &["westminster", "city-of-london", "lambeth", "southwark"],
     },
     Area {
         key: "east",
@@ -144,6 +150,7 @@ pub const AREAS: [Area; 4] = [
         lat: 51.5200,
         lng: -0.0750,
         radius_km: 3.0,
+        boroughs: &["city-of-london", "hackney", "tower-hamlets"],
     },
     Area {
         key: "kings-cross",
@@ -151,6 +158,7 @@ pub const AREAS: [Area; 4] = [
         lat: 51.5320,
         lng: -0.1240,
         radius_km: 1.5,
+        boroughs: &["camden", "islington"],
     },
     Area {
         key: "south-kensington",
@@ -158,6 +166,7 @@ pub const AREAS: [Area; 4] = [
         lat: 51.4990,
         lng: -0.1750,
         radius_km: 2.0,
+        boroughs: &["kensington-and-chelsea", "westminster"],
     },
 ];
 
@@ -706,13 +715,15 @@ struct Filters {
     /// `price_max=` amount; empty = any price.
     price_max: String,
     near: String,
+    /// `near=`: an area preset key ([`AREAS`], a group of boroughs) or a
+    /// borough key (`crate::borough::BOROUGHS`); empty = anywhere.
     /// "Near me": `here=<lat>,<lng>`, rounded to 3 decimals (about 100 m)
-    /// as soon as it is parsed; empty = off. An area preset wins over it.
+    /// as soon as it is parsed; empty = off. An area or borough wins over it.
     here: String,
     /// `walk=` minutes for `here` (10, 20 or 30; 20 by default); empty
     /// without `here`.
     walk: String,
-    /// `sort=` value; empty = the default (nearest with an area, else soonest).
+    /// `sort=` value; empty = the default (nearest with Near me, else soonest).
     sort: String,
     /// `pick=` quick pick (`tonight`, …); empty = none.
     pick: String,
@@ -873,12 +884,11 @@ impl Filters {
             }
         }
         if !self.near.is_empty() {
-            let area = AREAS
-                .iter()
-                .find(|a| a.key == self.near)
-                .ok_or_else(|| format!("unknown area {:?}", self.near))?;
-            s.append_pair("near", &format!("{},{}", area.lat, area.lng));
-            s.append_pair("radius_km", &area.radius_km.to_string());
+            for b in
+                near_boroughs(&self.near).ok_or_else(|| format!("unknown area {:?}", self.near))?
+            {
+                s.append_pair("borough", b);
+            }
         } else if !self.here.is_empty() {
             s.append_pair("near", &self.here);
             s.append_pair("within_walk_min", &self.walk);
@@ -889,6 +899,26 @@ impl Filters {
         s.append_pair("limit", &PAGE_SIZE.to_string());
         listing::parse_query(&s.finish())
     }
+}
+
+/// The boroughs a `near=` value stands for: an area preset's group, or
+/// the one borough; None if it is neither.
+fn near_boroughs(near: &str) -> Option<Vec<&'static str>> {
+    if let Some(a) = AREAS.iter().find(|a| a.key == near) {
+        return Some(a.boroughs.to_vec());
+    }
+    crate::borough::BOROUGH_KEYS
+        .iter()
+        .find(|k| **k == near)
+        .map(|k| vec![*k])
+}
+
+/// The label of a `near=` value: an area preset's, else the borough's name.
+fn near_label(near: &str) -> &str {
+    AREAS
+        .iter()
+        .find(|a| a.key == near)
+        .map_or_else(|| crate::borough::name(near), |a| a.label)
 }
 
 /// "Near me" walking-time presets (minutes) and the default.
@@ -933,6 +963,49 @@ fn tag_select(
                             @if let Some(n) = n { " (" (n) ")" }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+/// The "Area" select (`near=`): the area presets, then every borough with
+/// events (with its count; boroughs without events are left out unless
+/// chosen), and how many events have no known location.
+fn area_select(f: &Filters, counts: Option<&serde_json::Value>) -> Markup {
+    let count = |b: &str| {
+        counts
+            .and_then(|c| c.get(b))
+            .and_then(serde_json::Value::as_i64)
+    };
+    // Each event has at most one borough, so a group's count is the sum.
+    let area_count =
+        |a: &Area| counts.map(|_| a.boroughs.iter().filter_map(|b| count(b)).sum::<i64>());
+    let unknown = count(crate::borough::UNKNOWN).filter(|n| *n > 0);
+    html! {
+        div class="field" {
+            label for="near" { "Area" }
+            select id="near" name="near" aria-describedby=[unknown.map(|_| "near-unknown")] {
+                option value="" selected[f.near.is_empty()] { "Anywhere in London" }
+                optgroup label="Areas" {
+                    @for a in &AREAS {
+                        option value=(a.key) selected[f.near == a.key] {
+                            (with_count(a.label, area_count(a)))
+                        }
+                    }
+                }
+                optgroup label="Boroughs" {
+                    @for (key, name) in crate::borough::BOROUGHS {
+                        @let n = count(key);
+                        @if counts.is_none() || n.is_some() || f.near == *key {
+                            option value=(key) selected[f.near == *key] { (with_count(name, n)) }
+                        }
+                    }
+                }
+            }
+            @if let Some(n) = unknown {
+                p class="small" id="near-unknown" {
+                    "Location unknown: " (n) @if n == 1 { " event" } @else { " events" } " (in no area)"
                 }
             }
         }
@@ -1002,7 +1075,7 @@ fn effective_sort(f: &Filters) -> Sort {
         .filter(|s| *s != Sort::Relevance || !f.q.is_empty())
         .unwrap_or(if !f.q.is_empty() {
             Sort::Relevance
-        } else if f.near.is_empty() && f.here.is_empty() {
+        } else if f.here.is_empty() {
             Sort::Soonest
         } else {
             Sort::Nearest
@@ -1101,9 +1174,9 @@ fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec
     if f.free {
         out.push(("Free".to_string(), link_with(f, |g| g.free = false)));
     }
-    if let Some(a) = AREAS.iter().find(|a| a.key == f.near) {
+    if near_boroughs(&f.near).is_some() {
         out.push((
-            format!("Area: {}", a.label),
+            format!("Area: {}", near_label(&f.near)),
             link_with(f, |g| g.near.clear()),
         ));
     }
@@ -1466,15 +1539,7 @@ fn filter_form(
                             }
                         }
                     }
-                    div class="field" {
-                        label for="near" { "Area" }
-                        select id="near" name="near" {
-                            option value="" selected[f.near.is_empty()] { "Anywhere in London" }
-                            @for a in &AREAS {
-                                option value=(a.key) selected[f.near == a.key] { (a.label) }
-                            }
-                        }
-                    }
+                    (area_select(f, facets.and_then(|v| v.get("borough"))))
                     (near_me_field(f))
                     (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium")), label_of))
                     (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format")), label_of))
@@ -1996,7 +2061,7 @@ async fn home_page(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Re
                     (hidden_unknown(&counts))
                     @if query.fell_back_from == Some(Sort::Nearest) {
                         p class="results-status hint" role="status" {
-                            "Closest to me needs a place to measure from: pick an area or use Near me. "
+                            "Closest to me needs a place to measure from: use Near me. "
                             "Showing events starting soonest."
                         }
                     }
@@ -2846,6 +2911,14 @@ async fn about() -> Response {
                         ". No account needed; leave an email address only if you'd like a reply."
                     }
                 }
+                p class="small" id="boroughs" {
+                    "Borough boundaries (the events list's areas): Source: Office for National "
+                    "Statistics, licensed under the "
+                    a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="noopener" {
+                        "Open Government Licence v3.0"
+                    }
+                    ". Contains OS data \u{a9} Crown copyright and database right 2024."
+                }
                 p class="small" {
                     "Sources and credits: every venue and service we use, and the sites we "
                     "couldn't use, are listed on " a href="/sources" { "Sources" } "."
@@ -3249,8 +3322,30 @@ mod tests {
         assert!(!f.from.is_empty());
         let q = f.api_query().unwrap();
         assert!(q.filter.free_only);
-        assert!(matches!(q.order, listing::EventOrder::ByDistance { .. }));
+        // An area preset is a group of boroughs, not a radius (issue #79).
+        assert_eq!(q.filter.boroughs, ["camden", "islington"]);
+        assert!(q.near.is_none());
+        assert!(matches!(q.order, listing::EventOrder::ByStart { .. }));
         assert!(f.page_query().contains("near=kings-cross"));
+        // A single borough.
+        let f = Filters::parse("near=tower-hamlets");
+        assert_eq!(f.api_query().unwrap().filter.boroughs, ["tower-hamlets"]);
+        let today = Utc::now().with_timezone(&London).date_naive();
+        let chips = relaxations(&f, today, &[]);
+        assert!(
+            chips
+                .iter()
+                .any(|(l, h)| l == "Area: Tower Hamlets" && !h.contains("near="))
+        );
+        // Every preset names real boroughs.
+        for a in &AREAS {
+            assert!(!a.boroughs.is_empty());
+            assert!(
+                a.boroughs
+                    .iter()
+                    .all(|b| crate::borough::BOROUGH_KEYS.contains(b))
+            );
+        }
         assert!(Filters::parse("near=mars").api_query().is_err());
         assert!(Filters::parse("category=concert").api_query().is_err());
     }
@@ -3288,10 +3383,9 @@ mod tests {
         // An area preset wins (picking one in the form replaces Near me).
         let f = Filters::parse("here=51.5,-0.1&near=central");
         assert!(f.here.is_empty() && f.walk.is_empty());
-        assert_eq!(
-            f.api_query().unwrap().near.unwrap().radius_km,
-            AREAS[0].radius_km
-        );
+        let q = f.api_query().unwrap();
+        assert!(q.near.is_none());
+        assert_eq!(q.filter.boroughs, AREAS[0].boroughs);
     }
 
     #[test]
@@ -3301,9 +3395,14 @@ mod tests {
         assert!(f.without_source("x").contains("sort=ending"));
         let q = f.api_query().unwrap();
         assert_eq!(q.order.sort(), Sort::Ending);
-        assert!(q.near.is_some());
+        assert!(!q.filter.boroughs.is_empty());
+        // An area has no point to measure from; Near me does.
         assert_eq!(
             effective_sort(&Filters::parse("near=central")),
+            Sort::Soonest
+        );
+        assert_eq!(
+            effective_sort(&Filters::parse("here=51.5,-0.1")),
             Sort::Nearest
         );
         assert_eq!(effective_sort(&Filters::parse("")), Sort::Soonest);
