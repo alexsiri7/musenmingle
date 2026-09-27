@@ -79,12 +79,19 @@ a new versioned directory, update `MAPLIBRE_DIR`/`PMTILES_DIR` and
 ## Location privacy
 
 "Use my exact coordinates" calls the browser's Geolocation API only when
-tapped (the `/map` response alone sets `Permissions-Policy:
+tapped (the `/map` and `/` responses set `Permissions-Policy:
 geolocation=(self)`; every other response keeps `geolocation=()`). The
 position never leaves the browser: `map.mjs` fetches the London-wide
 `GET /v1/events?at=now` (or `at=today`) listing, which has no location in
 it, and computes distances and walking times itself. Without JavaScript,
 or if location is refused, the page lists events near an area preset.
+
+The home page's "Near me" filter (issue #173) is different: "Use my
+location" rounds the position to 3 decimals (about 100 m) in `web.js` and
+submits it as `here=<lat>,<lng>&walk=<10|20|30>`, which the server rounds
+again and turns into `near=` + `within_walk_min=` (the same 5 km/h × 1.3
+detour estimate as the map's "≈ N min walk"). The server keeps no request
+logs, so the position is not stored anywhere.
 
 ## Venue coordinates: `events.venues`
 

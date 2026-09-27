@@ -68,6 +68,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
+| `within_walk_min` | `20` | Instead of `radius_km`: events within this many minutes' walk of `near`, 1–60, estimated from straight-line distance at 5 km/h with a 1.3 detour factor (the same estimate as the map's "≈ N min walk"). Only with `near`; not with `radius_km` |
 | `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
 | `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise` or `relevance` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
