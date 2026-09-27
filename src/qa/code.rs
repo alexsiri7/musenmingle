@@ -29,6 +29,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
     ("courtauld", include_str!("../sources/courtauld.rs")),
     ("design_museum", include_str!("../sources/design_museum.rs")),
     (
+        "estorick_collection",
+        include_str!("../sources/estorick_collection.rs"),
+    ),
+    (
         "foundling_museum",
         include_str!("../sources/foundling_museum.rs"),
     ),

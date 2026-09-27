@@ -19,6 +19,7 @@ pub mod clerkenwell_design_week;
 pub mod conway_hall;
 pub mod courtauld;
 pub mod design_museum;
+pub mod estorick_collection;
 pub mod foundling_museum;
 pub mod four_corners;
 pub mod garden_museum;
@@ -141,6 +142,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         courtauld::KEY => Ok(Box::new(courtauld::Courtauld::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
+        estorick_collection::KEY => {
+            Ok(Box::new(estorick_collection::EstorickCollection::new(base)))
+        }
         foundling_museum::KEY => Ok(Box::new(foundling_museum::FoundlingMuseum::new(base))),
         four_corners::KEY => Ok(Box::new(four_corners::FourCorners::new(base))),
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
