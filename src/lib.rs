@@ -32,6 +32,7 @@ pub mod suggestions;
 pub mod thumbs;
 pub mod transit;
 pub mod venue_type;
+pub mod venues;
 pub mod web;
 
 /// Crate version, used in the bot User-Agent.
