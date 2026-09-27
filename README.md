@@ -141,6 +141,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     price; category from `/exhibitions/` or keywords (else workshop);
     recurring programmes without a date skipped; facts + link only (the
     Royal College of Surgeons' terms restrict reuse).
+  - `handel-hendrix` — links from the cards on `/whats-on`, then CSS
+    selectors on each event page (no JSON-LD `Event`): a dated day with
+    London wall-clock times, or a date-only exhibition range; price;
+    category from keywords in the eyebrow and title (a demonstration is a
+    talk); concerts and recurring or open-ended programmes skipped; facts +
+    link only (the site's legal page restricts reuse).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
@@ -509,7 +515,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum and the TEC venues daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House and the TEC venues daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
