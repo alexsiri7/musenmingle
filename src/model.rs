@@ -156,7 +156,7 @@ pub struct NewEvent {
     /// The separate sessions of a multi-session event (issue #207), in
     /// order; empty for a one-off or a continuous run. When set,
     /// `starts_at`/`ends_at` are the envelope (first session's start, last
-    /// session's end) and `all_day` is false: see [`NewEvent::set_sessions`].
+    /// session's end): see [`NewEvent::set_sessions`].
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub sessions: Vec<Session>,
     pub price: Price,
@@ -171,7 +171,9 @@ impl NewEvent {
     /// Make this a multi-session event: sort and dedupe `sessions`, drop
     /// ends not after their start, and set the envelope (`starts_at` = the
     /// first start, `ends_at` = the last session's end, else its start when
-    /// later than the first, `all_day` = false). Fewer than two sessions
+    /// later than the first; `all_day` only when every session is all-day,
+    /// i.e. starts at London midnight, and then `ends_at` is the last
+    /// session's day, as for any all-day run). Fewer than two sessions
     /// leave a plain timed event (no `sessions`). The caller recomputes
     /// `dedupe_key` from the new `starts_at` if it depends on it.
     pub fn set_sessions(&mut self, mut sessions: Vec<Session>) {
@@ -185,11 +187,17 @@ impl NewEvent {
             return;
         };
         self.starts_at = first.starts_at;
-        self.ends_at = last
-            .ends_at
-            .or(Some(last.starts_at))
-            .filter(|e| *e > first.starts_at);
-        self.all_day = false;
+        // All-day sessions (from London midnight): an all-day envelope, its
+        // `ends_at` the last day's midnight as for any all-day run.
+        self.all_day = sessions
+            .iter()
+            .all(|s| crate::normalise::is_london_midnight(s.starts_at));
+        self.ends_at = if self.all_day {
+            Some(last.starts_at)
+        } else {
+            last.ends_at.or(Some(last.starts_at))
+        }
+        .filter(|e| *e > first.starts_at);
         self.sessions = if sessions.len() >= 2 {
             sessions
         } else {

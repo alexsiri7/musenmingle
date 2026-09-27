@@ -302,3 +302,31 @@ test("transitBadge", () => {
   assert.equal(app.transitBadge({ status: "short_walk", transit: null }), "");
   assert.equal(app.transitBadge(null), "");
 });
+
+test("multi-session events (#207): next session, one VEVENT and one calendar day per session", () => {
+  const e = {
+    id: "e1",
+    title: "Made By Hands",
+    venue: "The Showroom",
+    starts_at: "2026-10-20T15:30:00Z",
+    ends_at: "2026-11-03T18:30:00Z",
+    all_day: false,
+    sessions: [
+      { starts_at: "2026-10-20T15:30:00Z", ends_at: "2026-10-20T17:30:00Z" },
+      { starts_at: "2026-11-03T16:30:00Z", ends_at: "2026-11-03T18:30:00Z" },
+    ],
+  };
+  assert.equal(app.eventWhen(e, "2026-10-01T12:00:00Z"), "Next session: Tue 20 Oct, 16:30 · 2 sessions");
+  assert.equal(app.eventWhen(e, "2026-10-27T12:00:00Z"), "Next session: Tue 3 Nov, 16:30 · 2 sessions");
+  assert.equal(app.nextSession(e.sessions, "2026-11-04T00:00:00Z"), null);
+  const ics = app.toICS([e], "2026-10-01T12:00:00Z", "https://example.org");
+  assert.equal(ics.split("BEGIN:VEVENT").length - 1, 2);
+  assert.ok(ics.includes("UID:e1-20261020T153000Z@musenmingle.interstellarai.net"));
+  assert.ok(ics.includes("DTSTART:20261103T163000Z\r\nDTEND:20261103T183000Z"));
+  const placed = app.placeEvents([e], "2026-10-19", "2026-11-08");
+  assert.deepEqual(placed.ongoing, []);
+  assert.deepEqual(Object.keys(placed.days).sort(), ["2026-10-20", "2026-11-03"]);
+  // Saved with the sessions, and read back from the snapshot.
+  const items = app.toggle([], e, "2026-10-01T12:00:00Z");
+  assert.equal(app.fromSnapshot(items[0]).sessions.length, 2);
+});

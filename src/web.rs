@@ -1711,7 +1711,8 @@ fn save_button(e: &EventJson) -> Markup {
             data-venue=(e.venue_name.as_deref().unwrap_or(""))
             data-starts=(e.starts_at.to_rfc3339())
             data-ends=(e.ends_at.map(|t| t.to_rfc3339()).unwrap_or_default())
-            data-all-day=(if e.all_day { "true" } else { "false" }) {
+            data-all-day=(if e.all_day { "true" } else { "false" })
+            data-sessions=[(e.sessions.len() >= 2).then(|| serde_json::to_string(&e.sessions).unwrap_or_default())] {
             (bookmark())
             span class="save-label" { "Save" }
             span class="vh" { ": " (e.title) }

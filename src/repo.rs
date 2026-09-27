@@ -1158,11 +1158,13 @@ async fn set_hours_tx(
     sqlx::query(
         "UPDATE events.events e SET
             opening_hours = CASE WHEN NOT e.all_day OR e.ends_at IS NULL OR e.ends_at <= e.starts_at
+                                      OR e.sessions IS NOT NULL
                                  THEN NULL
                                  ELSE COALESCE($2::jsonb, e.opening_hours,
                                                CASE WHEN e.category = 'exhibition' THEN $4::jsonb END)
                             END,
             hours_note    = CASE WHEN NOT e.all_day OR e.ends_at IS NULL OR e.ends_at <= e.starts_at
+                                      OR e.sessions IS NOT NULL
                                  THEN NULL
                                  WHEN $2::jsonb IS NOT NULL THEN $3
                                  ELSE e.hours_note

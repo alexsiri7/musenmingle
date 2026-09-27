@@ -110,6 +110,9 @@
         all_day: event.all_day === true,
       },
     };
+    if (Array.isArray(event.sessions) && event.sessions.length > 1) {
+      item.snapshot.sessions = event.sessions;
+    }
     return [item].concat(items);
   }
 
@@ -181,6 +184,36 @@
     return fmtDateTime(startsIso);
   }
 
+  // ------------------------------------------------------------ sessions (#207)
+
+  /** A session's end: its ends_at, else its start + 60 minutes (the server's LIVE_GRACE_MINUTES). */
+  function sessionEnd(s) {
+    var start = Date.parse(s.starts_at);
+    var end = s.ends_at ? Date.parse(s.ends_at) : NaN;
+    return end > start ? end : start + 60 * 60 * 1000;
+  }
+
+  /** The first session not over at `nowIso` (model::next_session); null if none. */
+  function nextSession(sessions, nowIso) {
+    if (!Array.isArray(sessions) || sessions.length < 2) return null;
+    var now = Date.parse(nowIso);
+    for (var i = 0; i < sessions.length; i++) {
+      var s = sessions[i];
+      if (s && s.starts_at && !Number.isNaN(Date.parse(s.starts_at)) && sessionEnd(s) > now) return s;
+    }
+    return null;
+  }
+
+  /** [`when`] for an event: "Next session: Tue 20 Oct, 16:30 · 6 sessions" (web::event_when). */
+  function eventWhen(e, nowIso) {
+    var s = nextSession(e.sessions, nowIso);
+    if (!s) return when(e.starts_at, e.ends_at, nowIso, e.all_day);
+    var p = parts(s.starts_at);
+    var day = p.weekday + " " + Number(p.day) + " " + MONTHS[Number(p.month) - 1];
+    if (!isMidnight(s.starts_at)) day += ", " + fmtTime(s.starts_at);
+    return "Next session: " + day + " · " + e.sessions.length + " sessions";
+  }
+
   function money(amount, currency) {
     var n = Number(amount);
     var s = Number.isInteger(n) ? String(n) : n.toFixed(2);
@@ -239,6 +272,7 @@
       starts_at: item.snapshot.starts_at,
       ends_at: item.snapshot.ends_at,
       all_day: isAllDay(item.snapshot),
+      sessions: item.snapshot.sessions || null,
     };
   }
 
@@ -272,17 +306,38 @@
       "PRODID:-//Muse & Mingle//Saved events//EN",
       "CALSCALE:GREGORIAN",
     ];
+    // A multi-session event (#207): one VEVENT per session, with the
+    // server's UIDs (share::ics_with_sessions); an all-day session starts
+    // at London midnight.
+    var entries = [];
     events.forEach(function (e) {
-      if (!e.starts_at) return;
-      lines.push("BEGIN:VEVENT");
-      lines.push("UID:" + e.id + "@musenmingle.interstellarai.net");
-      lines.push("DTSTAMP:" + icsTime(nowIso));
-      if (isAllDay(e)) {
-        lines.push("DTSTART;VALUE=DATE:" + icsDate(e.starts_at, 0));
-        lines.push("DTEND;VALUE=DATE:" + icsDate(e.ends_at || e.starts_at, 1));
+      if (Array.isArray(e.sessions) && e.sessions.length > 1) {
+        e.sessions.forEach(function (s) {
+          var untimed = isMidnight(s.starts_at);
+          entries.push({
+            uid: e.id + "-" + icsTime(s.starts_at),
+            e: e,
+            starts_at: s.starts_at,
+            ends_at: untimed ? null : s.ends_at || null,
+            all_day: untimed,
+          });
+        });
       } else {
-        lines.push("DTSTART:" + icsTime(e.starts_at));
-        if (e.ends_at) lines.push("DTEND:" + icsTime(e.ends_at));
+        entries.push({ uid: e.id, e: e, starts_at: e.starts_at, ends_at: e.ends_at, all_day: isAllDay(e) });
+      }
+    });
+    entries.forEach(function (x) {
+      var e = x.e;
+      if (!x.starts_at) return;
+      lines.push("BEGIN:VEVENT");
+      lines.push("UID:" + x.uid + "@musenmingle.interstellarai.net");
+      lines.push("DTSTAMP:" + icsTime(nowIso));
+      if (x.all_day) {
+        lines.push("DTSTART;VALUE=DATE:" + icsDate(x.starts_at, 0));
+        lines.push("DTEND;VALUE=DATE:" + icsDate(x.ends_at || x.starts_at, 1));
+      } else {
+        lines.push("DTSTART:" + icsTime(x.starts_at));
+        if (x.ends_at) lines.push("DTEND:" + icsTime(x.ends_at));
       }
       lines.push("SUMMARY:" + icsEscape(e.title));
       if (e.venue) lines.push("LOCATION:" + icsEscape(e.venue));
@@ -341,6 +396,14 @@
     }
     events.forEach(function (e, i) {
       if (!e.starts_at) return;
+      // A multi-session event (#207) sits on each of its session days.
+      if (Array.isArray(e.sessions) && e.sessions.length > 1) {
+        e.sessions.forEach(function (x) {
+          var d = x && x.starts_at ? londonDate(x.starts_at) : null;
+          if (d && d >= first && d <= last) add(d, i, "event");
+        });
+        return;
+      }
       var s = spanOf(e);
       if (s[1] < first || s[0] > last) return;
       if (isLongRunning(s[0], s[1])) {
@@ -520,6 +583,8 @@
     isSaved: isSaved,
     toggle: toggle,
     when: when,
+    eventWhen: eventWhen,
+    nextSession: nextSession,
     dayOfMonth: dayOfMonth,
     price: price,
     toICS: toICS,
@@ -537,6 +602,16 @@
   var storage = getStorage();
   migrateStorage(storage);
 
+  function parseSessions(json) {
+    if (!json) return null;
+    try {
+      var v = JSON.parse(json);
+      return Array.isArray(v) ? v : null;
+    } catch (err) {
+      return null;
+    }
+  }
+
   function eventFromButton(b) {
     return {
       id: b.getAttribute("data-save-id"),
@@ -545,6 +620,7 @@
       starts_at: b.getAttribute("data-starts") || null,
       ends_at: b.getAttribute("data-ends") || null,
       all_day: b.getAttribute("data-all-day") === "true",
+      sessions: parseSessions(b.getAttribute("data-sessions")),
     };
   }
 
@@ -653,7 +729,7 @@
     var title = slot(node, "title");
     title.textContent = e.title;
     title.setAttribute("href", href);
-    slot(node, "when").textContent = when(e.starts_at, e.ends_at, nowIso, e.all_day);
+    slot(node, "when").textContent = eventWhen(e, nowIso);
     var venue = slot(node, "venue");
     if (e.venue_name && e.venue_slug) {
       var va = venue.ownerDocument.createElement("a");
@@ -752,6 +828,9 @@
     btn.setAttribute("data-starts", e.starts_at || "");
     btn.setAttribute("data-ends", e.ends_at || "");
     btn.setAttribute("data-all-day", e.all_day ? "true" : "false");
+    if (Array.isArray(e.sessions) && e.sessions.length > 1) {
+      btn.setAttribute("data-sessions", JSON.stringify(e.sessions));
+    }
     slot(node, "save-title").textContent = ": " + e.title;
     return node;
   }
@@ -819,6 +898,7 @@
                 starts_at: e.starts_at,
                 ends_at: e.ends_at,
                 all_day: e.all_day,
+                sessions: e.sessions || null,
               }
             : {
                 id: item.id,
@@ -827,6 +907,7 @@
                 starts_at: item.snapshot.starts_at,
                 ends_at: item.snapshot.ends_at,
                 all_day: isAllDay(item.snapshot),
+                sessions: item.snapshot.sessions || null,
               };
         });
         var blob = new Blob([toICS(events, new Date().toISOString(), root.location.origin)], {

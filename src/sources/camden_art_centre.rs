@@ -446,7 +446,8 @@ mod tests {
         let ev = normalise_payload(&p).unwrap().unwrap();
         assert_eq!(ev.category, Category::Workshop);
         assert!(ev.tags.contains(&"family".to_string()));
-        assert!(!ev.all_day);
+        // All-day sessions: an all-day envelope, ending on the last day.
+        assert!(ev.all_day);
         let starts: Vec<String> = ev
             .sessions
             .iter()
@@ -464,6 +465,10 @@ mod tests {
         );
         assert_eq!(
             ev.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2026-11-21T00:00:00+00:00")
+        );
+        assert_eq!(
+            ev.sessions[3].ends_at.map(|e| e.to_rfc3339()).as_deref(),
             Some("2026-11-22T00:00:00+00:00")
         );
     }

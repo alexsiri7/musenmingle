@@ -66,11 +66,11 @@ expression: out
   {
     "event": {
       "address": "Arkwright Road, London NW3 6DG",
-      "all_day": false,
+      "all_day": true,
       "category": "workshop",
       "dedupe_key": "family-takeover-with-tom-james|2026-10-10|camden-art",
       "description": "Join artist Tom James for family activities exploring the play and process of making art together.",
-      "ends_at": "2026-11-22T00:00:00Z",
+      "ends_at": "2026-11-21T00:00:00Z",
       "image_url": "https://camdenartcentre.s3.eu-west-2.amazonaws.com/uploads/2026/09/002_HD_250717_5910_┬®-Hydar-Dewachi-George-Collum-640x427.jpg",
       "lat": null,
       "lng": null,

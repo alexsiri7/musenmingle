@@ -102,6 +102,34 @@ export function hoursStatus(hours, nowIso) {
 
 /// The card's status line; mirrors `live_label` in src/web/map.rs.
 /// `hours` is the event's `opening_hours` (or null).
+/**
+ * A multi-session event's (#207) current or next session: the first whose
+ * end (else start + 60 minutes, the server's LIVE_GRACE_MINUTES) is after
+ * now; null without sessions or when all are over. Mirrors
+ * `model::next_session`.
+ */
+export function currentSession(sessions, nowIso) {
+  if (!Array.isArray(sessions)) return null;
+  const nowMs = Date.parse(nowIso);
+  for (const s of sessions) {
+    const start = Date.parse(s && s.starts_at);
+    if (Number.isNaN(start)) continue;
+    const end = s.ends_at && Date.parse(s.ends_at) > start ? Date.parse(s.ends_at) : start + 60 * 60 * 1000;
+    if (end > nowMs) return s;
+  }
+  return null;
+}
+
+/** liveLabel for an event from the JSON API, by its current session if any. */
+export function eventLiveLabel(e, nowIso) {
+  const s = currentSession(e.sessions, nowIso);
+  if (s) {
+    const untimed = londonParts(s.starts_at).hm === "00:00";
+    return liveLabel(s.starts_at, untimed ? null : s.ends_at || null, untimed, nowIso, null);
+  }
+  return liveLabel(e.starts_at, e.ends_at, !!e.all_day, nowIso, e.opening_hours || null);
+}
+
 export function liveLabel(startIso, endIso, allDay, nowIso, hours) {
   const start = londonParts(startIso);
   const today = londonParts(nowIso).ymd;
@@ -189,7 +217,7 @@ export function eventFromJson(e, nowIso) {
     ends_at: e.ends_at || null,
     all_day: !!e.all_day,
     category: titleCase(e.category),
-    status: liveLabel(e.starts_at, e.ends_at, !!e.all_day, nowIso, e.opening_hours || null),
+    status: eventLiveLabel(e, nowIso),
     price: priceLabel(e),
     free: !!e.is_free,
     thumb,
