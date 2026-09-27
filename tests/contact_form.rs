@@ -27,11 +27,16 @@ const REPO: &str = "alexsiri7/musenmingle";
 const SALT: &str = "test-salt";
 
 fn app(pool: &PgPool, filer: Option<Box<dyn IssueFiler>>) -> Router {
+    app_with(pool, filer, SuggestionConfig::default().issues_per_day)
+}
+
+fn app_with(pool: &PgPool, filer: Option<Box<dyn IssueFiler>>, issues_per_day: u32) -> Router {
     musenmingle::api::router(
         pool.clone(),
         Suggestions::new(
             SuggestionConfig {
                 ip_salt: Some(SALT.into()),
+                issues_per_day,
                 ..Default::default()
             },
             filer,
@@ -353,15 +358,23 @@ async fn github_down_leaves_pending_and_the_ingest_run_files_it() {
     mock_create(&up, 90).await;
     let gh = GitHubIssueFiler::new(&up.uri(), REPO, "token").unwrap();
     assert_eq!(
-        contact::file_pending(&pool, &gh, Utc::now()).await.unwrap(),
-        0
+        contact::file_pending(&pool, &gh, Utc::now(), 20)
+            .await
+            .unwrap(),
+        (0, false)
     );
     // ...then filed.
     let later = Utc::now() + contact::RETRY_GRACE + Duration::minutes(1);
-    assert_eq!(contact::file_pending(&pool, &gh, later).await.unwrap(), 2);
+    assert_eq!(
+        contact::file_pending(&pool, &gh, later, 20).await.unwrap(),
+        (2, false)
+    );
     let r = rows(&pool).await;
     assert!(r.iter().all(|r| r.4 == "filed" && r.3 == Some(90)), "{r:?}");
-    assert_eq!(contact::file_pending(&pool, &gh, later).await.unwrap(), 0);
+    assert_eq!(
+        contact::file_pending(&pool, &gh, later, 20).await.unwrap(),
+        (0, false)
+    );
     pool.close().await;
     db.drop_db().await;
 }
@@ -379,6 +392,29 @@ async fn oversized_bodies_are_rejected() {
         "{status}"
     );
     assert!(rows(&pool).await.is_empty());
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn daily_issue_cap_leaves_contact_requests_pending() {
+    let Some(db) = TestDb::create("contact_daily_issue_cap").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let server = MockServer::start().await;
+    mock_create(&server, 5).await;
+    let app = app_with(&pool, filer(&server), 1);
+
+    for site in ["first.org", "second.org"] {
+        let (status, _) = post(&app, body("other", site, "hi", "", "")).await;
+        assert_eq!(status, StatusCode::OK);
+    }
+    let r = rows(&pool).await;
+    assert_eq!((r[0].4.as_str(), r[0].3), ("filed", Some(5)), "{r:?}");
+    assert_eq!((r[1].4.as_str(), r[1].3), ("pending_issue", None), "{r:?}");
+    assert_eq!(requests_to(&server, "/issues").await.len(), 1);
+    assert!(requests_to(&server, "/comments").await.is_empty());
     pool.close().await;
     db.drop_db().await;
 }

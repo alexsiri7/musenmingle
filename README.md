@@ -273,7 +273,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
   honoured) and rate-limits per domain (default 1 request / 2 s; built-in
   floors in `config::BUILTIN_MIN_INTERVALS` can't be lowered by
-  configuration).
+  configuration). It connects only to public addresses (`src/netguard.rs`:
+  http(s) only; no loopback, private, link-local, CGNAT, unique-local IPv6
+  or `*.internal` / `*.local` hosts, checked on the resolved IPs), follows
+  at most 3 redirects (each checked again) and reads at most 10 MB of a
+  body.
 - **Normalisation** (`src/normalise.rs`): HTML/whitespace cleanup,
   Europe/London → UTC, price parsing (free detection), category mapping and
   the cross-source **dedupe key** (`title|London date|venue`, algorithm
@@ -316,9 +320,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   labelled `new-scraper` from `.github/ISSUE_TEMPLATE/new-scraper.md`; if
   GitHub fails the row stays `pending` and the next ingest run files it
   (adopting an open issue with the same title). Invalid input gets 400
-  `invalid`. Each client IP (stored only as `sha256(ip + salt)`) may make 5
-  stored submissions per hour and 20 per day, duplicates included; beyond
-  that, 429 with `Retry-After`. The URL is never fetched.
+  `invalid`. Each client IP (stored only as `sha256(ip + salt)`; IPv6
+  clients are grouped by /64) may make 5 stored submissions per hour and 20
+  per day, duplicates included; beyond that, 429 with `Retry-After`. The
+  URL is never fetched. GitHub issues and comments from both forms share a
+  site-wide daily cap (`FORM_ISSUES_PER_DAY`, `src/issue_cap.rs`): past it,
+  submissions stay pending, are filed oldest first on later days, and the
+  owner gets one ntfy digest a day while any are held.
 - **Read API** (`src/api.rs`, `src/listing.rs`; documented in
   [`docs/api.md`](docs/api.md)): `GET /v1/events` filters by London date
   window (events with an end date match on range overlap), category, free,
@@ -349,7 +357,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   form (`src/contact.rs`): requests are stored in `events.contact_requests`
   and filed as `venue-request` GitHub issues with the server's token (the
   optional reply email stays in the database), with a honeypot, a signed
-  minimum fill time and a per-IP rate limit against spam; see
+  minimum fill time, a per-IP rate limit and the forms' daily issue cap
+  against spam; see
   [docs/venue-requests.md](docs/venue-requests.md). Public pages never link
   into the (private) GitHub repository.
   `GET /sources` is the `/v1/sources` data as a table;
@@ -429,7 +438,9 @@ small credited thumbnail, and send people to the venue.
   `FetchContext` (robots.txt, User-Agent, rate limit), skips images over
   8 MB, shrinks it to fit 480×480 as a JPEG (quality 70, lowered until
   < 40 KB), and stores it in `events.thumbnails`. It re-fetches only when
-  the event's `image_url` changes (failures are retried after 7 days), at
+  the event's `image_url` changes (failures are retried with exponential
+  backoff, after 1, 2, 4 and 8 days, and given up after 5 attempts until
+  the image URL changes), at
   most 60 per run and 20 per image host. `events.events.image_source_id`
   records which source the image came from, for the credit "Image:
   <display_name>" that links to the event's page on that source (not to the
@@ -676,6 +687,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `SUGGESTION_IP_SALT` | api | — (required) | Secret salt for hashing submitter IPs |
 | `SUGGESTION_RATE_PER_HOUR` | api | `5` | Stored suggestions per client IP per hour |
 | `SUGGESTION_RATE_PER_DAY` | api | `20` | Stored suggestions per client IP per day |
+| `FORM_ISSUES_PER_DAY` | both | `20` | GitHub issues/comments the site's forms may file per London day; the rest wait as pending and the owner gets one ntfy digest per day |
 | `TRUSTED_PROXY_COUNT` | api | `0` | Proxies whose `X-Forwarded-For` entries are trusted (Railway: `1`) |
 | `PORT` | api | `8080` | HTTP port |
 | `CANONICAL_HOST` | api | unset → no redirect | Host that requests to `LEGACY_HOSTS` are redirected to (301 for GET/HEAD, 308 otherwise; path and query kept; `/healthz` never redirects) |

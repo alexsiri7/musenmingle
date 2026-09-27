@@ -2841,6 +2841,32 @@ pub async fn pending_suggestions(
     .await
 }
 
+/// Take one of `per_day` form-issue slots for the London date `day`; false
+/// when they are all taken. Atomic, so concurrent requests can't overshoot.
+pub async fn reserve_form_issue(pool: &PgPool, day: NaiveDate, per_day: i32) -> sqlx::Result<bool> {
+    let filed: Option<i32> = sqlx::query_scalar(
+        "INSERT INTO events.form_issue_quota (day, filed) VALUES ($1, 1)
+         ON CONFLICT (day) DO UPDATE SET filed = events.form_issue_quota.filed + 1
+             WHERE events.form_issue_quota.filed < $2
+         RETURNING filed",
+    )
+    .bind(day)
+    .bind(per_day)
+    .fetch_optional(pool)
+    .await?;
+    Ok(filed.is_some())
+}
+
+/// Site suggestions and contact requests waiting for a GitHub issue.
+pub async fn held_form_counts(pool: &PgPool) -> sqlx::Result<(i64, i64)> {
+    sqlx::query_as(
+        "SELECT (SELECT count(*) FROM events.site_suggestions WHERE status = 'pending'),
+                (SELECT count(*) FROM events.contact_requests WHERE status = 'pending_issue')",
+    )
+    .fetch_one(pool)
+    .await
+}
+
 // ------------------------------------------------------------ content policy
 
 /// What [`enforce_content_policy`] changed.
@@ -2940,12 +2966,15 @@ pub struct ThumbnailJob {
 }
 
 /// Current or upcoming events with an image from a source that allows
-/// storing images and no thumbnail for that exact image URL yet (failed
-/// attempts are retried after `retry_failed_before`). Soonest first.
+/// storing images and no thumbnail for that exact image URL yet. A failed
+/// image URL is retried `retry_base` after its first failure, then after
+/// twice as long each time, and not at all after `max_failures`. Soonest
+/// first.
 pub async fn thumbnail_jobs(
     pool: &PgPool,
     now: DateTime<Utc>,
-    retry_failed_before: DateTime<Utc>,
+    retry_base: chrono::Duration,
+    max_failures: i32,
     limit: i64,
 ) -> sqlx::Result<Vec<ThumbnailJob>> {
     sqlx::query_as(
@@ -2957,12 +2986,15 @@ pub async fn thumbnail_jobs(
            AND COALESCE(e.ends_at, e.starts_at) >= $1 - interval '1 day'
            AND (t.event_id IS NULL
                 OR t.source_image_url <> e.image_url
-                OR (t.bytes IS NULL AND t.fetched_at < $2))
+                OR (t.bytes IS NULL AND t.failures < $3
+                    AND t.fetched_at + make_interval(secs => $2::float8 * power(2, t.failures - 1))
+                        <= $1))
          ORDER BY e.starts_at, e.id
-         LIMIT $3",
+         LIMIT $4",
     )
     .bind(now)
-    .bind(retry_failed_before)
+    .bind(retry_base.num_seconds() as f64)
+    .bind(max_failures)
     .bind(limit)
     .fetch_all(pool)
     .await
@@ -2980,7 +3012,8 @@ pub struct NewThumbnail {
     pub last_modified: Option<String>,
 }
 
-/// Store the thumbnail (`Ok`) or the failure (`Err(message)`) for a job.
+/// Store the thumbnail (`Ok`) or the failure (`Err(message)`) for a job,
+/// counting consecutive failures of the same image URL.
 pub async fn save_thumbnail(
     pool: &PgPool,
     job: &ThumbnailJob,
@@ -2992,14 +3025,20 @@ pub async fn save_thumbnail(
     };
     sqlx::query(
         "INSERT INTO events.thumbnails (event_id, source_id, source_image_url, bytes, content_type,
-             width, height, content_hash, etag, last_modified, error, fetched_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+             width, height, content_hash, etag, last_modified, error, failures, fetched_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
          ON CONFLICT (event_id) DO UPDATE SET
              source_id = EXCLUDED.source_id, source_image_url = EXCLUDED.source_image_url,
              bytes = EXCLUDED.bytes, content_type = EXCLUDED.content_type,
              width = EXCLUDED.width, height = EXCLUDED.height,
              content_hash = EXCLUDED.content_hash, etag = EXCLUDED.etag,
              last_modified = EXCLUDED.last_modified, error = EXCLUDED.error,
+             failures = CASE
+                 WHEN EXCLUDED.error IS NULL THEN 0
+                 WHEN events.thumbnails.bytes IS NULL
+                      AND events.thumbnails.source_image_url = EXCLUDED.source_image_url
+                     THEN events.thumbnails.failures + 1
+                 ELSE 1 END,
              fetched_at = EXCLUDED.fetched_at",
     )
     .bind(job.event_id)
@@ -3013,6 +3052,7 @@ pub async fn save_thumbnail(
     .bind(t.and_then(|t| t.etag.as_ref()))
     .bind(t.and_then(|t| t.last_modified.as_ref()))
     .bind(error)
+    .bind(i32::from(error.is_some()))
     .execute(pool)
     .await?;
     Ok(())

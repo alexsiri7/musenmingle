@@ -78,7 +78,7 @@ async fn fetches_the_api_via_fetch_context() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WellcomeCollection::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -103,7 +103,7 @@ async fn robots_disallow_blocks_the_source() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = WellcomeCollection::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

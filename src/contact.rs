@@ -10,10 +10,11 @@
 //! backticks removed, so it cannot inject Markdown or HTML.
 //!
 //! A second request for the same registrable domain and type within
-//! [`DEDUPE_WINDOW`] is added as a comment on the first one's issue. When
-//! GitHub is not configured or fails, the row stays `pending_issue` and the
-//! next ingest run files it ([`file_pending`]); the visitor sees the same
-//! "Thanks" either way.
+//! [`DEDUPE_WINDOW`] is added as a comment on the first one's issue. Issues
+//! and comments count toward the site-wide daily cap ([`crate::issue_cap`]).
+//! When the cap is reached or GitHub is not configured or fails, the row
+//! stays `pending_issue` and the next ingest run files it
+//! ([`file_pending`]); the visitor sees the same "Thanks" either way.
 //!
 //! Spam protection, without third-party scripts or CAPTCHAs: a honeypot
 //! field, a signed form timestamp that must be at least [`MIN_FILL_SECS`]
@@ -30,6 +31,7 @@ use sha2::{Digest, Sha256};
 use sqlx::{FromRow, PgPool};
 
 use crate::github::IssueFiler;
+use crate::issue_cap;
 use crate::suggestions::{self, Invalid, Suggestions};
 
 pub const LABEL: &str = "venue-request";
@@ -321,8 +323,15 @@ pub async fn submit(
     tx.commit().await?;
 
     if let Some(filer) = suggestions.filer() {
-        match tokio::time::timeout(GITHUB_TIMEOUT, deliver(pool, filer, id)).await {
-            Ok(Ok(())) => {}
+        let delivery = deliver(pool, filer, id, suggestions.issues_per_day(), now);
+        match tokio::time::timeout(GITHUB_TIMEOUT, delivery).await {
+            Ok(Ok(true)) => {}
+            Ok(Ok(false)) => {
+                tracing::info!(
+                    id,
+                    "daily GitHub issue cap reached; contact request left pending"
+                )
+            }
             Ok(Err(e)) => {
                 tracing::warn!(id, error = %e, "filing contact request failed; left pending")
             }
@@ -336,8 +345,14 @@ pub async fn submit(
 
 /// File one pending request: as a comment on the issue of an earlier
 /// request for the same domain and type within [`DEDUPE_WINDOW`], else as a
-/// new issue.
-async fn deliver(pool: &PgPool, filer: &dyn IssueFiler, id: i64) -> anyhow::Result<()> {
+/// new issue. `false` when the daily cap of `per_day` leaves it pending.
+async fn deliver(
+    pool: &PgPool,
+    filer: &dyn IssueFiler,
+    id: i64,
+    per_day: u32,
+    now: DateTime<Utc>,
+) -> anyhow::Result<bool> {
     let Some(row): Option<Row> = sqlx::query_as(
         "SELECT id, request_type, url, domain, details, reply_email IS NOT NULL AS has_email,
                 created_at
@@ -347,7 +362,7 @@ async fn deliver(pool: &PgPool, filer: &dyn IssueFiler, id: i64) -> anyhow::Resu
     .fetch_optional(pool)
     .await?
     else {
-        return Ok(());
+        return Ok(true);
     };
     let t = RequestType::parse(&row.request_type).unwrap_or(RequestType::Other);
     let body = issue_body(
@@ -370,6 +385,9 @@ async fn deliver(pool: &PgPool, filer: &dyn IssueFiler, id: i64) -> anyhow::Resu
     .bind(row.created_at - DEDUPE_WINDOW)
     .fetch_optional(pool)
     .await?;
+    if !issue_cap::reserve(pool, per_day, now).await? {
+        return Ok(false);
+    }
     let (number, status) = match earlier {
         Some(n) => {
             filer
@@ -392,16 +410,18 @@ async fn deliver(pool: &PgPool, filer: &dyn IssueFiler, id: i64) -> anyhow::Resu
     .bind(status)
     .execute(pool)
     .await?;
-    Ok(())
+    Ok(true)
 }
 
 /// File requests left `pending_issue` (older than [`RETRY_GRACE`]), oldest
-/// first. Returns how many were delivered.
+/// first, until the daily cap of `per_day`. Returns how many were delivered,
+/// and whether the cap stopped it.
 pub async fn file_pending(
     pool: &PgPool,
     filer: &dyn IssueFiler,
     now: DateTime<Utc>,
-) -> anyhow::Result<usize> {
+    per_day: u32,
+) -> anyhow::Result<(usize, bool)> {
     let ids: Vec<i64> = sqlx::query_scalar(
         "SELECT id FROM events.contact_requests
          WHERE status = 'pending_issue' AND created_at < $1 ORDER BY id",
@@ -409,10 +429,12 @@ pub async fn file_pending(
     .bind(now - RETRY_GRACE)
     .fetch_all(pool)
     .await?;
-    for id in &ids {
-        deliver(pool, filer, *id).await?;
+    for (delivered, id) in ids.iter().enumerate() {
+        if !deliver(pool, filer, *id, per_day, now).await? {
+            return Ok((delivered, true));
+        }
     }
-    Ok(ids.len())
+    Ok((ids.len(), false))
 }
 
 #[cfg(test)]

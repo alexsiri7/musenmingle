@@ -134,7 +134,7 @@ async fn fetches_listings_and_details_via_fetch_context() {
             .mount(&server)
             .await;
     }
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = TheShowroom::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -179,7 +179,7 @@ async fn a_failed_detail_page_keeps_the_card() {
         )
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let got = TheShowroom::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -203,7 +203,7 @@ async fn robots_disallow_stops_the_run() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     assert!(
         TheShowroom::new(server.uri().parse().unwrap())
             .fetch(&ctx)
@@ -225,7 +225,7 @@ async fn a_page_without_any_cards_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><main></main></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = TheShowroom::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -257,7 +257,7 @@ async fn a_quiet_season_is_not_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string(events_archive_only))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let got = TheShowroom::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

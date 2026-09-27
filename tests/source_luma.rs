@@ -131,7 +131,7 @@ async fn fetches_the_feed_via_fetch_context() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = source("luma-mason-and-fifth", &server.uri())
         .fetch(&ctx)
         .await
@@ -161,7 +161,7 @@ async fn robots_disallow_blocks_the_feed() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = source("luma-for-writers", &server.uri())
         .fetch(&ctx)
         .await
@@ -183,7 +183,7 @@ async fn a_page_instead_of_a_feed_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html>sign in</html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = source("luma-for-writers", &server.uri())
         .fetch(&ctx)
         .await

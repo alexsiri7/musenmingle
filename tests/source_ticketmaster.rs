@@ -41,7 +41,7 @@ async fn mock_pages(server: &MockServer) {
 async fn fetches_all_pages_and_normalises() {
     let server = MockServer::start().await;
     mock_pages(&server).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let tm = Ticketmaster::new(server.uri().parse().unwrap(), "test-key".into());
 
     let raws = tm.fetch(&ctx).await.expect("fetch");
@@ -76,7 +76,7 @@ async fn respects_page_cap() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let tm = Ticketmaster::new(server.uri().parse().unwrap(), "test-key".into()).with_paging(3, 1);
     assert_eq!(tm.fetch(&ctx).await.unwrap().len(), 3);
 }
@@ -89,7 +89,7 @@ async fn api_error_fails_fetch_without_leaking_key() {
         .respond_with(ResponseTemplate::new(429))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let tm = Ticketmaster::new(server.uri().parse().unwrap(), "super-secret".into());
     let err = tm.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("429"), "{err}");

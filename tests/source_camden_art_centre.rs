@@ -125,7 +125,7 @@ async fn fetches_the_feed_and_event_pages_via_fetch_context() {
         pages += 1;
     }
     assert_eq!(pages, 8);
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = CamdenArtCentre::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -158,7 +158,7 @@ async fn robots_disallow_stops_the_run() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     assert!(
         CamdenArtCentre::new(server.uri().parse().unwrap())
             .fetch(&ctx)
@@ -182,7 +182,7 @@ async fn an_empty_feed_is_an_error() {
         )
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = CamdenArtCentre::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

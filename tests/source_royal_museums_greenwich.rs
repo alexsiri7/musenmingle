@@ -59,7 +59,7 @@ async fn fetches_the_feed_via_fetch_context() {
         1,
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = RoyalMuseumsGreenwich::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -81,7 +81,7 @@ async fn unreadable_feed_items_are_reported_not_fatal() {
         1,
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = RoyalMuseumsGreenwich::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");
     let ids: Vec<_> = got.iter().map(|r| r.source_event_id.as_str()).collect();
@@ -102,7 +102,7 @@ async fn robots_disallow_blocks_the_scraper() {
     )
     .await;
     serve(&server, "/whats-on-api", ResponseTemplate::new(200), 0).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = RoyalMuseumsGreenwich::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");

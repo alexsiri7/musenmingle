@@ -15,11 +15,16 @@ needed. Each request:
 - is added as a comment to the earlier issue when the same domain and type
   were requested within 7 days;
 - stays `pending_issue` when GitHub is not configured or fails, and the next
-  ingest run files it (the visitor sees "Thanks" either way).
+  ingest run files it (the visitor sees "Thanks" either way);
+- also waits as `pending_issue` when the site's forms have used up the day's
+  GitHub issue cap (`FORM_ISSUES_PER_DAY`, default 20); it is filed, oldest
+  first, on a later day, and meanwhile the owner gets an ntfy digest once a
+  day.
 
 Spam protection: a honeypot field, a signed form timestamp (submissions
-under 3 s are dropped), 3 requests per hour / 10 per day per IP hash, and a
-16 KB body limit. No CAPTCHA and no third-party scripts.
+under 3 s are dropped), 3 requests per hour / 10 per day per IP hash (an
+IPv6 client's whole /64 counts as one IP), and a 16 KB body limit. No
+CAPTCHA and no third-party scripts.
 
 The About page promises that we act on every request and **remove a venue's
 listings within 7 days**, so the owner checks the `venue-request` label at

@@ -86,7 +86,7 @@ async fn fetches_listing_and_london_pages_via_fetch_context() {
     let broken = paths[1].clone();
     serve_site(&server, &broken).await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = LissonGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -105,7 +105,7 @@ async fn fetches_listing_and_london_pages_via_fetch_context() {
 async fn caps_exhibition_page_fetches() {
     let server = MockServer::start().await;
     serve_site(&server, "").await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = LissonGallery::new(server.uri().parse().unwrap())
         .with_max_detail_pages(1)
         .fetch(&ctx)
@@ -127,7 +127,7 @@ async fn a_page_without_json_ld_is_reported() {
         .with_priority(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     LissonGallery::new(server.uri().parse().unwrap())
         .with_max_detail_pages(1)
         .fetch(&ctx)
@@ -155,7 +155,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = LissonGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -177,7 +177,7 @@ async fn a_listing_without_cards_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = LissonGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

@@ -323,7 +323,7 @@ async fn thumb_setup(name: &str, image_path: &str) -> Option<ThumbSetup> {
 }
 
 fn ctx() -> FetchContext {
-    FetchContext::new(RateLimitConfig::disabled()).unwrap()
+    FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap()
 }
 
 #[derive(Debug, sqlx::FromRow)]
@@ -417,6 +417,87 @@ async fn thumbnailer_fetches_once_resizes_and_refetches_only_on_url_change() {
             .source_image_url,
         new_url
     );
+    s.server.verify().await;
+    s.pool.close().await;
+    s.db.drop_db().await;
+}
+
+#[tokio::test]
+async fn thumbnailer_backs_off_exponentially_and_gives_up() {
+    let Some(s) = thumb_setup("thumbnailer_backs_off", "/img/bad.jpg").await else {
+        return;
+    };
+    Mock::given(method("GET"))
+        .and(path("/img/bad.jpg"))
+        .respond_with(
+            ResponseTemplate::new(200)
+                .insert_header("content-type", "image/jpeg")
+                .set_body_string("not an image"),
+        )
+        .expect(3)
+        .mount(&s.server)
+        .await;
+    let cfg = ThumbConfig {
+        max_failures: 3,
+        ..ThumbConfig::default()
+    };
+    let failures = || async {
+        sqlx::query_scalar::<_, i32>("SELECT failures FROM events.thumbnails WHERE event_id = $1")
+            .bind(s.event_id)
+            .fetch_one(&s.pool)
+            .await
+            .unwrap()
+    };
+    let age = |by: &'static str| {
+        let pool = s.pool.clone();
+        async move {
+            sqlx::query("UPDATE events.thumbnails SET fetched_at = fetched_at - $1::interval")
+                .bind(by)
+                .execute(&pool)
+                .await
+                .unwrap();
+        }
+    };
+    let ctx = ctx();
+    let run = || thumbs::run(&s.pool, &ctx, &cfg, Utc::now());
+    let failed = thumbs::ThumbReport {
+        failed: 1,
+        ..Default::default()
+    };
+    let nothing = thumbs::ThumbReport::default();
+
+    assert_eq!(run().await.unwrap(), failed);
+    assert_eq!(failures().await, 1);
+    age("23 hours").await;
+    assert_eq!(run().await.unwrap(), nothing);
+    age("2 hours").await;
+    assert_eq!(run().await.unwrap(), failed);
+    assert_eq!(failures().await, 2);
+    age("47 hours").await;
+    assert_eq!(run().await.unwrap(), nothing);
+    age("2 hours").await;
+    assert_eq!(run().await.unwrap(), failed);
+    assert_eq!(failures().await, 3);
+    age("30 days").await;
+    assert_eq!(run().await.unwrap(), nothing, "given up after max_failures");
+    s.server.verify().await;
+
+    // A new image URL starts again.
+    Mock::given(method("GET"))
+        .and(path("/img/other.jpg"))
+        .respond_with(image_response())
+        .expect(1)
+        .mount(&s.server)
+        .await;
+    sqlx::query("UPDATE events.events SET image_url = $1 WHERE id = $2")
+        .bind(format!("{}/img/other.jpg", s.server.uri()))
+        .bind(s.event_id)
+        .execute(&s.pool)
+        .await
+        .unwrap();
+    let r = run().await.unwrap();
+    assert_eq!((r.made, r.failed), (1, 0));
+    assert_eq!(failures().await, 0);
     s.server.verify().await;
     s.pool.close().await;
     s.db.drop_db().await;

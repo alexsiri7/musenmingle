@@ -106,7 +106,7 @@ async fn fetches_the_listings_via_fetch_context() {
             .mount(&server)
             .await;
     }
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = EstorickCollection::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -139,7 +139,7 @@ async fn robots_disallow_stops_the_run() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     assert!(
         EstorickCollection::new(server.uri().parse().unwrap())
             .fetch(&ctx)
@@ -161,7 +161,7 @@ async fn an_empty_events_page_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><main></main></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = EstorickCollection::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

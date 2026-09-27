@@ -5,7 +5,10 @@
 mod common;
 
 use std::net::SocketAddr;
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
+
+use async_trait::async_trait;
 
 use axum::Router;
 use axum::body::Body;
@@ -18,6 +21,8 @@ use musenmingle::config::{RateLimitConfig, SuggestionConfig};
 use musenmingle::fetch::FetchContext;
 use musenmingle::github::{GitHubIssueFiler, IssueFiler};
 use musenmingle::health::{HealthChecker, HealthConfig};
+use musenmingle::issue_cap::FormIssueCap;
+use musenmingle::notify::Notifier;
 use musenmingle::runner::Runner;
 use musenmingle::sources::SkipReason;
 use musenmingle::suggestions::{MAX_NOTE_CHARS, RETRY_GRACE, Suggestions, ip_hash};
@@ -414,13 +419,14 @@ async fn submissions_from_one_client_wait_for_its_lock() {
 fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
     Runner {
         pool: pool.clone(),
-        ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+        ctx: FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap(),
         factory: Box::new(|_| Err(SkipReason::UnknownKey)),
         health: HealthChecker::new(HealthConfig::default(), Some(filer)),
         source_timeout: Duration::from_secs(1),
         enrich: None,
         qa: None,
         venues: None,
+        form_issues: Default::default(),
     }
 }
 
@@ -517,6 +523,132 @@ async fn retry_adopts_an_issue_filed_before_a_crash() {
         rows(&pool).await,
         vec![("newplace.london".into(), "accepted".into(), Some(9))]
     );
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn ipv6_clients_share_a_rate_limit_per_64() {
+    let Some(db) = TestDb::create("ipv6_clients_share_a_rate_limit_per_64").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let config = SuggestionConfig {
+        per_hour: 2,
+        trusted_proxies: 1,
+        ..Default::default()
+    };
+    let app = app(&pool, config, None);
+
+    for (url, client) in [
+        ("https://site1.org", "2001:db8:1:2::1"),
+        ("https://site2.org", "2001:db8:1:2::2"),
+    ] {
+        let (status, _, body) = post(&app, json!({ "url": url }), Some(client)).await;
+        assert_eq!(status, StatusCode::CREATED, "{body}");
+    }
+    let (status, _, body) = post(
+        &app,
+        json!({ "url": "https://site3.org" }),
+        Some("2001:db8:1:2:abcd::7"),
+    )
+    .await;
+    assert_eq!(status, StatusCode::TOO_MANY_REQUESTS, "{body}");
+    let (status, _, body) = post(
+        &app,
+        json!({ "url": "https://site3.org" }),
+        Some("2001:db8:1:3::1"),
+    )
+    .await;
+    assert_eq!(status, StatusCode::CREATED, "{body}");
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[derive(Clone, Default)]
+struct Recorder(Arc<Mutex<Vec<String>>>);
+
+#[async_trait]
+impl Notifier for Recorder {
+    async fn notify(&self, _title: &str, body: &str, _priority: &str) -> anyhow::Result<()> {
+        self.0.lock().unwrap().push(body.into());
+        Ok(())
+    }
+}
+
+#[tokio::test]
+async fn daily_issue_cap_holds_submissions_and_alerts_the_owner_once_a_day() {
+    let Some(db) =
+        TestDb::create("daily_issue_cap_holds_submissions_and_alerts_the_owner_once_a_day").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let api_github = MockServer::start().await;
+    mock_create(
+        &api_github,
+        ResponseTemplate::new(201).set_body_json(json!({ "number": 1, "title": "x" })),
+        1,
+    )
+    .await;
+    let config = SuggestionConfig {
+        issues_per_day: 1,
+        ..Default::default()
+    };
+    let app = app(&pool, config, Some(filer(&api_github)));
+
+    let (_, _, body) = post(&app, json!({ "url": "https://first.org" }), None).await;
+    assert_eq!(body["github_issue"], 1, "{body}");
+    let (status, _, body) = post(&app, json!({ "url": "https://second.org" }), None).await;
+    assert_eq!(status, StatusCode::CREATED, "{body}");
+    assert_eq!(
+        body,
+        json!({ "status": "accepted", "domain": "second.org", "github_issue": null })
+    );
+    api_github.verify().await;
+    sqlx::query("UPDATE events.site_suggestions SET created_at = created_at - interval '1 hour'")
+        .execute(&pool)
+        .await
+        .unwrap();
+
+    let github = MockServer::start().await;
+    mock_list(&github, json!([])).await;
+    mock_create(
+        &github,
+        ResponseTemplate::new(201).set_body_json(json!({ "number": 2, "title": "x" })),
+        1,
+    )
+    .await;
+    let notes = Recorder::default();
+    let runner = Runner {
+        form_issues: FormIssueCap {
+            per_day: 1,
+            notifier: Box::new(notes.clone()),
+        },
+        ..runner(&pool, filer(&github))
+    };
+    let now = Utc::now();
+    runner.run_once(now).await.unwrap();
+    assert_eq!(rows(&pool).await[1].1, "pending");
+    let sent = notes.0.lock().unwrap().clone();
+    assert_eq!(sent.len(), 1, "{sent:?}");
+    assert!(
+        sent[0].starts_with("1 site suggestion(s) and 0 contact request(s)"),
+        "{sent:?}"
+    );
+    runner.run_once(now).await.unwrap();
+    assert_eq!(notes.0.lock().unwrap().len(), 1, "once a day");
+
+    // The next London day has a free slot.
+    runner
+        .run_once(now + chrono::Duration::days(1))
+        .await
+        .unwrap();
+    assert_eq!(
+        rows(&pool).await[1],
+        ("second.org".into(), "accepted".into(), Some(2))
+    );
+    github.verify().await;
     pool.close().await;
     db.drop_db().await;
 }

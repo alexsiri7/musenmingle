@@ -9,7 +9,11 @@
 //!   everything allowed, 5xx / network error → everything disallowed.
 //!   A `Crawl-delay` longer than the configured interval is honoured,
 //!   counting the robots.txt fetch itself as a request;
-//! * a per-domain rate limit (default one request every 2 s per host).
+//! * a per-domain rate limit (default one request every 2 s per host);
+//! * public addresses only ([`crate::netguard`]): http(s) URLs whose host
+//!   resolves only to public IPs, checked before the request and again on
+//!   each of at most [`MAX_REDIRECTS`] redirects;
+//! * bodies of at most [`MAX_BODY_BYTES`] (or a caller's lower limit).
 //!
 //! The underlying `reqwest::Client` is private on purpose; do not add an
 //! accessor for it.
@@ -31,6 +35,7 @@ use tokio::time::Instant;
 use url::Url;
 
 use crate::config::RateLimitConfig;
+use crate::netguard::{self, GuardedResolver};
 
 /// Robots.txt product token.
 pub const ROBOTS_AGENT: &str = "MuseNMingleBot";
@@ -62,6 +67,8 @@ pub enum FetchError {
     Decode { url: String, message: String },
     #[error("response from {url} is larger than {limit} bytes")]
     TooLarge { url: String, limit: usize },
+    #[error("{reason}: {url}")]
+    Blocked { reason: String, url: String },
 }
 
 /// A body fetched by [`FetchContext::get_bytes_limited`].
@@ -81,6 +88,23 @@ pub struct CapturedPage {
     pub body: String,
     /// Fetched with [`FetchContext::get_json`] (an API response, not HTML).
     pub json: bool,
+}
+
+/// Redirects followed per request; each target is checked again.
+pub const MAX_REDIRECTS: usize = 3;
+/// The largest text or JSON body [`FetchContext`] reads.
+pub const MAX_BODY_BYTES: usize = 10 * 1024 * 1024;
+
+/// The [`netguard::Blocked`] reason anywhere in a request error's chain.
+fn blocked_reason(e: &reqwest::Error) -> Option<String> {
+    let mut source: Option<&(dyn std::error::Error + 'static)> = Some(e);
+    while let Some(err) = source {
+        if let Some(blocked) = err.downcast_ref::<netguard::Blocked>() {
+            return Some(blocked.to_string());
+        }
+        source = err.source();
+    }
+    None
 }
 
 /// Bodies larger than this are not captured.
@@ -192,17 +216,42 @@ pub struct FetchContext {
     robots: Mutex<HashMap<String, Arc<RobotsPolicy>>>,
     soft_errors: StdMutex<Vec<String>>,
     capture: StdMutex<Option<Vec<CapturedPage>>>,
+    allow_loopback: bool,
 }
 
 impl FetchContext {
     pub fn new(rate_limit: RateLimitConfig) -> Result<Self, reqwest::Error> {
+        Self::build(rate_limit, false)
+    }
+
+    /// For tests against local mock servers only: loopback addresses are
+    /// allowed; every other rule still applies.
+    pub fn new_allowing_loopback(rate_limit: RateLimitConfig) -> Result<Self, reqwest::Error> {
+        Self::build(rate_limit, true)
+    }
+
+    fn build(rate_limit: RateLimitConfig, allow_loopback: bool) -> Result<Self, reqwest::Error> {
+        let redirects = reqwest::redirect::Policy::custom(move |attempt| {
+            if attempt.previous().len() > MAX_REDIRECTS {
+                attempt.error(netguard::Blocked("too many redirects".into()))
+            } else if let Err(e) = netguard::check_url(attempt.url(), allow_loopback) {
+                attempt.error(e)
+            } else {
+                attempt.follow()
+            }
+        });
         let client = reqwest::Client::builder()
             .user_agent(user_agent())
             .timeout(Duration::from_secs(30))
             .connect_timeout(Duration::from_secs(10))
+            .dns_resolver(GuardedResolver { allow_loopback })
+            .redirect(redirects)
+            // A proxy would resolve names itself, past the resolver.
+            .no_proxy()
             .build()?;
         Ok(Self {
             client,
+            allow_loopback,
             limiter: RateLimiter::new(rate_limit),
             robots: Mutex::new(HashMap::new()),
             soft_errors: StdMutex::new(Vec::new()),
@@ -291,9 +340,13 @@ impl FetchContext {
         Ok(policy)
     }
 
-    /// GET `url` after robots.txt and rate-limit checks. Non-2xx statuses
-    /// are errors.
+    /// GET `url` after the address, robots.txt and rate-limit checks.
+    /// Non-2xx statuses are errors.
     pub async fn get(&self, url: &Url) -> Result<reqwest::Response, FetchError> {
+        netguard::check_url(url, self.allow_loopback).map_err(|e| FetchError::Blocked {
+            reason: e.to_string(),
+            url: redact(url),
+        })?;
         let robots = self.robots_for(url).await?;
         if !robots.allowed(url) {
             return Err(FetchError::RobotsDisallowed(redact(url)));
@@ -301,15 +354,21 @@ impl FetchContext {
         let (_, host) = Self::origin_and_host(url)?;
         self.limiter.acquire(&host, robots.crawl_delay()).await;
         tracing::debug!(url = %redact(url), "GET");
-        let resp = self
-            .client
-            .get(url.clone())
-            .send()
-            .await
-            .map_err(|e| FetchError::Http {
-                url: redact(url),
-                source: e.without_url(),
-            })?;
+        let resp =
+            self.client
+                .get(url.clone())
+                .send()
+                .await
+                .map_err(|e| match blocked_reason(&e) {
+                    Some(reason) => FetchError::Blocked {
+                        reason,
+                        url: redact(url),
+                    },
+                    None => FetchError::Http {
+                        url: redact(url),
+                        source: e.without_url(),
+                    },
+                })?;
         let status = resp.status();
         if !status.is_success() {
             return Err(FetchError::Status {
@@ -320,17 +379,10 @@ impl FetchContext {
         Ok(resp)
     }
 
-    /// GET and return the body as text.
+    /// GET and return the body as text (invalid UTF-8 replaced).
     pub async fn get_text(&self, url: &Url) -> Result<String, FetchError> {
-        let body = self
-            .get(url)
-            .await?
-            .text()
-            .await
-            .map_err(|e| FetchError::Http {
-                url: redact(url),
-                source: e.without_url(),
-            })?;
+        let fetched = self.get_bytes_limited(url, MAX_BODY_BYTES).await?;
+        let body = String::from_utf8_lossy(&fetched.bytes).into_owned();
         self.keep(url, &body, false);
         Ok(body)
     }
@@ -384,15 +436,7 @@ impl FetchContext {
 
     /// GET and decode the body as JSON.
     pub async fn get_json<T: DeserializeOwned>(&self, url: &Url) -> Result<T, FetchError> {
-        let bytes = self
-            .get(url)
-            .await?
-            .bytes()
-            .await
-            .map_err(|e| FetchError::Http {
-                url: redact(url),
-                source: e.without_url(),
-            })?;
+        let bytes = self.get_bytes_limited(url, MAX_BODY_BYTES).await?.bytes;
         self.keep(url, &String::from_utf8_lossy(&bytes), true);
         serde_json::from_slice(&bytes).map_err(|e| FetchError::Decode {
             url: redact(url),
@@ -487,7 +531,7 @@ mod tests {
             .respond_with(ResponseTemplate::new(200).set_body_string(r#"{"a":1}"#))
             .mount(&server)
             .await;
-        let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
         let page = u(&format!("{}/page?key=SECRET", server.uri()));
         let api = u(&format!("{}/api?apikey=SECRET", server.uri()));
 
@@ -519,6 +563,117 @@ mod tests {
             ctx.finish_capture().is_empty(),
             "finish_capture turns it off"
         );
+    }
+
+    #[tokio::test]
+    async fn strict_context_refuses_loopback_without_any_request() {
+        let server = wiremock::MockServer::start().await;
+        let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+        let err = ctx
+            .get_text(&u(&format!("{}/page?key=SECRET", server.uri())))
+            .await
+            .unwrap_err();
+        assert!(matches!(err, FetchError::Blocked { .. }), "{err}");
+        assert!(!err.to_string().contains("SECRET"), "{err}");
+        assert!(server.received_requests().await.unwrap().is_empty());
+    }
+
+    async fn redirecting_server(hops: &[(&str, String)]) -> wiremock::MockServer {
+        use wiremock::matchers::{method, path};
+        use wiremock::{Mock, MockServer, ResponseTemplate};
+
+        let server = MockServer::start().await;
+        Mock::given(path("/robots.txt"))
+            .respond_with(ResponseTemplate::new(404))
+            .mount(&server)
+            .await;
+        Mock::given(method("GET"))
+            .and(path("/ok"))
+            .respond_with(ResponseTemplate::new(200).set_body_string("ok"))
+            .mount(&server)
+            .await;
+        for (from, to) in hops {
+            let to = to.replace("{base}", &server.uri()).replace(
+                "{localhost}",
+                &server.uri().replace("127.0.0.1", "localhost"),
+            );
+            Mock::given(method("GET"))
+                .and(path(*from))
+                .respond_with(ResponseTemplate::new(302).insert_header("location", to.as_str()))
+                .mount(&server)
+                .await;
+        }
+        server
+    }
+
+    #[tokio::test]
+    async fn redirects_to_non_public_targets_are_refused() {
+        let server = redirecting_server(&[
+            ("/to-private", "http://10.0.0.1/x".into()),
+            (
+                "/to-metadata",
+                "http://169.254.169.254/latest/meta-data/".into(),
+            ),
+            ("/to-railway", "http://api.railway.internal/".into()),
+            ("/to-localhost-name", "{localhost}/ok".into()),
+            ("/to-ftp", "ftp://example.org/".into()),
+        ])
+        .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        for from in [
+            "/to-private",
+            "/to-metadata",
+            "/to-railway",
+            "/to-localhost-name",
+            "/to-ftp",
+        ] {
+            let err = ctx
+                .get_text(&u(&format!("{}{from}", server.uri())))
+                .await
+                .unwrap_err();
+            assert!(matches!(err, FetchError::Blocked { .. }), "{from}: {err}");
+        }
+    }
+
+    #[tokio::test]
+    async fn at_most_three_redirects_are_followed() {
+        let hop = |to: &str| format!("{{base}}{to}");
+        let server = redirecting_server(&[
+            ("/a1", hop("/a2")),
+            ("/a2", hop("/a3")),
+            ("/a3", hop("/ok")),
+            ("/b1", hop("/b2")),
+            ("/b2", hop("/b3")),
+            ("/b3", hop("/b4")),
+            ("/b4", hop("/ok")),
+        ])
+        .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        let three = ctx.get_text(&u(&format!("{}/a1", server.uri()))).await;
+        assert_eq!(three.unwrap(), "ok");
+        let four = ctx
+            .get_text(&u(&format!("{}/b1", server.uri())))
+            .await
+            .unwrap_err();
+        assert!(matches!(four, FetchError::Blocked { .. }), "{four}");
+    }
+
+    #[tokio::test]
+    async fn text_and_json_bodies_over_the_cap_are_refused() {
+        use wiremock::matchers::method;
+        use wiremock::{Mock, MockServer, ResponseTemplate};
+
+        let server = MockServer::start().await;
+        Mock::given(method("GET"))
+            .respond_with(ResponseTemplate::new(200).set_body_bytes(vec![b' '; MAX_BODY_BYTES + 1]))
+            .mount(&server)
+            .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        let url = u(&format!("{}/big", server.uri()));
+        let text = ctx.get_text(&url).await.unwrap_err();
+        assert!(matches!(text, FetchError::TooLarge { .. }), "{text}");
+        let json = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
+        assert!(matches!(json, FetchError::TooLarge { .. }), "{json}");
     }
 
     #[tokio::test(start_paused = true)]

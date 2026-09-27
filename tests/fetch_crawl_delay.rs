@@ -22,7 +22,7 @@ async fn first_page_request_waits_the_crawl_delay_after_robots_txt() {
         .respond_with(ResponseTemplate::new(200).set_body_string("ok"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let start = Instant::now();
     let body = ctx
         .get_text(&Url::parse(&format!("{}/whats-on", server.uri())).unwrap())

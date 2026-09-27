@@ -586,4 +586,5 @@ Responses: `201` `{"status": "accepted", "domain", "github_issue"}`, `200`
 Southbank Centre on 25 September 2026 and couldn't include it: …", and the
 `refused` entry; nothing is filed), `400` `invalid`
 (with `error`), `429` `rate_limited` (with `retry_after_secs` and a
-`Retry-After` header).
+`Retry-After` header). `github_issue` is `null` when filing waits for a
+later ingest run (GitHub unavailable, or the site's daily issue cap reached).

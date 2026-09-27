@@ -120,7 +120,7 @@ async fn fetches_listing_and_details_via_fetch_context() {
         serve(&server, p, detail_html(slug(p))).await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -162,7 +162,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -180,7 +180,7 @@ async fn empty_listing_is_an_error() {
         "<html><body></body></html>".to_string(),
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event cards"), "{err}");
@@ -236,7 +236,7 @@ async fn full_grid_loads_more_until_a_batch_is_empty() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(raws.is_empty());
@@ -271,7 +271,7 @@ async fn load_more_and_detail_fetches_stop_at_their_caps() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     s.fetch(&ctx).await.expect("fetch");
     assert_eq!(ctx.take_errors().len(), MAX_DETAIL_PAGES);
@@ -296,7 +296,7 @@ async fn full_grid_without_a_page_id_is_reported() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(raws.is_empty());

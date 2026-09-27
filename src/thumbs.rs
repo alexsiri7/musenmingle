@@ -10,7 +10,9 @@
 //! source ("Image: Barbican") with a link to the event's page there.
 //!
 //! An image is fetched again only when the event's `image_url` changes (or,
-//! after a failure, once [`ThumbConfig::retry_failed_after`] has passed).
+//! after a failure, with exponential backoff from
+//! [`ThumbConfig::retry_failed_after`], up to [`ThumbConfig::max_failures`]
+//! attempts).
 //! Work per run and per image host is capped. Failures (robots.txt
 //! disallows, oversized or undecodable images) are logged and recorded on the
 //! thumbnail row; they are NOT source errors and never feed the health
@@ -53,8 +55,11 @@ pub struct ThumbConfig {
     pub per_run: usize,
     /// Thumbnails attempted per image host per ingest run.
     pub per_host: usize,
-    /// A failed image URL is retried after this long.
+    /// Wait after the first failure of an image URL; doubles after each
+    /// further failure.
     pub retry_failed_after: chrono::Duration,
+    /// Attempts at one image URL before giving up on it until it changes.
+    pub max_failures: i32,
     /// Wall-clock budget for the whole thumbnail pass.
     pub budget: Duration,
 }
@@ -71,7 +76,8 @@ impl Default for ThumbConfig {
             max_source_dimension: 12_000,
             per_run: 60,
             per_host: 20,
-            retry_failed_after: chrono::Duration::days(7),
+            retry_failed_after: chrono::Duration::days(1),
+            max_failures: 5,
             budget: Duration::from_secs(300),
         }
     }
@@ -193,7 +199,8 @@ pub async fn run(
     // Fetch more candidates than the run cap so busy hosts don't starve
     // the others.
     let limit = i64::try_from(cfg.per_run.saturating_mul(4)).unwrap_or(i64::MAX);
-    let jobs = repo::thumbnail_jobs(pool, now, now - cfg.retry_failed_after, limit).await?;
+    let jobs =
+        repo::thumbnail_jobs(pool, now, cfg.retry_failed_after, cfg.max_failures, limit).await?;
     let mut report = ThumbReport::default();
     let mut per_host: HashMap<String, usize> = HashMap::new();
     for job in &jobs {

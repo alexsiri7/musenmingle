@@ -5,9 +5,11 @@
 //! works on: against `events.sources.domain` (normalised the same way) and
 //! against pending/accepted suggestions (a unique partial index). Every
 //! stored row, duplicates included, counts toward the submitter's rate limit,
-//! keyed by a salted hash of the client IP. An accepted suggestion becomes
-//! one `new-scraper` GitHub issue; if GitHub is unreachable the row stays
-//! `pending` and the next ingest run files it ([`file_pending`]).
+//! keyed by a salted hash of the client's [`rate_limit_key`] (an IPv6
+//! client's whole /64). An accepted suggestion becomes one `new-scraper`
+//! GitHub issue, within the site-wide daily cap ([`crate::issue_cap`]); if
+//! the cap is reached or GitHub is unreachable the row stays `pending` and
+//! the next ingest run files it ([`file_pending`]).
 //!
 //! The submitted URL is never fetched.
 
@@ -20,6 +22,7 @@ use sqlx::PgPool;
 
 use crate::config::SuggestionConfig;
 use crate::github::IssueFiler;
+use crate::issue_cap;
 use crate::repo::{self, NewSuggestion, RefusedSourceRow};
 
 pub const LABEL: &str = "new-scraper";
@@ -127,8 +130,26 @@ pub fn client_ip<'a>(
         .unwrap_or(peer)
 }
 
+/// What a client is rate-limited as: its IPv4 address, or its IPv6 /64
+/// (one subscriber usually gets a whole /64 to rotate through).
+pub fn rate_limit_key(ip: IpAddr) -> String {
+    match ip {
+        IpAddr::V4(v4) => v4.to_string(),
+        IpAddr::V6(v6) => match v6.to_ipv4_mapped() {
+            Some(v4) => v4.to_string(),
+            None => {
+                let [a, b, c, d, ..] = v6.segments();
+                format!("{}/64", std::net::Ipv6Addr::new(a, b, c, d, 0, 0, 0, 0))
+            }
+        },
+    }
+}
+
 pub fn ip_hash(ip: IpAddr, salt: &str) -> String {
-    format!("{:x}", Sha256::digest(format!("{ip}{salt}")))
+    format!(
+        "{:x}",
+        Sha256::digest(format!("{}{salt}", rate_limit_key(ip)))
+    )
 }
 
 pub fn issue_title(domain: &str) -> String {
@@ -200,6 +221,7 @@ pub struct Suggestions {
     per_hour: u32,
     per_day: u32,
     trusted_proxies: usize,
+    issues_per_day: u32,
     filer: Option<Box<dyn IssueFiler>>,
 }
 
@@ -216,6 +238,7 @@ impl Suggestions {
             per_hour: config.per_hour,
             per_day: config.per_day,
             trusted_proxies: config.trusted_proxies,
+            issues_per_day: config.issues_per_day,
             filer,
         })
     }
@@ -223,6 +246,12 @@ impl Suggestions {
     /// The GitHub issue filer, if configured (shared with the contact form).
     pub fn filer(&self) -> Option<&dyn IssueFiler> {
         self.filer.as_deref()
+    }
+
+    /// The site-wide daily cap on form issues (shared with the contact
+    /// form).
+    pub fn issues_per_day(&self) -> u32 {
+        self.issues_per_day
     }
 
     /// Salt for client-IP hashes (shared with the contact form).
@@ -301,9 +330,13 @@ impl Suggestions {
                 None
             }
             Some(filer) => {
-                match tokio::time::timeout(GITHUB_TIMEOUT, file_issue(pool, filer, id, &sub)).await
-                {
-                    Ok(Ok(n)) => Some(n),
+                let filing = file_issue(pool, filer, id, &sub, self.issues_per_day);
+                match tokio::time::timeout(GITHUB_TIMEOUT, filing).await {
+                    Ok(Ok(Some(n))) => Some(n),
+                    Ok(Ok(None)) => {
+                        tracing::info!(domain = %sub.domain, "daily GitHub issue cap reached; suggestion left pending");
+                        None
+                    }
                     Ok(Err(e)) => {
                         tracing::warn!(domain = %sub.domain, error = %e, "filing suggestion failed; left pending");
                         None
@@ -322,31 +355,38 @@ impl Suggestions {
     }
 }
 
+/// `None` when the daily cap leaves it for later.
 async fn file_issue(
     pool: &PgPool,
     filer: &dyn IssueFiler,
     id: i64,
     sub: &Submission,
-) -> anyhow::Result<i64> {
+    per_day: u32,
+) -> anyhow::Result<Option<i64>> {
+    if !issue_cap::reserve(pool, per_day, Utc::now()).await? {
+        return Ok(None);
+    }
     let body = issue_body(&sub.url, &sub.domain, sub.note.as_deref());
     let n = filer
         .create_issue(&issue_title(&sub.domain), &body, &[LABEL])
         .await?;
     repo::mark_suggestion_filed(pool, id, n).await?;
-    Ok(n)
+    Ok(Some(n))
 }
 
 /// File issues for suggestions left `pending` (created before
 /// `now - RETRY_GRACE`). An open `new-scraper` issue with the same title is
-/// adopted instead of filing a second one. Returns the issue numbers.
+/// adopted instead of filing a second one; new issues stop at the daily cap
+/// of `per_day`. Returns the issue numbers, and whether the cap stopped it.
 pub async fn file_pending(
     pool: &PgPool,
     filer: &dyn IssueFiler,
     now: DateTime<Utc>,
-) -> anyhow::Result<Vec<i64>> {
+    per_day: u32,
+) -> anyhow::Result<(Vec<i64>, bool)> {
     let pending = repo::pending_suggestions(pool, now - RETRY_GRACE).await?;
     if pending.is_empty() {
-        return Ok(Vec::new());
+        return Ok((Vec::new(), false));
     }
     let open = filer.list_open_issues(LABEL).await?;
     let mut filed = Vec::new();
@@ -355,6 +395,9 @@ pub async fn file_pending(
         let n = match open.iter().find(|i| i.title == title) {
             Some(existing) => existing.number,
             None => {
+                if !issue_cap::reserve(pool, per_day, now).await? {
+                    return Ok((filed, true));
+                }
                 let body = issue_body(&s.url, &s.domain, s.note.as_deref());
                 filer.create_issue(&title, &body, &[LABEL]).await?
             }
@@ -362,7 +405,7 @@ pub async fn file_pending(
         repo::mark_suggestion_filed(pool, s.id, n).await?;
         filed.push(n);
     }
-    Ok(filed)
+    Ok((filed, false))
 }
 
 #[cfg(test)]
@@ -455,6 +498,22 @@ mod tests {
         assert_eq!(ip_hash(ip, "a"), ip_hash(ip, "a"));
         assert_ne!(ip_hash(ip, "a"), ip_hash(ip, "b"));
         assert_eq!(ip_hash(ip, "a").len(), 64);
+    }
+
+    #[test]
+    fn rate_limit_key_groups_ipv6_by_64() {
+        let ip = |s: &str| s.parse::<IpAddr>().unwrap();
+        let a = ip("2001:db8:1:2::1");
+        let b = ip("2001:db8:1:2:ffff::9");
+        assert_eq!(rate_limit_key(a), "2001:db8:1:2::/64");
+        assert_eq!(rate_limit_key(a), rate_limit_key(b));
+        assert_eq!(ip_hash(a, "s"), ip_hash(b, "s"));
+        assert_ne!(ip_hash(a, "s"), ip_hash(ip("2001:db8:1:3::1"), "s"));
+        assert_eq!(rate_limit_key(ip("1.2.3.4")), "1.2.3.4");
+        assert_eq!(
+            ip_hash(ip("::ffff:1.2.3.4"), "s"),
+            ip_hash(ip("1.2.3.4"), "s")
+        );
     }
 
     #[test]

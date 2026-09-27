@@ -36,7 +36,7 @@ strsim = "0.11"
 sqlx = { version = "0.9", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls", "migrate", "macros", "chrono", "uuid", "json", "rust_decimal", "sqlx-toml"] }
 texting_robots = "0.2"
 thiserror = "2"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync", "signal"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync", "signal", "net"] }
 tower-http = { version = "0.6", features = ["cors", "fs"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }

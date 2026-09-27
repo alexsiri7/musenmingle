@@ -88,7 +88,7 @@ fn runner(
 ) -> Runner {
     Runner {
         pool,
-        ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+        ctx: FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap(),
         factory: Box::new(move |row| {
             if row.key == "fake" {
                 Ok(Box::new(FakeSource { now, delay }))
@@ -101,6 +101,7 @@ fn runner(
         enrich: None,
         qa: None,
         venues: None,
+        form_issues: Default::default(),
     }
 }
 
@@ -265,7 +266,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
     let factory_configured = configured.clone();
     let r = Runner {
         pool: pool.clone(),
-        ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+        ctx: FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap(),
         factory: Box::new(move |_| {
             if factory_configured.load(Ordering::SeqCst) {
                 Ok(Box::new(FakeSource { now, delay: None }))
@@ -278,6 +279,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
         enrich: None,
         qa: None,
         venues: None,
+        form_issues: Default::default(),
     };
 
     let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {
