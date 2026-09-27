@@ -16,8 +16,9 @@
 //! * Category: `isExhibition` → exhibition (skipping permanent ones, format
 //!   "Permanent exhibition" or ending in 2090); format Discussion/Talk and
 //!   tours → talk; Workshop → workshop; Session/Relaxed opening/Late/
-//!   Festival → community (a "tour" session is a talk). Performances,
-//!   screenings and online-only events are skipped.
+//!   Festival → community (a "tour" session is a talk); other formats by
+//!   the shared keyword rules. Performances, screenings and online-only
+//!   events are skipped.
 //! * Links: `https://wellcomecollection.org/events/<uid>` (exhibitions:
 //!   `/exhibitions/<uid>`). The list has no description; images are the
 //!   Prismic `16:9` crop (the thumbnailer fetches them, never the pages).
@@ -245,7 +246,9 @@ fn event_category(format: &str, title: &str) -> Option<Category> {
             Some(Category::Talk)
         }
         "session" | "relaxed opening" | "late" | "festival" | "event" => Some(Category::Community),
-        _ => None,
+        "performance" | "screening" | "film" | "concert" | "music" | "permanent exhibition" => None,
+        // A format we haven't seen: the shared keyword rules decide.
+        _ => crate::normalise::map_category(&[format, title]),
     }
 }
 
