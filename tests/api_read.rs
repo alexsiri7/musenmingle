@@ -467,6 +467,7 @@ async fn event_by_id_includes_every_source_link_and_unknown_ids_are_404() {
             "format_tags": [],
             "good_for": [],
             "vibe_tags": [],
+            "music_tags": [],
             "is_opening": null,
             "ai": null,
             "sources": [

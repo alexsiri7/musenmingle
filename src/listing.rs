@@ -89,6 +89,9 @@ pub struct EventFilter {
     /// `borough=` (repeatable, [`crate::borough::BOROUGHS`] keys): events
     /// in ANY of them. Events without a known borough never match.
     pub boroughs: Vec<String>,
+    /// `music=` (repeatable, [`crate::music::MUSIC_TAGS`]): music events
+    /// with ANY of those subtags.
+    pub music: Vec<String>,
     /// Time-of-day / day-of-week bucket (`when=`).
     pub when: Option<When>,
     /// Free events and GBP events whose lowest price is at most this;
@@ -469,6 +472,7 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 &value,
                 &crate::borough::BOROUGH_KEYS,
             )?,
+            "music" => push_tag(&mut filter.music, "music", &value, crate::music::MUSIC_TAGS)?,
             "facets" => {
                 facets = match value.as_ref() {
                     "true" => true,
@@ -845,6 +849,15 @@ mod tests {
         let q = parse_query("venue_type=museum&venue_type=artist_run&venue_type=museum").unwrap();
         assert_eq!(q.filter.venue_types, ["museum", "artist_run"]);
         assert!(parse_query("venue_type=pub").is_err());
+    }
+
+    #[test]
+    fn music_repeats_dedupes_and_uses_the_vocabulary() {
+        let q = parse_query("music=jazz&music=sound_art&music=jazz").unwrap();
+        assert_eq!(q.filter.music, ["jazz", "sound_art"]);
+        assert!(parse_query("music=rock").is_err());
+        let q = parse_query("category=music").unwrap();
+        assert_eq!(q.filter.categories, [Category::Music]);
     }
 
     #[test]

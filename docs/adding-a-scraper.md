@@ -280,7 +280,7 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] JSON-LD `Event` markup present? (listing and/or detail pages) — if not, which CSS selectors
 - [ ] Pagination / detail pages and a per-run fetch cap
 - [ ] Proposed `interval_minutes`
-- [ ] Category mapping (exhibition / expo / community / talk / workshop) and what to skip
+- [ ] Category mapping (exhibition / expo / community / talk / workshop / music, with music subtags in `tags`: see `src/music.rs`) and what to skip
 - [ ] Time-zone quirks verified against human-readable times
 - [ ] Date-only items (no time given) set `all_day`; timed items never do
 - [ ] Fixtures saved under `tests/fixtures/scrapers/<key>/`

@@ -397,6 +397,9 @@ pub(crate) struct EventJson {
     /// Who it suits (AI enrichment).
     pub(crate) good_for: Vec<String>,
     pub(crate) vibe_tags: Vec<String>,
+    /// Music subtags (`crate::music::MUSIC_TAGS`; deterministic, only for
+    /// `music` events).
+    pub(crate) music_tags: Vec<String>,
     /// Private view / opening / launch (AI enrichment; null = unknown).
     pub(crate) is_opening: Option<bool>,
     /// AI-written notes, labelled as such; never the venue's words.
@@ -503,6 +506,7 @@ impl EventJson {
             format_tags: e.format_tags,
             good_for: e.good_for,
             vibe_tags: e.vibe_tags,
+            music_tags: e.music_tags,
             is_opening: e.is_opening,
             ai: match (e.ai_grounding, e.ai_model, e.ai_enriched_at) {
                 (Some(grounding), Some(model), Some(generated_at)) => Some(AiNoteJson {

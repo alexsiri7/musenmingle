@@ -736,6 +736,8 @@ struct Filters {
     good_for: String,
     /// `venue_type=` (`crate::venue_type::VENUE_TYPES`).
     venue_type: String,
+    /// `music=` subtag (`crate::music::MUSIC_TAGS`).
+    music: String,
     cursor: String,
 }
 
@@ -762,6 +764,7 @@ impl Filters {
                 "format" => f.format = v,
                 "good_for" => f.good_for = v,
                 "venue_type" => f.venue_type = v,
+                "music" => f.music = v,
                 "source" if !v.is_empty() && !f.sources.contains(&v) => f.sources.push(v),
                 "cursor" => f.cursor = v,
                 _ => {}
@@ -806,6 +809,7 @@ impl Filters {
             ("format", &self.format),
             ("good_for", &self.good_for),
             ("venue_type", &self.venue_type),
+            ("music", &self.music),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -840,6 +844,7 @@ impl Filters {
             format: self.format.clone(),
             good_for: self.good_for.clone(),
             venue_type: self.venue_type.clone(),
+            music: self.music.clone(),
             cursor: String::new(),
         };
         format!("/?{}", rest.page_query())
@@ -879,6 +884,7 @@ impl Filters {
             ("format", &self.format),
             ("good_for", &self.good_for),
             ("venue_type", &self.venue_type),
+            ("music", &self.music),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -1217,6 +1223,12 @@ fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec
             link_with(f, |g| g.venue_type.clear()),
         ));
     }
+    if !f.music.is_empty() {
+        out.push((
+            format!("Music: {}", title_case(crate::music::label(&f.music))),
+            link_with(f, |g| g.music.clear()),
+        ));
+    }
     for src in &f.sources {
         let name = names
             .iter()
@@ -1334,7 +1346,7 @@ async fn quick_pick_counts(
 }
 
 /// The quick picks (Tonight, This weekend, Free, Openings this week, Last
-/// chance, Hands-on, Talks) with counts; the active one links back to `/`.
+/// chance, Hands-on, Talks, Music) with counts; the active one links back to `/`.
 /// Each link is a plain listing URL whose filter is the SQL its count uses.
 async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPick>> {
     let today = Utc::now().with_timezone(&London).date_naive();
@@ -1348,7 +1360,8 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
         && f.medium.is_empty()
         && f.format.is_empty()
         && f.good_for.is_empty()
-        && f.venue_type.is_empty();
+        && f.venue_type.is_empty()
+        && f.music.is_empty();
     let pick_on = |p: &str| f.pick == p && bare;
     let today_s = today.format("%Y-%m-%d").to_string();
     let picks = [
@@ -1402,6 +1415,16 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
             c.talks,
             bare && f.pick.is_empty()
                 && f.category == "talk"
+                && !f.free
+                && f.to.is_empty()
+                && f.from == today_s,
+        ),
+        (
+            "Music",
+            "/?category=music".to_string(),
+            c.music,
+            bare && f.pick.is_empty()
+                && f.category == "music"
                 && !f.free
                 && f.to.is_empty()
                 && f.from == today_s,
@@ -1546,6 +1569,9 @@ fn filter_form(
                     (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format")), label_of))
                     (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for")), label_of))
                     (tag_select("venue_type", "Venue", "Any venue", crate::venue_type::VENUE_TYPES, &f.venue_type, facets.and_then(|v| v.get("venue_type")), crate::venue_type::label))
+                    @if f.category.is_empty() || f.category == Category::Music.as_str() || !f.music.is_empty() {
+                        (tag_select("music", "Music", "Any music", crate::music::MUSIC_TAGS, &f.music, facets.and_then(|v| v.get("music")), crate::music::label))
+                    }
                     div class="field check" {
                         input id="free" name="free" type="checkbox" value="true" checked[f.free];
                         label for="free" { (with_count("Free only", price(|c| c.price.free))) }
@@ -1961,7 +1987,7 @@ async fn home_page(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Re
                         p class="eyebrow" { span class="dot" {} "London // Week " (week) }
                         h1 { (TAGLINE) }
                         p class="lede" {
-                            "Exhibitions, talks, workshops, expos and community events, gathered "
+                            "Exhibitions, talks, workshops, expos, community events and music, gathered "
                             "automatically from venues' websites and ticketing APIs. No ads, no "
                             "sponsored listings."
                         }
@@ -2482,6 +2508,13 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
                                     }
                                 }
                             }
+                            @if !e.music_tags.is_empty() {
+                                p class="tag-chips" aria-label="Music" {
+                                    @for t in &e.music_tags {
+                                        a class="tag-chip" href={ "/?category=music&music=" (t) } { (title_case(crate::music::label(t))) } " "
+                                    }
+                                }
+                            }
                             @if !e.medium_tags.is_empty() || !e.format_tags.is_empty() {
                                 p class="tag-chips" aria-label="Medium and format" {
                                     @for t in &e.medium_tags {
@@ -2913,7 +2946,8 @@ async fn about() -> Response {
                     h2 id="objective-h" { "What we're for" }
                     p {
                         (BRAND) " is a free, non-commercial, just-for-fun guide to exhibitions, "
-                        "talks, workshops and community events in London for creative people."
+                        "talks, workshops, community events and the arty end of live music in London "
+                        "for creative people."
                     }
                     p { "No ads, no ticket sales, no affiliate links. We want to send you to the venues, not keep you here." }
                 }
