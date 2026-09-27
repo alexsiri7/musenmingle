@@ -50,6 +50,7 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("design-museum", "museum"),
     ("foundling-museum", "museum"),
     ("garden-museum", "museum"),
+    ("gasworks", "museum"),
     ("goldsmiths-cca", "museum"),
     ("handel-hendrix", "museum"),
     ("headstone-manor", "museum"),

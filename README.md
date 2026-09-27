@@ -223,6 +223,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     clock), ranges, "From" dates and untimed days all day; film screenings
     and children's/family sessions skipped; talks → talk, workshops →
     workshop, the rest → community.
+  - `gasworks` — CSS on the `/exhibitions/` and `/events/` listings only
+    (no JSON-LD; the current and forthcoming sections, not the archive; no
+    detail pages, as robots.txt asks for one request a minute, a built-in
+    60 s floor): two-digit years expanded, everything all day (no times
+    are listed), ranges to their last day; free admission on exhibitions;
+    screenings and children's/family sessions skipped; tours/talks → talk,
+    the rest → community; no descriptions.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

@@ -23,6 +23,7 @@ pub mod estorick_collection;
 pub mod foundling_museum;
 pub mod four_corners;
 pub mod garden_museum;
+pub mod gasworks;
 pub mod goldsmiths_cca;
 pub mod handel_hendrix;
 pub mod headstone_manor;
@@ -180,6 +181,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             base,
         ))),
         the_showroom::KEY => Ok(Box::new(the_showroom::TheShowroom::new(base))),
+        gasworks::KEY => Ok(Box::new(gasworks::Gasworks::new(base))),
         two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),
         wellcome_collection::KEY => {
             Ok(Box::new(wellcome_collection::WellcomeCollection::new(base)))

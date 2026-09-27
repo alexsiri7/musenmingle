@@ -1,0 +1,156 @@
+---
+source: tests/source_gasworks.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "paloma-contreras-lomas-disco-inferno|2026-10-01|gasworks",
+      "description": null,
+      "ends_at": "2026-12-13T00:00:00Z",
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/07/29/7/1e90a2f4726dd7c88392c6b665bb45ad.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-30T23:00:00Z",
+      "tags": [],
+      "title": "Paloma Contreras Lomas: Disco Inferno",
+      "url": "https://www.gasworks.org.uk/exhibitions/paloma-contreras-lomas-exhibition/",
+      "venue_name": "Gasworks"
+    },
+    "id": "exhibitions/paloma-contreras-lomas-exhibition"
+  },
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "thuy-tien-nguyen-press-release|2027-01-14|gasworks",
+      "description": null,
+      "ends_at": "2027-03-21T00:00:00Z",
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/05/21/GW-EXH-2026-TTN_1_XRdO5TE/f482fffc7b05a72637859dbf0088dae3.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2027-01-14T00:00:00Z",
+      "tags": [],
+      "title": "Thuy Tien Nguyen: Press, Release",
+      "url": "https://www.gasworks.org.uk/exhibitions/thuy-tien-nguyen/",
+      "venue_name": "Gasworks"
+    },
+    "id": "exhibitions/thuy-tien-nguyen"
+  },
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "community",
+      "dedupe_key": "cotch-x-gasworks-presents-disco-inferno|2026-10-01|gasworks",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/08/25/2/2a0e5b6566b4ab4468e3359202142e76.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-30T23:00:00Z",
+      "tags": [],
+      "title": "COTCH x Gasworks presents Disco Inferno",
+      "url": "https://www.gasworks.org.uk/exhibitions/gasworks-x-cotch-presents-disco-inferno/",
+      "venue_name": "Gasworks"
+    },
+    "id": "exhibitions/gasworks-x-cotch-presents-disco-inferno"
+  },
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "community",
+      "dedupe_key": "elders-2046-for-living-dying-otherwise|2026-10-09|gasworks",
+      "description": null,
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/09/11/SDP_EP003644_260814_1625_v2/66b3d81aeb3a94bc8cf035e5c65c25f8.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T23:00:00Z",
+      "tags": [],
+      "title": "Elders, 2046: For Living and Dying Otherwise",
+      "url": "https://www.gasworks.org.uk/events/elders-2046-for-living-and-dying-otherwise/",
+      "venue_name": "Gasworks"
+    },
+    "id": "events/elders-2046-for-living-and-dying-otherwise"
+  },
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "talk",
+      "dedupe_key": "curators-tour-disco-inferno|2026-11-07|gasworks",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/08/13/AmarDios_1xSBOEa/294f012ccd8aefdb290906caf4aef728.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-07T00:00:00Z",
+      "tags": [],
+      "title": "Curator's Tour: Disco Inferno",
+      "url": "https://www.gasworks.org.uk/events/curators-tour-disco-inferno/",
+      "venue_name": "Gasworks"
+    },
+    "id": "events/curators-tour-disco-inferno"
+  },
+  {
+    "event": {
+      "address": "155 Vauxhall Street, London SE11 5RH",
+      "all_day": true,
+      "category": "talk",
+      "dedupe_key": "neighbourhood-breakfast-exhibition-tour-disco-inferno|2026-11-19|gasworks",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/08/13/CONTPA_SCIN_1164_11/dee9c8ad5e3a5e327a35e2c70a2028ea.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T00:00:00Z",
+      "tags": [],
+      "title": "Neighbourhood Breakfast & Exhibition Tour: Disco Inferno",
+      "url": "https://www.gasworks.org.uk/events/disco-inferno-neighbourhood-breakfast-exhibition-tour/",
+      "venue_name": "Gasworks"
+    },
+    "id": "events/disco-inferno-neighbourhood-breakfast-exhibition-tour"
+  }
+]
