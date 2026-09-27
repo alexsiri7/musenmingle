@@ -162,6 +162,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     every talk, tour, conference or workshop for its London wall-clock
     start time and intro; families, concerts and online editions skipped;
     facts + link only (terms).
+  - `wellcome-collection` — Wellcome Collection's public Content API
+    (`api.wellcomecollection.org/content/v0/events?timespan=future`, no
+    key, one request per run): exhibitions as all-day London date ranges
+    (permanent ones skipped), and one event per session of talks, tours,
+    workshops and access sessions (the series' overall span dropped);
+    performances, screenings and online-only events skipped; no
+    description in the API; images are CC-BY/CC-BY-NC, credited.
   - `conway-hall` — the JSON-LD `Event` inside each card on `/whats-on/`
     (one request, no detail pages; control characters in the blocks are
     tolerated): London wall-clock times; the site's categories decide

@@ -1,0 +1,980 @@
+---
+source: tests/source_wellcome_collection.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "source_event_id": "XNFfsxAAANwqbNWD",
+    "source_url": "https://wellcomecollection.org/exhibitions/being-human"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "coming-of-age|2026-03-26|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-29T00:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/ac4w7pGXnQHGZMe4_SDP_EP003369_260319_2680.jpg?auto=format,compress&rect=0,0,4000,2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-03-26T00:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "The Coming of Age",
+      "url": "https://wellcomecollection.org/exhibitions/the-coming-of-age",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aR8DZxAAACgAaG6e",
+    "source_url": "https://wellcomecollection.org/exhibitions/the-coming-of-age"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "tenderness-rage|2026-05-29|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-05-29T23:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/aikf6QeQX7-eXHyo_BTG260520093501.jpg?auto=format%2Ccompress&rect=0%2C272%2C3543%2C1993&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-05-28T23:00:00Z",
+      "tags": [
+        "display"
+      ],
+      "title": "Tenderness and Rage",
+      "url": "https://wellcomecollection.org/exhibitions/tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aY8u9xAAACEAIL8z",
+    "source_url": "https://wellcomecollection.org/exhibitions/tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "audrey-amiss-surviving-exhibitions|2026-07-10|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-02-07T00:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/iAXrdUQkBhpr5CAB_EP3621_0020.jpg?auto=format%2Ccompress&rect=0%2C417%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-07-09T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Audrey Amiss: The Surviving Exhibitions",
+      "url": "https://wellcomecollection.org/exhibitions/audrey-amiss-the-surviving-exhibitions",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aaWwHRAAAE66zmM8",
+    "source_url": "https://wellcomecollection.org/exhibitions/audrey-amiss-the-surviving-exhibitions"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "rudy-loewe-intimacies-of-care-spaces-of-grief-possibility|2026-07-10|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-02-07T00:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/9nTrkFmIBv1FMmrS_EP3619_0001.jpg?auto=format%2Ccompress&rect=0%2C196%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-07-09T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Rudy Loewe: Intimacies of Care – Spaces of Grief and Possibility",
+      "url": "https://wellcomecollection.org/exhibitions/rudy-loewe-intimacies-of-care-spaces-of-grief-and-possibility",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aaWv4xAAAC6mzmLB",
+    "source_url": "https://wellcomecollection.org/exhibitions/rudy-loewe-intimacies-of-care-spaces-of-grief-and-possibility"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "discovering-our-collections-through-songsheets|2026-09-29|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-09-29T15:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/Zshsd0aF0TcGJWsV_EP_001983_095.jpg?auto=format%2Ccompress&rect=0%2C454%2C5566%2C3131&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-29T14:00:00Z",
+      "tags": [
+        "workshop"
+      ],
+      "title": "Discovering our Collections through Songsheets",
+      "url": "https://wellcomecollection.org/events/discovering-our-collections-through-songsheets",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aowJlREAACsALUBi-20260929T1400Z",
+    "source_url": "https://wellcomecollection.org/events/discovering-our-collections-through-songsheets"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "conversations-about-death|2026-10-03|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-03T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/aK3SEWGNHVfTOVOh_EP_002130_043.jpg?auto=format,compress&rect=0,0,4000,2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-03T11:00:00Z",
+      "tags": [
+        "discussion",
+        "18+",
+        "hearing loop",
+        "relaxed"
+      ],
+      "title": "Conversations about Death",
+      "url": "https://wellcomecollection.org/events/conversations-about-death-oct26",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aoWxyxIAACwAyEBF-20261003T1100Z",
+    "source_url": "https://wellcomecollection.org/events/conversations-about-death-oct26"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-audrey-amiss-rudy-loewe-exhibitions|2026-10-04|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-04T11:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/GQorxb6SWRo4e1xA_BTG260701143026.jpg?auto=format%2Ccompress&rect=0%2C354%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-04T10:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of Audrey Amiss and Rudy Loewe exhibitions",
+      "url": "https://wellcomecollection.org/events/bsl-interpreted-tours-audrey-amiss-rudy-loewe",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "anmt5xIAAC4AtLrL-20261004T1030Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-interpreted-tours-audrey-amiss-rudy-loewe"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-audrey-amiss-rudy-loewe-exhibitions|2026-11-22|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-22T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/GQorxb6SWRo4e1xA_BTG260701143026.jpg?auto=format%2Ccompress&rect=0%2C354%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T11:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of Audrey Amiss and Rudy Loewe exhibitions",
+      "url": "https://wellcomecollection.org/events/bsl-interpreted-tours-audrey-amiss-rudy-loewe",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "anmt5xIAAC4AtLrL-20261122T1130Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-interpreted-tours-audrey-amiss-rudy-loewe"
+  },
+  {
+    "event": null,
+    "source_event_id": "apkySRIAACoAXxO6-20261009T1800Z",
+    "source_url": "https://wellcomecollection.org/events/elders-2046-for-living-and-dying-otherwise"
+  },
+  {
+    "event": null,
+    "source_event_id": "apkySRIAACoAXxO6-20261010T1300Z",
+    "source_url": "https://wellcomecollection.org/events/elders-2046-for-living-and-dying-otherwise"
+  },
+  {
+    "event": null,
+    "source_event_id": "apkySRIAACoAXxO6-20261010T1800Z",
+    "source_url": "https://wellcomecollection.org/events/elders-2046-for-living-and-dying-otherwise"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lights-out-audio-described-tours-of-audrey-amiss-rudy-loewe-exhibitions|2026-10-10|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-10T11:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/Pkh4OhEfrQprG48j_BTG260701143704.jpg?auto=format%2Ccompress&rect=190%2C474%2C3810%2C2143&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-10T10:30:00Z",
+      "tags": [
+        "gallery tour",
+        "audio described"
+      ],
+      "title": "Lights Out and Audio Described Tours of the Audrey Amiss and Rudy Loewe Exhibitions",
+      "url": "https://wellcomecollection.org/events/audio-described-tour-of-the-audrey-amiss-and-rudy-loewe-exhibitions",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aqAC5BEAACkAVOkd-20261010T1030Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tour-of-the-audrey-amiss-and-rudy-loewe-exhibitions"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lights-out-audio-described-tours-of-audrey-amiss-rudy-loewe-exhibitions|2026-11-18|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-18T16:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/Pkh4OhEfrQprG48j_BTG260701143704.jpg?auto=format%2Ccompress&rect=190%2C474%2C3810%2C2143&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-18T15:30:00Z",
+      "tags": [
+        "gallery tour",
+        "audio described"
+      ],
+      "title": "Lights Out and Audio Described Tours of the Audrey Amiss and Rudy Loewe Exhibitions",
+      "url": "https://wellcomecollection.org/events/audio-described-tour-of-the-audrey-amiss-and-rudy-loewe-exhibitions",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aqAC5BEAACkAVOkd-20261118T1530Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tour-of-the-audrey-amiss-and-rudy-loewe-exhibitions"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2026-10-17|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-17T15:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-17T14:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20261017T1430Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2026-11-11|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-11T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T11:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20261111T1130Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2026-12-17|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-12-17T16:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-17T15:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20261217T1530Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2027-01-23|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-01-23T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-23T11:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20270123T1130Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2027-02-17|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-02-17T16:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-17T15:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20270217T1530Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2027-03-16|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-03-16T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-16T11:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20270316T1130Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2027-04-24|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-04-24T15:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-04-24T14:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20270424T1430Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "audio-described-tours-of-tenderness-rage|2027-05-19|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-05-19T11:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airHxKlQnVZVEN6z_BTG260520152042-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-05-19T10:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Audio Described Tours of 'Tenderness and Rage'",
+      "url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aip1thcAACwA_2ny-20270519T1030Z",
+    "source_url": "https://wellcomecollection.org/events/audio-described-tours-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "relaxed-openings-of-coming-of-age|2026-10-18|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-18T17:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/acqx95GXnQHGZGzy_SDP_EP003369_260319_4961.jpg?auto=format%2Ccompress&rect=119%2C571%2C3636%2C2045&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-18T13:00:00Z",
+      "tags": [
+        "relaxed opening",
+        "relaxed"
+      ],
+      "title": "Relaxed Openings of The Coming of Age",
+      "url": "https://wellcomecollection.org/events/the-coming-of-age-relaxed-openings",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "ac5zThEAACQAbwxb-20261018T1300Z",
+    "source_url": "https://wellcomecollection.org/events/the-coming-of-age-relaxed-openings"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "relaxed-opening-of-audrey-amiss-rudy-loewe-exhibitions|2026-10-24|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-24T13:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/zuSP8RLJqswQhLFS_EP3619_0070-2.jpg?auto=format%2Ccompress&rect=0%2C397%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-24T09:00:00Z",
+      "tags": [
+        "relaxed opening",
+        "relaxed"
+      ],
+      "title": "Relaxed Opening of ‘Audrey Amiss' and ‘Rudy Loewe' exhibitions",
+      "url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "al48_BIAACsAmneA-20261024T0900Z",
+    "source_url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "relaxed-opening-of-audrey-amiss-rudy-loewe-exhibitions|2026-12-10|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-12-10T18:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/zuSP8RLJqswQhLFS_EP3619_0070-2.jpg?auto=format%2Ccompress&rect=0%2C397%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-10T14:00:00Z",
+      "tags": [
+        "relaxed opening",
+        "relaxed"
+      ],
+      "title": "Relaxed Opening of ‘Audrey Amiss' and ‘Rudy Loewe' exhibitions",
+      "url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "al48_BIAACsAmneA-20261210T1400Z",
+    "source_url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "relaxed-opening-of-audrey-amiss-rudy-loewe-exhibitions|2027-01-24|wellcome-collection",
+      "description": null,
+      "ends_at": "2027-01-24T14:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/zuSP8RLJqswQhLFS_EP3619_0070-2.jpg?auto=format%2Ccompress&rect=0%2C397%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-24T10:00:00Z",
+      "tags": [
+        "relaxed opening",
+        "relaxed"
+      ],
+      "title": "Relaxed Opening of ‘Audrey Amiss' and ‘Rudy Loewe' exhibitions",
+      "url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "al48_BIAACsAmneA-20270124T1000Z",
+    "source_url": "https://wellcomecollection.org/events/audrey-amiss-rudy-loewe-relaxed-openings"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "pure-poison|2026-10-24|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-24T15:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/Z8hiEhsAHJWomJTn_EP_002619_014-full.jpg?auto=format%2Ccompress&rect=0%2C417%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-24T11:00:00Z",
+      "tags": [
+        "session",
+        "relaxed",
+        "limited audio description"
+      ],
+      "title": "Pure Poison",
+      "url": "https://wellcomecollection.org/events/pure-poison",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aqkRpREAACoAkBax-20261024T1100Z",
+    "source_url": "https://wellcomecollection.org/events/pure-poison"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-tenderness-rage|2026-10-25|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-25T15:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airGyKlQnVZVEN55_BTG260520145210.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-25T14:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of Tenderness and Rage",
+      "url": "https://wellcomecollection.org/events/bsl-interpreted-tours-of-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aibw3RcAAC4A-U89-20261025T1430Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-interpreted-tours-of-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-tenderness-rage|2026-12-13|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-12-13T15:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/airGyKlQnVZVEN55_BTG260520145210.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T14:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of Tenderness and Rage",
+      "url": "https://wellcomecollection.org/events/bsl-interpreted-tours-of-tenderness-and-rage",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aibw3RcAAC4A-U89-20261213T1430Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-interpreted-tours-of-tenderness-and-rage"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-coming-of-age|2026-10-28|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-10-28T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/afTJUMBOoF08xilm_SDP_EP003369_260319_4205.jpg?auto=format%2Ccompress&rect=0%2C320%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-28T11:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of The Coming of Age",
+      "url": "https://wellcomecollection.org/events/bsl-tours-coming-of-age-exhibition",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "abK-ehEAACAAOwwT-20261028T1130Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-tours-coming-of-age-exhibition"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-interpreted-tours-of-coming-of-age|2026-11-28|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-28T15:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/afTJUMBOoF08xilm_SDP_EP003369_260319_4205.jpg?auto=format%2Ccompress&rect=0%2C320%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-28T14:30:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language interpreted"
+      ],
+      "title": "BSL Interpreted Tours of The Coming of Age",
+      "url": "https://wellcomecollection.org/events/bsl-tours-coming-of-age-exhibition",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "abK-ehEAACAAOwwT-20261128T1430Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-tours-coming-of-age-exhibition"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-tours-of-coming-of-age-with-rubbena-aurangzeb-tariq|2026-11-07|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-07T15:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/agNhc6YofJOwHJFU_EP_003391_0010.jpg?auto=format%2Ccompress&rect=0%2C0%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-07T14:00:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language"
+      ],
+      "title": "BSL Tours of ‘The Coming of Age’ with Rubbena Aurangzeb-Tariq",
+      "url": "https://wellcomecollection.org/events/bsl-tours-of-the-coming-of-age-with-rubbena-aurangzeb-tariq",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "agGrWRIAACQAEGFK-20261107T1400Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-tours-of-the-coming-of-age-with-rubbena-aurangzeb-tariq"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "low-stim-openings-of-audrey-amiss-rudy-loewe-exhibitions|2026-11-19|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-19T20:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/x5e8IktXGNnNYqus_EP3629_0022.jpg?auto=format%2Ccompress&rect=0%2C0%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T18:00:00Z",
+      "tags": [
+        "session"
+      ],
+      "title": "Low-stim Openings of the 'Audrey Amiss' and 'Rudy Loewe' exhibitions",
+      "url": "https://wellcomecollection.org/events/low-stim-openings-audrey-amiss-and-rudy-loewe",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "akuTABEAACcA7STL-20261119T1800Z",
+    "source_url": "https://wellcomecollection.org/events/low-stim-openings-audrey-amiss-and-rudy-loewe"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lights-up-audio-described-tours-of-coming-of-age|2026-10-24|wellcome-collection",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://images.prismic.io/wellcomecollection/afTJUcBOoF08xiln_SDP_EP003369_260319_4447.jpg?auto=format%2Ccompress&rect=0%2C137%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-24T14:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Lights Up and Audio Described Tours of The Coming of Age",
+      "url": "https://wellcomecollection.org/events/lights-up-and-audio-described-tours-of-the-coming-of-age",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "abBClxEAACIAiYhx-20261024T1430Z",
+    "source_url": "https://wellcomecollection.org/events/lights-up-and-audio-described-tours-of-the-coming-of-age"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lights-up-audio-described-tours-of-coming-of-age|2026-11-25|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-25T12:30:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/afTJUcBOoF08xiln_SDP_EP003369_260319_4447.jpg?auto=format%2Ccompress&rect=0%2C137%2C4000%2C2250&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-25T11:30:00Z",
+      "tags": [
+        "session",
+        "audio described"
+      ],
+      "title": "Lights Up and Audio Described Tours of The Coming of Age",
+      "url": "https://wellcomecollection.org/events/lights-up-and-audio-described-tours-of-the-coming-of-age",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "abBClxEAACIAiYhx-20261125T1130Z",
+    "source_url": "https://wellcomecollection.org/events/lights-up-and-audio-described-tours-of-the-coming-of-age"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-tour-of-audrey-amiss-surviving-exhibitions-with-alison-claire-france|2026-11-29|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-11-29T15:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/rkHtawbrOkpFMGvy_SDP_EP003626_260702_3114-Edit.jpg?auto=format%2Ccompress&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T14:00:00Z",
+      "tags": [
+        "gallery tour",
+        "british sign language",
+        "wheelchair accessible"
+      ],
+      "title": "BSL Tour of ‘Audrey Amiss: The Surviving Exhibitions’ with Alison Claire France",
+      "url": "https://wellcomecollection.org/events/bsl-tours-the-surviving-exhibitions-with-alison-claire-france",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "aleCxhIAACwAj9aw-20261129T1400Z",
+    "source_url": "https://wellcomecollection.org/events/bsl-tours-the-surviving-exhibitions-with-alison-claire-france"
+  },
+  {
+    "event": {
+      "address": "183 Euston Road, London NW1 2BE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "immuno-cautious-openings-of-audrey-amiss-rudy-loewe-exhibitions|2026-12-05|wellcome-collection",
+      "description": null,
+      "ends_at": "2026-12-05T10:00:00Z",
+      "image_url": "https://images.prismic.io/wellcomecollection/cJ4wZJNi582UtbzT_EP3621_0029.jpg?auto=format%2Ccompress&rect=162%2C542%2C3774%2C2123&w=3200&h=1800",
+      "lat": 51.5259,
+      "lng": -0.13396,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-05T09:00:00Z",
+      "tags": [
+        "session"
+      ],
+      "title": "Immuno-cautious Openings of the 'Audrey Amiss' and 'Rudy Loewe' exhibitions",
+      "url": "https://wellcomecollection.org/events/immuno-cautious-sessions-audrey-amiss-rudy-loewe-exhbitions",
+      "venue_name": "Wellcome Collection"
+    },
+    "source_event_id": "an3FrRIAACsAu6Tw-20261205T0900Z",
+    "source_url": "https://wellcomecollection.org/events/immuno-cautious-sessions-audrey-amiss-rudy-loewe-exhbitions"
+  }
+]
