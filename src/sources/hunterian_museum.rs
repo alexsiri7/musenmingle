@@ -207,7 +207,13 @@ pub fn parse_when(line: &str) -> Result<When, SourceError> {
     }
     let time = |s: &str| NaiveTime::parse_from_str(s.trim(), "%H:%M").map_err(|_| err());
     match times.split_once(['–', '—', '-']) {
-        Some((start, end)) => Ok(When::Timed(first, time(start)?, Some(time(end)?))),
+        Some((start, end)) => {
+            let (start, end) = (time(start)?, time(end)?);
+            if end <= start {
+                return Err(err());
+            }
+            Ok(When::Timed(first, start, Some(end)))
+        }
         None => Ok(When::Timed(first, time(times)?, None)),
     }
 }
@@ -237,8 +243,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         ),
         When::Timed(day, start, end) => (
             london_to_utc(day.and_time(start)),
-            end.filter(|e| *e > start)
-                .map(|e| london_to_utc(day.and_time(e))),
+            end.map(|e| london_to_utc(day.and_time(e))),
             false,
         ),
     };
@@ -382,6 +387,7 @@ mod tests {
             "29th October 2026 7pm",
             "31st October–10th September 2026",
             "10th–12th October 2026 10:00–16:00",
+            "29th October 2026 20:15–19:00",
         ] {
             let err = parse_when(line).unwrap_err().to_string();
             assert!(err.contains("unrecognised date line"), "{line}: {err}");
@@ -425,6 +431,23 @@ mod tests {
         );
         assert!(ev.tags.is_empty());
         assert_eq!(ev.price, Price::default());
+    }
+
+    #[test]
+    fn late_opening_exhibitions_are_tagged() {
+        let tags = |facts: &[&str], exhibition: bool| {
+            normalise_payload(&payload("The Operating Theatre", "", facts, exhibition))
+                .unwrap()
+                .unwrap()
+                .tags
+        };
+        let late = [
+            "1st–30th November 2026",
+            "Late openings every Thursday until 20:00",
+        ];
+        assert_eq!(tags(&late, true), ["late opening"]);
+        let talk = ["3rd November 2026 19:00", "Late opening"];
+        assert!(tags(&talk, false).is_empty());
     }
 
     #[test]
