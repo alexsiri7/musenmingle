@@ -188,6 +188,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     tolerated): London wall-clock times; the site's categories decide
     (talks → talk, workshops → workshop, festivals → community; concerts
     and film skipped); online-only events skipped.
+  - `camden-art-centre` — the site's own programme feed
+    (`/api/programmes?format=in-the-building`, which its Vue listing reads;
+    ≤ 5 pages) plus each in-scope event page (≤ 20 a run) for the sidebar
+    time, price and description: exhibitions all day from the feed's ISO
+    dates, single-day workshops timed (London wall clock); the sidebar
+    price, not the JSON-LD `Course` offer (which says free for paid
+    workshops); residencies, young people's and family programmes skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
@@ -666,7 +673,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall, the London Review Bookshop, the TEC venues and the Artlogic galleries daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall, the London Review Bookshop, Camden Art Centre, the TEC venues and the Artlogic galleries daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
