@@ -110,6 +110,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     talks and festivals (online, password-protected, non-London and
     multi-day non-exhibition events skipped); descriptions but no images
     (licensed stills of artists' works).
+  - `royal-museums-greenwich` — reads the site's own `/whats-on-api` JSON
+    feed (no JSON-LD; one request per run) for the National Maritime
+    Museum, Queen's House, Royal Observatory, Cutty Sark and the Prince
+    Philip Maritime Collections Centre; exhibitions, talks and tours,
+    workshops and festivals (recurring programmes, courses, online,
+    members-only and multi-day non-exhibition events skipped); facts + link
+    only (terms).
 - **FetchContext** (`src/fetch.rs`): the only way sources reach the network.
   Sends `MuseNMingleBot/<version> (+https://musenmingle.interstellarai.net/about#for-venues)`,
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
@@ -467,7 +474,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners and LUX daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX and Royal Museums Greenwich daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full
