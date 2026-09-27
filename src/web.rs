@@ -1713,6 +1713,15 @@ fn card_template() -> Markup {
     }
 }
 
+/// The event's opening hours while its run is on (started, not over).
+fn running_hours(e: &EventJson, now: DateTime<Utc>) -> Option<&crate::hours::OpeningHours> {
+    let h = e.hours.as_ref()?;
+    // Hours are only kept for all-day runs, whose `ends_at` is London
+    // midnight of the last day (inclusive).
+    let last_day = london(e.ends_at.unwrap_or(e.starts_at)).date_naive();
+    (e.starts_at <= now && london(now).date_naive() <= last_day).then_some(h)
+}
+
 fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
     let detail = format!("/events/{}", e.id);
     let primary = primary_source(e);
@@ -1724,6 +1733,11 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
             div class="card-body" {
                 p class="card-meta" {
                     span class="when" { (when(e.starts_at, e.ends_at, e.all_day, now)) }
+                    @if let Some(h) = running_hours(e, now) {
+                        span class={ "badge hours" @if h.is_open_at(now) { " open" } } {
+                            (h.today_status(now))
+                        }
+                    }
                     @if let Some(p) = price(e) {
                         span class={ "badge price" @if e.is_free { " free" } } { (p) }
                     }
@@ -2066,6 +2080,7 @@ async fn saved() -> Response {
 fn status_line(
     start: DateTime<Utc>,
     end: Option<DateTime<Utc>>,
+    hours: Option<&crate::hours::OpeningHours>,
     now: DateTime<Utc>,
 ) -> (String, &'static str) {
     let today = london(now).date_naive();
@@ -2078,6 +2093,14 @@ fn status_line(
         return ("Ended".into(), "past");
     }
     if start <= now {
+        // A run with opening hours is only "on" while it is open.
+        if let Some(h) = hours {
+            return if h.is_open_at(now) {
+                (h.today_status(now), "live")
+            } else {
+                (h.today_status(now), "soon")
+            };
+        }
         // Without an end time we only know it is today, not that it's still on.
         return match end {
             Some(_) => ("On now".into(), "live"),
@@ -2179,7 +2202,7 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
         _ => None,
     };
     let primary = primary_source(&e);
-    let (status, status_class) = status_line(e.starts_at, e.ends_at, now);
+    let (status, status_class) = status_line(e.starts_at, e.ends_at, e.hours.as_ref(), now);
     let kinds: Vec<String> = std::iter::once(title_case(&e.category))
         .chain(e.medium_tags.iter().map(|t| title_case(label_of(t))))
         .collect();
@@ -2249,6 +2272,21 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                             "Starts " (time_tag(e.starts_at, fmt_date_time(e.starts_at)))
                                             br;
                                             "Ends " (time_tag(end, fmt_date_time(end)))
+                                        }
+                                    }
+                                }
+                            }
+                            @if let Some(h) = &e.hours {
+                                div {
+                                    dt { "Opening hours" }
+                                    dd class="hours" {
+                                        "Open " (h.display())
+                                        span class="sub" {
+                                            @if let Some(n) = &e.hours_note {
+                                                "The listing says: \u{201c}" (n) "\u{201d}"
+                                                br;
+                                            }
+                                            "London time. Check the venue's page before you go."
                                         }
                                     }
                                 }
@@ -3098,7 +3136,7 @@ mod tests {
     #[test]
     fn status_line_says_where_an_event_stands() {
         let now = t("2026-10-01T12:00:00Z");
-        let s = |a: &str, b: Option<&str>| status_line(t(a), b.map(t), now);
+        let s = |a: &str, b: Option<&str>| status_line(t(a), b.map(t), None, now);
         assert_eq!(
             s("2026-09-01T00:00:00Z", Some("2027-01-03T00:00:00Z")).1,
             "live"

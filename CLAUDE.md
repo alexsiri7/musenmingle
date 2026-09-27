@@ -111,6 +111,7 @@ There is no local Docker; never try to use testcontainers.
 
 - `src/fetch.rs` — FetchContext (UA, robots, rate limit)
 - `src/normalise.rs` — text/time/price/category helpers, dedupe key
+- `src/hours.rs` — weekly opening hours (pure): parsed from a listing's full text at ingest (`repo::upsert_event`), schema.org forms, open-at/status/display; the listing SQL mirrors its JSON shape
 - `src/matching.rs` — fuzzy cross-source match rules (pure)
 - `src/sources/` — `Source` trait, `jsonld` helpers, `ticketmaster`, `serpentine`
 - `src/repo.rs` — all SQL (upsert/merge, runs, health issues)

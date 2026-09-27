@@ -14,6 +14,7 @@ pub mod fetch;
 pub mod github;
 pub mod health;
 pub mod host_redirect;
+pub mod hours;
 pub mod ics;
 pub mod listing;
 pub mod matching;

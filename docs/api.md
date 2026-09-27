@@ -56,6 +56,9 @@ Lists events. Every parameter is optional; they combine freely.
 | `to` | `2026-10-05` | Events starting on or before this London date (inclusive) |
 | `at` | `now` | `now`: events still on now or starting within `within_hours`; `today`: still on now or starting later today (London). Not combinable with `from`, `to` or `when` (see below). Used by `/map` |
 | `within_hours` | `3` | Window for `at=now`, 1–24 (default 3). Only with `at=now` |
+| `open_now` | `true` | Events happening now and, when they have `opening_hours`, open now (see "Opening hours" below). Not combinable with `at`, `open_at`, `from`, `to` or `when` |
+| `open_at` | `2026-10-18T11:30` | As `open_now`, at another instant: RFC 3339 (`2026-10-18T10:30:00Z`) or London wall-clock time (`YYYY-MM-DDTHH:MM`) |
+| `open_on` | `sun` | Events whose London dates (clipped to `from`/`to`) include that day of the week and, when they have `opening_hours`, open that day: `mon`…`sun` (or the full name) |
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
 | `price_max` | `10` | Free events and events whose lowest price (`price_min`) is at most this many pounds. Events with an unknown price, or priced in another currency, are left out |
@@ -102,7 +105,22 @@ such as an exhibition run without opening hours):
   the `from`/`to` window, include a Saturday or Sunday. An exhibition that
   runs through a weekend matches unless the window holds only weekdays.
 
-`evening`, `after_work` and `daytime` look at the start time only.
+`evening`, `after_work` and `daytime` look at the start time only, except
+for events with `opening_hours`, which are judged by them instead:
+`evening` = open after 18:00 on some day, `after_work` = open between 17:30
+and 20:30 on a weekday, `daytime` = open before 18:00, `weekend` = open on a
+Saturday or Sunday within the clipped dates. The `tonight` pick likewise
+means "open after 18:00 today" for them.
+
+Opening hours: some all-day runs (mostly exhibitions) have
+`opening_hours`, a weekly schedule in Europe/London time read from the
+listing's own text when it states one (e.g. "Wednesdays, Thursdays,
+Fridays & Sundays from 11am-3pm"), else the venue's usual hours for an
+exhibition. Days not listed are closed. When an event has them, `at`,
+`open_now`, `open_at`, `open_on` and `when` use them: `at=now` lists it
+only while it is open or if it opens later today before the window ends
+(so an exhibition closed on Mondays is not "on now" on a Monday evening).
+Events without `opening_hours` keep the date-only behaviour above.
 
 Search (`q`): matches the title (strongest), the venue name, then the
 description excerpt, category and tags, with English stemming (`painting`
@@ -259,6 +277,13 @@ listing on that source (may be `null`).
 `all_day` is `true` when the source gave dates but no time of day:
 `starts_at` and `ends_at` are then London midnight of the first and last day
 (the last day inclusive), so display dates without times.
+
+`opening_hours` (absent when unknown; only on all-day runs of more than one
+day) is a list of `{"days": ["wed", "thu", "fri", "sun"], "opens": "11:00",
+"closes": "15:00"}` in London time (`opens` before `closes`; each day in at
+most one entry). `hours_note` (absent when none) is the listing's own
+sentence about its hours, kept only for sources whose descriptions we may
+store.
 
 Tags and AI notes (see `README.md`, "AI enrichment"): `medium_tags`,
 `format_tags`, `good_for` and `vibe_tags` use the fixed vocabularies in the
