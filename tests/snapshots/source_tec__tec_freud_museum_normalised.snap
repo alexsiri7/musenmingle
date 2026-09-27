@@ -1,0 +1,426 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-freud-museum\", &raws)"
+---
+[
+  {
+    "event": null,
+    "id": "/event/freud-and-modernism/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-the-dead-that-answer-back-conversational-ai-mourning-and-the-production-of-posthumous-presence/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-the-care-manifesto-book-launch-with-the-care-collective/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-house-care-manifesto-book-launch-with-care-collective|2026-10-01|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. ________________________________________________________________________ From care crisis to care stripping: building care in times of despair Celebrating The Care Manifesto: The Politics of Interdependence, 2nd edition. Despite widespread interest in our Care Manifesto, since its publication we have seen not a growing embrace of the politics of care, but, rather, an intensification in the politics of carelessness and cruelty. Indeed, over the past half decade, the world has witnessed continued warfare, mass human destruction, the amassing of ever more obscene wealth by the few, ongoing austerity, and ‘care-stripping’. Yet even in these times of despair, there is also evidence of increased grassroots resistance and support for better lives for all, as seen, for example, in the popularity of Mamdani in New York and Claudia Sheinbaum in Mexico. In these harsh times, we return to the premises of The Care Manifesto and ask how we can collectively strengthen our notions and practices of care? We argue that placing care front and centre of our politics is even more urgent today than it was when the first edition of the manifesto was published six years ago. Please click here if you would like to purchase an online ticket. About the book: The Care Manifesto is the fiercely argued demand to place care at the centre of our politics. Our lives are always interdependent. It is by nurturing these ties that we cultivate a world in which every one of us can not only survive but thrive. Care must be at the heart of the state and the economy, promoting collective joy, not the satisfaction of individual desire. It should inform how we work, interact with each other, and plan our cities. It is part of how we can rebalance our relationship with the natural world. __________________________________________________________________ Speakers: Andreas Chatzidakis is Professor of Marketing and Consumer Ethics at the School of Business and Management, Royal Holloway, University of London. His works include The Moralizing Corporation; Gendering Marketing; Contemporary Issues in Marketing and Consumer Behaviour and Ethics and Morality in Consumption. Jamie Hakim is a Senior Lecturer in Media and Cultural Studies at King’s College, London. He has published widely on queer cultures of embodiment, intimacy and care, including the books Work That Body and Digital Intimacies. Jo Littler is Professor of Cultural, Media and Social Analysis at Goldsmiths, University of London. Her books include The Moralizing Corporation; Left Feminisms ; Against Meritocracy ; Radical Consumption; and The Politics of Heritage. Catherine Rottenberg is Professor of Media, Communications and Cultural Studies at Goldsmiths, University of London. Her books include The Rise of Neoliberal Feminism, This is Not A Feminism Textbook! Performing Americanness, and Black Harlem and the Jewish Lower East Side. She is currently working on a co-authored book entitled Feminism Against Fascism. Lynne Segal is Professor Emerita of Psychology & Gender Studies at Birkbeck, University of London. Her books include Beyond the Fragments (co-authored); Is the Future Female? ; Slow Motion: Changing Masculinities, Changing Men ; Straight Sex ; Why Feminism? ; Out of Time: The Pleasures and perils of Ageing ; Radical Happiness: Moments of Collective Joy ; Lean on Me: The Politics of Radical Care. _______________________________________________________________________ Tickets: Solidarity Ticket – £26.94 Standard Ticket – £16.40 A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-10-01T18:30:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/07/care-manifesto.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16.40",
+        "min": "11.13"
+      },
+      "starts_at": "2026-10-01T17:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN-HOUSE – The Care Manifesto: Book Launch with The Care Collective",
+      "url": "https://www.freud.org.uk/event/in-person-the-care-manifesto-book-launch-with-the-care-collective/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-person-the-care-manifesto-book-launch-with-the-care-collective/"
+  },
+  {
+    "event": null,
+    "id": "/event/visita-guidata-gradiva/"
+  },
+  {
+    "event": null,
+    "id": "/event/brett-kahr-a-festschrift/"
+  },
+  {
+    "event": null,
+    "id": "/event/a-hanukia-de-freud-freud-judaismo-e-a-psicanalise/"
+  },
+  {
+    "event": null,
+    "id": "/event/freud-museum-reading-group-civilisation-and-its-discontents/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lean-on-me-book-launch-with-lynne-segal|2026-10-22|freud",
+      "description": "The Freud Museum London is delighted to host this evening event to celebrate the paperback release of Lynne Segal’s ‘Lean on Me’. On the night we will be joined by Lynne Segal and Akshi Singh to explore the themes of care, intimacy, and collective responsibility that are at the core of Lynne’s book. Lynne and Akshi will discuss what it means to depend on one another in an age of social fragmentation, inequality and climate crisis, and consider how practices of radical care can help us imagine a more hopeful future. ________________________________________________________________________ About the book Have you ever relied on the kindness of strangers? What brings people together to find hope and solidarity? What do we owe each other as citizens and comrades? Questions of care, intimacy, education, meaningful work, and social engagement lie at the core of our ability to understand the world and its possibilities for human flourishing. In Lean On Me feminist thinker Lynne Segal goes in search of hope in her own life and in the world around her. She finds it entwined in our intimate commitments to each other and our shared collective endeavours. Segal calls this shared dependence ‘radical care’. In recounting from her own life the moments of motherhood, and of being on the front line of second-wave feminism, she draws upon lessons from more than half a century of engagement in left feminist politics, with its underlying commitment to building a more egalitarian and nurturing world. The personal and the political combine in this rallying cry to transform radically how we approach education, motherhood, and our everyday vulnerabilities of disability, ageing, and enhanced needs. Only by confronting head-on these different forms of interdependence and care can we change the way we think about the environment and learn to struggle — together —against impending climate catastrophe. _______________________________________________________________________ Speakers: Lynne Segal is Anniversary Professor Emerita of Psychology and Gender Studies in the Department of Psychosocial Studies at Birkbeck, University of London. She is the author of several titles, including Is the Future Female? Troubled Thoughts on Contemporary Feminism, Making Trouble: Life & Politics, Radical Happiness: Moments of Collective Joy, Out of Time: The Pleasures and perils of Ageing. Lynne Segal also co-wrote Beyond the Fragments: Feminism and the Making of Socialism with Sheila Rowbotham and Hilary Wainwright, and recently published Lean on Me: A Politics of Radical Car e. Akshi Singh is an associate editor at Parapraxis and deputy editor at Critical Quarterly, and is the editor of a special collection of Critical Quarterly presenting new writing on Marion Milner. She collaborates regularly with the Derek Jarman lab, and writes for the London Review of Books. Singh moved to the UK from India to study for a PhD in psychoanalysis and literature with Jacqueline Rose. She is currently training to be a psychoanalyst at the Centre for Freudian Analysis and Research. _______________________________________________________________________ Tickets: Solidarity Ticket – £26.94 Standard Ticket – £16.40 A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-10-22T19:30:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/07/lean-on-me.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16.40",
+        "min": "11.13"
+      },
+      "starts_at": "2026-10-22T18:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "Lean on Me: Book Launch with Lynne Segal",
+      "url": "https://www.freud.org.uk/event/lean-on-me-book-launch-with-lynne-segal/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/lean-on-me-book-launch-with-lynne-segal/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-anxiety-clarification-critique-and-update/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-house-anxiety-clarification-critique-update|2026-10-24|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. ________________________________________________________________________ The Freud Museum is delighted to welcome Salman Akhtar and Mary Kay O’Neill to discuss their edited volume, Anxiety: Clarification, Critique and Update. They will be joined in their discussion by the Freud Museum’s Research Manager and book contributor Tom DeRose. The evening will begin with a presentation by Tom DeRose on Freud’s changing views on anxiety, considering the 100-year anniversary of the publication of Inhibitions, Symptoms and Anxiety. Then Salman Akhtar will discuss the distinctions between different types of anxiety and their relations to fears and phobias. Finally, Mary Kay O’Neill will discuss the theme of the professional anxieties of analysts. There will be opportunities for audience questions and discussion throughout the event. Please click here if you would like to purchase an onlin e ticket. About the book: Anxiety is one of the most central concepts in both the theoretical and clinical foundations of psychoanalysis. Thus, the study of anxiety is, in effect, the study of psychoanalysis itself. Salman Akhtar and Mary Kay O’Neil have gathered together a thoughtful group of scholars to cover this challenging terrain. The book opens with two chapters that lay out the groundwork for things to come: the first offers succinct definitions of the plethora of psychiatric and psychoanalytic terms pertaining to this emotion; the second elucidates Freud’s changing views of anxiety. These chapters are followed by independent discourses on separation anxiety and castration anxiety that attempt to describe, critique, and update these well-established notions. A section on cultural matters follows which includes essays on performance and climate anxieties. Part IV focuses on the clinical process and provides three pithy discourses on the entanglement of anxiety with enactment, aging, and trauma. The fifth and final part explores the analyst’s clinical and professional anxieties. __________________________________________________________________ Speakers: Salman Akhtar was born in India and completed his medical and psychiatric education there. Upon arriving in the USA in 1973, he repeated his psychiatric training at the University of Virginia School of Medicine, and then obtained psychoanalytic training from the Philadelphia Psychoanalytic Institute. He is Emeritus Professor at Jefferson Medical College and a training and supervising analyst at the Psychoanalytic Center of Philadelphia. He has authored, edited or co-edited more than 118 books on psychiatry and psychoanalysis, including his most recent: Freud in Istanbul: Turkish contributions to Psychotherapy and Psychoanalysis. He is also a Scholar-in-Residence at the Inter-Act Theatre Company in Philadelphia. Salman Akhtar received the Sigourney Award in 2012. Mary Kay O’Neil is supervising and training psychoanalyst of the Canadian Institute of Psychoanalysis and a registered psychologist in private practice in Toronto. She is a member of the TIP Curriculum Committee and of the Centre for Advanced Psychoanalytic Studies, and formally North American representative on the IPA Board. She has served on a number of local, national and international committees and on the editorial board of the International Journal of Psychoanalysis. She is also the author of several books, including The Unsung Psychoanalyst: The Quiet Influence of Ruth Easser, and Mothering Alone: A Plea for Opportunity. Tom DeRose is Research Manager at the Freud Museum London. His research focusses on the cultural and philosophical aspects of Freudian theory. His most recent publication is ‘Freud’s Changing Views on Sadomasochism’, published in, ed. Akhtar and Crilley, ‘The Joy of Torment’ (Karnac, 2024). His has recently written chapters on Freud’s theory of Anxiety and Psychoanalysis and the detective novel, and is currently working on a chapter on Freud and Africa. _______________________________________________________________________ Tickets: £26.94 Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-10-24T18:30:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/08/framed-anxiety.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-10-24T17:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN-HOUSE – Anxiety: Clarification, Critique and Update",
+      "url": "https://www.freud.org.uk/event/in-house-anxiety-clarification-critique-and-update/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-house-anxiety-clarification-critique-and-update/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "freuds-afternoon-session-greek-myths-for-post-truth-world|2026-10-28|freud",
+      "description": "What can ancient Greek myths teach us about the troubles and challenges of our post-truth times: environmental degradation, mass migration, war, inequality, exclusion, authoritarianism, and perplexing technological possibilities? Using some of his favourite myths as points of departure, Yiannis Gabriel will invite the audience to think and experience the world we inhabit mythologically – to engage with emotions and symbolism that lurk deeply inside old texts and to consider different courses of action, individual and collective, they open up. In addition to acting as fountains of meaning when meaning is precarious and fragmented, Greek myths, he will argue, have a therapeutic power helping us face the future with greater fortitude and practical wisdom that we so badly need in our times. _______________________________________________________________________ Speaker: Yiannis Gabriel, a Greek social psychologist, is Professor Emeritus at Bath University, UK. Since his PhD on Psychoanalysis at the University of California, Berkeley, and his first book Freud and Society, Gabriel has used psychoanalytic insights and theories to study a wide range of political, cultural and organizational phenomena, ranging from authoritarianism, nostalgia, consumerism, miasma and organizational trauma. As a Greek, he has had a life-long fascination with stories and myths which have played a large part in his research published in fourteen books, including Music and Story: A Two-Part Invention (2022), Myths, Stories, and Organizations: Premodern Narratives for Our Times (2004), Organizations in Depth: The Psychoanalysis of Organizations (1999) and Storytelling In Organizations: Facts, Fictions, and Fantasies (2000). _______________________________________________________________________ Complement your visit to the Freud Museum with one of our tours or talks led by staff, volunteers and guest speakers. Afternoon Sessions are free with your admission ticket, you can book your admission ticket now! Please note that we have limited capacity so advanced booking is recommended to avoid missing out. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately, the Freud Museum does not currently have step-free access. Advance booking is highly recommended, as capacity is limited. Concessions/Members/Patrons: Please show proof of eligibility/membership card on arrival. _______________________________________________________________________ *Book cover designed by Terry Woodley and illustrated by Marianne Gabriel.",
+      "ends_at": "2026-10-28T16:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/08/greek-myths-with-framed.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14.90",
+        "min": "12.90"
+      },
+      "starts_at": "2026-10-28T15:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "Freud’s Afternoon Session – Greek Myths for a Post-truth World",
+      "url": "https://www.freud.org.uk/event/freuds-afternoon-session-greek-myths-for-a-post-truth-world/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/freuds-afternoon-session-greek-myths-for-a-post-truth-world/"
+  },
+  {
+    "event": null,
+    "id": "/event/the-shadow-of-the-object-chloe-aridjis-and-devorah-baum-in-conversation/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-the-architecture-of-the-unconscious-technology-domestic-fantasy-and-the-uncanny-in-kane-parsons-backrooms/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-person-psychic-life-of-fragments-with-raluca-soreanu|2026-10-30|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. Please click here if you would like to purchase an online ticket. ________________________________________________________________________ The Freud Museum is delighted to host the book launch of Raluca Soreanu’s monograph ‘The Psychic Life of Fragments: On Splitting and the Experience of Time in Psychoanalysis’ (Routledge, 2026, The Relational Perspectives Series). This evening symposium dedicated to the book (6:00pm – 8:00pm) is available either in person or online. The Psychic Life of Fragments rethinks trauma and psychic fragmentation starting from the psychoanalytic clinic. What does it mean to work with fragments in psychoanalysis? What is the psychic life of fragments? And what can a fragment do? Raluca Soreanu writes about trauma, fragmentation and the radical plasticity of the psyche. Reconstructing Sándor Ferenczi’s trauma theory, she articulates an original vocabulary of fractures, splits, atomisations, pulverisations, leakages, detritus and psychic dematerialisation along with new formations, protective membranes, expansions, contagions and growths. She approaches the scene of trauma from new angles, paying attention to oblique lines and asymmetric encounters. Mobilizing clinical and literary vignettes, this book further argues for a minor psychoanalysis, one that emerges at the intersection of four types of theoretical-clinical experimentation: a psychoanalysis of scars, a psychoanalysis of organs, an eventful psychoanalysis and a blue psychoanalysis. This book is important for clinicians and trainees in psychoanalysis, for mental health practitioners working with trauma, and for psychosocial and psychoanalytic thinkers. It is written to be used, between the psychoanalytic chair and the couch, especially at challenging times, in the transference and in the world. Please click here if you would like to purchase an online ticket. About the book: ‘Raluca Soreanu has become an indispensable thinker in contemporary psychoanalysis. With dazzling precision, she shows that the psyche’s fragments are not detritus but lively actors in trauma, memory, and repair. This book outlines a ‘minor psychoanalysis’ of scars, organs, catastrophe—an audacious re-staging of Ferenczi that re-opens psychoanalysis to its most experimental, timely, and unruly possibilities.’ Patricia Gherovici, psychoanalyst and author of Transgender Psychoanalysis ‘Soreanu’s return to Ferenczi, like Lacan’s return to Freud, levers us not into the past but a transformational future, a new psychoanalytic imaginary that is oblique, tentacular, visceral, surreal, decolonial. Here is a vocabulary of pliable elements, mimicry, asynchronous temporalities, fluid bodies, mosaics of dead and alive fragments – a psyche sensorially gripped and dismembered by the scars of time, but endowed with radically creative capacities and modes of registration and survival. Compelling, poetic, and precise, anchored throughout in luminous clinical narratives and a rigorous didactic concern with process, this is an epoch-making contribution to the emergent Ferenczian tradition: rerouting the mainstream into fascinating, life-preserving waters.’ Matt Ffytche, Professor of Psychoanalytic Studies, University of Essex and Editor, Psychoanalysis and History ‘In her strikingly lyrical text, Raluca Soreanu elucidates what ‘being in fragments’ might mean psychically. Drawing on the work of Sándor Ferenczi, Soreanu takes us beyond the static and repetitive temporalities of dissociation and splitting, and suggests that rather than the discarded elements of trauma, psychic fragments have a life of their own. Through clinical vignettes she shows us how patient and analyst can create a montage of such fragments, producing transformations in suffering through the co-creation of new and surprising forms of psychic life. Breathtakingly original, Soreanu offers us an entirely new thesis on trauma.’ Lisa Baraitser, Psychoanalyst, The British Psychoanalytical Society, and Professor of Psychosocial Theory, Birkbeck, University of London, UK On the evening: During the symposium, introduced and moderated by Lizaveta van Munsteren, we will hear from the author, Raluca Soreanu, and from guest speakers G Lori Millon, Patricia Gherovici, Katie Gentile, Matt ffytche, Lisa Baraitser, Jakob Staberg, Laura Salisbury & Julianna Pusztai. The Psychic Life of Fragments is part of the Relational Perspectives book series at Routledge, edited by Adrienne Harris, Eyal Rozmarin & Steven Kuchuck. The evening symposium will be followed by a wine and canapés reception. __________________________________________________________________ Speakers: Raluca Soreanu is a psychoanalytic and psychosocial thinker and writer. She is Professor of Psychoanalytic Studies in the Department of Psychosocial and Psychoanalytic Studies, University of Essex, UK, and a psychoanalyst, member of the Círculo Psicanalítico do Rio de Janeiro, Brazil, and of the Site for Contempo…",
+      "ends_at": "2026-10-30T20:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/08/psychic-life-of-fragments-framed.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-10-30T18:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN PERSON – The Psychic Life of Fragments, with Raluca Soreanu",
+      "url": "https://www.freud.org.uk/event/in-person-the-psychic-life-of-fragments-with-raluca-soreanu/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-person-the-psychic-life-of-fragments-with-raluca-soreanu/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-the-psychic-life-of-fragments-with-raluca-soreanu/"
+  },
+  {
+    "event": null,
+    "id": "/event/o-pacto-colonial-da-psicanalise-e-a-violencia-contra-a-mulher/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-two-women-book-launch-with-jacqueline-rose/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-house-two-women-book-launch-with-jacqueline-rose|2026-11-06|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. ________________________________________________________________________ The Freud Museum is delighted to welcome acclaimed writer and critic Jacqueline Rose to mark the publication of her new novel, Two Women. Two Women is a fictional account tracing the lives and imagined interconnections of Edith Stein and Gillian Rose. Jacqueline Rose will be joined in conversation by fellow writer and critic Devorah Baum. Their discussion will explore the influence of psychoanalysis in the creative process particularly in connection with the novel, the relationship between biography and fiction, and how fiction can offer new ways of engaging with history and identity. Please click here if you would like to purchase an onlin e ticket. About the book: In Two Women, Jacqueline Rose fictionalizes and intertwines the lives of two remarkable figures whose stories trace the contours of the twentieth century: Edith Stein, the German-Jewish philosopher, Catholic convert and saint; and Gillian Rose, philosopher of German-Jewish thought, also a convert, and Jacqueline’s sister. Through a luminous weaving of fiction and history, Rose traces the parallels and distances between these women – their intellect, faith, suffering and courage – while also confronting the mysteries of love, loss and belonging that shape every human life. A deeply moving work, Two Women is at once an act of remembrance and a daring work of imagination by one of the most important feminist writers of our time. __________________________________________________________________ Speakers: Jacqueline Rose is internationally recognised as one of the most important living feminist critics. She is co-director of the Birkbeck Institute for the Humanities, co-founder of Independent Jewish Voices UK, a Fellow of the British Academy and of the Royal Society of Literature. She is a frequent contributor to the London Review of Books and New York Review of Books, The Guardian and other publications. Her books include States of Fantasy, The Last Resistance, Women in Dark Times, Mothers: an essay on love and cruelty, and The Plague: Living Death in Our Times. She is the recipient of the 2026 PEN Harold Pinter Prize. Devorah Baum is Professor of English Literature at the University of Southampton. She has published several works including: On Marriage, Feeling Jewish and The Jewish Joke: an essay with examples (less essay, more examples). Devorah has also written for The New York Times, Guardian, Tate Etc and the Financial Times. _______________________________________________________________________ Tickets: £26.94 Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-11-06T20:30:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/07/Two-Women-framed.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-11-06T19:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN-HOUSE – Two Women: Book Launch with Jacqueline Rose",
+      "url": "https://www.freud.org.uk/event/in-house-two-women-book-launch-with-jacqueline-rose/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-house-two-women-book-launch-with-jacqueline-rose/"
+  },
+  {
+    "event": null,
+    "id": "/event/inner-torment-part-ii-fear-hatred-envy-and-greed/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-person-symposium-book-launch-of-psychoanalysis-otherwise-with-raluca-soreanu-ana-minozzo|2026-11-16|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. Please click here if you would like to purchase an online ticket. ________________________________________________________________________ The Freud Museum is delighted to host the launch of ‘Psychoanalysis Otherwise’, a collection edited by the FREEPSY Collective. This evening symposium is dedicated to the publication (6:00pm – 7:45pm), with the presence of editors Raluca Soreanu and Ana Minozzo, authors and guests. It is followed by launch of an exhibition by Ana Čvorović, curated by Sacha Craddock (8pm – 9pm), and a wine reception (9pm – 10pm). The symposium is available both in person and online. The first part of the evening will be dedicated to the launch of Psychoanalysis Otherwise, a collection of papers by the Free Clinics Working Group (FCWG) at FREEPSY. The Free Clinics Working Group is a collective space of exchange, learning, thinking and writing promoted by FREEPSY. Over the past four years, FREEPSY hosted guests from free clinics and scholars from various territories aiming at stretching our collective repertoire of what free psychoanalytic clinics are, can be and how they operate across different contexts. Since 2022, the FCWG has been fostering the establishment of an intimate network of researchers & clinicians of psychosocial orientation that can discuss texts, think together and produce alternative types of scholarly work collectively such as zines, online dictionaries, artwork and essays. Psychoanalysis Otherwise is the fruit of these collective explorations. On the evening, psychoanalysts Raluca Soreanu and Ana Minozzo will be in conversation with authors and guests, including Susana Caló and Anderson Santos. The date also marks the first day of the three-week Free Clinics Festival, organised by the FREEPSY Collective. Held between November 16 and December 6 in various locations across London, the Free Clinics Festival includes a series workshops, book launches, conferences, artist talks, exhibitions and more. Please check the FREEPSY website for more information on how to register for the events: https://freepsyproject.com/fcf/. The second part of the evening will be dedicated to the opening of an exhibition by Ana Čvorović, artist-researcher at FREEPSY, curated by Sacha Craddock. The exhibition will be displayed on site, at the Freud Museum, over the duration of the Free Clinics Festival. The two launches will be followed by a reception. Please click here if you would like to purchase an online ticket. __________________________________________________________________ Speakers: Susana Caló is a researcher and writer. Her work focuses on reconstructing potential histories of radical psy practices, considering their relationship to wider social, political and urban struggles with the aim to develop a critical theory of psychological practices and contemporary psychopolitics. Her most recent publication CERFI: Analysis Everywhere (Minor Compositions) is the result of ten years of collective research into the history and practices of French institutional analysis and psychotherapy, examining their conceptual and socio-political dimensions. She was a co-investigator in The Pragmatic Genealogy of Concepts (BA, King’s College London), examining the political life of concepts in post-war French thought. She is a founding member of Chaosmosemedia, a rhizomatic project that has organised several international events focusing on the work of the psychoanalyst and activist Félix Guattari. She lectures at the Open University and collaborates with the FREEPSY collective, acting as a consultant and network organiser contributing to the development of a Free Clinics Network. Sacha Craddock (b. 1955) is an art critic, writer & curator based in London. She is co-founder of ArtSchool Palestine, member of Abbey Council, and co-founder of the Contemporary Art Award at the British School at Rome, Trustee of the Shelagh Cluett Trust, and President of AICA-UK. She was Chair of the Board of New Contemporaries and selection process from 1996 until 2021. Selected critical writing includes essays on Mark Boulos, Angus Fairhurst, Jose Dávila, Chantal Joffe, Wolfgang Tillmans, Rosa Lee, and Adam Henein, among others. She was the co-founder of Bloomberg Space and its curator from 2002-2011. Her curatorial contribution includes the Turner Prize, Hull 2017, Strike Site at Backlit Gallery, Nottingham 2018, Here, Now at Misk Art Institute 2021, Glossary for Curated by, Vienna 2023, and Thought to Image for Albion Jeune 2024. Latest curatorial projects include PLATAFORMA as International Guest Curator, Guadalajara 2025-2026, and David Garner: I have nothing to say only to show, Penarth 2025. Ana Čvorović (b. Sarajevo 1981) is a contemporary artist based in London. Her installations are an exploration of the psychodynamics of place, specifically in the context of war, migration, and socio-economic impoverishment. Her solo exhibitions include Archipelago at Ballon Rouge, …",
+      "ends_at": "2026-11-16T21:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/09/Picture1.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-11-16T18:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN PERSON – Symposium & Book Launch of ‘Psychoanalysis Otherwise’ with Raluca Soreanu & Ana Minozzo",
+      "url": "https://www.freud.org.uk/event/in-person-symposium-book-launch-of-psychoanalysis-otherwise-with-raluca-soreanu-ana-minozzo/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-person-symposium-book-launch-of-psychoanalysis-otherwise-with-raluca-soreanu-ana-minozzo/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-symposium-book-launch-of-psychoanalysis-otherwise-with-raluca-soreanu-ana-minozzo/"
+  },
+  {
+    "event": null,
+    "id": "/event/por-que-a-psicanalise-ainda-importa-evento-online/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "por-que-psicanalise-ainda-importa-evento-presencial|2026-11-19|freud",
+      "description": "Por que a psicanálise ainda importa? No ano em que o Freud Museum celebra seus 40 anos, esta palestra propõe uma reflexão sobre a atualidade da obra de Freud. Mais de um século após o surgimento da psicanálise, suas ideias continuam despertando interesse, provocando debates e suscitando novas perguntas. O que explica essa permanência? Nesta conferência presencial, realizada no Freud Museum, em Londres, o renomado psicanalista, professor e escritor Christian Dunker propõe uma reflexão sobre a presença da psicanálise no mundo de hoje. A partir de temas como sofrimento psíquico, identidade, cultura e política, a conversa busca discutir por que a psicanálise continua oferecendo uma forma de compreender o presente e os impasses da experiência humana. Evento Presencial Data : Quinta feira, 19/11/2026. Horário : 19–20:30 ( Horário de Londres). Palestrante : Christian Dunker é psicanalista, professor titular do Instituto de Psicologia da Universidade de São Paulo (USP) e Analista Membro de Escola do Fórum do Campo Lacaniano. É mestre e doutor em Psicologia pela USP, com pós-doutorado na Manchester Metropolitan University. Atua clinicamente a partir de Freud e Lacan e coordena o Laboratório de Teoria Social, Filosofia e Psicanálise da USP. É autor de diversos livros, entre eles Mal-Estar, Sofrimento e Sintoma e Uma Biografia da Depressão, vencedores do Prêmio Jabuti. É colunista da UOL e mantém o canal de divulgação científica “Falando Nisso” no YouTube.",
+      "ends_at": "2026-11-19T20:30:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/07/christian-dunker-foto.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "26.94"
+      },
+      "starts_at": "2026-11-19T19:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "Por que a psicanálise ainda importa ? ( Evento presencial )",
+      "url": "https://www.freud.org.uk/event/por-que-a-psicanalise-ainda-importa-evento-presencial/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/por-que-a-psicanalise-ainda-importa-evento-presencial/"
+  },
+  {
+    "event": null,
+    "id": "/event/online-case-by-case-psychoanalysis-and-the-political-discourse-book-launch-with-patricia-gherovici-jamieson-webster/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-house-case-by-case-psychoanalysis-political-discourse-book-launch-with-patricia-gherovici-jamieson-webster|2026-11-20|freud",
+      "description": "This ticket is for IN-HOUSE access to this event. ________________________________________________________________________ This event is part of the Free Clinics Festival organised by the FREEPSY Collective: https://freepsyproject.com/fcf / Freud’s ‘talking cure’ and its offshoots are more widespread today than ever. But as the divisive issues of our time grow more urgent, a contentious question persists: must psychoanalysis remove itself from politics altogether in order to be effective? Or is it inherently political? Specific disagreements about how clinicians should or shouldn’t engage with imperialism, violence, race, and gender identity point to the broader question of where politics is situated in our psychic life. Is it on the periphery – a symptom or displacement – or right at the heart of the matter? In this timely book, psychoanalysts Patricia Gherovici and Jamieson Webster examine the vexed relationship between psychoanalysis and politics through a sequence of case studies, exploring the many ways in which the political enters the consulting room. Ranging from early cases confronting homosexuality and race to idiosyncratic analyses disentangling the legacies of state and colonial violence, the authors illuminate how the political shapes our relationships to power, normativity, and identity. These historic cases are prescient of the political dilemmas confronting us today. Rather than dismissing psychoanalysis as irrelevant or reducing it to a vehicle for political positions, Case by Case makes a galvanizing and challenging argument for what psychoanalysis can reveal about our political selves – and how it might transform them. Please click here if you would like to purchase an online ticket. __________________________________________________________________ Speakers: Jamieson Webster is a psychoanalyst in private practice in New York City. She is the author of O n Breathing (2025), Disorganization & Sex (2022), Conversion Disorder: Listening to the Body in Psychoanalysis (2018), and, with Simon Critchley, Stay, Illusion! The Hamlet Doctrine (2013). She teaches at the New School for Social Research. Patricia Gherovici is a psychoanalyst, analytic supervisor, and recipient of the Sigourney Award for her clinical and scholarly work with Latinx and gender variant communities. Her books include The Puerto Rican Syndrome (2003), Please Select Your Gender: From the Invention of Hysteria to the Democratizing of Transgenderism (2010), Transgender Psychoanalysis: A Lacanian Perspective on Sexual Difference (2017), and Bodies to Wear (2025). Raluca Soreanu is a psychoanalyst and Professor of Psychoanalytic Studies in the Department of Psychosocial and Psychoanalytic Studies, University of Essex, UK. Her new book The Psychic Life of Fragments: On Splitting and the Experience of Time in Psychoanalysis was published by Routledge in April 2026 in the Relational Perspectives Series. She is the project lead of the FREEPSY: Free Clinics and a Psychoanalysis for the People: Progressive Histories, Collective Practices, Implications for Our Times (UKRI Frontier Research Grant). _______________________________________________________________________ Solidarity Ticket – £26.94 Standard Ticket – £16.40 A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-11-20T20:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/09/1790173597441-7a25472b-b7d7-4080-9f02-1a9c86e5244b_1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-11-20T18:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "IN-HOUSE – Case by Case: Psychoanalysis and the Political Discourse | Book Launch with Patricia Gherovici & Jamieson Webster",
+      "url": "https://www.freud.org.uk/event/in-house-case-by-case-psychoanalysis-and-the-political-discourse-book-launch-with-patricia-gherovici-jamieson-webster/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/in-house-case-by-case-psychoanalysis-and-the-political-discourse-book-launch-with-patricia-gherovici-jamieson-webster/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-capital-delay-body-laura-mulveys-freud/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "freuds-afternoon-session-midlife|2026-11-26|freud",
+      "description": "“Throughout my therapeutic career most of my clients have been between the age of 35 and 55 and arrive in the state of anxiety, overwhelmed by some intractable problem. We have come to call this the midlife crisis.” – Andrew Jamieson Andrew Jamieson identifies that only two species of mammal have an extensive, post-reproductive life: killer whales – whose elders can sniff out food for their pods – and Homo sapiens. While the rationale behind the whale’s longevity seems clear, what is the point of ours? This question intrigued Carl Jung who observed that if a culture is to thrive, it must find a balance between the energy of the young and the experience of the old. But to obtain this equilibrium, we need to pass through the dreaded middle years. Examining the Jungian concept of the midlife crisis, and the lives of prominent figures who endured it (including Abraham Lincoln and Marie Curie), psychoanalyst Andrew Jamieson shows in his book how there is an evolutionary purpose behind this rite of passage which ­­– once traversed – holds the key to our prosperity. The Freud Museum welcomes Andrew Jamieson for this Afternoon Session, in which Andrew will deliver a short presentation on his book, followed by a conversation with Dr Martin Gledhill. _______________________________________________________________________ Speaker: Andrew Jamieson is a psychotherapist based in Bath whose interests include psychotherapy’s interconnection with philosophy, music and literature. He is the author of Midlife: Humanity’s Secret Weapon and On the Couch: 20 extraordinary personalities from Picasso to Putin (both published by Notting Hill Editions). Parallel to his psychotherapeutic career, Jamieson has promoted orchestral concerts throughout the UK for over forty years. Dr Martin Gledhill was a senior lecturer in the Bath University Architectural Department. He has always been fascinating by psychology and completed a PhD on the interface between architecture and psychology. Recently he has published a well received book on Jung’s Bollingen Tower and is currently working on a second book to be published by Routledge exploring further the overlap between psychology and architecture. He is the Chairman of the Trustees at the Bath Centre for Psychotherapy and Counselling. After a serendipitous first meeting following a lecture, he has known Andrew Jamieson for a number of years. During enjoyably long walks in the Wiltshire and Somerset countryside they have discussed the many aspects of psychoanalysis and how it might aid our interpretation of an increasingly troubled world as much as ourselves. _______________________________________________________________________ Complement your visit to the Freud Museum with one of our tours or talks led by staff, volunteers and guest speakers. Afternoon Sessions are free with your admission ticket, you can book your admission ticket now! Please note that we have limited capacity so advanced booking is recommended to avoid missing out. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately, the Freud Museum does not currently have step-free access. Advance booking is highly recommended, as capacity is limited. Concessions/Members/Patrons: Please show proof of eligibility/membership card on arrival.",
+      "ends_at": "2026-11-26T16:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/09/Midlife-framed.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14.90",
+        "min": "12.90"
+      },
+      "starts_at": "2026-11-26T15:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "Freud’s Afternoon Session – Midlife",
+      "url": "https://www.freud.org.uk/event/freuds-afternoon-session-midlife/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/freuds-afternoon-session-midlife/"
+  },
+  {
+    "event": {
+      "address": "20 Maresfield Gardens, London, NW3 5SX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "making-clinic-spatial-material-investigations-artist-talk-with-ana-čvorović|2026-11-27|freud",
+      "description": "The Freud Museum is delighted to host an artist talk by Ana Čvorović, whose work is displayed at the Museum, in an exhibition curated by Sacha Craddock (November 16-December 6 2026 ). The talk will be followed by a wine reception ( 9 pm – 10 pm). In this artist talk, Ana Čvorović discusses the work she developed through her research with FREEPSY – Free Clinics and Psychoanalysis for the People, bringing together earlier iterations of the work made during the project with the new sculpture and sound installation exhibited at the Freud Museum. Taking the works as a starting point, Čvorović reflects on how sculpture, sound, objects and spatial practice have informed her thinking about the psychoanalytic clinic as a relational, social and political space. The talk considers questions such as: what enters the clinical space? What remains outside it? And how might the material, spatial and sonic conditions of the clinic shape psychic life, relationships, supports, boundaries and exclusions? The talk will be followed by a Q&A and a wine and canapés reception. This event is part of the three-week Free Clinics Festival, organised by the FREEPSY Collective. Held between November 16 and December 6 in various locations across London, the Free Clinics Festival includes a series workshops, book launches, conferences, artist talks, exhibitions and more. Please check the FREEPSY website for more information on how to register for the events: https://freepsyproject.com/fcf/. The FREEPSY Collective ( Free Clinics and a Psychoanalysis for the People: Progressive Histories, Collective Practices, Implications for Our Times ) is an interdisciplinary research project of nine researchers based at the University of Essex, studying the practices and legacies of free clinics around the world (UKRI Frontier Research Grant, PI Raluca Soreanu). __________________________________________________________________ Speakers: Ana Čvorović (b. Sarajevo 1981) is a contemporary artist based in London. Her installations are an exploration of the psychodynamics of place, specifically in the context of war, migration, and socio-economic impoverishment. Her solo exhibitions include Archipelago at Ballon Rouge, Brussels (2021) and Borders Unfold at Pi Artworks, London (2019). Recent residencies include Arthouse Jersey for the commissioned project No Place Like Home (2023); FAP, Lebanon (2022) supported by the Foundation for Art and Psychoanalysis; and Sculpture Space, New York (2018) supported by Arts Council England. She is an Artist Researcher on the UKRI-funded project FREEPSY: Free Clinics and a Psychoanalysis for the People at the University of Essex. _______________________________________________________________________ Solidarity Ticket – £26.94 Standard Ticket – £16.40 A limited number of bursary tickets (£11.13) are available for those under financial hardship. Please email perry@freud.org.uk to apply for a bursary. Freud Museum Members and Patrons receive 20% off the standard ticket price on all events, courses, conferences and On Demand programming. The purpose of this event is to raise funds for the Freud Museum London, which receives no regular Government income. We are grateful to you for supporting our independent museum as generously as possible. The event will be held on the first floor of the Museum during regular opening hours. Unfortunately the Freud Museum does not have step-free access at this time. Advance booking is highly recommended as capacity is limited.",
+      "ends_at": "2026-11-27T21:00:00Z",
+      "image_url": "https://www.freud.org.uk/wp-content/uploads/2026/09/Screenshot-2026-09-23-155647.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.94",
+        "min": "11.13"
+      },
+      "starts_at": "2026-11-27T19:00:00Z",
+      "tags": [
+        "events",
+        "talks"
+      ],
+      "title": "Making the Clinic: Spatial and Material Investigations, Artist Talk with Ana Čvorović",
+      "url": "https://www.freud.org.uk/event/making-the-clinic-spatial-and-material-investigations-artist-talk-with-ana-cvorovic/",
+      "venue_name": "Freud Museum London"
+    },
+    "id": "/event/making-the-clinic-spatial-and-material-investigations-artist-talk-with-ana-cvorovic/"
+  },
+  {
+    "event": null,
+    "id": "/event/anna-freuds-birthday-celebration-dear-papa-a-reading-of-letters-from-anna-to-sigmund-freud-by-ruth-rosen/"
+  },
+  {
+    "event": null,
+    "id": "/event/projections-cinematic-representations-of-mental-illness-2/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-psychoanalysis-in-the-digital-era/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-the-photographic-afterlife-desire-temporality-and-the-other-in-digital-culture/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-the-consoling-eidolon-a-psychoanalytic-and-phenomenological-critique-of-grief-tech/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-shockerlebnis-and-the-second-concept-of-technology-on-a-potential-dialogue-between-freud-and-benjamin/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-infantile-helplessness-and-a-prosthetic-god/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-masculine-plight-freudian-phallic-masculinity-in-comparison-to-manospheric-ideology/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-the-dark-side-of-the-rainbow-gay-subjectivity-and-its-discontents-in-the-telecommunication-era/"
+  },
+  {
+    "event": null,
+    "id": "/event/freudian-research-seminar-voice-within-a-voice-cinematic-free-indirect-discourse-as-melancholic-structure/"
+  }
+]

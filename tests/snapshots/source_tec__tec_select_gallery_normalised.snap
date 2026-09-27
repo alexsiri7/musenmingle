@@ -1,0 +1,33 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-select-gallery\", &raws)"
+---
+[
+  {
+    "event": {
+      "address": "Evolution London, London, SW11 4NJ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "affordable-art-fair-battersea-2026|2026-10-14|battersea",
+      "description": "Not only are we delighted to be partaking in the Affordale Art Fair Battersea for a 3rd year running we are also beyond thrilled to announce that Jayson Lilley will be showcasing a large interactive work in the foyer ‘ I’d Be Lost Without You’. You won’t want to miss this! The fair will run from Wednesday 14th October – Sunday 18th October in Battersea Park and you can find us on S t and C7 where we will be exhibiting 8 incredibly talented artists: A A Watson, Abotz, Ayesha Pearce, Ben Farleigh, Dominic Denis, Graham Gosling, James Talon & of course Jayson Lilley ! Wednesday 14 October Private View 5 – 9pm Thursday 15 October General Admission 11am – 5pm Art After Dark Late* 5 – 9pm Friday 16 October General Admission 11am – 5pm Art After Dark Late* 5 – 9pm Saturday 17 October General Admission 10am – 6pm Family Morning 10am – 12pm Sunday 18 October General Admission 10am – 6pm Family Morning 10am – 12pm *Late events are 18+ only For C omplimentary Tickets please RSVP here We simply can’t wait to see you there! Anna, Charlie & Molly",
+      "ends_at": "2026-10-18T17:00:00Z",
+      "image_url": "https://selectgallery.art/wp-content/uploads/2026/09/Screenshot-2026-09-13-at-19.42.42.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-14T17:00:00Z",
+      "tags": [
+        "events & fairs"
+      ],
+      "title": "Affordable Art Fair Battersea 2026",
+      "url": "https://selectgallery.art/exhibitions/affordable-art-fair-battersea-2026/",
+      "venue_name": "Battersea"
+    },
+    "id": "/exhibitions/affordable-art-fair-battersea-2026/"
+  }
+]

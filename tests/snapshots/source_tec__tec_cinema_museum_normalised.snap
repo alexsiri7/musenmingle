@@ -1,0 +1,369 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-cinema-museum\", &raws)"
+---
+[
+  {
+    "event": null,
+    "id": "/scheduled/80-years-of-martin-and-lewis-youre-never-too-young-1954/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/extravaganza-of-silent-films-about-filmmaking-to-help-the-cinema-museum-buy-its-home/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/away-up-north-an-evening-of-movie-mavericks-from-finland/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-20/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-afternoon-11/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/closed-circuit-1978/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/dyn-amo-1973-on-16mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/murders-in-the-zoo-1933-and-shivers-1975/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-21/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-afternoon-12/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-bill-reunion-17/"
+  },
+  {
+    "event": {
+      "address": "2 Dugard Way, London SE11 4TH",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "programmers-of-tomorrow-workshop-2-licenses-community-with-token-homo|2026-10-11|cinema",
+      "description": "Programmers of Tomorrow’s second (and final) workshop is facilitated by the brilliant, energetic and endlessly creative film programmer Token Homo – if you haven’t been to his Bar Trash (opens in a new window) events at cinemas across London, you haven’t lived. The workshop will start with the practical with a brief breakdown of the basics of film licensing, and then get down to the juicy creative stuff. You’ll hear from Richard aka Token Homo about how and why he builds queer community around the beauty of the B-movie, and get the chance to bounce your own community film programming ideas and dreams around with other film lovers. All amidst the ephemera of cinemas past at the beautiful Cinema Museum! Doors will open at 12.15pm. The workshop will begin at 1pm and run until 3pm, with a short break in the middle. Apply to screen your film of choice at the Programmers of Tomorrow all-dayer! Programmers of Tomorrow culminates in an all-day triple-feature film-festival at the Cinema Museum on Sun 29 November, where every programmer screens a film for the first time! You don’t have you attend any PoT workshops in order to submit your idea for the PoT all-dayer, but they can be a great space to develop your idea! All-dayer submission form coming soon, deadline Sun 25 Oct. If selected, you will have access to funding to pay for film licensing and support with promoting your screening. If you have any other questions or requests please do get in touch! cinemaoftomorrowldn@gmail.com",
+      "ends_at": "2026-10-11T14:00:00Z",
+      "image_url": "https://cinemamuseum.org.uk/wp-content/uploads/2026/07/PoT-Licensing-Community-poster.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-11T12:00:00Z",
+      "tags": [
+        "cinema of tomorrow",
+        "events"
+      ],
+      "title": "Programmers of Tomorrow Workshop #2 – Licenses & Community with Token Homo",
+      "url": "https://cinemamuseum.org.uk/scheduled/programmers-of-tomorrow-workshop-2-licenses-community-with-token-homo/",
+      "venue_name": "The Cinema Museum"
+    },
+    "id": "/scheduled/programmers-of-tomorrow-workshop-2-licenses-community-with-token-homo/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-mothman-prophecies-2002/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/force-of-evil-1948/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/italy-through-its-cinema-investigation-of-a-citizen-above-suspicion-1970/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-fat-black-pussycat-1963-2/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-22/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-blinking-buzzards-11-september/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-hart-of-london-1970-on-16mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/horror-for-a-cause-save-the-cinema-museum-the-return-of-the-living-dead-1985/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-arrival-from-the-darkness-prichozi-z-temnot-1921/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/night-of-the-comet-1984/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-beast-2023/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/home-movie-day-2026/"
+  },
+  {
+    "event": {
+      "address": "2 Dugard Way, London SE11 4TH",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "lisa-gornick-in-conversation-with-caroline-cassin|2026-10-24|cinema",
+      "description": "Join British filmmaker, artist, and performer Lisa Gornick in conversation with curator Caroline Cassin. Celebrating Lisa’s 60th birthday, this special event will explore her expansive body of work, looking back on her filmmaking life as she embarks on a new feature film. Lisa’s career as a filmmaker spans three decades, during which they have made three feature films and seven short films. She is celebrated for the BFI-acclaimed Do I Love You? (2002), the first British lesbian feature film in a decade (below), Tick Tock Lullaby (2007), a comedy-drama about the ambivalence around whether to be a parent and The Book of Gabrielle (2016), their first cross-platform production about talking, writing and drawing sex. Caroline will explore with Lisa the very intimate, existential investigations that form the basis of her work. Made largely outside conventional production structures, their films have always been poignant, personal, comedic and defiantly DIY. The evening will weave together clips from Lisa’s films, an interactive live drawing performance, music and conversation. All proceeds from ticket sales will support two important crowdfunding campaigns: Lisa’s film and The Cinema Museum’s effort to secure its home. 5-6pm: Arrival and gathering to Lisa’s soundtrack Doors open at 5pm, when refreshments and snacks will be available in our licensed cafe/bar; you can browse the bookstore, all soundtracked by Lisa’s favourite tunes. 6-7.15pm: Lisa Gornick in Conversation with Caroline Cassin Lisa and Caroline explore a selection of Lisa’s chosen film clips and share stories about Lisa’s life as a filmmaker and the making of the films. 7.30-8pm: Live drawing performance Lisa takes to the drawing table for a live, interactive drawing session, bringing the evening’s conversation into the present and giving the audience a chance to participate. 8-9pm: Birthday celebrations More music and conversation. Maybe even dancing? After 9pm, for those who want to keep the party going, we’ll head to another venue.",
+      "ends_at": "2026-10-24T18:30:00Z",
+      "image_url": "https://cinemamuseum.org.uk/wp-content/uploads/2026/09/Lisa-Gornick.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-10-24T16:00:00Z",
+      "tags": [
+        "events"
+      ],
+      "title": "Lisa Gornick in Conversation with Caroline Cassin",
+      "url": "https://cinemamuseum.org.uk/scheduled/lisa-gornick-in-conversation-with-caroline-cassin/",
+      "venue_name": "The Cinema Museum"
+    },
+    "id": "/scheduled/lisa-gornick-in-conversation-with-caroline-cassin/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/exploding-cinema-30th-october/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/halloween-disco-with-toby-jones-ben-miles/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/mark-kermode-is-horrified-with-neil-brand/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/festen-1998/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/a-tribute-to-ray-harryhausen-including-the-beast-from-20000-fathoms-1953/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/gemma-robert-rosss-comedy-carnival-ix/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-bill-reunion-18/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/gentlemen-among-themselves-die-fidele-herrenpartie-1929/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/italy-through-its-cinema-ceravamo-tanto-amati-1974/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/silent-weekend-2026/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/chris-lewis-presents-jerry-lewiss-home-movies-plus-qa/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/chris-lewis-presents-the-nutty-professor-1963/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/on-dangerous-ground-1951/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/horror-for-a-cause-save-the-cinema-museum-night-of-the-creeps-1986/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-24/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-afternoon-13/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/julien-donkey-boy-1999/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-25/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-live-ghost-tent-quarterly-meeting-december-2026/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/80-years-of-martin-and-lewis-artists-and-models-1955/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/early-colour-live/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/italy-through-its-cinema-a-special-day-1977/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/dracula-1973-and-they-have-changed-their-face-1971-introduced-by-kim-newman/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-morning-26/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-afternoon-14/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/law-of-desire-1987-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-smallest-shows-on-earth/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/thunder-road-1958-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/80-years-of-martin-and-lewis-hollywood-or-bust-1956/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tours-morning/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/museum-tour-afternoon-15/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/women-on-the-verge-of-a-nervous-breakdown-1988-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-blinking-buzzards-9-january/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/italy-through-its-cinema-cinema-paradiso-1988/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-good-the-bad-and-the-ugly-1966-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/zombies-of-mora-tau-1957-and-the-vampire-1957/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/el-topo-1970-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/trouble-every-day-2001-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/creature-with-the-atom-brain-1955-and-i-married-a-monster-from-outer-space-1958/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/in-my-skin-2002-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-hours-2002-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-live-ghost-tent-quarterly-meeting-march-2027/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-werewolf-1956-and-the-giant-claw-1957/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/moulin-rouge-2001-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/goodfellas-1990-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-blinking-buzzards-6-march/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-age-of-innocence-1993-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/gozu-2003-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/audition-1999-on-35mm/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-live-ghost-tent-quarterly-meeting-june-2027/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-blinking-buzzards-5-june/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-live-ghost-tent-quarterly-meeting-september-2027/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-blinking-buzzards-4-december/"
+  },
+  {
+    "event": null,
+    "id": "/scheduled/the-live-ghost-tent-quarterly-meeting-december-2027/"
+  }
+]

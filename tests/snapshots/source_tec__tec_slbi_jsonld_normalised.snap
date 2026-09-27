@@ -1,0 +1,55 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-slbi\", &raws)"
+---
+[
+  {
+    "event": null,
+    "id": "/event/photo-exhibition-nature-in-process/"
+  },
+  {
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "botanical-cyanotype-workshop|2026-10-03|south-botanical-institute",
+      "description": "Get creative and create stunning plant prints using old-school cyanotype techniquesCyanotype is a historic solar photographic process dating back to the 19th century. In this hands-on workshop, you will learn the basics of its chemistry, coating techniques and exposure methods, and experiment with a variety of papers and materials to create your own camera-less prints. …",
+      "ends_at": "2026-10-03T13:00:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/17d53d2f7b0fbafdf4e681e100e7172d-Jw6d37.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "30.00",
+        "min": "30.00"
+      },
+      "starts_at": "2026-10-03T09:00:00Z",
+      "tags": [],
+      "title": "Botanical Cyanotype Workshop",
+      "url": "https://www.slbi.org.uk/event/botanical-cyanotype-workshop/",
+      "venue_name": "South London Botanical Institute"
+    },
+    "id": "/event/botanical-cyanotype-workshop/"
+  },
+  {
+    "event": null,
+    "id": "/event/mushroom-university-8/"
+  },
+  {
+    "event": null,
+    "id": "/event/slbi-open-evening-4/"
+  },
+  {
+    "event": null,
+    "id": "/event/slbi-series-urban-rewilding-pasts-and-possible-futures/"
+  },
+  {
+    "event": null,
+    "id": "/event/mushroom-university-9/"
+  },
+  {
+    "event": null,
+    "id": "/event/harvest-festival-a-family-celebration-of-plants/"
+  }
+]

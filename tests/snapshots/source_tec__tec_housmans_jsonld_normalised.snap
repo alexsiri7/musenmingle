@@ -1,0 +1,206 @@
+---
+source: tests/source_tec.rs
+expression: "normalised(\"tec-housmans\", &raws)"
+---
+[
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "poetry-reading-suddenly-into-nothing-by-suzanne-doppelt-translated-by-cole-swensen|2026-09-27|housmans-bookshop",
+      "description": "Featuring readings from Laynie Browne, Ágnes Lehóczky, Cole Swensen & Suzanne Doppelt THIS IS A FREE EVENT, BUT PLEASE RSVP USING THE LINK BELOW:",
+      "ends_at": "2026-09-27T20:00:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/Pamenar-Readin-33-Aug-8-2026-D1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-27T18:00:00Z",
+      "tags": [],
+      "title": "POETRY READING: ‘AND SUDDENLY INTO NOTHING’ by Suzanne Doppelt (translated by Cole Swensen.)",
+      "url": "https://housmans.com/event/poetry-reading-and-suddenly-into-nothing-by-suzanne-doppelt-translated-by-cole-swensen/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/poetry-reading-and-suddenly-into-nothing-by-suzanne-doppelt-translated-by-cole-swensen/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "charity-shop-world-with-tansy-e-hoskins|2026-09-30|housmans-bookshop",
+      "description": "WE ARE DELIGHTED TO WELCOME TANSY E. HOSKINS TO HOUMANS TO TALK ABOUT HER GROUNDBREAKING, MOVING NEW STUDY OF CHARITY SHOPS AND THE ROLES THEY PLAY IN MODERN CONSUMERIST CULTURE. ‘Charity shops are ubiquitous and invisible. They anchor the high street, employ thousands, process millions of items. Yet far more is written about AI than […]",
+      "ends_at": "2026-09-30T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/images.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14.99",
+        "min": "2.5"
+      },
+      "starts_at": "2026-09-30T18:00:00Z",
+      "tags": [],
+      "title": "CHARITY SHOP WORLD! with Tansy E. Hoskins",
+      "url": "https://housmans.com/event/charity-shop-world-with-tansy-e-hoskins/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/charity-shop-world-with-tansy-e-hoskins/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "poetry-series-nell-perry|2026-10-09|housmans-bookshop",
+      "description": "Join us for another evening of cutting edge, brilliant poetry. This time we will be launching Nell Perry\\'s incredible new work of hybridised poetics His Splendid Tables, published by Runamok! His Splendid Tables is a collection of hybrid writing combining wayward translation and poetic essay to explore, variously, what is lost and what is gained […]",
+      "ends_at": "2026-10-09T20:00:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/09/Poetry-Series-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-09T18:00:00Z",
+      "tags": [],
+      "title": "POETRY SERIES: NELL PERRY",
+      "url": "https://housmans.com/event/poetry-series-nell-perry/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/poetry-series-nell-perry/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "zine-launch-tranny-central|2026-10-10|housmans-bookshop",
+      "description": "JOIN US FOR FOR THE LAUNCH OF THIS INCREDIBLE HISTORY OF THE GAY LIBERATION FRONT\\'S TRANSSEXUAL, TRANSVESTITE AND DRAG QUEEN GROUP, FROM TGIRLSONFILM Come for the launch of the third bumper edition of \"Tranny Central\", with new archival goodies and newly commissioned articles. In Tranny Central, TGirlsonFilm summons the spirits of our radical trans-sisters of […]",
+      "ends_at": "2026-10-10T20:00:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/09/LAUNCH-Instagram.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "9",
+        "min": "2.5"
+      },
+      "starts_at": "2026-10-10T18:30:00Z",
+      "tags": [],
+      "title": "ZINE LAUNCH: TRANNY CENTRAL",
+      "url": "https://housmans.com/event/zine-launch-tranny-central/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/zine-launch-tranny-central/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "book-talk-ragged-edge-of-freedom-race-capitalism-class-struggle-in-slaverys-borderland|2026-10-12|housmans-bookshop",
+      "description": "Matthew E. Stanley in Conversation with Dr Milly Williamson & Dr Adam Elliott-Cooper A stirring and thoroughly necessary reflection on the histories of slavery, poverty and class solidarity in the American Midwest. The Ragged Edge of Freedom explores the long shadow of slavery in the Lower Midwest. In the decades after the Civil War, elites […]",
+      "ends_at": "2026-10-12T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/9781685901547.avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "29",
+        "min": "2.5"
+      },
+      "starts_at": "2026-10-12T18:00:00Z",
+      "tags": [],
+      "title": "BOOK TALK: The Ragged Edge of Freedom: Race, Capitalism, and Class Struggle in Slavery’s Borderland",
+      "url": "https://housmans.com/event/book-talk-the-ragged-edge-of-freedom-race-capitalism-and-class-struggle-in-slaverys-borderland/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/book-talk-the-ragged-edge-of-freedom-race-capitalism-and-class-struggle-in-slaverys-borderland/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-age-of-hobsbawm-by-emile-chabal|2026-10-13|housmans-bookshop",
+      "description": "Join Emile Chabal as he discusses his new intellectual biography of Eric Hobsbawm, The Age of Hobsbawm: The Life of a Revolutionary Historian. Eric Hobsbawm (1917–2012) was one of the foremost European intellectuals of the twentieth century. He published hundreds of articles on modern history and culture, and his books became canonical works and bestsellers […]",
+      "ends_at": "2026-10-13T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/preeti-insta1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.99",
+        "min": "5"
+      },
+      "starts_at": "2026-10-13T18:00:00Z",
+      "tags": [],
+      "title": "BOOK LAUNCH: THE AGE OF HOBSBAWM by Emile Chabal",
+      "url": "https://housmans.com/event/book-launch-the-age-of-hobsbawm-by-emile-chabal/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/book-launch-the-age-of-hobsbawm-by-emile-chabal/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "taj-ali-in-conversation-with-kojo-koram|2026-10-14|housmans-bookshop",
+      "description": "Taj Ali and Kojo Koram are two of the most truly radical thinkers working in Britain today. They both have great experience as front line organisers but also, on the theoretical level, advance a rigorous and materialist anti-racism, rooted in a Marxist understanding of power and exploitation; that works towards a praxis based on class […]",
+      "ends_at": "2026-10-14T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/preeti-insta2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "42",
+        "min": "0"
+      },
+      "starts_at": "2026-10-14T18:00:00Z",
+      "tags": [],
+      "title": "TAJ ALI IN CONVERSATION WITH KOJO KORAM",
+      "url": "https://housmans.com/event/taj-ali-in-conversation-with-kojo/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/taj-ali-in-conversation-with-kojo/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "panel-talk-publishing-as-collective-infrastructure-with-minor-compositions|2026-11-07|housmans-bookshop",
+      "description": "What if a book wasn’t an endpoint but an infrastructure? Please join us for the launch of Publishing as Collective Infrastructure. This title is less a \\'book\\' than it is a radical rethinking of the book-form itself; formulated as a collectively authored, polyphonic work; an intervention into the realms of academic and open-access publishing. The […]",
+      "ends_at": "2026-11-07T20:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/ServPub-cvr.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "2.5"
+      },
+      "starts_at": "2026-11-07T19:00:00Z",
+      "tags": [],
+      "title": "PANEL TALK: PUBLISHING AS COLLECTIVE INFRASTRUCTURE with Minor Compositions",
+      "url": "https://housmans.com/event/panel-talk-publishing-as-collective-infrastructure-with-minor-compositions/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/panel-talk-publishing-as-collective-infrastructure-with-minor-compositions/"
+  }
+]
