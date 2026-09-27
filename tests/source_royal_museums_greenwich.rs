@@ -67,6 +67,31 @@ async fn fetches_the_feed_via_fetch_context() {
 }
 
 #[tokio::test]
+async fn unreadable_feed_items_are_reported_not_fatal() {
+    let server = MockServer::start().await;
+    serve(&server, "/robots.txt", ResponseTemplate::new(404), 1).await;
+    let feed = serde_json::json!([
+        {"title": "Good", "url": "/whats-on/national-maritime-museum/good"},
+        {"title": "Elsewhere", "url": "https://example.com/x"},
+    ]);
+    serve(
+        &server,
+        "/whats-on-api",
+        ResponseTemplate::new(200).set_body_json(feed),
+        1,
+    )
+    .await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = RoyalMuseumsGreenwich::new(server.uri().parse().unwrap());
+    let got = s.fetch(&ctx).await.expect("fetch");
+    let ids: Vec<_> = got.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["/whats-on/national-maritime-museum/good"]);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("Elsewhere"), "{errors:?}");
+}
+
+#[tokio::test]
 async fn robots_disallow_blocks_the_scraper() {
     let server = MockServer::start().await;
     serve(
