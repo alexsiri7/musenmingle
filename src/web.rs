@@ -174,6 +174,7 @@ pub(crate) fn routes() -> Router<AppState> {
     Router::new()
         .route("/", get(home))
         .route("/events/{id}", get(event_detail))
+        .route("/venues/{slug}", get(venue_page))
         .route("/sources", get(sources))
         .route("/about", get(about))
         .route(
@@ -1826,7 +1827,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                     }
                 }
                 h2 { a href=(detail) { (e.title) } }
-                @if let Some(v) = &e.venue_name { p class="venue" { (v) } }
+                @if let Some(v) = &e.venue_name { p class="venue" { (venue_name_link(v, e.venue_slug.as_deref())) } }
                 @if let Some(o) = e.ai.as_ref().and_then(|a| a.one_liner.as_deref()) {
                     p class="one-liner" title="AI-written summary" { (ai_mark()) (o) }
                 }
@@ -2401,7 +2402,10 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
                             div {
                                 dt { "Venue" }
                                 dd {
-                                    (e.venue_name.as_deref().unwrap_or("Not listed"))
+                                    @match &e.venue_name {
+                                        Some(v) => (venue_name_link(v, e.venue_slug.as_deref())),
+                                        None => "Not listed",
+                                    }
                                     @if let Some(a) = &e.address { span class="sub" { (a) } }
                                 }
                             }
@@ -2555,6 +2559,179 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        },
+    )
+}
+
+/// A venue name, linked to its page on this site when it has one (#204).
+fn venue_name_link(name: &str, slug: Option<&str>) -> Markup {
+    html! {
+        @match slug {
+            Some(slug) => a class="venue-page" href={ "/venues/" (slug) } { (name) },
+            None => (name),
+        }
+    }
+}
+
+/// How many upcoming events a venue page lists.
+const VENUE_EVENTS: i64 = 60;
+
+/// `GET /venues/{slug}` (#204): the venue's address, area, type, usual
+/// hours and map links, and its upcoming events.
+async fn venue_page(State(state): State<AppState>, Path(slug): Path<String>) -> Response {
+    let v = match repo::venue_by_slug(&state.pool, &slug).await {
+        Ok(Some(v)) => v,
+        Ok(None) => {
+            return error_page(
+                StatusCode::NOT_FOUND,
+                "Venue not found",
+                "We don't know a venue at this address.",
+            );
+        }
+        Err(err) => return internal_error(err),
+    };
+    let now = Utc::now();
+    let events = match api::venue_events(&state.pool, v.id, now, VENUE_EVENTS).await {
+        Ok(e) => e,
+        Err(err) => return internal_error(err),
+    };
+    let page_url = format!("{}/venues/{}", SHARE_ORIGIN.as_str(), v.slug);
+    let place = ShareEvent {
+        id: Uuid::nil(),
+        title: &v.name,
+        venue: Some(&v.name),
+        address: v.address.as_deref(),
+        lat: v.lat,
+        lng: v.lng,
+        starts_at: now,
+        ends_at: None,
+        all_day: false,
+        excerpt: None,
+        source_url: None,
+        page_url: &page_url,
+    };
+    let maps = share::map_links(&place);
+    let osm = match (v.lat, v.lng) {
+        (Some(lat), Some(lng)) => Some(format!(
+            "https://www.openstreetmap.org/?mlat={lat}&mlon={lng}#map=17/{lat}/{lng}"
+        )),
+        _ => None,
+    };
+    let kind = v.venue_type.as_deref().map(crate::venue_type::label);
+    let description = match (&v.address, &v.borough) {
+        (Some(a), _) => format!("{} · {a}", v.name),
+        (None, Some(b)) => format!("{} · {}", v.name, crate::borough::name(b)),
+        (None, None) => v.name.clone(),
+    };
+    let head = html! {
+        link rel="canonical" href=(page_url);
+        meta property="og:type" content="website";
+        meta property="og:site_name" content=(BRAND);
+        meta property="og:title" content=(v.name);
+        meta property="og:description" content=(description);
+        meta property="og:url" content=(page_url);
+        meta name="description" content=(description);
+    };
+    let hours = v.opening_hours.as_ref().map(|h| &h.0);
+    page_with_head(
+        StatusCode::OK,
+        &v.name,
+        Nav::Other,
+        head,
+        html! {
+            nav class="crumbs" aria-label="Breadcrumb" {
+                div class="wrap-x" {
+                    div class="trail" {
+                        a href="/" { "← All events" }
+                        span class="kind" { "[Venue]" }
+                    }
+                }
+            }
+            article class="detail venue-detail" {
+                section class="page-head" {
+                    div class="wrap-x" {
+                        p class="eyebrow" {
+                            span class="dot" {}
+                            "Venue"
+                            @if let Some(k) = kind { " // " (title_case(k)) }
+                        }
+                        div class="detail-head" { div { h1 { (v.name) } } }
+                        @if let Some(m) = &maps {
+                            p class="handoffs" aria-label="Directions" {
+                                (maps_link(&m.google_directions, &m.apple_directions, "button secondary", html! {
+                                    (icon_svg(ICON_PIN)) "Directions"
+                                }))
+                            }
+                        }
+                        dl class="facts" {
+                            div {
+                                dt { "Address" }
+                                dd {
+                                    (v.address.as_deref().unwrap_or("Not listed"))
+                                    @if let Some(p) = v.postcode.as_deref().filter(|p| !v.address.as_deref().unwrap_or("").contains(*p)) {
+                                        span class="sub" { (p) }
+                                    }
+                                }
+                            }
+                            @if let Some(b) = &v.borough {
+                                div {
+                                    dt { "Area" }
+                                    dd { a href={ "/?borough=" (b) } { (crate::borough::name(b)) } }
+                                }
+                            }
+                            @if let Some(k) = kind {
+                                div { dt { "Type" } dd { (title_case(k)) } }
+                            }
+                            @if let Some(h) = hours {
+                                div {
+                                    dt { "Usual hours" }
+                                    dd class="hours" {
+                                        "Open " (h.display())
+                                        span class="sub" { "London time. Check the venue's own site before you go." }
+                                    }
+                                }
+                            }
+                            @if let Some(links) = &maps {
+                                div {
+                                    dt { "Map" }
+                                    dd {
+                                        (maps_link(&links.google_view, &links.apple_view, "", html! { "Open in Maps ↗" }))
+                                        @if let (Some(m), Some(lat), Some(lng)) = (&osm, v.lat, v.lng) {
+                                            span class="sub" {
+                                                (format!("{lat:.4}, {lng:.4}")) " · "
+                                                a href=(m) rel="noopener noreferrer" { "View on OpenStreetMap" }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            @if let Some(u) = safe_link(v.website.as_deref()) {
+                                div { dt { "Website" } dd { a href=(u) rel="noopener" { (u) } } }
+                            }
+                        }
+                    }
+                }
+                div class="wrap-x venue-events" {
+                    div class="section-title" {
+                        span class="sq" {}
+                        h2 id="venue-events-h" { "Coming up" }
+                    }
+                    @if events.is_empty() {
+                        div class="empty" { p { "No upcoming events listed here right now." } }
+                    } @else {
+                        p class="results-status" {
+                            span {
+                                strong { (events.len()) @if events.len() == 1 { " event" } @else { " events" } }
+                                @if events.len() as i64 == VENUE_EVENTS { " // the soonest" }
+                            }
+                            span { "Soonest first" }
+                        }
+                        section class="cards" aria-labelledby="venue-events-h" {
+                            @for e in &events { (card(e, now)) }
                         }
                     }
                 }
@@ -2925,6 +3102,18 @@ async fn about() -> Response {
                         "Open Government Licence v3.0"
                     }
                     ". Contains OS data \u{a9} Crown copyright and database right 2024."
+                }
+                p class="small" id="postcodes" {
+                    "Venue locations a listing doesn't give: the centre of the venue's postcode, "
+                    "looked up on "
+                    a href="https://postcodes.io" rel="noopener" { "postcodes.io" }
+                    " (ONS Postcode Directory). Source: Office for National Statistics, "
+                    "licensed under the "
+                    a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="noopener" {
+                        "Open Government Licence v3.0"
+                    }
+                    ". Contains OS data \u{a9} Crown copyright and database right; contains "
+                    "Royal Mail data \u{a9} Royal Mail copyright and database right."
                 }
                 p class="small" {
                     "Sources and credits: every venue and service we use, and the sites we "

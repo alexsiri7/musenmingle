@@ -703,6 +703,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `REQUESTY_BASE_URL` | ingest | `https://router.requesty.ai` | Tests point it at a mock |
 | `NTFY_TOPIC` | ingest | unset → alerts logged | ntfy topic for owner alerts (secret) |
 | `NTFY_BASE_URL` | ingest | `https://ntfy.sh` | ntfy server |
+| `POSTCODES_IO_BASE_URL` | ingest | `https://api.postcodes.io` | postcodes.io API, for venues without coordinates (#204) |
 | `TILES_PATH` | api | `static/tiles/london.pmtiles` (Docker: `/usr/share/musenmingle/london.pmtiles`) | Map tiles served at `/tiles/london.pmtiles`; missing → `/map` shows only its list |
 | `TEST_DATABASE_URL` | tests | unset → DB tests skip | Throwaway Postgres for tests |
 

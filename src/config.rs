@@ -205,6 +205,8 @@ pub struct Config {
     /// ntfy topic for owner alerts (`NTFY_TOPIC`); unset = alerts are logged.
     pub ntfy_topic: Option<String>,
     pub ntfy_base_url: String,
+    /// postcodes.io API base (`crate::geocode`), `POSTCODES_IO_BASE_URL`.
+    pub postcodes_io_base_url: String,
     /// The London map tiles (PMTiles) the API serves at
     /// `/tiles/london.pmtiles` (`TILES_PATH`; the Docker image sets it).
     pub tiles_path: std::path::PathBuf,
@@ -334,6 +336,8 @@ impl Config {
             ntfy_topic: non_empty("NTFY_TOPIC"),
             ntfy_base_url: non_empty("NTFY_BASE_URL")
                 .unwrap_or_else(|| crate::notify::DEFAULT_NTFY_BASE.into()),
+            postcodes_io_base_url: non_empty("POSTCODES_IO_BASE_URL")
+                .unwrap_or_else(|| crate::geocode::DEFAULT_POSTCODES_IO_BASE.into()),
             tiles_path: non_empty("TILES_PATH")
                 .unwrap_or_else(|| DEFAULT_TILES_PATH.into())
                 .into(),

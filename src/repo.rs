@@ -680,6 +680,73 @@ pub async fn sync_venues(pool: &PgPool) -> sqlx::Result<VenueSync> {
     Ok(out)
 }
 
+/// Venues without coordinates that have events and a postcode not looked
+/// up since `checked_before` (`crate::geocode`), oldest first.
+pub async fn venues_to_geocode(
+    pool: &PgPool,
+    checked_before: DateTime<Utc>,
+    limit: usize,
+) -> sqlx::Result<Vec<(i64, String)>> {
+    sqlx::query_as(
+        "SELECT v.id, v.postcode FROM events.venues v
+         WHERE v.lat IS NULL AND v.postcode IS NOT NULL
+           AND (v.geocode_checked_at IS NULL OR v.geocode_checked_at < $1)
+           AND EXISTS (SELECT 1 FROM events.events ev WHERE ev.venue_id = v.id)
+         ORDER BY v.id LIMIT $2",
+    )
+    .bind(checked_before)
+    .bind(i64::try_from(limit).unwrap_or(i64::MAX))
+    .fetch_all(pool)
+    .await
+}
+
+/// Store a geocoded point for a venue that still has none.
+pub async fn set_venue_point(
+    pool: &PgPool,
+    id: i64,
+    lat: f64,
+    lng: f64,
+    source: &str,
+) -> sqlx::Result<()> {
+    sqlx::query(
+        "UPDATE events.venues SET lat = $2, lng = $3, coords_source = $4,
+             geocode_checked_at = NULL, updated_at = now()
+         WHERE id = $1 AND lat IS NULL",
+    )
+    .bind(id)
+    .bind(lat)
+    .bind(lng)
+    .bind(source)
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
+/// Remember a postcode lookup that found nothing.
+pub async fn venue_geocode_checked(pool: &PgPool, id: i64, now: DateTime<Utc>) -> sqlx::Result<()> {
+    sqlx::query("UPDATE events.venues SET geocode_checked_at = $2 WHERE id = $1")
+        .bind(id)
+        .bind(now)
+        .execute(pool)
+        .await?;
+    Ok(())
+}
+
+/// Names of venues without coordinates that have events still to come or
+/// still running at `now` (the #204 invariant), by name.
+pub async fn venues_without_coords(pool: &PgPool, now: DateTime<Utc>) -> sqlx::Result<Vec<String>> {
+    sqlx::query_scalar(
+        "SELECT v.name FROM events.venues v
+         WHERE v.lat IS NULL
+           AND EXISTS (SELECT 1 FROM events.events ev
+                       WHERE ev.venue_id = v.id AND COALESCE(ev.ends_at, ev.starts_at) >= $1)
+         ORDER BY v.name",
+    )
+    .bind(now)
+    .fetch_all(pool)
+    .await
+}
+
 /// Set every event's `venue_type` from [`crate::venue_type::classify`]
 /// (overrides from `events.venues`, its sources' keys, its venue name).
 /// Returns how many events changed. Run after each ingest run.
@@ -1311,12 +1378,15 @@ pub struct EventRow {
     pub opening_hours: Option<sqlx::types::Json<crate::hours::OpeningHours>>,
     /// The listing's own wording about its hours.
     pub hours_note: Option<String>,
+    /// Our page for the event's venue (`/venues/<slug>`, #204), if linked.
+    pub venue_slug: Option<String>,
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
     ends_at, all_day, is_free, price_min, price_max, currency, url, image_url, category, tags,
     dedupe_key, medium_tags, format_tags, good_for, vibe_tags, is_opening, whats_cool, one_liner,
-    ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note";
+    ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note,
+    (SELECT vn.slug FROM events.venues vn WHERE vn.id = venue_id) AS venue_slug";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
     sqlx::query_as(AssertSqlSafe(format!(
@@ -1324,6 +1394,57 @@ pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>
     )))
     .bind(id)
     .fetch_optional(pool)
+    .await
+}
+
+/// A venue (#204) as its page shows it.
+#[derive(Debug, Clone, FromRow)]
+pub struct Venue {
+    pub id: i64,
+    pub name: String,
+    pub slug: String,
+    pub address: Option<String>,
+    pub postcode: Option<String>,
+    pub lat: Option<f64>,
+    pub lng: Option<f64>,
+    pub borough: Option<String>,
+    /// The manual override, else the most common type of its events.
+    pub venue_type: Option<String>,
+    pub website: Option<String>,
+    pub opening_hours: Option<sqlx::types::Json<crate::hours::OpeningHours>>,
+}
+
+pub async fn venue_by_slug(pool: &PgPool, slug: &str) -> sqlx::Result<Option<Venue>> {
+    sqlx::query_as(
+        "SELECT v.id, v.name, v.slug, v.address, v.postcode, v.lat, v.lng, v.borough,
+                COALESCE(v.venue_type,
+                         (SELECT ev.venue_type FROM events.events ev WHERE ev.venue_id = v.id
+                          GROUP BY ev.venue_type ORDER BY count(*) DESC, ev.venue_type LIMIT 1))
+                    AS venue_type,
+                v.website, v.opening_hours
+         FROM events.venues v WHERE v.slug = $1",
+    )
+    .bind(slug)
+    .fetch_optional(pool)
+    .await
+}
+
+/// A venue's events still to come or running at `now`, soonest first.
+pub async fn venue_events(
+    pool: &PgPool,
+    venue_id: i64,
+    now: DateTime<Utc>,
+    limit: i64,
+) -> sqlx::Result<Vec<EventRow>> {
+    sqlx::query_as(AssertSqlSafe(format!(
+        "SELECT {EVENT_COLS} FROM events.events
+         WHERE venue_id = $1 AND COALESCE(ends_at, starts_at) >= $2
+         ORDER BY starts_at, id LIMIT $3"
+    )))
+    .bind(venue_id)
+    .bind(now)
+    .bind(limit)
+    .fetch_all(pool)
     .await
 }
 

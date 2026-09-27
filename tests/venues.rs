@@ -211,3 +211,108 @@ async fn venues_are_created_deduped_linked_and_located() {
         Some("islington")
     );
 }
+
+async fn get_page(pool: &PgPool, uri: &str) -> (axum::http::StatusCode, String, String) {
+    use tower::ServiceExt;
+    let app = musenmingle::api::router(
+        pool.clone(),
+        musenmingle::suggestions::Suggestions::new(
+            musenmingle::config::SuggestionConfig {
+                ip_salt: Some("test-salt".into()),
+                ..Default::default()
+            },
+            None,
+        )
+        .unwrap(),
+        musenmingle::api::ApiSettings {
+            github_repo: "alexsiri7/musenmingle".into(),
+            cors_origins: Vec::new(),
+        },
+    )
+    .layer(axum::extract::connect_info::MockConnectInfo(
+        std::net::SocketAddr::from(([10, 0, 0, 1], 4000)),
+    ));
+    let resp = app
+        .oneshot(
+            axum::http::Request::get(uri)
+                .body(axum::body::Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+    let status = resp.status();
+    let csp = resp
+        .headers()
+        .get(axum::http::header::CONTENT_SECURITY_POLICY)
+        .map(|v| v.to_str().unwrap().to_string())
+        .unwrap_or_default();
+    let body = axum::body::to_bytes(resp.into_body(), 4 * 1024 * 1024)
+        .await
+        .unwrap();
+    (status, csp, String::from_utf8_lossy(&body).into_owned())
+}
+
+#[tokio::test]
+async fn venue_pages_list_upcoming_events_and_events_link_to_them() {
+    let Some(db) = TestDb::create("venue_pages_list_upcoming_events").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let src = repo::upsert_source(
+        &pool,
+        "test",
+        SourceKind::Scraper,
+        "https://example.org",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+    let soon = Utc::now() + chrono::Duration::days(3);
+    let past = Utc::now() - chrono::Duration::days(3);
+    let mut upcoming = event(
+        "Glass & <light>",
+        "Peckham Arts Hall",
+        Some("65-67 Peckham Road, London SE5 8UH"),
+        Some((51.474, -0.0811)),
+    );
+    upcoming.starts_at = soon;
+    let mut gone = event("Old show", "Peckham Arts Hall", None, None);
+    gone.starts_at = past;
+    ingest(&pool, src, &upcoming).await;
+    ingest(&pool, src, &gone).await;
+    repo::sync_venues(&pool).await.unwrap();
+
+    let (status, csp, body) = get_page(&pool, "/venues/peckham-arts-hall").await;
+    assert_eq!(status, 200);
+    assert!(!csp.contains("unsafe-inline"), "{csp}");
+    assert!(body.contains("<h1>Peckham Arts Hall</h1>"), "{body}");
+    assert!(body.contains("65-67 Peckham Road, London SE5 8UH"));
+    assert!(
+        body.contains(r#"href="/?borough=southwark">Southwark</a>"#),
+        "{body}"
+    );
+    assert!(body.contains("openstreetmap.org/?mlat=51.474"));
+    assert!(body.contains("Glass &amp; &lt;light&gt;"), "escaped");
+    assert!(!body.contains("Old show"), "past events are not listed");
+    assert!(!body.contains("style="), "no inline styles");
+
+    // Event pages, cards and the JSON link to the venue page.
+    let id: uuid::Uuid =
+        sqlx::query_scalar("SELECT id FROM events.events WHERE title = 'Glass & <light>'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    let link = r#"<a class="venue-page" href="/venues/peckham-arts-hall">Peckham Arts Hall</a>"#;
+    let (_, _, detail) = get_page(&pool, &format!("/events/{id}")).await;
+    assert!(detail.contains(link), "{detail}");
+    let (_, _, home) = get_page(&pool, "/").await;
+    assert!(home.contains(link), "{home}");
+    let (_, _, json) = get_page(&pool, &format!("/v1/events/{id}")).await;
+    let json: serde_json::Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(json["venue_slug"], "peckham-arts-hall");
+
+    let (status, _, _) = get_page(&pool, "/venues/nowhere").await;
+    assert_eq!(status, 404);
+}

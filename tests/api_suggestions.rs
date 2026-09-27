@@ -420,6 +420,7 @@ fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
         source_timeout: Duration::from_secs(1),
         enrich: None,
         qa: None,
+        venues: None,
     }
 }
 

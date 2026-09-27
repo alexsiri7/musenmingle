@@ -10,6 +10,7 @@ use musenmingle::config::Config;
 use musenmingle::enrich::Enricher;
 use musenmingle::enrich::requesty::Requesty;
 use musenmingle::fetch::FetchContext;
+use musenmingle::geocode::VenueChecks;
 use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
 use musenmingle::health::{HealthChecker, HealthConfig};
 use musenmingle::notify::{LogNotifier, Notifier, Ntfy};
@@ -41,21 +42,22 @@ async fn main() -> anyhow::Result<()> {
         }
     };
 
+    if config.ntfy_topic.is_none() {
+        tracing::warn!("NTFY_TOPIC not set; owner alerts will only be logged");
+    }
+    let notifier = || -> anyhow::Result<Box<dyn Notifier>> {
+        Ok(match &config.ntfy_topic {
+            Some(topic) => Box::new(Ntfy::new(&config.ntfy_base_url, topic)?),
+            None => Box::new(LogNotifier),
+        })
+    };
+
     let enrich = match &config.requesty_api_key {
-        Some(key) => {
-            let notifier: Box<dyn Notifier> = match &config.ntfy_topic {
-                Some(topic) => Box::new(Ntfy::new(&config.ntfy_base_url, topic)?),
-                None => {
-                    tracing::warn!("NTFY_TOPIC not set; owner alerts will only be logged");
-                    Box::new(LogNotifier)
-                }
-            };
-            Some(Enricher {
-                client: Requesty::new(&config.requesty_base_url, key)?,
-                notifier,
-                config: config.enrich.clone(),
-            })
-        }
+        Some(key) => Some(Enricher {
+            client: Requesty::new(&config.requesty_base_url, key)?,
+            notifier: notifier()?,
+            config: config.enrich.clone(),
+        }),
         None => {
             tracing::info!("REQUESTY_API_KEY not set; AI enrichment and embeddings are off");
             None
@@ -82,6 +84,11 @@ async fn main() -> anyhow::Result<()> {
         source_timeout: config.source_timeout,
         enrich,
         qa,
+        venues: Some(VenueChecks {
+            postcodes_base: url::Url::parse(&config.postcodes_io_base_url)
+                .context("POSTCODES_IO_BASE_URL")?,
+            notifier: notifier()?,
+        }),
     };
     match runner.run_once(Utc::now()).await? {
         RunSummary::Locked => tracing::info!("skipped: another run in progress"),

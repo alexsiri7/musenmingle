@@ -41,6 +41,7 @@ async fn every_enabled_seeded_source_has_an_implementation() {
         qa: Default::default(),
         ntfy_topic: None,
         ntfy_base_url: String::new(),
+        postcodes_io_base_url: String::new(),
         tiles_path: Default::default(),
         transit: musenmingle::transit::TransitConfig::parse(Some("off"), None, None).unwrap(),
     };
