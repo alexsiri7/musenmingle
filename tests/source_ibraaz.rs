@@ -228,3 +228,50 @@ async fn listing_without_the_calendar_is_an_error() {
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("/whats-on/: no Nuxt payload"), "{err}");
 }
+
+/// A listing whose calendar holds one readable event and one without a
+/// start date.
+fn listing_with_an_unreadable_event() -> String {
+    r#"<script type="application/json" id="__NUXT_DATA__">
+        [{"solspace_calendar":1},{"events":2},[3,8],
+         {"id":4,"slug":5,"title":6,"startDate":7},1,"a-talk","A Talk","2026-10-01T18:00:00+00:00",
+         {"id":9,"slug":10,"title":11},2,"no-date","No Date"]
+        </script>"#
+        .into()
+}
+
+#[test]
+fn unreadable_calendar_events_are_problems() {
+    let (raws, problems) =
+        parse_listing(&listing_with_an_unreadable_event(), &SITE.parse().unwrap()).unwrap();
+    let slugs: Vec<&str> = raws.iter().map(slug).collect();
+    assert_eq!(slugs, ["a-talk"]);
+    assert_eq!(problems.len(), 1, "{problems:?}");
+    assert!(
+        problems[0].starts_with("unreadable calendar event: missing field `startDate`"),
+        "{problems:?}"
+    );
+}
+
+#[tokio::test]
+async fn unreadable_calendar_events_are_reported() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "/robots.txt",
+        fixture(&format!("{DIR}/robots.txt")),
+        1,
+    )
+    .await;
+    mount(&server, "/whats-on/", listing_with_an_unreadable_event(), 1).await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = Ibraaz::new(server.uri().parse().unwrap()).with_max_detail_pages(0);
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    assert_eq!(raws.len(), 1);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(
+        errors[0].starts_with("unreadable calendar event: missing field `startDate`"),
+        "{errors:?}"
+    );
+}
