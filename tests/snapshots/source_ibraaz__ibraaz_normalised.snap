@@ -1,0 +1,332 @@
+---
+source: tests/source_ibraaz.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "cosmic-breath|2026-03-07|ibraaz",
+      "description": "Cosmic Breath is a sound installation by artist Joe Namy composed of recordings of the adhan— the Islamic call to prayer. The work is reimagined for Ibraaz’s Musalla, a space dedicated to spiritual practice as both lived experience and creative expression. It brings together historical and contemporary calls from different geographies, amplified through horn speakers synonymous with those perched on the minarets of mosques. Played simultaneously, each speaker softly emits a different adhan recording, inviting the audience to lean in and listen closely. At prayer times, the volume increases to become clearly audible in the room, creating a congregation of calls to prayer. The voices span more than a century and include what is considered the first recording of the adhan at the Haram Mosque in Makkah in the late 1800s. Contemporary contributions include calls from the Al-Aqsa Mosque in Jerusalem and the Sultan Mosque in Singapore, which is thought to be the first mosque to use loudspeakers in the 1930s. Recordings have also been collected from Khartoum, Tbilisi, Durban, and beyond. The work was originally commissioned for the Islamic Arts Biennale in Jeddah in 2023 by its artistic director, Sumayya Vally. For this iteration at Ibraaz, the installation features a recording of the first public call to prayer performed by the Waltham Forest Islamic Association in London during the COVID lockdown in 2020. At a time when gathering was not possible, the sound of the adhan offered a sonic expression of shared experience and community. Through Cosmic Breath, the constancy of the adhan across place and time is evoked as a unifying spiritual and sonic practice. Designed to be listened to both individually and simultaneously, the work also reveals the multitude of voices included. Each carries a unique character shaped by acoustic environments, sonic traditions, and local histories. The work is part of Namy's wider study on sound systems, community, and spirituality.",
+      "ends_at": "2027-03-07T00:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/cosmic-breath-joe-namy/Joe-Namy_Cosmic-Breath-2026_Musalla-at-Ibraaz_5-courtesy-Joe-Namy-photo-Ollie-Hammick_2026-03-16-155743_viao.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-03-07T00:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Cosmic Breath",
+      "url": "https://ibraaz.org/whats-on/cosmic-breath-joe-namy",
+      "venue_name": "Ibraaz"
+    },
+    "id": "19426"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "rakyat-pasti-menang|2026-07-08|ibraaz",
+      "description": "Ibraaz presents an exhibition by Taring Padi, an Indonesian collective of art workers founded in Yogyakarta in 1998 by a group of progressive art students and activists. Rakyat Pasti Menang, Bahasa Indonesia for ‘the people united will never be defeated’, brings together major works and archival material from the collective’s nearly thirty-year history. The exhibition takes its title from the protest chants heard during the sociopolitical upheaval of Indonesia’s Reformasi movement in the late 1990s. Rooted in the historical moment from which Taring Padi emerged, the phrase continues to resonate today, demonstrating how the collective has carried its spirit of solidarity and resistance into new political and cultural contexts. The show unfolds over three chapters, featuring Taring Padi’s large-scale banners, cardboard puppets, woodcut prints and posters. Alongside these presentations, a public programme of workshops, talks and activations, will explore their approach to art as a tool for political education, mobilisation, and collective struggle. Hosted in the Majlis, a space central to Ibraaz’s vision of dialogue and exchange, Rakyat Pasti Menang reflects a shared commitment to culture as a site of collective imagination and social transformation.",
+      "ends_at": "2026-11-22T00:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/25673/white-bground.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-07-07T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Rakyat Pasti Menang",
+      "url": "https://ibraaz.org/whats-on/taring-padi",
+      "venue_name": "Ibraaz"
+    },
+    "id": "25673"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "who-is-your-we|2026-10-01|ibraaz",
+      "description": "Whether it's the family WhatsApp group, a five-a-side football team, a choir, a union, or a work team, our lives are mapped across collective being in ways that ground the every day. But what makes a group a 'we', and what do we owe it? This event takes Ibraaz’s current exhibition Rakyat Pasti Menang from Indonesian collective Taring Padi as a starting point for answering this question. In their 30 years of existence, Taring Padi’s determination to ‘agitate, educate, and organise’ has been structured around a set of principles that allow them to mobilise and exist as a ‘we’. Through other examples of global, local and personal networks of collective being, this event explores how collective realities can be shaped and how we can understand our responsibility to the collectives we belong to. Doors open at 5.30pm; event starts at 6pm and ends at 8pm. Image courtesy of Taring Padi.",
+      "ends_at": "2026-10-01T19:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/29493/RapatTP-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T17:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Who is your 'we'?",
+      "url": "https://ibraaz.org/whats-on/who-is-your-we",
+      "venue_name": "Ibraaz"
+    },
+    "id": "29493"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "colonial-sensitivities|2026-10-03|ibraaz",
+      "description": "Randa Abdel-Fattah 's Discipline is a searing critique of Western liberalism and its complicity with the enduring colonial violence of Zionism. The novel, first published in Australia in 2025, follows a cast of Arab Muslim characters working in media and educational institutions who are forced to choose between conflict and compromise with the mainstream colonial culture. Those same institutions – the media, literary festivals, higher education establishments – have repeatedly sought to discipline Abdel-Fattah in real life, attempting to silence her through smear campaigns and cancellations. Ibraaz welcomes Randa Abdel-Fattah to London to mark the UK launch of Discipline, where she will be in conversation with writer Omar Robert Hamilton.",
+      "ends_at": "2026-10-03T15:30:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/29753/Randa2.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-03T14:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Colonial Sensitivities",
+      "url": "https://ibraaz.org/whats-on/colonial-sensitivities",
+      "venue_name": "Ibraaz"
+    },
+    "id": "29753"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "earshot|2026-10-08|ibraaz",
+      "description": null,
+      "ends_at": "2027-06-26T23:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/earshot/Strike-on-journalists-in-South-Lebanon-Earshot-Unmanned-Aerial-Vehicle-UAV-Analysis-2023_01_2026-08-14-134933_vrob.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T23:00:00Z",
+      "tags": [
+        "library-in-residence"
+      ],
+      "title": "Earshot",
+      "url": "https://ibraaz.org/whats-on/earshot-library-in-residence",
+      "venue_name": "Ibraaz"
+    },
+    "id": "28059"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "elegy|2026-10-08|ibraaz",
+      "description": "Developed over more than a decade as a ritual performance and installation project, Gabrielle Goliath’s Elegy (2015–ongoing) gathers collective acts of mourning around lives and histories marked by violence, erasure and structural loss. Elegy has evolved through multiple geographies and communities, with performative encounters staged across Johannesburg, Cape Town, São Paulo, Paris, Amsterdam, Munich and beyond. The work arrives in London for a major institutional presentation, following the shocking cancellation of the South African Pavilion in Venice and its subsequent presentation as an independent exhibition at Chiesa di Sant’Antonin, with the support of Ibraaz, the Bertha Foundation and other allies. Installed in the sonic chamber of Ibraaz's Minassa, voices and moving images immerse audiences within a space of mourning, kinship and collective care. Addressing contexts of rape culture and femicide in South Africa, the genocide of Ovaherero and Nama peoples in Namibia and the ongoing devastation of Palestinian life, Elegy proposes mourning not as closure, but as a sustained practice of collective presence.",
+      "ends_at": "2027-01-17T00:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/28051/Elegy_Joan-Thabeng_Do-Disturb-Festival-Palais-de-Tokyo-Gabrielle-Goliath-Crédits-Ayka-Lux-3_2026-09-04-140714_glqr.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T23:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Elegy",
+      "url": "https://ibraaz.org/whats-on/elegy-gabrielle-goliath",
+      "venue_name": "Ibraaz"
+    },
+    "id": "28051"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "autumn-opening|2026-10-08|ibraaz",
+      "description": "Join us to celebrate the opening of Ibraaz’s autumn programme of sonic and spatial interventions with Gabrielle Goliath's Elegy and the Earshot Library-in-Residence. Through testimony and sonic inquiry, these exhibitions explore how sound, memories and evidence are gathered and listened to. Also on view are Taring Padi’s Rakyat Pasti Menang in the Majlis and Joe Namy’s Cosmic Breath in the Musalla. About Elegy: In the Minassa, Gabrielle Goliath’s Elegy gathers collective acts of mourning around lives and histories marked by violence, erasure and structural loss. Developed over more than a decade through encounters in Johannesburg, Cape Town, São Paulo, Paris and Amsterdam, the work brings together voices and moving images across eight funerary monoliths, moving between contexts including rape culture and femicide in South Africa, the genocide of Ovaherero and Nama peoples in Namibia, and the ongoing devastation of Palestinian life. About Earshot-Library-in-Residence: In the Iqra, Earshot-Library-in-Residence brings sound not as atmosphere, but as argument. Over nine months, the space becomes a site of sonic inquiry, where recordings are interrogated and listening becomes both exercise and method. From the Field, a multichannel audio experience drawn from Earshot’s eco-acoustic field recordings, plays alongside three listening stations presenting The Crack and the Boom, Authentic Audio and The Sonic Identikit. Together, they ask not only what a sound is, but how it is heard, by whom, through which technologies, and within what social, legal and political conditions. Join us between 6–8pm for the opening evening. Please RSVP to confirm your attendance.",
+      "ends_at": "2026-10-08T19:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/28743/Gabrielle-Earshot_image.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T17:00:00Z",
+      "tags": [
+        "exhibition",
+        "library-in-residence"
+      ],
+      "title": "Autumn Opening",
+      "url": "https://ibraaz.org/whats-on/autumn-opening",
+      "venue_name": "Ibraaz"
+    },
+    "id": "28743"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "ibraaz-one-year|2026-10-15|ibraaz",
+      "description": null,
+      "ends_at": "2026-10-15T20:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/29870/Website-Banner-1.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-15T17:00:00Z",
+      "tags": [
+        "exhibition",
+        "music"
+      ],
+      "title": "Ibraaz: One Year",
+      "url": "https://ibraaz.org/whats-on/ibraaz-one-year",
+      "venue_name": "Ibraaz"
+    },
+    "id": "29870"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "global-majority-as-idea-practice|2026-10-17|ibraaz",
+      "description": null,
+      "ends_at": "2026-10-17T16:30:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/29775/geoid.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-17T15:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Global Majority as Idea and Practice",
+      "url": "https://ibraaz.org/whats-on/global-majority-as-idea-and-practice",
+      "venue_name": "Ibraaz"
+    },
+    "id": "29775"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "another-kind-of-relation|2026-10-21|ibraaz",
+      "description": null,
+      "ends_at": "2026-10-21T19:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/30581/Huna-Banner-preview_2026-09-25-113053_bitm.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-21T17:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Another Kind of Relation",
+      "url": "https://ibraaz.org/whats-on/another-kind-of-relation",
+      "venue_name": "Ibraaz"
+    },
+    "id": "30581"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "mon-y|2026-10-29|ibraaz",
+      "description": null,
+      "ends_at": "2026-10-29T20:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/29484/Meireles-Zero-Dollar-V2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-29T18:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "MØN€Y",
+      "url": "https://ibraaz.org/whats-on/after-the-lecture-money",
+      "venue_name": "Ibraaz"
+    },
+    "id": "29484"
+  },
+  {
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "eden-at-dawn|2026-11-04|ibraaz",
+      "description": "Palestinian writers Karim Kattan and Tareq Baconi come together to discuss Kattan’s new novel Eden at Dawn, a sweeping queer love story which begins in Jerusalem and develops past the oppressive weight of occupation. Two men cross paths in the labyrinthine old city, where for centuries storytelling has fuelled romance. As a sandstorm covers the land, Gabriel and Isaac fall in love, lose each other, and find each other again. Despite extreme conditions, the lovers embark on a journey across Jericho to the West Bank, a daring act in a divided land. After The Palace on the Higher Hill, his first novel to be published in the UK, Kattan returns to the vivid Palestine of his imagination. Mixing traditional orality with classical culture and the marvellous with the tragically real, this story is a lyrical and shattering cry for love through which its author establishes himself as a master storyteller and takes us deeper into his literary world. Doors open at 5.30pm; event starts at 6pm and ends at 8pm. This even has been supported by the Institut Français. Image credit: David Mclenachan on Unsplash.",
+      "ends_at": "2026-11-04T20:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/eden-at-dawn/952010b0-3696-482f-88b7-81cc7753d9e1.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-04T18:00:00Z",
+      "tags": [
+        "talk"
+      ],
+      "title": "Eden at Dawn",
+      "url": "https://ibraaz.org/whats-on/eden-at-dawn",
+      "venue_name": "Ibraaz"
+    },
+    "id": "28225"
+  }
+]
