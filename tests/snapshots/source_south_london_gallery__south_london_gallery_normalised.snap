@@ -1,0 +1,125 @@
+---
+source: tests/source_south_london_gallery.rs
+expression: out
+---
+[
+  {
+    "date_text": "26 Sep – 25 Oct 2026,",
+    "event": null,
+    "source_event_id": "/events/slg-forever-raffle/"
+  },
+  {
+    "date_text": "THU 1 OCT, 6-9PM",
+    "event": {
+      "address": "65-67 Peckham Road, London SE5 8UH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "celebrating-fifteen-years-of-publishing-with-other-stories|2026-10-01|south",
+      "description": null,
+      "ends_at": "2026-10-01T20:00:00Z",
+      "image_url": "https://www.southlondongallery.org/wp-content/uploads/2026/09/four_original_photos_1880x940-640x426.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T17:00:00Z",
+      "tags": [],
+      "title": "Celebrating Fifteen Years of Publishing with And Other Stories",
+      "url": "https://www.southlondongallery.org/events/celebrating-fifteen-years-of-publishing-with-and-other-stories/",
+      "venue_name": "South London Gallery"
+    },
+    "source_event_id": "/events/celebrating-fifteen-years-of-publishing-with-and-other-stories/"
+  },
+  {
+    "date_text": "WED 7 OCT 2026, 6:30-8:00pm",
+    "event": {
+      "address": "65-67 Peckham Road, London SE5 8UH",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "talk-weight-of-matter|2026-10-07|south",
+      "description": null,
+      "ends_at": "2026-10-07T19:00:00Z",
+      "image_url": "https://www.southlondongallery.org/wp-content/uploads/2026/09/Installation-view-Monika-Sosnowska-at-the-South-London-Gallery-5-640x426.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T17:30:00Z",
+      "tags": [],
+      "title": "Talk: Weight of Matter",
+      "url": "https://www.southlondongallery.org/events/talk-weight-of-matter/",
+      "venue_name": "South London Gallery"
+    },
+    "source_event_id": "/events/talk-weight-of-matter/"
+  },
+  {
+    "date_text": "WED 21 OCT, 5-7PM",
+    "event": {
+      "address": "65-67 Peckham Road, London SE5 8UH",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "teachers-cpdl-workshop-monika-sosnowska|2026-10-21|south",
+      "description": null,
+      "ends_at": "2026-10-21T18:00:00Z",
+      "image_url": "https://www.southlondongallery.org/wp-content/uploads/2026/09/SLG-191_edited-640x426.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-21T16:00:00Z",
+      "tags": [],
+      "title": "Teachers’ CPDL Workshop: Monika Sosnowska",
+      "url": "https://www.southlondongallery.org/events/teachers-cpdl-workshop-monika-sosnowska/",
+      "venue_name": "South London Gallery"
+    },
+    "source_event_id": "/events/teachers-cpdl-workshop-monika-sosnowska/"
+  },
+  {
+    "date_text": "WED 28 OCT, 6:30-8PM",
+    "event": null,
+    "source_event_id": "/events/film-screening-psychobuildings/"
+  },
+  {
+    "date_text": "5 Jun - 30 Sep 2026",
+    "event": null,
+    "source_event_id": "/exhibitions/slg-forever-at-christies-online-selling-exhibition/"
+  },
+  {
+    "date_text": "10 Sep - 22 Nov 2026",
+    "event": {
+      "address": "65-67 Peckham Road, London SE5 8UH",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "monika-sosnowska-weight-of-matter|2026-09-10|south",
+      "description": null,
+      "ends_at": "2026-11-22T00:00:00Z",
+      "image_url": "https://www.southlondongallery.org/wp-content/uploads/2026/07/Installation-view-Monika-Sosnowska-at-the-South-London-Gallery-6-960x639.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-09T23:00:00Z",
+      "tags": [],
+      "title": "Monika Sosnowska: Weight of Matter",
+      "url": "https://www.southlondongallery.org/exhibitions/monika-sosnowska-weight-of-matter/",
+      "venue_name": "South London Gallery"
+    },
+    "source_event_id": "/exhibitions/monika-sosnowska-weight-of-matter/"
+  }
+]

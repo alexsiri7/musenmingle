@@ -202,6 +202,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     "From" dates and untimed days all day; families / under-5s skipped,
     talks, tours and symposia → talk, art classes → workshop, special
     events → community.
+  - `south-london-gallery` — CSS on two server-rendered WordPress listings
+    (events/film/talks and exhibitions; no `Event` JSON-LD, no detail
+    pages): year-less date lines resolved against the fetch date, single
+    days with a time timed (London wall clock), ranges and "From" dates all
+    day; film screenings, children's/family sessions, raffles and online
+    selling shows skipped; talks → talk, workshops → workshop, the rest →
+    community.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
