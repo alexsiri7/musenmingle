@@ -722,6 +722,8 @@ struct Filters {
     medium: String,
     format: String,
     good_for: String,
+    /// `venue_type=` (`crate::venue_type::VENUE_TYPES`).
+    venue_type: String,
     cursor: String,
 }
 
@@ -747,6 +749,7 @@ impl Filters {
                 "medium" => f.medium = v,
                 "format" => f.format = v,
                 "good_for" => f.good_for = v,
+                "venue_type" => f.venue_type = v,
                 "source" if !v.is_empty() && !f.sources.contains(&v) => f.sources.push(v),
                 "cursor" => f.cursor = v,
                 _ => {}
@@ -790,6 +793,7 @@ impl Filters {
             ("medium", &self.medium),
             ("format", &self.format),
             ("good_for", &self.good_for),
+            ("venue_type", &self.venue_type),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -823,6 +827,7 @@ impl Filters {
             medium: self.medium.clone(),
             format: self.format.clone(),
             good_for: self.good_for.clone(),
+            venue_type: self.venue_type.clone(),
             cursor: String::new(),
         };
         format!("/?{}", rest.page_query())
@@ -861,6 +866,7 @@ impl Filters {
             ("medium", &self.medium),
             ("format", &self.format),
             ("good_for", &self.good_for),
+            ("venue_type", &self.venue_type),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -907,6 +913,7 @@ fn tag_select(
     vocab: &[&str],
     chosen: &str,
     counts: Option<&serde_json::Value>,
+    label_of: fn(&str) -> &str,
 ) -> Markup {
     let count = |t: &str| {
         counts
@@ -1127,6 +1134,15 @@ fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec
             ));
         }
     }
+    if !f.venue_type.is_empty() {
+        out.push((
+            format!(
+                "Venue: {}",
+                title_case(crate::venue_type::label(&f.venue_type))
+            ),
+            link_with(f, |g| g.venue_type.clear()),
+        ));
+    }
     for src in &f.sources {
         let name = names
             .iter()
@@ -1257,7 +1273,8 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
         && f.sources.is_empty()
         && f.medium.is_empty()
         && f.format.is_empty()
-        && f.good_for.is_empty();
+        && f.good_for.is_empty()
+        && f.venue_type.is_empty();
     let pick_on = |p: &str| f.pick == p && bare;
     let today_s = today.format("%Y-%m-%d").to_string();
     let picks = [
@@ -1459,9 +1476,10 @@ fn filter_form(
                         }
                     }
                     (near_me_field(f))
-                    (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium"))))
-                    (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format"))))
-                    (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for"))))
+                    (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium")), label_of))
+                    (tag_select("format", "Format", "Any format", FORMAT_TAGS, &f.format, facets.and_then(|v| v.get("format")), label_of))
+                    (tag_select("good_for", "Good for", "Anyone", GOOD_FOR, &f.good_for, facets.and_then(|v| v.get("good_for")), label_of))
+                    (tag_select("venue_type", "Venue", "Any venue", crate::venue_type::VENUE_TYPES, &f.venue_type, facets.and_then(|v| v.get("venue_type")), crate::venue_type::label))
                     div class="field check" {
                         input id="free" name="free" type="checkbox" value="true" checked[f.free];
                         label for="free" { (with_count("Free only", price(|c| c.price.free))) }

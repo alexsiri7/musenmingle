@@ -288,6 +288,7 @@ The issue template `.github/ISSUE_TEMPLATE/new-scraper.md` contains this list:
 - [ ] wiremock fetch test (incl. robots.txt) passes
 - [ ] Source registered in `sources::build` + seed migration (new file)
 - [ ] Seed sets `display_name` (shown on pages and in "Image: …" credits)
+- [ ] Venue type: a single-venue source gets its default in `SOURCE_DEFAULTS` (`src/venue_type.rs`); an aggregator's well-known venues can get `events.venues.venue_type` overrides in a new migration
 - [ ] Site's terms of use checked: `store_description` / `store_image` decided (default true only if the terms don't forbid it; restrictive terms → both false, facts + link only) and `policy_note` records the terms URL + date
 - [ ] No image hotlinking or image fetching in the source (thumbnails come only from the thumbnailer); no truncation of descriptions in the source (upsert does the excerpt)
 - [ ] No LLM parsing; all requests go through `FetchContext`
