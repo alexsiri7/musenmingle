@@ -623,6 +623,74 @@ impl Ev {
     }
 }
 
+/// The `href` of the first `<a …>` whose tag contains `marker`.
+fn href_near(body: &str, marker: &str) -> String {
+    let at = body
+        .find(marker)
+        .unwrap_or_else(|| panic!("{marker} in {body}"));
+    let tag = &body[body[..at].rfind("<a ").unwrap()..];
+    let h = tag.find("href=\"").unwrap() + 6;
+    tag[h..h + tag[h..].find('"').unwrap()].replace("&amp;", "&")
+}
+
+#[tokio::test]
+async fn home_filter_panel_is_closed_with_removable_chips() {
+    let Some(db) = TestDb::create("home_filter_panel_is_closed_with_removable_chips").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    insert(&pool, Ev::new("Paid", days(1))).await;
+    let app = app(&pool);
+
+    // No filters: a closed panel, no count, no chips.
+    let p = get(&app, "/").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert!(
+        p.body
+            .contains("<details class=\"filter-panel\"><summary>Filters</summary>"),
+        "{}",
+        p.body
+    );
+    assert!(!p.body.contains("<details class=\"filter-panel\" open"));
+    assert!(!p.body.contains("Remove filter:"));
+
+    // Two filters and a chosen sort: still closed, a count of three, and a
+    // chip per filter whose × drops just that one.
+    let p = get(&app, "/?free=true&when=evening&sort=ending").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    assert!(!p.body.contains("filter-panel\" open"), "{}", p.body);
+    assert!(
+        p.body
+            .contains("<summary>Filters<span class=\"filter-count\">3</span>"),
+        "{}",
+        p.body
+    );
+    let free = href_near(&p.body, "aria-label=\"Remove filter: Free\"");
+    assert!(
+        !free.contains("free=") && free.contains("when=evening") && free.contains("sort=ending"),
+        "{free}"
+    );
+    let when = href_near(&p.body, "aria-label=\"Remove filter: When: Evenings\"");
+    assert!(
+        when.contains("free=true") && !when.contains("when="),
+        "{when}"
+    );
+    let sort = href_near(&p.body, "aria-label=\"Remove filter: Sort: ");
+    assert!(
+        sort.contains("free=true") && !sort.contains("sort="),
+        "{sort}"
+    );
+    // The chips sit outside the panel so they show while it is closed.
+    let chips = p.body.find("class=\"chips active-filters\"").unwrap();
+    assert!(chips > p.body.find("</details>").unwrap());
+
+    // The default sort is not a filter.
+    let p = get(&app, "/?sort=soonest").await;
+    assert!(!p.body.contains("Remove filter:"), "{}", p.body);
+    pool.close().await;
+    db.drop_db().await;
+}
+
 #[tokio::test]
 async fn home_filters_by_source_with_a_clearable_chip() {
     let Some(db) = TestDb::create("home_filters_by_source_with_a_clearable_chip").await else {
@@ -654,7 +722,8 @@ async fn home_filters_by_source_with_a_clearable_chip() {
     assert_eq!(p.status, StatusCode::OK, "{}", p.body);
     assert_eq!(card_titles(&p.body), ["On both", "Barbican only"]);
     assert!(
-        p.body.contains("From: <strong>Barbican</strong>"),
+        p.body
+            .contains("aria-label=\"Remove filter: Source: Barbican\""),
         "{}",
         p.body
     );
@@ -663,7 +732,7 @@ async fn home_filters_by_source_with_a_clearable_chip() {
             .contains("<input type=\"hidden\" name=\"source\" value=\"barbican\">")
     );
     // The chip clears the source but keeps the other filters.
-    let start = p.body.find("<span class=\"chip\">").unwrap();
+    let start = p.body.find("<li class=\"chip\">").unwrap();
     let chip = &p.body[start..];
     let href_at = chip.find("href=\"").unwrap() + 6;
     let href = chip[href_at..href_at + chip[href_at..].find('"').unwrap()].replace("&amp;", "&");
@@ -710,8 +779,7 @@ async fn home_paginates_with_a_more_link_keeping_filters() {
         card_titles(&p.body).len() as i64,
         musenmingle::web::PAGE_SIZE
     );
-    let start = p.body.find("<a href=\"/?").expect("More link") + "<a href=\"".len();
-    let href = p.body[start..start + p.body[start..].find('"').unwrap()].replace("&amp;", "&");
+    let href = href_near(&p.body, "rel=\"next\"");
     assert!(
         href.contains("category=workshop") && href.contains("cursor="),
         "{href}"

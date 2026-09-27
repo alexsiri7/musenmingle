@@ -979,14 +979,40 @@ fn hidden_filters(f: &Filters) -> Markup {
     }
 }
 
-/// For an empty result: one link per active filter that drops just that
-/// filter (`(label, href)`), keeping the search and everything else.
-fn relaxations(f: &Filters, today: NaiveDate) -> Vec<(String, String)> {
+/// The chosen date range in words: a preset's name ("This weekend") or
+/// the dates ("From 3 Oct", "Until 5 Oct", "3 Oct – 5 Oct").
+fn dates_label(f: &Filters, today: NaiveDate) -> String {
+    if let Some((label, _, _)) = date_presets(today)
+        .into_iter()
+        .skip(1)
+        .find(|(_, from, to)| *from == f.from && *to == f.to)
+    {
+        return label.to_string();
+    }
+    let d = |s: &str| {
+        NaiveDate::parse_from_str(s, "%Y-%m-%d")
+            .map_or_else(|_| s.to_string(), |d| d.format("%-d %b").to_string())
+    };
+    if f.to.is_empty() {
+        format!("From {}", d(&f.from))
+    } else if f.from == today.format("%Y-%m-%d").to_string() {
+        format!("Until {}", d(&f.to))
+    } else {
+        format!("{} – {}", d(&f.from), d(&f.to))
+    }
+}
+
+/// One link per active filter that drops just that filter (`(label,
+/// href)`), keeping the search and everything else: the removable chips
+/// and, for an empty result, the "Try removing a filter" list. `names`
+/// maps source keys to display names.
+fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec<(String, String)> {
     let mut out = Vec::new();
+    let dates = dates_label(f, today);
     let today = today.format("%Y-%m-%d").to_string();
     if !f.to.is_empty() || f.from != today {
         out.push((
-            "Dates".to_string(),
+            dates,
             link_with(f, |g| {
                 g.from = today.clone();
                 g.to.clear();
@@ -1012,7 +1038,7 @@ fn relaxations(f: &Filters, today: NaiveDate) -> Vec<(String, String)> {
         ));
     }
     if f.free {
-        out.push(("Free only".to_string(), link_with(f, |g| g.free = false)));
+        out.push(("Free".to_string(), link_with(f, |g| g.free = false)));
     }
     if let Some(a) = AREAS.iter().find(|a| a.key == f.near) {
         out.push((
@@ -1039,12 +1065,51 @@ fn relaxations(f: &Filters, today: NaiveDate) -> Vec<(String, String)> {
         }
     }
     for src in &f.sources {
+        let name = names
+            .iter()
+            .find(|(k, _)| k == src)
+            .map_or_else(|| repo::display_name(src, None), |(_, n)| n.clone());
+        out.push((format!("Source: {name}"), f.without_source(src)));
+    }
+    out
+}
+
+/// The removable chips for every active filter: `relaxations` plus a
+/// chosen non-default sort (the quick-pick row shows `pick=` itself).
+fn active_filters(
+    f: &Filters,
+    today: NaiveDate,
+    names: &[(String, String)],
+) -> Vec<(String, String)> {
+    let mut out = relaxations(f, today, names);
+    let default = Filters {
+        sort: String::new(),
+        ..f.clone()
+    };
+    let sort = effective_sort(f);
+    if !f.sort.is_empty() && sort != effective_sort(&default) {
         out.push((
-            format!("Source: {}", repo::display_name(src, None)),
-            f.without_source(src),
+            format!("Sort: {}", sort.label()),
+            link_with(f, |g| g.sort.clear()),
         ));
     }
     out
+}
+
+/// The active filters as chips, each with a × link that removes it.
+fn active_chips(active: &[(String, String)]) -> Markup {
+    html! {
+        @if !active.is_empty() {
+            ul class="chips active-filters" aria-label="Active filters" {
+                @for (label, href) in active {
+                    li class="chip" {
+                        (label)
+                        a href=(href) aria-label={ "Remove filter: " (label) } { "×" }
+                    }
+                }
+            }
+        }
+    }
 }
 
 /// The search box: its own GET form, carrying the other filters.
@@ -1219,20 +1284,35 @@ fn quick_pick_row(picks: &[QuickPick]) -> Markup {
 
 /// The filter bar: date and type quick links (plain links, so they work
 /// without JavaScript), then the full form for everything else.
+///
+/// The panel is a `<details>` that always starts closed; the active
+/// filters show as removable chips outside it.
 fn filter_form(
     f: &Filters,
     facets: Option<&serde_json::Value>,
     counts: Option<&CountsJson>,
     picks: &[QuickPick],
+    names: &[(String, String)],
 ) -> Markup {
     use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
     let price = |pick: fn(&CountsJson) -> i64| counts.map(pick);
     let today = Utc::now().with_timezone(&London).date_naive();
+    let active = active_filters(f, today, names);
     html! {
         section class="filter-bar" aria-label="Filters" {
             div class="wrap-x" {
                 (search_form(f))
                 (quick_pick_row(picks))
+                div class="filter-toggle-row" {
+                details class="filter-panel" {
+                summary {
+                    "Filters"
+                    @if !active.is_empty() {
+                        span class="filter-count" { (active.len()) }
+                        span class="vh" { " active" }
+                    }
+                }
+                div class="filter-panel-body" {
                 p class="chip-row" {
                     span class="label" { "Dates:" }
                     @for (label, from, to) in date_presets(today) {
@@ -1334,6 +1414,10 @@ fn filter_form(
                         button type="submit" { "Show events" }
                         a href="/" { "Reset" }
                     }
+                }
+                }
+                }
+                (active_chips(&active))
                 }
             }
         }
@@ -1670,7 +1754,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                     }
                 }
             }
-            (filter_form(&filters, facets.as_ref(), counts, &picks))
+            (filter_form(&filters, facets.as_ref(), counts, &picks, &source_names))
         }
     };
     // With a price ceiling, say how many events were left out for having no known price.
@@ -1688,19 +1772,6 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             }
         }
     };
-    let chips = html! {
-        @if !filters.sources.is_empty() {
-            p class="chips" aria-label="Active filters" {
-                @for src in &filters.sources {
-                    @let name = source_names.iter().find(|(k, _)| k == src).map_or_else(|| repo::display_name(src, None), |(_, n)| n.clone());
-                    span class="chip" {
-                        "From: " strong { (name) } " "
-                        a href=(filters.without_source(src)) aria-label={ "Show events from all sources, not only " (name) } { "×" }
-                    }
-                }
-            }
-        }
-    };
     let query = match query {
         Ok(q) => q,
         Err(msg) => {
@@ -1712,7 +1783,6 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                     (heading(None))
                     section class="band results" {
                         div class="wrap-x" {
-                            (chips)
                             p class="error" role="alert" { "Check the filters: " (msg) }
                         }
                     }
@@ -1746,7 +1816,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         .as_ref()
         .and_then(|s| s.corrected.clone());
     let today = Utc::now().with_timezone(&London).date_naive();
-    let relax = relaxations(&filters, today);
+    let relax = relaxations(&filters, today, &source_names);
     // With no results: how many upcoming events the corrected words find
     // without the other filters (the "Did you mean" link drops them).
     let suggestion = match (&corrected, events.is_empty()) {
@@ -1775,7 +1845,6 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
             (heading(Some(&counts)))
             section class="band results" {
                 div class="wrap-x" {
-                    @if !filters.sources.is_empty() { div class="results-status" { (chips) } }
                     (hidden_unknown(&counts))
                     @if query.fell_back_from == Some(Sort::Nearest) {
                         p class="results-status hint" role="status" {
@@ -1805,7 +1874,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                                 p class="small" { "Try removing a filter:" }
                                 ul class="chips relax" {
                                     @for (label, href) in &relax {
-                                        li { a class="pill" href=(href) aria-label={ "Remove filter " (label) } { "× " (label) } }
+                                        li { a class="pill" href=(href) aria-label={ "Remove filter: " (label) } { "× " (label) } }
                                     }
                                 }
                             }
