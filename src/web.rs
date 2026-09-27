@@ -672,6 +672,8 @@ struct Filters {
     near: String,
     /// `sort=` value; empty = the default (nearest with an area, else soonest).
     sort: String,
+    /// `pick=` quick pick (`tonight`, …); empty = none.
+    pick: String,
     /// Source keys (repeatable), e.g. from a link on `/sources`.
     sources: Vec<String>,
     /// AI/default tag filters (one value each on the page; the API repeats).
@@ -697,6 +699,7 @@ impl Filters {
                 "price_max" => f.price_max = v,
                 "near" => f.near = v,
                 "sort" => f.sort = v,
+                "pick" => f.pick = v,
                 "medium" => f.medium = v,
                 "format" => f.format = v,
                 "good_for" => f.good_for = v,
@@ -729,6 +732,7 @@ impl Filters {
             ("price_max", &self.price_max),
             ("near", &self.near),
             ("sort", &self.sort),
+            ("pick", &self.pick),
             ("medium", &self.medium),
             ("format", &self.format),
             ("good_for", &self.good_for),
@@ -759,6 +763,7 @@ impl Filters {
             price_max: self.price_max.clone(),
             near: self.near.clone(),
             sort: self.sort.clone(),
+            pick: self.pick.clone(),
             medium: self.medium.clone(),
             format: self.format.clone(),
             good_for: self.good_for.clone(),
@@ -787,6 +792,7 @@ impl Filters {
             ("when", &self.when),
             ("price_max", &self.price_max),
             ("sort", &self.sort),
+            ("pick", &self.pick),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -1038,12 +1044,168 @@ fn search_form(f: &Filters) -> Markup {
     }
 }
 
+// ---------------------------------------------------------------- quick picks
+
+/// How long quick-pick counts are reused.
+const QUICK_PICK_TTL: std::time::Duration = std::time::Duration::from_secs(300);
+
+/// The last quick-pick counts, their London date and when they were counted
+/// (one per router: tests run several databases in one process).
+#[derive(Default)]
+pub(crate) struct QuickPickCache(
+    std::sync::Mutex<Option<(std::time::Instant, NaiveDate, repo::QuickPickCounts)>>,
+);
+
+/// A chip at the top of the listing: a preset filter URL and its count.
+struct QuickPick {
+    label: &'static str,
+    href: String,
+    count: i64,
+    active: bool,
+}
+
+/// Counts for London date `today`, from the cache when they are younger
+/// than [`QUICK_PICK_TTL`].
+async fn quick_pick_counts(
+    state: &AppState,
+    today: NaiveDate,
+) -> sqlx::Result<repo::QuickPickCounts> {
+    let cached = state
+        .quick_picks
+        .0
+        .lock()
+        .ok()
+        .and_then(|c| *c)
+        .filter(|(at, day, _)| *day == today && at.elapsed() < QUICK_PICK_TTL);
+    if let Some((_, _, counts)) = cached {
+        return Ok(counts);
+    }
+    let midnight = |d: NaiveDate| crate::normalise::london_to_utc(d.and_time(NaiveTime::MIN));
+    let (_, sat, sun) = &date_presets(today)[2];
+    let day = |s: &str| NaiveDate::parse_from_str(s, "%Y-%m-%d").unwrap_or(today);
+    let (sat, sun) = (day(sat), day(sun));
+    let counts = repo::quick_pick_counts(
+        &state.pool,
+        today,
+        midnight(today),
+        (midnight(sat), midnight(sun + chrono::Duration::days(1))),
+    )
+    .await?;
+    if let Ok(mut c) = state.quick_picks.0.lock() {
+        *c = Some((std::time::Instant::now(), today, counts));
+    }
+    Ok(counts)
+}
+
+/// The quick picks (Tonight, This weekend, Free, Openings this week, Last
+/// chance, Hands-on, Talks) with counts; the active one links back to `/`.
+/// Each link is a plain listing URL whose filter is the SQL its count uses.
+async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPick>> {
+    let today = Utc::now().with_timezone(&London).date_naive();
+    let c = quick_pick_counts(state, today).await?;
+    let (_, sat, sun) = &date_presets(today)[2];
+    let bare = f.when.is_empty()
+        && f.price_max.is_empty()
+        && f.near.is_empty()
+        && f.sources.is_empty()
+        && f.medium.is_empty()
+        && f.format.is_empty()
+        && f.good_for.is_empty();
+    let pick_on = |p: &str| f.pick == p && bare;
+    let today_s = today.format("%Y-%m-%d").to_string();
+    let picks = [
+        (
+            "Tonight",
+            "/?pick=tonight".to_string(),
+            c.tonight,
+            pick_on("tonight"),
+        ),
+        (
+            "This weekend",
+            format!("/?from={sat}&to={sun}"),
+            c.weekend,
+            bare && f.pick.is_empty()
+                && f.from == *sat
+                && f.to == *sun
+                && f.category.is_empty()
+                && !f.free,
+        ),
+        (
+            "Free",
+            "/?free=true".to_string(),
+            c.free,
+            bare && f.pick.is_empty()
+                && f.free
+                && f.category.is_empty()
+                && f.to.is_empty()
+                && f.from == today_s,
+        ),
+        (
+            "Openings this week",
+            "/?pick=openings".to_string(),
+            c.openings,
+            pick_on("openings"),
+        ),
+        (
+            "Last chance",
+            "/?pick=last_chance&sort=ending".to_string(),
+            c.last_chance,
+            pick_on("last_chance"),
+        ),
+        (
+            "Hands-on",
+            "/?pick=hands_on".to_string(),
+            c.hands_on,
+            pick_on("hands_on"),
+        ),
+        (
+            "Talks",
+            "/?category=talk".to_string(),
+            c.talks,
+            bare && f.pick.is_empty()
+                && f.category == "talk"
+                && !f.free
+                && f.to.is_empty()
+                && f.from == today_s,
+        ),
+    ];
+    Ok(picks
+        .into_iter()
+        .map(|(label, href, count, active)| QuickPick {
+            label,
+            href: if active { "/".to_string() } else { href },
+            count,
+            active,
+        })
+        .collect())
+}
+
+/// The quick-pick chips (zero counts hidden; an active one stays so it can
+/// be cleared).
+fn quick_pick_row(picks: &[QuickPick]) -> Markup {
+    html! {
+        @if picks.iter().any(|p| p.count > 0 || p.active) {
+            p class="chip-row quick-picks" {
+                span class="label" { "Quick picks:" }
+                @for p in picks.iter().filter(|p| p.count > 0 || p.active) {
+                    a class="pill" href=(p.href) aria-current=[p.active.then_some("true")] {
+                        (p.label)
+                        span class="pill-count" { (p.count) }
+                        @if p.active { span class="vh" { " (selected; select again to clear)" } }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /// The filter bar: date and type quick links (plain links, so they work
 /// without JavaScript), then the full form for everything else.
 fn filter_form(
     f: &Filters,
     facets: Option<&serde_json::Value>,
     counts: Option<&CountsJson>,
+    picks: &[QuickPick],
 ) -> Markup {
     use crate::enrich::output::{FORMAT_TAGS, GOOD_FOR, MEDIUM_TAGS};
     let price = |pick: fn(&CountsJson) -> i64| counts.map(pick);
@@ -1052,6 +1214,7 @@ fn filter_form(
         section class="filter-bar" aria-label="Filters" {
             div class="wrap-x" {
                 (search_form(f))
+                (quick_pick_row(picks))
                 p class="chip-row" {
                     span class="label" { "Dates:" }
                     @for (label, from, to) in date_presets(today) {
@@ -1145,6 +1308,9 @@ fn filter_form(
                     }
                     @if !f.q.is_empty() {
                         input type="hidden" name="q" value=(f.q);
+                    }
+                    @if !f.pick.is_empty() {
+                        input type="hidden" name="pick" value=(f.pick);
                     }
                     div class="field actions" {
                         button type="submit" { "Show events" }
@@ -1344,6 +1510,10 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
         },
         Err(_) => None,
     };
+    let picks = match quick_picks(&state, &filters).await {
+        Ok(p) => p,
+        Err(e) => return internal_error(e),
+    };
     let week = Utc::now().with_timezone(&London).iso_week().week();
     let heading = |counts: Option<&CountsJson>| {
         html! {
@@ -1360,7 +1530,7 @@ async fn home(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Respons
                     }
                 }
             }
-            (filter_form(&filters, facets.as_ref(), counts))
+            (filter_form(&filters, facets.as_ref(), counts, &picks))
         }
     };
     // With a price ceiling, say how many events were left out for having no known price.

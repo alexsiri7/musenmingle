@@ -40,6 +40,8 @@ pub struct AppState {
     pub pool: PgPool,
     pub suggestions: Arc<Suggestions>,
     pub github_repo: Arc<str>,
+    /// Home-page quick-pick counts, cached for 5 minutes.
+    pub(crate) quick_picks: Arc<crate::web::QuickPickCache>,
 }
 
 /// Settings for [`router`] beyond the database and suggestions.
@@ -70,6 +72,7 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
             pool,
             suggestions: Arc::new(suggestions),
             github_repo: settings.github_repo.into(),
+            quick_picks: Arc::default(),
         })
 }
 

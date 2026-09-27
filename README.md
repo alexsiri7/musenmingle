@@ -234,7 +234,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   events (from today, London) with a plain GET filter form — dates,
   category, free only, and a preset "near" area (Central & South Bank,
   East, King's Cross, South Kensington) mapped to `near`+`radius_km` — so
-  every filtered view is a shareable URL; results are cards with a "More"
+  every filtered view is a shareable URL; above the filters, quick-pick chips (Tonight, This
+  weekend, Free, Openings this week, Last chance, Hands-on, Talks) link to
+  preset listings (`pick=` in `listing.rs`, SQL in `repo::pick_sql`) with
+  live counts from one FILTER-aggregate query cached for 5 minutes, zero
+  counts hidden; results are cards with a "More"
   link on the same cursor as the API. `GET /events/{id}` shows every field,
   the description as escaped paragraphs, each source link and an
   OpenStreetMap link. `GET /about` ("About & our approach", linked from

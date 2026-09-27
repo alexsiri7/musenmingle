@@ -10,7 +10,7 @@ they are not renamed or removed without notice; new fields may be added.
 
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
-takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`,
+takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`, `pick`,
 `source`, `medium`, `format`, `good_for` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}`, `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
@@ -66,6 +66,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
+| `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
 | `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise` or `relevance` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
@@ -103,6 +104,25 @@ events matching the corrected query are included; the response then has
 is `null` otherwise; `search` is absent without `q`). A query of stop words
 only (`the`) matches titles and venue names containing it. `counts` and
 `facets` apply the search too.
+
+Quick picks (`pick`), judged on London dates, "today" being the day of the
+request:
+
+- `tonight`: runs today and either starts today at 17:00 or later, or is
+  untimed and tagged `late opening`.
+- `openings`: starts within the next 7 days (today included) and is an
+  exhibition, has `is_opening: true` or the `opening` format tag, or its
+  title says private view, opening reception, opening night, preview
+  evening, launch or "PV" (whole words; "PV" in capitals only).
+- `last_chance`: runs on more than one London day, its last day is within
+  the next 7, and it has not ended (the `ending` sort's notion of an end).
+  The home page pairs it with `sort=ending`.
+- `hands_on`: category `workshop`, the `hands_on` format tag, or a title
+  saying class, course, drop-in, life drawing, masterclass or workshop.
+
+The home page shows these (and "This weekend", "Free" and "Talks", which
+are plain `from`/`to`, `free` and `category` links) as chips with counts
+from one query, cached for 5 minutes; chips with no events are hidden.
 
 Order (`sort`), ties broken by `id`:
 
