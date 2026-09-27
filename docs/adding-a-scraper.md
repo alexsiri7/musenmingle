@@ -72,7 +72,7 @@ the venue's own site before it.
    `store_description = FALSE, store_image = FALSE`. Terms that forbid
    reproducing *any information* from the site (not just text and images)
    rule out even facts + link: refuse the site (`terms`) instead, as with
-   ArtRabbit (#96) and White Cube. Scrapers still emit
+   ArtRabbit (#96), D&AD (#101) and White Cube. Scrapers still emit
    `description`/`image_url` as found — `repo::upsert_event` drops what the
    policy forbids and cuts descriptions to a 300-character excerpt, so don't
    truncate or strip in the scraper (and don't change `clean_description`).

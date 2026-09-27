@@ -1161,6 +1161,21 @@ async fn retired_artrabbit_is_listed_only_as_refused() {
     db.drop_db().await;
 }
 
+#[tokio::test]
+async fn retired_dandad_is_listed_only_as_refused() {
+    let Some(db) = TestDb::create("retired_dandad_is_listed_only_as_refused").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let p = get(&app(&pool), "/sources").await;
+    let (active, refused) = p.body.split_once("id=\"refused\"").unwrap();
+    assert!(!active.contains("D&amp;AD"), "{active}");
+    assert!(refused.contains("D&amp;AD"), "{refused}");
+    assert!(refused.contains("personal use"), "{refused}");
+    pool.close().await;
+    db.drop_db().await;
+}
+
 #[test]
 fn venue_request_issue_template_exists() {
     let t = std::fs::read_to_string(concat!(

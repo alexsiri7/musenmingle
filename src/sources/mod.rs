@@ -17,7 +17,6 @@ pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
 pub mod conway_hall;
 pub mod courtauld;
-pub mod dandad;
 pub mod design_museum;
 pub mod foundling_museum;
 pub mod four_corners;
@@ -153,7 +152,6 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             william_morris_society::WilliamMorrisSociety::new(base),
         )),
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
-        dandad::KEY => Ok(Box::new(dandad::Dandad::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }
 }
