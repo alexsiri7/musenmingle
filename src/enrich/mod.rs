@@ -17,9 +17,10 @@
 //! its pessimistic estimate fits under both the daily cap (London day) and
 //! the per-run cap. An event is re-enriched only when its input hash, its
 //! page text (`page_text_hash`, when this run has the text) or the prompt
-//! version changes; a give-up is remembered the same way. An event whose
-//! listing has page text that this run does not hold waits for its source's
-//! next scrape instead of being enriched from the excerpt alone.
+//! version changes; a give-up is remembered the same way. An event that
+//! shows a note and whose listing has page text this run does not hold
+//! keeps its note until its source's next scrape instead of being
+//! re-enriched from the excerpt alone.
 //!
 //! When Requesty reports that credits are exhausted, the pass stops for the
 //! run, `events.alert_state` remembers it and the owner gets one ntfy per
@@ -264,11 +265,14 @@ pub fn needs_enrichment(c: &Candidate, page: Option<&PageText>) -> bool {
     if current || gave_up {
         return false;
     }
-    // The listing has more text than the excerpt but this run did not scrape
-    // it: wait for the source's next run rather than spend on a thinner note.
-    // Before a listing is first seen with this code (hash NULL), an excerpt
-    // cut short ("…") is the sign that more text exists.
+    // The event shows a note and its listing has more text than the excerpt,
+    // but this run did not scrape it: keep the note and wait for the
+    // source's next run rather than spend on a thinner one. (Without a note,
+    // enrich from the excerpt now; the page text upgrades it later.) Before
+    // a listing is first seen with this code (hash NULL), an excerpt cut
+    // short ("…") is the sign that more text exists.
     let waits = page.is_none()
+        && c.materialised
         && match c.page_text_hash.as_deref() {
             Some(h) => !h.is_empty(),
             None => c

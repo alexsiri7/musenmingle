@@ -452,9 +452,10 @@ runner, which passes it to the pass and drops it after the tick; it is
 never stored, logged or cached (its `Debug` is redacted), only its sha256
 (`events.events.page_text_hash`, for the listing behind the stored
 excerpt, so merged events don't flip between sources). An event is due
-again when that hash differs from the one its enrichment saw; one whose
-page text this tick doesn't hold waits for its source's next scrape rather
-than being enriched from the excerpt alone. The pass never fetches a page,
+again when that hash differs from the one its enrichment saw; one that
+shows a note but whose page text this tick doesn't hold keeps the note
+until its source's next scrape rather than being re-enriched from the
+excerpt alone (without a note, it is enriched from the excerpt now). The pass never fetches a page,
 and facts-only sources (Ticketmaster, Serpentine) send just the facts.
 Expect about 2–3× the input tokens per event; the caps below still apply.
 

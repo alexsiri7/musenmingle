@@ -2783,8 +2783,9 @@ async fn about() -> Response {
                             "It sees the facts we store (title, venue, dates, category, the listing's "
                             "own labels, price, the short excerpt we keep and which sites list the "
                             "event) and, while we collect, the text of the public listing page we "
-                            "read anyway. That text is used only for this and then dropped: we keep "
-                            "just the short excerpt. We never fetch a page just for these notes, and "
+                            "read anyway. The AI sees that text only in passing: we don't keep it for "
+                            "the AI, and pages show just the short excerpt. We never fetch a page just "
+                            "for these notes, and "
                             "for sites whose terms limit reuse the AI gets only the basic facts."
                         }
                         li {
@@ -2829,8 +2830,8 @@ async fn about() -> Response {
                         li { "the facts: title, dates, venue, price and category;" }
                         li {
                             "a short excerpt of the description, not the full text (our AI reads "
-                            "the full public listing text while we collect, to tag the event and "
-                            "write its note, but we don't keep it);"
+                            "the full public listing text in passing while we collect, to tag the "
+                            "event and write its note);"
                         }
                         li {
                             "a small thumbnail, made once from your image and served from our own "

@@ -76,10 +76,15 @@ async fn mount_chat(server: &MockServer) {
                 .iter()
                 .map(|e| {
                     // The speaker is only in the page text: grounding must
-                    // accept it.
+                    // accept it (and would reject it without the text).
+                    let artists = if e.get("page_text").is_some() {
+                        json!([SENTINEL])
+                    } else {
+                        json!([])
+                    };
                     json!({
                         "id": e["id"], "medium_tags": ["painting"], "format_tags": ["talk"],
-                        "good_for": [], "vibe_tags": [], "artists": [SENTINEL],
+                        "good_for": [], "vibe_tags": [], "artists": artists,
                         "is_opening": false, "opening_evidence": null, "grounding": "listing",
                         "whats_cool": "A talk on painting rivers and the city.",
                         "one_liner": "Talk on paintings of rivers", "confidence": 0.8
@@ -260,6 +265,13 @@ async fn a_changed_page_makes_the_event_due_but_an_unchanged_one_does_not() {
     let pages: PageTexts = [(id, page)].into();
     assert_eq!(e.run(&pool, now(), &pages).await.unwrap().enriched, 1);
     assert_eq!(requesty.received_requests().await.unwrap().len(), 2);
+
+    // An event without a note doesn't wait for its text: it gets an
+    // excerpt-only note now (upgraded when a run has the text).
+    let (other, _) = ingest(&pool, src.id, &event("Canal talk", &description("x."))).await;
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
+    assert_eq!((r.queued, r.enriched), (1, 1), "{r:?}");
+    assert_eq!(page_hash(&pool, other).await.map(|h| h.len()), Some(64));
     db.drop_db().await;
 }
 
