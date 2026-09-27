@@ -100,19 +100,33 @@ pub struct Card {
     pub image_url: Option<String>,
 }
 
-/// The cards of the "Upcoming and Current Events" grid, de-duplicated by
-/// slug, or an error when the page has no such grid (a template change).
-pub fn parse_listing(html: &str) -> Result<Vec<Card>, SourceError> {
+/// The "Upcoming and Current Events" grid.
+#[derive(Debug, serde::Serialize)]
+pub struct Listing {
+    /// De-duplicated by slug.
+    pub cards: Vec<Card>,
+    /// Cards that could not be read, for the fetch to report.
+    pub problems: Vec<String>,
+}
+
+/// The upcoming grid, or an error when the page has no such grid (a
+/// template change).
+pub fn parse_listing(html: &str) -> Result<Listing, SourceError> {
     let doc = Html::parse_document(html);
     let grid = doc.select(&selector(UPCOMING_GRID)).next().ok_or_else(|| {
         SourceError::Parse("no upcoming events grid on the What's on page".into())
     })?;
     let mut cards: Vec<Card> = Vec::new();
+    let mut problems = Vec::new();
     for item in grid.select(&selector(".e-loop-item")) {
         let Some(link) = item.select(&selector("h5 a[href]")).next() else {
+            let title = item.select(&selector("h5")).next().map(element_text);
+            problems.push(format!("card without a title link: {title:?}"));
             continue;
         };
-        let Some((path, slug)) = link.value().attr("href").and_then(event_path) else {
+        let href = link.value().attr("href").unwrap_or_default();
+        let Some((path, slug)) = event_path(href) else {
+            problems.push(format!("card with an unreadable event link {href:?}"));
             continue;
         };
         if cards.iter().any(|c| c.slug == slug) {
@@ -154,7 +168,7 @@ pub fn parse_listing(html: &str) -> Result<Vec<Card>, SourceError> {
                 .map(str::to_string),
         });
     }
-    Ok(cards)
+    Ok(Listing { cards, problems })
 }
 
 /// What only the detail page has.
@@ -356,10 +370,13 @@ impl Source for Lux {
                 .join(path)
                 .map_err(|e| SourceError::Config(e.to_string()))
         };
-        let cards = parse_listing(&ctx.get_text(&url(LISTING_PATH)?).await?)?;
+        let listing = parse_listing(&ctx.get_text(&url(LISTING_PATH)?).await?)?;
+        for problem in listing.problems {
+            ctx.report_error(problem);
+        }
         let mut raws = Vec::new();
         let mut details_fetched = 0;
-        for card in &cards {
+        for card in &listing.cards {
             let page_url = url(&card.path)?;
             let raw = card_event(card, &page_url, None);
             if in_scope(&raw.payload).is_none() {

@@ -11,7 +11,9 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
 use musenmingle::model::RawEvent;
 use musenmingle::sources::Source;
-use musenmingle::sources::lux::{Card, Lux, card_event, in_scope, parse_detail, parse_listing};
+use musenmingle::sources::lux::{
+    Card, Lux, MAX_DETAIL_PAGES, card_event, in_scope, parse_detail, parse_listing,
+};
 use url::Url;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -30,7 +32,9 @@ fn detail_html(slug: &str) -> String {
 }
 
 fn cards() -> Vec<Card> {
-    parse_listing(&fixture(&format!("{DIR}/whats-on.html"))).expect("listing")
+    let listing = parse_listing(&fixture(&format!("{DIR}/whats-on.html"))).expect("listing");
+    assert!(listing.problems.is_empty(), "{:?}", listing.problems);
+    listing.cards
 }
 
 /// The raw events a run produces from the fixtures: detail pages only for
@@ -89,7 +93,38 @@ fn missing_upcoming_grid_is_an_error() {
     // A template change must reach the health checker; an empty grid is fine.
     assert!(parse_listing("<html><body><h2>What's on</h2></body></html>").is_err());
     let empty = r#"<div class="elementor-widget-loop-grid"></div>"#;
-    assert!(parse_listing(empty).unwrap().is_empty());
+    assert!(parse_listing(empty).unwrap().cards.is_empty());
+}
+
+/// A grid card for a one-day lecture at LUX; `href` is its title link.
+fn lecture_card(href: &str) -> String {
+    format!(
+        r#"<div class="e-loop-item event_catogories-lecture">
+        <h5><a href="{href}">A Lecture</a></h5>
+        <div class="elementor-widget-text-editor">LUX</div>
+        <div class="elementor-widget-text-editor">6 November, 2026</div>
+        <div class="elementor-widget-text-editor">– 6 November, 2026</div></div>"#
+    )
+}
+
+fn grid(cards: &str) -> String {
+    format!(r#"<html><body><div class="elementor-widget-loop-grid">{cards}</div></body></html>"#)
+}
+
+#[test]
+fn unreadable_cards_are_problems() {
+    let html = grid(
+        &[
+            r#"<div class="e-loop-item"><h5>No link</h5></div>"#.to_string(),
+            lecture_card("https://lux.org.uk/news/not-an-event/"),
+            lecture_card("https://lux.org.uk/event/a-lecture/"),
+        ]
+        .concat(),
+    );
+    let listing = parse_listing(&html).unwrap();
+    let slugs: Vec<_> = listing.cards.iter().map(|c| c.slug.as_str()).collect();
+    assert_eq!(slugs, ["a-lecture"]);
+    assert_eq!(listing.problems.len(), 2, "{:?}", listing.problems);
 }
 
 async fn serve(server: &MockServer, at: &str, body: String, times: u64) {
@@ -152,6 +187,55 @@ async fn fetches_listing_and_in_scope_details_via_fetch_context() {
         events[0].starts_at.to_rfc3339(),
         "2026-11-06T09:00:00+00:00"
     );
+}
+
+#[tokio::test]
+async fn detail_fetches_stop_at_the_cap_and_failed_cards_are_dropped() {
+    // Two more in-scope cards than the cap, plus an unreadable one. The
+    // first detail page fails; cards past the cap are never requested. Both
+    // are left out rather than stored without their time.
+    let slug = |i: usize| format!("lecture-{i}");
+    let cards: String = (0..MAX_DETAIL_PAGES + 2)
+        .map(|i| lecture_card(&format!("https://lux.org.uk/event/{}/", slug(i))))
+        .chain([lecture_card("https://lux.org.uk/news/")])
+        .collect();
+    let server = MockServer::start().await;
+    serve(
+        &server,
+        "/robots.txt",
+        fixture(&format!("{DIR}/robots.txt")),
+        1,
+    )
+    .await;
+    serve(&server, "/whats-on/", grid(&cards), 1).await;
+    Mock::given(method("GET"))
+        .and(path(format!("/event/{}/", slug(0))))
+        .respond_with(ResponseTemplate::new(404))
+        .expect(1)
+        .mount(&server)
+        .await;
+    for i in 1..MAX_DETAIL_PAGES + 2 {
+        let times = u64::from(i < MAX_DETAIL_PAGES);
+        serve(
+            &server,
+            &format!("/event/{}/", slug(i)),
+            "<html></html>".into(),
+            times,
+        )
+        .await;
+    }
+
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = Lux::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+
+    let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.clone()).collect();
+    let want: Vec<_> = (1..MAX_DETAIL_PAGES).map(slug).collect();
+    assert_eq!(ids, want);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 2, "{errors:?}");
+    assert!(errors.iter().any(|e| e.contains(&slug(0))), "{errors:?}");
+    assert!(errors.iter().any(|e| e.contains("/news/")), "{errors:?}");
 }
 
 fn raws_with_site(site: &str) -> Vec<RawEvent> {
