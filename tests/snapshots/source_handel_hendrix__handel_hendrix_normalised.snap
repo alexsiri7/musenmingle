@@ -1,0 +1,198 @@
+---
+source: tests/source_handel_hendrix.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "facts": [
+      "Every Thursday",
+      "14:00",
+      "Included in general admission"
+    ],
+    "source_event_id": "events/talks"
+  },
+  {
+    "event": null,
+    "facts": [
+      "One Saturday every month!",
+      "£20",
+      "Includes general admission"
+    ],
+    "source_event_id": "events/saturday-guitar-days"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Select Sundays 14:00 - 15:00",
+      "Included with general admission"
+    ],
+    "source_event_id": "events/volunteer_tours"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Saturday & Sunday",
+      "Included in general admission"
+    ],
+    "source_event_id": "events/live-music"
+  },
+  {
+    "event": null,
+    "facts": [
+      "From 19th June",
+      "Included in general admission"
+    ],
+    "source_event_id": "events/hendrix-in-london"
+  },
+  {
+    "event": {
+      "address": "25 Brook Street, Mayfair, London W1K 4HB",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "hallelujah-house-inside-handels-hq|2026-09-17|handel-hendrix-house",
+      "description": "To mark 25 years of Handel’s London home being open to the public, Hallelujah House: Inside Handel’s HQ explores the music Handel composed and performed whilst calling 25 Brook Street home. Discover how the House was far more than a place to live, uncover the stories behind some of his greatest works and follow the music created within these walls as it travelled across London, from its theatres and taverns to its grandest royal occasions.",
+      "ends_at": "2027-03-14T00:00:00Z",
+      "image_url": null,
+      "lat": 51.51278,
+      "lng": -0.14812,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-16T23:00:00Z",
+      "tags": [],
+      "title": "The Hallelujah House: Inside Handel's HQ",
+      "url": "https://handelhendrix.org/events/the-hallelujah-house-inside-handels-hq",
+      "venue_name": "Handel Hendrix House"
+    },
+    "facts": [
+      "Open 17th September 2026 - 14th March 2027",
+      "Included in general admission"
+    ],
+    "source_event_id": "events/the-hallelujah-house-inside-handels-hq"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Tue 29th Sept 2026",
+      "16:30",
+      "£25",
+      "Ticket"
+    ],
+    "source_event_id": "events/handels-salon-with-zsombor-t%C3%B3th-vajna"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Select Sundays 10.15-11.00 & 11.30-12.15",
+      "£8 per adult £4 per child"
+    ],
+    "source_event_id": "events/wigs-and-wiggles-an-interactive-childrens-concert-series"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Tue 13th Oct 2026",
+      "18:30",
+      "£25"
+    ],
+    "source_event_id": "events/handels-salon-with-guy-cutting"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Thu 15th Oct 2026",
+      "18:30 & 19:30",
+      "£25"
+    ],
+    "source_event_id": "events/the-jimi-sessions-with-andy-cortes"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Tue 27th Oct 2026",
+      "18:30",
+      "£25"
+    ],
+    "source_event_id": "events/handels-salon-with-chantefable"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Tue 10th Nov 2026",
+      "19:00",
+      "St. George's Hanover Square"
+    ],
+    "source_event_id": "events/celebrating-25-year-of-handel-house"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Wed 18th Nov 2026",
+      "18:30 & 19:30",
+      "£25"
+    ],
+    "source_event_id": "events/the-jimi-sessions-greg-coulson"
+  },
+  {
+    "event": {
+      "address": "25 Brook Street, Mayfair, London W1K 4HB",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "feasting-for-christmas|2026-11-21|handel-hendrix-house",
+      "description": "The end of November marks the beginning of the preparations for Christmas feasting! Come as food historians Marc Meltonville and Robert Hoare demonstrate how the Georgians prepared for Christmas Day, the Feast of St. Stephen and the rest of the festive period, including getting their Christmas puddings ready on the last Sunday before advent. The event includes a glass of wine.",
+      "ends_at": null,
+      "image_url": null,
+      "lat": 51.51278,
+      "lng": -0.14812,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-11-21T18:00:00Z",
+      "tags": [],
+      "title": "Feasting for Christmas!",
+      "url": "https://handelhendrix.org/events/feasting-for-christmas",
+      "venue_name": "Handel Hendrix House"
+    },
+    "facts": [
+      "Sat 21st Nov 2026",
+      "18:00",
+      "£25"
+    ],
+    "source_event_id": "events/feasting-for-christmas"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Tue 24th Nov 2026",
+      "18:30",
+      "£25"
+    ],
+    "source_event_id": "events/handels-salon-with-literary-music"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Sun 6th Dec 2026",
+      "18:00",
+      "£15",
+      "Includes entry to the House on the day"
+    ],
+    "source_event_id": "events/rising-notes"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Thu 10th Dec 2026",
+      "17:00 & 19:00",
+      "£25"
+    ],
+    "source_event_id": "events/deck-the-halls-with-boughs-of-handel"
+  }
+]

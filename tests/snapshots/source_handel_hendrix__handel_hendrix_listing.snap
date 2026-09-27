@@ -1,0 +1,23 @@
+---
+source: tests/source_handel_hendrix.rs
+expression: listing_paths()
+---
+[
+  "/events/talks",
+  "/events/saturday-guitar-days",
+  "/events/volunteer_tours",
+  "/events/live-music",
+  "/events/hendrix-in-london",
+  "/events/the-hallelujah-house-inside-handels-hq",
+  "/events/handels-salon-with-zsombor-t%C3%B3th-vajna",
+  "/events/wigs-and-wiggles-an-interactive-childrens-concert-series",
+  "/events/handels-salon-with-guy-cutting",
+  "/events/the-jimi-sessions-with-andy-cortes",
+  "/events/handels-salon-with-chantefable",
+  "/events/celebrating-25-year-of-handel-house",
+  "/events/the-jimi-sessions-greg-coulson",
+  "/events/feasting-for-christmas",
+  "/events/handels-salon-with-literary-music",
+  "/events/rising-notes",
+  "/events/deck-the-halls-with-boughs-of-handel"
+]
