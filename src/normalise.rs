@@ -598,6 +598,14 @@ pub fn excerpt(text: &str) -> String {
     format!("{head}…")
 }
 
+/// Greater London bounding box (lat_min, lat_max, lng_min, lng_max).
+pub const LONDON_BBOX: (f64, f64, f64, f64) = (51.28, 51.70, -0.52, 0.34);
+
+pub fn in_london_bbox(lat: f64, lng: f64) -> bool {
+    let (lat_min, lat_max, lng_min, lng_max) = LONDON_BBOX;
+    (lat_min..=lat_max).contains(&lat) && (lng_min..=lng_max).contains(&lng)
+}
+
 /// Outward code (e.g. `E1W`) of the first UK postcode in `text`.
 pub fn postcode_outward(text: &str) -> Option<String> {
     let tokens: Vec<&str> = text
@@ -627,6 +635,12 @@ mod tests {
 
     fn utc(s: &str) -> DateTime<Utc> {
         DateTime::parse_from_rfc3339(s).unwrap().with_timezone(&Utc)
+    }
+
+    #[test]
+    fn london_bbox_covers_outer_boroughs_only() {
+        assert!(in_london_bbox(51.4464, 0.1571), "Hall Place, Bexley");
+        assert!(!in_london_bbox(50.82, -0.14), "Brighton");
     }
 
     #[test]
