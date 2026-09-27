@@ -1,0 +1,17 @@
+User-agent: *
+Disallow: /views/
+
+User-agent: *
+Disallow: /open-records-generator/
+
+User-agent: *
+Disallow: /bookstore-dev
+
+User-agent: *
+Disallow: /editions-dev
+
+User-agent: *
+Disallow: /bookstore-dev-eefbb35d3abd35ca9417ed0e4770391f/
+
+User-agent: *
+Disallow: /editions-dev-973e49a57cf85681315c2a1bbcc61923

@@ -59,6 +59,7 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         include_str!("../sources/hunterian_museum.rs"),
     ),
     ("ibraaz", include_str!("../sources/ibraaz.rs")),
+    ("ica", include_str!("../sources/ica.rs")),
     (
         "lisson_gallery",
         include_str!("../sources/lisson_gallery.rs"),
