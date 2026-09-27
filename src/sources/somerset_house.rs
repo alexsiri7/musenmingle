@@ -21,16 +21,20 @@
 //!   `duration` (e.g. `00:00 → 03:00` for "6–9pm"); for those the start time
 //!   is taken from the human `timeText`. Exhibitions are date-only ranges
 //!   (`all_day`).
+//! * Quirk: open-ended items ("From Thu 12 Nov 2026") can carry an unrelated
+//!   `dateStart` with the "From" date in `dateEnd`, so for a "From <date>"
+//!   `dateText` that date is the start, at the first time in `timeText`
+//!   ("Sessions from 8pm") when there is one.
 //! * Known site data errors are stored as published: some ends are an hour
-//!   off (`18:00 → 23:00` for "6–10pm") and some `dateStart`s disagree with
-//!   the human date text.
+//!   off (`18:00 → 23:00` for "6–10pm") and some other `dateStart`s disagree
+//!   with the human date text.
 //! * Permanent or standing items (the Courtauld Gallery, a twice-weekly tour)
 //!   are ranges longer than [`MAX_RANGE_DAYS`] and are skipped (`Ok(None)`).
 //! * Items are at Somerset House unless their free-text `space` contains a
 //!   postcode outside WC2R (the "3 Evenings" series is in Wapping).
 
 use async_trait::async_trait;
-use chrono::{Duration, NaiveTime};
+use chrono::{Duration, NaiveDate, NaiveTime};
 use scraper::{Html, Selector};
 use serde_json::Value;
 use url::Url;
@@ -217,6 +221,22 @@ pub fn parse_start_time(text: &str) -> Option<NaiveTime> {
     None
 }
 
+/// The date of an open-ended human date text: `"From Thu 12 Nov 2026"` and
+/// `"From 14 Nov 2026"` → that date; anything else (ranges, month-only
+/// dates) → `None`.
+pub fn open_ended_start_date(date_text: &str) -> Option<NaiveDate> {
+    let mut words = date_text.trim().strip_prefix("From ")?.split_whitespace();
+    let mut day = words.next()?;
+    if day.chars().all(char::is_alphabetic) {
+        day = words.next()?;
+    }
+    let date = [day, words.next()?, words.next()?].join(" ");
+    if words.next().is_some() {
+        return None;
+    }
+    NaiveDate::parse_from_str(&date, "%d %b %Y").ok()
+}
+
 struct Venue {
     name: String,
     address: String,
@@ -259,9 +279,17 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
     let title = node_str(node, "/title")
         .map(clean_text)
         .ok_or_else(|| SourceError::Parse("listing item without title".into()))?;
-    let listed_start = node_str(node, "/dateStart")
-        .and_then(parse_london_wall_clock)
-        .ok_or_else(|| SourceError::Parse(format!("no dateStart for {title:?}")))?;
+    let listed_start = match node_str(node, "/dateText").and_then(open_ended_start_date) {
+        Some(date) => {
+            let time = node_str(node, "/timeText")
+                .and_then(parse_start_time)
+                .unwrap_or(NaiveTime::MIN);
+            london_to_utc(date.and_time(time))
+        }
+        None => node_str(node, "/dateStart")
+            .and_then(parse_london_wall_clock)
+            .ok_or_else(|| SourceError::Parse(format!("no dateStart for {title:?}")))?,
+    };
     let listed_end = node_str(node, "/dateEnd").and_then(parse_london_wall_clock);
     if listed_end.is_some_and(|e| e - listed_start > Duration::days(MAX_RANGE_DAYS)) {
         return Ok(None);
@@ -423,6 +451,52 @@ mod tests {
         ] {
             assert_eq!(parse_start_time(text), expected, "{text:?}");
         }
+    }
+
+    #[test]
+    fn open_ended_start_date_from_human_text() {
+        let d = |m, day| NaiveDate::from_ymd_opt(2026, m, day);
+        for (text, expected) in [
+            ("From Thu 12 Nov 2026", d(11, 12)),
+            ("From 14 Nov 2026", d(11, 14)),
+            ("Thu 12 Nov 2026", None),
+            ("16–27 Sep 2026", None),
+            ("From Oct 2026", None),
+            ("From 12 Nov 2026 – 3 Jan 2027", None),
+            ("Wednesday, fortnightly from Oct 2026 – April 2027", None),
+        ] {
+            assert_eq!(open_ended_start_date(text), expected, "{text:?}");
+        }
+    }
+
+    #[test]
+    fn from_date_text_overrides_the_listed_dates() {
+        let node = serde_json::json!({
+            "title": "Skate Lates",
+            "dateStart": "2026-09-24T00:00",
+            "dateEnd": "2026-11-12T00:00",
+            "dateText": "From Thu 12 Nov 2026",
+            "timeText": "Sessions from 8pm",
+        });
+        let event = normalise_payload(&node).unwrap().unwrap();
+        assert_eq!(event.starts_at.to_rfc3339(), "2026-11-12T20:00:00+00:00");
+        assert_eq!(event.ends_at, None);
+        assert!(!event.all_day);
+
+        let untimed = serde_json::json!({
+            "title": "Skate School",
+            "dateStart": "2026-11-14T00:00",
+            "dateEnd": "2027-01-03T00:00",
+            "dateText": "From 14 Nov 2026",
+            "timeText": "",
+        });
+        let event = normalise_payload(&untimed).unwrap().unwrap();
+        assert_eq!(event.starts_at.to_rfc3339(), "2026-11-14T00:00:00+00:00");
+        assert_eq!(
+            event.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2027-01-03T00:00:00+00:00")
+        );
+        assert!(event.all_day);
     }
 
     #[test]
