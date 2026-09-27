@@ -23,9 +23,10 @@ pub const ALERT: &str = "venues-without-coordinates";
 const ALERT_TITLE: &str = "Muse & Mingle: venues without a location";
 const ALERT_OK_TITLE: &str = "Muse & Mingle: every venue has a location";
 
-/// Postcode lookups per run (the first run after deploy does the backlog
-/// over a few runs; later runs see one or two new venues).
-pub const MAX_LOOKUPS_PER_RUN: usize = 40;
+/// Postcode lookups per run (about 2 minutes at the default rate limit;
+/// the backlog on deploy was ~45; later runs see one or two new venues).
+/// A run that hits the cap skips the alert: the rest may still resolve.
+pub const MAX_LOOKUPS_PER_RUN: usize = 60;
 
 /// How long a postcode that found nothing waits before it is tried again.
 pub fn retry_after() -> Duration {
@@ -122,7 +123,9 @@ impl VenueChecks {
             repo::sync_venues(pool).await?;
         }
         report.missing = repo::venues_without_coords(pool, now).await?;
-        self.alert(pool, &report.missing, now).await;
+        if todo.len() < MAX_LOOKUPS_PER_RUN {
+            self.alert(pool, &report.missing, now).await;
+        }
         Ok(report)
     }
 
