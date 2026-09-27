@@ -1110,7 +1110,10 @@ mod tests {
         );
         assert_eq!(at("open_now=false"), None);
         assert_eq!(
-            parse_query_at("open_on=Sunday", now).unwrap().filter.open_on,
+            parse_query_at("open_on=Sunday", now)
+                .unwrap()
+                .filter
+                .open_on,
             Some(7)
         );
         for bad in [
