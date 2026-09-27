@@ -160,6 +160,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     every talk, tour, conference or workshop for its London wall-clock
     start time and intro; families, concerts and online editions skipped;
     facts + link only (terms).
+  - `conway-hall` — the JSON-LD `Event` inside each card on `/whats-on/`
+    (one request, no detail pages; control characters in the blocks are
+    tolerated): London wall-clock times; the site's categories decide
+    (talks → talk, workshops → workshop, festivals → community; concerts
+    and film skipped); online-only events skipped.
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
@@ -546,7 +551,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House and the TEC venues daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery, Ibraaz, The Horse Hospital, the Hunterian Museum, Handel Hendrix House, Conway Hall and the TEC venues daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

@@ -14,6 +14,7 @@ use crate::repo::SourceRow;
 pub mod barbican;
 pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
+pub mod conway_hall;
 pub mod courtauld;
 pub mod dandad;
 pub mod design_museum;
@@ -111,6 +112,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         clerkenwell_design_week::KEY => Ok(Box::new(
             clerkenwell_design_week::ClerkenwellDesignWeek::new(base),
         )),
+        conway_hall::KEY => Ok(Box::new(conway_hall::ConwayHall::new(base))),
         courtauld::KEY => Ok(Box::new(courtauld::Courtauld::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),

@@ -1,0 +1,660 @@
+---
+source: tests/source_conway_hall.rs
+expression: out
+---
+[
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bringing-it-home|2026-09-27|conway",
+      "description": "Artist Jayne Murray explores the legacy of artists who have connected their practice with social concerns, and used their voice to disrupt the status quo - to challenge the received wisdom and to posit alternatives. A part of her Bringing It Home project, the talk will be followed by an opportunity to visit her new installation on public display for the first time.",
+      "ends_at": "2026-09-27T16:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Hero-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-27T14:00:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "Bringing It Home",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/bringing-it-home/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/bringing-it-home/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/piatti-quartet-4/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "life-lessons-from-big-thinkers|2026-10-04|conway",
+      "description": "Life’s most difficult, existential questions often make us feel alone. And yet many of the anxieties, disappointments, and uncertainties in our lives are universal. Jack Maden explores the questions posed by the giants of philosophy in this Ethical Matters talk.",
+      "ends_at": "2026-10-23T15:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Life-Lessons-from-Big-Thinkers-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-04T14:00:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "Life Lessons from Big Thinkers",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/life-lessons-from-big-thinkers/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/life-lessons-from-big-thinkers/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/nous-quartet-2/"
+  },
+  {
+    "categories": [
+      "festivals",
+      "workshops"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "radical-poster-design|2026-10-06|conway",
+      "description": "Step into the world of radical poster design with graphic designer Craig Yamey and explore how graphic design can be used as a powerful tool for ethics, activism and social change.",
+      "ends_at": "2026-10-06T19:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Radical-Poster-Design-with-Craig-Yamey-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-06T17:30:00Z",
+      "tags": [
+        "bloomsbury festival"
+      ],
+      "title": "Radical Poster Design",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/radical-poster-design/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/radical-poster-design/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "evening-with-katherine-rundell|2026-10-07|conway",
+      "description": "This autumn, author Katherine Rundell joins Intelligence Squared live on stage at Conway Hall to discuss a new menagerie of spectacular creatures.",
+      "ends_at": "2026-10-07T20:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Katherine-Rundell-Conway-Hall-600x500.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T18:30:00Z",
+      "tags": [
+        "intelligence squared"
+      ],
+      "title": "An Evening with Katherine Rundell",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/an-evening-with-katherine-rundell/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/an-evening-with-katherine-rundell/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "unveiling-vermeer-man-his-masterpieces-with-andrew-graham-dixon|2026-10-08|conway",
+      "description": "Join art historian Andrew Graham-Dixon at Conway Hall for a repainting of Vermeer.",
+      "ends_at": "2026-10-08T20:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/06/Andrew-GD-image-copy-Large-600x600.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T18:30:00Z",
+      "tags": [
+        "intelligence squared"
+      ],
+      "title": "Unveiling Vermeer: The Man and his Masterpieces, with Andrew Graham-Dixon",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/unveiling-vermeer-the-man-and-his-masterpieces-with-andrew-graham-dixon/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/unveiling-vermeer-the-man-and-his-masterpieces-with-andrew-graham-dixon/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/edinburgh-quartet-3/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "inside-world-of-beatles-with-gary-kemp-simon-halfon-tom-holland|2026-10-13|conway",
+      "description": "Musician Gary Kemp and filmmaker Simon Halfon explore the extraordinary world of The Beatles, in conversation with historian Tom Holland.",
+      "ends_at": "2026-10-13T19:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Gary-Kemp-850x500-1-600x500.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T18:00:00Z",
+      "tags": [
+        "5x15"
+      ],
+      "title": "Inside the World of The Beatles, with Gary Kemp, Simon Halfon & Tom Holland",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/inside-the-world-of-the-beatles-with-gary-kemp-simon-halfon-tom-holland/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/inside-the-world-of-the-beatles-with-gary-kemp-simon-halfon-tom-holland/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "can-we-reclaim-childhood-from-big-tech-beeban-kidron-sandi-toksvig|2026-10-14|conway",
+      "description": "Filmmaker and campaigner Baroness Beeban Kidron is in conversation with writer, broadcaster and comedian Sandi Toksvig about technology.",
+      "ends_at": "2026-10-14T19:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Beeban-Kidron-Sandi-Toksvig-850x500-1-600x500.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-14T18:00:00Z",
+      "tags": [
+        "5x15"
+      ],
+      "title": "Can We Reclaim Childhood from Big Tech?: Beeban Kidron & Sandi Toksvig",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/can-we-reclaim-childhood-from-big-tech-beeban-kidron-sandi-toksvig/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/can-we-reclaim-childhood-from-big-tech-beeban-kidron-sandi-toksvig/"
+  },
+  {
+    "categories": [
+      "concerts",
+      "festivals"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/the-peaceful-crystallographer-and-other-songs/"
+  },
+  {
+    "categories": [
+      "concerts",
+      "festivals"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/double-bill-soraya-verjee-and-no-more-girl-friday/"
+  },
+  {
+    "categories": [
+      "concerts",
+      "festivals"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/sounding-the-archive-the-emily-penrose-diaries/"
+  },
+  {
+    "categories": [
+      "concerts",
+      "festivals"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/lifelines-poetry-dance-and-music/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "creating-beyond-mainstream|2026-10-18|conway",
+      "description": "In this Ethical Matters talk, novelist & screenwriter Courttia Newland reflects on what it means to be an artist operating in the margins, creating art beyond the mainstream.",
+      "ends_at": "2026-10-18T15:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/05/Creating-Beyond-the-Mainstream-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-18T14:00:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "Creating Beyond the Mainstream",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/creating-beyond-the-mainstream/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/creating-beyond-the-mainstream/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/in-music-is-such-art/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/dvorak-piano-quartet-2/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "ghibli-goodness|2026-10-28|conway",
+      "description": "From Laputa: Castle in the Sky, via Princess Mononoke to Grave of the Fireflies and Pom Poko, Studio Ghibli tells tales of the horrors of conflict, the destruction of nature and the goodness of being honest and earnest. Ghibli experts Prof Rayna Denison and Jake Cunningham discuss the ethical messages within these magical worlds.",
+      "ends_at": "2026-10-28T20:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Ghibli-and-Goodness-1-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-28T18:30:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "Ghibli and Goodness",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/ghibli-and-goodness/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/ghibli-and-goodness/"
+  },
+  {
+    "categories": [
+      "festivals"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "sechel-sensibility|2026-10-29|conway",
+      "description": "Sechel and Sensibility draws on a remarkable tradition of humour, scholarship and imagination, and sets it loose for one evening in the heart of London's academic quarter.",
+      "ends_at": "2026-10-29T21:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Sechel-and-Sensibility-600x600.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-29T19:00:00Z",
+      "tags": [
+        "bloomsbury festival"
+      ],
+      "title": "Sechel and Sensibility",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/sechel-and-sensibility/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/sechel-and-sensibility/"
+  },
+  {
+    "categories": [
+      "film"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/can-fear-be-moral/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/aida-piano-trio/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "launching-news-club-network|2026-11-04|conway",
+      "description": "Join Media Revolution and Conway Hall Ethical Society as we launch a News Club Network. Keynote speaker Gail Bradbrook, Founder of Extinction Rebellion, will lead an expert panel for an evening of discussion, community-building and an interactive introduction to how News Clubs work.",
+      "ends_at": "2026-11-04T21:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/News-Club-Network-600x600.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-04T18:30:00Z",
+      "tags": [
+        "touch paper"
+      ],
+      "title": "Launching a News Club Network",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/launching-a-news-club-network/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/launching-a-news-club-network/"
+  },
+  {
+    "categories": [
+      "talks-debates",
+      "workshops"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "conway-hall-news-club|2026-11-07|conway",
+      "description": "Join Media Revolution and Conway Hall Ethical Society as we host our first Conway Hall News Club. News Clubs make media consumption a conscientious, collective, empowering community activity, where we can discuss and challenge the news we consume - together.",
+      "ends_at": "2026-11-07T15:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/News-Club-Network-600x600.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-07T14:00:00Z",
+      "tags": [],
+      "title": "Conway Hall News Club",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/conway-hall-news-club/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/conway-hall-news-club/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/greenwich-trio-boris-bizjak-2/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "history-of-black-people-alternative-music|2026-11-08|conway",
+      "description": "There would be no alternative music without Black artists. Journalist and feminist punk musician Stephanie Phillips reclaims the past and future of rock ’n’ roll for the Black artists who tore up and re-wrote its rules.",
+      "ends_at": "2026-11-08T16:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/A-History-of-Black-People-and-Alternative-Music-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-08T15:00:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "A History of Black People and Alternative Music",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/a-history-of-black-people-and-alternative-music/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/a-history-of-black-people-and-alternative-music/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/raphael-wallfisch-simon-callaghan-3/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "why-pubs-matter|2026-11-18|conway",
+      "description": "Pubs are an essential part of British culture in all its forms - they grow the social roots for communities and provide safe spaces for groups and gatherings. Join sociologist Amit Singh and pub artist Lydia Wood as they discuss the need to recognise the importance of our pubs and what we can do to preserve them.",
+      "ends_at": "2026-11-18T20:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Why-Pubs-Matter-600x600.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-18T18:30:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "Why Pubs Matter",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/why-pubs-matter/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/why-pubs-matter/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/edward-lloyd/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "haunted-landscape-magic-fairies-old-gods|2026-11-21|conway",
+      "description": "This year, The Haunted Landscape, our annual folklore all-dayer, delves into the realms of magic fairies and old gods. We will entertain the Great God Pan with Professor Ronald Hutton and Sara Hannant, discover witch trials with Marion Gibson and walk Britain's haunted lands with Jeremy Harte and Fiona Robertson.",
+      "ends_at": "2026-11-21T17:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/Haunted-Landscape-Magic-Fairies-and-Old-Gods-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-21T10:00:00Z",
+      "tags": [
+        "london fortean society"
+      ],
+      "title": "The Haunted Landscape: Magic, Fairies and Old Gods",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/the-haunted-landscape-magic-fairies-and-old-gods/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/the-haunted-landscape-magic-fairies-and-old-gods/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/woolf-quartet/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "neurodiversity-performance|2026-11-26|conway",
+      "description": "Neurodivergent people create and perform. It could be our over-active minds, a need to carve out our own niche in the world, or a need to express ourselves in a world that doesn’t get us. Join multidisciplinary artist The Mollusc Dimension discussing his creative practice.",
+      "ends_at": "2026-11-26T20:00:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/UnMasked-Neurodiversity-and-Performance-600x600.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T18:30:00Z",
+      "tags": [
+        "unmasked"
+      ],
+      "title": "Neurodiversity and Performance",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/neurodiversity-and-performance/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/neurodiversity-and-performance/"
+  },
+  {
+    "categories": [
+      "talks-debates"
+    ],
+    "event": {
+      "address": "25 Red Lion Square, London WC1R 4RL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "ai-online-disinformation|2026-11-29|conway",
+      "description": "Our social media feeds have been increasingly cannibalised by slop: low-quality content generated using AI text, image and video tools. Reporter Niamh McIntyre explores what it means when online political debate is manufactured for profit by people with zero commitment to the ideas they are promoting.",
+      "ends_at": "2026-11-29T16:30:00Z",
+      "image_url": "https://www.conwayhall.org.uk/wp-content/uploads/2026/07/AI-and-Online-Disinformation-600x600.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T15:00:00Z",
+      "tags": [
+        "ethical matters"
+      ],
+      "title": "AI and Online Disinformation",
+      "url": "https://www.conwayhall.org.uk/whats-on/event/ai-and-online-disinformation/",
+      "venue_name": "Conway Hall"
+    },
+    "source_event_id": "/whats-on/event/ai-and-online-disinformation/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/halcyon-quartet-3/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/the-golden-fountain/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/tippett-quartet/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/winter-carols-by-candlelight-2/"
+  },
+  {
+    "categories": [
+      "concerts"
+    ],
+    "event": null,
+    "source_event_id": "/whats-on/event/ryelandt-trio/"
+  }
+]
