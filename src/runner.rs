@@ -271,6 +271,11 @@ impl Runner {
             Ok(n) => tracing::info!(count = n, "venue types updated"),
             Err(e) => tracing::error!(error = %e, "updating venue types failed"),
         }
+        match repo::sync_boroughs(&self.pool).await {
+            Ok(0) => {}
+            Ok(n) => tracing::info!(count = n, "boroughs updated"),
+            Err(e) => tracing::error!(error = %e, "updating boroughs failed"),
+        }
         Ok(reports)
     }
 

@@ -618,7 +618,58 @@ async fn upsert_event_tx(
         .await?;
     }
     set_hours_tx(tx, outcome.event_id, event, policy).await?;
+    set_borough_tx(tx, outcome.event_id).await?;
     Ok(outcome)
+}
+
+/// The London borough (issue #79, `crate::borough`) of the event this
+/// listing landed in, from the row's final coordinates (merging keeps
+/// existing ones, so they may not be the listing's).
+async fn set_borough_tx(tx: &mut Transaction<'_, Postgres>, event_id: Uuid) -> sqlx::Result<()> {
+    let (lat, lng): (Option<f64>, Option<f64>) =
+        sqlx::query_as("SELECT lat, lng FROM events.events WHERE id = $1")
+            .bind(event_id)
+            .fetch_one(&mut **tx)
+            .await?;
+    sqlx::query(
+        "UPDATE events.events SET borough = $2
+         WHERE id = $1 AND borough IS DISTINCT FROM $2",
+    )
+    .bind(event_id)
+    .bind(crate::borough::of(lat, lng))
+    .execute(&mut **tx)
+    .await?;
+    Ok(())
+}
+
+/// Set every event's `borough` from its coordinates
+/// ([`crate::borough::of`]). Returns how many events changed. Runs after
+/// each ingest run; the first run after the column was added backfills it.
+pub async fn sync_boroughs(pool: &PgPool) -> sqlx::Result<u64> {
+    type Row = (Uuid, Option<f64>, Option<f64>, Option<String>);
+    let events: Vec<Row> = sqlx::query_as("SELECT id, lat, lng, borough FROM events.events")
+        .fetch_all(pool)
+        .await?;
+    let (mut ids, mut boroughs) = (Vec::new(), Vec::<Option<&str>>::new());
+    for (id, lat, lng, current) in &events {
+        let b = crate::borough::of(*lat, *lng);
+        if b != current.as_deref() {
+            ids.push(*id);
+            boroughs.push(b);
+        }
+    }
+    if ids.is_empty() {
+        return Ok(0);
+    }
+    Ok(sqlx::query(
+        "UPDATE events.events ev SET borough = u.b
+         FROM unnest($1::uuid[], $2::text[]) AS u(id, b) WHERE ev.id = u.id",
+    )
+    .bind(&ids)
+    .bind(&boroughs)
+    .execute(pool)
+    .await?
+    .rows_affected())
 }
 
 /// Opening hours (issue #168, `crate::hours`) for the event this listing
@@ -1033,10 +1084,31 @@ const RULE_CLOSES: &str = "(r->>'closes')::time";
 /// event with opening hours is open that weekday.
 /// The filters of an [`EventFilter`] that are SQL built from constants
 /// rather than [`LISTING_FILTER`]'s placeholders: [`live_sql`] and
-/// [`venue_type_sql`]. Every listing query applies it after
+/// [`venue_type_sql`], [`borough_sql`]. Every listing query applies it after
 /// [`LISTING_FILTER`], so counts and listings agree.
 fn filter_extra_sql(f: &EventFilter) -> String {
-    format!("{} AND {}", live_sql(f), venue_type_sql(f))
+    format!(
+        "{} AND {} AND {}",
+        live_sql(f),
+        venue_type_sql(f),
+        borough_sql(f)
+    )
+}
+
+/// `borough=` ([`EventFilter::boroughs`]): events in ANY of the given
+/// boroughs. Built only from [`crate::borough::BOROUGHS`] keys (unknown
+/// values are dropped; `crate::listing` rejects them).
+fn borough_sql(f: &EventFilter) -> String {
+    let chosen: Vec<String> = crate::borough::BOROUGHS
+        .iter()
+        .filter(|(k, _)| f.boroughs.iter().any(|v| v == k))
+        .map(|(k, _)| format!("'{k}'"))
+        .collect();
+    if chosen.is_empty() {
+        "TRUE".into()
+    } else {
+        format!("ev.borough IN ({})", chosen.join(", "))
+    }
 }
 
 /// `venue_type=` ([`EventFilter::venue_types`]): events at ANY of the
@@ -1421,14 +1493,17 @@ pub enum Facet {
     Format,
     GoodFor,
     VenueType,
+    /// Events without a known borough count as [`crate::borough::UNKNOWN`].
+    Borough,
 }
 
 impl Facet {
-    pub const ALL: [Facet; 4] = [
+    pub const ALL: [Facet; 5] = [
         Facet::Medium,
         Facet::Format,
         Facet::GoodFor,
         Facet::VenueType,
+        Facet::Borough,
     ];
 
     /// The facet's values of an event (`ev`) as an SQL array.
@@ -1438,16 +1513,19 @@ impl Facet {
             Facet::Format => "ev.format_tags",
             Facet::GoodFor => "ev.good_for",
             Facet::VenueType => "ARRAY[ev.venue_type]",
+            Facet::Borough => "ARRAY[COALESCE(ev.borough, 'unknown')]",
         }
     }
 
-    /// The API name (`medium`, `format`, `good_for`, `venue_type`).
+    /// The API name (`medium`, `format`, `good_for`, `venue_type`,
+    /// `borough`).
     pub fn name(self) -> &'static str {
         match self {
             Facet::Medium => "medium",
             Facet::Format => "format",
             Facet::GoodFor => "good_for",
             Facet::VenueType => "venue_type",
+            Facet::Borough => "borough",
         }
     }
 }
@@ -1466,6 +1544,7 @@ pub async fn facet_counts(
         Facet::Format => f.formats.clear(),
         Facet::GoodFor => f.good_for.clear(),
         Facet::VenueType => f.venue_types.clear(),
+        Facet::Borough => f.boroughs.clear(),
     }
     let near = query.near;
     let b = near.map(|n| n.bounding_box());

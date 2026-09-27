@@ -118,6 +118,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/fetch.rs` — FetchContext (UA, robots, rate limit)
 - `src/normalise.rs` — text/time/price/category helpers, dedupe key
 - `src/hours.rs` — weekly opening hours (pure): parsed from a listing's full text at ingest (`repo::upsert_event`), schema.org forms, open-at/status/display; the listing SQL mirrors its JSON shape
+- `src/borough.rs` — London borough of a point (pure): point-in-polygon against `src/london_boroughs.geojson` (ONS, OGL; credited on `/about`, regenerate with `docs/boroughs.md`); stored at upsert and by `repo::sync_boroughs` after each run; `borough=` filter, facet, and the home page's area presets (groups of boroughs, `web::AREAS`)
 - `src/venue_type.rs` — venue type facet (pure): overrides from `events.venues.venue_type`, source defaults, venue-name keywords; applied by `repo::sync_venue_types` after each ingest run
 - `src/matching.rs` — fuzzy cross-source match rules (pure)
 - `src/sources/` — `Source` trait, `jsonld` helpers, `ticketmaster`, `serpentine`

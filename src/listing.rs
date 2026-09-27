@@ -86,6 +86,9 @@ pub struct EventFilter {
     /// `venue_type=` (repeatable, [`crate::venue_type::VENUE_TYPES`]):
     /// events at ANY of them.
     pub venue_types: Vec<String>,
+    /// `borough=` (repeatable, [`crate::borough::BOROUGHS`] keys): events
+    /// in ANY of them. Events without a known borough never match.
+    pub boroughs: Vec<String>,
     /// Time-of-day / day-of-week bucket (`when=`).
     pub when: Option<When>,
     /// Free events and GBP events whose lowest price is at most this;
@@ -459,6 +462,12 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 "venue_type",
                 &value,
                 crate::venue_type::VENUE_TYPES,
+            )?,
+            "borough" => push_tag(
+                &mut filter.boroughs,
+                "borough",
+                &value,
+                &crate::borough::BOROUGH_KEYS,
             )?,
             "facets" => {
                 facets = match value.as_ref() {
@@ -836,6 +845,14 @@ mod tests {
         let q = parse_query("venue_type=museum&venue_type=artist_run&venue_type=museum").unwrap();
         assert_eq!(q.filter.venue_types, ["museum", "artist_run"]);
         assert!(parse_query("venue_type=pub").is_err());
+    }
+
+    #[test]
+    fn borough_repeats_dedupes_and_uses_the_borough_keys() {
+        let q = parse_query("borough=southwark&borough=city-of-london&borough=southwark").unwrap();
+        assert_eq!(q.filter.boroughs, ["southwark", "city-of-london"]);
+        assert!(parse_query("borough=shoreditch").is_err());
+        assert!(parse_query("borough=unknown").is_err());
     }
 
     #[test]
