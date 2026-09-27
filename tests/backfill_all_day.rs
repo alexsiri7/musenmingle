@@ -9,7 +9,7 @@ use musenmingle::db;
 use sqlx::PgPool;
 use uuid::Uuid;
 
-/// The last migration before `20260928120001_backfill_all_day.sql`.
+/// A migration before `20260928120002_backfill_all_day.sql`.
 const BEFORE_BACKFILL: i64 = 20260928110001;
 
 /// Inserts an event whose times are London wall-clock times.
