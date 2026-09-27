@@ -221,7 +221,7 @@ pub enum LedgerPass {
 }
 
 impl LedgerPass {
-    fn as_str(self) -> &'static str {
+    pub(crate) fn as_str(self) -> &'static str {
         match self {
             LedgerPass::Enrich => "enrich",
             LedgerPass::Qa => "qa",
@@ -271,9 +271,10 @@ pub async fn record_pass_call(
 pub async fn spent_since(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Decimal> {
     sqlx::query_scalar(
         "SELECT COALESCE(sum(cost_usd), 0) FROM events.enrichment_calls
-         WHERE called_at >= $1 AND pass = 'enrich'",
+         WHERE called_at >= $1 AND pass = $2",
     )
     .bind(since)
+    .bind(LedgerPass::Enrich.as_str())
     .fetch_one(pool)
     .await
 }

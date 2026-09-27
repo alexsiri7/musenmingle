@@ -6,6 +6,7 @@ use serde_json::Value;
 use sqlx::{FromRow, PgPool};
 
 use super::rules::{Finding, RunCounts};
+use crate::enrich::store::LedgerPass;
 
 /// Statuses of a check that ran to a conclusion; `failed` is retried.
 pub const COMPLETED: &[&str] = &["ok", "issues", "no_pages", "invalid"];
@@ -115,9 +116,10 @@ pub async fn latest_check(pool: &PgPool, source_id: i64) -> sqlx::Result<Option<
 pub async fn qa_spent_since(pool: &PgPool, since: DateTime<Utc>) -> sqlx::Result<Decimal> {
     sqlx::query_scalar(
         "SELECT COALESCE(sum(cost_usd), 0) FROM events.enrichment_calls
-         WHERE called_at >= $1 AND pass = 'qa'",
+         WHERE called_at >= $1 AND pass = $2",
     )
     .bind(since)
+    .bind(LedgerPass::Qa.as_str())
     .fetch_one(pool)
     .await
 }

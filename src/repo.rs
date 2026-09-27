@@ -1619,12 +1619,13 @@ pub async fn source_statuses(pool: &PgPool) -> sqlx::Result<Vec<SourceStatusRow>
          LEFT JOIN LATERAL (
              SELECT checked_at, status, wrong_fields, missed_events
              FROM events.qa_checks
-             WHERE source_id = s.id AND status IN ('ok', 'issues', 'no_pages', 'invalid')
+             WHERE source_id = s.id AND status = ANY($1)
              ORDER BY checked_at DESC, id DESC LIMIT 1
          ) q ON TRUE
          LEFT JOIN events.health_issues h ON h.source_id = s.id AND h.closed_at IS NULL
          ORDER BY s.key",
     )
+    .bind(crate::qa::store::COMPLETED)
     .fetch_all(pool)
     .await
 }
