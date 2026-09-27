@@ -62,6 +62,7 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("serpentine-galleries", "museum"),
     ("soane-museum", "museum"),
     ("somerset-house", "museum"),
+    ("south-london-gallery", "museum"),
     ("tec-cinema-museum", "museum"),
     ("tec-freud-museum", "museum"),
     ("tec-slbi", "museum"),

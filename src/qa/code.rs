@@ -95,6 +95,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "somerset_house",
         include_str!("../sources/somerset_house.rs"),
     ),
+    (
+        "south_london_gallery",
+        include_str!("../sources/south_london_gallery.rs"),
+    ),
     ("tec", include_str!("../sources/tec.rs")),
     ("ticketmaster", include_str!("../sources/ticketmaster.rs")),
     (
