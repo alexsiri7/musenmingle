@@ -508,3 +508,43 @@ async fn map_assets_and_glyphs_are_self_hosted() {
     let (status, _, _) = get(&app, "/static/map/../Cargo.toml").await;
     assert_eq!(status, StatusCode::NOT_FOUND);
 }
+
+#[tokio::test]
+async fn map_list_leads_to_our_detail_page() {
+    let Some(db) = TestDb::create("map_list_leads_to_our_detail_page").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let source = repo::source_by_key(&pool, "horse-hospital")
+        .await
+        .unwrap()
+        .unwrap()
+        .id;
+    let now = Utc::now();
+    let mut ev = new_event("Somerset House", Some((51.5110, -0.1171)));
+    ev.starts_at = now - chrono::Duration::days(3);
+    ev.ends_at = Some(now + chrono::Duration::days(20));
+    ev.category = Category::Exhibition;
+    ev.url = Some("https://venue.test/whats-on/show".into());
+    let raw = RawEvent {
+        source_event_id: "show".into(),
+        source_url: Some("https://venue.test/whats-on/show".into()),
+        payload: serde_json::json!({}),
+    };
+    repo::upsert_event(&pool, source, &ev, &raw).await.unwrap();
+    let app = router(pool.clone(), None);
+    let (status, _, body) = get(&app, "/map?area=central").await;
+    let body = String::from_utf8(body).unwrap();
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let links = &body[body.find("class=\"near-links\"").expect("near-links")..];
+    let details = links.find("href=\"/events/").expect("detail link");
+    let venue = links
+        .find("<a class=\"near-source\" href=\"https://venue.test/whats-on/show\" rel=\"noopener\">See it on ")
+        .expect("venue link");
+    assert!(details < venue, "{links}");
+    assert!(
+        links.starts_with("class=\"near-links\"><a class=\"arrow-link\" href=\"/events/"),
+        "{links}"
+    );
+    db.drop_db().await;
+}

@@ -744,7 +744,8 @@ button.near-num:hover { background: var(--cobalt); border-color: var(--cobalt); 
 }
 .near-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--xs) var(--md); }
 .near-links .arrow-link { font-size: 0.875rem; }
-.near-details { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-2); }
+.near-source { font-size: 0.8125rem; color: var(--ink-2); }
+.near-source:hover { color: var(--cobalt); }
 .map-pane { grid-area: map; position: relative; height: 55vh; min-height: 18rem; background: var(--fill); border-bottom: 1px solid var(--line); }
 @media (min-width: 1024px) {
   .near-layout {
