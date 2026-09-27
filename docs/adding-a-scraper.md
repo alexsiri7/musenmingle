@@ -176,6 +176,26 @@ Images all come from `static-assets.artlogic.net`, whose robots.txt asks for
 `Crawl-delay: 10`; the thumbnailer honours it for all galleries together, so
 with its per-host cap new galleries' thumbnails fill in over a few runs.
 
+## Adding a Luma calendar
+
+Luma calendars share `src/sources/luma.rs` (`platform = 'luma'`). Luma's
+terms allow reuse only through its publicly supported interfaces, so a
+calendar is read **only** through its iCal feed; don't scrape luma.com pages.
+
+1. Find the calendar's id (`cal-…`) from its "Add iCal subscription" link
+   and check the feed once:
+   `curl -A "$UA" 'https://api2.luma.com/ics/get?entity=calendar&id=cal-…'`.
+   It must be a London creative community with upcoming events (not a
+   "Personal" calendar, not startup/tech).
+2. Save the feed as `tests/fixtures/scrapers/luma/<name>.ics`, add it to
+   `calendar_snapshots` in `tests/source_luma.rs` and review the snapshot.
+3. Add a row in a new migration with `kind = 'aggregator'`,
+   `base_url = 'https://api2.luma.com'`, `store_description = FALSE`,
+   `store_image = FALSE`, `platform = 'luma'` and a `config` of
+   `calendar_id`, optionally `default_category` and `skip_keywords` (title
+   words or phrases to skip). Unknown fields make the row a recorded skip.
+4. Add the calendar and a one-line reason to `docs/luma-calendars.md`.
+
 ## When a site can't be used
 
 If the investigation shows a site must not or cannot be scraped — robots.txt

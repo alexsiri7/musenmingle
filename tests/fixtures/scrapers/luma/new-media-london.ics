@@ -1,0 +1,41 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luma//New Media London//EN
+X-WR-CALNAME:New Media London
+X-WR-CALDESC:Luma Calendar
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:20260911T173000Z
+DTEND:20260911T203000Z
+DTSTAMP:20260927T074346Z
+ORGANIZER;CN="New Media London":MAILTO:calendar-invite@lu.ma
+UID:evt-Z8MgSUStRxJ7FrA@events.lu.ma
+SUMMARY:Audio-Reactive Visual Workshop - TouchDesigner + Pure Data
+DESCRIPTION:Get up-to-date information at: https://luma.com/9pe52pzl\n\nAd
+ dress:\nThe Bersey Warehouse\nLondon, United Kingdom\n\nHosted by New Medi
+ a London & 4 others
+LOCATION:The Bersey Warehouse, 293 Old St, London EC1V 9LA, UK
+GEO:51.5268398;-0.0820209
+SEQUENCE:212658226
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20261001T170000Z
+DTEND:20261001T203000Z
+DTSTAMP:20260927T074346Z
+ORGANIZER;CN="New Media London":MAILTO:calendar-invite@lu.ma
+UID:evt-jFvQe50i8ZB8LDh@events.lu.ma
+SUMMARY:TouchDesigner Meetup - Talks, Open Visuals & Live Electronic Sets
+DESCRIPTION:Get up-to-date information at: https://luma.com/v7tyg0pl\n\nAd
+ dress:\nNot For Sale Gallery\nLondon, United Kingdom\n\nHosted by New Medi
+ a London & 3 others
+LOCATION:Not For Sale Gallery, Algha works, 83 Smeed Rd, Fish Island, Lond
+ on E3 2NR, UK
+GEO:51.5382779;-0.0233346
+SEQUENCE:212658226
+STATUS:TENTATIVE
+END:VEVENT
+END:VCALENDAR

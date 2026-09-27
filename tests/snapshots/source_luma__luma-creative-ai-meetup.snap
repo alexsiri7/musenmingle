@@ -1,0 +1,32 @@
+---
+source: tests/source_luma.rs
+expression: "normalised(&s, &feed(fixture_name))"
+---
+[
+  {
+    "event": {
+      "address": null,
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "creative-ai-meetup-september|2026-09-30|unknown",
+      "description": null,
+      "ends_at": "2026-09-30T19:30:00Z",
+      "image_url": null,
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-30T17:00:00Z",
+      "tags": [],
+      "title": "Creative AI Meetup: September",
+      "url": "https://luma.com/7i07bzv8",
+      "venue_name": null
+    },
+    "id": "evt-VHMM4bwQwm1EnUL",
+    "start": "2026-09-30T17:00:00+00:00"
+  }
+]

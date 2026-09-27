@@ -1,0 +1,54 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//musenmingle tests//SYNTHETIC edge cases, not a real Luma feed//EN
+X-WR-CALNAME:Synthetic edge cases
+BEGIN:VEVENT
+DTSTART;TZID=Europe/London:20260923T190000
+DTEND;TZID=Europe/London:20260923T210000
+UID:evt-weeklySketch@events.lu.ma
+SUMMARY:Weekly life drawing workshop
+RRULE:FREQ=WEEKLY;UNTIL=20261104T235959Z
+EXDATE;TZID=Europe/London:20261007T190000
+DESCRIPTION:Get up-to-date information at: https://luma.com/weekly01\n\nAd
+ dress:\nStudio\nLondon
+LOCATION:Print Studio\, Unit 3, 12 Example St, London E8 1AA, UK
+GEO:51.5456;-0.0553
+STATUS:TENTATIVE
+BEGIN:VALARM
+TRIGGER:-PT1H
+SUMMARY:Alarm summary must be ignored
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20261010T130000Z
+DTEND:20261010T150000Z
+UID:evt-cancelled@events.lu.ma
+SUMMARY:Cancelled zine workshop
+LOCATION:Library, 1 Road, London N1 1AA, UK
+STATUS:CANCELLED
+END:VEVENT
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20261017
+DTEND;VALUE=DATE:20261019
+UID:evt-weekendFair@events.lu.ma
+SUMMARY:Zine fair weekend
+DESCRIPTION:Get up-to-date information at: https://luma.com/zinefair\n
+LOCATION:Hall\, 2 Road, London SE1 1AA, UK
+GEO:51.50;-0.10
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20261025T003000Z
+DURATION:PT2H
+UID:evt-clockChange@events.lu.ma
+SUMMARY:Night talk across the clock change
+LOCATION:https://luma.com/event/evt-clockChange
+GEO:51.531108880080;-0.132882388772
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20261012T180000Z
+DTEND:20261012T200000Z
+UID:evt-online@events.lu.ma
+SUMMARY:Online writing talk
+LOCATION:https://us02web.zoom.us/j/123
+END:VEVENT
+END:VCALENDAR
