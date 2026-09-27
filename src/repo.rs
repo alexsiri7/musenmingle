@@ -365,20 +365,47 @@ fn update_from_values(set: &str) -> String {
 /// The `events.event_sources` row is then upserted (raw payload,
 /// last_seen_at), and an event the listing moved away from is deleted if
 /// nothing else links to it. Everything happens in one transaction.
+/// The venue-name resolver (`crate::venues::Resolver`) over
+/// `events.venue_aliases`.
+async fn venue_resolver<'e, E>(db: E) -> sqlx::Result<crate::venues::Resolver>
+where
+    E: sqlx::PgExecutor<'e>,
+{
+    let aliases: Vec<(String, Option<String>)> =
+        sqlx::query_as("SELECT name, venue_name FROM events.venue_aliases ORDER BY name")
+            .fetch_all(db)
+            .await?;
+    Ok(crate::venues::Resolver::new(
+        aliases.iter().map(|(n, v)| (n.as_str(), v.as_deref())),
+    ))
+}
+
+/// The key (`crate::venues::Resolver`) of the venue a listing's venue name
+/// belongs to, if any.
+async fn venue_key_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    venue: Option<&str>,
+) -> sqlx::Result<Option<String>> {
+    if venue.is_none_or(|v| v.trim().is_empty()) {
+        return Ok(None);
+    }
+    Ok(match venue_resolver(&mut **tx).await?.resolve(venue) {
+        crate::venues::Resolved::Venue(key) => Some(key),
+        crate::venues::Resolved::None => None,
+    })
+}
+
 /// Coordinates for a venue from `events.venues`, matched on the normalised
 /// venue name (`normalise::normalise_venue_for_key`, the dedupe key's venue
-/// part). The table is small (hand-seeded), so it is read whole.
+/// part) through `events.venue_aliases`. The table is small (one row per
+/// venue), so it is read whole.
 async fn venue_coords_tx(
     tx: &mut Transaction<'_, Postgres>,
     venue: Option<&str>,
 ) -> sqlx::Result<Option<(f64, f64)>> {
-    let Some(venue) = venue.filter(|v| !v.trim().is_empty()) else {
+    let Some(key) = venue_key_tx(tx, venue).await? else {
         return Ok(None);
     };
-    let key = crate::normalise::normalise_venue_for_key(Some(venue));
-    if key == "unknown" {
-        return Ok(None);
-    }
     let rows: Vec<(String, f64, f64)> = sqlx::query_as(
         "SELECT name, lat, lng FROM events.venues WHERE lat IS NOT NULL ORDER BY id",
     )
@@ -388,6 +415,269 @@ async fn venue_coords_tx(
         .into_iter()
         .find(|(name, _, _)| crate::normalise::normalise_venue_for_key(Some(name)) == key)
         .map(|(_, lat, lng)| (lat, lng)))
+}
+
+/// What [`sync_venues`] changed.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+pub struct VenueSync {
+    /// Venues created from events' venue names.
+    pub created: usize,
+    /// Venues whose slug, address, postcode, coordinates, borough or hours
+    /// were filled or refreshed.
+    pub updated: usize,
+    /// Events whose `venue_id` changed.
+    pub linked: u64,
+    /// Events without coordinates that got their venue's.
+    pub located: u64,
+}
+
+#[derive(FromRow)]
+struct VenueRow {
+    id: i64,
+    name: String,
+    slug: Option<String>,
+    address: Option<String>,
+    postcode: Option<String>,
+    lat: Option<f64>,
+    lng: Option<f64>,
+    borough: Option<String>,
+    opening_hours: Option<serde_json::Value>,
+}
+
+/// Venues as first-class objects (#204; see the `first_class_venues`
+/// migration): create a venue for every venue name on the events that has
+/// none, link every event to its venue (`venue_id`), fill venues' missing
+/// slug/address/postcode/coordinates/hours (from their events and
+/// `events.venue_hours`), their borough from their coordinates, and events'
+/// missing coordinates from their venue. Deterministic, idempotent, one
+/// transaction; runs after each ingest run (before the borough sync).
+pub async fn sync_venues(pool: &PgPool) -> sqlx::Result<VenueSync> {
+    use std::collections::{BTreeMap, HashMap};
+    type EventRow = (
+        Uuid,
+        Option<String>,
+        Option<String>,
+        Option<f64>,
+        Option<f64>,
+        Option<i64>,
+    );
+
+    let mut out = VenueSync::default();
+    let mut tx = pool.begin().await?;
+    // One sync at a time (the ingest lock already ensures it; this is cheap).
+    sqlx::query("LOCK TABLE events.venues IN SHARE ROW EXCLUSIVE MODE")
+        .execute(&mut *tx)
+        .await?;
+    let resolver = venue_resolver(&mut *tx).await?;
+    let mut venues: Vec<VenueRow> = sqlx::query_as(
+        "SELECT id, name, slug, address, postcode, lat, lng, borough, opening_hours
+         FROM events.venues ORDER BY id",
+    )
+    .fetch_all(&mut *tx)
+    .await?;
+    let events: Vec<EventRow> = sqlx::query_as(
+        "SELECT id, venue_name, address, lat, lng, venue_id FROM events.events ORDER BY id",
+    )
+    .fetch_all(&mut *tx)
+    .await?;
+    let hours: Vec<(String, serde_json::Value, String)> = sqlx::query_as(
+        "SELECT name, opening_hours, hours_source FROM events.venue_hours ORDER BY id",
+    )
+    .fetch_all(&mut *tx)
+    .await?;
+
+    // Venue key -> index in `venues` (the oldest row wins a shared key).
+    let mut by_key: HashMap<String, usize> = HashMap::new();
+    for (i, v) in venues.iter().enumerate() {
+        by_key
+            .entry(crate::normalise::normalise_venue_for_key(Some(&v.name)))
+            .or_insert(i);
+    }
+    // Events grouped by venue key (sorted, so creation order is stable).
+    let mut groups: BTreeMap<String, Vec<usize>> = BTreeMap::new();
+    for (i, e) in events.iter().enumerate() {
+        if let crate::venues::Resolved::Venue(key) = resolver.resolve(e.1.as_deref()) {
+            groups.entry(key).or_default().push(i);
+        }
+    }
+    let group_names = |idx: &[usize]| {
+        crate::venues::most_common(idx.iter().filter_map(|&i| events[i].1.as_deref()))
+            .map(str::to_string)
+    };
+    let group_address = |idx: &[usize]| {
+        crate::venues::most_common(idx.iter().filter_map(|&i| events[i].2.as_deref()))
+            .map(str::to_string)
+    };
+    let group_point = |idx: &[usize]| {
+        crate::venues::most_common_point(idx.iter().filter_map(|&i| events[i].3.zip(events[i].4)))
+    };
+
+    // 1. Create the missing venues.
+    for (key, idx) in &groups {
+        if by_key.contains_key(key) {
+            continue;
+        }
+        let Some(name) = group_names(idx) else {
+            continue;
+        };
+        let point = group_point(idx);
+        let row: VenueRow = sqlx::query_as(
+            "INSERT INTO events.venues (name, address, lat, lng, coords_source)
+             VALUES ($1, $2, $3, $4, CASE WHEN $3::float8 IS NOT NULL THEN 'listing' END)
+             RETURNING id, name, slug, address, postcode, lat, lng, borough, opening_hours",
+        )
+        .bind(&name)
+        .bind(group_address(idx))
+        .bind(point.map(|p| p.0))
+        .bind(point.map(|p| p.1))
+        .fetch_one(&mut *tx)
+        .await?;
+        by_key.insert(key.clone(), venues.len());
+        venues.push(row);
+        out.created += 1;
+    }
+
+    // 2. Fill each venue's gaps.
+    let mut hours_by_key: HashMap<String, (&serde_json::Value, &str)> = HashMap::new();
+    for (name, h, src) in &hours {
+        if let crate::venues::Resolved::Venue(key) = resolver.resolve(Some(name)) {
+            hours_by_key.entry(key).or_insert((h, src.as_str()));
+        }
+    }
+    let mut slugs: std::collections::HashSet<String> =
+        venues.iter().filter_map(|v| v.slug.clone()).collect();
+    let key_of: HashMap<i64, String> = by_key
+        .iter()
+        .map(|(k, &i)| (venues[i].id, k.clone()))
+        .collect();
+    for v in &mut venues {
+        let key = key_of.get(&v.id).cloned();
+        let idx: &[usize] = key
+            .as_ref()
+            .and_then(|k| groups.get(k))
+            .map(Vec::as_slice)
+            .unwrap_or_default();
+        let slug = match &v.slug {
+            Some(_) => None,
+            None => {
+                let s = crate::venues::unique_slug(&crate::venues::slugify(&v.name), |s| {
+                    slugs.contains(s)
+                });
+                slugs.insert(s.clone());
+                Some(s)
+            }
+        };
+        let address = v.address.is_none().then(|| group_address(idx)).flatten();
+        let postcode = match (&v.postcode, address.as_deref().or(v.address.as_deref())) {
+            (None, Some(a)) => crate::venues::postcode(a),
+            _ => None,
+        };
+        let point = v.lat.is_none().then(|| group_point(idx)).flatten();
+        let (lat, lng) = match point {
+            Some(p) => (Some(p.0), Some(p.1)),
+            None => (v.lat, v.lng),
+        };
+        let borough = crate::borough::of(lat, lng).map(str::to_string);
+        let borough_changed = borough != v.borough;
+        let hours = match (
+            &v.opening_hours,
+            key.as_ref().and_then(|k| hours_by_key.get(k)),
+        ) {
+            (None, Some(h)) => Some(*h),
+            _ => None,
+        };
+        if slug.is_none()
+            && address.is_none()
+            && postcode.is_none()
+            && point.is_none()
+            && !borough_changed
+            && hours.is_none()
+        {
+            continue;
+        }
+        sqlx::query(
+            "UPDATE events.venues SET
+                slug = COALESCE(slug, $2),
+                address = COALESCE(address, $3),
+                postcode = COALESCE(postcode, $4),
+                lat = COALESCE(lat, $5), lng = COALESCE(lng, $6),
+                coords_source = CASE WHEN lat IS NULL AND $5::float8 IS NOT NULL
+                                     THEN 'listing' ELSE coords_source END,
+                borough = $7,
+                opening_hours = COALESCE(opening_hours, $8),
+                hours_source = CASE WHEN opening_hours IS NULL AND $8::jsonb IS NOT NULL
+                                    THEN $9 ELSE hours_source END,
+                updated_at = now()
+             WHERE id = $1",
+        )
+        .bind(v.id)
+        .bind(&slug)
+        .bind(&address)
+        .bind(&postcode)
+        .bind(point.map(|p| p.0))
+        .bind(point.map(|p| p.1))
+        .bind(&borough)
+        .bind(hours.map(|h| h.0))
+        .bind(hours.map(|h| h.1))
+        .execute(&mut *tx)
+        .await?;
+        (v.lat, v.lng) = (lat, lng);
+        out.updated += 1;
+    }
+
+    // 3. Link events to their venues, and locate the ones without a point.
+    let (mut ids, mut venue_ids) = (Vec::new(), Vec::<Option<i64>>::new());
+    let (mut loc_ids, mut lats, mut lngs) = (Vec::new(), Vec::new(), Vec::new());
+    for (key, idx) in &groups {
+        let Some(v) = by_key.get(key).map(|&i| &venues[i]) else {
+            continue;
+        };
+        for &i in idx {
+            let e = &events[i];
+            if e.5 != Some(v.id) {
+                ids.push(e.0);
+                venue_ids.push(Some(v.id));
+            }
+            if let (None, Some(lat), Some(lng)) = (e.3, v.lat, v.lng) {
+                loc_ids.push(e.0);
+                lats.push(lat);
+                lngs.push(lng);
+            }
+        }
+    }
+    let grouped: std::collections::HashSet<usize> = groups.values().flatten().copied().collect();
+    for (i, e) in events.iter().enumerate() {
+        if e.5.is_some() && !grouped.contains(&i) {
+            ids.push(e.0);
+            venue_ids.push(None);
+        }
+    }
+    if !ids.is_empty() {
+        out.linked = sqlx::query(
+            "UPDATE events.events ev SET venue_id = u.v
+             FROM unnest($1::uuid[], $2::int8[]) AS u(id, v) WHERE ev.id = u.id",
+        )
+        .bind(&ids)
+        .bind(&venue_ids)
+        .execute(&mut *tx)
+        .await?
+        .rows_affected();
+    }
+    if !loc_ids.is_empty() {
+        out.located = sqlx::query(
+            "UPDATE events.events ev SET lat = u.lat, lng = u.lng
+             FROM unnest($1::uuid[], $2::float8[], $3::float8[]) AS u(id, lat, lng)
+             WHERE ev.id = u.id AND ev.lat IS NULL",
+        )
+        .bind(&loc_ids)
+        .bind(&lats)
+        .bind(&lngs)
+        .execute(&mut *tx)
+        .await?
+        .rows_affected();
+    }
+    tx.commit().await?;
+    Ok(out)
 }
 
 /// Set every event's `venue_type` from [`crate::venue_type::classify`]
@@ -773,26 +1063,32 @@ async fn set_hours_tx(
     Ok(())
 }
 
-/// A venue's usual hours from `events.venue_hours` (matched like
+/// A venue's usual hours: the venue's own (`events.venues.opening_hours`),
+/// else a not-yet-synced `events.venue_hours` row (matched like
 /// [`venue_coords_tx`]).
 async fn venue_hours_tx(
     tx: &mut Transaction<'_, Postgres>,
     venue: Option<&str>,
 ) -> sqlx::Result<Option<serde_json::Value>> {
-    let Some(venue) = venue.filter(|v| !v.trim().is_empty()) else {
+    let Some(key) = venue_key_tx(tx, venue).await? else {
         return Ok(None);
     };
-    let key = crate::normalise::normalise_venue_for_key(Some(venue));
-    if key == "unknown" {
-        return Ok(None);
-    }
-    let rows: Vec<(String, serde_json::Value)> =
-        sqlx::query_as("SELECT name, opening_hours FROM events.venue_hours ORDER BY id")
-            .fetch_all(&mut **tx)
-            .await?;
+    let rows: Vec<(String, serde_json::Value)> = sqlx::query_as(
+        "SELECT name, opening_hours FROM (
+             SELECT 0 AS pri, id, name, opening_hours FROM events.venues
+             WHERE opening_hours IS NOT NULL
+             UNION ALL
+             SELECT 1, id, name, opening_hours FROM events.venue_hours) h
+         ORDER BY pri, id",
+    )
+    .fetch_all(&mut **tx)
+    .await?;
+    let resolver = venue_resolver(&mut **tx).await?;
     Ok(rows
         .into_iter()
-        .find(|(name, _)| crate::normalise::normalise_venue_for_key(Some(name)) == key)
+        .find(|(name, _)| {
+            resolver.resolve(Some(name)) == crate::venues::Resolved::Venue(key.clone())
+        })
         .map(|(_, h)| h))
 }
 

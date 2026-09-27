@@ -272,6 +272,19 @@ impl Runner {
                 "no GitHub filer configured; pending site suggestions and contact requests will not be filed"
             );
         }
+        // Venues first: it fills events' missing coordinates, which the
+        // borough sync then reads.
+        match repo::sync_venues(&self.pool).await {
+            Ok(r) if r == repo::VenueSync::default() => {}
+            Ok(r) => tracing::info!(
+                created = r.created,
+                updated = r.updated,
+                linked = r.linked,
+                located = r.located,
+                "venues synced"
+            ),
+            Err(e) => tracing::error!(error = %e, "syncing venues failed"),
+        }
         match repo::sync_venue_types(&self.pool).await {
             Ok(0) => {}
             Ok(n) => tracing::info!(count = n, "venue types updated"),
