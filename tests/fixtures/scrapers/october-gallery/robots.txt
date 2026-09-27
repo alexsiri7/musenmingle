@@ -1,0 +1,40 @@
+User-agent: *
+Allow: /
+
+# Block Chinese search engine crawlers
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: Sogou web spider
+Disallow: /
+
+User-agent: YisouSpider
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# Block known aggressive crawlers
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# Protect admin, internal paths, and AJAX endpoints
+User-agent: *
+Disallow: /landscape3/
+Disallow: /artlogic/
+Disallow: /api/
+Disallow: /errors/
+Disallow: /news/ajax_more_news.php
+Disallow: /results.php
+
+Sitemap: https://www.octobergallery.co.uk/SiteMap.xml
+Sitemap: https://www.octobergallery.co.uk/sitemap-articles.php

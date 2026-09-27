@@ -1,0 +1,81 @@
+---
+source: tests/source_october_gallery.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "24 Old Gloucester Street, London WC1N 3AL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "zana-masombuka-spotlight-benji-reid|2026-09-03|october",
+      "description": "October Gallery presents selected photographic works by South African artist Zana Masombuka, which bring together compelling works from different series deeply rooted in her Ndebele culture. In the gallery's second space, a Spotlight is placed on poignant works by award-winning photographer and multi-disciplinary artist Benji Reid. Zana Masombuka exhibits significant photographic works from different series which explore stories about identity, culture, modernity and ritual from the perspective of a 21st-century Ndebele Woman. This dynamic presentation features selected works from Nges’rhodlweni: A Portal for Black Joy, Ubonani: What Do You See?, Time: Gadesi S'khathi, Proudly South African, Namba S'khambe and her recent series, Akhulumile Amabhudango: Scenes from Dreams – ‘Journeys with Kosabo’. Highlights include works from Nges’rhodlweni: A Portal for Black Joy, which are inspired by the sacred gathering space within the Ndebele household where generations come together through art, storytelling and shared experience. This communal site fosters a connection to the Enas (spirit), nurturing joy, knowledge and cultural continuity. Also exhibited are works from Ubonani: What Do You See?, Time: Gadesi S'khathi, Proudly South African, and Namba S'khambe. Set within the rocky landscapes of KwaNdebele, Ubonani explores the symbolic power of red through natural earth pigments and dramatic lighting. In Masombuka’s series, Time: Gadesi S'khathi, lemons, become metaphors for the passage of time and the transmission of generational knowledge. Her works from Proudly South African examine youth identity through national symbols, while Namba S'khambe critiques institutional power, capitalism and inequity. In her recent series, Akhulumile Amabhudango: Scenes from Dreams – ‘Journeys with Kosabo’, Masombuka’s ever evolving practice combines the mediums of photography and sculpture to create fascinating photographs surrounded by an intricate beaded frame. ‘Journeys with Kosabo’ pays homage to Masombuka’s late grandfather– as the artist journeys with him through her dreams, she reflects on themes of kingship, ascension and ancestral guidance. Layered onto the photographs, the beadwork honours the enduring significance of Ndebele beading, a centuries-old visual language historically used for communication, while reimagining its role within a contemporary artistic practice. The exhibition brings together a powerful body of work that examines perception, memory, spirituality and the enduring relationship between land and ancestral knowledge. Benji Reid considers himself a Choreo-Photolist; a term he coined to encapsulate his unique practice where theatricality, choreography and photography meet in the image. In July 2023, he premiered Find Your Eyes, a highly acclaimed performance that brought dancers and photography into the fold to create images in real time in front of his audience. The successful show was presented at the 60th edition of Venice Biennale in 2024, then continued on tour around the world, including performances at Sadlers Wells, London in 2025. Reid’s breathtaking photographs, composed primarily of self-portraits in incredible, anti-gravitational poses with a medley of props, draw the audience into a different dimension. In the hyper-realities he presents the subject as liberated by acts of the artist’s imagination. Whether exploring life as an outsider, issues surrounding mental health, or complexities of fatherhood, Reid makes the audience part of the discussion. These sublime and sensitive images draw from his well of life experiences, explore vulnerability, tragedy and triumph through the photographer’s lens. Exploring inner and outer landscapes, the two exhibitions richly layered imagery investigate realms brimming with imagination and emotion.",
+      "ends_at": "2026-10-02T23:00:00Z",
+      "image_url": "https://octobergallery.co.uk/website_safezone/images/figures/zana_masombuka_spotlight_benji_reid_squarish.webp",
+      "lat": 51.5215,
+      "lng": -0.1236,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "Zana Masombuka / Spotlight: Benji Reid",
+      "url": "https://www.octobergallery.co.uk/exhibitions/zana-masombuka-spotlight-benji-reid",
+      "venue_name": "October Gallery"
+    },
+    "id": "zana-masombuka-spotlight-benji-reid"
+  },
+  {
+    "event": {
+      "address": "24 Old Gloucester Street, London WC1N 3AL",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "romuald-hazoume-my-blue-period|2026-10-08|october",
+      "description": "October Gallery presents My Blue Period, a solo exhibition by the internationally renowned artist Romuald Hazoumè, which coincides with 1-54 Contemporary African Art Fair and Frieze London. Romuald Hazoumè revisits his iconic masques bidons (Fr. bidon * – flask, container, bottle)—presenting a striking series of masks made from repurposed plastic containers that are adorned with an eclectic array of found materials. Wittily imagined as portraits of figures inhabiting particular places in the contemporary geo-political landscape, these new sculptures come freighted with Hazoumè’s biting commentaries on current issues of global concern. Displaying a wicked eye for detail, each mask dances before our eyes animated by his irreverent sense of humour. Revitalising the sculptural form for which he is best known, Hazoumè’s ironic avatars offer timely reflections on the precarious nature of the world we all inhabit. Once again, these powerful works, taken collectively, underline Hazoumè’s willing acceptance of the artist’s responsibility to confront patent abuses of authority while speaking truth to power. Creating ‘masks’ from plastic containers, the majority of which are blue in colour, allows Hazoumè to play with associations that echo two separate yet distantly related ideas. The immediate reference is to the young Picasso’s ‘blue period’, when the majority of his canvases were dominated by an all-pervading blue tone, as he became fixated upon melancholic themes of youth, poverty, old-age and death. At the same time, Hazoumè’s title also suggests ‘the Blues’, that uniquely African-American form of music, rooted in traditions transported from central west Africa, which developed throughout the late 19th and early 20th centuries in the US. The distinctive genre of Blues music draws its power from the heartfelt expressions of marginalised people who, although powerless in the face of the conditions that surround them, unite in shared expressions of affirmative music that—even if only temporarily—offer transformative relief. Hazoumè’s work is well known for addressing such complex matters as slavery (historical and modern), migration and the brutal realities developing in postcolonial Africa. Somehow, these blue masks seem to penetrate deeper still, adopting darker, more ominous tones, reflecting anxieties fed by the many interconnected crises of the present day. Their titles, often forenames or placenames, supply disquieting clues as to the undercurrents of thought currently colouring Hazoumè’s approach. Kongo (2024/25), alludes directly to the endless conflicts over natural resources that blight that immense country’s past, present and probable future. Autlan de Navarro (2024/25), flickers between contrasting visions of a once-proud indigenous people and the wretched survivors of a downtrodden minority eking out impoverished lives on the margins of a paradise where they once lived in balance with the biosphere that maintained them. Each mask pulls into focus another emergency or potential flashpoint: the ongoing ‘situation’ in Gaza; the Israeli-American coalition at war with Iran, the vicious spiral of hostilities in Putin’s ‘special military operation’ in Ukraine and the potential for any one of these to spill over, at any moment, into nuclear conflagration. Ever the agent provacateur, Hazoumè’s tongue-in-cheek borrowing of Picasso’s blue tones for this present period of work shows little evidence of dejection or despair. Rather, we can sense, radiating from within each mask, the fiery reds and incandescent whites of Hazoumè’s focussed indignation.",
+      "ends_at": "2026-11-21T00:00:00Z",
+      "image_url": "https://octobergallery.co.uk/website_safezone/images/figures/romuald_hazoume_my_blue_period_squarish.webp",
+      "lat": 51.5215,
+      "lng": -0.1236,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-07T23:00:00Z",
+      "tags": [],
+      "title": "Romuald Hazoumè: My Blue Period",
+      "url": "https://www.octobergallery.co.uk/exhibitions/romuald-hazoume-my-blue-period",
+      "venue_name": "October Gallery"
+    },
+    "id": "romuald-hazoume-my-blue-period"
+  },
+  {
+    "event": {
+      "address": "24 Old Gloucester Street, London WC1N 3AL",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "gallery-talk-romuald-hazoume-in-conversation-with-gerard-houghton|2026-10-17|october",
+      "description": "October Gallery is pleased to present a conversation between the artist Romuald Hazoumè and October Gallery’s Director of Special Projects, Gerard Houghton, held in conjunction with the exhibition Romuald Hazoumè: My Blue Period. The discussion will offer unique insights into Hazoumè’s distinctive art and the ideas that inform his sculptural language. Drawing on the works presented in the exhibition, Hazoumè will reflect on the conceptual, material and cultural frameworks that shape his work, together with the inspirations and concerns that underly his current practice. Romuald Hazoumè at 1-54 Contemporary African Art Fair New works by Romuald Hazoumè will also be presented at Booth S7 at 1-54 Contemporary African Art Fair, Somerset House, Strand — approximately 20 minutes’ walk or 5 minutes by taxi or public transport from October Gallery.",
+      "ends_at": "2026-10-17T11:30:00Z",
+      "image_url": "https://www.octobergallery.co.uk/website_safezone/images/events/7a783130-4294-45bc-91f1-5d872975cac4_12-13.jpg",
+      "lat": 51.5215,
+      "lng": -0.1236,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-17T10:00:00Z",
+      "tags": [],
+      "title": "Gallery Talk: Romuald Hazoumè in Conversation with Gerard Houghton",
+      "url": "https://www.octobergallery.co.uk/events/",
+      "venue_name": "October Gallery"
+    },
+    "id": "gallery-talk-romuald-hazoume-in-conversation-with-gerard-houghton-saturday-17th-october-2026"
+  }
+]
