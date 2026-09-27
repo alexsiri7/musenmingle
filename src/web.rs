@@ -1,6 +1,7 @@
 //! Human-facing HTML pages, server-rendered by the API process itself:
 //! `GET /` (filterable upcoming events), `GET /events/{id}`, `GET /sources`
-//! and `POST /suggest` (the "Suggest a venue site" form).
+//! and `POST /suggest` (the "Suggest a venue site" form); the calendar
+//! views and `.ics` feed are in `web/calendar_page.rs`.
 //!
 //! Templating is `maud`: templates are Rust code checked at compile time, and
 //! every interpolated value is HTML-escaped unless explicitly wrapped in
@@ -43,6 +44,9 @@ use crate::listing::{self, Sort, When};
 use crate::model::{Category, SourceKind};
 use crate::repo;
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
+
+mod calendar_page;
+pub use calendar_page::SITE_ORIGIN;
 
 /// Content-Security-Policy for every HTML response.
 /// Images are our own thumbnails only (`/thumbs/...`), never hotlinked.
@@ -173,6 +177,9 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/static/app.js", get(app_js))
         .route("/static/fonts/{name}", get(font))
         .route("/saved", get(saved))
+        .route("/calendar", get(calendar_page::calendar_page))
+        .route("/calendar.ics", get(calendar_page::calendar_feed))
+        .route("/saved/calendar", get(calendar_page::saved_calendar))
         .route("/thumbs/{name}", get(thumbnail))
 }
 
@@ -308,6 +315,7 @@ async fn app_js() -> Response {
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Nav {
     Events,
+    Calendar,
     Saved,
     Sources,
     About,
@@ -362,6 +370,7 @@ fn page(status: StatusCode, title: &str, nav: Nav, main: Markup) -> Response {
                         }
                         nav class="primary" aria-label="Site" {
                             (item("/", "Events", Nav::Events))
+                            (item("/calendar", "Calendar", Nav::Calendar))
                             a href="/saved" aria-current=[(nav == Nav::Saved).then_some("page")] {
                                 "Saved"
                                 span class="count" data-saved-count hidden { "0" }
@@ -1361,7 +1370,10 @@ async fn saved() -> Response {
                         "Nothing saved yet. Use the Save button on any event, then come back here."
                     }
                     section id="saved-list" class="cards" aria-label="Saved events" {}
-                    p class="saved-tools" { button id="export-ics" type="button" hidden { "Export saved as .ics" } }
+                    p class="saved-tools" {
+                        button id="export-ics" type="button" hidden { "Export saved as .ics" }
+                        a class="button secondary" href="/saved/calendar" { "See them in a calendar" }
+                    }
                     (card_template())
                 }
             }
@@ -1898,7 +1910,8 @@ async fn about() -> Response {
                         li { "There are no accounts, and no tracking or analytics cookies." }
                         li {
                             "Saved events live only in your browser. We don't store them; the Saved "
-                            "page just asks us for those events' current details, like any other page."
+                            "page and My calendar just ask us for those events' current details, like "
+                            "any other page."
                         }
                         li {
                             "If you suggest a venue, we store the website address and your note, "
