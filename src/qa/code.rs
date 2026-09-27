@@ -89,6 +89,7 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "two_temple_place",
         include_str!("../sources/two_temple_place.rs"),
     ),
+    ("vam", include_str!("../sources/vam.rs")),
     (
         "wellcome_collection",
         include_str!("../sources/wellcome_collection.rs"),
