@@ -1,0 +1,114 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-victoria-miro\", &cards)"
+---
+[
+  {
+    "event": {
+      "address": "16 Wharf Road, London N1 7RW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "hernan-bas-time-to-shine-salesmen|2026-09-17|victoria-miro",
+      "description": "The exhibition focuses on overlooked characters – from a perfume counter attendant and a gallerist who specialises in ‘cat-made painting,’ to a man who sells seashells by the seashore – capturing the interactions that make a transaction possible and the brief window that exposes a person’s vulnerability or confidence.",
+      "ends_at": "2026-11-14T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-victoriamiro3/usr/images/exhibitions/main_image_override/685/hb532_no-refunds-on-relaxation_2026_edge.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-16T23:00:00Z",
+      "tags": [],
+      "title": "Hernan Bas: TIME TO SHINE! (the salesmen)",
+      "url": "https://www.victoria-miro.com/exhibitions/685/",
+      "venue_name": "Victoria Miro"
+    },
+    "id": "www.victoria-miro.com:685"
+  },
+  {
+    "event": null,
+    "id": "www.victoria-miro.com:679"
+  },
+  {
+    "event": {
+      "address": "16 Wharf Road, London N1 7RW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "khalif-tahir-thompson-send-in-clowns|2026-10-08|victoria-miro",
+      "description": "In these new paintings, Thompson invites viewers into the everyday lives of his subjects through vibrant domestic scenes, creating scenarios from his own childhood growing up in Brooklyn and today.",
+      "ends_at": "2026-11-07T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-victoriamiro3/usr/images/exhibitions/main_image_override/683/kt-arch-diner-2026.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-07T23:00:00Z",
+      "tags": [],
+      "title": "Khalif Tahir Thompson: Send in the Clowns",
+      "url": "https://www.victoria-miro.com/exhibitions/683/",
+      "venue_name": "Victoria Miro"
+    },
+    "id": "www.victoria-miro.com:683"
+  },
+  {
+    "event": null,
+    "id": "www.victoria-miro.com:680"
+  },
+  {
+    "event": {
+      "address": "16 Wharf Road, London N1 7RW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "alchemies-may-cockcroft-nour-malas-sarah-martin-nuss|2026-11-13|victoria-miro",
+      "description": "Three emerging abstract painters whose distinct practices transform colour and material into evocative visual languages.",
+      "ends_at": "2027-01-23T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-victoriamiro3/usr/images/exhibitions/main_image_override/684/group-show_2026_4.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T00:00:00Z",
+      "tags": [],
+      "title": "Alchemies: May Cockcroft, Nour Malas, Sarah Martin-Nuss",
+      "url": "https://www.victoria-miro.com/exhibitions/684/",
+      "venue_name": "Victoria Miro"
+    },
+    "id": "www.victoria-miro.com:684"
+  },
+  {
+    "event": {
+      "address": "16 Wharf Road, London N1 7RW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "conrad-shawcross-shadows-of-mechanism|2026-11-26|victoria-miro",
+      "description": "The debut of a significant new body of work, Time Pebble, and an immersive, multi-sensory installation of the artist’s acclaimed series, Slow Arc inside a Cube.",
+      "ends_at": "2027-01-23T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-victoriamiro3/usr/images/exhibitions/main_image_override/682/cs-slow-arc-inside-a-cube-xiv-lakeside-arts.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T00:00:00Z",
+      "tags": [],
+      "title": "Conrad Shawcross: Shadows of the Mechanism",
+      "url": "https://www.victoria-miro.com/exhibitions/682/",
+      "venue_name": "Victoria Miro"
+    },
+    "id": "www.victoria-miro.com:682"
+  }
+]

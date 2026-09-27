@@ -1,0 +1,1519 @@
+
+
+
+                        
+    <!DOCTYPE html>
+    <!-- Site by Artlogic - https://artlogic.net -->
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <script>
+            /* Artlogic deterministic page-ready signal (see e2e/ + pageload perf notes).
+               Installs a default window.modulesReady that latches window.__artlogicReady,
+               adds a `modules-ready` class to <html>/<body>, and dispatches `artlogic:ready`
+               exactly once. Themes may still wrap window.modulesReady (prevReady pattern);
+               their wrapper chains through to this. All gallery JS loader paths converge on
+               window.modulesReady(); the legacy galleries.js now calls it after init too. */
+            (function () {
+                var prev = window.modulesReady;
+                window.modulesReady = function () {
+                    if (typeof prev === 'function') { try { prev(); } catch (e) {} }
+                    if (window.__artlogicReady) { return; }
+                    window.__artlogicReady = true;
+                    try { document.documentElement.className += ' modules-ready'; } catch (e) {}
+                    try { if (document.body) { document.body.className += ' modules-ready'; } } catch (e) {}
+                    try { document.dispatchEvent(new CustomEvent('artlogic:ready')); } catch (e) {}
+                };
+            })();
+            </script>
+            <title>Exhibitions | Frith Street Gallery</title>
+        <meta property="og:site_name" content="Frith Street Gallery" />
+        <meta property="og:title" content="Exhibitions" />
+        <meta property="og:description" content="" />
+        <meta property="og:image" content="" />
+        <meta property="og:image:width" content="" />
+        <meta property="og:image:height" content="" />
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://www.frithstreetgallery.com/exhibitions/">
+        <meta property="twitter:title" content="Exhibitions">
+        <meta property="twitter:description" content="">
+        <meta property="twitter:text:description" content="">
+        <meta property="twitter:image" content="">
+        <link rel="canonical" href="https://www.frithstreetgallery.com/exhibitions/" />
+        <meta name="google" content="notranslate" />
+            <meta name="description" content="" />
+            <meta name="publication_date" content="2021-07-06 13:50:39" />
+            <meta name="generator" content="Artlogic CMS - https://artlogic.net" />
+            
+            <meta name="accessibility_version" content="1.1"/>
+            
+            
+                <meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0" />
+
+            
+
+<link rel="icon" href="/usr/images/preferences/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/usr/images/preferences/favicon.ico" type="image/x-icon" />
+
+<meta name="application-name" content="Frith Street Gallery"/>
+<meta name="msapplication-TileColor" content="#ffffff"/>
+            
+            
+            
+                <link rel="stylesheet" media="print" href="/lib/g/2.0/styles/print.css">
+                <link rel="stylesheet" media="print" href="/styles/print.css">
+
+            <script src="/lib/js/datadog-logs/datadog-logs.js" type="text/javascript"></script>
+<script>
+try {
+    function checkStatisticsCookiePreference() {
+        // Get the cookie_preferences item from localStorage
+        const cookiePreferences = localStorage.getItem('cookie_preferences');
+
+        // Check if the item exists
+        if (!cookiePreferences) {
+            console.log('No cookie_preferences found in localStorage');
+            return false;
+        }
+
+        // Parse the JSON string
+        const preferences = JSON.parse(cookiePreferences);
+
+        // Check if statistics is set to true
+        const statisticsEnabled = preferences?.statistics === true;
+
+        console.debug('Statistics enabled:', statisticsEnabled);
+        return statisticsEnabled;
+    }
+
+    // Usage
+    const hasStatistics = checkStatisticsCookiePreference();
+
+    if (hasStatistics) {
+        // --- Check for artlogic_id cookie ---
+        const artlogicIdSet = document.cookie
+            .split('; ')
+            .some(cookie => cookie.startsWith('artlogic_id='));
+
+        console.debug('artlogic_id cookie set:', artlogicIdSet);
+
+        if (artlogicIdSet) {
+            window.DD_LOGS && window.DD_LOGS.init({
+                // TODO add proxy?
+                clientToken: 'pub0866d56abaa16869f0d9bb4a3c7da950',
+                site: 'datadoghq.eu',
+                forwardConsoleLogs: ["error"],
+                forwardErrorsToLogs: true,
+                service: 'artlogiccms',
+                // version: '1.3.4',  // TODO implement versioning in future.
+                sessionSampleRate: 100,
+                trackSessionAcrossSubdomains: true
+            });
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('site', 'frithstreetgallery'.toLowerCase())
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('hostname', 'web-eu-021'.toLowerCase())
+
+            // report any missing JS files
+            window.addEventListener('error', function(event) {
+                // Filter out standard JS runtime execution errors
+                if (event.target && event.target.tagName === 'SCRIPT') {
+                    window.DD_LOGS && window.DD_LOGS.logger.error(
+                        'A script failed to load: ' + (event.target?.src || event.target?.href),
+                        {'script': (event.target?.src || event.target?.href)}
+                    )
+                }
+            }, true); // The 'true' flag activates the capturing phase
+        }
+    }
+} catch (error) {
+    console.error(error);
+}
+</script>
+
+            
+
+            <script>
+            (window.Promise && window.Array.prototype.find) || document.write('<script src="/lib/js/polyfill/polyfill_es6.min.js"><\/script>');
+            </script>
+
+
+            
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/font-awesome/font-awesome-4.6.3/css/font-awesome.min.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/archimedes-frontend-core.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/accessibility.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/jquery.archimedes-frontend-core-plugins-0.1.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.artlogic.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/slick-1.8.1/slick.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/pageload/1.1/jquery.pageload.1.1.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_base.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_main.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/user_custom.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_responsive.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/artlogic-site-icons/artlogic-site-icons-1.0/artlogic-site-icons.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/plyr/3.5.10/plyr.css?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"/>
+<!-- add crtical css to improve performance -->
+		<script>window.ARTLOGIC_ASSET_SUFFIX="_ver_c943054b67v8c960dag41a07b00978e436ebeec20516b218a94";</script>
+		<script data-context="helper"  src="/lib/g/2.0/scripts/import_helpers.js"></script>
+		<script data-context="helper"  src="/lib/jquery/3.7.1/jquery-3.7.1.min.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/webpack_import_helpers.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/jquery/3.7.1/plugins/jquery.compat.selector.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.browser.min.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.easing.min.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.archimedes-frontend-core-plugins-0.1.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.fitvids.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/core/dynamic.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-core.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-modules.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" type="module"  traceurOptions="--async-functions" src="/lib/g/2.0/scripts/galleries_js_loader__mjs.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/feature_panels.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/g/themes/aperture/2.0/scripts/script.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/shop.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/recaptcha.js?c=943054b67&v=8c960da&g=41a07b00978e436ebeec20516b218a94"></script>
+            
+            
+                
+
+
+    <script>
+        function get_cookie_preference(category) {
+            result = false;
+            try {
+                var cookie_preferences = localStorage.getItem('cookie_preferences') || "";
+                if (cookie_preferences) {
+                    cookie_preferences = JSON.parse(cookie_preferences);
+                    if (cookie_preferences.date) {
+                        var expires_on = new Date(cookie_preferences.date);
+                        expires_on.setDate(expires_on.getDate() + 365);
+                        console.log('cookie preferences expire on', expires_on.toISOString());
+                        var valid = expires_on > new Date();
+                        if (valid && cookie_preferences.hasOwnProperty(category) && cookie_preferences[category]) {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch(e) {
+                console.warn('get_cookie_preference() failed');
+                return result;
+            }
+            return result;
+        }
+
+        window.google_analytics_init = function(page){
+            var collectConsent = true;
+            var useConsentMode = true;
+            var analyticsProperties = ['G-TW1P1RGT4R', 'UA-201047395-27'];
+            var analyticsCookieType = 'statistics';
+            var disableGa = false;
+            var sendToArtlogic = true;
+            var artlogicProperties = {
+                'UA': 'UA-157296318-1',
+                'GA': 'G-GLQ6WNJKR5',
+            };
+
+            analyticsProperties = analyticsProperties.concat(Object.values(artlogicProperties));
+
+            var uaAnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('UA-'));
+            var ga4AnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('G-')).concat(analyticsProperties.filter((p) => p.startsWith('AW-')));
+
+            if (collectConsent) {
+                disableGa = !get_cookie_preference(analyticsCookieType);
+
+                for (var i=0; i < analyticsProperties.length; i++){
+                    var key = 'ga-disable-' + analyticsProperties[i];
+
+                    window[key] = disableGa;
+                }
+
+                if (disableGa) {
+                    if (document.cookie.length) {
+                        var cookieList = document.cookie.split(/; */);
+
+                        for (var i=0; i < cookieList.length; i++) {
+                            var splitCookie = cookieList[i].split('='); //this.split('=');
+
+                            if (splitCookie[0].indexOf('_ga') == 0 || splitCookie[0].indexOf('_gid') == 0 || splitCookie[0].indexOf('__utm') == 0) {
+                                //h.deleteCookie(splitCookie[0]);
+                                var domain = location.hostname;
+                                var cookie_name = splitCookie[0];
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                                // now delete the version without a subdomain
+                                domain = domain.split('.');
+                                domain.shift();
+                                domain = domain.join('.');
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (uaAnalyticsProperties.length) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+                if (!disableGa) {
+                    var anonymizeIps = false;
+
+                    for (var i=0; i < uaAnalyticsProperties.length; i++) {
+                        var propertyKey = '';
+
+                        if (i > 0) {
+                            propertyKey = 'tracker' + String(i + 1);
+                        }
+
+                        var createArgs = [
+                            'create',
+                            uaAnalyticsProperties[i],
+                            'auto',
+                        ];
+
+                        if (propertyKey) {
+                            createArgs.push({'name': propertyKey});
+                        }
+
+                        ga.apply(null, createArgs);
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            propertyKey ? propertyKey + '.send' : 'send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+
+                    if (sendToArtlogic) {
+                        ga('create', 'UA-157296318-1', 'auto', {'name': 'artlogic_tracker'});
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            'artlogic_tracker.send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+                }
+            }
+
+            if (ga4AnalyticsProperties.length) {
+                if (!disableGa || useConsentMode) {
+                    (function(d, script) {
+                        script = d.createElement('script');
+                        script.type = 'text/javascript';
+                        script.async = true;
+                        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4AnalyticsProperties[0];
+                        d.getElementsByTagName('head')[0].appendChild(script);
+                    }(document));
+
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function (){dataLayer.push(arguments);}
+                    window.gtag('js', new Date());
+
+                    if (useConsentMode) {
+                        gtag('consent', 'default', {
+                            'ad_storage': 'denied',
+                            'analytics_storage': 'denied',
+                            'functionality_storage': 'denied',
+                            'personalization_storage': 'denied',
+                            'security': 'denied',
+                        });
+
+                        if (disableGa) {
+                            // If this has previously been granted, it will need set back to denied (ie on cookie change)
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'denied',
+                            });
+                        } else {
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'granted',
+                            });
+                        }
+                    }
+
+                    for (var i=0; i < ga4AnalyticsProperties.length; i++) {
+                        window.gtag('config', ga4AnalyticsProperties[i]);
+                    }
+
+                }
+            }
+        }
+
+        var waitForPageLoad = true;
+
+        if (waitForPageLoad) {
+            window.addEventListener('load', function() {
+                window.google_analytics_init();
+                window.archimedes.archimedes_core.analytics.init();
+            });
+        } else {
+            window.google_analytics_init();
+        }
+    </script>
+
+            
+                 <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xsyb6n78fo");
+</script>
+            
+
+        </head>
+        
+        
+        
+        <body class="section-exhibitions page-exhibitions site-responsive responsive-top-size-1023 responsive-nav-slide-nav responsive-nav-side-position-fullscreen responsive-layout-forced-lists responsive-layout-forced-image-lists responsive-layout-forced-tile-lists analytics-track-all-links site-lib-version-2-0 ajax_load_more_pagination_enabled scroll_sub_nav_enabled responsive_src_image_sizing hero_heading_title_position_overlay no-page-params  layout-fixed-header site-type-template pageload-ajax-navigation-active layout-animation-enabled layout-lazyload-enabled prevent_user_image_save" data-viewport-width="1024" data-site-name="frithstreetgallery" data-connected-db-name="frithstreetgallery" data-pathname="/exhibitions/"
+>
+            <script>document.getElementsByTagName('body')[0].className+=' browser-js-enabled';</script>
+            
+
+
+            
+            
+
+
+
+
+
+
+        <div id="responsive_slide_nav_content_wrapper">
+
+    <div id="container">
+
+        
+    
+
+
+    <div class="header-fixed-wrapper">
+    <header id="header" class="clearwithin header_fixed topnav_dropdown_header  header_layout_right">
+        <div class="inner clearwithin">
+
+            
+
+
+<div id="logo" class=" user-custom-logo-image"><a href="/">Frith Street Gallery</a></div>
+
+
+            
+                <div id="skiplink-container">
+                    <div>
+                        <a href="#main_content" class="skiplink">Skip to main content</a>
+                    </div>
+                </div>
+            
+        
+            <div class="header-ui-wrapper">
+
+                    <div id="responsive_slide_nav_wrapper" class="mobile_menu_align_center" data-nav-items-animation-delay>
+                        <div id="responsive_slide_nav_wrapper_inner" data-responsive-top-size=1023>
+                        
+                            <nav id="top_nav" aria-label="Main site" class="navigation noprint clearwithin">
+                                
+<div id="top_nav_reveal" class="hidden"><ul><li><a href="#" role="button" aria-label="Close">Menu</a></li></ul></div>
+
+        
+    <div id="full_nav" class="nav navigation" role="navigation">
+        
+<ul class='ul_top' data-level="1">
+    <li id="li_top_1"  class="first top"><a href="/artists/" class="first top" aria-label="Link to Frith Street Gallery Artists page">Artists</a>
+</li>
+    <li id="li_top_2"  class="top active_dir active"><a href="/exhibitions/" class="top active_dir active" aria-label="Link to Frith Street Gallery Exhibitions page (current nav item)">Exhibitions</a>
+</li>
+    <li id="li_top_3"  class="top"><a href="/news/" class="top" aria-label="Link to Frith Street Gallery News page">News</a>
+</li>
+    <li id="li_top_4"  class="top"><a href="/about/" data-original-url="/contact/" class="top" aria-label="Link to Frith Street Gallery About page">About</a>
+</li>
+    <li id="li_top_5"  class="last top"><a href="/publications/" class="last top" aria-label="Link to Frith Street Gallery Publications page">Publications</a>    </li>
+</ul>
+
+        <div class="clear"></div>
+    </div>
+
+
+
+                                
+                                
+
+
+
+                                
+                            </nav>
+                        
+                        </div>
+                    </div>
+                
+
+                <div class="header-icons-wrapper  active cart-icon-active">
+                    
+                    
+
+                        
+
+
+
+<!--excludeindexstart-->
+<div id="store_cart_widget" class="hide_when_empty">
+    <div class="store_cart_widget_inner">
+        <div id="scw_heading"><a href="/store/basket/" class="scw_checkout_link">Cart</a></div>
+        <div id="scw_items">
+            <a href="/store/basket/" aria-label="Your store basket is empty" data-currency="&pound;">
+                <span class="scw_total_items"><span class="scw_total_count">0</span><span class="scw_total_items_text"> items</span></span>
+               
+
+                    <span class="scw_total_price">
+                        <span class="scw_total_price_currency widget_currency">&pound;</span>
+                        <span class="scw_total_price_amount widget_total_price" 
+                                data-cart_include_vat_in_price="False" 
+                                data-total_price_without_vat_in_base_currency="0" 
+                                data-total_price_with_vat_in_base_currency="0"
+                                data-conversion_rate='{"GBP": {"conversion_rate": 1, "name": "&pound;", "stripe_code": "gbp"}}'
+                                data-count="0">
+                        </span>
+                    </span>
+      
+                
+            </a>
+        </div>
+        <div id="scw_checkout">
+            <div class="scw_checkout_button"><a href="/store/basket/" class="scw_checkout_link">Checkout</a></div>
+        </div>
+            <div id="scw_popup" class="hidden scw_popup_always_show">
+                <div id="scw_popup_inner">
+                    <h3>Item added to cart</h3>
+                    <div id="scw_popup_buttons_container">
+                        <div class="button"><a href="/store/basket/">View cart & checkout</a></div>
+                        <div id="scw_popup_close" class="link"><a href="#">Continue shopping</a></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        
+    </div>
+</div>
+<!--excludeindexend-->
+
+                    
+     
+                        <div id="slide_nav_reveal" tabindex="0" role="button">Menu</div>
+                </div>
+                
+                
+
+                
+
+
+
+                
+
+                
+            </div>
+        </div>
+        
+
+
+
+    </header>
+    </div>
+
+
+
+        
+            
+
+
+
+
+
+        <div id="main_content" role="main" class="clearwithin">
+            <!--contentstart-->
+            
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+            <div class="heading_wrapper exhibition-list-header ">
+                    <h1>Exhibitions</h1>    
+
+
+                <div class="exhibitions_list_filters clearwithin">
+
+                </div>
+
+            </div>
+    
+    <div id="content" class="exhibition-list-outer-container clearwithin">
+        
+        
+        
+
+        
+        
+        <div id="content_module" class="prose clearwithin full_width">
+        </div>
+        
+
+            
+    
+    <div id="sub_nav" class="navigation noprint clearwithin exhibitions_filter" role="navigation" aria-label="Exhibition filter">
+        <ul>
+            <li class="all active"><a href="/exhibitions/">All</a></li>
+
+            
+
+                
+                <li class=" "><a href="/exhibitions/location/2/">Golden Square</a></li>
+                
+                <li class=" "><a href="/exhibitions/location/1/">Soho Square</a></li>
+                
+                <li class=" last"><a href="/exhibitions/location/3/">Online Exhibition</a></li>
+        </ul>
+    </div>
+
+
+<div id="exhibitions-grid-container">
+    
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+                    
+                    
+
+
+
+<div id="exhibitions-grid-current" class="subsection-exhibitions-grid " data-ajax-list-type="None" >
+
+    <div class="subheading" role="heading" aria-level="2"><span>Current</span></div>
+    
+    
+    
+
+
+    <div class="records_list image_list grid_dynamic_layout_exhibitions collapse_single_column set_minimum_heights_per_row  gd_no_of_columns_2 clearwithin" data-pagestats-id="page_stats_0">
+            <ul class="clearwithin">
+                
+                
+                    
+                    
+                    <li  class="last"  data-width="2000" data-height="1500">
+                        
+        <a href="/exhibitions/249-colin-self-unseen/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg" alt="Colin Self Unseen"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Colin Self</h2>
+                                            <span class="subtitle">Unseen</span>
+                                    <span class="date">18 Sep - 7 Nov 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+            </ul>
+    </div>
+
+    
+</div>
+    
+                <div class="divider inner"></div>
+        
+                    
+                <div class="content-above">
+    
+                    
+
+
+
+<div id="exhibitions-grid-forthcoming" class="subsection-exhibitions-grid " data-ajax-list-type="None" >
+
+    <div class="subheading" role="heading" aria-level="2"><span>Upcoming</span></div>
+    
+    
+    
+
+
+    <div class="records_list feature_list grid_dynamic_layout_exhibitions_featured collapse_single_column  gd_no_of_columns_1 clearwithin" data-pagestats-id="page_stats_0">
+            <ul class="clearwithin">
+                
+                
+                    
+                    
+                    <li  class="last"  data-width="2543" data-height="1728">
+                        
+        <a href="/exhibitions/254-frith-street-gallery-le-moliere-2026-pop-up-project/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg'}"  data-src="https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/253/facade-final_web.jpg" alt="Frith Street Gallery Le Molière | 2026 Pop-up project"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Frith Street Gallery Le Molière | 2026</h2>
+                                            <span class="subtitle">Pop-up project</span>
+                                    <span class="date">19 - 25 Oct 2026</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce the gallery’s return to Paris this autumn with a special pop-up project at 40 rue de Richelieu coinciding with Art Basel Paris.<br/><br/>Frith Street Gallery le Molière is located by Jardins du Palais Royal and a short walk from major cultural landmarks such as the Louvre, the Bourse de Commerce, Collection Pinault and the new Fondation Cartier pour l'Art Contemporain.<br/><br/>Nous sommes ravis d'annoncer le retour de la galerie à Paris cet automne, avec un projet éphémère exceptionnel, au 40 rue de Richelieu, organisé en marge d'Art Basel Paris.<br/><br/>Cette année, Frith Street Gallery Le Molière met à l'honneur des œuvres majeures de quatre artistes de la galerie : Dayanita Singh, Małgorzata Mirga-Tas, Tacita Dean, et Cornelia Parker.
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+            </ul>
+    </div>
+
+    
+</div>
+    
+                    <div class="divider inner"></div>
+    
+                </div>
+        
+                    
+        
+                    
+                <div class="content-above">
+    
+                    
+
+
+
+<div id="exhibitions-grid-past" class="subsection-exhibitions-grid " data-ajax-list-type="None" >
+
+    <div class="subheading" role="heading" aria-level="2"><span>Archive</span></div>
+    
+    
+    
+
+
+    <div class="records_list image_list grid_dynamic_layout_exhibitions collapse_single_column set_minimum_heights_per_row  gd_no_of_columns_2 clearwithin" data-pagestats-id="page_stats_0">
+            <ul class="clearwithin">
+                
+                
+                    
+                    
+                    <li   data-width="2543" data-height="1728">
+                        
+        <a href="/exhibitions/247-summer-show-multiple-narratives/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/247/ss.jpg" alt="Summer Show: Multiple Narratives"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Summer Show: <i>Multiple Narratives</i></h2>
+                                    <span class="date">3 Jul - 7 Aug 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Multiple Narratives brings together works by eight gallery artists. The pieces are linked through their use of repetition, series and classification, some are narrative-driven, while others focus on visual exploration....
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2543" data-height="1728">
+                        
+        <a href="/exhibitions/252-to-the-dance-eight-works-by-nancy-spero/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/252/ns.jpg" alt="To the Dance: eight works by Nancy Spero 1926–2009"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2><i>To the Dance: eight works by Nancy Spero 1926–2009</i></h2>
+                                    <span class="date">3 Jul - 7 Aug 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2126" data-height="1605">
+                        
+        <a href="/exhibitions/245-john-riddy-winter-landscape/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/245/jr-407-london-trafalgar-square-2026.-frith-street-mail-jpeg.jpg" alt="John Riddy Winter Landscape"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>John Riddy</h2>
+                                            <span class="subtitle">Winter Landscape</span>
+                                    <span class="date">30 Apr - 25 Jun 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to present Winter Landscape, an exhibition of new photographs of London by John Riddy. Riddy&rsquo;s images are recognised for their attention to the atmosphere and...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="1050" data-height="576">
+                        
+        <a href="/exhibitions/246-daphne-wright-moving-image-programme/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/246/thumb.jpg" alt="Daphne Wright Moving Image Programme"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Daphne Wright</h2>
+                                            <span class="subtitle">Moving Image Programme</span>
+                                    <span class="date">30 Mar - 19 Apr 2026</span>
+                                            
+                                            <span class="location">Online Exhibition</span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="1154" data-height="876">
+                        
+        <a href="/exhibitions/242-daphne-wright-expectations/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/242/dw_list.jpg" alt="Daphne Wright: Expectations"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Daphne Wright: <i>Expectations</i></h2>
+                                    <span class="date">19 Feb - 18 Apr 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new works by Daphne Wright, it follows the artist&rsquo;s recent major presentation at the Ashmolean Museum, Oxford. Wright is known...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="4132" data-height="2952">
+                        
+        <a href="/exhibitions/241-juan-usle-en-la-pared-del-mar/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/241/ju_fsg_m_5-homepage.jpg" alt="Juan Uslé: En la pared del mar"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Juan Uslé: <i>En la pared del mar</i></h2>
+                                    <span class="date">5 Dec 2025 - 7 Feb 2026</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to present an exhibition of new paintings by Juan Usl&eacute;. It follows the artist&rsquo;s major solo exhibition at Museo Nacional Centro de Arte Reina Sofia,...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2543" data-height="1728">
+                        
+        <a href="/exhibitions/237-frith-street-gallery-le-moliere-2025-pop-up-project/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/237/fsglm.jpg" alt="Frith Street Gallery Le Molière | 2025 Pop-up project"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Frith Street Gallery Le Molière | 2025</h2>
+                                            <span class="subtitle">Pop-up project</span>
+                                    <span class="date">10 - 26 Oct 2025</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is coming to Paris this autumn. To coincide with the art fair weeks in London and the French capital, we are delighted to announce a special pop-up...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2543" data-height="1728">
+                        
+        <a href="/exhibitions/238-tacita-dean/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/238/td-ex-for-home-page.jpg" alt="Tacita Dean"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Tacita Dean</h2>
+                                    <span class="date">19 Sep - 22 Nov 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Golden Square Black, Grey, Green and White and If I were in the Adlon Soho Square Because my secret is my duty Tacita Dean, Mathew Hale, Boris and Vita Mikhailov...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="1656" data-height="1244">
+                        
+        <a href="/exhibitions/236-sea-soil-stone-a-summer-show/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/236/summer-show-homepage-w-td.jpg" alt="Sea, Soil, Stone: A Summer Show"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Sea, Soil, Stone: A Summer Show</h2>
+                                    <span class="date">12 Jul - 8 Aug 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to present Sea, Soil, Stone , a summer exhibition of gallery artists. Spanning the past two decades, the works explore our symbiotic relationship with the...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3063" data-height="2040">
+                        
+        <a href="/exhibitions/235-cornelia-parker-history-painting/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/235/cornelia-parker-website-08-m.jpg" alt="Cornelia Parker History Painting"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Cornelia Parker</h2>
+                                            <span class="subtitle">History Painting</span>
+                                    <span class="date">16 May - 5 Jul 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new works by Cornelia Parker. For this show Parker has created a series of paintings: seemingly abstract oil-on-canvas works inspired...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2000" data-height="1500">
+                        
+        <a href="/exhibitions/234-fiona-banner-aka-the-vanity-press/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/234/fiona-banner-installation-18-2000px-.jpg" alt="Fiona Banner aka The Vanity Press"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Fiona Banner aka The Vanity Press</h2>
+                                    <span class="date">21 Mar - 3 May 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce a new exhibition of works by Fiona Banner aka The Vanity Press. In this show the artist continues to explore language, conflict and...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3508" data-height="2480">
+                        
+        <a href="/exhibitions/233-massimo-bartolini-sparse-steps/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/233/mb-installation-edit-2-homepage-.jpg" alt="Massimo Bartolini: Sparse steps"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Massimo Bartolini: <i>Sparse steps</i></h2>
+                                    <span class="date">1 Feb - 8 Mar 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new work by Massimo Bartolini. Bartolini&rsquo;s practice is defined by a diverse range of artistic languages and materials ranging from...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="2000" data-height="1500">
+                        
+        <a href="/exhibitions/232-daniel-silver-uncanny-valley/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/232/daniel-silver-uncanny-valley-07-2000px-.jpg" alt="Daniel Silver Uncanny Valley"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Daniel Silver</h2>
+                                            <span class="subtitle">Uncanny Valley</span>
+                                    <span class="date">29 Nov 2024 - 18 Jan 2025</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of works by Daniel Silver. Silver&rsquo;s practice is influenced by the art of the ancient world, modernism, Sigmund Freud and psychoanalytic...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3300" data-height="2475">
+                        
+        <a href="/exhibitions/231-marlene-dumas-mourning-marsyas/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/231/marlene-dumas-installation-5-m.jpg" alt="Marlene Dumas Mourning Marsyas"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Marlene Dumas</h2>
+                                            <span class="subtitle">Mourning Marsyas</span>
+                                    <span class="date">20 Sep - 16 Nov 2024</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new works by Marlene Dumas. The paintings in this show are created through a mixture of chance and intention, mostly...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="1772" data-height="997">
+                        
+        <a href="/exhibitions/230-moving-image-programme-alliances/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/230/a_planet_turns_uncompressed-0-17-57-06-s.jpg" alt="Moving Image Programme Alliances"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Moving Image Programme</h2>
+                                            <span class="subtitle">Alliances</span>
+                                    <span class="date">22 Jul - 15 Sep 2024</span>
+                                            
+                                            <span class="location">Online Exhibition</span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3134" data-height="2039">
+                        
+        <a href="/exhibitions/229-gallery-summer-show-alliances/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/229/frith-street-gallery-exhibition-1-m-banner.jpg" alt="Gallery Summer Show Alliances"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Gallery Summer Show</h2>
+                                            <span class="subtitle">Alliances</span>
+                                    <span class="date">5 Jul - 9 Aug 2024</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to present Alliances , a summer exhibition. This eclectic and playful show presents pairs of works by different gallery artists. The connection between the two...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3300" data-height="2475">
+                        
+        <a href="/exhibitions/227-dayanita-singh/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/227/dayanita-singh-installation-16-m.jpg" alt="Dayanita Singh"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Dayanita Singh</h2>
+                                    <span class="date">17 May - 29 Jun 2024</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new work by Dayanita Singh. Over the last 40 years Singh has created pioneering works that cross genres, explore the...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="3000" data-height="1688">
+                        
+        <a href="/exhibitions/228-raqs-media-collective-moving-image-programme/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/228/04_deep_breath_-0-21-46-20-.jpg" alt="Raqs Media Collective Moving Image Programme"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Raqs Media Collective</h2>
+                                            <span class="subtitle">Moving Image Programme</span>
+                                    <span class="date">28 Mar - 14 Apr 2024</span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li   data-width="4400" data-height="3300">
+                        
+        <a href="/exhibitions/226-raqs-media-collective-come-undone/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/226/rmc-press-image-main.jpg" alt="Raqs Media Collective Come Undone"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Raqs Media Collective</h2>
+                                            <span class="subtitle">Come Undone</span>
+                                    <span class="date">22 Mar - 4 May 2024</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Raqs Media Collective have been variously described as artists, curators, philosophical agents provocateurs, and catalysts of cultural processes. For their fifth exhibition at Frith Street Gallery, they present works centred...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+                
+                    
+                    
+                    <li  class="last"  data-width="10000" data-height="7501">
+                        
+        <a href="/exhibitions/224-anna-barriball-new-drawings/" >
+                                <span class="image"><span>
+                                        
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/224/ab-199-23-web-banner.jpg" alt="Anna Barriball New Drawings"  />
+                                </span></span>
+
+                                <div class="content">
+                                        <h2>Anna Barriball</h2>
+                                            <span class="subtitle">New Drawings</span>
+                                    <span class="date">2 Feb - 14 Mar 2024</span>
+                                            
+                                            <span class="location">Golden Square</span>
+                                        <span class="description prose">
+                                                    Frith Street Gallery is delighted to announce an exhibition of new works by Anna Barriball. Light, memory and the history of photography are some of the abiding themes in this...
+                                        </span>
+                                        <span class="link"><span class="read_more">Read more</span></span>
+                                </div>
+                        </a>
+
+                    </li>
+            </ul>
+    </div>
+
+    
+</div>
+                    
+                        <div class="link exhibition_archive_label"><a href="/exhibitions/archive/">View all past exhibitions</a></div>
+    
+                </div>
+        
+
+
+
+</div>
+
+
+    </div>
+
+            <!--contentend-->
+        </div>
+
+        
+
+
+            
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="footer" role="contentinfo" class=" advanced_footer">
+    <div class="inner">
+            
+        <div id="mailinglist_form">
+            <div class="mailinglist_form_wrapper">
+                <h2>Sign up to our mailing list</h2>
+                
+    
+    
+    
+
+<div id="artlogic_mailinglist_signup_form_wrapper">
+    <div class="form">
+
+        <form id="artlogic_mailinglist_signup_form" class="mailing_list_form clearwithin  " method="post" onsubmit="return false;" data-field-error="Please fill in all required fields." data-field-thanks-heading="Thank you" data-field-error-heading="Sorry" data-field-thanks-content="You have been added to our mailing list" data-field-exists-heading="Thank you" data-field-exists-content="You are already on our mailing list">
+        
+            <div id="error" class="error" tabindex="-1"></div>
+
+                
+                <div id="firstname_row" class="form_row">
+                                <label for="ml_firstname">First name *</label>
+                                <input name="firstname" class="inputField" id="ml_firstname" type="text" required autocomplete="given-name" value="" />
+                </div>
+                
+                <div id="lastname_row" class="form_row">
+                                <label for="ml_lastname">Last name *</label>
+                                <input name="lastname" class="inputField" id="ml_lastname" type="text" required autocomplete="family-name" value="" />
+                </div>
+                
+                <div id="email_row" class="form_row">
+                                <label for="ml_email">Email *</label>
+                                <input name="email" class="inputField" id="ml_email" type="email" required autocomplete="email" value="" />
+                </div>
+
+                <input type="hidden" name="interests" value="">
+                <input type="hidden" name="phone" value="">
+                <input type="hidden" name="organisation" value="">
+                <input type="hidden" name="categories" value="">
+                <input type="hidden" name="position" value="">
+
+
+            <input type="hidden" name="tmp_send" value="1" />
+            <input type="hidden" name="lang" value="" />
+            <input type="hidden" name="originating_page" value="/exhibitions/" />
+            <input type="hidden" name="encoded_data" value="eyJub3RfaGlkZGVuIjogZmFsc2V9" />
+
+
+            <div id="email_warning">
+                <div id="email_warning_inner"></div>
+            </div>
+            
+
+            <div id="mailing_submit_button" class="rowElem">
+                <div class="button"><a class="submit_button" role="button" href="#">Submit</a></div>
+            </div>
+        </form>
+
+            
+
+
+
+<div id="privacy_policy_form_msg" class="privacy_policy_form_msg prose">
+    <div class="asterisk">
+        <p>
+            * denotes required fields
+        </p>
+    </div>
+        <p>
+            We will process the personal data you have supplied to communicate with you in accordance with our <a href="/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. 
+            You can unsubscribe or change your preferences at any time by clicking the link in our emails.
+        </p>
+</div>
+    </div>
+</div>
+
+
+
+            </div>
+        </div>
+
+                <div class="advanced_footer_item clearwithin">
+                    
+        <div id="contact_info">
+                <h4>Contact<span style="color: #010101; font-size: 1.45rem;"><br></span></h4>
+<p class="p1"><span class="s1">Email:<span class="Apple-converted-space">&nbsp;</span></span></p>
+<p class="p1"><a href="mailto:info@frithstreetgallery.com"><span class="s1">info@frithstreetgallery.com</span></a></p>
+<p class="p1"><span class="s1">Phone:<span class="Apple-converted-space">&nbsp;</span></span></p>
+<p class="p1"><a href="tel:+44%20(0)20%207494%201550"><span class="s1">+44 (0)20 7494 1550</span></a></p>
+        </div>
+
+                </div>
+            
+            <div class="advanced_footer_item advanced_footer_item_1">
+                <h4>Golden Square&nbsp;</h4>
+<p class="p1"><span class="s1">17&ndash;18 Golden Square</span></p>
+<p class="p1"><span class="s1">London</span></p>
+<p class="p1"><span class="s1">W1F 9JJ</span></p>
+            </div>
+            <div class="advanced_footer_item advanced_footer_item_2">
+                <h4>Soho Square</h4>
+<p>60 Frith Street</p>
+<p>London</p>
+<p>W1D 3JJ</p>
+<h6 class="cms_gray">&nbsp;</h6>
+            </div>
+            <div class="advanced_footer_item advanced_footer_item_3">
+                <h4>Gallery Hours</h4>
+<p class="p1"><span class="s1">Tuesday&ndash;Friday:&nbsp;</span><span class="s1">11&ndash;6</span></p>
+<p class="p1"><span class="s1">Saturday: 11&ndash;5 (during exhibitions)</span></p>
+<p class="p1"><span class="s1">Sunday&ndash;Monday: Closed</span></p>
+            </div>
+
+            
+    
+        <div id="social_links" class="clearwithin">
+            <div id="facebook" class="social_links_item"><a href="https://www.facebook.com/frithstreetgallery/" class=""><span class="social_media_icon facebook"></span>Facebook<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="instagram" class="social_links_item"><a href="https://www.instagram.com/frithstreetgallery" class=""><span class="social_media_icon instagram"></span>Instagram<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="linkedin" class="social_links_item"><a href="https://www.linkedin.com/company/frith-street-gallery-limited" class=""><span class="social_media_icon linkedin"></span>LinkedIn<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="mailinglist" class="social_links_item"><a href="/mailing-list/" class=""><span class="social_media_icon mailinglist"></span>Join the mailing list</a></div>
+        </div>
+
+            <div class="clear"></div>
+            
+    <div class="copyright">
+            
+    <div class="small-links-container">
+            <div class="privacy-policy"><a href="/privacy-policy/">Privacy Policy</a></div>
+            <div class="cookie-policy"><a href="/cookie-policy/">Cookie Policy</a></div>
+            <div class="cookie_notification_preferences"><a href="javascript:void(0)" role="button" class="link-no-ajax">Manage cookies</a></div>
+            <div id="terms_conditions_url"><a href="/terms-and-conditions">Terms & Conditions</a></div>
+
+
+
+    </div>
+
+        <div id="copyright" class="noprint">
+            <div class="copyright-text">
+                    Copyright &copy; 2026 Frith Street Gallery
+            </div>
+                
+        
+        <div id="artlogic" class="noprint"><a href="https://artlogic.net/" target="_blank" rel="noopener noreferrer">
+                Site by Artlogic
+        </a></div>
+
+        </div>
+        
+    </div>
+
+        <div class="clear"></div>
+    </div>
+</div>
+        <div class="clear"></div>
+
+            <div id="cookie_notification" role="region" aria-label="Cookie banner" data-mode="consent" data-cookie-notification-settings="">
+    <div class="inner">
+        <div id="cookie_notification_message" class="prose">
+                <p><span>This website places cookies on your computer to improve your experience. By continuing to browse the site, you are agreeing to our use of cookies. For more details, see our </span><a href="https://www.frithstreetgallery.com/legal/cookies" class="a">cookie policy</a><span>.</span></p>
+<p> </p>
+<p>We partner with Microsoft Clarity and Microsoft Advertising to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replay to improve and market our products/services. Website usage data is captured using first and third-party cookies and other tracking technologies to determine the popularity of products/services and online activity. Additionally, we use this information for site optimization, fraud/security purposes, and advertising. For more information about how Microsoft collects and uses your data, visit the <a href="https://www.microsoft.com/privacy/privacystatement" data-linktype="external">Microsoft Privacy Statement</a>.</p>
+        </div>
+        <div id="cookie_notification_preferences" class="link"><a href="javascript:;" role="button">Manage cookies</a></div>
+        <div id="cookie_notification_reject" class="button"><a href="javascript:;" role="button">Reject non essential</a></div>
+        <div id="cookie_notification_accept" class="button"><a href="javascript:;" role="button">Accept all</a></div>
+
+    </div>
+</div>
+    <div id="manage_cookie_preferences_popup_container">
+        <div id="manage_cookie_preferences_popup_overlay"></div>
+        <div id="manage_cookie_preferences_popup_inner">
+            <div id="manage_cookie_preferences_popup_box" role="dialog" aria-modal="true" aria-label="Cookie preferences">
+                <div id="manage_cookie_preferences_close_popup_link" class="close">
+                    <a href="javascript:;" role="button" aria-label="close">
+                        <svg width="20px" height="20px" viewBox="0 0 488 488" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="close" fill="#5D5D5D" fill-rule="nonzero">
+                                    <polygon id="Path" points="488 468 468 488 244 264 20 488 0 468 224 244 0 20 20 0 244 224 468 0 488 20 264 244"></polygon>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <h2>Cookie preferences</h2>
+                    <p>Check the boxes for the cookie categories you allow our site to use</p>
+                
+                <div id="manage_cookie_preferences_form_wrapper">
+                    <div class="form form_style_simplified">
+
+                        <form id="cookie_preferences_form">
+                            <fieldset>
+                                <legend class="visually-hidden">Cookie options</legend>
+                                <div>
+                                    <label><input type="checkbox" name="essential" disabled checked value="1"> Strictly necessary</label>
+                                    <div class="note">Required for the website to function and cannot be disabled.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="functionality"  value="1"> Preferences and functionality</label>
+                                    <div class="note">Improve your experience on the website by storing choices you make about how it should function.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="statistics"  value="1"> Statistics</label>
+                                    <div class="note">Allow us to collect anonymous usage data in order to improve the experience on our website.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="marketing"  value="1"> Marketing</label>
+                                    <div class="note">Allow us to identify our visitors so that we can offer personalised, targeted marketing.</div>
+                                </div>
+                            </fieldset>
+                            
+                            <div class="button">
+                                <a href="javascript:;" id="cookie_preferences_form_submit" role="button">Save preferences</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+            
+
+
+
+
+
+
+    </div>
+
+        </div>
+
+
+
+
+            
+            
+                
+
+
+
+
+
+            
+            
+        <!-- sentry-verification-string -->
+</body>
+    </html>
+
+

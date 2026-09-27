@@ -1,0 +1,35 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-frith-street\", &cards)"
+---
+[
+  {
+    "event": {
+      "address": "17-18 Golden Square, London W1F 9JJ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "colin-self-unseen|2026-09-18|frith-street",
+      "description": "Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin...",
+      "ends_at": "2026-11-07T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/249/colin-self-installation-12-2000px-.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-17T23:00:00Z",
+      "tags": [],
+      "title": "Colin Self: Unseen",
+      "url": "https://www.frithstreetgallery.com/exhibitions/249-colin-self-unseen/",
+      "venue_name": "Frith Street Gallery"
+    },
+    "id": "www.frithstreetgallery.com:249"
+  },
+  {
+    "event": null,
+    "id": "www.frithstreetgallery.com:254"
+  }
+]

@@ -1,0 +1,96 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-ropac\", &cards)"
+---
+[
+  {
+    "event": null,
+    "id": "ropac.net:800"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:801"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:802"
+  },
+  {
+    "event": {
+      "address": "37 Dover Street, London W1S 4NJ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "like-music-in-blood|2026-09-03|thaddaeus-ropac-ely-house",
+      "description": null,
+      "ends_at": "2026-09-30T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,h_816,c_limit,f_auto,fl_lossy,q_auto:good/ws-ropac/usr/images/exhibitions/main_image_override/items/82/8263204aa95d4a1d9ec169d81204d6fd/tr_02_09_2026_03.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "Like Music in the Blood",
+      "url": "https://ropac.net/exhibitions/803-likemusic-in-theblood/",
+      "venue_name": "Thaddaeus Ropac, Ely House"
+    },
+    "id": "ropac.net:803"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:799"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:779"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:814"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:805"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:807"
+  },
+  {
+    "event": {
+      "address": "37 Dover Street, London W1S 4NJ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "georg-baselitz-heroes-1965-66|2026-10-13|thaddaeus-ropac-ely-house",
+      "description": null,
+      "ends_at": "2026-12-18T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,h_816,c_limit,f_auto,fl_lossy,q_auto:good/ws-ropac/usr/images/exhibitions/main_image_override/items/67/67fc20ae8792414cbfd0b0d5cd59cfd4/crop.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-12T23:00:00Z",
+      "tags": [],
+      "title": "Georg Baselitz: The Heroes 1965–66",
+      "url": "https://ropac.net/exhibitions/806-georg-baselitz-the-heroes-196566/",
+      "venue_name": "Thaddaeus Ropac, Ely House"
+    },
+    "id": "ropac.net:806"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:808"
+  },
+  {
+    "event": null,
+    "id": "ropac.net:804"
+  }
+]

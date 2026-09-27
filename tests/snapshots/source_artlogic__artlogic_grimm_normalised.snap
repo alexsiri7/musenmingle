@@ -1,0 +1,109 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-grimm\", &cards)"
+---
+[
+  {
+    "event": {
+      "address": "43a Duke Street, St James's, London SW1Y 6DD",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "jonathan-wateridge-some-distance-apart|2026-09-03|grimm",
+      "description": null,
+      "ends_at": "2026-10-09T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-grimm/usr/images/exhibitions/main_image_override/368/installation-view_some-distance-apart_grimm-london-uk-_3_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "Jonathan Wateridge: Some Distance Apart",
+      "url": "https://grimmgallery.com/exhibitions/368-jonathan-wateridge-some-distance-apart/",
+      "venue_name": "GRIMM"
+    },
+    "id": "grimmgallery.com:368"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:374"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:376"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:377"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:378"
+  },
+  {
+    "event": {
+      "address": "43a Duke Street, St James's, London SW1Y 6DD",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "rosalind-nashashibi-gaza-apollo|2026-10-13|grimm",
+      "description": null,
+      "ends_at": "2026-11-21T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-grimm/usr/images/exhibitions/main_image_override/375/rosalind-nashashibi_not-yet-titled-2026_rn26015.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-12T23:00:00Z",
+      "tags": [],
+      "title": "Rosalind Nashashibi: Gaza Apollo",
+      "url": "https://grimmgallery.com/exhibitions/375-rosalind-nashashibi-gaza-apollo/",
+      "venue_name": "GRIMM"
+    },
+    "id": "grimmgallery.com:375"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:382"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:383"
+  },
+  {
+    "event": null,
+    "id": "grimmgallery.com:381"
+  },
+  {
+    "event": {
+      "address": "43a Duke Street, St James's, London SW1Y 6DD",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "angela-heisch|2026-11-26|grimm",
+      "description": null,
+      "ends_at": "2027-01-09T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-grimm/usr/images/exhibitions/main_image_override/379/angela-heisch_the-dreamer-2025_ahe25014.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T00:00:00Z",
+      "tags": [],
+      "title": "Angela Heisch",
+      "url": "https://grimmgallery.com/exhibitions/379-angela-heisch/",
+      "venue_name": "GRIMM"
+    },
+    "id": "grimmgallery.com:379"
+  }
+]

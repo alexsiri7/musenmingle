@@ -133,6 +133,49 @@ not code: `events.sources.platform` names the shared implementation
    An unknown field or category makes the row a recorded skip
    (`invalid config`), not a crash.
 
+## Adding an Artlogic gallery
+
+Many London commercial galleries run the Artlogic CMS (the page carries
+`<meta name="generator" content="Artlogic CMS - https://artlogic.net">` and
+images on `static-assets.artlogic.net`). They share `src/sources/artlogic.rs`
+(`platform = 'artlogic'`), so a new gallery is a seed row:
+
+1. Fetch `robots.txt` and `/exhibitions/` with the bot UA and follow the
+   redirect: seed `base_url`/`domain` with the **post-redirect host**, and
+   set `listing_paths` to the page the listing actually lives on
+   (`/exhibitions/current-forthcoming/`, `/exhibitions/location/1/`, …). If
+   `/exhibitions/` lands on a single show, use
+   `["/exhibitions/current/", "/exhibitions/forthcoming/"]`.
+2. Check the listing has `#exhibitions-grid-current` / `-forthcoming` grids
+   (or classic `section[data-label="Current"]`), and that its cards carry a
+   date range the parser reads (unit tests in `artlogic.rs` list the
+   formats).
+3. Look at the cards' location labels. For a gallery with spaces outside
+   London (or several in London), add `locations`: each `match` is a
+   case-insensitive substring of the label (`"London"`, `"Cork Street"`),
+   optionally with its own `name`/`address`; cards matching none are
+   skipped. `unlabelled_at_venue: true` places cards with no label at
+   `venue`. Leave out galleries whose current list is mostly off-site shows
+   without labels to filter on.
+4. Find the address (footer or `/contact/`) for `venue`, and read the terms
+   (`/terms-and-conditions/`, often only terms of sale) for the content
+   policy.
+5. Add the row in a new migration (see
+   `20260927952001_seed_artlogic_galleries.sql`) and bump the row count in
+   `tests/source_artlogic.rs`.
+
+   | field | default | meaning |
+   |---|---|---|
+   | `listing_paths` | `["/exhibitions/"]` | listing pages to read |
+   | `venue` | required | `{"name", "address"}` of the London space |
+   | `locations` | `[]` | `[{"match", "name"?, "address"?}]` London location labels |
+   | `unlabelled_at_venue` | `false` | with `locations`: unlabelled cards go to `venue` |
+   | `skip_match` | `[]` | extra phrases marking a card as not at the gallery |
+
+Images all come from `static-assets.artlogic.net`, whose robots.txt asks for
+`Crawl-delay: 10`; the thumbnailer honours it for all galleries together, so
+with its per-host cap new galleries' thumbnails fill in over a few runs.
+
 ## When a site can't be used
 
 If the investigation shows a site must not or cannot be scraped — robots.txt

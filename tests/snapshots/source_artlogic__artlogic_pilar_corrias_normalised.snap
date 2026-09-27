@@ -1,0 +1,81 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-pilar-corrias\", &cards)"
+---
+[
+  {
+    "event": {
+      "address": "2 Savile Row, London W1S 3PA",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "soft-spot-second-iteration|2026-09-03|pilar-corrias",
+      "description": "Pilar Corrias is pleased to present Soft Spot, a thematic exhibition unfolding across two consecutive iterations at the gallery’s Savile Row space.",
+      "ends_at": "2026-10-02T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_fill,f_auto,fl_lossy,q_auto:best,dpr_2.0/ws-pilarcorrias/usr/images/exhibitions/main_image_override/items/14/14fe8991120c44b5ad999f37993c4b70/moye-2025014-image-1-.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-02T23:00:00Z",
+      "tags": [],
+      "title": "Soft Spot – the second iteration",
+      "url": "https://www.pilarcorrias.com/exhibitions/534-soft-spot-the-second-iteration/",
+      "venue_name": "Pilar Corrias"
+    },
+    "id": "www.pilarcorrias.com:534"
+  },
+  {
+    "event": {
+      "address": "51 Conduit Street, London W1S 2YT",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "mary-ramsden-feeling-of-what-happens|2026-09-10|pilar-corrias",
+      "description": "Pilar Corrias presents The Feeling of What Happens, Mary Ramsden's seventh solo exhibition with the gallery.",
+      "ends_at": "2026-11-07T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_800,h_800,c_fill,f_auto,fl_lossy,q_auto:best,dpr_2.0/ws-pilarcorrias/usr/images/exhibitions/main_image_override/items/78/7825a5b9f7594b03a4faf69e0bc02a9f/rams-2026012-image-1-.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-09T23:00:00Z",
+      "tags": [],
+      "title": "Mary Ramsden: The Feeling of What Happens",
+      "url": "https://www.pilarcorrias.com/exhibitions/533-mary-ramsden-the-feeling-of-what-happens/",
+      "venue_name": "Pilar Corrias"
+    },
+    "id": "www.pilarcorrias.com:533"
+  },
+  {
+    "event": {
+      "address": "51 Conduit Street, London W1S 2YT",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "rirkrit-tiravanija|2026-10-09|pilar-corrias",
+      "description": null,
+      "ends_at": "2026-11-14T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1600,h_1600,c_limit,f_auto,fl_lossy,q_auto:best,dpr_2.0/ws-pilarcorrias/usr/images/exhibitions/main_image_override/items/ac/ac80cca5391c4bf3b21d7303f8869a07/installation-view-of-untitled-2019-the-form-of-the-flower-is-unknown-to-the-seed-at-the-ica-london-2019.-photo-mark-blower_6-3-.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T23:00:00Z",
+      "tags": [],
+      "title": "Rirkrit Tiravanija",
+      "url": "https://www.pilarcorrias.com/exhibitions/538-rirkrit-tiravanija-situational-awareness/",
+      "venue_name": "Pilar Corrias"
+    },
+    "id": "www.pilarcorrias.com:538"
+  }
+]

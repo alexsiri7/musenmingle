@@ -1,0 +1,31 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(\"artlogic-jaggedart\", &[card])"
+---
+[
+  {
+    "event": {
+      "address": "28a Devonshire Street, London W1G 6PS",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "entwined|2026-09-10|jaggedart",
+      "description": "Strands of words and fibre woven together Defying convention with materials -organic, fibrous, even pages of books- Justine Randall and Thurle Wright follow traditional weaving patterns and techniques alongside layering, knotting and intertwining to create powerful tapestries. From her formation in textiles, Justine Randall’s work celebrates the environment and highlights...",
+      "ends_at": "2026-10-01T23:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,h_630,c_fill,f_auto,fl_lossy,q_auto/ws-artlogicwebsite1636/usr/images/exhibitions/images_and_objects/258/img_9863.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-09T23:00:00Z",
+      "tags": [],
+      "title": "Entwined",
+      "url": "https://www.jaggedart.com/exhibitions/258-entwined/",
+      "venue_name": "jaggedart"
+    },
+    "id": "www.jaggedart.com:258"
+  }
+]
