@@ -196,3 +196,56 @@ test("placeEvents: long-running events once in the strip, markers on their first
   assert.deepEqual(w.ongoing, [1, 2]);
   assert.deepEqual(w.days, { "2026-10-25": [[2, "last"]] });
 });
+
+// ------------------------------------------------------------ hand-offs (#76)
+
+test("isApple is conservative", () => {
+  assert.equal(app.isApple({ platform: "iPhone" }), true);
+  const SAFARI = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15";
+  const CHROME = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36";
+  assert.equal(app.isApple({ platform: "MacIntel", userAgent: SAFARI }), true);
+  assert.equal(app.isApple({ platform: "MacIntel", userAgent: CHROME }), false);
+  assert.equal(app.isApple({ platform: "MacIntel", userAgent: CHROME, maxTouchPoints: 5 }), true);
+  assert.equal(app.isApple({ platform: "iPhone", userAgent: "CriOS" }), true);
+  assert.equal(app.isApple({ userAgentData: { platform: "macOS" }, platform: "", userAgent: CHROME }), false);
+  assert.equal(app.isApple({ platform: "Linux armv8l" }), false);
+  assert.equal(app.isApple({ userAgentData: { platform: "Android" }, platform: "Linux" }), false);
+  assert.equal(app.isApple({ platform: "Win32" }), false);
+  assert.equal(app.isApple(undefined), false);
+});
+
+test("shareMode prefers the native sheet, then the clipboard, else none", () => {
+  assert.equal(app.shareMode({ share: () => Promise.resolve(), clipboard: { writeText() {} } }), "share");
+  assert.equal(app.shareMode({ clipboard: { writeText() {} } }), "copy");
+  assert.equal(app.shareMode({}), null);
+});
+
+const DATA = { title: "Concrete and Clay", text: "Barbican · Sat 3 Oct", url: "https://musenmingle.interstellarai.net/events/x" };
+
+test("shareEvent uses navigator.share with the event data", async () => {
+  let got = null;
+  const nav = { share: (d) => { got = d; return Promise.resolve(); } };
+  assert.equal(await app.shareEvent(nav, DATA), "shared");
+  assert.deepEqual(got, DATA);
+});
+
+test("shareEvent: a dismissed sheet is not an error; a failing one copies", async () => {
+  const abort = Object.assign(new Error("x"), { name: "AbortError" });
+  assert.equal(await app.shareEvent({ share: () => Promise.reject(abort) }, DATA), "cancelled");
+  let copied = null;
+  const nav = {
+    share: () => Promise.reject(new Error("NotAllowedError")),
+    clipboard: { writeText: (u) => { copied = u; return Promise.resolve(); } },
+  };
+  assert.equal(await app.shareEvent(nav, DATA), "copied");
+  assert.equal(copied, DATA.url);
+});
+
+test("shareEvent falls back to copying the link, then to failing", async () => {
+  let copied = null;
+  const nav = { clipboard: { writeText: (u) => { copied = u; return Promise.resolve(); } } };
+  assert.equal(await app.shareEvent(nav, DATA), "copied");
+  assert.equal(copied, DATA.url);
+  assert.equal(await app.shareEvent({ clipboard: { writeText: () => Promise.reject(new Error("denied")) } }, DATA), "failed");
+  assert.equal(await app.shareEvent({}, DATA), "failed");
+});

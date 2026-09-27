@@ -354,7 +354,80 @@
     return out;
   }
 
+  // ------------------------------------------------------------ hand-offs
+
+  /**
+   * Apple device whose maps links should open Apple Maps: iPhone/iPad
+   * (any browser: they hand off to the Maps app), or Safari on a Mac.
+   * Conservative: userAgentData's platform when present, else
+   * navigator.platform ("iPhone", "iPad", "MacIntel"; iPadOS reports
+   * MacIntel with touch points).
+   */
+  function isApple(nav) {
+    if (!nav) return false;
+    var p = (nav.userAgentData && nav.userAgentData.platform) || nav.platform || "";
+    if (/^(iPhone|iPad|iPod)/.test(p)) return true;
+    if (!/^(Mac|macOS)/.test(p)) return false;
+    if (nav.maxTouchPoints > 1) return true; // iPadOS
+    var ua = nav.userAgent || "";
+    return /Safari\//.test(ua) && !/Chrome|Chromium|CriOS|Edg|Firefox|FxiOS|OPR/.test(ua);
+  }
+
+  /** "share" (native sheet), "copy" (clipboard) or null (keep hidden). */
+  function shareMode(nav) {
+    if (!nav) return null;
+    if (typeof nav.share === "function") return "share";
+    if (nav.clipboard && typeof nav.clipboard.writeText === "function") return "copy";
+    return null;
+  }
+
+  /**
+   * Share `data` ({title, text, url}) with the native sheet, else copy the
+   * link. Resolves to "shared", "copied", "cancelled" or "failed".
+   */
+  function shareEvent(nav, data) {
+    var mode = shareMode(nav);
+    if (mode === "share") {
+      return Promise.resolve()
+        .then(function () {
+          return nav.share(data);
+        })
+        .then(
+          function () {
+            return "shared";
+          },
+          function (err) {
+            if (err && err.name === "AbortError") return "cancelled";
+            return copyLink(nav, data.url);
+          }
+        );
+    }
+    if (mode === "copy") return copyLink(nav, data.url);
+    return Promise.resolve("failed");
+  }
+
+  function copyLink(nav, url) {
+    if (!nav.clipboard || typeof nav.clipboard.writeText !== "function") {
+      return Promise.resolve("failed");
+    }
+    return Promise.resolve()
+      .then(function () {
+        return nav.clipboard.writeText(url);
+      })
+      .then(
+        function () {
+          return "copied";
+        },
+        function () {
+          return "failed";
+        }
+      );
+  }
+
   var api = {
+    isApple: isApple,
+    shareMode: shareMode,
+    shareEvent: shareEvent,
     STORAGE_KEY: STORAGE_KEY,
     londonDate: londonDate,
     placeEvents: placeEvents,
@@ -408,6 +481,48 @@
     }
     return items;
   }
+
+  var nav = root.navigator;
+
+  /** Show share buttons the browser can serve; point maps links at Apple Maps on Apple devices. */
+  function setUpHandoffs() {
+    var mode = shareMode(nav);
+    var shares = doc.querySelectorAll("button.share[data-share-url]");
+    for (var i = 0; i < shares.length; i++) shares[i].hidden = !mode;
+    if (isApple(nav)) {
+      var links = doc.querySelectorAll("a[data-apple-href]");
+      for (var j = 0; j < links.length; j++) {
+        var u = safeLink(links[j].getAttribute("data-apple-href"));
+        if (u) links[j].setAttribute("href", u);
+      }
+    }
+  }
+
+  var toastTimer = null;
+  function toast(text) {
+    var t = doc.getElementById("toast");
+    if (!t) return say(text);
+    t.textContent = text;
+    t.hidden = false;
+    say(text); // the always-present live region, so screen readers hear it
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      t.hidden = true;
+    }, 2500);
+  }
+
+  doc.addEventListener("click", function (ev) {
+    var s = ev.target && ev.target.closest ? ev.target.closest("button.share[data-share-url]") : null;
+    if (!s) return;
+    shareEvent(nav, {
+      title: s.getAttribute("data-share-title"),
+      text: s.getAttribute("data-share-text"),
+      url: s.getAttribute("data-share-url"),
+    }).then(function (result) {
+      if (result === "copied") toast("Link copied");
+      else if (result === "failed") toast("Couldn't share: copy the address from the Details page.");
+    });
+  });
 
   doc.addEventListener("click", function (ev) {
     var b = ev.target && ev.target.closest ? ev.target.closest("button.save[data-save-id]") : null;
@@ -499,6 +614,10 @@
     var sources = slot(node, "sources");
     if (event) {
       details.setAttribute("href", href);
+      var ics = slot(node, "ics");
+      ics.setAttribute("href", href + ".ics");
+      slot(node, "ics-title").textContent = "Add to calendar: " + e.title;
+      ics.hidden = false;
       // The primary call to action is the source's own page; venue links
       // keep the referrer (rel="noopener", no "noreferrer").
       var primary = null;
@@ -739,6 +858,7 @@
   }
 
   function start() {
+    setUpHandoffs();
     refresh();
     renderSaved();
     renderSavedCalendar();
