@@ -189,7 +189,7 @@ label, legend {
   font-size: 0.875rem; letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--ink);
 }
 input, select, textarea, button { font: inherit; color: inherit; letter-spacing: inherit; }
-input[type=date], input[type=url], input[type=text], input[type=email], select, textarea {
+input[type=date], input[type=url], input[type=text], input[type=email], input[type=search], select, textarea {
   min-height: 2.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--line); border-radius: 0;
   background: var(--canvas); color: var(--ink); max-width: 100%; font-size: 0.875rem;
 }
@@ -213,6 +213,18 @@ input[type=checkbox]:focus-visible, input[type=radio]:focus-visible { outline: 2
 @media (max-width: 340px) {
   .filters .field:not(.check):not(.actions) { flex-basis: 100%; }
 }
+/* search box (issue #77): full width, hairline input + ink button */
+form.search { display: flex; flex-direction: column; gap: var(--xs); margin: 0 0 var(--xs); }
+.search-row { display: flex; gap: 0; max-width: 44rem; }
+.search-row input[type=search] {
+  flex: 1 1 auto; min-width: 0; font-size: 1rem; border-color: var(--ink); border-right: 0; -webkit-appearance: none; appearance: none;
+}
+.search-row input[type=search]:focus-visible { border-right: 0; }
+.search-row button { flex: none; }
+.empty p { margin: 0 0 var(--sm); }
+.empty .small { margin-top: var(--md); }
+.did-you-mean a { color: var(--cobalt); }
+.chips.relax { list-style: none; padding: 0; margin: var(--sm) 0 0; }
 .chips { margin: 0; display: flex; flex-wrap: wrap; gap: var(--xs); }
 .chip {
   display: inline-flex; align-items: center; gap: var(--sm); padding: 0.125rem 0.125rem 0.125rem 0.75rem;
