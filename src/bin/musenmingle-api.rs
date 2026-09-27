@@ -42,8 +42,9 @@ async fn main() -> anyhow::Result<()> {
     if redirect.is_active() {
         tracing::info!("redirecting legacy hosts to CANONICAL_HOST");
     }
-    let app = host_redirect::apply(api::router(pool, suggestions, settings), redirect)
-        .into_make_service_with_connect_info::<SocketAddr>();
+    let router = api::router_with_tiles(pool, suggestions, settings, Some(&config.tiles_path));
+    let app =
+        host_redirect::apply(router, redirect).into_make_service_with_connect_info::<SocketAddr>();
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())
         .await?;

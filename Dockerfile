@@ -14,7 +14,7 @@ COPY Cargo.toml Cargo.lock sqlx.toml ./
 COPY migrations ./migrations
 COPY .github/ISSUE_TEMPLATE/new-scraper.md ./.github/ISSUE_TEMPLATE/new-scraper.md
 COPY src ./src
-# Self-hosted fonts, embedded by src/web.rs (include_bytes!).
+# Self-hosted fonts and map assets, embedded by src/web.rs (include_bytes!).
 COPY static ./static
 # Tests reference fixtures via include_bytes! only under #[cfg(test)], so
 # they are not needed for a release build.
@@ -30,8 +30,10 @@ RUN apt-get update \
     && useradd --system --uid 10001 --no-create-home musenmingle
 COPY --from=build /app/target/release/musenmingle-api /usr/local/bin/musenmingle-api
 COPY --from=build /app/target/release/musenmingle-ingest /usr/local/bin/musenmingle-ingest
+# The London map tiles (docs/map.md), read from disk by the API.
+COPY static/tiles/london.pmtiles /usr/share/musenmingle/london.pmtiles
 USER musenmingle
-ENV RUST_LOG=info PORT=8080
+ENV RUST_LOG=info PORT=8080 TILES_PATH=/usr/share/musenmingle/london.pmtiles
 EXPOSE 8080
 # The API is the default; the Railway cron service overrides the start
 # command with `musenmingle-ingest`.

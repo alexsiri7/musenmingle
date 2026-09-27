@@ -54,6 +54,8 @@ Lists events. Every parameter is optional; they combine freely.
 | `q` | `whitechapel painting` | Full-text search (see below), at most 200 characters; blank = no search. Sorts by `relevance` unless `sort` says otherwise |
 | `from` | `2026-10-01` | Events still on at or after the start of this London date |
 | `to` | `2026-10-05` | Events starting on or before this London date (inclusive) |
+| `at` | `now` | `now`: events still on now or starting within `within_hours`; `today`: still on now or starting later today (London). Not combinable with `from`, `to` or `when` (see below). Used by `/map` |
+| `within_hours` | `3` | Window for `at=now`, 1–24 (default 3). Only with `at=now` |
 | `category` | `category=talk&category=workshop` | Any of the given categories: `exhibition`, `expo`, `community`, `talk`, `workshop`. Repeatable |
 | `free` | `true` | Free events only (`false` = no filter) |
 | `price_max` | `10` | Free events and events whose lowest price (`price_min`) is at most this many pounds. Events with an unknown price, or priced in another currency, are left out |
@@ -76,6 +78,15 @@ when `[starts_at, ends_at]` overlaps the window; an event without an end
 matches when `starts_at` is inside the window. Dates are Europe/London
 calendar days, so `from=2026-10-01` starts at `2026-09-30T23:00:00Z` (BST).
 An exhibition whose last day is 1 October matches `from=2026-10-01`.
+
+"Now" (`at`): an event is still on when its end is in the future. A
+date-only (all-day) event ends at London midnight after its last day (so
+an exhibition is on for all of its final day, and DST days are 23 or 25
+hours); an event with `ends_at` ends then; an event with a start time but
+no end counts as on for 60 minutes after it starts. It must also start
+before the window ends: `within_hours` from now for `at=now`, the next
+London midnight for `at=today`. `at=now&near=…` lists what is on nearby,
+nearest first.
 
 Time of day (`when`), in Europe/London local time. An event starting at
 exactly London midnight is treated as **untimed** (a date-only listing,

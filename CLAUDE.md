@@ -69,12 +69,15 @@ There is no local Docker; never try to use testcontainers.
    emit `href` only via `safe_link` (http(s) only). No
    third-party assets (CDNs, fonts, embeds, scripts, images), no inline `style=`,
    `<style>`, inline `<script>` or `on*=` handlers (CSS lives in
-   `src/web.css`, the one script in `src/web.js`, served from `/static/`);
+   `src/web.css`, the scripts in `src/web.js` (every page) and
+   `src/map.mjs` (`/map` only), served from `/static/`; the map's vendored
+   MapLibre/pmtiles/glyphs/styles are under `static/map/` and its tiles in
+   `static/tiles/`, see `docs/map.md`);
    keep the `CSP` constant strict. JavaScript is progressive enhancement
    only: every page must work without it (JS-only controls render
    `hidden`), and it builds DOM with `textContent`, never `innerHTML`. Pages
    read data through the same `api.rs` helpers as the JSON API, never over
-   HTTP. `node --test tests/js/*.test.js` tests `web.js`.
+   HTTP. `node --test tests/js/*.test.js` tests `web.js` and `map.mjs`.
 10. **Respect sources' content (content policy).** Never hotlink or expose a
     source's image URL: images reach pages and JSON only as our own
     thumbnails (`src/thumbs.rs`, served from `/thumbs/`, `img-src 'self'`),
@@ -128,5 +131,6 @@ There is no local Docker; never try to use testcontainers.
 - `static/fonts/` — self-hosted, subset woff2 fonts (SIL OFL, licences alongside), embedded and served at `/static/fonts/`
 - `src/share.rs` — event hand-offs (pure): `.ics`, Google Calendar link, Google/Apple Maps links
 - `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/sources`, `/saved`, `/about`, `POST /suggest`, `/thumbs/...`) and the Saved-events script
+- `src/web/map.rs` + `src/map.mjs` — `/map` ("Near me, right now"), `/tiles/london.pmtiles` (range requests) and the vendored map assets; `docs/map.md` (tiles refresh, licences, privacy)
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`
