@@ -1,0 +1,275 @@
+---
+source: tests/source_hunterian_museum.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "operating-theatre-250-years-of-surgery-in-hospitals|2026-09-10|hunterian",
+      "description": "A new exhibition at the Hunterian Museum exploring the evolution of one of surgery's most recognisable, though often hidden, spaces: the hospital operating theatre.",
+      "ends_at": "2026-10-31T00:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/_1200x630_crop_center-center_82_none/Operating-Theatre.jpeg?mtime=1786437650",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-09T23:00:00Z",
+      "tags": [],
+      "title": "The Operating Theatre: 250 Years of Surgery in Hospitals",
+      "url": "https://hunterianmuseum.org/exhibitions/the-operating-theatre-250-years",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "10th September–31st October 2026",
+      "Wednesday - Saturday"
+    ],
+    "source_event_id": "exhibitions/the-operating-theatre-250-years"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "amputation-dramatic-act|2026-10-29|hunterian",
+      "description": "A talk by Dawn Kemp, Director of Museums at the Royal College of Surgeons of England reveals a fascinating surgical detective story.",
+      "ends_at": "2026-10-29T20:15:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/_1200x630_crop_center-center_82_none/Amputation-A-Dramatic-Act.png?mtime=1789636182",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "8",
+        "min": "8"
+      },
+      "starts_at": "2026-10-29T19:00:00Z",
+      "tags": [],
+      "title": "Amputation: A Dramatic Act",
+      "url": "https://hunterianmuseum.org/events/amputation-a-dramatic-act",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "29th October 2026 19:00–20:15",
+      "£8"
+    ],
+    "source_event_id": "events/amputation-a-dramatic-act"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "hunterian-drawing-club|2026-11-03|hunterian",
+      "description": "Artist Joanna Cameron leads a day of drawing at the Hunterian Museum.",
+      "ends_at": "2026-11-03T16:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/Events/_1200x630_crop_center-center_82_none/Jo-Cameron-1.jpg?mtime=1746528555",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "starts_at": "2026-11-03T11:00:00Z",
+      "tags": [],
+      "title": "Hunterian Drawing Club",
+      "url": "https://hunterianmuseum.org/events/hunterian-drawing-club",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "3rd November 2026 11:00–16:00",
+      "£15"
+    ],
+    "source_event_id": "events/hunterian-drawing-club"
+  },
+  {
+    "event": null,
+    "facts": [
+      "Free"
+    ],
+    "source_event_id": "events/wednesday-curator-tour"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "anatomists-bodies-coffins-corpse-stealing-in-georgian-london|2026-10-22|hunterian",
+      "description": "Dive into the world of Georgian corpse theft and examine a full-scale reconstruction of an anti-body snatching coffin.",
+      "ends_at": "2026-10-22T20:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/_1200x630_crop_center-center_82_none/Inside-coffin-overlaid-with-Diary-of-a-Resurrectionist.-Credit-Liam-Salisbury.png?mtime=1790073798",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "8",
+        "min": "8"
+      },
+      "starts_at": "2026-10-22T18:00:00Z",
+      "tags": [],
+      "title": "Anatomists, Bodies and Coffins: Corpse stealing in Georgian London",
+      "url": "https://hunterianmuseum.org/events/anatomists-bodies-and-coffins",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "22nd October 2026 19:00–21:00",
+      "£8"
+    ],
+    "source_event_id": "events/anatomists-bodies-and-coffins"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "family-activities-in-autumn-for-children-with-send|2026-10-26|hunterian",
+      "description": "Exclusive opening: The Hunterian Museum will be open to ticket holders from 10am-2pm for this event. Enjoy a mix of outdoor and indoor activities designed for all ages, inviting everyone to be curious and explore the beauty of autumn.",
+      "ends_at": "2026-10-26T14:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/Learning-Photos/_1200x630_crop_center-center_82_none/IMG-20260401-WA0013_2026-04-10-095710_shsh.jpg?mtime=1776071709",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-26T10:00:00Z",
+      "tags": [],
+      "title": "Family Activities in autumn for children with SEND",
+      "url": "https://hunterianmuseum.org/events/family-activities",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "26th October 2026 10:00–14:00",
+      "Free"
+    ],
+    "source_event_id": "events/family-activities"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "family-activity-in-autumn|2026-10-28|hunterian",
+      "description": "Enjoy a mix of outdoor and indoor activities designed for all ages, inviting everyone to be curious and explore the beauty of autumn.",
+      "ends_at": "2026-10-28T15:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/Learning-Photos/_1200x630_crop_center-center_82_none/62776/IMG_0042_2026-06-04-151218_zqnq.jpg?mtime=1781103818",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-28T11:00:00Z",
+      "tags": [],
+      "title": "Family Activity in Autumn",
+      "url": "https://hunterianmuseum.org/events/half-term-family-activities",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "28th October 2026 11:00–15:00",
+      "Free, drop in"
+    ],
+    "source_event_id": "events/half-term-family-activities"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "stop-bleed-training|2026-10-29|hunterian",
+      "description": "Learn practical, life-saving skills with the Hunterian Museum at the Royal College of Surgeons of England",
+      "ends_at": "2026-10-29T16:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/Events/_1200x630_crop_center-center_82_none/image.jpg?mtime=1776247217",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-29T14:00:00Z",
+      "tags": [],
+      "title": "Stop the Bleed Training",
+      "url": "https://hunterianmuseum.org/events/stop-the-bleed-training",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "29th October 2026 14:00–16:00",
+      "Free"
+    ],
+    "source_event_id": "events/stop-the-bleed-training"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "curves-in-our-spines-with-fused-not-fragile|2026-11-14|hunterian",
+      "description": "An afternoon and evening of connection, conversation and learning for people living with scoliosis and spinal fusion.",
+      "ends_at": "2026-11-14T19:30:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/_1200x630_crop_center-center_82_none/Special-Guest-2.png?mtime=1789720911",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-14T16:30:00Z",
+      "tags": [],
+      "title": "Curves in our Spines with Fused not Fragile",
+      "url": "https://hunterianmuseum.org/events/curves-in-our-spines",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "14th November 2026 16:30–19:30",
+      "Free",
+      "Sold out"
+    ],
+    "source_event_id": "events/curves-in-our-spines"
+  },
+  {
+    "event": {
+      "address": "Royal College of Surgeons of England, 38–43 Lincoln's Inn Fields, London WC2A 3PE",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "home-learners-day|2026-12-14|hunterian",
+      "description": "Join the Hunterian Museum for a Home Learners day. Enjoy trails, workshops, hands-on activities with other home learners and their family.",
+      "ends_at": "2026-12-14T15:00:00Z",
+      "image_url": "https://hunterian-files-prod.s3.eu-west-2.amazonaws.com/Learning-Photos/_1200x630_crop_center-center_82_none/Fam-day.jpg?mtime=1776071711",
+      "lat": 51.51548,
+      "lng": -0.11548,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-12-14T10:00:00Z",
+      "tags": [],
+      "title": "Home Learners Day",
+      "url": "https://hunterianmuseum.org/events/home-learners-takeover-day",
+      "venue_name": "Hunterian Museum"
+    },
+    "facts": [
+      "14th December 2026 10:00–15:00",
+      "Free"
+    ],
+    "source_event_id": "events/home-learners-takeover-day"
+  }
+]

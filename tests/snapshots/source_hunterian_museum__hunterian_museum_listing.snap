@@ -1,0 +1,16 @@
+---
+source: tests/source_hunterian_museum.rs
+expression: listing_paths()
+---
+[
+  "/exhibitions/the-operating-theatre-250-years",
+  "/events/amputation-a-dramatic-act",
+  "/events/hunterian-drawing-club",
+  "/events/wednesday-curator-tour",
+  "/events/anatomists-bodies-and-coffins",
+  "/events/family-activities",
+  "/events/half-term-family-activities",
+  "/events/stop-the-bleed-training",
+  "/events/curves-in-our-spines",
+  "/events/home-learners-takeover-day"
+]
