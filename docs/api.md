@@ -76,7 +76,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `within_walk_min` | `20` | Instead of `radius_km`: events within this many minutes' walk of `near`, 1–60, estimated from straight-line distance at 5 km/h with a 1.3 detour factor (the same estimate as the map's "≈ N min walk"). Only with `near`; not with `radius_km` |
 | `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
-| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise` or `relevance` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` |
+| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise`, `relevance` or `richest` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` (the home page defaults to `richest`) |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
 
@@ -178,14 +178,26 @@ Order (`sort`), ties broken by `id`:
   `q` it falls back to `soonest`, with `"sort_fallback": {"requested":
   "relevance", ...}`.
 
+- `richest` ("Soonest, fullest listings first"; the home page's default
+  without a search or Near me, never the API's): day by day (the London day
+  an event starts, or today for one already running), and within a day
+  listings with a picture and a description first, interleaved with
+  facts-only ones: two rich listings, then one facts-only, each kind by
+  start time. A listing is rich when its score is at least 5 of 8: a
+  thumbnail we may show 3, a description of 120+ characters 2 (40+: 1), an
+  AI note 1, opening hours or a known price 1 (`repo::richness_sql`).
+  Interleaving rather than a hard sort keeps venues whose terms allow only
+  facts visible, and the day comes first so a rich event later in the week
+  never buries a facts-only one tonight.
+
 The response's `sort` says which sort was applied. There is no popularity
 sort: saves stay in the visitor's browser and the server does not track them.
 
 Pagination: `next_cursor` is `null` on the last page. Otherwise, repeat the
 request with the **same filters and sort** plus `cursor=<next_cursor>`.
 Cursors are opaque and only valid for the sort that issued them (anything
-else is a 400). A `surprise` cursor carries its day's shuffle, so paging
-across midnight keeps the order.
+else is a 400). A `surprise` cursor carries its day's shuffle (a `richest` one
+its day), so paging across midnight keeps the order.
 Unknown parameters are rejected with 400.
 
 ```http

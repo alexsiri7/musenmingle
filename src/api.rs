@@ -588,6 +588,10 @@ pub(crate) async fn event_page(
                 EventOrder::ByAdded { .. } => last.sort_at.map(|t| Cursor::Added(t, id)),
                 EventOrder::Shuffled { seed, .. } => Some(Cursor::Shuffle(*seed, id)),
                 EventOrder::ByRelevance { .. } => last.relevance.map(|r| Cursor::Relevance(r, id)),
+                EventOrder::Richest { today, .. } => last
+                    .rich_day
+                    .zip(last.rich_slot)
+                    .map(|(day, slot)| Cursor::Richest(*today, day, slot, id)),
             }
         })
         .map(|c| c.encode());
