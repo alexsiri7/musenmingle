@@ -11,7 +11,7 @@ they are not renamed or removed without notice; new fields may be added.
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
 takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area>`, `sort`, `pick`,
-`source`, `medium`, `format`, `good_for` and `cursor`, and shows the
+`source`, `medium`, `format`, `good_for`, `venue_type` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}` (with Open Graph tags, and Share / Directions / Add-to-calendar hand-offs from `src/share.rs`), `GET /events/{id}.ics` (the event as a one-event iCalendar file: exact UTC times, or an all-day span for date-only events; `text/calendar`, downloaded as `<slug>.ics`), `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
@@ -68,6 +68,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `medium` | `medium=photography&medium=painting` | Events with any of these medium tags: `photography`, `painting`, `drawing`, `sculpture`, `installation`, `design`, `architecture`, `illustration`, `textiles_craft`, `ceramics`, `film_video`, `performance`, `sound_music`, `writing_poetry`, `digital_new_media`, `printmaking`. Repeatable |
 | `format` | `format=talk` | Events with any of these format tags: `hands_on`, `talk`, `social`, `opening`, `late`, `family_friendly`, `course`, `tour`, `screening`, `fair_market`. Repeatable |
 | `good_for` | `good_for=kids` | Events tagged as good for any of: `solo`, `date`, `friends`, `kids`, `first_timers`, `deep_dive`. Repeatable |
+| `venue_type` | `venue_type=museum` | Events at any of these kinds of venue: `museum` (museums and public, non-commercial galleries and arts centres), `commercial_gallery`, `artist_run`, `community`, `other`. Every event has exactly one (see "Venue type" below). Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
@@ -305,14 +306,26 @@ With `facets=true` the response also has
 "facets": {
   "medium": { "photography": 12, "painting": 7 },
   "format": { "talk": 9 },
-  "good_for": { "friends": 14, "kids": 3 }
+  "good_for": { "friends": 14, "kids": 3 },
+  "venue_type": { "museum": 120, "commercial_gallery": 64 }
 }
 ```
 
 counting the events that match every other filter (dates, category, free,
-source, area and the other two tag filters), ignoring that facet's own
+source, area and the other facets), ignoring that facet's own
 selection, so each number says how many events choosing that tag would
 show. Tags with no events are omitted.
+
+### Venue type
+
+`venue_type` is deterministic (no AI), from `src/venue_type.rs`, and is
+refreshed after every ingest run: a manual override for the venue
+(`events.venues.venue_type`, matched on the normalised venue name), else
+the default of the event's sources (museum sources `museum`, Artlogic
+galleries `commercial_gallery`, Luma calendars `community`, …), else a
+keyword in the venue name ("project space", "studios", "artist-run" →
+`artist_run`; "museum" → `museum`; "community", "library", "arts centre"
+→ `community`), else `other`.
 
 **Breaking change (2026-09-26):** `image_url` was removed from event
 objects; use `thumbnail_url` + `image_credit`.

@@ -378,14 +378,58 @@ async fn venue_coords_tx(
     if key == "unknown" {
         return Ok(None);
     }
-    let rows: Vec<(String, f64, f64)> =
-        sqlx::query_as("SELECT name, lat, lng FROM events.venues ORDER BY id")
-            .fetch_all(&mut **tx)
-            .await?;
+    let rows: Vec<(String, f64, f64)> = sqlx::query_as(
+        "SELECT name, lat, lng FROM events.venues WHERE lat IS NOT NULL ORDER BY id",
+    )
+    .fetch_all(&mut **tx)
+    .await?;
     Ok(rows
         .into_iter()
         .find(|(name, _, _)| crate::normalise::normalise_venue_for_key(Some(name)) == key)
         .map(|(_, lat, lng)| (lat, lng)))
+}
+
+/// Set every event's `venue_type` from [`crate::venue_type::classify`]
+/// (overrides from `events.venues`, its sources' keys, its venue name).
+/// Returns how many events changed. Run after each ingest run.
+pub async fn sync_venue_types(pool: &PgPool) -> sqlx::Result<u64> {
+    let overrides: Vec<(String, String)> = sqlx::query_as(
+        "SELECT name, venue_type FROM events.venues WHERE venue_type IS NOT NULL ORDER BY id",
+    )
+    .fetch_all(pool)
+    .await?;
+    let overrides =
+        crate::venue_type::Overrides::new(overrides.iter().map(|(n, t)| (n.as_str(), t.as_str())));
+    let events: Vec<(Uuid, Option<String>, String, Vec<String>)> = sqlx::query_as(
+        "SELECT ev.id, ev.venue_name, ev.venue_type,
+                ARRAY(SELECT s.key FROM events.event_sources es
+                      JOIN events.sources s ON s.id = es.source_id
+                      WHERE es.event_id = ev.id ORDER BY s.key)
+         FROM events.events ev",
+    )
+    .fetch_all(pool)
+    .await?;
+    let (mut ids, mut types) = (Vec::new(), Vec::new());
+    for (id, venue, current, keys) in &events {
+        let keys: Vec<&str> = keys.iter().map(String::as_str).collect();
+        let t = crate::venue_type::classify(venue.as_deref(), &keys, &overrides);
+        if t != current {
+            ids.push(*id);
+            types.push(t);
+        }
+    }
+    if ids.is_empty() {
+        return Ok(0);
+    }
+    Ok(sqlx::query(
+        "UPDATE events.events ev SET venue_type = u.t
+         FROM unnest($1::uuid[], $2::text[]) AS u(id, t) WHERE ev.id = u.id",
+    )
+    .bind(&ids)
+    .bind(&types)
+    .execute(pool)
+    .await?
+    .rows_affected())
 }
 
 pub async fn upsert_event(
@@ -987,6 +1031,30 @@ const RULE_CLOSES: &str = "(r->>'closes')::time";
 /// `open_on`: the event's London dates, clipped to the `$1`/`$2` window,
 /// include that weekday (at most the first 7 days need checking), and an
 /// event with opening hours is open that weekday.
+/// The filters of an [`EventFilter`] that are SQL built from constants
+/// rather than [`LISTING_FILTER`]'s placeholders: [`live_sql`] and
+/// [`venue_type_sql`]. Every listing query applies it after
+/// [`LISTING_FILTER`], so counts and listings agree.
+fn filter_extra_sql(f: &EventFilter) -> String {
+    format!("{} AND {}", live_sql(f), venue_type_sql(f))
+}
+
+/// `venue_type=` ([`EventFilter::venue_types`]): events at ANY of the
+/// given venue types. Built only from [`crate::venue_type::VENUE_TYPES`]
+/// (unknown values are dropped; `crate::listing` rejects them).
+fn venue_type_sql(f: &EventFilter) -> String {
+    let chosen: Vec<String> = crate::venue_type::VENUE_TYPES
+        .iter()
+        .filter(|t| f.venue_types.iter().any(|v| v == *t))
+        .map(|t| format!("'{t}'"))
+        .collect();
+    if chosen.is_empty() {
+        "TRUE".into()
+    } else {
+        format!("ev.venue_type IN ({})", chosen.join(", "))
+    }
+}
+
 fn live_sql(f: &EventFilter) -> String {
     use crate::listing::{LIVE_GRACE_MINUTES, LIVE_LOOKBACK_HOURS};
     let open_on = match f.open_on {
@@ -1243,7 +1311,7 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
         price_max_sql("$12"),
         when_sql(f.when),
         pick_sql(f.pick),
-        live_sql(f)
+        filter_extra_sql(f)
     );
     // (sort key expression, extra condition, cursor condition, order)
     let (key, extra, after, order) = match &query.order {
@@ -1352,25 +1420,34 @@ pub enum Facet {
     Medium,
     Format,
     GoodFor,
+    VenueType,
 }
 
 impl Facet {
-    pub const ALL: [Facet; 3] = [Facet::Medium, Facet::Format, Facet::GoodFor];
+    pub const ALL: [Facet; 4] = [
+        Facet::Medium,
+        Facet::Format,
+        Facet::GoodFor,
+        Facet::VenueType,
+    ];
 
+    /// The facet's values of an event (`ev`) as an SQL array.
     pub fn column(self) -> &'static str {
         match self {
-            Facet::Medium => "medium_tags",
-            Facet::Format => "format_tags",
-            Facet::GoodFor => "good_for",
+            Facet::Medium => "ev.medium_tags",
+            Facet::Format => "ev.format_tags",
+            Facet::GoodFor => "ev.good_for",
+            Facet::VenueType => "ARRAY[ev.venue_type]",
         }
     }
 
-    /// The API name (`medium`, `format`, `good_for`).
+    /// The API name (`medium`, `format`, `good_for`, `venue_type`).
     pub fn name(self) -> &'static str {
         match self {
             Facet::Medium => "medium",
             Facet::Format => "format",
             Facet::GoodFor => "good_for",
+            Facet::VenueType => "venue_type",
         }
     }
 }
@@ -1388,6 +1465,7 @@ pub async fn facet_counts(
         Facet::Medium => f.mediums.clear(),
         Facet::Format => f.formats.clear(),
         Facet::GoodFor => f.good_for.clear(),
+        Facet::VenueType => f.venue_types.clear(),
     }
     let near = query.near;
     let b = near.map(|n| n.bounding_box());
@@ -1397,11 +1475,11 @@ pub async fn facet_counts(
         price_max_sql("$20"),
         when_sql(f.when),
         pick_sql(f.pick),
-        live_sql(&f)
+        filter_extra_sql(&f)
     );
     bind_filter(
         sqlx::query_as(AssertSqlSafe(format!(
-            "SELECT t, count(*) FROM events.events ev CROSS JOIN LATERAL unnest(ev.{col}) AS t
+            "SELECT t, count(*) FROM events.events ev CROSS JOIN LATERAL unnest({col}) AS t
              WHERE {filter}
                AND ($12::float8 IS NULL OR (
                    lat BETWEEN $15 AND $16 AND lng BETWEEN $17 AND $18
@@ -1454,7 +1532,7 @@ pub async fn listing_counts(
     let sources: Vec<&str> = filter.sources.iter().map(String::as_str).collect();
     let price = price_filter_sql("$12", "$13");
     let when = when_sql(filter.when);
-    let live = live_sql(filter);
+    let live = filter_extra_sql(filter);
     let when_count = |w: When| format!("count(*) FILTER (WHERE {} AND {price})", when_sql(Some(w)));
     let price_count = |p: &str| format!("count(*) FILTER (WHERE {p} AND {when})");
     let b = near.map(Near::bounding_box);
@@ -1562,7 +1640,7 @@ pub async fn semantic_candidates(
              WHERE {LISTING_FILTER} AND {}
              ORDER BY em.embedding OPERATOR(extensions.<=>) q.v, ev.id
              LIMIT $13",
-            live_sql(filter)
+            filter_extra_sql(filter)
         ))),
         filter,
     )

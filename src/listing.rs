@@ -83,6 +83,9 @@ pub struct EventFilter {
     pub formats: Vec<String>,
     /// `good_for=` (repeatable): events with ANY of them.
     pub good_for: Vec<String>,
+    /// `venue_type=` (repeatable, [`crate::venue_type::VENUE_TYPES`]):
+    /// events at ANY of them.
+    pub venue_types: Vec<String>,
     /// Time-of-day / day-of-week bucket (`when=`).
     pub when: Option<When>,
     /// Free events and GBP events whose lowest price is at most this;
@@ -451,6 +454,12 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
             "medium" => push_tag(&mut filter.mediums, "medium", &value, MEDIUM_TAGS)?,
             "format" => push_tag(&mut filter.formats, "format", &value, FORMAT_TAGS)?,
             "good_for" => push_tag(&mut filter.good_for, "good_for", &value, GOOD_FOR)?,
+            "venue_type" => push_tag(
+                &mut filter.venue_types,
+                "venue_type",
+                &value,
+                crate::venue_type::VENUE_TYPES,
+            )?,
             "facets" => {
                 facets = match value.as_ref() {
                     "true" => true,
@@ -820,6 +829,13 @@ mod tests {
     fn sources_repeat_and_dedupe() {
         let q = parse_query("source=barbican&source=design-museum&source=barbican").unwrap();
         assert_eq!(q.filter.sources, ["barbican", "design-museum"]);
+    }
+
+    #[test]
+    fn venue_type_repeats_dedupes_and_uses_the_vocabulary() {
+        let q = parse_query("venue_type=museum&venue_type=artist_run&venue_type=museum").unwrap();
+        assert_eq!(q.filter.venue_types, ["museum", "artist_run"]);
+        assert!(parse_query("venue_type=pub").is_err());
     }
 
     #[test]

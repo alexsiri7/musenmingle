@@ -266,6 +266,11 @@ impl Runner {
                 "no GitHub filer configured; pending site suggestions and contact requests will not be filed"
             );
         }
+        match repo::sync_venue_types(&self.pool).await {
+            Ok(0) => {}
+            Ok(n) => tracing::info!(count = n, "venue types updated"),
+            Err(e) => tracing::error!(error = %e, "updating venue types failed"),
+        }
         Ok(reports)
     }
 

@@ -29,6 +29,7 @@ pub mod share;
 pub mod sources;
 pub mod suggestions;
 pub mod thumbs;
+pub mod venue_type;
 pub mod web;
 
 /// Crate version, used in the bot User-Agent.
