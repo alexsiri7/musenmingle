@@ -25,13 +25,18 @@ async fn insert_event(pool: &PgPool, title: &str, url: &str) -> Uuid {
 }
 
 async fn link(pool: &PgPool, event: Uuid, source: &str, url: &str) {
+    link_page(pool, event, source, url, Some(url)).await;
+}
+
+async fn link_page(pool: &PgPool, event: Uuid, source: &str, id: &str, page: Option<&str>) {
     sqlx::query(
         "INSERT INTO events.event_sources (event_id, source_id, source_event_id, source_url, raw)
-         SELECT $1, id, $3, $3, '{}' FROM events.sources WHERE key = $2",
+         SELECT $1, id, $3, $4, '{}' FROM events.sources WHERE key = $2",
     )
     .bind(event)
     .bind(source)
-    .bind(url)
+    .bind(id)
+    .bind(page)
     .execute(pool)
     .await
     .unwrap();
@@ -59,6 +64,11 @@ async fn retirement_deletes_dandad_only_events_and_unlinks_shared_ones() {
     link(&pool, shared, "dandad", shared_dandad_url).await;
     link(&pool, shared, "barbican", barbican_url).await;
 
+    let pageless_dandad_url = "https://www.dandad.org/events/pageless/";
+    let pageless = insert_event(&pool, "Shared, no other page", pageless_dandad_url).await;
+    link(&pool, pageless, "dandad", pageless_dandad_url).await;
+    link_page(&pool, pageless, "barbican", "barbican-pageless", None).await;
+
     let other = insert_event(&pool, "Barbican only", barbican_url).await;
     link(
         &pool,
@@ -74,21 +84,23 @@ async fn retirement_deletes_dandad_only_events_and_unlinks_shared_ones() {
         .fetch_all(&pool)
         .await
         .unwrap();
-    assert_eq!(ids, vec![other, shared]);
-    let shared_url: Option<String> =
-        sqlx::query_scalar("SELECT url FROM events.events WHERE id = $1")
-            .bind(shared)
-            .fetch_one(&pool)
-            .await
-            .unwrap();
-    assert_eq!(shared_url.as_deref(), Some(barbican_url));
-    let other_url: Option<String> =
-        sqlx::query_scalar("SELECT url FROM events.events WHERE id = $1")
-            .bind(other)
-            .fetch_one(&pool)
-            .await
-            .unwrap();
-    assert_eq!(other_url.as_deref(), Some(barbican_url));
+    assert_eq!(ids, vec![other, shared, pageless]);
+    let url_of = |id: Uuid| {
+        let pool = pool.clone();
+        async move {
+            sqlx::query_scalar::<_, Option<String>>("SELECT url FROM events.events WHERE id = $1")
+                .bind(id)
+                .fetch_one(&pool)
+                .await
+                .unwrap()
+        }
+    };
+    assert_eq!(url_of(shared).await.as_deref(), Some(barbican_url));
+    assert_eq!(
+        url_of(pageless).await.as_deref(),
+        Some("https://www.barbican.org.uk")
+    );
+    assert_eq!(url_of(other).await.as_deref(), Some(barbican_url));
 
     let dandad_links: i64 = sqlx::query_scalar(
         "SELECT count(*) FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id

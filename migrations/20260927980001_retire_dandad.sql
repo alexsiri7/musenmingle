@@ -22,11 +22,13 @@ DELETE FROM events.events e
                    WHERE es.event_id = e.id AND s.key <> 'dandad');
 
 -- Events other sources also list stay, pointing at another source's page
--- instead of D&AD's (a merge never replaces an existing URL by itself).
+-- instead of D&AD's (a merge never replaces an existing URL by itself), or
+-- at that source's site when none of its links recorded a page.
 UPDATE events.events e
-   SET url = (SELECT es.source_url FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
-               WHERE es.event_id = e.id AND s.key <> 'dandad' AND es.source_url IS NOT NULL
-               ORDER BY es.first_seen_at LIMIT 1)
+   SET url = (SELECT COALESCE(es.source_url, s.base_url)
+                FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
+               WHERE es.event_id = e.id AND s.key <> 'dandad'
+               ORDER BY es.source_url IS NULL, es.first_seen_at LIMIT 1)
  WHERE e.url IN (SELECT es.source_url FROM events.event_sources es JOIN events.sources s ON s.id = es.source_id
                   WHERE es.event_id = e.id AND s.key = 'dandad');
 DELETE FROM events.event_sources
