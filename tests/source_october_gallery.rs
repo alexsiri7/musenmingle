@@ -39,11 +39,14 @@ fn raws() -> Vec<RawEvent> {
             parse_detail(&html, &url(&format!("/exhibitions/{slug}"))).expect("ExhibitionEvent")
         })
         .collect();
-    raws.extend(parse_events(
-        &fixture(&format!("{DIR}/events.html")),
-        &url("/events/"),
-        listed_on(),
-    ));
+    raws.extend(
+        parse_events(
+            &fixture(&format!("{DIR}/events.html")),
+            &url("/events/"),
+            listed_on(),
+        )
+        .expect("event cards"),
+    );
     raws
 }
 
@@ -66,7 +69,8 @@ fn events_page_yields_only_forthcoming_events() {
         &fixture(&format!("{DIR}/events.html")),
         &url("/events/"),
         listed_on(),
-    );
+    )
+    .expect("event cards");
     let titles: Vec<_> = events
         .iter()
         .map(|r| r.payload["title"].as_str().unwrap())
@@ -107,6 +111,15 @@ async fn mount(server: &MockServer, at: &str, body: String, times: u64) {
 }
 
 async fn mount_site(server: &MockServer, detail_fetches: u64) {
+    mount_site_with_events(
+        server,
+        detail_fetches,
+        fixture(&format!("{DIR}/events.html")),
+    )
+    .await;
+}
+
+async fn mount_site_with_events(server: &MockServer, detail_fetches: u64, events: String) {
     mount(
         server,
         "/robots.txt",
@@ -121,13 +134,7 @@ async fn mount_site(server: &MockServer, detail_fetches: u64) {
         1,
     )
     .await;
-    mount(
-        server,
-        "/events/",
-        fixture(&format!("{DIR}/events.html")),
-        1,
-    )
-    .await;
+    mount(server, "/events/", events, 1).await;
     for (i, slug) in DETAILS.iter().enumerate() {
         mount(
             server,
@@ -203,8 +210,29 @@ async fn exhibition_page_without_jsonld_is_reported() {
     assert!(s.fetch(&ctx).await.expect("fetch").is_empty());
     assert_eq!(
         ctx.take_errors(),
-        ["/exhibitions/show: no ExhibitionEvent JSON-LD"]
+        [
+            "/exhibitions/show: no ExhibitionEvent JSON-LD",
+            "/events/: no events found (forthcoming or past)",
+        ]
     );
+}
+
+#[tokio::test]
+async fn events_page_with_only_past_events_is_clean() {
+    // No talk scheduled is normal; only a page without any event card
+    // (forthcoming or past) is a template change worth an error.
+    let past_only = fixture(&format!("{DIR}/events.html")).replacen(
+        "Gallery Talk: Romuald Hazoumè in Conversation with Gerard Houghton",
+        "",
+        1,
+    );
+    let server = MockServer::start().await;
+    mount_site_with_events(&server, 2, past_only).await;
+    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let s = OctoberGallery::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    assert!(ctx.take_errors().is_empty());
+    assert!(raws.iter().all(|r| r.payload["kind"] == "exhibition"));
 }
 
 #[tokio::test]

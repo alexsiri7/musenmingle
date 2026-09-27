@@ -149,8 +149,15 @@ pub fn parse_detail(html: &str, page_url: &Url) -> Option<RawEvent> {
 /// Parse the "Forthcoming Events" cards of the Events page. `page_url` is
 /// the address the page was fetched from (it is each event's link);
 /// `listed_on` is the London date of the fetch, kept for year inference.
-pub fn parse_events(html: &str, page_url: &Url, listed_on: NaiveDate) -> Vec<RawEvent> {
+/// `None` when the page has no event cards at all, forthcoming or past: an
+/// empty forthcoming list is normal, but the past list is never empty on
+/// the real page, so its absence means the template changed.
+pub fn parse_events(html: &str, page_url: &Url, listed_on: NaiveDate) -> Option<Vec<RawEvent>> {
     let doc = Html::parse_document(html);
+    doc.select(&selector(
+        "#inner-content .flex-parent > .flex-item > article .minor-heading",
+    ))
+    .next()?;
     let mut out: Vec<RawEvent> = Vec::new();
     for card in doc.select(&selector(
         "#inner-content .flex-parent:not(.moreflexitems) > .flex-item > article",
@@ -195,7 +202,7 @@ pub fn parse_events(html: &str, page_url: &Url, listed_on: NaiveDate) -> Vec<Raw
             }),
         });
     }
-    out
+    Some(out)
 }
 
 /// A printed day at the start of a line, "Saturday 17th October, 2026",
@@ -440,7 +447,12 @@ impl Source for OctoberGallery {
         }
         let events_url = url(EVENTS_PATH)?;
         match ctx.get_text(&events_url).await {
-            Ok(html) => raws.extend(parse_events(&html, &events_url, london_date(Utc::now()))),
+            Ok(html) => match parse_events(&html, &events_url, london_date(Utc::now())) {
+                Some(events) => raws.extend(events),
+                None => ctx.report_error(format!(
+                    "{EVENTS_PATH}: no events found (forthcoming or past)"
+                )),
+            },
             Err(e) => ctx.report_error(format!("{EVENTS_PATH}: {e}")),
         }
         Ok(raws)
@@ -626,6 +638,13 @@ mod tests {
         ] {
             assert!(normalise_payload(&event(lines)).is_err(), "{lines:?}");
         }
+    }
+
+    #[test]
+    fn out_of_scope_event_is_skipped_before_date_parsing() {
+        let mut payload = event(&["not a recognisable date line"]);
+        payload["title"] = json!("OG LATES x TAOSOL");
+        assert_eq!(normalise_payload(&payload).unwrap(), None);
     }
 
     #[test]
