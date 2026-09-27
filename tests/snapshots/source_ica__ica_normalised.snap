@@ -1,0 +1,270 @@
+---
+source: tests/source_ica.rs
+expression: out
+---
+[
+  {
+    "date_text": "Wed, 30 September",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-whole-routine-by-edward-thomasson|2026-09-30|ica",
+      "description": "Join Montez Press to celebrate the launch of Edward Thomasson’s The Whole Routine, with an in-conversation between Thomasson and Fiontán Moran discussing the work, its development and publication.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13734.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-09-30T17:00:00Z",
+      "tags": [],
+      "title": "Book Launch: The Whole Routine by Edward Thomasson",
+      "url": "https://www.ica.art/talks/book-launch-the-whole-routine-by-edward-thomasson",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/talks/book-launch-the-whole-routine-by-edward-thomasson"
+  },
+  {
+    "date_text": "Fri, 2 October",
+    "event": null,
+    "source_event_id": "/talks/conditions-studio-programme-film-video-2026"
+  },
+  {
+    "date_text": "Sat, 3 October",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "performance-my-tragedy|2026-10-03|ica",
+      "description": "My Tragedy is a one-night performance by Hunter Boyd, presenting the same dramatic text three times, each independently reimagined by Alex Heard, Emma Alvin + Gulliver Whitby, and Jaya Twill. Blending classical tragedy with advertising, luxury branding and popular culture, each interpretation offers a new way into the story.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13974.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-03T18:00:00Z",
+      "tags": [],
+      "title": "Performance: My Tragedy",
+      "url": "https://www.ica.art/talks/my-tragedy",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/talks/my-tragedy"
+  },
+  {
+    "date_text": "Thu, 8 October",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-wet-proof-by-mary-stephenson-lou-stoppard-federica-chiocchetti|2026-10-08|ica",
+      "description": "Celebrating the publication of Wet Proof, curators and writers Lou Stoppard and Federica Chiocchetti are joined by artist Mary Stephenson to explore the themes behind the book and exhibition, including water, memory and the unconscious.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14007.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-08T17:30:00Z",
+      "tags": [],
+      "title": "Book Launch: Wet Proof by Mary Stephenson, Lou Stoppard & Federica Chiocchetti",
+      "url": "https://www.ica.art/talks/book-launch-wet-proof",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/talks/book-launch-wet-proof"
+  },
+  {
+    "date_text": "29 September – 29 November 2026",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "autumn-knight-i-cant-complain|2026-09-29|ica",
+      "description": "I Can’t Complain is a solo exhibition by New York-based artist Autumn Knight. Featuring a new commission alongside recent work, this is the first major presentation of her work in the UK.",
+      "ends_at": "2026-11-29T00:00:00Z",
+      "image_url": "https://www.ica.art/media/13549.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-28T23:00:00Z",
+      "tags": [],
+      "title": "Autumn Knight: I Can't Complain",
+      "url": "https://www.ica.art/exhibitions/autumn-knight",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight"
+  },
+  {
+    "date_text": "Mon, 28 September",
+    "event": null,
+    "source_event_id": "/exhibitions/members-exhibition-preview-autumn-knight-i-can-t-complain"
+  },
+  {
+    "date_text": "Thu, 1 October",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "party-of-one-performance-by-autumn-knight|2026-10-01|ica",
+      "description": "A newly commissioned performance lecture by Autumn Knight as part of her solo exhibition I Can't Complain, addressing the nuances and pleasures of complaint.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13970.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T18:00:00Z",
+      "tags": [],
+      "title": "party of one: Performance by Autumn Knight",
+      "url": "https://www.ica.art/exhibitions/autumn-knight-performance-1",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight-performance-1"
+  },
+  {
+    "date_text": "Mon, 12 October",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "party-pooper-1-performance-by-autumn-knight|2026-10-12|ica",
+      "description": "The first iteration of a new live performance exploring group complaint responding to the site, environment and themes of Autumn Knight's exhibition I Can't Complain.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13990.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-12T18:00:00Z",
+      "tags": [],
+      "title": "party pooper 1: Performance by Autumn Knight",
+      "url": "https://www.ica.art/exhibitions/autumn-knight-party-pooper",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight-party-pooper"
+  },
+  {
+    "date_text": "Thu, 15 October",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "party-pooper-2-performance-by-autumn-knight|2026-10-15|ica",
+      "description": "The second iteration of a new performance exploring group complaint responding to the site, environment and themes of Autumn Knight's solo exhibition.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13992.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-15T18:00:00Z",
+      "tags": [],
+      "title": "party pooper 2: Performance by Autumn Knight",
+      "url": "https://www.ica.art/exhibitions/autumn-knight-party-pooper-2",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight-party-pooper-2"
+  },
+  {
+    "date_text": "Wed, 21 October",
+    "event": null,
+    "source_event_id": "/exhibitions/artists-film-picks-no-other-choice"
+  },
+  {
+    "date_text": "Wed, 28 October",
+    "event": null,
+    "source_event_id": "/exhibitions/artists-film-picks-i-am-not-your-negro"
+  },
+  {
+    "date_text": "Tue, 3 November",
+    "event": null,
+    "source_event_id": "/exhibitions/members-curator-tour-autumn-knight"
+  },
+  {
+    "date_text": "Fri, 6 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "party-done-performance-by-samra-mayanja|2026-11-06|ica",
+      "description": "The party is over, or did it ever start? The guests arrive and the party has finished. Samra Mayanja's solo performance weaves narrative and physical responses to the exhibition space.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13993.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-06T18:30:00Z",
+      "tags": [],
+      "title": "party done: Performance by Samra Mayanja",
+      "url": "https://www.ica.art/exhibitions/autumn-knight-party-done",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight-party-done"
+  },
+  {
+    "date_text": "Wed, 11 November",
+    "event": null,
+    "source_event_id": "/exhibitions/artists-film-picks-persepolis"
+  },
+  {
+    "date_text": "Fri, 20 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "pity-party-performance-by-michelangelo-miccolis-nick-von-kleist|2026-11-20|ica",
+      "description": "Final party and performance blend into a unique event conceptualised by Autumn Knight and performed by Michelangelo Miccolis and nick von kleist; expect drinks, music and conversation.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13994.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T19:00:00Z",
+      "tags": [],
+      "title": "pity party: Performance by Michelangelo Miccolis and nick von kleist",
+      "url": "https://www.ica.art/exhibitions/autumn-knight-pity-party",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/exhibitions/autumn-knight-pity-party"
+  }
+]

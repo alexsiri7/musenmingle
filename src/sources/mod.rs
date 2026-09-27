@@ -29,6 +29,7 @@ pub mod headstone_manor;
 pub mod horse_hospital;
 pub mod hunterian_museum;
 pub mod ibraaz;
+pub mod ica;
 pub mod jsonld;
 pub mod lisson_gallery;
 pub mod london_review_bookshop;
@@ -171,6 +172,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         photographers_gallery::KEY => Ok(Box::new(
             photographers_gallery::PhotographersGallery::new(base),
         )),
+        ica::KEY => Ok(Box::new(ica::Ica::new(base))),
         soane_museum::KEY => Ok(Box::new(soane_museum::SoaneMuseum::new(base))),
         somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
         south_london_gallery::KEY => Ok(Box::new(south_london_gallery::SouthLondonGallery::new(

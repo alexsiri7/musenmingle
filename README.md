@@ -209,6 +209,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     day; film screenings, children's/family sessions, raffles and online
     selling shows skipped; talks → talk, workshops → workshop, the rest →
     community.
+  - `ica` — CSS on the ICA's `/talks` and `/exhibitions` listings (no
+    JSON-LD), plus the detail page of each single-day event (capped at 20
+    a run) for its time (London wall clock); ranges and "From" dates all
+    day; residencies and the young artists' programme, film screenings and
+    members-only events skipped; `/live` concerts not read; exhibitions →
+    exhibition, book launches → talk, performances → community.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
