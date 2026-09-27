@@ -147,6 +147,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     category from keywords in the eyebrow and title (a demonstration is a
     talk); concerts and recurring or open-ended programmes skipped; facts +
     link only (the site's legal page restricts reuse).
+  - `lisson-gallery` — the London cards (city "London" and dates) on
+    `/exhibitions`, then each show's JSON-LD `ExhibitionEvent` (date-only
+    range, stored `all_day`) with the artist from the page heading and the
+    "About" section as description; other cities, museum and past shows
+    skipped; descriptions but no images (artists' works).
   - `two-temple-place` — listing-only CSS scraper (no JSON-LD, no TEC
     API): the upcoming cards of `/whats-on/` (the ~540 past ones below are
     ignored): title, date lines with London wall-clock times, price
