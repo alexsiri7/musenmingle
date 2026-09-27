@@ -23,6 +23,10 @@ pub const BUILTIN_MIN_INTERVALS: &[(&str, u64)] = &[
     // the floor stays so nothing ever reads it faster than one page per 5 s.
     ("www.artrabbit.com", 5_000),
     ("artrabbit.com", 5_000),
+    // Gasworks (#108): robots.txt asks for `Request-rate: 1/60` on top of its
+    // `Crawl-delay: 20`, which FetchContext honours by itself.
+    ("www.gasworks.org.uk", 60_000),
+    ("gasworks.org.uk", 60_000),
 ];
 /// Environment variable holding the Ticketmaster Discovery API key.
 pub const TICKETMASTER_API_KEY_ENV: &str = "TICKETMASTER_API_KEY";

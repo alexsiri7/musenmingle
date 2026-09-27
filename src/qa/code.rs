@@ -38,6 +38,7 @@ const SOURCE_FILES: &[(&str, &str)] = &[
     ),
     ("four_corners", include_str!("../sources/four_corners.rs")),
     ("garden_museum", include_str!("../sources/garden_museum.rs")),
+    ("gasworks", include_str!("../sources/gasworks.rs")),
     (
         "goldsmiths_cca",
         include_str!("../sources/goldsmiths_cca.rs"),
