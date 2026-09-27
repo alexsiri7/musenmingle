@@ -148,7 +148,7 @@ async fn fetches_listing_and_details_via_fetch_context() {
             .await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GardenMuseum::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     let errors = ctx.take_errors();
@@ -204,7 +204,7 @@ async fn detail_fetches_are_capped() {
             .mount(&server)
             .await;
     }
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GardenMuseum::new(server.uri().parse().unwrap()).with_max_detail_pages(2);
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert_eq!(raws.len(), 2);
@@ -228,7 +228,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GardenMuseum::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -254,7 +254,7 @@ async fn empty_listing_is_an_error() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GardenMuseum::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no events found"), "{err}");

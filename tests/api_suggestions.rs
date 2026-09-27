@@ -414,7 +414,7 @@ async fn submissions_from_one_client_wait_for_its_lock() {
 fn runner(pool: &PgPool, filer: Box<dyn IssueFiler>) -> Runner {
     Runner {
         pool: pool.clone(),
-        ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+        ctx: FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap(),
         factory: Box::new(|_| Err(SkipReason::UnknownKey)),
         health: HealthChecker::new(HealthConfig::default(), Some(filer)),
         source_timeout: Duration::from_secs(1),

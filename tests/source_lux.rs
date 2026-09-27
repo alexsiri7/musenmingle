@@ -165,7 +165,7 @@ async fn fetches_listing_and_in_scope_details_via_fetch_context() {
         )
         .await;
     }
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Lux::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -225,7 +225,7 @@ async fn detail_fetches_stop_at_the_cap_and_failed_cards_are_dropped() {
         .await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Lux::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -261,7 +261,7 @@ async fn robots_disallow_blocks_the_scraper() {
     )
     .await;
     serve(&server, "/whats-on/", "should never be fetched".into(), 0).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Lux::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");

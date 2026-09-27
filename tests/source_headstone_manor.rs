@@ -166,7 +166,7 @@ async fn fetches_listing_pages_and_in_scope_details_via_fetch_context() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -210,7 +210,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -228,7 +228,7 @@ async fn empty_listing_is_an_error() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event cards"), "{err}");
@@ -279,7 +279,7 @@ async fn listing_and_detail_fetches_stop_at_their_caps() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -309,7 +309,7 @@ async fn bad_cards_are_reported() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
@@ -337,7 +337,7 @@ async fn cards_that_fail_to_classify_are_kept_for_normalise() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = HeadstoneManor::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();

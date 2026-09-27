@@ -131,7 +131,7 @@ async fn mount_page(server: &MockServer, p: &str, body: String) {
 /// A test context with no configured interval (robots.txt's Crawl-delay
 /// still applies: the saved robots.txt makes the full fetch test take ~40 s).
 fn ctx() -> FetchContext {
-    FetchContext::new(RateLimitConfig::disabled()).unwrap()
+    FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap()
 }
 
 #[tokio::test]

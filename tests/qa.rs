@@ -139,7 +139,7 @@ impl Env {
             Box::new(GitHubIssueFiler::new(&self.github.uri(), REPO, "test-token").unwrap());
         Runner {
             pool: self.pool.clone(),
-            ctx: FetchContext::new(RateLimitConfig::disabled()).unwrap(),
+            ctx: FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap(),
             factory: Box::new(move |row| {
                 Ok(Box::new(VenueSource {
                     key: row.key.clone(),

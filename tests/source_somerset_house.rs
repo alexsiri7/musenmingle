@@ -117,7 +117,7 @@ async fn fetches_all_pages_via_fetch_context() {
             .await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -138,7 +138,7 @@ async fn failed_later_page_is_a_soft_error() {
     mount_page(&server, "1", page_fixture(1)).await;
     mount_page(&server, "2", ResponseTemplate::new(500)).await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -159,7 +159,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -181,7 +181,7 @@ async fn failed_first_page_fails_the_fetch() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let result = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await;
@@ -203,7 +203,7 @@ async fn pagination_stops_at_the_page_cap() {
             .await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -220,7 +220,7 @@ async fn unusable_listing_items_are_reported_once() {
         mount_page(&server, n, ResponseTemplate::new(200).set_body_string(body)).await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = SomersetHouse::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

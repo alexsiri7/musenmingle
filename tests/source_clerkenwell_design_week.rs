@@ -53,7 +53,7 @@ async fn fetches_the_homepage_via_fetch_context() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = scraper(&server.uri()).fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
     assert_eq!(raws.len(), 1);
@@ -73,7 +73,7 @@ async fn homepage_without_an_event_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><body>soon</body></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = scraper(&server.uri())
         .fetch(&ctx)
         .await
@@ -98,7 +98,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = scraper(&server.uri())
         .fetch(&ctx)
         .await

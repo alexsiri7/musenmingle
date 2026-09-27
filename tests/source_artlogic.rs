@@ -253,7 +253,7 @@ async fn mount_page(server: &MockServer, at: &str, template: ResponseTemplate, e
 }
 
 fn ctx() -> FetchContext {
-    FetchContext::new(RateLimitConfig::disabled()).unwrap()
+    FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap()
 }
 
 fn gallery(server: &MockServer, config: Value) -> Artlogic {

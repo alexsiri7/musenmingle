@@ -84,7 +84,7 @@ async fn fetches_homepage_and_details_via_fetch_context() {
             .mount(&server)
             .await;
     }
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GoldsmithsCca::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -125,7 +125,7 @@ async fn failing_detail_pages_are_soft_errors() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GoldsmithsCca::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert_eq!(raws.len(), items.len() - 2);
@@ -159,7 +159,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GoldsmithsCca::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -179,7 +179,7 @@ async fn empty_listing_is_an_error() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = GoldsmithsCca::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no exhibitions found"), "{err}");

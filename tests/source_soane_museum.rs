@@ -147,7 +147,7 @@ async fn fetches_listing_pages_and_off_site_details_via_fetch_context() {
             .await;
     }
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = SoaneMuseum::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -186,7 +186,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = SoaneMuseum::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -214,7 +214,7 @@ async fn empty_listing_is_an_error() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = SoaneMuseum::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event cards"), "{err}");
@@ -271,7 +271,7 @@ async fn listing_and_detail_fetches_stop_at_their_caps() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = SoaneMuseum::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -330,7 +330,7 @@ async fn cards_with_bad_times_or_sidebars_become_errors() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = SoaneMuseum::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 

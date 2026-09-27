@@ -150,7 +150,7 @@ async fn mount_site_with_events(server: &MockServer, detail_fetches: u64, events
 async fn fetches_exhibitions_and_events_via_fetch_context() {
     let server = MockServer::start().await;
     mount_site(&server, 2).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -178,7 +178,7 @@ async fn fetches_exhibitions_and_events_via_fetch_context() {
 async fn detail_fetches_are_capped() {
     let server = MockServer::start().await;
     mount_site(&server, 1).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap()).with_max_detail_pages(1);
     let raws = s.fetch(&ctx).await.expect("fetch");
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
@@ -205,7 +205,7 @@ async fn exhibition_page_without_jsonld_is_reported() {
     .await;
     mount(&server, "/exhibitions/show", "<html></html>".into(), 1).await;
     mount(&server, "/events/", "<html></html>".into(), 1).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap());
     assert!(s.fetch(&ctx).await.expect("fetch").is_empty());
     assert_eq!(
@@ -228,7 +228,7 @@ async fn events_page_with_only_past_events_is_clean() {
     );
     let server = MockServer::start().await;
     mount_site_with_events(&server, 2, past_only).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -252,7 +252,7 @@ async fn robots_disallow_blocks_the_scraper() {
         0,
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -277,7 +277,7 @@ async fn empty_listing_is_an_error() {
         1,
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = OctoberGallery::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(

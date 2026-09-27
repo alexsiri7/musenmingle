@@ -323,7 +323,7 @@ async fn thumb_setup(name: &str, image_path: &str) -> Option<ThumbSetup> {
 }
 
 fn ctx() -> FetchContext {
-    FetchContext::new(RateLimitConfig::disabled()).unwrap()
+    FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap()
 }
 
 #[derive(Debug, sqlx::FromRow)]

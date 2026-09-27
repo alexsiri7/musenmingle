@@ -238,7 +238,7 @@ async fn mount_list(server: &MockServer, at: &str, body: String, expect: u64) {
 }
 
 fn ctx() -> FetchContext {
-    FetchContext::new(RateLimitConfig::disabled()).unwrap()
+    FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap()
 }
 
 fn tec(server: &MockServer, config: Value) -> Tec {

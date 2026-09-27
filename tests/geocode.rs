@@ -53,7 +53,7 @@ async fn postcodes_io() -> MockServer {
 async fn postcodes_resolve_live_then_terminated() {
     let server = postcodes_io().await;
     let base = Url::parse(&server.uri()).unwrap();
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     assert_eq!(
         postcode_point(&ctx, &base, "SE5 8UH").await.unwrap(),
         Some((51.474002, -0.081087))
@@ -117,7 +117,7 @@ async fn venues_are_geocoded_and_missing_ones_alert() {
     };
     let pool = db.migrated_pool().await;
     let server = postcodes_io().await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let recorder = Recorder::default();
     let checks = VenueChecks {
         postcodes_base: Url::parse(&server.uri()).unwrap(),

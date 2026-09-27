@@ -73,7 +73,7 @@ async fn fetches_the_listing_once_via_fetch_context() {
         .mount(&server)
         .await;
 
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -117,7 +117,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -144,7 +144,7 @@ async fn empty_listing_is_an_error() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("no event cards"), "{err}");
@@ -169,7 +169,7 @@ async fn cards_without_a_title_link_are_reported() {
         .respond_with(ResponseTemplate::new(200).set_body_string(listing))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = WilliamMorrisSociety::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();

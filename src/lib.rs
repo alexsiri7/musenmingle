@@ -22,6 +22,7 @@ pub mod listing;
 pub mod matching;
 pub mod model;
 pub mod music;
+pub mod netguard;
 pub mod normalise;
 pub mod notify;
 pub mod qa;

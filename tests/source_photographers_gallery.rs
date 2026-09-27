@@ -77,7 +77,7 @@ async fn serve_site(server: &MockServer) {
 async fn fetches_both_listing_pages_via_fetch_context() {
     let server = MockServer::start().await;
     serve_site(&server).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = PhotographersGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -103,7 +103,7 @@ async fn fetches_both_listing_pages_via_fetch_context() {
 async fn caps_listing_pages() {
     let server = MockServer::start().await;
     serve_site(&server).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = PhotographersGallery::new(server.uri().parse().unwrap())
         .with_max_pages(1)
         .fetch(&ctx)
@@ -125,7 +125,7 @@ async fn a_failing_second_page_is_a_soft_error() {
         .mount(&server)
         .await;
     serve_site(&server).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = PhotographersGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -153,7 +153,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = PhotographersGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -175,7 +175,7 @@ async fn a_listing_without_teasers_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = PhotographersGallery::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

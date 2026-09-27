@@ -128,7 +128,7 @@ async fn fetches_pages_and_event_pages_via_fetch_context() {
     let server = MockServer::start().await;
     let broken = "sunday-drop-in-tours-18-oct";
     serve_site(&server, broken).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = FoundlingMuseum::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -148,7 +148,7 @@ async fn fetches_pages_and_event_pages_via_fetch_context() {
 async fn caps_event_page_fetches() {
     let server = MockServer::start().await;
     serve_site(&server, "").await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = FoundlingMuseum::new(server.uri().parse().unwrap())
         .with_max_detail_pages(2)
         .fetch(&ctx)
@@ -180,7 +180,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = FoundlingMuseum::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -202,7 +202,7 @@ async fn a_listing_without_cards_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = FoundlingMuseum::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

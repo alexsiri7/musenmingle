@@ -65,7 +65,7 @@ async fn fetches_the_listing_via_fetch_context() {
         .expect(1)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = TwoTemplePlace::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -97,7 +97,7 @@ async fn an_empty_upcoming_section_is_not_an_error() {
         ))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = TwoTemplePlace::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -118,7 +118,7 @@ async fn a_page_without_the_upcoming_section_is_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = TwoTemplePlace::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await
@@ -144,7 +144,7 @@ async fn robots_disallow_blocks_the_scraper() {
         .expect(0)
         .mount(&server)
         .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let err = TwoTemplePlace::new(server.uri().parse().unwrap())
         .fetch(&ctx)
         .await

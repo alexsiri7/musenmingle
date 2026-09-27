@@ -273,7 +273,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   fetches and caches robots.txt per origin (RFC 9309 semantics, Crawl-delay
   honoured) and rate-limits per domain (default 1 request / 2 s; built-in
   floors in `config::BUILTIN_MIN_INTERVALS` can't be lowered by
-  configuration).
+  configuration). It connects only to public addresses (`src/netguard.rs`:
+  http(s) only; no loopback, private, link-local, CGNAT, unique-local IPv6
+  or `*.internal` / `*.local` hosts, checked on the resolved IPs), follows
+  at most 3 redirects (each checked again) and reads at most 10 MB of a
+  body.
 - **Normalisation** (`src/normalise.rs`): HTML/whitespace cleanup,
   Europe/London → UTC, price parsing (free detection), category mapping and
   the cross-source **dedupe key** (`title|London date|venue`, algorithm

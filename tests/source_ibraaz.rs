@@ -143,7 +143,7 @@ async fn mount_site(server: &MockServer, detail_fetches: usize) {
 async fn fetches_listing_and_event_pages_via_fetch_context() {
     let server = MockServer::start().await;
     mount_site(&server, SLUGS.len()).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Ibraaz::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
 
@@ -174,7 +174,7 @@ async fn fetches_listing_and_event_pages_via_fetch_context() {
 async fn event_page_fetches_are_capped() {
     let server = MockServer::start().await;
     mount_site(&server, 2).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Ibraaz::new(server.uri().parse().unwrap()).with_max_detail_pages(2);
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
@@ -198,7 +198,7 @@ async fn robots_disallow_blocks_the_scraper() {
     )
     .await;
     mount(&server, "/whats-on/", "should never be fetched".into(), 0).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Ibraaz::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("robots.txt disallows"), "{err}");
@@ -223,7 +223,7 @@ async fn listing_without_the_calendar_is_an_error() {
         1,
     )
     .await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Ibraaz::new(server.uri().parse().unwrap());
     let err = s.fetch(&ctx).await.unwrap_err().to_string();
     assert!(err.contains("/whats-on/: no Nuxt payload"), "{err}");
@@ -264,7 +264,7 @@ async fn unreadable_calendar_events_are_reported() {
     )
     .await;
     mount(&server, "/whats-on/", listing_with_an_unreadable_event(), 1).await;
-    let ctx = FetchContext::new(RateLimitConfig::disabled()).unwrap();
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Ibraaz::new(server.uri().parse().unwrap()).with_max_detail_pages(0);
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert_eq!(raws.len(), 1);
