@@ -90,7 +90,9 @@ There is no local Docker; never try to use testcontainers.
     (both false). `repo::upsert_event` enforces the flags and the 300-char
     excerpt (`normalise::excerpt`); don't bypass it, and don't change
     `clean_description`/sources to do it. Venue links use `rel="noopener"`
-    (not `noreferrer`) and the primary call to action is the source's page.
+    (not `noreferrer`). On the event detail page (and the map popover) the
+    primary call to action is the source's page ("See it on <venue> →");
+    event cards lead to our detail page and keep a "See it on" link.
 11. **`/about` must stay true.** It makes public promises (robots.txt, the
     MuseNMingleBot UA linking to `/about#for-venues`, 2 s default rate limit,
     excerpts, credited thumbnails, no cookies, removal within 7 days via

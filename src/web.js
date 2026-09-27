@@ -599,8 +599,9 @@
       var c = slot(node, "credit");
       c.setAttribute("href", creditUrl);
       c.textContent = credit.name;
+      if (event) slot(node, "image-link").setAttribute("href", href);
       figure.hidden = false;
-      removeSlot(node, "blank");
+      removeSlot(node, "blank-link");
     } else {
       if (figure) figure.parentNode.removeChild(figure);
       // The decorative "Monograph Blank" (same as web::blank on the server).
@@ -612,6 +613,7 @@
         slot(node, "blank-venue").textContent = e.venue_name || "London";
         slot(node, "blank-numeral").textContent = e.starts_at ? dayOfMonth(e.starts_at) : "";
         blank.hidden = false;
+        if (event) slot(node, "blank-link").setAttribute("href", href);
       }
     }
     var details = slot(node, "details");
@@ -623,8 +625,9 @@
       ics.setAttribute("href", href + ".ics");
       slot(node, "ics-title").textContent = "Add to calendar: " + e.title;
       ics.hidden = false;
-      // The primary call to action is the source's own page; venue links
-      // keep the referrer (rel="noopener", no "noreferrer").
+      // The card leads to our own detail page; the source's page is the
+      // link under it. Venue links keep the referrer (rel="noopener", no
+      // "noreferrer").
       var primary = null;
       (event.sources || []).forEach(function (s) {
         var u = safeLink(s.url);
@@ -635,7 +638,11 @@
           var cta = slot(node, "cta");
           cta.setAttribute("href", u);
           cta.textContent = "See it on " + name + " \u2192";
-          slot(node, "cta-wrap").hidden = false;
+          var vh = doc.createElement("span");
+          vh.className = "vh";
+          vh.textContent = ": " + e.title;
+          cta.appendChild(vh);
+          slot(node, "links").hidden = false;
           return;
         }
         if (u === primary) return;
@@ -647,7 +654,7 @@
         sources.appendChild(a);
       });
     } else {
-      details.hidden = true;
+      slot(node, "details-wrap").hidden = true;
       if (gone) slot(node, "gone").hidden = false;
     }
     var btn = node.querySelector("button.save");

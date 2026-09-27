@@ -630,6 +630,19 @@ async fn thumbnails_are_served_cached_and_credited_never_hotlinked() {
         "{html}"
     );
     assert!(html.contains("See it on Image Venue →"), "{html}");
+    // The card's image links to our detail page; only the img is wrapped, so
+    // the credit link is never nested inside another link.
+    assert!(
+        html.contains(&format!(
+            "<figure class=\"thumb\"><a class=\"thumb-link\" href=\"/events/{}\" tabindex=\"-1\" aria-hidden=\"true\"><img src=\"{thumb_url}\"",
+            s.event_id
+        )),
+        "{html}"
+    );
+    assert!(
+        html.contains("height=\"336\"></a><figcaption class=\"credit\">"),
+        "{html}"
+    );
     assert!(!html.contains(&s.server.uri()), "source image URL leaked");
     for img in html.split("<img ").skip(1) {
         assert!(img.starts_with("src=\"/thumbs/"), "{img}");
@@ -643,6 +656,13 @@ async fn thumbnails_are_served_cached_and_credited_never_hotlinked() {
     );
     assert!(html.contains("Image: <a href=\"https://venue.test/whats-on/poster-show\""));
     assert!(!html.contains(&s.server.uri()));
+    // The detail page's hero is not a link; its primary call to action is
+    // the source's page.
+    assert!(!html.contains("thumb-link"), "{html}");
+    assert!(
+        html.contains("<a class=\"button\" href=\"https://venue.test/whats-on/poster-show\" rel=\"noopener\">See it on Image Venue →"),
+        "{html}"
+    );
 
     // JSON: local thumbnail + credit, never the source image URL.
     let (_, _, body) = get(&app, &format!("/v1/events/{}", s.event_id), None).await;

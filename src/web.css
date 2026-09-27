@@ -816,6 +816,9 @@ button.pop-close:hover { background: var(--fill); color: var(--ink); }
 }
 .sources-table td:nth-child(3), .sources-table td:nth-child(4), .sources-table td:nth-child(5) { font-family: var(--mono); font-size: 0.75rem; }
 .sources-table + h2, .table-wrap + h2 { margin-top: var(--xl); }
-.links > a:first-child { color: var(--cobalt); text-decoration: none; }
-.links > a:first-child::after { content: " \2192"; }
-.links > a:first-child:hover { text-decoration: underline; }
+.links a.venue-link {
+  display: inline-block; padding: 0.25rem 0; font-family: var(--sans); font-size: 0.8125rem; font-weight: 600;
+  color: var(--cobalt); text-decoration: none;
+}
+.links a.venue-link:hover { text-decoration: underline; }
+a.thumb-link { display: block; color: inherit; text-decoration: none; }

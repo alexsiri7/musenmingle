@@ -314,9 +314,33 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert!(p.body.contains(">Exhibition</span>"));
     assert!(p.body.contains("Until <time"));
     assert!(p.body.contains(&format!("href=\"/events/{drawing}\"")));
+    // Cards lead to our own detail page (the "Details" button, the title and
+    // the image or blank); the source's page is the link under them.
     assert!(
+        p.body.contains(&format!(
+            "<p class=\"cta\"><a class=\"button\" href=\"/events/{drawing}\">Details<span class=\"vh\">: Life drawing</span></a></p>"
+        )),
+        "{}",
         p.body
-            .contains("<a class=\"button\" href=\"https://www.barbican.org.uk/life-drawing\" rel=\"noopener\">See it on Barbican →")
+    );
+    assert!(
+        p.body.contains(&format!(
+            "<a class=\"thumb-link\" href=\"/events/{drawing}\" tabindex=\"-1\" aria-hidden=\"true\"><div class=\"blank thumb\""
+        )),
+        "{}",
+        p.body
+    );
+    assert!(
+        p.body.contains(
+            "<p class=\"links\"><a class=\"venue-link\" href=\"https://www.barbican.org.uk/life-drawing\" rel=\"noopener\">See it on Barbican →"
+        ),
+        "{}",
+        p.body
+    );
+    assert!(
+        !p.body.contains("<a class=\"button\" href=\"https://"),
+        "no card leads with an external button: {}",
+        p.body
     );
     // Default "from" is today (London), shown in the form.
     assert!(p.body.contains(&format!(
