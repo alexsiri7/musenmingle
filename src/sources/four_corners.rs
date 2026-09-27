@@ -376,6 +376,28 @@ mod tests {
     }
 
     #[test]
+    fn listing_skips_foreign_hosts_and_repeated_slugs() {
+        let card = |href: &str, title: &str| {
+            format!(
+                r#"<div data-box-url="{href}"><div class="event-content"><h4>{title}</h4></div></div>"#
+            )
+        };
+        let html = [
+            card("https://elsewhere.example/whats-on/away", "Elsewhere"),
+            card("/whats-on/show", "First"),
+            card("/whats-on/show", "Second"),
+        ]
+        .concat();
+        let page_url = Url::parse("https://www.fourcornersfilm.co.uk/whats-on/").unwrap();
+        let listing = parse_listing(&html, &page_url);
+        let kept: Vec<_> = listing
+            .iter()
+            .map(|r| (r.source_event_id.as_str(), r.payload["title"].as_str()))
+            .collect();
+        assert_eq!(kept, [("show", Some("First"))]);
+    }
+
+    #[test]
     fn missing_date_is_an_error() {
         assert!(normalise_payload(&json!({"title": "No date", "types": ["Talk"]})).is_err());
     }
