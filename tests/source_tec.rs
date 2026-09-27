@@ -303,6 +303,23 @@ async fn a_failed_later_page_keeps_what_was_fetched() {
 }
 
 #[tokio::test]
+async fn a_malformed_later_page_keeps_what_was_fetched() {
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    let body = fixture("scrapers/tec-cinema-museum/api-page-1.json");
+    mount_api_page(&server, 1, body, 1).await;
+    mount_api_page(&server, 2, r#"{"message": "busy"}"#.into(), 1).await;
+    let ctx = ctx();
+    let raws = tec(&server, json!({})).fetch(&ctx).await.expect("fetch");
+    assert_eq!(ids(&raws), ids(&api_page("tec-cinema-museum", 1)));
+    let errors = ctx.take_errors();
+    assert!(
+        errors.len() == 1 && errors[0].contains("API page 2") && errors[0].contains("no events"),
+        "{errors:?}"
+    );
+}
+
+#[tokio::test]
 async fn an_empty_programme_is_not_an_error() {
     let server = MockServer::start().await;
     mount_open_robots(&server).await;

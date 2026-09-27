@@ -159,15 +159,18 @@ impl Tec {
                 .append_pair("ends_after", &ends_after.format("%Y-%m-%d").to_string())
                 .append_pair("per_page", &PER_PAGE.to_string())
                 .append_pair("page", &page.to_string());
-            let body: Value = match ctx.get_json(&url).await {
-                Ok(body) => body,
-                Err(e) if page == 1 => return Err(e.into()),
+            let parsed = match ctx.get_json::<Value>(&url).await {
+                Ok(body) => parse_api_page(&body),
+                Err(e) => Err(e.into()),
+            };
+            let (items, total_pages) = match parsed {
+                Ok(parsed) => parsed,
+                Err(e) if page == 1 => return Err(e),
                 Err(e) => {
                     ctx.report_error(format!("API page {page}: {e}"));
                     break;
                 }
             };
-            let (items, total_pages) = parse_api_page(&body)?;
             collect(ctx, items, &mut out);
             if page >= total_pages.min(MAX_API_PAGES) {
                 break;
