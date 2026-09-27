@@ -182,6 +182,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     `platform = 'artlogic'` and its `config` (listing paths, venue, London
     locations), so a new gallery is a migration row. 38 galleries seeded
     (issue #52); content policy per gallery from its terms.
+  - `luma-<calendar>` — one platform source (`src/sources/luma.rs`) for
+    curated Luma calendars of London creative communities, each read only
+    through its official iCal subscription feed (Luma's "publicly supported
+    interface"; one request per calendar): UTC, `TZID` and all-day times,
+    `RRULE` expansion (daily/weekly, 90 days ahead), cancelled and past
+    events dropped, London-only by `GEO`, hidden addresses kept without a
+    venue or pin; category from title keywords or the row's default. Each
+    calendar is a `platform = 'luma'` row; the list and reasons are in
+    `docs/luma-calendars.md`. Facts + link only (terms).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list

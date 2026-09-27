@@ -1,0 +1,52 @@
+---
+source: tests/source_luma.rs
+expression: "normalised(&s, &feed(fixture_name))"
+---
+[
+  {
+    "event": null,
+    "id": "evt-heINBWFqBgkAJUI",
+    "start": "2026-07-07"
+  },
+  {
+    "event": null,
+    "id": "evt-pCFcyhvqtsZURlF",
+    "start": "2026-09-27T16:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "Westbourne Park, 11 Woodfield Rd, London W9 2BA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "offland-travel-folio-workshop|2026-09-29|mason-fifth",
+      "description": null,
+      "ends_at": "2026-09-29T19:00:00Z",
+      "image_url": null,
+      "lat": 51.5225729,
+      "lng": -0.1994666,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-29T17:00:00Z",
+      "tags": [],
+      "title": "Offland : Travel Folio Workshop",
+      "url": "https://luma.com/bcb6km9t",
+      "venue_name": "Mason & Fifth"
+    },
+    "id": "evt-MMRCEwpdkTHRTOP",
+    "start": "2026-09-29T17:00:00+00:00"
+  },
+  {
+    "event": null,
+    "id": "evt-l8VDJVGACKki0Tu",
+    "start": "2026-09-30T18:00:00+00:00"
+  },
+  {
+    "event": null,
+    "id": "evt-zsu7jfbliInUXKM",
+    "start": "2026-10-04T11:00:00+00:00"
+  }
+]

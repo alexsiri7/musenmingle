@@ -1,0 +1,32 @@
+---
+source: tests/source_luma.rs
+expression: "normalised(&s, &feed(fixture_name))"
+---
+[
+  {
+    "event": {
+      "address": "222 Brixton Rd, London SW9 6AH, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "dramaturgy-drop-in|2026-09-29|unknown",
+      "description": null,
+      "ends_at": "2026-09-29T15:00:00Z",
+      "image_url": null,
+      "lat": 51.472099299999996,
+      "lng": -0.1130211,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-29T12:00:00Z",
+      "tags": [],
+      "title": "Dramaturgy Drop-In ✍🏾✨",
+      "url": "https://luma.com/lzp4ss9l",
+      "venue_name": null
+    },
+    "id": "evt-I7clnOZDrL9B8Od",
+    "start": "2026-09-29T12:00:00+00:00"
+  }
+]

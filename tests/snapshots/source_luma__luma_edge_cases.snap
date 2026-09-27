@@ -1,0 +1,193 @@
+---
+source: tests/source_luma.rs
+expression: "normalised(&s, &feed(\"edge-cases\"))"
+---
+[
+  {
+    "event": {
+      "address": "Unit 3, 12 Example St, London E8 1AA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "weekly-life-drawing-workshop|2026-09-30|print-studio",
+      "description": null,
+      "ends_at": "2026-09-30T20:00:00Z",
+      "image_url": null,
+      "lat": 51.5456,
+      "lng": -0.0553,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-30T18:00:00Z",
+      "tags": [],
+      "title": "Weekly life drawing workshop",
+      "url": "https://luma.com/weekly01",
+      "venue_name": "Print Studio"
+    },
+    "id": "evt-weeklySketch#20260930T180000Z",
+    "start": "2026-09-30T18:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "Unit 3, 12 Example St, London E8 1AA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "weekly-life-drawing-workshop|2026-10-14|print-studio",
+      "description": null,
+      "ends_at": "2026-10-14T20:00:00Z",
+      "image_url": null,
+      "lat": 51.5456,
+      "lng": -0.0553,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-14T18:00:00Z",
+      "tags": [],
+      "title": "Weekly life drawing workshop",
+      "url": "https://luma.com/weekly01",
+      "venue_name": "Print Studio"
+    },
+    "id": "evt-weeklySketch#20261014T180000Z",
+    "start": "2026-10-14T18:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "Unit 3, 12 Example St, London E8 1AA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "weekly-life-drawing-workshop|2026-10-21|print-studio",
+      "description": null,
+      "ends_at": "2026-10-21T20:00:00Z",
+      "image_url": null,
+      "lat": 51.5456,
+      "lng": -0.0553,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-21T18:00:00Z",
+      "tags": [],
+      "title": "Weekly life drawing workshop",
+      "url": "https://luma.com/weekly01",
+      "venue_name": "Print Studio"
+    },
+    "id": "evt-weeklySketch#20261021T180000Z",
+    "start": "2026-10-21T18:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "Unit 3, 12 Example St, London E8 1AA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "weekly-life-drawing-workshop|2026-10-28|print-studio",
+      "description": null,
+      "ends_at": "2026-10-28T21:00:00Z",
+      "image_url": null,
+      "lat": 51.5456,
+      "lng": -0.0553,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-28T19:00:00Z",
+      "tags": [],
+      "title": "Weekly life drawing workshop",
+      "url": "https://luma.com/weekly01",
+      "venue_name": "Print Studio"
+    },
+    "id": "evt-weeklySketch#20261028T190000Z",
+    "start": "2026-10-28T19:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "Unit 3, 12 Example St, London E8 1AA, UK",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "weekly-life-drawing-workshop|2026-11-04|print-studio",
+      "description": null,
+      "ends_at": "2026-11-04T21:00:00Z",
+      "image_url": null,
+      "lat": 51.5456,
+      "lng": -0.0553,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-04T19:00:00Z",
+      "tags": [],
+      "title": "Weekly life drawing workshop",
+      "url": "https://luma.com/weekly01",
+      "venue_name": "Print Studio"
+    },
+    "id": "evt-weeklySketch#20261104T190000Z",
+    "start": "2026-11-04T19:00:00+00:00"
+  },
+  {
+    "event": {
+      "address": "2 Road, London SE1 1AA, UK",
+      "all_day": true,
+      "category": "expo",
+      "dedupe_key": "zine-fair-weekend|2026-10-17|unknown",
+      "description": null,
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": null,
+      "lat": 51.5,
+      "lng": -0.1,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-16T23:00:00Z",
+      "tags": [],
+      "title": "Zine fair weekend",
+      "url": "https://luma.com/zinefair",
+      "venue_name": "Hall"
+    },
+    "id": "evt-weekendFair",
+    "start": "2026-10-17"
+  },
+  {
+    "event": {
+      "address": null,
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "night-talk-across-clock-change|2026-10-25|unknown",
+      "description": null,
+      "ends_at": "2026-10-25T02:30:00Z",
+      "image_url": null,
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-25T00:30:00Z",
+      "tags": [],
+      "title": "Night talk across the clock change",
+      "url": "https://luma.com/event/evt-clockChange",
+      "venue_name": null
+    },
+    "id": "evt-clockChange",
+    "start": "2026-10-25T00:30:00+00:00"
+  },
+  {
+    "event": null,
+    "id": "evt-online",
+    "start": "2026-10-12T18:00:00+00:00"
+  }
+]

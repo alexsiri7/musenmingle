@@ -1,0 +1,141 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Luma//Creative AI Meetup//EN
+X-WR-CALNAME:Creative AI Meetup
+X-WR-CALDESC:Luma Calendar
+REFRESH-INTERVAL;VALUE=DURATION:PT12H
+X-PUBLISHED-TTL:PT12H
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:20250305T183000Z
+DTEND:20250305T210000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-WzEBiI8BEi5Vlx8@events.lu.ma
+SUMMARY:Creative AI meetup: The Return
+DESCRIPTION:Get up-to-date information at: https://luma.com/44u4wx9y\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott & Edw
+ ard Saperia
+LOCATION:https://luma.com/event/evt-WzEBiI8BEi5Vlx8
+GEO:51.52675306661263;-0.07060333632488947
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20250515T170000Z
+DTEND:20250515T200000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-aMeEJ9rR1ldjUDI@events.lu.ma
+SUMMARY:Creative AI Meetup: Satellites, Oceans and Disintegrating Orchestr
+ as
+DESCRIPTION:Get up-to-date information at: https://luma.com/r6cltrhw\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott
+LOCATION:https://luma.com/event/evt-aMeEJ9rR1ldjUDI
+GEO:51.52846473430598;-0.07880998761319098
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20250715T170000Z
+DTEND:20250715T193000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-DBuBAt1Up99yy65@events.lu.ma
+SUMMARY:Creative AI Meetup: Neural Folklore, Improv and Poetic Embodiment
+DESCRIPTION:Get up-to-date information at: https://luma.com/exq4jj9y\n\nAd
+ dress:\nIDEALondon\nLondon, England\nUnited Kingdom\n\nHosted by Luba Elli
+ ott, Subaita Rahman & IDEALondon
+LOCATION:IDEALondon, 69 Wilson St, London EC2A 2BB, UK
+GEO:51.52196559999999;-0.0848193
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20251001T170000Z
+DTEND:20251001T193000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-tYyoOAQoHDO15VO@events.lu.ma
+SUMMARY:Creative AI Meetup: Machine as Author, Audience and Critic
+DESCRIPTION:Get up-to-date information at: https://luma.com/3pjdt4tt\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott
+LOCATION:https://luma.com/event/evt-tYyoOAQoHDO15VO
+GEO:51.53110888008006;-0.13288238877282801
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260114T180000Z
+DTEND:20260114T203000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-8esr0z05O8M06tp@events.lu.ma
+SUMMARY:Creative AI Meetup: January Edition
+DESCRIPTION:Get up-to-date information at: https://luma.com/9awru27x\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott & IDE
+ ALondon
+LOCATION:https://luma.com/event/evt-8esr0z05O8M06tp
+GEO:51.52329298801465;-0.08240536615023354
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260211T180000Z
+DTEND:20260211T203000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-u1nVX7Br1lRwpn5@events.lu.ma
+SUMMARY:Struggle of Seeds
+DESCRIPTION:Get up-to-date information at: https://luma.com/zm22t3rj\n\nAd
+ dress:\narebyte Digital Art Centre\nLondon, England\nUnited Kingdom\n\nHos
+ ted by Luba Elliott & masaru mizuochi
+LOCATION:arebyte Digital Art Centre, 25, 27 Camden Rd, London NW1 9LN, UK
+GEO:51.5409122;-0.1396267
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260304T180000Z
+DTEND:20260304T203000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-4GkdDReijlg1E8b@events.lu.ma
+SUMMARY:Creative AI Meetup: Mutations, Wetware and Real-Time Creativity
+DESCRIPTION:Get up-to-date information at: https://luma.com/8pod00g2\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott
+LOCATION:https://luma.com/event/evt-4GkdDReijlg1E8b
+GEO:51.53657580226061;-0.12784378533735657
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260513T170000Z
+DTEND:20260513T193000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-yatYdHUKyT2OTqg@events.lu.ma
+SUMMARY:Creative AI Meetup: May Edition
+DESCRIPTION:Get up-to-date information at: https://luma.com/gx7c3x0i\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott
+LOCATION:https://luma.com/event/evt-yatYdHUKyT2OTqg
+GEO:51.52504144916362;-0.08460986290388438
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20260930T170000Z
+DTEND:20260930T193000Z
+DTSTAMP:20260927T074349Z
+ORGANIZER;CN="Luba Elliott":MAILTO:calendar-invite@lu.ma
+UID:evt-VHMM4bwQwm1EnUL@events.lu.ma
+SUMMARY:Creative AI Meetup: September
+DESCRIPTION:Get up-to-date information at: https://luma.com/7i07bzv8\n\nAd
+ dress:\nCheck event page for more details.\n\nHosted by Luba Elliott
+LOCATION:https://luma.com/event/evt-VHMM4bwQwm1EnUL
+GEO:51.52073936501845;-0.09059113233734879
+SEQUENCE:212658229
+STATUS:TENTATIVE
+END:VEVENT
+END:VCALENDAR

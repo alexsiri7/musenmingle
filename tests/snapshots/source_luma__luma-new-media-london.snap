@@ -1,0 +1,32 @@
+---
+source: tests/source_luma.rs
+expression: "normalised(&s, &feed(fixture_name))"
+---
+[
+  {
+    "event": {
+      "address": "Algha works, 83 Smeed Rd, Fish Island, London E3 2NR, UK",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "touchdesigner-meetup-talks-open-visuals-live-electronic-sets|2026-10-01|not-for-sale",
+      "description": null,
+      "ends_at": "2026-10-01T20:30:00Z",
+      "image_url": null,
+      "lat": 51.5382779,
+      "lng": -0.0233346,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T17:00:00Z",
+      "tags": [],
+      "title": "TouchDesigner Meetup - Talks, Open Visuals & Live Electronic Sets",
+      "url": "https://luma.com/v7tyg0pl",
+      "venue_name": "Not For Sale Gallery"
+    },
+    "id": "evt-jFvQe50i8ZB8LDh",
+    "start": "2026-10-01T17:00:00+00:00"
+  }
+]

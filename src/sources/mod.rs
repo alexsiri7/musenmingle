@@ -30,6 +30,7 @@ pub mod hunterian_museum;
 pub mod ibraaz;
 pub mod jsonld;
 pub mod lisson_gallery;
+pub mod luma;
 pub mod lux;
 pub mod mall_galleries;
 pub mod october_gallery;
@@ -101,6 +102,11 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
                 row.config.as_ref(),
             )?)),
             tec::PLATFORM => Ok(Box::new(tec::Tec::from_row(
+                &row.key,
+                base,
+                row.config.as_ref(),
+            )?)),
+            luma::PLATFORM => Ok(Box::new(luma::Luma::from_row(
                 &row.key,
                 base,
                 row.config.as_ref(),
