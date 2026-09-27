@@ -116,6 +116,9 @@ pub struct SuggestionConfig {
     /// Reverse proxies in front of the API whose `X-Forwarded-For` entries
     /// are trusted (Railway: 1). 0 = use the TCP peer address.
     pub trusted_proxies: usize,
+    /// GitHub issues and comments the site's forms may file per London day
+    /// (`crate::issue_cap`).
+    pub issues_per_day: u32,
 }
 
 impl Default for SuggestionConfig {
@@ -125,6 +128,7 @@ impl Default for SuggestionConfig {
             per_hour: 5,
             per_day: 20,
             trusted_proxies: 0,
+            issues_per_day: crate::issue_cap::DEFAULT_PER_DAY,
         }
     }
 }
@@ -146,9 +150,12 @@ impl SuggestionConfig {
             per_hour: parse_env("SUGGESTION_RATE_PER_HOUR", d.per_hour)?,
             per_day: parse_env("SUGGESTION_RATE_PER_DAY", d.per_day)?,
             trusted_proxies: parse_env("TRUSTED_PROXY_COUNT", d.trusted_proxies)?,
+            issues_per_day: parse_env("FORM_ISSUES_PER_DAY", d.issues_per_day)?,
         };
-        if c.per_hour == 0 || c.per_day == 0 {
-            bail!("SUGGESTION_RATE_PER_HOUR and SUGGESTION_RATE_PER_DAY must be at least 1");
+        if c.per_hour == 0 || c.per_day == 0 || c.issues_per_day == 0 {
+            bail!(
+                "SUGGESTION_RATE_PER_HOUR, SUGGESTION_RATE_PER_DAY and FORM_ISSUES_PER_DAY must be at least 1"
+            );
         }
         Ok(c)
     }

@@ -101,6 +101,7 @@ fn runner(
         enrich: None,
         qa: None,
         venues: None,
+        form_issues: Default::default(),
     }
 }
 
@@ -278,6 +279,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
         enrich: None,
         qa: None,
         venues: None,
+        form_issues: Default::default(),
     };
 
     let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {

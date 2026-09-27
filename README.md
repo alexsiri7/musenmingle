@@ -320,9 +320,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   labelled `new-scraper` from `.github/ISSUE_TEMPLATE/new-scraper.md`; if
   GitHub fails the row stays `pending` and the next ingest run files it
   (adopting an open issue with the same title). Invalid input gets 400
-  `invalid`. Each client IP (stored only as `sha256(ip + salt)`) may make 5
-  stored submissions per hour and 20 per day, duplicates included; beyond
-  that, 429 with `Retry-After`. The URL is never fetched.
+  `invalid`. Each client IP (stored only as `sha256(ip + salt)`; IPv6
+  clients are grouped by /64) may make 5 stored submissions per hour and 20
+  per day, duplicates included; beyond that, 429 with `Retry-After`. The
+  URL is never fetched. GitHub issues and comments from both forms share a
+  site-wide daily cap (`FORM_ISSUES_PER_DAY`, `src/issue_cap.rs`): past it,
+  submissions stay pending, are filed oldest first on later days, and the
+  owner gets one ntfy digest a day while any are held.
 - **Read API** (`src/api.rs`, `src/listing.rs`; documented in
   [`docs/api.md`](docs/api.md)): `GET /v1/events` filters by London date
   window (events with an end date match on range overlap), category, free,
@@ -353,7 +357,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   form (`src/contact.rs`): requests are stored in `events.contact_requests`
   and filed as `venue-request` GitHub issues with the server's token (the
   optional reply email stays in the database), with a honeypot, a signed
-  minimum fill time and a per-IP rate limit against spam; see
+  minimum fill time, a per-IP rate limit and the forms' daily issue cap
+  against spam; see
   [docs/venue-requests.md](docs/venue-requests.md). Public pages never link
   into the (private) GitHub repository.
   `GET /sources` is the `/v1/sources` data as a table;
@@ -682,6 +687,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `SUGGESTION_IP_SALT` | api | — (required) | Secret salt for hashing submitter IPs |
 | `SUGGESTION_RATE_PER_HOUR` | api | `5` | Stored suggestions per client IP per hour |
 | `SUGGESTION_RATE_PER_DAY` | api | `20` | Stored suggestions per client IP per day |
+| `FORM_ISSUES_PER_DAY` | both | `20` | GitHub issues/comments the site's forms may file per London day; the rest wait as pending and the owner gets one ntfy digest per day |
 | `TRUSTED_PROXY_COUNT` | api | `0` | Proxies whose `X-Forwarded-For` entries are trusted (Railway: `1`) |
 | `PORT` | api | `8080` | HTTP port |
 | `CANONICAL_HOST` | api | unset → no redirect | Host that requests to `LEGACY_HOSTS` are redirected to (301 for GET/HEAD, 308 otherwise; path and query kept; `/healthz` never redirects) |

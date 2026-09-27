@@ -2751,6 +2751,32 @@ pub async fn pending_suggestions(
     .await
 }
 
+/// Take one of `per_day` form-issue slots for the London date `day`; false
+/// when they are all taken. Atomic, so concurrent requests can't overshoot.
+pub async fn reserve_form_issue(pool: &PgPool, day: NaiveDate, per_day: i32) -> sqlx::Result<bool> {
+    let filed: Option<i32> = sqlx::query_scalar(
+        "INSERT INTO events.form_issue_quota (day, filed) VALUES ($1, 1)
+         ON CONFLICT (day) DO UPDATE SET filed = events.form_issue_quota.filed + 1
+             WHERE events.form_issue_quota.filed < $2
+         RETURNING filed",
+    )
+    .bind(day)
+    .bind(per_day)
+    .fetch_optional(pool)
+    .await?;
+    Ok(filed.is_some())
+}
+
+/// Site suggestions and contact requests waiting for a GitHub issue.
+pub async fn held_form_counts(pool: &PgPool) -> sqlx::Result<(i64, i64)> {
+    sqlx::query_as(
+        "SELECT (SELECT count(*) FROM events.site_suggestions WHERE status = 'pending'),
+                (SELECT count(*) FROM events.contact_requests WHERE status = 'pending_issue')",
+    )
+    .fetch_one(pool)
+    .await
+}
+
 // ------------------------------------------------------------ content policy
 
 /// What [`enforce_content_policy`] changed.

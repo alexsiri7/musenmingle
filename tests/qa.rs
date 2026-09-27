@@ -154,6 +154,7 @@ impl Env {
                 config,
             }),
             venues: None,
+            form_issues: Default::default(),
         }
     }
 

@@ -13,6 +13,7 @@ use musenmingle::fetch::FetchContext;
 use musenmingle::geocode::VenueChecks;
 use musenmingle::github::{DEFAULT_API_BASE, GitHubIssueFiler, IssueFiler};
 use musenmingle::health::{HealthChecker, HealthConfig};
+use musenmingle::issue_cap::FormIssueCap;
 use musenmingle::notify::{LogNotifier, Notifier, Ntfy};
 use musenmingle::qa::QaChecker;
 use musenmingle::runner::{RunSummary, Runner};
@@ -89,6 +90,10 @@ async fn main() -> anyhow::Result<()> {
                 .context("POSTCODES_IO_BASE_URL")?,
             notifier: notifier()?,
         }),
+        form_issues: FormIssueCap {
+            per_day: config.suggestions.issues_per_day,
+            notifier: notifier()?,
+        },
     };
     match runner.run_once(Utc::now()).await? {
         RunSummary::Locked => tracing::info!("skipped: another run in progress"),

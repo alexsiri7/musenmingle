@@ -19,7 +19,8 @@
 //!    and, when a Requesty key is configured, run the AI enrichment and
 //!    embedding pass within its spend caps (`crate::enrich`);
 //! 7. file GitHub issues for site suggestions and contact requests the API
-//!    left pending.
+//!    left pending, within the forms' daily cap, and send the owner's daily
+//!    digest while the cap holds some back (`crate::issue_cap`).
 
 use std::time::Duration;
 
@@ -64,6 +65,8 @@ pub struct Runner {
     /// Venue geocoding and the venue-location alert (#204); `None` skips
     /// both (the venue sync still runs).
     pub venues: Option<crate::geocode::VenueChecks>,
+    /// The daily cap on GitHub issues filed for the site's forms.
+    pub form_issues: crate::issue_cap::FormIssueCap,
 }
 
 /// Outcome of one source within a run.
@@ -258,18 +261,27 @@ impl Runner {
             }
         }
         if let Some(filer) = self.health.filer() {
-            match suggestions::file_pending(&self.pool, filer, now).await {
-                Ok(filed) if !filed.is_empty() => {
-                    tracing::info!(issues = ?filed, "filed pending site suggestions")
+            let per_day = self.form_issues.per_day;
+            let mut capped = false;
+            match suggestions::file_pending(&self.pool, filer, now, per_day).await {
+                Ok((filed, held)) => {
+                    capped |= held;
+                    if !filed.is_empty() {
+                        tracing::info!(issues = ?filed, "filed pending site suggestions");
+                    }
                 }
-                Ok(_) => {}
                 Err(e) => tracing::error!(error = %e, "filing pending site suggestions failed"),
             }
-            match crate::contact::file_pending(&self.pool, filer, now).await {
-                Ok(0) => {}
-                Ok(n) => tracing::info!(count = n, "filed pending contact requests"),
+            match crate::contact::file_pending(&self.pool, filer, now, per_day).await {
+                Ok((delivered, held)) => {
+                    capped |= held;
+                    if delivered > 0 {
+                        tracing::info!(count = delivered, "filed pending contact requests");
+                    }
+                }
                 Err(e) => tracing::error!(error = %e, "filing pending contact requests failed"),
             }
+            self.form_issues.digest(&self.pool, now, capped).await;
         } else {
             tracing::warn!(
                 "no GitHub filer configured; pending site suggestions and contact requests will not be filed"

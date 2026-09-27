@@ -18,6 +18,7 @@ pub mod health;
 pub mod host_redirect;
 pub mod hours;
 pub mod ics;
+pub mod issue_cap;
 pub mod listing;
 pub mod matching;
 pub mod model;
