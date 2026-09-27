@@ -1,8 +1,8 @@
 //! Scraper QA end to end: a fake source fetching a wiremock venue, the
 //! runner with a `QaChecker` against a wiremock Requesty, and a wiremock
 //! GitHub. First check and issue, not re-checking, adopting an open issue,
-//! closing on a clean check, the caps, invalid answers and the
-//! zero-retention gate.
+//! closing on a clean check, the caps, running out of credit, invalid
+//! answers, a failed issue update and the zero-retention gate.
 
 mod common;
 
@@ -604,5 +604,59 @@ async fn a_model_that_keeps_data_is_never_called() {
     assert_eq!(reports[0].qa_check, None);
     assert_eq!(calls.load(Ordering::SeqCst), 0);
     assert!(env.checks().await.is_empty());
+    env.done().await;
+}
+
+#[tokio::test]
+async fn out_of_credit_stops_checks_for_the_rest_of_the_tick() {
+    let Some(env) = Env::new(
+        "qa_out_of_credit_stops_checks_for_the_rest_of_the_tick",
+        &["fake", "fake-2"],
+    )
+    .await
+    else {
+        return;
+    };
+    Mock::given(method("POST"))
+        .and(path("/v1/chat/completions"))
+        .respond_with(
+            ResponseTemplate::new(402)
+                .set_body_json(json!({ "error": { "message": "organization balance exhausted" } })),
+        )
+        .mount(&env.requesty)
+        .await;
+    let runner = env.runner(config());
+
+    let reports = env.tick(&runner).await;
+    let statuses: Vec<Option<&str>> = reports.iter().map(|r| r.qa_check.as_deref()).collect();
+    assert_eq!(statuses, [Some("failed"), None]);
+    assert_eq!(env.requesty.received_requests().await.unwrap().len(), 1);
+    assert_eq!(env.checks().await.len(), 1);
+    env.done().await;
+}
+
+#[tokio::test]
+async fn a_failed_issue_update_is_not_a_finished_check() {
+    let Some(env) = Env::new(
+        "qa_a_failed_issue_update_is_not_a_finished_check",
+        &["fake"],
+    )
+    .await
+    else {
+        return;
+    };
+    let calls = Arc::new(AtomicUsize::new(0));
+    mount_chat(&env.requesty, wrong_start_and_missed(), calls.clone()).await;
+    Mock::given(method("GET"))
+        .and(path(format!("/repos/{REPO}/issues")))
+        .respond_with(ResponseTemplate::new(500))
+        .mount(&env.github)
+        .await;
+    let runner = env.runner(config());
+
+    assert_eq!(env.tick(&runner).await[0].qa_check, None);
+    assert_eq!(calls.load(Ordering::SeqCst), 1);
+    let check = env.checks().await.pop().unwrap();
+    assert_eq!((check.1.as_str(), check.4), ("issues", None));
     env.done().await;
 }

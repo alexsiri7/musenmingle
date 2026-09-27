@@ -605,13 +605,7 @@ impl QaChecker {
                     fetched_on: london_date(now),
                 });
                 let report = (status == "issues").then_some((title.as_str(), body.as_str()));
-                match issue::sync(pool, filer, row, report, now).await {
-                    Ok(action) => action,
-                    Err(e) => {
-                        tracing::error!(source = %row.key, error = %e, "scraper check issue update failed");
-                        None
-                    }
-                }
+                issue::sync(pool, filer, row, report, now).await?
             }
         };
         if let Some(a) = issue
