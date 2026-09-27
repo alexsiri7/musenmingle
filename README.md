@@ -215,6 +215,14 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     day; residencies and the young artists' programme, film screenings and
     members-only events skipped; `/live` concerts not read; exhibitions →
     exhibition, book launches → talk, performances → community.
+  - `the-showroom` — CSS on the `/exhibitions/` and `/events/` listings
+    (no JSON-LD; only the current section, not the archive), plus each
+    current event's detail page (capped at 8 a run) for its type label,
+    price note and description; the `time` attributes are malformed, so the
+    visible date text is parsed: single days with a time timed (London wall
+    clock), ranges, "From" dates and untimed days all day; film screenings
+    and children's/family sessions skipped; talks → talk, workshops →
+    workshop, the rest → community.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
