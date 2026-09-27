@@ -592,6 +592,13 @@ async fn sources_lists_refused_sites() {
         .collect();
     assert!(checked.is_sorted_by(|a, b| a >= b), "{checked:?}");
     assert_eq!(refused.last().unwrap()["reason_code"], "js_only");
+    // The 2026-09-26 source survey (#47: 28 rows in migration 20260927970001, plus
+    // National Gallery and White Cube) and venue-discovery pass (#104).
+    let from_issue = |n: u32| {
+        let url = format!("https://github.com/alexsiri7/musenmingle/issues/{n}");
+        refused.iter().filter(|r| r["issue_url"] == url).count()
+    };
+    assert_eq!((from_issue(47), from_issue(104)), (30, 21));
     // The two refusals seeded by migration ..08.
     refused.retain(|r| r["checked_on"] == "2026-09-25");
     assert_eq!(
