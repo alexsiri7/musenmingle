@@ -1,0 +1,732 @@
+---
+source: tests/source_royal_museums_greenwich.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "path": "/whats-on/royal-observatory/observatory-unlocked"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/prince-philip-maritime-collections-centre/behind-scenes-tours-prince-philip-maritime"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/character-encounters-national-maritime-museum"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/character-actors"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/cutty-sark-characters"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/royal-observatory/treasures-tour"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/prince-philip-maritime-collections-centre/coder-dojo"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/discover-sundays"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/sensory-sailors"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "windrush-food-culture-exhibition|2025-11-06|national-maritime",
+      "description": "This free exhibition explores Windrush food culture and its impact on Britain through the decades: from the margins to the mainstream",
+      "ends_at": "2026-09-29T23:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2025-10/Windrush%20Museum%20Windrush%20Food%20Culture%20T4957-003_1.jpg.webp?itok=g4VhiQ9w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-11-06T00:00:00Z",
+      "tags": [],
+      "title": "Windrush Food Culture exhibition",
+      "url": "https://www.rmg.co.uk/whats-on/national-maritime-museum/windrush-food-culture/exhibition",
+      "venue_name": "National Maritime Museum"
+    },
+    "path": "/whats-on/national-maritime-museum/windrush-food-culture/exhibition"
+  },
+  {
+    "event": {
+      "address": "King William Walk, Greenwich, London SE10 9HT",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "niki-gorick-dock-life|2025-11-07|cutty-sark",
+      "description": "A snapshot of the culture and communities of London’s docklands",
+      "ends_at": "2026-10-17T23:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2025-10/Niki%20Gorick%20Leisure-%20Flagging%20up%20web%20banner%20edit%20final.jpg.webp?itok=IO8yTGg1",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2025-11-07T00:00:00Z",
+      "tags": [],
+      "title": "Niki Gorick: Dock Life",
+      "url": "https://www.rmg.co.uk/whats-on/cutty-sark/niki-gorick-dock-life",
+      "venue_name": "Cutty Sark"
+    },
+    "path": "/whats-on/cutty-sark/niki-gorick-dock-life"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "komij-mour-ijin-our-life-is-here|2025-11-28|national-maritime",
+      "description": "Reflections on nuclear testing and climate change in the Marshall Islands – a contemporary art exhibition at the National Maritime Museum",
+      "ends_at": "2026-10-03T23:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2025-10/Our%20Life%20is%20Here%20main%20image.png.webp?itok=6nzcCYXS",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2025-11-28T00:00:00Z",
+      "tags": [],
+      "title": "Kõmij Mour Ijin/Our Life is Here",
+      "url": "https://www.rmg.co.uk/whats-on/national-maritime-museum/komij-mour-ijinour-life-here",
+      "venue_name": "National Maritime Museum"
+    },
+    "path": "/whats-on/national-maritime-museum/komij-mour-ijinour-life-here"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/treasures-tour-national-maritime-museum"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/astronomers-take-over"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/unboxing-universe"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/safe-harbour"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/baby-yoga"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/astronomy-lego-brick-club"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/royal-observatory/mirror-moon"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/royal-observatory/lunar-tours"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/prince-philip-maritime-collections-centre/object-art-craft-workshops"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/prince-philip-maritime-collections-centre/experimental-saturdays"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/lgbtq-history-talks-national-maritime-museum"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "zwo-astronomy-photographer-of-year-exhibition|2026-09-18|national-maritime",
+      "description": "See the world's greatest space photography at the National Maritime Museum",
+      "ends_at": "2027-08-10T23:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-06/SN-494732-2026-10%20%281%29.jpg.webp?itok=wEVbdEQC",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "12",
+        "min": "6"
+      },
+      "starts_at": "2026-09-17T23:00:00Z",
+      "tags": [
+        "space and astronomy"
+      ],
+      "title": "ZWO Astronomy Photographer of the Year exhibition",
+      "url": "https://www.rmg.co.uk/whats-on/astronomy-photographer-year/exhibition",
+      "venue_name": "National Maritime Museum"
+    },
+    "path": "/whats-on/astronomy-photographer-year/exhibition"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/online/voyaging-christ-children-ships-london-missionary-society"
+  },
+  {
+    "event": {
+      "address": "King William Walk, Greenwich, London SE10 9HT",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "national-poetry-day-talks-at-cutty-sark|2026-10-01|cutty-sark",
+      "description": "Celebrate National Poetry Day with short talks about maritime poetry, including Robert Burns' poem that gave Cutty Sark its name and figurehead",
+      "ends_at": "2026-10-01T15:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2025-04/Bow%20view%20of%20Cutty%20Sark%20with%20Nannie%20and%20rigging.jpg.webp?itok=TRmflR_G",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-01T10:00:00Z",
+      "tags": [],
+      "title": "National Poetry Day talks at Cutty Sark",
+      "url": "https://www.rmg.co.uk/whats-on/cutty-sark/national-poetry-day-talks-cutty-sark",
+      "venue_name": "Cutty Sark"
+    },
+    "path": "/whats-on/cutty-sark/national-poetry-day-talks-cutty-sark"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/little-stars"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/raphael-wallfisch-queens-house-bachs-cello-suites-recital"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/cutty-sark-wool-evening"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "perilous-journey-live-in-conversation|2026-10-02|queens-house",
+      "description": "Learn about refugee crossings at sea from those who have experienced it, who are representing it, and who are involved in rescue missions today",
+      "ends_at": "2026-10-02T19:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-09/12235038_1684993058400965_6738491614054980331_n_0.jpg.webp?h=f3d7a386&itok=i-t5mObr",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-02T17:00:00Z",
+      "tags": [
+        "museum lates"
+      ],
+      "title": "A Perilous Journey: live in conversation",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/perilous-journey-live-conversation",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/perilous-journey-live-conversation"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/saturday-art-club"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "tides-intertidal-migration-festival|2026-10-03|queens-house",
+      "description": "A day of workshops and performances exploring how migration shapes our world",
+      "ends_at": "2026-10-03T15:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-04/crossing%20border%20cropped.jpg.webp?itok=svyHJuSt",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-03T10:00:00Z",
+      "tags": [],
+      "title": "TIDES: (Intertidal) – Migration Festival",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/tides-intertidal-migration-festival",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/tides-intertidal-migration-festival"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/sea-shanty-singers"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "art-history-festival-artemisia-gentileschis-susanna-elders-at-queens-house|2026-10-05|queens-house",
+      "description": "Uncover the story behind a rediscovered masterpiece by Artemisia Gentileschi, on loan to the Queen's House from the Royal Collection. This talk is part of the Association for Art History's Art History Festival",
+      "ends_at": "2026-10-05T12:45:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-06/S2038-008_0.jpg.webp?itok=kLHCR4P5",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-05T12:00:00Z",
+      "tags": [
+        "art and culture"
+      ],
+      "title": "Art History Festival: Artemisia Gentileschi’s ‘Susanna and the Elders’ at the Queen’s House",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/art-history-festival-artemisia-gentileschis-susanna-elders-queens-house",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/art-history-festival-artemisia-gentileschis-susanna-elders-queens-house"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "guided-audio-described-tour-of-queens-house|2026-10-06|queens-house",
+      "description": "Join a tour of the Queen's House for blind and visually impaired visitors",
+      "ends_at": "2026-10-06T11:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/F8571-025.png.webp?itok=Y7bt0vPa",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-06T10:00:00Z",
+      "tags": [],
+      "title": "Guided audio-described tour of the Queen's House",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/guided-audio-described-tour-queens-house",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/guided-audio-described-tour-queens-house"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/sister-circle-breathwork-session"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "art-history-festival-pearls-sugar-tobacco-flowers-english-queens-in-atlantic-world|2026-10-06|queens-house",
+      "description": "Historian Lauren Working explores how the Atlantic World shaped Early Modern England, as seen in the art and architecture of the Queen's House. This free talk is part of the Association for Art History's Art History Festival",
+      "ends_at": "2026-10-06T12:50:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2021-02/armada-portrait-of-elizabethi.jpg.webp?itok=8YeuE7U7",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-06T12:00:00Z",
+      "tags": [
+        "art and culture"
+      ],
+      "title": "Art History Festival – Pearls, Sugar, & Tobacco Flowers: English Queens in an Atlantic World",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/art-history-festival-pearls-sugar-tobacco-flowers-english-queens-atlantic",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/art-history-festival-pearls-sugar-tobacco-flowers-english-queens-atlantic"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/flamsteed-astronomy-society-masterclass"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "art-history-festival-held-tenderly-by-sharon-walters|2026-10-07|queens-house",
+      "description": "Explore the influences behind artist Sharon Walters' work in the Queen's House in this free talk, as part of the Association for Art History's Art History Festival",
+      "ends_at": "2026-10-07T12:45:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-02/IMG_2424_0.jpeg.webp?itok=ATofBVOu",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-07T12:00:00Z",
+      "tags": [
+        "art and culture"
+      ],
+      "title": "Art History Festival: 'Held Tenderly' by Sharon Walters",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/art-history-festival-held-tenderly-sharon-walters",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/art-history-festival-held-tenderly-sharon-walters"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/anniversary-celebration-queens-house"
+  },
+  {
+    "event": {
+      "address": "Nelson Mandela Road, Kidbrooke, London SE3 9QS",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-tour-prince-philip-maritime-collections-centre|2026-10-08|prince-philip-maritime-collections",
+      "description": "Join guide John Wilson for a British Sign Language (BSL) tour of our state-of-the-art conservation and storage facility",
+      "ends_at": "2026-10-08T14:30:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2021-02/S5003-039%20PPMCC%20web.png.webp?itok=cyRyRTFp",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-08T13:00:00Z",
+      "tags": [
+        "bsl tours"
+      ],
+      "title": "BSL Tour: The Prince Philip Maritime Collections Centre",
+      "url": "https://www.rmg.co.uk/whats-on/prince-philip-maritime-collections-centre/bsl-tour-prince-philip-maritime-collections",
+      "venue_name": "Prince Philip Maritime Collections Centre"
+    },
+    "path": "/whats-on/prince-philip-maritime-collections-centre/bsl-tour-prince-philip-maritime-collections"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/musica-antica-queens-house"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-conversation-with-luke-jerram|2026-10-09|national-maritime",
+      "description": "Join internationally acclaimed artist Luke Jerram for an evening exploring the stories behind his sculptures",
+      "ends_at": "2026-10-09T19:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-07/T5385-017.jpg.webp?itok=Zn52D22N",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "11"
+      },
+      "starts_at": "2026-10-09T17:30:00Z",
+      "tags": [
+        "space and astronomy"
+      ],
+      "title": "In conversation with Luke Jerram",
+      "url": "https://www.rmg.co.uk/whats-on/national-maritime-museum/conversation-luke-jerram",
+      "venue_name": "National Maritime Museum"
+    },
+    "path": "/whats-on/national-maritime-museum/conversation-luke-jerram"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/flamsteed-lecture-universe-reality-or-simulation"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/members-lecture-galaxies-jake-foster"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/shipkeeping-wednesdays"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/peglar-papers-reading-workshop"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "in-conversation-with-richard-wright-celebrating-10-years-of-great-hall-ceiling|2026-10-22|queens-house",
+      "description": "Hear first-hand about the ideas, craftsmanship, and legacy behind this spectacular ceiling installation",
+      "ends_at": null,
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-06/2016_QUEE_WRIGH_005.jpg.webp?itok=NZsg7QwM",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "22.50"
+      },
+      "starts_at": "2026-10-22T18:00:00Z",
+      "tags": [
+        "museum lates"
+      ],
+      "title": "In conversation with Richard Wright: celebrating 10 years of the Great Hall ceiling",
+      "url": "https://www.rmg.co.uk/whats-on/queens-house/conversation-richard-wright-celebrating-10-years-great-hall-ceiling",
+      "venue_name": "Queen's House"
+    },
+    "path": "/whats-on/queens-house/conversation-richard-wright-celebrating-10-years-great-hall-ceiling"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/october-half-term"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/october-half-term-cutty-sark"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/members-treasures-tours"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/october-half-term-family-activities-queens-house"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/online/african-experience-on-slaving-vessels-captured-west-africa-squadron-1808-1867"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/sky-we-share-star-stories-around-world-workshop"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/dark-history-haunted-tours-queens-house"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/life-universe"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/young-producers"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/first-look-first-light"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/amateur-astronomy-beginners"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/introduction-astronomy"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/introduction-astrophotography"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/diwali"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/conference-maritime-histories-margins-people-places-practices"
+  },
+  {
+    "event": {
+      "address": "King William Walk, Greenwich, London SE10 9HT",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-black-asian-seafarers-visual-history|2026-11-11|cutty-sark",
+      "description": "Join us as we celebrate the launch of a publication exploring Black and Asian seafarers and how they have appeared in art and photography",
+      "ends_at": "2026-11-11T21:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-08/Black%20and%20Asian%20Seafarers.png.webp?itok=-VBM3TP6",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "16"
+      },
+      "starts_at": "2026-11-11T18:30:00Z",
+      "tags": [
+        "maritime history"
+      ],
+      "title": "Book launch - Black and Asian Seafarers: A Visual History",
+      "url": "https://www.rmg.co.uk/whats-on/cutty-sark/book-launch-black-asian-seafarers-visual-history",
+      "venue_name": "Cutty Sark"
+    },
+    "path": "/whats-on/cutty-sark/book-launch-black-asian-seafarers-visual-history"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/prince-philip-maritime-collections-centre/behind-scenes-tour-prince-philip-maritime"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/santas-grotto-queens-house"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/queens-house/santas-grotto-queens-house-relaxed-sessions"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/empire-edge-world-illustrated-lecture"
+  },
+  {
+    "event": {
+      "address": "King William Walk, Greenwich, London SE10 9HT",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "sea-shanty-festival-2026|2026-11-21|cutty-sark",
+      "description": "Visit Cutty Sark for a fantastic day of sea song performances and workshops in celebration of the tea clipper's 157th birthday",
+      "ends_at": "2026-11-21T18:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-02/rmg-shanty-fest-jonnyguardiani-37.jpg.webp?itok=tdCguTPX",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-21T10:00:00Z",
+      "tags": [
+        "maritime history"
+      ],
+      "title": "Sea Shanty Festival 2026",
+      "url": "https://www.rmg.co.uk/whats-on/cutty-sark/sea-shanty-festival-2026",
+      "venue_name": "Cutty Sark"
+    },
+    "path": "/whats-on/cutty-sark/sea-shanty-festival-2026"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/members-craft-workshop"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/in-the-dark"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/foundation-astrophysics"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/intermediate-astronomy"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/cutty-sark/chuck-ragan-concert"
+  },
+  {
+    "event": {
+      "address": "Romney Road, Greenwich, London SE10 9NF",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "winter-solstice-family-festival|2026-12-19|national-maritime",
+      "description": "Join Royal Museum Greenwich for a day of family activities celebrating folktales about the winter solstice - from storytelling and art installations to crafts, music and more",
+      "ends_at": "2026-12-19T17:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/2026-09/Between%20Solstices%20%C2%A9%20Gy%C3%B6rgy%20Soponyai.jpg.webp?h=3a7492ca&itok=3-pM_Jwv",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-12-19T10:30:00Z",
+      "tags": [
+        "space and astronomy"
+      ],
+      "title": "Winter Solstice Family Festival",
+      "url": "https://www.rmg.co.uk/whats-on/national-maritime-museum/winter-solstice-festival",
+      "venue_name": "National Maritime Museum"
+    },
+    "path": "/whats-on/national-maritime-museum/winter-solstice-festival"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/introduction-astrophysics"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/greenwich/lgbtq-history-month"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/lunar-new-year"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/national-maritime-museum/stem-careers-event-2027"
+  },
+  {
+    "event": {
+      "address": "King William Walk, Greenwich, London SE10 9HT",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "bsl-tour-cutty-sark|2027-02-26|cutty-sark",
+      "description": "Join guide John Wilson for a British Sign Language (BSL) tour of Cutty Sark and discover what life was like aboard the iconic sailing ship",
+      "ends_at": "2027-02-26T15:00:00Z",
+      "image_url": "https://www.rmg.co.uk/sites/default/files/styles/card_no_alt/public/L9130-061_JohnWilsonbanner.jpg.webp?itok=LhxFVCtc",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "11"
+      },
+      "starts_at": "2027-02-26T14:00:00Z",
+      "tags": [
+        "bsl tours"
+      ],
+      "title": "BSL Tour: Cutty Sark",
+      "url": "https://www.rmg.co.uk/whats-on/cutty-sark/bsl-tour-cutty-sark",
+      "venue_name": "Cutty Sark"
+    },
+    "path": "/whats-on/cutty-sark/bsl-tour-cutty-sark"
+  },
+  {
+    "event": null,
+    "path": "/whats-on/astronomy-courses/introduction-astronomy-online"
+  }
+]

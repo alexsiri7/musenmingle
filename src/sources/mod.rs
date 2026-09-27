@@ -25,6 +25,7 @@ pub mod jsonld;
 pub mod lux;
 pub mod mall_galleries;
 pub mod old_royal_naval_college;
+pub mod royal_museums_greenwich;
 pub mod serpentine;
 pub mod soane_museum;
 pub mod somerset_house;
@@ -98,6 +99,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
         old_royal_naval_college::KEY => Ok(Box::new(
             old_royal_naval_college::OldRoyalNavalCollege::new(base),
+        )),
+        royal_museums_greenwich::KEY => Ok(Box::new(
+            royal_museums_greenwich::RoyalMuseumsGreenwich::new(base),
         )),
         soane_museum::KEY => Ok(Box::new(soane_museum::SoaneMuseum::new(base))),
         somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
