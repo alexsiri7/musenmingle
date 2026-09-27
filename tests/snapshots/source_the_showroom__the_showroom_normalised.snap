@@ -1,0 +1,87 @@
+---
+source: tests/source_the_showroom.rs
+expression: out
+---
+[
+  {
+    "date_text": "25 September 2026 – 19 December 2026",
+    "event": {
+      "address": "63 Penfold Street, London NW8 8PQ",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "bahar-noorizadeh-debtors-portal|2026-09-25|showroom",
+      "description": null,
+      "ends_at": "2026-12-19T00:00:00Z",
+      "image_url": "https://theshowroom.org/media/pages/exhibitions/bahar-noorizadeh-the-debtor-s-portal/81cf79207f-1787841699/ftc-cooper-gallery-djcad-university-of-dundee.-photo-by-sally-jubb-8-300x.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-24T23:00:00Z",
+      "tags": [],
+      "title": "Bahar Noorizadeh: The Debtor’s Portal",
+      "url": "https://theshowroom.org/exhibitions/bahar-noorizadeh-the-debtor-s-portal",
+      "venue_name": "The Showroom"
+    },
+    "source_event_id": "/exhibitions/bahar-noorizadeh-the-debtor-s-portal",
+    "type": null
+  },
+  {
+    "date_text": "20 October 2026 – 26 January 2027",
+    "event": {
+      "address": "63 Penfold Street, London NW8 8PQ",
+      "all_day": true,
+      "category": "workshop",
+      "dedupe_key": "made-by-hands-fabric-of-creative-action|2026-10-20|showroom",
+      "description": "Are you under 30 or over 60 years old? Join our intergenerational textile workshop series for an opportunity to create together, build connections and inspire agency and action within community. Led by artist Kim Chin, this series will provide a space for intergenerational dialogue and creative expression through textile banner-making, silk-screen print and engaged conversation. In slow and collective making sessions, we will discuss themes such as connection to place, re-claiming ‘waste’ within circular economic frameworks, and inspiring agency and action within our communities, all within the context of The Showroom’s annual Mural Commission by Bahar Noorizadeh. No previous stitching or printing experience necessary. Contribution to topics and collaborative work encouraged. Materials and refreshments will be provided. Outcomes of this workshop include: • Co-create a textile piece (textile ‘poster’ / banner / protest gear) that inspires action towards chosen themes • Re-using material ‘waste’ • Shared multi-vocal, intergenerational collective wisdom to inspire and inform how to overcome challenges, eg. tools for how we can be more informed, compassionate and active citizens. • Introduction to political education and human behaviour through lived experience. • Inspire complex conversations, collaborative decision making, self reflection and action. • Human connection amongst ever-changing environments and technologies • Context of artistic practice, approaches and medium • Empowering a sense of achievement (individual and collective) Themes we can expand on led by group interest: • AI as a tool vs. hazard • Impacts of Capitalism in relation to labour value • Grieving communities and public spaces due to gentrification • Dissemination of what is “policing” vs. community safeguarding • What and who makes ‘community’? Attendance Participants are strongly encouraged to commit to attending all fortnightly sessions. The Showroom is dedicated to providing equal opportunities for all members of our community and can offer concessions. Please contact Rosy Leake at [email protected] if you are interested in taking part in the workshops but are unable to commit to the full 3 months or would like a concessionary booking. About the artist Kim Chin is a multidisciplinary artist, designer, facilitator, curator, and community organiser. Mediums include textiles, print-making (analogue + digital), participatory co-creation, and crafting conversations inclusive of embodied neurodifferent adaptations. Their practice explores objects, memory, “absence”, and intergenerational dissonance/joy as a site for transformation, self-discovery, and connection. Kim’s mission is to inspire agency and common ground attitudes through creative play.",
+      "ends_at": "2027-01-26T00:00:00Z",
+      "image_url": "https://theshowroom.org/media/pages/events/itle-made-by-hands-the-fabric-of-creative-action/e8572c7e93-1789554183/foca_1-multi_text-copy-300x225-crop.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "30",
+        "min": "30"
+      },
+      "starts_at": "2026-10-19T23:00:00Z",
+      "tags": [],
+      "title": "Made By Hands: The Fabric of Creative Action",
+      "url": "https://theshowroom.org/events/itle-made-by-hands-the-fabric-of-creative-action",
+      "venue_name": "The Showroom"
+    },
+    "source_event_id": "/events/itle-made-by-hands-the-fabric-of-creative-action",
+    "type": "Workshop Series"
+  },
+  {
+    "date_text": "22 October 2026, 6.30 – 9pm",
+    "event": {
+      "address": "63 Penfold Street, London NW8 8PQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "deeper-than-rap|2026-10-22|showroom",
+      "description": "In conversation with Bahar Noorizadeh’s exhibition The Debtor’s Portal, The Showroom presents Deeper than Rap in collaboration with ETP Studios. This is an intentional, intimate listening session that honours Black Sonics as knowledge transmission, acknowledging the depth and gravity of information encoded within the wavelengths and frequencies of our musical offerings. This session will encourage attendees to listen not only with their ears, but with their minds and bodies, and, in doing so, receive this information in a space that encourages considered and critical engagement with the art. Proposing Black Sonics as an alternative pedagogy and living archive, we will engage with J Hus’ Big Conspiracy as a rich text from which we can learn about the world and our place in it. This session will be led by Dipo Alao-Odeleye, The Showroom’s Assistant Engagement Curator and Ezra Olaoya, founder of ETP Studios. About Dipo Alao-Odeleye is a cultural worker, poet and curator whose community-based work engages with memory, diaspora and the Blues via poetry and sound to transform the mundane into stories that affirm aliveness. They have previously worked with several institutions such as Bold Tendencies, Black Cultural Archives, V&A Museum and Rich Mix. Ezra Olaoya is a Nigerian-Irish writer, artist and strategist whose expressions and explorations are driven by a desire to connect people, places and ideas by questioning, amplifying and constructing narratives. His work encourages people to not only look inwards and introspect but also to look outwards to perceive the connections that exist between individuals and ideas across geographies - especially between Africa and its diaspora. His writing has featured in publications including Dazed, The Republic and The Culture Crypt while he has also exhibited multimedia image and sonic works at the ICA. He regularly DJs for pan-African plant-based kitchen Garden of Afruika and opened up for Major League DJz AT Roundhouse. Through ETP Studios he has self produced and performed two editions of ‘Burning Questions’ - a satirical poetry show - in London and Lagos. He also wrote and co-directed Adétòkunbọ̀ a poetry film meditating on heritage, destiny and identity.",
+      "ends_at": "2026-10-22T20:00:00Z",
+      "image_url": "https://theshowroom.org/media/pages/events/deeper-than-rap/0374f9d51a-1790183579/tsr-version-resized-no-date-300x225-crop.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "5",
+        "min": "5"
+      },
+      "starts_at": "2026-10-22T17:30:00Z",
+      "tags": [],
+      "title": "Deeper than Rap",
+      "url": "https://theshowroom.org/events/deeper-than-rap",
+      "venue_name": "The Showroom"
+    },
+    "source_event_id": "/events/deeper-than-rap",
+    "type": "Listening Session"
+  }
+]

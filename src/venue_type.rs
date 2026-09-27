@@ -67,6 +67,7 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("tec-cinema-museum", "museum"),
     ("tec-freud-museum", "museum"),
     ("tec-slbi", "museum"),
+    ("the-showroom", "museum"),
     ("two-temple-place", "museum"),
     ("vam", "museum"),
     ("wellcome-collection", "museum"),
