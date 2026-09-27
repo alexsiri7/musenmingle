@@ -780,8 +780,11 @@ pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>
 pub struct ListedEvent {
     #[sqlx(flatten)]
     pub event: EventRow,
-    /// Set when ordering by distance.
+    /// Set when the listing has an area (`near`).
     pub distance_km: Option<f64>,
+    /// The sort key as a time (`ending`: effective end, `added`: first
+    /// seen), for the next page's cursor; NULL for other sorts.
+    pub sort_at: Option<DateTime<Utc>>,
 }
 
 /// `$1`..`$9` of every listing query (on `events.events ev`). An event with
@@ -883,67 +886,120 @@ fn distance_km_sql(lat: usize, lng: usize, earth_radius: usize) -> String {
     )
 }
 
+/// When an event is over, for "Last chance" (`sort=ending`): its end; for
+/// an all-day event the London midnight after its last (or only) day; for
+/// a timed one-off without an end, three hours after it starts.
+pub const EFFECTIVE_END: &str = "(CASE
+        WHEN ev.all_day THEN ((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')
+                              + interval '1 day') AT TIME ZONE 'Europe/London'
+        WHEN ev.ends_at IS NOT NULL THEN ev.ends_at
+        ELSE ev.starts_at + interval '3 hours'
+    END)";
+
+/// When Muse & Mingle first saw the event (`sort=added`).
+const FIRST_SEEN: &str = "COALESCE((SELECT min(es.first_seen_at) FROM events.event_sources es
+        WHERE es.event_id = ev.id), ev.created_at)";
+
 /// One page of events plus one more row (the caller's "has next page" probe):
 /// `query.limit + 1` rows at most.
+///
+/// Placeholders: `$1`..`$9` [`LISTING_FILTER`], `$10` price_max, `$11`..`$18`
+/// the area (NULL without `near`), `$19`/`$20` the cursor, `$21` the limit,
+/// `$22` the sort's parameter (`now` for `ending`, the seed for `surprise`).
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
+    let near = query.near;
+    let b = near.map(|n| n.bounding_box());
     let filter = format!(
-        "{LISTING_FILTER} AND {} AND {}",
+        "{LISTING_FILTER} AND {} AND {}
+         AND ($11::float8 IS NULL OR (lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17))",
         price_max_sql("$10"),
         when_sql(f.when)
     );
-    let fetch = query.limit + 1;
-    match &query.order {
-        EventOrder::ByStart { after } => {
-            bind_filter(
-                sqlx::query_as(AssertSqlSafe(format!(
-                    "SELECT {EVENT_COLS}, NULL::float8 AS distance_km FROM events.events ev
-                     WHERE {filter}
-                       AND ($11::timestamptz IS NULL OR (starts_at, id) > ($11, $12::uuid))
-                     ORDER BY starts_at, id LIMIT $13"
-                ))),
-                f,
-            )
-            .bind(f.price_max)
+    // (sort key expression, extra condition, cursor condition, order)
+    let (key, extra, after, order) = match &query.order {
+        EventOrder::ByStart { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            "($19::timestamptz IS NULL OR (starts_at, id) > ($19, $20::uuid))",
+            "starts_at, id",
+        ),
+        EventOrder::ByDistance { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            "($19::float8 IS NULL OR (distance_km, id) > ($19, $20::uuid))",
+            "distance_km, id",
+        ),
+        EventOrder::ByEnd { .. } => (
+            EFFECTIVE_END.to_string(),
+            "sort_at > $22::timestamptz",
+            "($19::timestamptz IS NULL OR (sort_at, id) > ($19, $20::uuid))",
+            "sort_at, id",
+        ),
+        EventOrder::ByAdded { .. } => (
+            FIRST_SEEN.to_string(),
+            "TRUE",
+            "($19::timestamptz IS NULL OR (sort_at, id) < ($19, $20::uuid))",
+            "sort_at DESC, id DESC",
+        ),
+        EventOrder::Shuffled { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            // $19 is unused (NULL); the key is recomputed from the last id.
+            "($20::uuid IS NULL OR (shuffle, id) > (md5($20::text || $22::text), $20))",
+            "shuffle, id",
+        ),
+    };
+    let shuffle = match &query.order {
+        EventOrder::Shuffled { .. } => "md5(ev.id::text || $22::text)",
+        _ => "NULL::text",
+    };
+    let sql = format!(
+        "SELECT * FROM (
+             SELECT {EVENT_COLS},
+                    CASE WHEN $11::float8 IS NULL THEN NULL::float8 ELSE {} END AS distance_km,
+                    {key} AS sort_at, {shuffle} AS shuffle
+             FROM events.events ev
+             WHERE {filter}
+         ) e
+         WHERE ($18::float8 IS NULL OR distance_km <= $18)
+           AND {extra} AND {after}
+         ORDER BY {order} LIMIT $21",
+        distance_km_sql(11, 12, 13)
+    );
+    let q = bind_filter(sqlx::query_as(AssertSqlSafe(sql)), f)
+        .bind(f.price_max)
+        .bind(near.map(|n| n.lat))
+        .bind(near.map(|n| n.lng))
+        .bind(EARTH_RADIUS_KM)
+        .bind(b.map(|b| b.min_lat))
+        .bind(b.map(|b| b.max_lat))
+        .bind(b.map(|b| b.min_lng))
+        .bind(b.map(|b| b.max_lng))
+        .bind(near.map(|n| n.radius_km));
+    let q = match &query.order {
+        EventOrder::ByStart { after } | EventOrder::ByAdded { after } => q
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
-            .bind(fetch)
-            .fetch_all(pool)
-            .await
-        }
-        EventOrder::ByDistance { near, after } => {
-            let b = near.bounding_box();
-            bind_filter(
-                sqlx::query_as(AssertSqlSafe(format!(
-                    "SELECT * FROM (
-                         SELECT {EVENT_COLS}, {} AS distance_km
-                         FROM events.events ev
-                         WHERE {filter}
-                           AND lat BETWEEN $14 AND $15 AND lng BETWEEN $16 AND $17
-                     ) e
-                     WHERE distance_km <= $18
-                       AND ($19::float8 IS NULL OR (distance_km, id) > ($19, $20::uuid))
-                     ORDER BY distance_km, id LIMIT $21",
-                    distance_km_sql(11, 12, 13)
-                ))),
-                f,
-            )
-            .bind(f.price_max)
-            .bind(near.lat)
-            .bind(near.lng)
-            .bind(EARTH_RADIUS_KM)
-            .bind(b.min_lat)
-            .bind(b.max_lat)
-            .bind(b.min_lng)
-            .bind(b.max_lng)
-            .bind(near.radius_km)
+            .bind(query.limit + 1)
+            .bind(None::<String>),
+        EventOrder::ByDistance { after, .. } => q
             .bind(after.map(|a| a.0))
             .bind(after.map(|a| a.1))
-            .bind(fetch)
-            .fetch_all(pool)
-            .await
-        }
-    }
+            .bind(query.limit + 1)
+            .bind(None::<String>),
+        EventOrder::ByEnd { now, after } => q
+            .bind(after.map(|a| a.0))
+            .bind(after.map(|a| a.1))
+            .bind(query.limit + 1)
+            .bind(*now),
+        EventOrder::Shuffled { seed, after } => q
+            .bind(None::<String>)
+            .bind(*after)
+            .bind(query.limit + 1)
+            .bind(seed.format("%Y-%m-%d").to_string()),
+    };
+    q.fetch_all(pool).await
 }
 
 /// Which tag column a facet counts.
@@ -989,10 +1045,7 @@ pub async fn facet_counts(
         Facet::Format => f.formats.clear(),
         Facet::GoodFor => f.good_for.clear(),
     }
-    let near = match &query.order {
-        EventOrder::ByDistance { near, .. } => Some(*near),
-        EventOrder::ByStart { .. } => None,
-    };
+    let near = query.near;
     let b = near.map(|n| n.bounding_box());
     let col = facet.column();
     let filter = format!(
