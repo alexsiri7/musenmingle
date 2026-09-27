@@ -36,6 +36,7 @@ pub mod soane_museum;
 pub mod somerset_house;
 pub mod tec;
 pub mod ticketmaster;
+pub mod two_temple_place;
 pub mod whitechapel_gallery;
 pub mod william_morris_gallery;
 pub mod william_morris_society;
@@ -131,6 +132,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         )),
         soane_museum::KEY => Ok(Box::new(soane_museum::SoaneMuseum::new(base))),
         somerset_house::KEY => Ok(Box::new(somerset_house::SomersetHouse::new(base))),
+        two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),
         whitechapel_gallery::KEY => {
             Ok(Box::new(whitechapel_gallery::WhitechapelGallery::new(base)))
         }
