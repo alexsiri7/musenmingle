@@ -1,8 +1,8 @@
 ---
 created: '2026-09-27'
-github_issue: null
+github_issue: 201
 id: '004'
-status: draft
+status: idea
 title: Richer listings rise to the top when no order is asked for
 updated: '2026-09-27'
 ---
@@ -23,4 +23,4 @@ When a request for events doesn't ask for a particular order, results are groupe
 
 ## Issues
 
-_None yet._
+- #201 — Default event order: group by day, richest listings first within each day
