@@ -625,6 +625,47 @@ pub fn from_spec_json(v: &serde_json::Value) -> Option<OpeningHours> {
     OpeningHours::new(rules)
 }
 
+/// Hours stated as structured data in a source's payload (#206): the
+/// event node's own `openingHoursSpecification` / `openingHours`, and its
+/// `location`'s (a schema.org Place, as JSON-LD sources store it). The
+/// first is the event's schedule; the second is the venue's usual hours.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct StructuredHours {
+    pub event: Option<OpeningHours>,
+    pub venue: Option<OpeningHours>,
+}
+
+/// [`StructuredHours`] from a raw payload (`RawEvent::payload`). A
+/// `location` array uses its first object. Empty or unparseable values
+/// ("openingHours": "") give nothing.
+pub fn from_payload(v: &serde_json::Value) -> StructuredHours {
+    let place = match v.get("location") {
+        Some(serde_json::Value::Array(a)) => a.iter().find(|x| x.is_object()),
+        Some(o @ serde_json::Value::Object(_)) => Some(o),
+        _ => None,
+    };
+    StructuredHours {
+        event: node_hours(v),
+        venue: place.and_then(node_hours),
+    }
+}
+
+fn node_hours(v: &serde_json::Value) -> Option<OpeningHours> {
+    if let Some(h) = v.get("openingHoursSpecification").and_then(from_spec_json) {
+        return Some(h);
+    }
+    match v.get("openingHours")? {
+        serde_json::Value::String(s) => from_schema_org(&[s]),
+        serde_json::Value::Array(a) => {
+            let specs: Vec<&str> = a.iter().filter_map(|x| x.as_str()).collect();
+            (specs.len() == a.len())
+                .then(|| from_schema_org(&specs))
+                .flatten()
+        }
+        _ => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -814,5 +855,40 @@ mod tests {
         assert_eq!(parse_day("monday"), Some(1));
         assert_eq!(parse_day("xyz"), None);
         assert_eq!(day_code(3), "wed");
+    }
+    #[test]
+    fn structured_hours_from_a_payload() {
+        use serde_json::json;
+        let sat = OpeningHours::new(vec![rule(&[6], t(10, 0), t(14, 0))]).unwrap();
+        // The event's own spec, and its Place's openingHours.
+        let p = json!({
+            "@type": "ExhibitionEvent",
+            "openingHoursSpecification": {"dayOfWeek": "https://schema.org/Saturday",
+                                          "opens": "10:00:00", "closes": "14:00:00"},
+            "location": {"@type": "Place", "openingHours": ["Th 10:00-16:00", "Sa 10:00-14:00"]}
+        });
+        let h = from_payload(&p);
+        assert_eq!(h.event, Some(sat.clone()));
+        let v = h.venue.unwrap();
+        assert_eq!(v.display(), "Thu · 10:00–16:00; Sat · 10:00–14:00");
+        // A location array, a single string; nothing on the event.
+        let p = json!({"location": [{"openingHours": "Sa 10:00-14:00"}]});
+        assert_eq!(
+            from_payload(&p),
+            StructuredHours {
+                event: None,
+                venue: Some(sat)
+            }
+        );
+        // Empty (Squarespace's LocalBusiness), junk and mixed arrays: nothing.
+        for p in [
+            json!({"openingHours": ""}),
+            json!({"location": {"openingHours": "open daily"}}),
+            json!({"location": {"openingHours": ["Sa 10:00-14:00", 3]}}),
+            json!({"location": "Somewhere"}),
+            json!({}),
+        ] {
+            assert_eq!(from_payload(&p), StructuredHours::default(), "{p}");
+        }
     }
 }

@@ -75,7 +75,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `within_walk_min` | `20` | Instead of `radius_km`: events within this many minutes' walk of `near`, 1–60, estimated from straight-line distance at 5 km/h with a 1.3 detour factor (the same estimate as the map's "≈ N min walk"). Only with `near`; not with `radius_km` |
-| `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
+| `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `open_now`, `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
 | `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise`, `relevance` or `richest` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` (the home page defaults to `richest`) |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
@@ -152,6 +152,11 @@ request:
   The home page pairs it with `sort=ending`.
 - `hands_on`: category `workshop`, the `hands_on` format tag, or a title
   saying class, course, drop-in, life drawing, masterclass or workshop.
+- `open_now`: open at the moment of the request: it has started and not
+  ended and, when it has `opening_hours`, today's hours include this
+  minute. Stricter than `open_now=true`: an all-day or untimed event with
+  unknown hours is left out, as we cannot say it is open right now. The
+  home page's count is cached for up to 5 minutes like the others.
 
 The home page shows these (and "This weekend", "Free" and "Talks", which
 are plain `from`/`to`, `free` and `category` links) as chips with counts

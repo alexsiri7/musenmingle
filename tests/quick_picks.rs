@@ -356,3 +356,115 @@ async fn zero_chips_hide_and_counts_are_cached() {
     assert!(!labels.contains(&"Hands-on".to_string()));
     db.drop_db().await;
 }
+
+/// (title, starts, ends, all_day, opening_hours)
+type Row = (
+    &'static str,
+    DateTime<Utc>,
+    Option<DateTime<Utc>>,
+    bool,
+    Option<serde_json::Value>,
+);
+
+/// `pick=open_now` (#206): started, not ended, and inside today's hours;
+/// an all-day or untimed event with unknown hours is left out.
+#[tokio::test]
+async fn open_now_chip_lists_what_is_open_at_this_minute() {
+    let Some(db) = TestDb::create("open_now_chip_lists_what_is_open_at_this_minute").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let now = Utc::now();
+    let today = now.with_timezone(&chrono_tz::Europe::London).date_naive();
+    let dow = chrono::Datelike::weekday(&today).number_from_monday() as i64;
+    let other_days: Vec<i64> = (1..=7).filter(|d| *d != dow).collect();
+    let rows: Vec<Row> = vec![
+        (
+            "Talk on now",
+            now - Duration::minutes(30),
+            Some(now + Duration::hours(1)),
+            false,
+            None,
+        ),
+        (
+            "Talk later",
+            now + Duration::hours(2),
+            Some(now + Duration::hours(3)),
+            false,
+            None,
+        ),
+        (
+            "Talk over",
+            now - Duration::hours(3),
+            Some(now - Duration::hours(1)),
+            false,
+            None,
+        ),
+        (
+            "Show open all day",
+            at(-10, None),
+            Some(at(30, None)),
+            true,
+            Some(
+                serde_json::json!([{"days": [1, 2, 3, 4, 5, 6, 7], "opens": "00:00", "closes": "23:59"}]),
+            ),
+        ),
+        (
+            "Show closed today",
+            at(-10, None),
+            Some(at(30, None)),
+            true,
+            Some(serde_json::json!([{"days": other_days, "opens": "00:00", "closes": "23:59"}])),
+        ),
+        (
+            "Show hours unknown",
+            at(-10, None),
+            Some(at(30, None)),
+            true,
+            None,
+        ),
+    ];
+    for (title, s, e, all_day, hours) in rows {
+        sqlx::query(
+            "INSERT INTO events.events
+                (title, starts_at, ends_at, all_day, category, opening_hours, dedupe_key)
+             VALUES ($1, $2, $3, $4, 'exhibition', $5, $1)",
+        )
+        .bind(title)
+        .bind(s)
+        .bind(e)
+        .bind(all_day)
+        .bind(hours)
+        .execute(&pool)
+        .await
+        .unwrap();
+    }
+    let app = app(&pool);
+    let (_, home) = get(&app, "/").await;
+    let open = chips(&home)
+        .into_iter()
+        .find(|c| c.0 == "Open now")
+        .expect("Open now chip");
+    assert_eq!(open.1, "/?pick=open_now");
+    let (status, page) = get(&app, "/?pick=open_now").await;
+    assert_eq!(status, StatusCode::OK, "{page}");
+    let titles = sorted(card_titles(&page));
+    // "Show open all day" is open unless this runs in the day's last minute.
+    let late = now
+        .with_timezone(&chrono_tz::Europe::London)
+        .format("%H:%M")
+        .to_string()
+        == "23:59";
+    let want: Vec<&str> = if late {
+        vec!["Talk on now"]
+    } else {
+        vec!["Show open all day", "Talk on now"]
+    };
+    assert_eq!(titles, want);
+    assert_eq!(open.2, titles.len() as i64);
+    let (s, json) = get(&app, "/v1/events?pick=open_now").await;
+    assert_eq!(s, StatusCode::OK);
+    let v: serde_json::Value = serde_json::from_str(&json).unwrap();
+    assert_eq!(v["events"].as_array().unwrap().len(), titles.len());
+    db.drop_db().await;
+}

@@ -1022,7 +1022,7 @@ async fn upsert_event_tx(
         .execute(&mut **tx)
         .await?;
     }
-    set_hours_tx(tx, outcome.event_id, event, policy).await?;
+    set_hours_tx(tx, outcome.event_id, event, raw, policy).await?;
     set_borough_tx(tx, outcome.event_id).await?;
     let page = set_page_text_hash_tx(tx, outcome.event_id, event, &ev, policy).await?;
     Ok((outcome, page))
@@ -1113,26 +1113,40 @@ pub async fn sync_boroughs(pool: &PgPool) -> sqlx::Result<u64> {
 }
 
 /// Opening hours (issue #168, `crate::hours`) for the event this listing
-/// landed in, read from the listing's FULL description (before the excerpt
-/// and content policy), else inherited from `events.venue_hours` by an
+/// landed in: the payload's structured schema.org hours for the event
+/// (#206), else read from the listing's FULL description (before the
+/// excerpt and content policy), else inherited from its venue by an
 /// exhibition that has none. Hours only apply to all-day events running
 /// more than one day (the row's final dates, after merging), and are
 /// cleared otherwise, so "doors 7pm" on a talk never becomes a schedule.
 /// The listing's own wording (`hours_note`) is kept only when the source's
 /// policy lets us keep its description.
+///
+/// Structured hours on the payload's `location` are the venue's: they fill
+/// the matching `events.venues` row's hours when it has none
+/// ([`set_venue_hours_tx`]) and serve as the venue fallback here.
 async fn set_hours_tx(
     tx: &mut Transaction<'_, Postgres>,
     event_id: Uuid,
     event: &NewEvent,
+    raw: &RawEvent,
     policy: SourcePolicy,
 ) -> sqlx::Result<()> {
-    let parsed = event
-        .description
-        .as_deref()
-        .and_then(crate::hours::from_text);
-    let venue = match parsed {
-        Some(_) => None,
-        None => venue_hours_tx(tx, event.venue_name.as_deref()).await?,
+    let structured = crate::hours::from_payload(&raw.payload);
+    if let Some(h) = &structured.venue {
+        set_venue_hours_tx(tx, event.venue_name.as_deref(), h, raw).await?;
+    }
+    let parsed = match structured.event {
+        Some(hours) => Some(crate::hours::ParsedHours { hours, note: None }),
+        None => event
+            .description
+            .as_deref()
+            .and_then(crate::hours::from_text),
+    };
+    let venue = match (&parsed, &structured.venue) {
+        (Some(_), _) => None,
+        (None, Some(h)) => Some(serde_json::to_value(h).unwrap_or_default()),
+        (None, None) => venue_hours_tx(tx, event.venue_name.as_deref()).await?,
     };
     let hours = parsed
         .as_ref()
@@ -1159,6 +1173,52 @@ async fn set_hours_tx(
     .bind(hours)
     .bind(note)
     .bind(venue)
+    .execute(&mut **tx)
+    .await?;
+    Ok(())
+}
+
+/// Give the venue a listing names the hours its structured data states
+/// (#206), when the venue has none yet (hand-seeded `events.venue_hours`
+/// and earlier values win). A venue not created yet gets them on a later
+/// run, after `sync_venues` has made its row.
+async fn set_venue_hours_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    venue: Option<&str>,
+    hours: &crate::hours::OpeningHours,
+    raw: &RawEvent,
+) -> sqlx::Result<()> {
+    let Some(key) = venue_key_tx(tx, venue).await? else {
+        return Ok(());
+    };
+    let rows: Vec<(i64, String)> = sqlx::query_as(
+        "SELECT id, name FROM events.venues WHERE opening_hours IS NULL ORDER BY id",
+    )
+    .fetch_all(&mut **tx)
+    .await?;
+    let resolver = venue_resolver(&mut **tx).await?;
+    let Some((id, _)) = rows.into_iter().find(|(_, name)| {
+        resolver.resolve(Some(name)) == crate::venues::Resolved::Venue(key.clone())
+    }) else {
+        return Ok(());
+    };
+    let host = raw
+        .source_url
+        .as_deref()
+        .and_then(|u| url::Url::parse(u).ok())
+        .and_then(|u| u.host_str().map(str::to_string));
+    let source = format!(
+        "schema.org structured data{}, {}",
+        host.map(|h| format!(" on {h}")).unwrap_or_default(),
+        Utc::now().format("%Y-%m-%d")
+    );
+    sqlx::query(
+        "UPDATE events.venues SET opening_hours = $2, hours_source = $3, updated_at = now()
+         WHERE id = $1 AND opening_hours IS NULL",
+    )
+    .bind(id)
+    .bind(serde_json::to_value(hours).unwrap_or_default())
+    .bind(source)
     .execute(&mut **tx)
     .await?;
     Ok(())
@@ -1689,7 +1749,7 @@ fn venue_type_sql(f: &EventFilter) -> String {
 }
 
 fn live_sql(f: &EventFilter) -> String {
-    use crate::listing::{LIVE_GRACE_MINUTES, LIVE_LOOKBACK_HOURS};
+    use crate::listing::LIVE_LOOKBACK_HOURS;
     let open_on = match f.open_on {
         None => "TRUE".to_string(),
         Some(day) => {
@@ -1721,15 +1781,28 @@ fn live_sql(f: &EventFilter) -> String {
         rule_on_day(&format!("extract(isodow FROM {lnow})"))
     ));
     format!(
-        "((CASE
+        "({}
+          AND (NOT {HAS_HOURS} OR {open})
+          AND {open_on})",
+        still_on_sql(&now)
+    )
+}
+
+/// The event has not ended at SQL instant `now`: an all-day event ends at
+/// London midnight after its last day (computed in London time, so DST
+/// days are 23 or 25 hours), a ranged event at its `ends_at`, an event
+/// with a start time but no end [`crate::listing::LIVE_GRACE_MINUTES`]
+/// after it starts.
+fn still_on_sql(now: &str) -> String {
+    use crate::listing::LIVE_GRACE_MINUTES;
+    format!(
+        "(CASE
             WHEN ev.all_day THEN
                 (((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date + 1)::timestamp
                     AT TIME ZONE 'Europe/London') > {now}
             WHEN ev.ends_at IS NOT NULL THEN ev.ends_at > {now}
             ELSE ev.starts_at + interval '{LIVE_GRACE_MINUTES} minutes' > {now}
-          END)
-          AND (NOT {HAS_HOURS} OR {open})
-          AND {open_on})"
+          END)"
     )
 }
 
@@ -1875,6 +1948,20 @@ pub fn pick_sql(pick: Option<PickFilter>) -> String {
         Pick::HandsOn => format!(
             "(ev.category = 'workshop' OR 'hands_on' = ANY(ev.format_tags) OR {HANDS_ON_TITLE})"
         ),
+        // Started, not ended, and open now by its hours; without hours only
+        // a timed event counts (an untimed one may be closed right now).
+        Pick::OpenNow => format!(
+            "(ev.starts_at <= now() AND {}
+              AND (CASE WHEN {HAS_HOURS} THEN {}
+                   ELSE NOT ev.all_day AND {LOCAL_START}::time <> '00:00'
+                   END))",
+            still_on_sql("now()"),
+            hours_rule_sql(&format!(
+                "{} AND {RULE_OPENS} <= (now() AT TIME ZONE 'Europe/London')::time
+                 AND {RULE_CLOSES} > (now() AT TIME ZONE 'Europe/London')::time",
+                rule_on_day("extract(isodow FROM now() AT TIME ZONE 'Europe/London')")
+            ))
+        ),
     }
 }
 
@@ -1889,6 +1976,7 @@ pub struct QuickPickCounts {
     pub openings: i64,
     pub last_chance: i64,
     pub hands_on: i64,
+    pub open_now: i64,
     pub talks: i64,
     pub music: i64,
 }
@@ -1910,6 +1998,7 @@ pub async fn quick_pick_counts(
                 count(*) FILTER (WHERE {}) AS openings,
                 count(*) FILTER (WHERE {}) AS last_chance,
                 count(*) FILTER (WHERE {}) AS hands_on,
+                count(*) FILTER (WHERE {}) AS open_now,
                 count(*) FILTER (WHERE ev.category = 'talk') AS talks,
                 count(*) FILTER (WHERE ev.category = 'music') AS music
          FROM events.events ev
@@ -1918,6 +2007,7 @@ pub async fn quick_pick_counts(
         p(Pick::Openings),
         p(Pick::LastChance),
         p(Pick::HandsOn),
+        p(Pick::OpenNow),
     )))
     .bind(from)
     .bind(weekend.0)

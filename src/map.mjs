@@ -85,8 +85,24 @@ export function londonParts(iso) {
   return { ymd: p.year + "-" + p.month + "-" + p.day, hm: p.hour + ":" + p.minute, weekday: p.weekday };
 }
 
+const DAY_CODES = { Mon: "mon", Tue: "tue", Wed: "wed", Thu: "thu", Fri: "fri", Sat: "sat", Sun: "sun" };
+
+/// Today's status from weekly opening hours (the API's `opening_hours`:
+/// `[{days: ["sat"], opens: "11:00", closes: "15:00"}]`, London time);
+/// mirrors `OpeningHours::today_status` in src/hours.rs.
+export function hoursStatus(hours, nowIso) {
+  const now = londonParts(nowIso);
+  const code = DAY_CODES[now.weekday];
+  const r = hours.find((x) => Array.isArray(x.days) && x.days.indexOf(code) !== -1);
+  if (!r) return "Closed today";
+  if (now.hm < r.opens) return "Opens today at " + r.opens;
+  if (now.hm < r.closes) return "Open now until " + r.closes;
+  return "Closed now";
+}
+
 /// The card's status line; mirrors `live_label` in src/web/map.rs.
-export function liveLabel(startIso, endIso, allDay, nowIso) {
+/// `hours` is the event's `opening_hours` (or null).
+export function liveLabel(startIso, endIso, allDay, nowIso, hours) {
   const start = londonParts(startIso);
   const today = londonParts(nowIso).ymd;
   const startMs = Date.parse(startIso);
@@ -100,6 +116,7 @@ export function liveLabel(startIso, endIso, allDay, nowIso) {
   if (ranged) {
     if (future && !untimed) return "Opens " + day(start) + start.hm;
     if (future) return "Opens " + onDay(start) + " · check opening hours";
+    if (Array.isArray(hours) && hours.length) return hoursStatus(hours, nowIso);
     return "Open today · check opening hours";
   }
   if (untimed) {
@@ -172,7 +189,7 @@ export function eventFromJson(e, nowIso) {
     ends_at: e.ends_at || null,
     all_day: !!e.all_day,
     category: titleCase(e.category),
-    status: liveLabel(e.starts_at, e.ends_at, !!e.all_day, nowIso),
+    status: liveLabel(e.starts_at, e.ends_at, !!e.all_day, nowIso, e.opening_hours || null),
     price: priceLabel(e),
     free: !!e.is_free,
     thumb,

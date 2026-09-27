@@ -246,3 +246,103 @@ async fn hours_are_stored_inherited_and_filtered_on() {
     assert_eq!(h, None);
     db.drop_db().await;
 }
+
+/// Structured schema.org hours in a listing's payload (#206): the event's
+/// own spec wins over its text; its `location`'s hours are the venue's,
+/// filling `events.venues.opening_hours` (never overwriting) and serving as
+/// the exhibition's fallback.
+#[tokio::test]
+async fn structured_hours_fill_the_event_and_its_venue() {
+    let Some(db) = TestDb::create("structured_hours_fill_the_event_and_its_venue").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let src = repo::upsert_source(
+        &pool,
+        "hours-structured",
+        SourceKind::Scraper,
+        "https://example.org",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+    let upsert = |e: NewEvent, payload: serde_json::Value| {
+        let pool = pool.clone();
+        async move {
+            let raw = RawEvent {
+                source_event_id: e.title.clone(),
+                source_url: Some("https://www.example.org/whats-on/x".into()),
+                payload,
+            };
+            repo::upsert_event(&pool, src, &e, &raw).await.unwrap();
+        }
+    };
+    let place = serde_json::json!({
+        "@type": "ExhibitionEvent",
+        "location": {"@type": "Place", "name": "Rivington Place",
+                     "openingHours": ["Tu-Fr 11:00-18:00", "Sa 12:00-18:00"]}
+    });
+    let spec = serde_json::json!({
+        "openingHoursSpecification": [{"dayOfWeek": ["Monday", "Tuesday"],
+                                       "opens": "09:00", "closes": "12:00"}]
+    });
+    // Before the venue row exists: the exhibition still gets the hours.
+    upsert(
+        chats_palace("placed", "Rivington Place", None, true),
+        place.clone(),
+    )
+    .await;
+    // The event's own spec wins over the hours in its text.
+    upsert(
+        chats_palace("spec", "Chats Palace Arts Centre", Some(TEXT), true),
+        spec,
+    )
+    .await;
+    repo::sync_venues(&pool).await.unwrap();
+    let venue_hours = || async {
+        sqlx::query_as::<_, (Option<serde_json::Value>, Option<String>)>(
+            "SELECT opening_hours, hours_source FROM events.venues WHERE name = 'Rivington Place'",
+        )
+        .fetch_one(&pool)
+        .await
+        .unwrap()
+    };
+    assert_eq!(venue_hours().await.0, None);
+    // The next run's listing fills the venue's hours.
+    upsert(
+        chats_palace("placed", "Rivington Place", None, true),
+        place.clone(),
+    )
+    .await;
+    let want = serde_json::json!([
+        {"days": [2, 3, 4, 5], "opens": "11:00", "closes": "18:00"},
+        {"days": [6], "opens": "12:00", "closes": "18:00"}
+    ]);
+    let (h, source) = venue_hours().await;
+    assert_eq!(h, Some(want.clone()));
+    assert!(
+        source
+            .unwrap()
+            .starts_with("schema.org structured data on www.example.org, "),
+    );
+    // Never overwritten by different structured hours later.
+    let other = serde_json::json!({"location": {"openingHours": "Mo 10:00-11:00"}});
+    upsert(chats_palace("other", "Rivington Place", None, true), other).await;
+    assert_eq!(venue_hours().await.0, Some(want.clone()));
+
+    let rows: Vec<(String, Option<serde_json::Value>, Option<String>)> =
+        sqlx::query_as("SELECT title, opening_hours, hours_note FROM events.events ORDER BY title")
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+    let by = |title: &str| rows.iter().find(|r| r.0 == title).unwrap().clone();
+    assert_eq!(by("placed").1, Some(want));
+    assert_eq!(
+        by("spec").1,
+        Some(serde_json::json!([{"days": [1, 2], "opens": "09:00", "closes": "12:00"}]))
+    );
+    assert_eq!(by("spec").2, None);
+    db.drop_db().await;
+}

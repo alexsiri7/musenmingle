@@ -40,6 +40,21 @@ test("live labels match the server's (London time)", async () => {
     m.liveLabel("2026-10-03T23:00:00Z", "2026-10-29T00:00:00Z", true, late),
     "Opens Sun · check opening hours"
   );
+  // With opening hours (#206): Sat 11:00–15:00, Sun 12:00–17:00.
+  const hours = [
+    { days: ["sat"], opens: "11:00", closes: "15:00" },
+    { days: ["sun"], opens: "12:00", closes: "17:00" },
+  ];
+  const run = (at) => m.liveLabel("2026-09-30T23:00:00Z", "2026-10-19T23:00:00Z", true, at, hours);
+  assert.equal(run(now), "Open now until 15:00");
+  assert.equal(run("2026-10-03T09:00:00Z"), "Opens today at 11:00");
+  assert.equal(run("2026-10-03T15:00:00Z"), "Closed now");
+  assert.equal(run("2026-10-05T13:00:00Z"), "Closed today");
+  assert.equal(
+    m.liveLabel("2026-10-03T23:00:00Z", "2026-10-29T00:00:00Z", true, late, hours),
+    "Opens Sun · check opening hours"
+  );
+  assert.equal(m.liveLabel("2026-09-30T23:00:00Z", "2026-10-19T23:00:00Z", true, now, []), "Open today · check opening hours");
 });
 
 const EVENT = {
