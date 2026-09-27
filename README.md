@@ -147,6 +147,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     category from keywords in the eyebrow and title (a demonstration is a
     talk); concerts and recurring or open-ended programmes skipped; facts +
     link only (the site's legal page restricts reuse).
+  - `two-temple-place` — listing-only CSS scraper (no JSON-LD, no TEC
+    API): the upcoming cards of `/whats-on/` (the ~540 past ones below are
+    ignored): title, date lines with London wall-clock times, price
+    overlay and summary; category from title/summary keywords (tours are
+    talks); music and multi-day non-exhibition items skipped, and an
+    exhibition's run is all day (its times are opening hours);
+    descriptions but no images (credited photographs).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
