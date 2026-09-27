@@ -48,6 +48,7 @@ use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
 
 mod calendar_page;
 pub use calendar_page::SITE_ORIGIN;
+pub mod map;
 
 /// Content-Security-Policy for every HTML response.
 /// Images are our own thumbnails only (`/thumbs/...`), never hotlinked.
@@ -182,6 +183,7 @@ pub(crate) fn routes() -> Router<AppState> {
         .route("/calendar.ics", get(calendar_page::calendar_feed))
         .route("/saved/calendar", get(calendar_page::saved_calendar))
         .route("/thumbs/{name}", get(thumbnail))
+        .merge(map::routes())
 }
 
 /// `GET /thumbs/{event_id}-{hash}.jpg` (immutable: the hash changes with the
@@ -317,6 +319,7 @@ async fn app_js() -> Response {
 enum Nav {
     Events,
     Calendar,
+    Map,
     Saved,
     Sources,
     About,
@@ -384,6 +387,7 @@ fn page_with_head(
                         nav class="primary" aria-label="Site" {
                             (item("/", "Events", Nav::Events))
                             (item("/calendar", "Calendar", Nav::Calendar))
+                            (item("/map", "Map", Nav::Map))
                             a href="/saved" aria-current=[(nav == Nav::Saved).then_some("page")] {
                                 "Saved"
                                 span class="count" data-saved-count hidden { "0" }
@@ -2484,6 +2488,15 @@ async fn about() -> Response {
                             "Saved events live only in your browser. We don't store them; the Saved "
                             "page and My calendar just ask us for those events' current details, like "
                             "any other page."
+                        }
+                        li {
+                            "The " a href="/map" { "map" } " asks for your location only when you tap "
+                            "\u{201c}Use my exact coordinates\u{201d}, and your position stays in your "
+                            "browser: the page downloads what's on across London and works out distances "
+                            "on your device, so we never receive it. The map itself (tiles, library and "
+                            "fonts) comes from our own server, built from OpenStreetMap data, not from "
+                            "anyone else's map servers; like any map, it loads the tiles for the area "
+                            "on screen."
                         }
                         li {
                             "If you suggest a venue, we store the website address and your note, "

@@ -541,6 +541,11 @@
     if (s) s.textContent = text;
   }
 
+  // Cards rendered by another script (the map's "near me" list).
+  doc.addEventListener("musenmingle:cards", function () {
+    refresh();
+  });
+
   // Other tabs.
   if (root.addEventListener) {
     root.addEventListener("storage", function (e) {

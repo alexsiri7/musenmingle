@@ -310,13 +310,27 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   is the same layout filled in by the Saved-events script from this
   browser's saves; saves can't be subscribed to, only exported.
   **Saved events** (`/saved`, `src/web.js` served as `/static/app.js?v=<hash>`):
-  the only script, and progressive enhancement — without it every page
+  the site-wide script, and progressive enhancement — without it every page
   works and the save buttons stay `hidden`. Saves live only in the
   visitor's browser (`localStorage` key `musenmingle.saved.v1`: id, saved time
   and a title/venue/dates snapshot; no accounts, cookies or server
   storage). `/saved` is a server-rendered shell whose script fetches the
   saved events with `GET /v1/events?ids=…`, renders them from a `<template>`,
   marks vanished ones "No longer listed", and can export them as `.ics`.
+  **Map** (`/map`, "Near me, right now"; `src/web/map.rs`, `src/map.mjs`):
+  events on now or starting within 3 hours (or later today), nearest
+  first from an area preset, as a server-rendered list that works without
+  JavaScript. With it, a map drawn by MapLibre GL JS from our own
+  self-hosted Greater London vector tiles (`/tiles/london.pmtiles`, one
+  PMTiles file served with range requests; libraries, styles and glyphs
+  vendored under `static/map/`, nothing from third parties), numbered and
+  clustered markers, a popover whose main button is the venue's page, and
+  "Use my exact coordinates": the browser's position stays on the device
+  (the script fetches the London-wide `at=now` listing and computes
+  walking distances itself). Only `/map` allows geolocation
+  (`Permissions-Policy`) and adds `worker-src 'self'` to its CSP. Venues
+  that sources list without coordinates get them from `events.venues`
+  (hand-seeded) at upsert. See [docs/map.md](docs/map.md).
 
 ### Content policy
 
@@ -555,6 +569,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `REQUESTY_BASE_URL` | ingest | `https://router.requesty.ai` | Tests point it at a mock |
 | `NTFY_TOPIC` | ingest | unset → alerts logged | ntfy topic for owner alerts (secret) |
 | `NTFY_BASE_URL` | ingest | `https://ntfy.sh` | ntfy server |
+| `TILES_PATH` | api | `static/tiles/london.pmtiles` (Docker: `/usr/share/musenmingle/london.pmtiles`) | Map tiles served at `/tiles/london.pmtiles`; missing → `/map` shows only its list |
 | `TEST_DATABASE_URL` | tests | unset → DB tests skip | Throwaway Postgres for tests |
 
 See `.env.example`.

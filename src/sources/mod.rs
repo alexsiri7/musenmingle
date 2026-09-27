@@ -211,6 +211,7 @@ mod tests {
             enrich: Default::default(),
             ntfy_topic: None,
             ntfy_base_url: String::new(),
+            tiles_path: Default::default(),
         }
     }
 

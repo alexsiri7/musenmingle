@@ -18,6 +18,20 @@ pub const MAX_RADIUS_KM: f64 = 100.0;
 /// Most ids one `ids=` filter may name.
 pub const MAX_IDS: usize = 100;
 
+/// `within_hours=` default and bounds for `at=now`.
+pub const DEFAULT_WITHIN_HOURS: i64 = 3;
+pub const MAX_WITHIN_HOURS: i64 = 24;
+/// In `at=` mode the listing's lower bound (`from`, `$1` in SQL) is this far
+/// before the requested instant: a loose, index-friendly bound that every
+/// event still on at that instant satisfies (an all-day event's stored end
+/// is London midnight of its last day, at most 25 hours before it ends).
+/// The exact test is `repo::live_sql`, which recovers the instant as
+/// `$1 + LIVE_LOOKBACK_HOURS`.
+pub const LIVE_LOOKBACK_HOURS: i64 = 48;
+/// An event with a start time but no end counts as still on for this long
+/// after it starts (we rarely know when a talk finishes).
+pub const LIVE_GRACE_MINUTES: i64 = 60;
+
 /// Mean Earth radius used for haversine distances.
 pub const EARTH_RADIUS_KM: f64 = 6371.0088;
 
@@ -66,6 +80,10 @@ pub struct EventFilter {
     pub search: Option<Search>,
     /// A quick pick (`pick=`), judged against a London date (today).
     pub pick: Option<PickFilter>,
+    /// `at=now|today`: only events still on at this instant (and, via
+    /// `until`, starting before the end of the window). `from` is then this
+    /// instant minus [`LIVE_LOOKBACK_HOURS`].
+    pub live_at: Option<DateTime<Utc>>,
 }
 
 /// `pick=`: the home page's quick-pick chips as listing filters. Each is
@@ -116,6 +134,15 @@ impl Pick {
 pub struct PickFilter {
     pub pick: Pick,
     pub today: NaiveDate,
+}
+
+/// `at=`: "happening now or starting soon" windows (London time).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum At {
+    /// Still on now, or starting within `within_hours` (default 3).
+    Now,
+    /// Still on now, or starting later today (before London midnight).
+    Today,
 }
 
 /// Add a vocabulary tag to `list` (deduped), or explain why it is invalid.
@@ -372,9 +399,11 @@ pub fn parse_query(raw: &str) -> Result<EventQuery, String> {
 }
 
 /// [`parse_query`] with the clock given (`ending` hides events that ended
-/// before `now`; `surprise` shuffles by `now`'s London date).
+/// before `now`; `surprise` shuffles by `now`'s London date; `at=` is
+/// relative to it).
 pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, String> {
     let mut filter = EventFilter::default();
+    let (mut at, mut within_hours) = (None, None);
     let (mut from, mut to) = (None, None);
     let (mut near, mut radius_km) = (None, None);
     let (mut limit, mut cursor) = (None, None);
@@ -409,6 +438,24 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 })?)
             }
             "q" => filter.search = Search::parse(&value)?,
+            "at" => {
+                at = Some(match value.as_ref() {
+                    "now" => At::Now,
+                    "today" => At::Today,
+                    _ => return Err("at must be now or today".into()),
+                })
+            }
+            "within_hours" => {
+                let h: i64 = value
+                    .parse()
+                    .map_err(|_| "within_hours must be an integer".to_string())?;
+                if !(1..=MAX_WITHIN_HOURS).contains(&h) {
+                    return Err(format!(
+                        "within_hours must be between 1 and {MAX_WITHIN_HOURS}"
+                    ));
+                }
+                within_hours = Some(h);
+            }
             "from" => from = Some(parse_date("from", &value)?),
             "to" => to = Some(parse_date("to", &value)?),
             "category" => {
@@ -498,6 +545,29 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
     }
     filter.from = from.map(london_midnight);
     filter.until = to.and_then(|t| t.succ_opt()).map(london_midnight);
+    match at {
+        None if within_hours.is_some() => return Err("within_hours requires at=now".into()),
+        None => {}
+        Some(_) if from.is_some() || to.is_some() || filter.when.is_some() => {
+            return Err("at cannot be combined with from, to or when".into());
+        }
+        Some(At::Today) if within_hours.is_some() => {
+            return Err("within_hours requires at=now".into());
+        }
+        Some(at) => {
+            filter.live_at = Some(now);
+            filter.from = Some(now - chrono::Duration::hours(LIVE_LOOKBACK_HOURS));
+            filter.until = Some(match at {
+                At::Now => {
+                    now + chrono::Duration::hours(within_hours.unwrap_or(DEFAULT_WITHIN_HOURS))
+                }
+                At::Today => {
+                    let today = now.with_timezone(&chrono_tz::Europe::London).date_naive();
+                    london_midnight(today.succ_opt().unwrap_or(today))
+                }
+            });
+        }
+    }
 
     if near.is_none() && radius_km.is_some() {
         return Err("radius_km requires near".into());
@@ -845,6 +915,55 @@ mod tests {
         assert!(parse_query(&format!("cursor={rel}")).is_err());
         assert!(parse_query(&format!("near=51.5,-0.1&cursor={rel}")).is_err());
         assert!(parse_query(&format!("q=print&near=51.5,-0.1&cursor={rel}")).is_ok());
+    }
+
+    #[test]
+    fn at_now_and_today_set_a_live_window() {
+        // 22:30 BST on Sat 3 Oct 2026 (21:30 UTC).
+        let now = Utc.with_ymd_and_hms(2026, 10, 3, 21, 30, 0).unwrap();
+        let q = parse_query_at("at=now", now).unwrap();
+        assert_eq!(q.filter.live_at, Some(now));
+        assert_eq!(
+            q.filter.from,
+            Some(now - chrono::Duration::hours(LIVE_LOOKBACK_HOURS))
+        );
+        assert_eq!(q.filter.until, Some(now + chrono::Duration::hours(3)));
+        let q = parse_query_at("at=now&within_hours=1&near=51.5,-0.1", now).unwrap();
+        assert_eq!(q.filter.until, Some(now + chrono::Duration::hours(1)));
+        assert!(matches!(q.order, EventOrder::ByDistance { .. }));
+        // "Today" ends at London midnight (23:00 UTC while on BST).
+        let q = parse_query_at("at=today", now).unwrap();
+        assert_eq!(
+            q.filter.until,
+            Some(Utc.with_ymd_and_hms(2026, 10, 3, 23, 0, 0).unwrap())
+        );
+        // After midnight UTC but before London midnight on a GMT day: still that London day.
+        let late = Utc.with_ymd_and_hms(2026, 12, 1, 23, 30, 0).unwrap();
+        let q = parse_query_at("at=today", late).unwrap();
+        assert_eq!(
+            q.filter.until,
+            Some(Utc.with_ymd_and_hms(2026, 12, 2, 0, 0, 0).unwrap())
+        );
+        assert_eq!(parse_query_at("", now).unwrap().filter.live_at, None);
+    }
+
+    #[test]
+    fn at_rejects_bad_combinations() {
+        let now = Utc.with_ymd_and_hms(2026, 10, 3, 12, 0, 0).unwrap();
+        for raw in [
+            "at=later",
+            "at=",
+            "at=now&from=2026-10-03",
+            "at=now&to=2026-10-03",
+            "at=today&when=evening",
+            "at=today&within_hours=2",
+            "within_hours=3",
+            "at=now&within_hours=0",
+            "at=now&within_hours=25",
+            "at=now&within_hours=two",
+        ] {
+            assert!(parse_query_at(raw, now).is_err(), "{raw}");
+        }
     }
 
     #[test]

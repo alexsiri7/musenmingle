@@ -42,6 +42,8 @@ pub struct AppState {
     pub github_repo: Arc<str>,
     /// Home-page quick-pick counts, cached for 5 minutes.
     pub(crate) quick_picks: Arc<crate::web::QuickPickCache>,
+    /// The London map tiles (`/tiles/london.pmtiles`), when present.
+    pub tiles: Option<Arc<crate::web::map::TileFile>>,
 }
 
 /// Settings for [`router`] beyond the database and suggestions.
@@ -54,6 +56,19 @@ pub struct ApiSettings {
 }
 
 pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> Router {
+    router_with_tiles(pool, suggestions, settings, None)
+}
+
+/// [`router`] serving the map tiles from the PMTiles file at `tiles` (see
+/// `crate::web::map`); without it (or if it is missing) `/map` shows only
+/// its list.
+pub fn router_with_tiles(
+    pool: PgPool,
+    suggestions: Suggestions,
+    settings: ApiSettings,
+    tiles: Option<&std::path::Path>,
+) -> Router {
+    let tiles = tiles.and_then(crate::web::map::TileFile::open);
     let cors = CorsLayer::new()
         .allow_origin(AllowOrigin::list(settings.cors_origins))
         .allow_methods([Method::GET, Method::POST])
@@ -66,6 +81,12 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
         .route("/v1/sources", get(list_sources))
         .route("/v1/suggestions", post(suggest))
         .merge(crate::web::routes())
+        .merge(
+            tiles
+                .clone()
+                .map(crate::web::map::tile_routes)
+                .unwrap_or_default(),
+        )
         .layer(cors)
         .layer(axum::middleware::map_response(security_headers))
         .with_state(AppState {
@@ -73,6 +94,7 @@ pub fn router(pool: PgPool, suggestions: Suggestions, settings: ApiSettings) -> 
             suggestions: Arc::new(suggestions),
             github_repo: settings.github_repo.into(),
             quick_picks: Arc::default(),
+            tiles,
         })
 }
 

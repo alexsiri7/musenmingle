@@ -40,6 +40,7 @@ async fn every_enabled_seeded_source_has_an_implementation() {
         enrich: Default::default(),
         ntfy_topic: None,
         ntfy_base_url: String::new(),
+        tiles_path: Default::default(),
     };
     assert!(!rows.is_empty());
     for row in &rows {

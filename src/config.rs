@@ -198,7 +198,13 @@ pub struct Config {
     /// ntfy topic for owner alerts (`NTFY_TOPIC`); unset = alerts are logged.
     pub ntfy_topic: Option<String>,
     pub ntfy_base_url: String,
+    /// The London map tiles (PMTiles) the API serves at
+    /// `/tiles/london.pmtiles` (`TILES_PATH`; the Docker image sets it).
+    pub tiles_path: std::path::PathBuf,
 }
+
+/// Where the map tiles are when `TILES_PATH` is unset (a checkout's copy).
+pub const DEFAULT_TILES_PATH: &str = "static/tiles/london.pmtiles";
 
 fn parse_usd(name: &str, default: Decimal) -> Result<Decimal> {
     match non_empty(name) {
@@ -305,6 +311,9 @@ impl Config {
             ntfy_topic: non_empty("NTFY_TOPIC"),
             ntfy_base_url: non_empty("NTFY_BASE_URL")
                 .unwrap_or_else(|| crate::notify::DEFAULT_NTFY_BASE.into()),
+            tiles_path: non_empty("TILES_PATH")
+                .unwrap_or_else(|| DEFAULT_TILES_PATH.into())
+                .into(),
         })
     }
 }

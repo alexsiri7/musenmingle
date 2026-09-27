@@ -364,6 +364,30 @@ fn update_from_values(set: &str) -> String {
 /// The `events.event_sources` row is then upserted (raw payload,
 /// last_seen_at), and an event the listing moved away from is deleted if
 /// nothing else links to it. Everything happens in one transaction.
+/// Coordinates for a venue from `events.venues`, matched on the normalised
+/// venue name (`normalise::normalise_venue_for_key`, the dedupe key's venue
+/// part). The table is small (hand-seeded), so it is read whole.
+async fn venue_coords_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    venue: Option<&str>,
+) -> sqlx::Result<Option<(f64, f64)>> {
+    let Some(venue) = venue.filter(|v| !v.trim().is_empty()) else {
+        return Ok(None);
+    };
+    let key = crate::normalise::normalise_venue_for_key(Some(venue));
+    if key == "unknown" {
+        return Ok(None);
+    }
+    let rows: Vec<(String, f64, f64)> =
+        sqlx::query_as("SELECT name, lat, lng FROM events.venues ORDER BY id")
+            .fetch_all(&mut **tx)
+            .await?;
+    Ok(rows
+        .into_iter()
+        .find(|(name, _, _)| crate::normalise::normalise_venue_for_key(Some(name)) == key)
+        .map(|(_, lat, lng)| (lat, lng)))
+}
+
 pub async fn upsert_event(
     pool: &PgPool,
     source_id: i64,
@@ -405,6 +429,12 @@ async fn upsert_event_tx(
     let mut ev = event.clone();
     let policy = source_policy_tx(tx, source_id).await?;
     policy.apply(&mut ev);
+    if ev.lat.is_none() || ev.lng.is_none() {
+        if let Some((lat, lng)) = venue_coords_tx(tx, ev.venue_name.as_deref()).await? {
+            ev.lat = Some(lat);
+            ev.lng = Some(lng);
+        }
+    }
     // A restricted source's raw payload (full text, image URLs) is not kept.
     let payload = if policy.restricted() {
         redacted_raw()
@@ -840,6 +870,31 @@ fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, 
         .bind(f.search.as_ref().and_then(|s| s.alternatives.as_deref()))
 }
 
+/// The `at=` test ([`EventFilter::live_at`]) as SQL over `events.events ev`
+/// (`TRUE` when not set): the event is still on at that instant. In `at=`
+/// mode `$1` is the instant minus [`crate::listing::LIVE_LOOKBACK_HOURS`], so the
+/// instant is recovered from it (and `$2`, the end of the window, is already
+/// applied by [`LISTING_FILTER`]). An all-day event ends at London midnight
+/// after its last day (computed in London time, so DST days are 23 or 25
+/// hours); a ranged event at its `ends_at`; an event with a start time but
+/// no end [`crate::listing::LIVE_GRACE_MINUTES`] after it starts.
+fn live_sql(f: &EventFilter) -> String {
+    use crate::listing::{LIVE_GRACE_MINUTES, LIVE_LOOKBACK_HOURS};
+    if f.live_at.is_none() {
+        return "TRUE".into();
+    }
+    let now = format!("($1::timestamptz + interval '{LIVE_LOOKBACK_HOURS} hours')");
+    format!(
+        "(CASE
+            WHEN ev.all_day THEN
+                (((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date + 1)::timestamp
+                    AT TIME ZONE 'Europe/London') > {now}
+            WHEN ev.ends_at IS NOT NULL THEN ev.ends_at > {now}
+            ELSE ev.starts_at + interval '{LIVE_GRACE_MINUTES} minutes' > {now}
+         END)"
+    )
+}
+
 /// The event's start in London wall-clock time.
 const LOCAL_START: &str = "(ev.starts_at AT TIME ZONE 'Europe/London')";
 
@@ -1016,11 +1071,12 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
     let near = query.near;
     let b = near.map(|n| n.bounding_box());
     let filter = format!(
-        "{LISTING_FILTER} AND {} AND {} AND {}
+        "{LISTING_FILTER} AND {} AND {} AND {} AND {}
          AND ($13::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19))",
         price_max_sql("$12"),
         when_sql(f.when),
-        pick_sql(f.pick)
+        pick_sql(f.pick),
+        live_sql(f)
     );
     // (sort key expression, extra condition, cursor condition, order)
     let (key, extra, after, order) = match &query.order {
@@ -1170,10 +1226,11 @@ pub async fn facet_counts(
     let b = near.map(|n| n.bounding_box());
     let col = facet.column();
     let filter = format!(
-        "{LISTING_FILTER} AND {} AND {} AND {}",
+        "{LISTING_FILTER} AND {} AND {} AND {} AND {}",
         price_max_sql("$20"),
         when_sql(f.when),
-        pick_sql(f.pick)
+        pick_sql(f.pick),
+        live_sql(&f)
     );
     bind_filter(
         sqlx::query_as(AssertSqlSafe(format!(
@@ -1230,6 +1287,7 @@ pub async fn listing_counts(
     let sources: Vec<&str> = filter.sources.iter().map(String::as_str).collect();
     let price = price_filter_sql("$12", "$13");
     let when = when_sql(filter.when);
+    let live = live_sql(filter);
     let when_count = |w: When| format!("count(*) FILTER (WHERE {} AND {price})", when_sql(Some(w)));
     let price_count = |p: &str| format!("count(*) FILTER (WHERE {p} AND {when})");
     let b = near.map(Near::bounding_box);
@@ -1237,7 +1295,7 @@ pub async fn listing_counts(
         "SELECT {} AS evening, {} AS after_work, {} AS weekend, {} AS daytime,
                 {} AS free, {} AS max_10, {} AS max_20, {} AS unknown
          FROM events.events ev
-         WHERE {LISTING_FILTER} AND {}
+         WHERE {LISTING_FILTER} AND {live} AND {}
            AND ($14::float8 IS NULL OR (lat BETWEEN $16 AND $17 AND lng BETWEEN $18 AND $19
                 AND {} <= $21))",
         when_count(When::Evening),
@@ -1334,9 +1392,10 @@ pub async fn semantic_candidates(
              FROM events.event_embeddings em
              JOIN events.events ev ON ev.id = em.event_id
              CROSS JOIN (SELECT $12::real[]::extensions.vector AS v) q
-             WHERE {LISTING_FILTER}
+             WHERE {LISTING_FILTER} AND {}
              ORDER BY em.embedding OPERATOR(extensions.<=>) q.v, ev.id
-             LIMIT $13"
+             LIMIT $13",
+            live_sql(filter)
         ))),
         filter,
     )
