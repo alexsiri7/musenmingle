@@ -680,6 +680,73 @@ pub async fn sync_venues(pool: &PgPool) -> sqlx::Result<VenueSync> {
     Ok(out)
 }
 
+/// Venues without coordinates that have events and a postcode not looked
+/// up since `checked_before` (`crate::geocode`), oldest first.
+pub async fn venues_to_geocode(
+    pool: &PgPool,
+    checked_before: DateTime<Utc>,
+    limit: usize,
+) -> sqlx::Result<Vec<(i64, String)>> {
+    sqlx::query_as(
+        "SELECT v.id, v.postcode FROM events.venues v
+         WHERE v.lat IS NULL AND v.postcode IS NOT NULL
+           AND (v.geocode_checked_at IS NULL OR v.geocode_checked_at < $1)
+           AND EXISTS (SELECT 1 FROM events.events ev WHERE ev.venue_id = v.id)
+         ORDER BY v.id LIMIT $2",
+    )
+    .bind(checked_before)
+    .bind(i64::try_from(limit).unwrap_or(i64::MAX))
+    .fetch_all(pool)
+    .await
+}
+
+/// Store a geocoded point for a venue that still has none.
+pub async fn set_venue_point(
+    pool: &PgPool,
+    id: i64,
+    lat: f64,
+    lng: f64,
+    source: &str,
+) -> sqlx::Result<()> {
+    sqlx::query(
+        "UPDATE events.venues SET lat = $2, lng = $3, coords_source = $4,
+             geocode_checked_at = NULL, updated_at = now()
+         WHERE id = $1 AND lat IS NULL",
+    )
+    .bind(id)
+    .bind(lat)
+    .bind(lng)
+    .bind(source)
+    .execute(pool)
+    .await?;
+    Ok(())
+}
+
+/// Remember a postcode lookup that found nothing.
+pub async fn venue_geocode_checked(pool: &PgPool, id: i64, now: DateTime<Utc>) -> sqlx::Result<()> {
+    sqlx::query("UPDATE events.venues SET geocode_checked_at = $2 WHERE id = $1")
+        .bind(id)
+        .bind(now)
+        .execute(pool)
+        .await?;
+    Ok(())
+}
+
+/// Names of venues without coordinates that have events still to come or
+/// still running at `now` (the #204 invariant), by name.
+pub async fn venues_without_coords(pool: &PgPool, now: DateTime<Utc>) -> sqlx::Result<Vec<String>> {
+    sqlx::query_scalar(
+        "SELECT v.name FROM events.venues v
+         WHERE v.lat IS NULL
+           AND EXISTS (SELECT 1 FROM events.events ev
+                       WHERE ev.venue_id = v.id AND COALESCE(ev.ends_at, ev.starts_at) >= $1)
+         ORDER BY v.name",
+    )
+    .bind(now)
+    .fetch_all(pool)
+    .await
+}
+
 /// Set every event's `venue_type` from [`crate::venue_type::classify`]
 /// (overrides from `events.venues`, its sources' keys, its venue name).
 /// Returns how many events changed. Run after each ingest run.

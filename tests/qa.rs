@@ -153,6 +153,7 @@ impl Env {
                 client: Requesty::new(&self.requesty.uri(), "test-key").unwrap(),
                 config,
             }),
+            venues: None,
         }
     }
 

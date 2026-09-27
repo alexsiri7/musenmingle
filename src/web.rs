@@ -2926,6 +2926,18 @@ async fn about() -> Response {
                     }
                     ". Contains OS data \u{a9} Crown copyright and database right 2024."
                 }
+                p class="small" id="postcodes" {
+                    "Venue locations a listing doesn't give: the centre of the venue's postcode, "
+                    "looked up on "
+                    a href="https://postcodes.io" rel="noopener" { "postcodes.io" }
+                    " (ONS Postcode Directory). Source: Office for National Statistics, "
+                    "licensed under the "
+                    a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="noopener" {
+                        "Open Government Licence v3.0"
+                    }
+                    ". Contains OS data \u{a9} Crown copyright and database right; contains "
+                    "Royal Mail data \u{a9} Royal Mail copyright and database right."
+                }
                 p class="small" {
                     "Sources and credits: every venue and service we use, and the sites we "
                     "couldn't use, are listed on " a href="/sources" { "Sources" } "."

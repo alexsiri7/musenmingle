@@ -61,6 +61,9 @@ pub struct Runner {
     /// Scraper QA AI checks (`None` without `REQUESTY_API_KEY` or with
     /// `QA_MAX_CHECKS_PER_RUN=0`); the rules run regardless.
     pub qa: Option<crate::qa::QaChecker>,
+    /// Venue geocoding and the venue-location alert (#204); `None` skips
+    /// both (the venue sync still runs).
+    pub venues: Option<crate::geocode::VenueChecks>,
 }
 
 /// Outcome of one source within a run.
@@ -284,6 +287,18 @@ impl Runner {
                 "venues synced"
             ),
             Err(e) => tracing::error!(error = %e, "syncing venues failed"),
+        }
+        if let Some(checks) = &self.venues {
+            match checks.run(&self.pool, &self.ctx, now).await {
+                Ok(r) => tracing::info!(
+                    geocoded = r.geocoded,
+                    not_found = r.not_found,
+                    failed = r.failed,
+                    missing = r.missing.len(),
+                    "venue locations checked"
+                ),
+                Err(e) => tracing::error!(error = %e, "checking venue locations failed"),
+            }
         }
         match repo::sync_venue_types(&self.pool).await {
             Ok(0) => {}

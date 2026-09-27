@@ -100,6 +100,7 @@ fn runner(
         source_timeout: timeout,
         enrich: None,
         qa: None,
+        venues: None,
     }
 }
 
@@ -276,6 +277,7 @@ async fn unbuildable_source_is_recorded_as_skipped_then_cleared_by_a_run() {
         source_timeout: Duration::from_secs(5),
         enrich: None,
         qa: None,
+        venues: None,
     };
 
     let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {

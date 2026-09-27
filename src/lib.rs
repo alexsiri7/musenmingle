@@ -12,6 +12,7 @@ pub mod contact;
 pub mod db;
 pub mod enrich;
 pub mod fetch;
+pub mod geocode;
 pub mod github;
 pub mod health;
 pub mod host_redirect;
