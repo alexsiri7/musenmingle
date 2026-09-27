@@ -442,11 +442,22 @@ small credited thumbnail, and send people to the venue.
 
 Scrapers never use a language model; extraction stays deterministic. After
 the sources of a tick, `src/enrich/` adds tags and a short note to each
-upcoming event, **only from what we already store** (`enrich::input`:
-title, venue, London dates, category, the listing's own tags, price, the
-≤ 300-character excerpt when the source's terms let us keep one, and the
-sources' names). It never fetches a page, and facts-only sources (Ticketmaster,
-Serpentine) send just the facts.
+upcoming event from what we store (`enrich::input`: title, venue, London
+dates, category, the listing's own tags, price, the ≤ 300-character excerpt
+when the source's terms let us keep one, and the sources' names) plus, for
+listings the same tick just scraped, their **full cleaned text** (the
+description before the excerpt cut, capped at 10,000 characters; issue
+#208). That text is transient: `repo::upsert_listing` hands it to the
+runner, which passes it to the pass and drops it after the tick; it is
+never stored, logged or cached (its `Debug` is redacted), only its sha256
+(`events.events.page_text_hash`, for the listing behind the stored
+excerpt, so merged events don't flip between sources). An event is due
+again when that hash differs from the one its enrichment saw; one that
+shows a note but whose page text this tick doesn't hold keeps the note
+until its source's next scrape rather than being re-enriched from the
+excerpt alone (without a note, it is enriched from the excerpt now). The pass never fetches a page,
+and facts-only sources (Ticketmaster, Serpentine) send just the facts.
+Expect about 2–3× the input tokens per event; the caps below still apply.
 
 - **Provider:** Requesty's OpenAI-compatible
   `POST https://router.requesty.ai/v1/chat/completions`, model
@@ -472,10 +483,11 @@ Serpentine) send just the facts.
   hash, output JSON, tokens, cost) and materialised onto `events.events`
   (`medium_tags`, `format_tags`, `good_for`, `vibe_tags`, `is_opening`,
   `whats_cool`, `one_liner`, `ai_grounding`, `ai_model`, `ai_enriched_at`)
-  for filters and pages. Events are re-enriched only when their input hash
-  or the prompt version changes; when the input changes the materialised AI
-  fields are cleared at once (`enrich::sync`, every tick) so a note never
-  outlives its facts. `medium_tags` also carries the sources'
+  for filters and pages. Events are re-enriched only when their input hash,
+  their page-text hash (above) or the prompt version changes; when the
+  stored facts change the materialised AI fields are cleared at once
+  (`enrich::sync`, every tick) so a note never outlives its facts (a changed
+  page text alone keeps the note until the re-enrichment replaces it). `medium_tags` also carries the sources'
   `default_medium_tags` (e.g. Design Museum → `design`), which is all an
   event has while AI is off.
 - **Cost control:** batches of `ENRICH_BATCH_SIZE` (10) behind one long

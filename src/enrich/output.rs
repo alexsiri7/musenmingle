@@ -10,7 +10,7 @@ use serde_json::{Value, json};
 
 /// Bump when the prompt, schema or validation changes meaningfully: every
 /// event is then re-enriched (gradually, within the spend caps).
-pub const PROMPT_VERSION: i32 = 1;
+pub const PROMPT_VERSION: i32 = 2;
 
 /// The instructions (static, so the provider can cache them).
 pub const SYSTEM_PROMPT: &str = include_str!("prompt.txt");

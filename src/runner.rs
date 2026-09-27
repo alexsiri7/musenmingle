@@ -95,6 +95,9 @@ pub struct SourceRun {
     pub report: SourceReport,
     pub run_id: i64,
     pub events: Vec<RunEvent>,
+    /// Page texts of the stored listings, by event, for this ingest run's
+    /// AI enrichment (issue #208; transient, never stored or logged).
+    pub page_texts: crate::enrich::PageTexts,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -129,6 +132,8 @@ impl Runner {
         tracing::info!(count = due.len(), "sources due");
         let mut reports = Vec::new();
         let mut qa_tick = crate::qa::QaTick::default();
+        // Held only until this run's enrichment pass, then dropped.
+        let mut page_texts = crate::enrich::PageTexts::new();
         for row in due {
             let source = match (self.factory)(&row) {
                 Ok(source) => source,
@@ -200,6 +205,7 @@ impl Runner {
                     }
                 }
             }
+            page_texts.extend(std::mem::take(&mut run.page_texts));
             let report = run.report;
             tracing::info!(?report, "source finished");
             reports.push(report);
@@ -230,7 +236,7 @@ impl Runner {
             Err(e) => tracing::error!(error = %e, "AI field sync failed"),
         }
         if let Some(enricher) = &self.enrich {
-            match enricher.run(&self.pool, now).await {
+            match enricher.run(&self.pool, now, &page_texts).await {
                 Ok(r) => tracing::info!(
                     model = %enricher.config.model,
                     queued = r.queued,
@@ -349,6 +355,7 @@ impl Runner {
         let mut errors: Vec<String> = Vec::new();
         let (mut found, mut created, mut skipped) = (0i32, 0i32, 0i32);
         let mut events: Vec<RunEvent> = Vec::new();
+        let mut page_texts = crate::enrich::PageTexts::new();
 
         let fetched = tokio::time::timeout(self.source_timeout, source.fetch(&self.ctx)).await;
         let ok = match fetched {
@@ -377,8 +384,11 @@ impl Runner {
                                 events.push(run_event(false));
                                 continue;
                             }
-                            match repo::upsert_event(&self.pool, row.id, &ev, raw).await {
-                                Ok(o) => {
+                            match repo::upsert_listing(&self.pool, row.id, &ev, raw).await {
+                                Ok((o, page)) => {
+                                    if let Some(page) = page {
+                                        page_texts.insert(o.event_id, page);
+                                    }
                                     found += 1;
                                     created += i32::from(o.created);
                                     events.push(run_event(true));
@@ -439,6 +449,7 @@ impl Runner {
             },
             run_id,
             events,
+            page_texts,
         })
     }
 }

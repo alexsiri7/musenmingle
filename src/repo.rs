@@ -9,6 +9,7 @@ use sqlx::{AssertSqlSafe, FromRow, PgPool, Postgres, Transaction};
 use std::collections::HashSet;
 use uuid::Uuid;
 
+use crate::enrich::input::PageText;
 use crate::listing::{
     EARTH_RADIUS_KM, EventFilter, EventOrder, EventQuery, Near, Pick, PickFilter, When,
 };
@@ -438,10 +439,23 @@ pub async fn upsert_event(
     event: &NewEvent,
     raw: &RawEvent,
 ) -> sqlx::Result<UpsertOutcome> {
+    Ok(upsert_listing(pool, source_id, event, raw).await?.0)
+}
+
+/// [`upsert_event`], also returning the listing's page text (issue #208)
+/// when it is the text behind the event's stored excerpt, for the AI
+/// enrichment of the same ingest run. Only its hash is stored
+/// (`events.events.page_text_hash`); the text itself never is.
+pub async fn upsert_listing(
+    pool: &PgPool,
+    source_id: i64,
+    event: &NewEvent,
+    raw: &RawEvent,
+) -> sqlx::Result<(UpsertOutcome, Option<PageText>)> {
     let mut tx = pool.begin().await?;
-    let outcome = upsert_event_tx(&mut tx, source_id, event, raw).await?;
+    let out = upsert_event_tx(&mut tx, source_id, event, raw).await?;
     tx.commit().await?;
-    Ok(outcome)
+    Ok(out)
 }
 
 async fn upsert_event_tx(
@@ -449,7 +463,7 @@ async fn upsert_event_tx(
     source_id: i64,
     event: &NewEvent,
     raw: &RawEvent,
-) -> sqlx::Result<UpsertOutcome> {
+) -> sqlx::Result<(UpsertOutcome, Option<PageText>)> {
     let linked: Option<Uuid> = sqlx::query_scalar(
         "SELECT event_id FROM events.event_sources
          WHERE source_id = $1 AND source_event_id = $2 FOR UPDATE",
@@ -619,7 +633,42 @@ async fn upsert_event_tx(
     }
     set_hours_tx(tx, outcome.event_id, event, policy).await?;
     set_borough_tx(tx, outcome.event_id).await?;
-    Ok(outcome)
+    let page = set_page_text_hash_tx(tx, outcome.event_id, event, &ev, policy).await?;
+    Ok((outcome, page))
+}
+
+/// Record the hash of this listing's page text (its full description,
+/// before the excerpt cut) when the event's stored excerpt is this
+/// listing's, so a merged event follows one listing (the one merge
+/// precedence picked for the description) and its hash doesn't flip between
+/// sources. `''` = the listing has no text beyond the excerpt. Sources whose
+/// terms don't let us keep descriptions provide no page text. Returns the
+/// text when it is the event's current page text.
+async fn set_page_text_hash_tx(
+    tx: &mut Transaction<'_, Postgres>,
+    event_id: Uuid,
+    event: &NewEvent,
+    stored: &NewEvent,
+    policy: SourcePolicy,
+) -> sqlx::Result<Option<PageText>> {
+    let page = if policy.store_description {
+        PageText::from_listing(event.description.as_deref(), stored.description.as_deref())
+    } else {
+        None
+    };
+    let hash = page.as_ref().map(PageText::hash).unwrap_or_default();
+    let matched = sqlx::query(
+        "UPDATE events.events SET page_text_hash = $2
+         WHERE id = $1 AND description IS NOT DISTINCT FROM $3",
+    )
+    .bind(event_id)
+    .bind(&hash)
+    .bind(&stored.description)
+    .execute(&mut **tx)
+    .await?
+    .rows_affected()
+        > 0;
+    Ok(page.filter(|_| matched))
 }
 
 /// The London borough (issue #79, `crate::borough`) of the event this

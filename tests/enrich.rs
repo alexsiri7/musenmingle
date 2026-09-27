@@ -20,7 +20,7 @@ use common::TestDb;
 use musenmingle::api::ApiSettings;
 use musenmingle::config::SuggestionConfig;
 use musenmingle::enrich::requesty::Requesty;
-use musenmingle::enrich::{EnrichConfig, Enricher, embed, store};
+use musenmingle::enrich::{EnrichConfig, Enricher, PageTexts, embed, store};
 use musenmingle::notify::Ntfy;
 use musenmingle::suggestions::Suggestions;
 use rust_decimal::Decimal;
@@ -209,7 +209,7 @@ async fn batches_map_results_back_by_id_and_record_spend() {
     mount_chat(&requesty, calls.clone()).await;
 
     let e = enricher(&requesty, &ntfy, config());
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(
         (r.queued, r.enriched, r.failed, r.calls),
         (12, 12, 0, 3),
@@ -242,7 +242,7 @@ async fn batches_map_results_back_by_id_and_record_spend() {
     assert_eq!(per_event, Decimal::new(16, 4), "$0.008 over a batch of 5");
 
     // Nothing changed: nothing is re-sent.
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.queued, r.calls), (0, 0));
     pool.close().await;
     db.drop_db().await;
@@ -261,7 +261,7 @@ async fn invalid_results_are_retried_once_then_given_up_until_the_input_changes(
     mount_chat(&requesty, calls.clone()).await;
     let e = enricher(&requesty, &ntfy, config());
 
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.enriched, r.failed, r.calls), (1, 1, 2), "{r:?}");
     // The retry carried the validator's complaint and only the bad event.
     let reqs = requesty.received_requests().await.unwrap();
@@ -300,7 +300,7 @@ async fn invalid_results_are_retried_once_then_given_up_until_the_input_changes(
     assert!(good_enriched);
 
     // Given up: not re-sent on the next tick ...
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.queued, r.calls), (0, 0));
     // ... until its input changes.
     sqlx::query("UPDATE events.events SET title = 'Better show' WHERE id = $1")
@@ -308,7 +308,7 @@ async fn invalid_results_are_retried_once_then_given_up_until_the_input_changes(
         .execute(&pool)
         .await
         .unwrap();
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.queued, r.enriched, r.calls), (1, 1, 1), "{r:?}");
     pool.close().await;
     db.drop_db().await;
@@ -333,7 +333,7 @@ async fn an_input_change_withdraws_the_note_and_re_enriches() {
             .unwrap();
     assert_eq!(medium, ["design"], "the source's default tag, before AI");
 
-    e.run(&pool, now()).await.unwrap();
+    e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     let row = || async {
         sqlx::query_as::<_, (Option<String>, Vec<String>, Option<String>)>(
             "SELECT whats_cool, medium_tags, ai_grounding FROM events.events WHERE id = $1",
@@ -364,7 +364,7 @@ async fn an_input_change_withdraws_the_note_and_re_enriches() {
     assert_eq!(s.stale_cleared, 1);
     assert_eq!(row().await, (None, vec!["design".to_string()], None));
     // ... and rewritten from the new facts.
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(r.enriched, 1);
     assert_eq!(row().await.0.as_deref(), Some("Notes on New title."));
     let new_hash: String =
@@ -402,7 +402,7 @@ async fn spend_caps_stop_calls_before_they_are_made() {
         .await
         .unwrap();
     let e = enricher(&requesty, &ntfy, config());
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(calls.load(Ordering::SeqCst), 0);
     assert!(
         r.stopped.as_deref().unwrap().starts_with("daily cap"),
@@ -433,10 +433,14 @@ async fn spend_caps_stop_calls_before_they_are_made() {
         .await
         .unwrap()
         .unwrap();
-    let batch: Vec<(String, &musenmingle::enrich::input::EventFacts)> = cands[..5]
+    let batch: Vec<(
+        String,
+        &musenmingle::enrich::input::EventFacts,
+        Option<&musenmingle::enrich::input::PageText>,
+    )> = cands[..5]
         .iter()
         .enumerate()
-        .map(|(i, c)| (format!("e{}", i + 1), &c.facts))
+        .map(|(i, c)| (format!("e{}", i + 1), &c.facts, None))
         .collect();
     let body = musenmingle::enrich::chat_body(&config(), &batch, None, true);
     let chars = body["messages"].to_string().len() + body["response_format"].to_string().len();
@@ -450,7 +454,7 @@ async fn spend_caps_stop_calls_before_they_are_made() {
             ..config()
         },
     );
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(calls.load(Ordering::SeqCst), 1);
     assert_eq!(r.enriched, 5);
     assert!(
@@ -480,7 +484,7 @@ async fn a_model_that_keeps_data_is_never_called() {
                 ..config()
             },
         );
-        let r = e.run(&pool, now()).await.unwrap();
+        let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
         assert!(r.stopped.is_some(), "{model}");
     }
     assert_eq!(calls.load(Ordering::SeqCst), 0);
@@ -542,7 +546,7 @@ async fn exhausted_credits_pause_notify_once_a_day_and_recover() {
     );
 
     // Stops after the first refused call (no retry loop, no embeddings).
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(r.calls, 1);
     assert_eq!(r.stopped.as_deref(), Some("Requesty credits exhausted"));
     assert_eq!(requesty.received_requests().await.unwrap().len(), 1);
@@ -561,12 +565,12 @@ async fn exhausted_credits_pause_notify_once_a_day_and_recover() {
     assert_eq!(state.active_since, Some(now()));
 
     // Later the same day: still exhausted, no second message.
-    e.run(&pool, now() + chrono::Duration::hours(3))
+    e.run(&pool, now() + chrono::Duration::hours(3), &PageTexts::new())
         .await
         .unwrap();
     assert_eq!(ntfy_messages(&ntfy).await.len(), 1);
     // The next London day: one reminder, still "since" the first time.
-    e.run(&pool, now() + chrono::Duration::days(1))
+    e.run(&pool, now() + chrono::Duration::days(1), &PageTexts::new())
         .await
         .unwrap();
     let sent = ntfy_messages(&ntfy).await;
@@ -577,7 +581,7 @@ async fn exhausted_credits_pause_notify_once_a_day_and_recover() {
     requesty.reset().await;
     mount_chat(&requesty, Arc::new(AtomicUsize::new(0))).await;
     let r = e
-        .run(&pool, now() + chrono::Duration::days(1))
+        .run(&pool, now() + chrono::Duration::days(1), &PageTexts::new())
         .await
         .unwrap();
     assert_eq!(r.enriched, 7, "{r:?}");
@@ -591,7 +595,7 @@ async fn exhausted_credits_pause_notify_once_a_day_and_recover() {
         .unwrap();
     assert_eq!(state.active_since, None);
     // Quiet afterwards.
-    e.run(&pool, now() + chrono::Duration::days(2))
+    e.run(&pool, now() + chrono::Duration::days(2), &PageTexts::new())
         .await
         .unwrap();
     assert_eq!(ntfy_messages(&ntfy).await.len(), 3);
@@ -640,11 +644,11 @@ async fn embeddings_follow_enrichment_and_track_the_text() {
             ..with_embeddings.clone()
         },
     );
-    let r = broke.run(&pool, now()).await.unwrap();
+    let r = broke.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.calls, r.embedded), (0, 0), "{r:?}");
 
     let e = enricher(&requesty, &ntfy, with_embeddings);
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     // Good enriched; Bad given up after its retry -> embedded from facts only.
     assert_eq!((r.enriched, r.failed, r.embedded), (1, 1, 2), "{r:?}");
     assert_eq!(embed_calls.load(Ordering::SeqCst), 1);
@@ -677,7 +681,7 @@ async fn embeddings_follow_enrichment_and_track_the_text() {
     }
 
     // Unchanged: no new embedding calls.
-    e.run(&pool, now()).await.unwrap();
+    e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!(embed_calls.load(Ordering::SeqCst), 1);
     // A changed title: re-enriched, then re-embedded with the new text.
     sqlx::query("UPDATE events.events SET title = 'Good show, again' WHERE id = $1")
@@ -686,7 +690,7 @@ async fn embeddings_follow_enrichment_and_track_the_text() {
         .await
         .unwrap();
     musenmingle::enrich::sync(&pool, now()).await.unwrap();
-    let r = e.run(&pool, now()).await.unwrap();
+    let r = e.run(&pool, now(), &PageTexts::new()).await.unwrap();
     assert_eq!((r.enriched, r.embedded), (1, 1), "{r:?}");
     let hash: String =
         sqlx::query_scalar("SELECT text_hash FROM events.event_embeddings WHERE event_id = $1")

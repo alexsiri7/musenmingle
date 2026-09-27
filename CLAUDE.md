@@ -34,10 +34,14 @@ There is no local Docker; never try to use testcontainers.
    `migrations/` once merged; add a new timestamped file instead.
 3. **No LLM parsing.** All extraction is deterministic code (JSON-LD first,
    then CSS selectors); scrapers never call a model. AI enrichment
-   (`src/enrich/`) runs only AFTER ingest, only on data already stored in
+   (`src/enrich/`) runs only AFTER ingest, on data already stored in
    `events.events` (title, venue, dates, category, source tags, price, the
-   stored excerpt, source names: `enrich::input`), never fetches pages and
-   never sends visitor data. Its output is validated strictly
+   stored excerpt, source names: `enrich::input`) plus, for listings the
+   same tick scraped, their full cleaned text (`enrich::input::PageText`,
+   from `repo::upsert_listing`; only for sources that let us keep
+   descriptions). That page text is transient: never written to the DB,
+   logs or caches (only its hash, `page_text_hash`), dropped after the tick.
+   Enrichment never fetches pages and never sends visitor data. Its output is validated strictly
    (`enrich::output::validate`: fixed vocabularies, lengths, grounding,
    artists/evidence quoted from the input), always labelled as AI-written
    on pages and in JSON (`ai.label`), withdrawn when its input hash changes
@@ -127,7 +131,7 @@ There is no local Docker; never try to use testcontainers.
 - `src/runner.rs` — ingest run; `src/health.rs` rules + issue lifecycle; `src/github.rs` REST filer
 - `src/thumbs.rs` — thumbnailer (fetch once, resize, store in `events.thumbnails`)
 - `src/enrich/` — AI enrichment + embeddings after ingest: `input` (what the
-  model sees, input hash), `prompt.txt` + `output` (vocabularies, schema,
+  model sees, input hash, the transient `PageText`), `prompt.txt` + `output` (vocabularies, schema,
   validation), `requesty` (client, credit-exhaustion detection), `embed`
   (embedding text), `store` (its SQL, "More like this"), `mod` (the pass,
   caps, ntfy alert). `examples/enrich_eval.rs` evaluates prompts/models
