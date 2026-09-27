@@ -55,6 +55,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "lisson_gallery",
         include_str!("../sources/lisson_gallery.rs"),
     ),
+    (
+        "london_review_bookshop",
+        include_str!("../sources/london_review_bookshop.rs"),
+    ),
     ("luma", include_str!("../sources/luma.rs")),
     ("lux", include_str!("../sources/lux.rs")),
     (
