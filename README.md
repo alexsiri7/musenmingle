@@ -117,6 +117,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     workshops and festivals (recurring programmes, courses, online,
     members-only and multi-day non-exhibition events skipped); facts + link
     only (terms).
+  - `october-gallery` — the current and forthcoming shows linked from
+    `/exhibitions/`, each read from its detail page's JSON-LD
+    `ExhibitionEvent` (with the page's prose as description), plus the
+    "Forthcoming Events" cards of `/events/` (CSS, free-text date and time
+    lines); exhibitions and talks (music lates skipped); descriptions but
+    no images (artists' works and credited photographs).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
@@ -485,7 +491,7 @@ the runtime image contains both binaries), and are declared in
    exits when done, as Railway cron requires. Per-source `interval_minutes` in
    `events.sources` decides what actually runs on each tick (Ticketmaster
    every 6 h, Serpentine, Somerset House, the Design Museum, Whitechapel
-   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich and the TEC venues daily), and an advisory lock prevents overlapping
+   Gallery, the Barbican, Chisenhale Gallery, D&AD, Sir John Soane's Museum, the William Morris Society, Headstone Manor & Museum, the Old Royal Naval College, the William Morris Gallery, Four Corners, LUX, Royal Museums Greenwich, October Gallery and the TEC venues daily), and an advisory lock prevents overlapping
    runs.
 
 See the environment variable table above (`Used by` column) for the full

@@ -24,6 +24,7 @@ pub mod headstone_manor;
 pub mod jsonld;
 pub mod lux;
 pub mod mall_galleries;
+pub mod october_gallery;
 pub mod old_royal_naval_college;
 pub mod royal_museums_greenwich;
 pub mod serpentine;
@@ -113,6 +114,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         headstone_manor::KEY => Ok(Box::new(headstone_manor::HeadstoneManor::new(base))),
         lux::KEY => Ok(Box::new(lux::Lux::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
+        october_gallery::KEY => Ok(Box::new(october_gallery::OctoberGallery::new(base))),
         old_royal_naval_college::KEY => Ok(Box::new(
             old_royal_naval_college::OldRoyalNavalCollege::new(base),
         )),
