@@ -433,7 +433,9 @@ small credited thumbnail, and send people to the venue.
   `FetchContext` (robots.txt, User-Agent, rate limit), skips images over
   8 MB, shrinks it to fit 480×480 as a JPEG (quality 70, lowered until
   < 40 KB), and stores it in `events.thumbnails`. It re-fetches only when
-  the event's `image_url` changes (failures are retried after 7 days), at
+  the event's `image_url` changes (failures are retried with exponential
+  backoff, after 1, 2, 4 and 8 days, and given up after 5 attempts until
+  the image URL changes), at
   most 60 per run and 20 per image host. `events.events.image_source_id`
   records which source the image came from, for the credit "Image:
   <display_name>" that links to the event's page on that source (not to the
