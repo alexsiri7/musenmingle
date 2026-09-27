@@ -210,6 +210,7 @@ fn ev(
 ) -> NewEvent {
     let starts_at = t(starts);
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: None,
         venue_name: Some(venue.into()),

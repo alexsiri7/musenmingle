@@ -18,6 +18,7 @@ fn t(s: &str) -> DateTime<Utc> {
 
 fn event(title: &str, category: Category, tags: &[&str]) -> NewEvent {
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: None,
         venue_name: Some("Test Hall".into()),

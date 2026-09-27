@@ -43,7 +43,7 @@ use uuid::Uuid;
 
 use crate::api::{self, AppState, CountsJson, EventJson, SourceLinkJson};
 use crate::listing::{self, Sort, When};
-use crate::model::{Category, SourceKind};
+use crate::model::{Category, Session, SourceKind};
 use crate::repo;
 use crate::share::{self, ShareEvent};
 use crate::suggestions::{MAX_NOTE_CHARS, Outcome};
@@ -646,6 +646,54 @@ fn when(
             (time_tag(start, fmt_date_time(start))) "–" (london(end).format("%H:%M").to_string())
         },
         _ => time_tag(start, fmt_date_time(start)),
+    }
+}
+
+/// A session's start, "Tue 20 Oct, 16:30" (#207); with `year`, "Tue 20
+/// Oct 2026, 16:30", and with its end the same day, "…, 16:30–18:30". An
+/// all-day session (from London midnight) is just its date.
+fn fmt_session(s: &Session, year: bool) -> String {
+    let l = london(s.starts_at);
+    let fmt = match (year, l.time() == NaiveTime::MIN) {
+        (true, true) => "%a %-d %b %Y",
+        (true, false) => "%a %-d %b %Y, %H:%M",
+        (false, true) => "%a %-d %b",
+        (false, false) => "%a %-d %b, %H:%M",
+    };
+    let mut out = l.format(fmt).to_string();
+    if year
+        && let Some(end) = s.ends_at.map(london)
+        && end.date_naive() == l.date_naive()
+    {
+        out.push_str(&format!("–{}", end.format("%H:%M")));
+    }
+    out
+}
+
+/// A multi-session event's next session (#207): "Next session: Tue 20
+/// Oct, 16:30 · 6 sessions", as (the session, the text after "Next
+/// session: "). `None` without sessions or once they are all over.
+fn next_session_line(sessions: &[Session], now: DateTime<Utc>) -> Option<(Session, String)> {
+    crate::model::next_session(sessions, now)
+        .map(|(s, n)| (s, format!("{} · {n} sessions", fmt_session(&s, false))))
+}
+
+/// [`when`] for an event: a multi-session event shows its next session.
+fn event_when(e: &EventJson, now: DateTime<Utc>) -> Markup {
+    match next_session_line(&e.sessions, now) {
+        Some((s, text)) => {
+            let (date, rest) = text.split_once(" · ").unwrap_or((&text, ""));
+            html! { "Next session: " (time_tag(s.starts_at, date.to_string())) " · " (rest) }
+        }
+        None => when(e.starts_at, e.ends_at, e.all_day, now),
+    }
+}
+
+/// [`when_text`] for an event: a multi-session event gives its next session.
+fn event_when_text(e: &EventJson, now: DateTime<Utc>) -> String {
+    match next_session_line(&e.sessions, now) {
+        Some((_, text)) => format!("Next session: {text}"),
+        None => when_text(e.starts_at, e.ends_at, e.all_day, now),
     }
 }
 
@@ -1739,11 +1787,8 @@ fn when_text(
 /// data attributes. `label` = visible text (cards show only the icon).
 fn share_button(e: &EventJson, now: DateTime<Utc>, label: bool) -> Markup {
     let text = match &e.venue_name {
-        Some(v) => format!(
-            "{v} · {}",
-            when_text(e.starts_at, e.ends_at, e.all_day, now)
-        ),
-        None => when_text(e.starts_at, e.ends_at, e.all_day, now),
+        Some(v) => format!("{v} · {}", event_when_text(e, now)),
+        None => event_when_text(e, now),
     };
     html! {
         button type="button" class={ "share" @if !label { " icon-action" } } hidden
@@ -1857,7 +1902,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
             (thumbnail_figure(e, "thumb", Some(&detail)))
             div class="card-body" {
                 p class="card-meta" {
-                    span class="when" { (when(e.starts_at, e.ends_at, e.all_day, now)) }
+                    span class="when" { (event_when(e, now)) }
                     @if let Some(h) = running_hours(e, now) {
                         span class={ "badge hours" @if h.is_open_at(now) { " open" } } {
                             (h.today_status(now))
@@ -2247,8 +2292,8 @@ fn status_line(
 }
 
 /// `GET /events/{id}.ics`: the event as a one-event calendar file.
-fn ics_response(e: &ShareEvent<'_>, now: DateTime<Utc>) -> Response {
-    let mut resp = share::ics(e, now).into_response();
+fn ics_response(e: &ShareEvent<'_>, sessions: &[Session], now: DateTime<Utc>) -> Response {
+    let mut resp = share::ics_with_sessions(e, sessions, now).into_response();
     let h = resp.headers_mut();
     h.insert(
         header::CONTENT_TYPE,
@@ -2302,10 +2347,22 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
     let page_url = event_url(e.id);
     let handoff = share_event(&e, &page_url);
     if want_ics {
-        return ics_response(&handoff, now);
+        return ics_response(&handoff, &e.sessions, now);
     }
     let maps = share::map_links(&handoff);
-    let gcal = share::google_calendar_url(&handoff);
+    // A multi-session event (#207) goes to Google Calendar as its next session.
+    let gcal = match crate::model::next_session(&e.sessions, now) {
+        Some((s, _)) => {
+            let untimed = london(s.starts_at).time() == NaiveTime::MIN;
+            share::google_calendar_url(&ShareEvent {
+                starts_at: s.starts_at,
+                ends_at: if untimed { None } else { s.ends_at },
+                all_day: untimed,
+                ..handoff.clone()
+            })
+        }
+        None => share::google_calendar_url(&handoff),
+    };
     let og_description = e
         .description
         .as_deref()
@@ -2313,7 +2370,7 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
         .filter(|d| !d.is_empty())
         .map(crate::normalise::excerpt)
         .unwrap_or_else(|| {
-            let when = when_text(e.starts_at, e.ends_at, e.all_day, now);
+            let when = event_when_text(&e, now);
             match &e.venue_name {
                 Some(v) => format!("{v} · {when}"),
                 None => when,
@@ -2408,8 +2465,18 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
                             div {
                                 dt { "When" }
                                 dd {
-                                    (when(e.starts_at, e.ends_at, e.all_day, now))
-                                    @if let Some(end) = e.ends_at {
+                                    (event_when(&e, now))
+                                    @if e.sessions.len() >= 2 {
+                                        ol class="sub sessions" {
+                                            @for s in &e.sessions {
+                                                @let past = s.effective_end() <= now;
+                                                li class=[past.then_some("past")] {
+                                                    (time_tag(s.starts_at, fmt_session(s, true)))
+                                                    @if past { span class="vh" { " (over)" } }
+                                                }
+                                            }
+                                        }
+                                    } @else if let Some(end) = e.ends_at {
                                         span class="sub" {
                                             "Starts " (time_tag(e.starts_at, fmt_date_time(e.starts_at)))
                                             br;

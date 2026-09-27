@@ -61,6 +61,7 @@ impl Source for FakeSource {
         let starts_at = self.now + chrono::Duration::days(days);
         let title = format!("Fake {}", raw.source_event_id);
         Ok(Some(NewEvent {
+            sessions: Vec::new(),
             dedupe_key: dedupe_key(&title, starts_at, Some("Fake Hall")),
             title,
             description: None,

@@ -625,8 +625,196 @@ pub fn postcode_outward(text: &str) -> Option<String> {
     })
 }
 
+// ------------------------------------------------------------ sessions (#207)
+
+const MONTH_NAMES: [&str; 12] = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+];
+
+/// Month number of "October", "oct" or "sept" (any case).
+fn month_number(word: &str) -> Option<u32> {
+    let w = word.to_lowercase();
+    MONTH_NAMES
+        .iter()
+        .position(|m| *m == w || (w.len() >= 3 && m.starts_with(&w) && w.len() <= 4))
+        .map(|i| i as u32 + 1)
+}
+
+/// The session days a listing spells out (#207): every "<day> <month>"
+/// (optionally followed by a year) in `text`, in order: "20 October, 3
+/// November, … 26 January" or "Saturdays: 10 Oct, 24 Oct, 7 Nov, 21 Nov
+/// 2026". Years run on from `first`'s, rolling over when the month goes
+/// back; a written year wins. `None` unless there are at least two days,
+/// in increasing order, the first being `first` and the last `last` (the
+/// event's own dates), so stray dates in the text are never taken for
+/// sessions.
+pub fn session_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec<NaiveDate>> {
+    use chrono::Datelike;
+    let tokens: Vec<&str> = text
+        .split(|c: char| !c.is_alphanumeric())
+        .filter(|t| !t.is_empty())
+        .collect();
+    let (mut year, mut prev_month) = (first.year(), first.month());
+    let mut days: Vec<NaiveDate> = Vec::new();
+    for (i, t) in tokens.iter().enumerate() {
+        let Some(day) = t.parse::<u32>().ok().filter(|d| (1..=31).contains(d)) else {
+            continue;
+        };
+        let Some(month) = tokens.get(i + 1).and_then(|m| month_number(m)) else {
+            continue;
+        };
+        if month < prev_month {
+            year += 1;
+        }
+        prev_month = month;
+        if let Some(y) = tokens
+            .get(i + 2)
+            .and_then(|y| y.parse::<i32>().ok())
+            .filter(|y| (1900..=2200).contains(y))
+        {
+            year = y;
+        }
+        days.push(NaiveDate::from_ymd_opt(year, month, day)?);
+    }
+    let increasing = days.windows(2).all(|w| w[0] < w[1]);
+    (days.len() >= 2 && increasing && days.first() == Some(&first) && days.last() == Some(&last))
+        .then_some(days)
+}
+
+/// "every Saturday" in `text`: each such weekday from `first` to `last`
+/// (inclusive), for sessions that repeat weekly (#207). `None` without the
+/// phrase or with fewer than two days.
+pub fn weekly_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec<NaiveDate>> {
+    use chrono::Datelike;
+    const DAYS: [&str; 7] = [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+    ];
+    let lower = text.to_lowercase();
+    let weekday = DAYS.iter().position(|d| {
+        lower.contains(&format!("every {d}")) || lower.contains(&format!("every {d}s"))
+    })?;
+    let days: Vec<NaiveDate> = first
+        .iter_days()
+        .take_while(|d| *d <= last)
+        .filter(|d| d.weekday().num_days_from_monday() as usize == weekday)
+        .collect();
+    (days.len() >= 2).then_some(days)
+}
+
+/// Sessions on `days` (#207): at London wall-clock `time` (start, optional
+/// end) each day, or, without a time, all day (London midnight to the next
+/// London midnight, so DST days are 23 or 25 hours).
+pub fn day_sessions(
+    days: &[NaiveDate],
+    time: Option<(NaiveTime, Option<NaiveTime>)>,
+) -> Vec<crate::model::Session> {
+    days.iter()
+        .map(|d| match time {
+            Some((from, to)) => crate::model::Session {
+                starts_at: london_to_utc(d.and_time(from)),
+                ends_at: to.map(|t| london_to_utc(d.and_time(t))),
+            },
+            None => crate::model::Session {
+                starts_at: london_to_utc(d.and_time(NaiveTime::MIN)),
+                ends_at: d
+                    .succ_opt()
+                    .map(|n| london_to_utc(n.and_time(NaiveTime::MIN))),
+            },
+        })
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn session_day_lists() {
+        let d = |y, m, day| NaiveDate::from_ymd_opt(y, m, day).unwrap();
+        assert_eq!(
+            session_days(
+                "Fortnightly on Tuesdays at 4.30 – 6.30pm 20 October, 3 November, 17 November, \
+                 1 December, 12 January, 26 January. £30 for 6 sessions",
+                d(2026, 10, 20),
+                d(2027, 1, 26)
+            ),
+            Some(vec![
+                d(2026, 10, 20),
+                d(2026, 11, 3),
+                d(2026, 11, 17),
+                d(2026, 12, 1),
+                d(2027, 1, 12),
+                d(2027, 1, 26)
+            ])
+        );
+        assert_eq!(
+            session_days(
+                "Saturdays: 10 Oct, 24 Oct, 7 Nov, 21 Nov 2026",
+                d(2026, 10, 10),
+                d(2026, 11, 21)
+            ),
+            Some(vec![
+                d(2026, 10, 10),
+                d(2026, 10, 24),
+                d(2026, 11, 7),
+                d(2026, 11, 21)
+            ])
+        );
+        // Must start and end on the event's own days.
+        assert_eq!(
+            session_days("10 Oct, 24 Oct", d(2026, 10, 10), d(2026, 11, 21)),
+            None
+        );
+        assert_eq!(
+            session_days("10 Oct", d(2026, 10, 10), d(2026, 10, 10)),
+            None
+        );
+        assert_eq!(
+            weekly_days(
+                "Sessions are every Saturday, 2.30-4.30pm.",
+                d(2026, 10, 10),
+                d(2026, 10, 31)
+            ),
+            Some(vec![
+                d(2026, 10, 10),
+                d(2026, 10, 17),
+                d(2026, 10, 24),
+                d(2026, 10, 31)
+            ])
+        );
+        assert_eq!(
+            weekly_days("Saturdays", d(2026, 10, 10), d(2026, 10, 31)),
+            None
+        );
+    }
+
+    #[test]
+    fn all_day_sessions_span_london_days() {
+        let d = |y, m, day| NaiveDate::from_ymd_opt(y, m, day).unwrap();
+        // 25 Oct 2026 is the 25-hour clock-change day.
+        let s = day_sessions(&[d(2026, 10, 25)], None);
+        assert_eq!(s[0].starts_at.to_rfc3339(), "2026-10-24T23:00:00+00:00");
+        assert_eq!(
+            s[0].ends_at.map(|e| e.to_rfc3339()).as_deref(),
+            Some("2026-10-26T00:00:00+00:00")
+        );
+    }
+
     use super::*;
 
     fn d(s: &str) -> Decimal {

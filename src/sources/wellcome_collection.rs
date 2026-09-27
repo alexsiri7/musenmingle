@@ -331,6 +331,7 @@ pub fn normalise_event(ev: &Value) -> Result<Option<NewEvent>, SourceError> {
     let url = s(ev, "/uid").map(|uid| source_url(ev, uid));
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE)),
         title,
         description: None,

@@ -349,6 +349,7 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
         .map(str::to_string);
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(&venue.name)),
         description: clean_description(node.get("listingText").and_then(Value::as_str)),
         title,

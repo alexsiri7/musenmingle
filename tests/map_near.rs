@@ -204,6 +204,7 @@ fn new_event(venue: &str, at: Option<(f64, f64)>) -> NewEvent {
     let starts_at = t("2026-10-10T18:00:00Z");
     let title = format!("A talk at {venue}");
     NewEvent {
+        sessions: Vec::new(),
         dedupe_key: musenmingle::normalise::dedupe_key(&title, starts_at, Some(venue)),
         title,
         description: None,

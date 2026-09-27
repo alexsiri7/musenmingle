@@ -377,6 +377,11 @@ pub(crate) struct EventJson {
     /// The source gave dates but no time of day: `starts_at`/`ends_at` are
     /// London midnight of the first/last day (inclusive).
     pub(crate) all_day: bool,
+    /// A multi-session event's sessions (#207), in order; omitted for other
+    /// events. `starts_at`/`ends_at` are then the first session's start and
+    /// the last session's end.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub(crate) sessions: Vec<crate::model::Session>,
     pub(crate) is_free: bool,
     pub(crate) price_min: Option<Decimal>,
     pub(crate) price_max: Option<Decimal>,
@@ -487,6 +492,7 @@ impl EventJson {
             starts_at: e.starts_at,
             ends_at: e.ends_at,
             all_day: e.all_day,
+            sessions: e.sessions.map(|j| j.0).unwrap_or_default(),
             is_free: e.is_free,
             price_min: e.price_min,
             price_max: e.price_max,

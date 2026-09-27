@@ -31,7 +31,7 @@ fn feed_items() -> Vec<Value> {
 }
 
 /// The feed items as `fetch` would store them, event pages read from the
-/// fixtures (skipped programme types have none).
+/// fixtures (skipped programme types, residencies, have none).
 fn raws() -> Vec<RawEvent> {
     let site = Url::parse(SITE).unwrap();
     feed_items()
@@ -124,7 +124,7 @@ async fn fetches_the_feed_and_event_pages_via_fetch_context() {
             .await;
         pages += 1;
     }
-    assert_eq!(pages, 8);
+    assert_eq!(pages, 10);
     let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = CamdenArtCentre::new(server.uri().parse().unwrap());
     let got = s.fetch(&ctx).await.expect("fetch");

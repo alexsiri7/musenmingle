@@ -289,6 +289,7 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         }
     };
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         title,
         description: None,

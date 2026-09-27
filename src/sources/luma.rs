@@ -670,6 +670,7 @@ pub fn normalise_payload(
     };
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, venue_name.as_deref()),
         title,
         description: None,

@@ -230,6 +230,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     }
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, venue_name.as_deref()),
         description: clean_description(ev.get("description").and_then(Value::as_str)),
         title,

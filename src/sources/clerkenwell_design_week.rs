@@ -98,6 +98,7 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
         .filter(|a| !a.is_empty());
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(&venue)),
         title,
         description: clean_description(s("description")),

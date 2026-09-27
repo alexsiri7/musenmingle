@@ -35,6 +35,7 @@ fn description(tail: &str) -> String {
 
 fn event(title: &str, desc: &str) -> NewEvent {
     NewEvent {
+        sessions: Vec::new(),
         title: title.into(),
         description: Some(desc.into()),
         venue_name: Some("Gallery".into()),

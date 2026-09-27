@@ -987,6 +987,7 @@ async fn upsert_event_tx(
             )
             .fetch_one(&mut **tx)
             .await?;
+            set_sessions(tx, id, &ev).await?;
             set_image_source(tx, id, source_id, &ev, None).await?;
             UpsertOutcome {
                 event_id: id,
@@ -1351,7 +1352,24 @@ async fn refresh(
         .bind(id)
         .execute(&mut **tx)
         .await?;
+    set_sessions(tx, id, event).await?;
     set_image_source(tx, id, source_id, event, prior.as_deref()).await
+}
+
+/// Store `event`'s sessions (#207) on event `id` (NULL when it has none):
+/// they belong with the dates the same statement just wrote.
+async fn set_sessions(
+    tx: &mut Transaction<'_, Postgres>,
+    id: Uuid,
+    event: &NewEvent,
+) -> sqlx::Result<()> {
+    let sessions = (event.sessions.len() >= 2).then_some(sqlx::types::Json(&event.sessions));
+    sqlx::query("UPDATE events.events SET sessions = $2 WHERE id = $1")
+        .bind(id)
+        .bind(sessions)
+        .execute(&mut **tx)
+        .await?;
+    Ok(())
 }
 
 async fn prior_image_url(
@@ -1431,6 +1449,10 @@ async fn merge_into(
         .bind(api_wins)
         .execute(&mut **tx)
         .await?;
+    // Sessions follow whichever side won the dates.
+    if site_wins {
+        set_sessions(tx, id, event).await?;
+    }
     set_image_source(tx, id, source_id, event, prior.as_deref()).await
 }
 
@@ -1447,6 +1469,8 @@ pub struct EventRow {
     pub starts_at: DateTime<Utc>,
     pub ends_at: Option<DateTime<Utc>>,
     pub all_day: bool,
+    /// The sessions of a multi-session event (#207), NULL otherwise.
+    pub sessions: Option<sqlx::types::Json<Vec<crate::model::Session>>>,
     pub is_free: bool,
     pub price_min: Option<Decimal>,
     pub price_max: Option<Decimal>,
@@ -1479,7 +1503,7 @@ pub struct EventRow {
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
-    ends_at, all_day, is_free, price_min, price_max, currency, url, image_url, category, tags,
+    ends_at, all_day, sessions, is_free, price_min, price_max, currency, url, image_url, category, tags,
     dedupe_key, medium_tags, format_tags, good_for, vibe_tags, music_tags, is_opening, whats_cool,
     one_liner, ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note,
     (SELECT vn.slug FROM events.venues vn WHERE vn.id = venue_id) AS venue_slug";
@@ -1631,7 +1655,11 @@ const LISTING_FILTER: &str = "($1::timestamptz IS NULL OR COALESCE(ev.ends_at, e
                          || to_tsquery('pg_catalog.english', coalesce($11::text, '')))
         OR (numnode(websearch_to_tsquery('pg_catalog.english', events.search_fold($10))) = 0
             AND strpos(events.search_fold(ev.title || ' ' || coalesce(ev.venue_name, '')),
-                       events.search_fold($10)) > 0))";
+                       events.search_fold($10)) > 0))
+    AND (ev.sessions IS NULL OR EXISTS (
+        SELECT 1 FROM jsonb_to_recordset(ev.sessions) AS s(starts_at timestamptz, ends_at timestamptz)
+        WHERE ($1::timestamptz IS NULL OR COALESCE(s.ends_at, s.starts_at) >= $1)
+          AND ($2::timestamptz IS NULL OR s.starts_at < $2)))";
 
 /// Bind `$1`..`$11` ([`LISTING_FILTER`]) for `f`.
 fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, O> {
@@ -1647,6 +1675,27 @@ fn bind_filter<'q, O>(q: PgQueryAs<'q, O>, f: &'q EventFilter) -> PgQueryAs<'q, 
         .bind(&f.good_for)
         .bind(f.search.as_ref().map(|s| s.text.as_str()))
         .bind(f.search.as_ref().and_then(|s| s.alternatives.as_deref()))
+}
+
+/// The event is a multi-session event (#207): its `starts_at`/`ends_at`
+/// are only the envelope of its sessions.
+const HAS_SESSIONS: &str = "(ev.sessions IS NOT NULL)";
+
+/// `EXISTS` a session `s` of the event (`ev.sessions`, #207) satisfying
+/// `cond`. Columns: `s.starts_at`, `s.ends_at` (may be NULL), `s.end_at`
+/// (its end, else [`crate::listing::LIVE_GRACE_MINUTES`] after its start:
+/// `crate::model::Session::effective_end`) and `s.local` (its London
+/// wall-clock start). FALSE when the event has no sessions.
+fn session_sql(cond: &str) -> String {
+    use crate::listing::LIVE_GRACE_MINUTES;
+    format!(
+        "EXISTS (SELECT 1 FROM (
+            SELECT j.starts_at, j.ends_at,
+                   COALESCE(j.ends_at, j.starts_at + interval '{LIVE_GRACE_MINUTES} minutes') AS end_at,
+                   j.starts_at AT TIME ZONE 'Europe/London' AS local
+            FROM jsonb_to_recordset(ev.sessions) AS j(starts_at timestamptz, ends_at timestamptz)
+          ) s WHERE {cond})"
+    )
 }
 
 /// The event's opening hours apply (`crate::hours`): NULL means unknown,
@@ -1754,15 +1803,20 @@ fn live_sql(f: &EventFilter) -> String {
         None => "TRUE".to_string(),
         Some(day) => {
             let day = u8::min(day, 7);
+            let by_session = session_sql(&format!(
+                "extract(isodow FROM s.local) = {day}
+                 AND ($1::timestamptz IS NULL OR COALESCE(s.ends_at, s.starts_at) >= $1)
+                 AND ($2::timestamptz IS NULL OR s.starts_at < $2)"
+            ));
             format!(
-                "(EXISTS (SELECT 1
+                "(CASE WHEN {HAS_SESSIONS} THEN {by_session} ELSE EXISTS (SELECT 1
                     FROM (SELECT GREATEST({LOCAL_START}::date,
                                           ($1::timestamptz AT TIME ZONE 'Europe/London')::date) AS d0,
                                  LEAST({LOCAL_LAST_DAY},
                                        ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) w,
                          generate_series(0, LEAST(w.d1 - w.d0, 6)) AS k
                     WHERE extract(isodow FROM w.d0 + k) = {day})
-                  AND (NOT {HAS_HOURS} OR {}))",
+                  AND (NOT {HAS_HOURS} OR {}) END)",
                 hours_rule_sql(&rule_on_day(&day.to_string()))
             )
         }
@@ -1784,7 +1838,7 @@ fn live_sql(f: &EventFilter) -> String {
         "({}
           AND (NOT {HAS_HOURS} OR {open})
           AND {open_on})",
-        still_on_sql(&now)
+        still_on_sql(&now, "COALESCE($2::timestamptz, 'infinity')")
     )
 }
 
@@ -1793,10 +1847,16 @@ fn live_sql(f: &EventFilter) -> String {
 /// days are 23 or 25 hours), a ranged event at its `ends_at`, an event
 /// with a start time but no end [`crate::listing::LIVE_GRACE_MINUTES`]
 /// after it starts.
-fn still_on_sql(now: &str) -> String {
+///
+/// A multi-session event (#207) is on when one of its sessions has not
+/// ended at `now` and starts before SQL instant `until` (so a gap between
+/// sessions is not "on").
+fn still_on_sql(now: &str, until: &str) -> String {
     use crate::listing::LIVE_GRACE_MINUTES;
+    let session = session_sql(&format!("s.end_at > {now} AND s.starts_at < {until}"));
     format!(
         "(CASE
+            WHEN {HAS_SESSIONS} THEN {session}
             WHEN ev.all_day THEN
                 (((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date + 1)::timestamp
                     AT TIME ZONE 'Europe/London') > {now}
@@ -1866,14 +1926,19 @@ fn when_sql(when: Option<When>) -> String {
         ),
         // At most the first 7 days of the clipped range need checking.
         Some(When::Weekend) => format!(
-            "EXISTS (SELECT 1
+            "(CASE WHEN {HAS_SESSIONS} THEN {} ELSE EXISTS (SELECT 1
                 FROM (SELECT GREATEST({LOCAL_START}::date,
                                       ($1::timestamptz AT TIME ZONE 'Europe/London')::date) AS d0,
                              LEAST((COALESCE(ev.ends_at, ev.starts_at) AT TIME ZONE 'Europe/London')::date,
                                    ($2::timestamptz AT TIME ZONE 'Europe/London')::date - 1) AS d1) w,
                      generate_series(0, LEAST(w.d1 - w.d0, 6)) AS k
                 WHERE extract(isodow FROM w.d0 + k) >= 6
-                  AND (NOT {HAS_HOURS} OR {}))",
+                  AND (NOT {HAS_HOURS} OR {})) END)",
+            session_sql(
+                "extract(isodow FROM s.local) >= 6
+                 AND ($1::timestamptz IS NULL OR COALESCE(s.ends_at, s.starts_at) >= $1)
+                 AND ($2::timestamptz IS NULL OR s.starts_at < $2)"
+            ),
             hours(&rule_on_day("extract(isodow FROM w.d0 + k)"))
         ),
     }
@@ -1928,10 +1993,12 @@ pub fn pick_sql(pick: Option<PickFilter>) -> String {
         // With opening hours: open after 18:00 today.
         Pick::Tonight => format!(
             "({first} <= {l} AND {last} >= {l}
-              AND (CASE WHEN {HAS_HOURS} THEN {}
+              AND (CASE WHEN {HAS_SESSIONS} THEN {}
+                   WHEN {HAS_HOURS} THEN {}
                    ELSE (({first} = {l} AND {LOCAL_START}::time >= '17:00')
                          OR ({LOCAL_START}::time = '00:00' AND 'late opening' = ANY(ev.tags)))
                    END))",
+            session_sql(&format!("s.local::date = {l} AND s.local::time >= '17:00'")),
             hours_rule_sql(&format!(
                 "{} AND {RULE_CLOSES} > '18:00'",
                 rule_on_day(&format!("extract(isodow FROM {l})"))
@@ -1955,7 +2022,7 @@ pub fn pick_sql(pick: Option<PickFilter>) -> String {
               AND (CASE WHEN {HAS_HOURS} THEN {}
                    ELSE NOT ev.all_day AND {LOCAL_START}::time <> '00:00'
                    END))",
-            still_on_sql("now()"),
+            still_on_sql("now()", "now() + interval '1 second'"),
             hours_rule_sql(&format!(
                 "{} AND {RULE_OPENS} <= (now() AT TIME ZONE 'Europe/London')::time
                  AND {RULE_CLOSES} > (now() AT TIME ZONE 'Europe/London')::time",
@@ -1993,7 +2060,8 @@ pub async fn quick_pick_counts(
     sqlx::query_as(AssertSqlSafe(format!(
         "SELECT count(*) FILTER (WHERE {}) AS tonight,
                 count(*) FILTER (WHERE COALESCE(ev.ends_at, ev.starts_at) >= $2
-                                   AND ev.starts_at < $3) AS weekend,
+                                   AND ev.starts_at < $3
+                                   AND (NOT {HAS_SESSIONS} OR {})) AS weekend,
                 count(*) FILTER (WHERE ev.is_free) AS free,
                 count(*) FILTER (WHERE {}) AS openings,
                 count(*) FILTER (WHERE {}) AS last_chance,
@@ -2002,12 +2070,15 @@ pub async fn quick_pick_counts(
                 count(*) FILTER (WHERE ev.category = 'talk') AS talks,
                 count(*) FILTER (WHERE ev.category = 'music') AS music
          FROM events.events ev
-         WHERE COALESCE(ev.ends_at, ev.starts_at) >= $1",
+         WHERE COALESCE(ev.ends_at, ev.starts_at) >= $1
+           AND (NOT {HAS_SESSIONS} OR {})",
         p(Pick::Tonight),
+        session_sql("COALESCE(s.ends_at, s.starts_at) >= $2 AND s.starts_at < $3"),
         p(Pick::Openings),
         p(Pick::LastChance),
         p(Pick::HandsOn),
         p(Pick::OpenNow),
+        session_sql("COALESCE(s.ends_at, s.starts_at) >= $1"),
     )))
     .bind(from)
     .bind(weekend.0)
@@ -2090,7 +2161,8 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
         EventOrder::Richest { .. } => extra.to_string(),
         _ => format!("{extra} AND $25::int8 IS NULL"),
     };
-    // `richest`: each event's London day (today if already running) and
+    // `richest`: each event's London day (today if already running; a
+    // multi-session event's next session day) and
     // whether it is rich; the slot is numbered over the whole filtered set,
     // before the cursor, so pages don't shift.
     let (rich_cols, slot) = match &query.order {
@@ -2098,7 +2170,10 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             let (n, m) = (crate::listing::RICH_RUN, crate::listing::RICH_RUN + 1);
             (
                 format!(
-                    "GREATEST({LOCAL_FIRST_DAY}, $24::date) AS rich_day,
+                    "COALESCE((SELECT min((j.starts_at AT TIME ZONE 'Europe/London')::date)
+                               FROM jsonb_to_recordset(ev.sessions) AS j(starts_at timestamptz)
+                               WHERE (j.starts_at AT TIME ZONE 'Europe/London')::date >= $24::date),
+                              GREATEST({LOCAL_FIRST_DAY}, $24::date)) AS rich_day,
                      {} >= {RICH_MIN_SCORE} AS rich",
                     richness_sql()
                 ),

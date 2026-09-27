@@ -447,6 +447,7 @@ pub(crate) mod tests {
             source_event_id: id.into(),
             source_url: Some(format!("https://venue.test/{id}")),
             event: NewEvent {
+                sessions: Vec::new(),
                 title: title.into(),
                 description: None,
                 venue_name: Some("Hall".into()),

@@ -213,6 +213,7 @@ impl Source for ConwayHall {
             .into_iter()
             .collect();
         Ok(Some(NewEvent {
+            sessions: Vec::new(),
             dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
             title,
             description: clean_description(event.get("description").and_then(Value::as_str)),

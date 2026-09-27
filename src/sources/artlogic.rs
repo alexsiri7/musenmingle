@@ -716,6 +716,7 @@ pub fn normalise_payload(
     let starts_at = midnight(first);
 
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(&venue_name)),
         title,
         description: clean_description(card.get("teaser").and_then(Value::as_str)),

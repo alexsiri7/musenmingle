@@ -24,6 +24,8 @@ pub struct FeedEvent {
     pub starts_at: DateTime<Utc>,
     pub ends_at: Option<DateTime<Utc>>,
     pub all_day: bool,
+    /// A multi-session event's sessions (#207): one VEVENT each.
+    pub sessions: Vec<crate::model::Session>,
     /// Venue name and address, joined for `LOCATION`.
     pub location: Option<String>,
     /// Where to see it (the venue's page); already checked to be http(s).
@@ -78,11 +80,33 @@ fn date_value(d: NaiveDate) -> String {
     d.format("%Y%m%d").to_string()
 }
 
-/// The `VEVENT` property lines of one event (unfolded).
+/// The `VEVENT` property lines of one event (unfolded); a multi-session
+/// event (#207) gives one VEVENT per session, UID `<id>-<session start>`.
 fn event_lines(e: &FeedEvent, stamp: &str) -> Vec<String> {
+    if e.sessions.is_empty() {
+        return vevent_lines(e, &e.id.to_string(), stamp);
+    }
+    e.sessions
+        .iter()
+        .flat_map(|s| {
+            // An all-day session starts at London midnight (a date entry).
+            let untimed = calendar::is_untimed(s.starts_at, false);
+            let one = FeedEvent {
+                starts_at: s.starts_at,
+                ends_at: if untimed { None } else { s.ends_at },
+                all_day: untimed,
+                sessions: Vec::new(),
+                ..e.clone()
+            };
+            vevent_lines(&one, &format!("{}-{}", e.id, utc_stamp(s.starts_at)), stamp)
+        })
+        .collect()
+}
+
+fn vevent_lines(e: &FeedEvent, uid: &str, stamp: &str) -> Vec<String> {
     let mut lines = vec![
         "BEGIN:VEVENT".to_string(),
-        format!("UID:{}@{UID_DOMAIN}", e.id),
+        format!("UID:{uid}@{UID_DOMAIN}"),
         format!("DTSTAMP:{stamp}"),
     ];
     let (first, last) = calendar::span(e.starts_at, e.ends_at);
@@ -151,6 +175,7 @@ mod tests {
             starts_at,
             ends_at: None,
             all_day: false,
+            sessions: Vec::new(),
             location: None,
             url: None,
             description: String::new(),

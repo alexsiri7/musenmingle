@@ -369,6 +369,7 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         .map(parse_price)
         .unwrap_or_default();
     Ok(Some(NewEvent {
+        sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         title,
         description: clean_description(card["description"].as_str()),

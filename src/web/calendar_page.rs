@@ -437,7 +437,7 @@ fn starting_panel(events: &[EventJson], see_all: &str, now: DateTime<Utc>) -> Ma
                 ul {
                     @for e in events {
                         li {
-                            p class="mono" { (super::when(e.starts_at, e.ends_at, e.all_day, now)) }
+                            p class="mono" { (super::event_when(e, now)) }
                             a class="name" href={ "/events/" (e.id) } { (e.title) }
                             @if let Some(v) = &e.venue_name { span class="mono" { (v) } }
                             div class="starting-actions" {
@@ -488,12 +488,23 @@ pub(super) async fn calendar_page(
         Ok(Err(msg)) => return bad_filters(&msg),
         Err(e) => return internal_error(e),
     };
-    let spans: Vec<_> = events
-        .iter()
-        .map(|e| calendar::span(e.starts_at, e.ends_at))
-        .collect();
+    // A multi-session event (#207) is placed on each of its session days
+    // (never as a long run); `owner[i]` is the event of `spans[i]`.
+    let mut owner: Vec<usize> = Vec::new();
+    let mut spans: Vec<(NaiveDate, NaiveDate)> = Vec::new();
+    for (i, e) in events.iter().enumerate() {
+        if e.sessions.is_empty() {
+            owner.push(i);
+            spans.push(calendar::span(e.starts_at, e.ends_at));
+        }
+        for s in &e.sessions {
+            let day = calendar::london_date(s.starts_at);
+            owner.push(i);
+            spans.push((day, day));
+        }
+    }
     let placed = calendar::place(&spans, &range);
-    let ongoing: Vec<&EventJson> = placed.ongoing.iter().map(|&i| &events[i]).collect();
+    let ongoing: Vec<&EventJson> = placed.ongoing.iter().map(|&i| &events[owner[i]]).collect();
     let feed_path = f.feed_path();
     let webcal = format!(
         "webcal://{}{}",
@@ -506,7 +517,7 @@ pub(super) async fn calendar_page(
         Some(entries) => (
             html! {
                 ul class="cal-events" {
-                    @for (i, m) in entries { (entry(&events[*i], *m)) }
+                    @for (i, m) in entries { (entry(&events[owner[*i]], *m)) }
                     // The month grid shows the first MONTH_CELL_MAX entries (CSS);
                     // this link (grid only) opens the day's listing for the rest.
                     @if entries.len() > MONTH_CELL_MAX {
@@ -658,6 +669,7 @@ fn feed_event(e: &EventJson) -> ics::FeedEvent {
         starts_at: e.starts_at,
         ends_at: e.ends_at,
         all_day: e.all_day,
+        sessions: e.sessions.clone(),
         location,
         url: Some(url.unwrap_or(ours)),
         description,
