@@ -22,9 +22,13 @@
 //!   2026", "11 am – 12.30 pm", "October Gallery, Ground Floor", "Free
 //!   Entry") and the description (`.minor-text`). Times are London
 //!   wall-clock; a line may hold both date and time ("Saturday, 19th
-//!   September 3 - 4:30 pm"). A date without a year is resolved against the
-//!   London date of the fetch (`listed_on`, see
-//!   [`chisenhale_gallery::infer_date`]). The link is the Events page itself
+//!   September 3 - 4:30 pm", "Saturday, March 22, 3 pm – 4.30 pm"), and a
+//!   time line may carry a label or a place ("Talk 6.30 – 8 pm", "3.00 –
+//!   4.30pm at October Gallery.", "7 – 8.15 pm (doors open 6 pm)"); lines
+//!   about doors opening are not the start time. Every event on the page
+//!   has a time, so a card without one is a parse error, never `all_day`. A
+//!   date without a year is resolved against the London date of the fetch
+//!   (`listed_on`, see [`infer_date`]). The link is the Events page itself
 //!   (booking goes to Eventbrite, which is not the venue's page).
 //! * Events: walk-throughs are talks; otherwise `map_category` on the title
 //!   decides, and anything it doesn't place as a talk, workshop or community
@@ -194,32 +198,37 @@ pub fn parse_events(html: &str, page_url: &Url, listed_on: NaiveDate) -> Vec<Raw
     out
 }
 
-/// A printed day at the start of a line, "Saturday 17th October, 2026" or
-/// "Saturday, 19th September 3 - 4:30 pm" (weekday and year optional), and
-/// whatever follows it.
+/// A printed day at the start of a line, "Saturday 17th October, 2026",
+/// "Saturday, 19th September 3 - 4:30 pm" or "Saturday, March 22, 3 pm"
+/// (weekday and year optional), and whatever follows it.
 pub fn parse_day_line(line: &str, listed_on: NaiveDate) -> Option<(NaiveDate, String)> {
     let line = line.replace(',', " ");
     let mut tokens = line.split_whitespace().peekable();
-    let starts_with = |token: &str, names: &[&str]| {
+    let name_index = |token: &str, names: &[&str]| {
         let lower = token.to_lowercase();
+        if !lower.chars().all(char::is_alphabetic) {
+            return None;
+        }
         names.iter().position(|n| lower.starts_with(n))
+    };
+    let day_number = |token: &str| -> Option<u32> {
+        token
+            .trim_end_matches(|c: char| c.is_ascii_alphabetic())
+            .parse()
+            .ok()
     };
     if tokens
         .peek()
-        .is_some_and(|t| starts_with(t, &WEEKDAYS).is_some())
+        .is_some_and(|t| name_index(t, &WEEKDAYS).is_some())
     {
         tokens.next();
     }
-    let day: u32 = tokens
-        .next()?
-        .trim_end_matches(|c: char| c.is_ascii_alphabetic())
-        .parse()
-        .ok()?;
-    let month_token = tokens.next()?;
-    if !month_token.chars().all(|c| c.is_alphabetic()) {
-        return None;
-    }
-    let month = starts_with(month_token, &MONTHS)? as u32 + 1;
+    let first = tokens.next()?;
+    let (day, month) = match name_index(first, &MONTHS) {
+        Some(month) => (day_number(tokens.next()?)?, month),
+        None => (day_number(first)?, name_index(tokens.next()?, &MONTHS)?),
+    };
+    let month = month as u32 + 1;
     let year = tokens
         .peek()
         .filter(|t| t.len() == 4)
@@ -234,9 +243,20 @@ pub fn parse_day_line(line: &str, listed_on: NaiveDate) -> Option<(NaiveDate, St
     Some((date, tokens.collect::<Vec<_>>().join(" ")))
 }
 
-/// A line that is only a time or time range: "11 am – 12.30 pm", "6.00–8.30pm".
-fn parse_time_line(line: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
-    parse_time_range(&line.replace(' ', ""))
+/// The time or time range in a line, after any label and before any place
+/// or aside: "11 am – 12.30 pm", "Talk 6.30 – 8 pm", "3.00 – 4.30pm at
+/// October Gallery.", "7 – 8.15 pm (doors open 6 pm)". Doors-opening lines
+/// ("Bar and doors open 5.30 pm") are not the event's time.
+pub fn parse_time_line(line: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
+    let clock = line.split(" at ").next()?.split('(').next()?;
+    if clock.to_lowercase().contains("doors open") {
+        return None;
+    }
+    let clock: String = clock
+        .split_whitespace()
+        .skip_while(|w| !w.chars().any(|c| c.is_ascii_digit()))
+        .collect();
+    parse_time_range(&clock)
 }
 
 /// Category of an Events-page item; `None` means out of scope.
@@ -346,20 +366,16 @@ fn normalise_event(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
         .iter()
         .find_map(|l| parse_day_line(l, listed_on))
         .ok_or_else(err)?;
-    let times = if rest.is_empty() {
+    let (start, end) = if rest.is_empty() {
         lines.iter().find_map(|l| parse_time_line(l))
     } else {
-        Some(parse_time_line(&rest).ok_or_else(err)?)
-    };
-    let (starts_at, ends_at, all_day) = match times {
-        Some((start, end)) => (
-            london_to_utc(day.and_time(start)),
-            end.filter(|e| *e > start)
-                .map(|e| london_to_utc(day.and_time(e))),
-            false,
-        ),
-        None => (london_to_utc(day.and_time(NaiveTime::MIN)), None, true),
-    };
+        parse_time_line(&rest)
+    }
+    .ok_or_else(err)?;
+    let starts_at = london_to_utc(day.and_time(start));
+    let ends_at = end
+        .filter(|e| *e > start)
+        .map(|e| london_to_utc(day.and_time(e)));
 
     Ok(Some(NewEvent {
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
@@ -371,7 +387,7 @@ fn normalise_event(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
         lng: Some(VENUE_LNG),
         starts_at,
         ends_at,
-        all_day,
+        all_day: false,
         price: parse_price(&lines.join("\n")),
         url: text("url").map(str::to_string),
         image_url: text("image_url").map(str::to_string),
@@ -467,6 +483,14 @@ mod tests {
             day("Tuesday 12th January"),
             Some((d("2027-01-12"), String::new()))
         );
+        assert_eq!(
+            day("Saturday, March 22, 3 pm – 4.30 pm"),
+            Some((d("2027-03-22"), "3 pm – 4.30 pm".to_string()))
+        );
+        assert_eq!(
+            day("Saturday, 7th March, 2026 3 pm – 4.30 pm"),
+            Some((d("2026-03-07"), "3 pm – 4.30 pm".to_string()))
+        );
         for line in [
             "11 am – 12.30 pm",
             "October Gallery, Ground Floor",
@@ -492,7 +516,29 @@ mod tests {
             parse_time_line("6.00–8.30pm"),
             Some((t("18:00"), Some(t("20:30"))))
         );
-        assert_eq!(parse_time_line("October Gallery, Ground Floor"), None);
+        assert_eq!(
+            parse_time_line("Talk 6.30 – 8 pm"),
+            Some((t("18:30"), Some(t("20:00"))))
+        );
+        assert_eq!(
+            parse_time_line("3.00 – 4.30pm at October Gallery."),
+            Some((t("15:00"), Some(t("16:30"))))
+        );
+        assert_eq!(
+            parse_time_line("7 – 8.15 pm (doors open 6 pm)"),
+            Some((t("19:00"), Some(t("20:15"))))
+        );
+        for line in [
+            "Bar and doors open 5.30 pm",
+            "October Gallery, Ground Floor",
+            "Saturday 17th October, 2026",
+            "Tickets: £10 (plus Booking Fee)",
+            "Free entry (booking essential)",
+            "Theatre (2nd floor)",
+            "Duration: 40 minutes",
+        ] {
+            assert_eq!(parse_time_line(line), None, "{line:?}");
+        }
     }
 
     #[test]
@@ -554,16 +600,19 @@ mod tests {
     }
 
     #[test]
-    fn untimed_talk_is_all_day_and_ticket_price_is_read() {
+    fn labelled_time_after_doors_line_and_ticket_price() {
         let e = normalise_payload(&event(&[
-            "Saturday 17th October, 2026",
-            "Tickets: £7 + booking fee",
+            "Thursday, 29th May, 2025",
+            "Bar and doors open 5.30 pm",
+            "Talk 6.30 – 8 pm",
+            "Tickets: £5 + booking fee",
         ]))
         .unwrap()
         .unwrap();
-        assert_eq!(e.starts_at.to_rfc3339(), "2026-10-16T23:00:00+00:00");
-        assert!(e.all_day);
-        assert_eq!(e.price.min, Some(Decimal::from(7)));
+        assert_eq!(e.starts_at.to_rfc3339(), "2025-05-29T17:30:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2025-05-29T19:00:00+00:00");
+        assert!(!e.all_day);
+        assert_eq!(e.price.min, Some(Decimal::from(5)));
         assert!(!e.price.is_free);
     }
 
@@ -573,6 +622,7 @@ mod tests {
             &["Autumn 2026"][..],
             &[],
             &["Saturday 17th October, 2026 late"],
+            &["Saturday 17th October, 2026", "Free Entry"],
         ] {
             assert!(normalise_payload(&event(lines)).is_err(), "{lines:?}");
         }
