@@ -42,6 +42,7 @@ async fn every_enabled_seeded_source_has_an_implementation() {
         ntfy_topic: None,
         ntfy_base_url: String::new(),
         tiles_path: Default::default(),
+        transit: musenmingle::transit::TransitConfig::parse(Some("off"), None, None).unwrap(),
     };
     assert!(!rows.is_empty());
     for row in &rows {

@@ -593,6 +593,7 @@ async fn map_page(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Res
                     p class="near-privacy small" {
                         "Your exact location stays on this device: the page asks our server for "
                         "everything on in London and works out distances in your browser. "
+                        "For public transport times it sends your position rounded to about 200 m. "
                         "Map tiles and data come only from our own server; like any map, it loads "
                         "the tiles for the area on screen."
                     }

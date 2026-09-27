@@ -1,0 +1,243 @@
+{
+ "$type": "Tfl.Api.Presentation.Entities.JourneyPlanner.ItineraryResult, Tfl.Api.Presentation.Entities",
+ "journeys": [
+  {
+   "startDateTime": "2026-09-27T15:04:00",
+   "duration": 29,
+   "arrivalDateTime": "2026-09-27T15:33:00",
+   "legs": [
+    {
+     "duration": 11,
+     "departureTime": "2026-09-27T15:04:00",
+     "arrivalTime": "2026-09-27T15:15:00",
+     "instruction": {
+      "summary": "Walk to Charing Cross"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    },
+    {
+     "duration": 6,
+     "departureTime": "2026-09-27T15:15:00",
+     "arrivalTime": "2026-09-27T15:21:00",
+     "instruction": {
+      "summary": "Northern line to Euston"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 3,
+     "departureTime": "2026-09-27T15:25:00",
+     "arrivalTime": "2026-09-27T15:28:00",
+     "instruction": {
+      "summary": "Northern line to Angel"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 5,
+     "departureTime": "2026-09-27T15:28:00",
+     "arrivalTime": "2026-09-27T15:33:00",
+     "instruction": {
+      "summary": "Walk to 415 CITY ROAD, LONDON"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "startDateTime": "2026-09-27T15:07:00",
+   "duration": 30,
+   "arrivalDateTime": "2026-09-27T15:37:00",
+   "legs": [
+    {
+     "duration": 11,
+     "departureTime": "2026-09-27T15:07:00",
+     "arrivalTime": "2026-09-27T15:18:00",
+     "instruction": {
+      "summary": "Walk to Charing Cross"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    },
+    {
+     "duration": 6,
+     "departureTime": "2026-09-27T15:18:00",
+     "arrivalTime": "2026-09-27T15:24:00",
+     "instruction": {
+      "summary": "Northern line to Euston"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 3,
+     "departureTime": "2026-09-27T15:29:00",
+     "arrivalTime": "2026-09-27T15:32:00",
+     "instruction": {
+      "summary": "Northern line to Angel"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 5,
+     "departureTime": "2026-09-27T15:32:00",
+     "arrivalTime": "2026-09-27T15:37:00",
+     "instruction": {
+      "summary": "Walk to 415 CITY ROAD, LONDON"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "startDateTime": "2026-09-27T15:10:00",
+   "duration": 29,
+   "arrivalDateTime": "2026-09-27T15:39:00",
+   "legs": [
+    {
+     "duration": 11,
+     "departureTime": "2026-09-27T15:10:00",
+     "arrivalTime": "2026-09-27T15:21:00",
+     "instruction": {
+      "summary": "Walk to Charing Cross"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    },
+    {
+     "duration": 6,
+     "departureTime": "2026-09-27T15:21:00",
+     "arrivalTime": "2026-09-27T15:27:00",
+     "instruction": {
+      "summary": "Northern line to Euston"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 3,
+     "departureTime": "2026-09-27T15:31:00",
+     "arrivalTime": "2026-09-27T15:34:00",
+     "instruction": {
+      "summary": "Northern line to Angel"
+     },
+     "mode": {
+      "id": "tube",
+      "name": "tube",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": "Northern"
+      }
+     ]
+    },
+    {
+     "duration": 5,
+     "departureTime": "2026-09-27T15:34:00",
+     "arrivalTime": "2026-09-27T15:39:00",
+     "instruction": {
+      "summary": "Walk to 415 CITY ROAD, LONDON"
+     },
+     "mode": {
+      "id": "walking",
+      "name": "walking",
+      "type": "Mode"
+     },
+     "routeOptions": [
+      {
+       "name": ""
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "recommendedMaxAgeMinutes": 3
+}

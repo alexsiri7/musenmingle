@@ -1772,6 +1772,12 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                     }
                     @if let Some(d) = e.distance_km {
                         " " span class="badge distance" { (format!("{d:.1} km")) }
+                        // Public-transport time, filled by web.js for cards in
+                        // view when the list is sorted closest first (closer
+                        // than transit::MIN_TRANSIT_KM, walking wins).
+                        @if d >= crate::transit::MIN_TRANSIT_KM {
+                            " " span class="badge transit" data-transit-card=(e.id) hidden {}
+                        }
                     }
                 }
                 div class="card-actions" {
@@ -2154,7 +2160,18 @@ fn ics_response(e: &ShareEvent<'_>, now: DateTime<Utc>) -> Response {
     resp
 }
 
-async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> Response {
+/// `GET /events/{id}`. The page may ask for the visitor's location (for the
+/// public-transport time: only on a tap, or when already granted).
+async fn event_detail(state: State<AppState>, id: Path<String>) -> Response {
+    let mut resp = event_detail_page(state, id).await;
+    resp.headers_mut().insert(
+        "permissions-policy",
+        HeaderValue::from_static(map::MAP_PERMISSIONS_POLICY),
+    );
+    resp
+}
+
+async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>) -> Response {
     let not_found = || {
         error_page(
             StatusCode::NOT_FOUND,
@@ -2321,6 +2338,24 @@ async fn event_detail(State(state): State<AppState>, Path(id): Path<String>) -> 
                                 dd {
                                     (e.venue_name.as_deref().unwrap_or("Not listed"))
                                     @if let Some(a) = &e.address { span class="sub" { (a) } }
+                                }
+                            }
+                            @if let (Some(lat), Some(lng)) = (e.lat, e.lng) {
+                                // Filled in by web.js from `/v1/transit` (it
+                                // needs the visitor's location), so hidden
+                                // without JavaScript.
+                                div class="getting-there" data-transit-event=(e.id) data-lat=(lat) data-lng=(lng) hidden {
+                                    dt { "Getting there" }
+                                    dd {
+                                        span class="transit-walk" data-transit-walk {}
+                                        span class="transit-time" data-transit-line hidden {}
+                                        span class="sub" data-transit-detail hidden {}
+                                        span class="transit-links" data-transit-links hidden {}
+                                        button type="button" class="secondary transit-btn" data-transit-locate hidden {
+                                            "Transit time"
+                                        }
+                                        span class="sub" data-transit-status role="status" {}
+                                    }
                                 }
                             }
                             @if let Some(links) = &maps {
@@ -2755,9 +2790,10 @@ async fn about() -> Response {
                         }
                         li {
                             "The " a href="/map" { "map" } " asks for your location only when you tap "
-                            "\u{201c}Use my exact coordinates\u{201d}, and your position stays in your "
+                            "\u{201c}Use my exact coordinates\u{201d}, and your exact position stays in your "
                             "browser: the page downloads what's on across London and works out distances "
-                            "on your device, so we never receive it. The map itself (tiles, library and "
+                            "on your device, so we never receive your exact position (only the rounded one "
+                            "used for public transport times, below). The map itself (tiles, library and "
                             "fonts) comes from our own server, built from OpenStreetMap data, not from "
                             "anyone else's map servers; like any map, it loads the tiles for the area "
                             "on screen."
@@ -2767,6 +2803,16 @@ async fn about() -> Response {
                             "only when you tap \u{201c}Use my location\u{201d}. It rounds your position to "
                             "about 100 metres in your browser and puts that in the page address, so our "
                             "server can list what's within walking distance; we don't log or store it."
+                        }
+                        li id="transit" {
+                            "Public transport times (on an event's page, on the map, and on the list when it's "
+                            "sorted closest first) use your position rounded to about 200 metres. An event page "
+                            "asks for it only when you tap \u{201c}Transit time\u{201d}, or straight away if "
+                            "you've already let this site use your location. Your browser sends that rounded "
+                            "position to our server, which asks Transport for London's journey planner for the "
+                            "trip to the venue. The rounded position and the answer are kept only in the server's "
+                            "memory for about 15 minutes (so visitors nearby share the answer), and are never "
+                            "logged or written anywhere."
                         }
                         li {
                             "If you suggest a venue, we store the website address and your note, "

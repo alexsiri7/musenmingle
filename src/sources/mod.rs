@@ -236,6 +236,7 @@ mod tests {
             ntfy_topic: None,
             ntfy_base_url: String::new(),
             tiles_path: Default::default(),
+            transit: crate::transit::TransitConfig::parse(Some("off"), None, None).unwrap(),
         }
     }
 

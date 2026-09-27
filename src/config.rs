@@ -204,6 +204,8 @@ pub struct Config {
     /// The London map tiles (PMTiles) the API serves at
     /// `/tiles/london.pmtiles` (`TILES_PATH`; the Docker image sets it).
     pub tiles_path: std::path::PathBuf,
+    /// Public-transport times (`TRANSIT_LONDON`, `TFL_APP_KEY`, `TFL_BASE_URL`).
+    pub transit: crate::transit::TransitConfig,
 }
 
 /// Where the map tiles are when `TILES_PATH` is unset (a checkout's copy).
@@ -331,6 +333,11 @@ impl Config {
             tiles_path: non_empty("TILES_PATH")
                 .unwrap_or_else(|| DEFAULT_TILES_PATH.into())
                 .into(),
+            transit: crate::transit::TransitConfig::parse(
+                non_empty("TRANSIT_LONDON").as_deref(),
+                non_empty("TFL_APP_KEY"),
+                non_empty("TFL_BASE_URL"),
+            )?,
         })
     }
 }

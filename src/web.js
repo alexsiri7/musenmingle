@@ -438,8 +438,75 @@
     return r(lat) + "," + r(lng);
   }
 
+  // ------------------------------------------------------------ transit
+
+  /**
+   * "lat,lng" snapped to the ~200 m grid the server uses for public-transport
+   * lookups (transit::GRID_LAT / GRID_LNG), so the exact position never
+   * leaves the browser.
+   */
+  function transitOrigin(lat, lng) {
+    var snap = function (x, g) {
+      var s = (Math.round(x / g) * g).toFixed(3);
+      return s === "-0.000" ? "0.000" : s;
+    };
+    return snap(lat, 0.002) + "," + snap(lng, 0.003);
+  }
+
+  /** Straight-line walk estimate, as the map and transit::walk_minutes do. */
+  function walkEstimate(lat1, lng1, lat2, lng2) {
+    var rad = Math.PI / 180;
+    var dLat = (lat2 - lat1) * rad;
+    var dLng = (lng2 - lng1) * rad;
+    var h =
+      Math.pow(Math.sin(dLat / 2), 2) +
+      Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.pow(Math.sin(dLng / 2), 2);
+    var km = 2 * 6371 * Math.asin(Math.sqrt(h));
+    return { minutes: Math.max(1, Math.round(((km * 1.3) / 5) * 60)), km: km };
+  }
+
+  function isHttpUrl(u) {
+    return typeof u === "string" && /^https?:\/\//i.test(u);
+  }
+
+  /**
+   * What the event page shows for a `/v1/transit` answer: the walk
+   * ("≈ 34 min walk · 2.2 km"), the transit time ("🚇 18 min by public
+   * transport", or "" for walking only), the detail
+   * ("Overground + 5 min walk · TfL") and the plan links (http(s) only).
+   * `fallbackWalk` ({minutes, km}) is used when the answer has no walk.
+   */
+  function transitView(r, fallbackWalk) {
+    var walk = (r && r.walk) || fallbackWalk;
+    if (!walk || typeof walk.minutes !== "number") return null;
+    var line = "≈ " + walk.minutes + " min walk · " + Number(walk.km).toFixed(1) + " km";
+    var t = r && r.transit;
+    if (!t || typeof t.minutes !== "number") return { walk: line, transit: "", detail: "", links: [] };
+    var detail = typeof t.summary === "string" ? t.summary : "";
+    if (typeof t.provider === "string" && t.provider) detail += (detail ? " · " : "") + "via " + t.provider;
+    var links = (Array.isArray(t.links) ? t.links : []).filter(function (l) {
+      return l && typeof l.label === "string" && isHttpUrl(l.url);
+    });
+    return {
+      walk: line,
+      transit: "🚇 " + t.minutes + " min by public transport",
+      detail: detail,
+      links: links,
+    };
+  }
+
+  /** A card's badge text ("🚇 18 min"), or "" to keep showing walking only. */
+  function transitBadge(r) {
+    var t = r && r.transit;
+    return t && typeof t.minutes === "number" ? "🚇 " + t.minutes + " min" : "";
+  }
+
   var api = {
     roundPosition: roundPosition,
+    transitOrigin: transitOrigin,
+    walkEstimate: walkEstimate,
+    transitView: transitView,
+    transitBadge: transitBadge,
     isApple: isApple,
     shareMode: shareMode,
     shareEvent: shareEvent,
@@ -934,8 +1001,164 @@
     });
   }
 
+  // ------------------------------------------------------------ transit
+
+  function fetchTransit(from, id) {
+    var url = "/v1/transit?from=" + encodeURIComponent(from) + "&event=" + encodeURIComponent(id);
+    return root.fetch(url, { headers: { Accept: "application/json" } }).then(function (r) {
+      if (!r.ok) throw new Error("transit " + r.status);
+      return r.json();
+    });
+  }
+
+  // Event page: "Getting there" (rendered hidden). If the location
+  // permission is already granted, look the times up straight away;
+  // otherwise a "Transit time" button asks. Only a ~200 m-rounded position
+  // is sent (to us; we ask the city's journey planner).
+  function setUpTransit() {
+    var box = doc.querySelector("[data-transit-event]");
+    var geo = root.navigator && root.navigator.geolocation;
+    if (!box || !geo || !root.fetch) return;
+    var id = box.getAttribute("data-transit-event");
+    var lat = parseFloat(box.getAttribute("data-lat"));
+    var lng = parseFloat(box.getAttribute("data-lng"));
+    var walkLine = box.querySelector("[data-transit-walk]");
+    var transitLine = box.querySelector("[data-transit-line]");
+    var detail = box.querySelector("[data-transit-detail]");
+    var links = box.querySelector("[data-transit-links]");
+    var button = box.querySelector("[data-transit-locate]");
+    var status = box.querySelector("[data-transit-status]");
+    var say = function (text) {
+      status.textContent = text;
+    };
+    var show = function (view) {
+      if (!view) return;
+      walkLine.textContent = view.walk;
+      transitLine.textContent = view.transit;
+      transitLine.hidden = !view.transit;
+      detail.textContent = view.detail;
+      detail.hidden = !view.detail;
+      links.replaceChildren();
+      view.links.forEach(function (l, i) {
+        if (i) links.appendChild(doc.createTextNode(" "));
+        var a = doc.createElement("a");
+        a.setAttribute("href", l.url);
+        a.setAttribute("rel", "noopener");
+        a.textContent = l.label + " ↗";
+        links.appendChild(a);
+      });
+      links.hidden = view.links.length === 0;
+    };
+    var busy = false;
+    var run = function () {
+      if (busy) return;
+      busy = true;
+      button.disabled = true;
+      say("Finding where you are…");
+      geo.getCurrentPosition(
+        function (pos) {
+          var walk = walkEstimate(pos.coords.latitude, pos.coords.longitude, lat, lng);
+          say("Checking public transport…");
+          fetchTransit(transitOrigin(pos.coords.latitude, pos.coords.longitude), id)
+            .then(
+              function (r) {
+                // Nowhere near (another city): nothing useful to say.
+                if (r && r.status === "outside_area") {
+                  box.hidden = true;
+                  return;
+                }
+                show(transitView(r, walk));
+              },
+              function () {
+                // Planner or server trouble: walking only, quietly (unless
+                // it's too far to walk anyway).
+                if (walk.km > 15) box.hidden = true;
+                else show(transitView(null, walk));
+              }
+            )
+            .then(function () {
+              say("");
+              button.hidden = true;
+            });
+        },
+        function () {
+          busy = false;
+          button.disabled = false;
+          say("Couldn't get your location. Check the browser's location permission.");
+        },
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+      );
+    };
+    box.hidden = false;
+    button.hidden = false;
+    button.addEventListener("click", run);
+    var perms = root.navigator.permissions;
+    if (perms && typeof perms.query === "function") {
+      perms.query({ name: "geolocation" }).then(
+        function (p) {
+          if (p.state === "granted") run();
+        },
+        function () {}
+      );
+    }
+  }
+
+  // Home page, sorted closest first from "Near me": add public-transport
+  // time to the cards as they scroll into view (two lookups at a time).
+  function setUpTransitCards() {
+    var badges = doc.querySelectorAll("[data-transit-card]");
+    if (!badges.length || !root.fetch || !root.IntersectionObserver) return;
+    var params = new URLSearchParams(root.location.search);
+    var here = params.get("here");
+    if (!here || params.get("sort") !== "nearest") return;
+    var queue = [];
+    var active = 0;
+    var pump = function () {
+      while (active < 2 && queue.length) {
+        var badge = queue.shift();
+        active++;
+        fetchTransit(here, badge.getAttribute("data-transit-card"))
+          .then(
+            function (b) {
+              return function (r) {
+                var text = transitBadge(r);
+                if (text) {
+                  b.textContent = text;
+                  b.hidden = false;
+                }
+              };
+            }(badge),
+            function () {}
+          )
+          .then(function () {
+            active--;
+            pump();
+          });
+      }
+    };
+    var byCard = new Map();
+    var io = new root.IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          io.unobserve(en.target);
+          queue.push(byCard.get(en.target));
+        });
+        pump();
+      },
+      { rootMargin: "100px" }
+    );
+    Array.prototype.forEach.call(badges, function (b) {
+      var card = b.closest("article") || b.parentNode;
+      byCard.set(card, b);
+      io.observe(card);
+    });
+  }
+
   function start() {
     setUpNearMe();
+    setUpTransit();
+    setUpTransitCards();
     setUpHandoffs();
     refresh();
     renderSaved();

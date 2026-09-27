@@ -61,7 +61,8 @@ There is no local Docker; never try to use testcontainers.
    source or expose FetchContext's client. (The other HTTP clients are
    authenticated API clients, not sources, and never fetch web pages: the
    GitHub issue filer in `src/github.rs`, the Requesty client in
-   `src/enrich/requesty.rs` and the ntfy notifier in `src/notify.rs`.)
+   `src/enrich/requesty.rs`, the ntfy notifier in `src/notify.rs` and the
+   journey planners in `src/transit.rs`.)
 6. Runtime-checked sqlx queries only (`sqlx::query*` + `AssertSqlSafe` for
    constant-built strings); no `query!` macros — builds must not need a DB.
 7. Secrets (API keys, tokens) are never logged; FetchContext redacts query
@@ -136,6 +137,7 @@ There is no local Docker; never try to use testcontainers.
   issues), `store` (its SQL), `mod` (`QaChecker`: when a check is due,
   caps, the check)
 - `src/notify.rs` — ntfy owner alerts
+- `src/transit.rs` — public-transport times for `GET /v1/transit`: `TransitProvider` per city (London → TfL Journey Planner, `TFL_APP_KEY`), ~200 m origin rounding, 15-minute cache, throttle; never logs coordinates or the key
 - `src/contact.rs` — `/contact` venue requests (spam checks, `venue-request` issues, pending filing)
 - `src/suggestions.rs` — site-suggestion validation, domain dedupe, IP rate limit, new-scraper issues
 - `src/api.rs` — axum router (`/healthz`, read API, `POST /v1/suggestions`, CORS); `docs/api.md` documents it

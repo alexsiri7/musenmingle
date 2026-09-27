@@ -832,3 +832,10 @@ button.pop-close:hover { background: var(--fill); color: var(--ink); }
 }
 .links a.venue-link:hover { text-decoration: underline; }
 a.thumb-link { display: block; color: inherit; text-decoration: none; }
+
+/* Getting there (event page): walking + public-transport time, filled by web.js. */
+.getting-there .transit-btn { display: inline-flex; margin-top: var(--xs); font-size: 0.8125rem; padding: 0.5rem 0.875rem; }
+.getting-there .transit-links { display: flex; flex-wrap: wrap; gap: var(--xs) var(--md); margin-top: var(--xs); font-size: 0.8125rem; }
+.getting-there [data-transit-status]:empty { display: none; }
+.getting-there .transit-walk, .getting-there .transit-time { display: block; }
+.badge.transit { font-family: var(--mono); font-weight: 400; letter-spacing: 0; text-transform: none; }

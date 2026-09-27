@@ -350,6 +350,32 @@ when the event has no embedding yet or embeddings are off.
 `shared_tags` are the tag values the two events have in common (the
 "similar because" hint).
 
+## `GET /v1/transit`
+
+`?from=<lat>,<lng>&event=<id>`: the walking time and, when it's quicker,
+the public-transport time from `from` to the event's venue. The server
+rounds `from` to ~200 m before using it and never logs or stores it; the
+journey planner (TfL in London) is only ever called by the server. 400 for
+a bad `from`/`event`, 404 for an unknown event, otherwise 200
+(`Cache-Control: private, max-age=300`):
+
+```json
+{ "status": "ok",
+  "walk": { "minutes": 34, "km": 2.2 },
+  "transit": { "minutes": 18, "summary": "Overground + 5 min walk",
+    "modes": ["walking", "overground"], "provider": "TfL",
+    "links": [ { "label": "Plan on TfL", "url": "https://tfl.gov.uk/plan-a-journey/results?…" },
+               { "label": "Citymapper", "url": "https://citymapper.com/directions?…" } ] } }
+```
+
+`transit` is null unless `status` is `ok`: `short_walk` (under 1.5 km;
+the planner isn't asked), `not_faster` (walking is as quick),
+`unavailable` (planner failed, timed out after 3 s, found no route, or the
+lookup was throttled), `outside_area` (no planner for these places) or
+`no_location` (the event has no coordinates; `walk` is null too). Answers
+are cached for ~15 minutes per (rounded origin, venue, 15-minute departure
+bucket). See `docs/map.md` for the provider design.
+
 ## `GET /v1/sources`
 
 Every configured source, ordered by `key`.
