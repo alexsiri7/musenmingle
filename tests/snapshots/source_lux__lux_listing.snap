@@ -1,0 +1,50 @@
+---
+source: tests/source_lux.rs
+expression: cards()
+---
+[
+  {
+    "path": "/event/late-night-conversations-stuart-marshall-tamara-krikorian/",
+    "slug": "late-night-conversations-stuart-marshall-tamara-krikorian",
+    "title": "Protected: Late-Night Conversations: Stuart Marshall & Tamara Krikorian",
+    "categories": [
+      "exhibition"
+    ],
+    "protected": true,
+    "location": "LUX",
+    "first_day": "9 October, 2026",
+    "last_day": "– 12 December, 2026",
+    "price_text": "Free",
+    "image_url": "https://lux.org.uk/wp-content/uploads/elementor/thumbs/LateNight-Conversations-rtsc3c03ff0rk55jivbhkam3vgi1um82171fprdgvo.png"
+  },
+  {
+    "path": "/event/online-visual-archives-as-a-means-to-process-trauma-azza-el-hassan/",
+    "slug": "online-visual-archives-as-a-means-to-process-trauma-azza-el-hassan",
+    "title": "[Online] Visual archives as a means to process trauma: Azza El-Hassan",
+    "categories": [
+      "education",
+      "lecture"
+    ],
+    "protected": false,
+    "location": "Online (Zoom or Youtube)",
+    "first_day": "30 September, 2026",
+    "last_day": "– 30 September, 2026",
+    "price_text": "Zoom, or Youtube livestream",
+    "image_url": "https://lux.org.uk/wp-content/uploads/elementor/thumbs/Lec4-web-43-scaled-rrrcwnup8hy8gry7j7w1ne5ax0qc24gfo8kf8m41bo.png"
+  },
+  {
+    "path": "/event/study-day-sharing-strategies-caring-for-artist-moving-image-in-the-margins/",
+    "slug": "study-day-sharing-strategies-caring-for-artist-moving-image-in-the-margins",
+    "title": "Study Day – Sharing Strategies: caring for artist moving image in the margins",
+    "categories": [
+      "education",
+      "symposium"
+    ],
+    "protected": false,
+    "location": "Marshgate Building, UCL East, London",
+    "first_day": "6 November, 2026",
+    "last_day": "– 6 November, 2026",
+    "price_text": "Applications Closed",
+    "image_url": "https://lux.org.uk/wp-content/uploads/elementor/thumbs/LUX_web_ratio-4-3_study-day-rr48c2bip3q1wwtkgecr3vgc7vup2hbi5nfm2is5o4.jpg"
+  }
+]

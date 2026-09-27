@@ -1,0 +1,41 @@
+---
+source: tests/source_lux.rs
+expression: out
+---
+[
+  {
+    "event": null,
+    "slug": "late-night-conversations-stuart-marshall-tamara-krikorian"
+  },
+  {
+    "event": null,
+    "slug": "online-visual-archives-as-a-means-to-process-trauma-azza-el-hassan"
+  },
+  {
+    "event": {
+      "address": "Marshgate Building, UCL East, London",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "study-day-sharing-strategies-caring-for-artist-moving-image-in-margins|2026-11-06|marshgate-building-ucl-east",
+      "description": "Study Day – Sharing Strategies: caring for artist moving image in the margins Delivered in partnership with UCL’s Conservation of Contemporary Art and Media MSc, this study day will bring together practitioners to envisage collaborative, sustainable and accessible structures for digital modes of preservation of artists’ moving image. Through a series of participatory workshops and discussions, the programme will create a space to discuss practical and ethical questions around acquiring, storing, and presenting digital artists moving image. Sessions will cover subjects including video condition assessment, acquisition workflows, sustainable digital preservation and storage models and creating alternatives to corporate cloud providers. The day is open to archivists, conservators, artist-filmmakers and anyone with an interest in the conservation of artists’ moving image. We welcome attendees from across the UK, working within moving image collections at a range of scales, including informal and grassroots collections. A limited number of travel bursaries are also available. This study day is delivered as part of ‘Sharing Strategies: Caring for moving image in the margins.’ This programme provides a platform for conservators, archivists, researchers and artist-filmmakers to share their community-led practices, and the ways knowledge is produced collectively, often in informal, under-resourced or under-recognised settings. More details on the rest of the programme can be found here. Please note: this programme is subject to change. Further details on each session, including contributor information will be published closer to the event. Delivered with the support of the BFI Screen Heritage Fund, awarding National Lottery funding.",
+      "ends_at": "2026-11-06T17:30:00Z",
+      "image_url": "https://lux.org.uk/wp-content/uploads/elementor/thumbs/LUX_web_ratio-4-3_study-day-rr48c2bip3q1wwtkgecr3vgc7vup2hbi5nfm2is5o4.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-06T09:00:00Z",
+      "tags": [
+        "moving image"
+      ],
+      "title": "Study Day – Sharing Strategies: caring for artist moving image in the margins",
+      "url": "https://lux.org.uk/event/study-day-sharing-strategies-caring-for-artist-moving-image-in-the-margins/",
+      "venue_name": "Marshgate Building, UCL East, London"
+    },
+    "slug": "study-day-sharing-strategies-caring-for-artist-moving-image-in-the-margins"
+  }
+]
