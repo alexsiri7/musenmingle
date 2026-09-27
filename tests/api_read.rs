@@ -594,11 +594,79 @@ async fn sources_lists_refused_sites() {
     assert_eq!(refused.last().unwrap()["reason_code"], "js_only");
     // The 2026-09-26 source survey (#47: 28 rows in migration 20260927970001, plus
     // National Gallery and White Cube) and venue-discovery pass (#104).
-    let from_issue = |n: u32| {
+    // paradoxmuseum.com and domobaal.com are deliberately absent: #104 needs their real
+    // listing URLs re-checked first.
+    let domains_from_issue = |n: u32| {
         let url = format!("https://github.com/alexsiri7/musenmingle/issues/{n}");
-        refused.iter().filter(|r| r["issue_url"] == url).count()
+        let mut domains: Vec<&str> = refused
+            .iter()
+            .filter(|r| r["issue_url"] == url)
+            .map(|r| r["domain"].as_str().unwrap())
+            .collect();
+        domains.sort_unstable();
+        domains
     };
-    assert_eq!((from_issue(47), from_issue(104)), (30, 21));
+    assert_eq!(
+        domains_from_issue(47),
+        [
+            "artnight.london",
+            "britishmuseum.org",
+            "buildingcentre.co.uk",
+            "craftscouncil.org.uk",
+            "dice.fm",
+            "dulwichpicturegallery.org.uk",
+            "eventbrite.co.uk",
+            "foyles.co.uk",
+            "frieze.com",
+            "gresham.ac.uk",
+            "hauserwirth.com",
+            "kingsplace.co.uk",
+            "londondesignfestival.com",
+            "londonist.com",
+            "londonwriterssalon.com",
+            "ltmuseum.co.uk",
+            "makerversity.org",
+            "meetup.com",
+            "nationalgallery.org.uk",
+            "npg.org.uk",
+            "photolondon.org",
+            "poetrysociety.org.uk",
+            "royalacademy.org.uk",
+            "royalsociety.org",
+            "societyofauthors.org",
+            "thersa.org",
+            "theschooloflife.com",
+            "timeout.com",
+            "visitlondon.com",
+            "whitecube.com",
+        ]
+    );
+    assert_eq!(
+        domains_from_issue(104),
+        [
+            "angus-hughes.org",
+            "bowstreetmuseum.org.uk",
+            "bvwm.org.uk",
+            "debutcontemporary.com",
+            "delightexhibit.com",
+            "dove-studios.com",
+            "eastendwomensmuseum.org",
+            "eveleibegallery.com",
+            "forbiddenplanet.com",
+            "hellenicbookservice.com",
+            "jewishmuseum.org.uk",
+            "kew.org",
+            "lesfetesgalantes.com",
+            "mocomuseum.com",
+            "nationaltheatre.org.uk",
+            "peterharrington.co.uk",
+            "postalmuseum.org",
+            "rct.uk",
+            "stanfords.co.uk",
+            "theclockworks.org",
+            "wimbledonmuseum.org.uk",
+        ]
+    );
     // The two refusals seeded by migration ..08.
     refused.retain(|r| r["checked_on"] == "2026-09-25");
     assert_eq!(
