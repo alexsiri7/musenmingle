@@ -9,7 +9,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
 use musenmingle::model::RawEvent;
 use musenmingle::sources::Source;
-use musenmingle::sources::royal_museums_greenwich::{Item, RoyalMuseumsGreenwich, raw_events};
+use musenmingle::sources::royal_museums_greenwich::{RoyalMuseumsGreenwich, raw_events};
 use url::Url;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
@@ -18,7 +18,7 @@ const FEED: &str = "scrapers/royal-museums-greenwich/whats-on-api.json";
 const SITE: &str = "https://www.rmg.co.uk";
 
 fn raws(site: &str) -> Vec<RawEvent> {
-    let items: Vec<Item> = serde_json::from_str(&fixture(FEED)).expect("feed");
+    let items: Vec<serde_json::Value> = serde_json::from_str(&fixture(FEED)).expect("feed");
     let (raws, problems) = raw_events(&items, &site.parse::<Url>().unwrap());
     assert!(problems.is_empty(), "{problems:?}");
     raws

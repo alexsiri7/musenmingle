@@ -23,8 +23,9 @@
 //!   weekday evenings from …") and skipped. That printed day wins over
 //!   `start_date`, which the feed sometimes leaves stale (Chuck Ragan: feed
 //!   2026-12-12, page "Tuesday 26 January 2027"). The start time is the
-//!   first later part that is a time ("6-8pm", "Doors open at 6.30pm"); a
-//!   day with no further parts is `all_day`.
+//!   first later part that is a time ("6-8pm", "In conversation at 7pm"),
+//!   a "Doors open at …" part only when no other has one; a day with no
+//!   further parts is `all_day`.
 //! * Category from the type: exhibition; talks and tours, conferences →
 //!   talk; workshop; events and festivals → `map_category` over the title,
 //!   else community for a festival, else skipped (concerts, evenings).
@@ -116,12 +117,19 @@ fn card_image(rendered: &str, base: &Url) -> Option<String> {
 
 /// The feed items as [`RawEvent`]s (de-duplicated by page path), and the
 /// items that could not be read, for the fetch to report.
-pub fn raw_events(items: &[Item], base: &Url) -> (Vec<RawEvent>, Vec<String>) {
+pub fn raw_events(items: &[Value], base: &Url) -> (Vec<RawEvent>, Vec<String>) {
     let mut raws: Vec<RawEvent> = Vec::new();
     let mut problems = Vec::new();
-    for item in items {
+    for value in items {
+        let item = match Item::deserialize(value) {
+            Ok(item) => item,
+            Err(e) => {
+                problems.push(format!("unreadable feed item: {e}"));
+                continue;
+            }
+        };
         let page = match base.join(&item.url) {
-            Ok(u) if u.path().starts_with("/whats-on/") => u,
+            Ok(u) if u.host() == base.host() && u.path() != "/" => u,
             _ => {
                 problems.push(format!(
                     "{:?}: unreadable page url {:?}",
@@ -134,7 +142,7 @@ pub fn raw_events(items: &[Item], base: &Url) -> (Vec<RawEvent>, Vec<String>) {
         if raws.iter().any(|r| r.source_event_id == id) {
             continue;
         }
-        let mut payload = serde_json::to_value(item).expect("item serialises");
+        let mut payload = serde_json::to_value(&item).expect("item serialises");
         payload["url"] = json!(page.as_str());
         payload["image_url"] = json!(
             item.rendered_event
@@ -184,7 +192,7 @@ pub fn parse_day(s: &str, year: i32) -> Option<NaiveDate> {
 }
 
 /// A part of the `times` line that is a time: "6.30pm", "6-8pm",
-/// "10.30am–12.30pm", "Doors open at 6.30pm".
+/// "10.30am–12.30pm", "In conversation at 7pm".
 pub fn parse_time(s: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
     let s = clean_text(s);
     let clock = s.rsplit_once(" at ").map_or(s.as_str(), |(_, t)| t);
@@ -251,8 +259,11 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         if rest.is_empty() {
             (london_to_utc(day.and_time(NaiveTime::MIN)), None, true)
         } else {
-            let (start, end) = rest
-                .iter()
+            let (doors, others): (Vec<&String>, Vec<&String>) =
+                rest.iter().partition(|p| p.starts_with("Doors"));
+            let (start, end) = others
+                .into_iter()
+                .chain(doors)
                 .find_map(|p| parse_time(p))
                 .ok_or_else(|| SourceError::Parse(format!("{title:?}: no time in {times:?}")))?;
             (
@@ -305,7 +316,7 @@ impl Source for RoyalMuseumsGreenwich {
             .base_url
             .join(FEED_PATH)
             .map_err(|e| SourceError::Config(e.to_string()))?;
-        let items: Vec<Item> = ctx.get_json(&feed).await?;
+        let items: Vec<Value> = ctx.get_json(&feed).await?;
         let (raws, problems) = raw_events(&items, &self.base_url);
         for problem in problems {
             ctx.report_error(problem);
@@ -403,6 +414,26 @@ mod tests {
         assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-10-09T19:00:00+00:00");
         assert!(!e.all_day);
         assert_eq!(e.venue_name.as_deref(), Some("National Maritime Museum"));
+    }
+
+    #[test]
+    fn doors_time_is_only_a_fallback() {
+        let start = |times: &str| {
+            let payload = item(&["Talks and tours"], ("2026-10-22", "2026-10-22"), times);
+            normalise_payload(&payload)
+                .unwrap()
+                .unwrap()
+                .starts_at
+                .to_rfc3339()
+        };
+        assert_eq!(
+            start("Thursday 22 October 2026 | Doors open at 6.30pm | In conversation at 7pm"),
+            "2026-10-22T18:00:00+00:00"
+        );
+        assert_eq!(
+            start("Thursday 22 October 2026 | Doors open at 6.30pm"),
+            "2026-10-22T17:30:00+00:00"
+        );
     }
 
     #[test]
@@ -505,15 +536,18 @@ mod tests {
         let base: Url = "https://www.rmg.co.uk".parse().unwrap();
         let card = r#"<div class="event-teaser"><div class="event-teaser__media">
             <img src="/sites/default/files/a.jpg.webp?itok=x" /></div></div>"#;
-        let items: Vec<Item> = serde_json::from_value(json!([
-            {"title": "A", "url": "/whats-on/cutty-sark/a", "renderedEvent": card},
-            {"title": "A again", "url": "/whats-on/cutty-sark/a"},
-            {"title": "Elsewhere", "url": "https://example.com/x"},
-        ]))
-        .unwrap();
+        let items = [
+            json!({"title": "A", "url": "/whats-on/cutty-sark/a", "renderedEvent": card}),
+            json!({"title": "A again", "url": "/whats-on/cutty-sark/a"}),
+            json!({"title": "Moved", "url": "/cutty-sark/attractions/b"}),
+            json!({"title": "Elsewhere", "url": "https://example.com/x"}),
+            json!({"title": "No url"}),
+            json!({"title": "Null type", "url": "/whats-on/c", "type": null}),
+        ];
         let (raws, problems) = raw_events(&items, &base);
-        assert_eq!(raws.len(), 1);
-        assert_eq!(problems.len(), 1, "{problems:?}");
+        let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+        assert_eq!(ids, ["/whats-on/cutty-sark/a", "/cutty-sark/attractions/b"]);
+        assert_eq!(problems.len(), 3, "{problems:?}");
         assert_eq!(raws[0].source_event_id, "/whats-on/cutty-sark/a");
         assert_eq!(
             raws[0].payload["image_url"],
