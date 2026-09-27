@@ -1,0 +1,33 @@
+---
+source: tests/source_horse_hospital.rs
+expression: listing_paths()
+---
+[
+  "/events/audrey-lyrics-helica",
+  "/events/feedback-to-feedback",
+  "/events/clipping",
+  "/events/reona-ivor-kallin-aga-ujma-meat-strap",
+  "/events/un/stable-8",
+  "/events/jay-jay-johanson",
+  "/events/beyond-failure",
+  "/events/re-enchantment-readings-ocotber-2026",
+  "/events/either-ore-presents-the-odes-featuring-ted-milton-ron-seal-ish-the-meantime-shirley-crowe-matt-thorne",
+  "/events/sophia-djebel-rose",
+  "/events/david-birchall-kate-carr-tullis-rennie",
+  "/events/maggie-nicols-the-gathering-16",
+  "/events/plus-minus-the-mad-moon-and-the-owls",
+  "/events/rumoursii",
+  "/events/publicity-department",
+  "/events/concrete-atlantis-the-megalithic-imperative",
+  "/events/peiriant-osgled-amberant",
+  "/events/halloween-2026",
+  "/events/a-peoples-history-of-music",
+  "/events/jasper",
+  "/events/catholic-block",
+  "/events/odda-tara-cunningham-fohn",
+  "/events/maggie-nicols-the-gathering-17",
+  "/events/concrete-atlantis-odditorium",
+  "/events/discus-music-1",
+  "/events/discus-music-2",
+  "/events/discus-music-3"
+]

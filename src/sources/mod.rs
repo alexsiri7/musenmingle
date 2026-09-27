@@ -21,6 +21,7 @@ pub mod four_corners;
 pub mod garden_museum;
 pub mod goldsmiths_cca;
 pub mod headstone_manor;
+pub mod horse_hospital;
 pub mod ibraaz;
 pub mod jsonld;
 pub mod lux;
@@ -113,6 +114,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         garden_museum::KEY => Ok(Box::new(garden_museum::GardenMuseum::new(base))),
         goldsmiths_cca::KEY => Ok(Box::new(goldsmiths_cca::GoldsmithsCca::new(base))),
         headstone_manor::KEY => Ok(Box::new(headstone_manor::HeadstoneManor::new(base))),
+        horse_hospital::KEY => Ok(Box::new(horse_hospital::HorseHospital::new(base))),
         ibraaz::KEY => Ok(Box::new(ibraaz::Ibraaz::new(base))),
         lux::KEY => Ok(Box::new(lux::Lux::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
