@@ -492,11 +492,11 @@ expression: out
   {
     "event": {
       "address": "Strand, London WC2R 1LA",
-      "all_day": true,
+      "all_day": false,
       "category": "community",
-      "dedupe_key": "skate-lates-with-aperol-spritz|2026-09-24|somerset-house",
+      "dedupe_key": "skate-lates-with-aperol-spritz|2026-11-12|somerset-house",
       "description": "Skate Lates with Aperol Spritz feature an extra special series of music nights throughout the season.",
-      "ends_at": "2026-11-12T00:00:00Z",
+      "ends_at": null,
       "image_url": "https://media.somersethouse.org.uk/original_images/Skate-Lates-header.jpg",
       "lat": 51.511,
       "lng": -0.1171,
@@ -506,7 +506,7 @@ expression: out
         "max": null,
         "min": null
       },
-      "starts_at": "2026-09-23T23:00:00Z",
+      "starts_at": "2026-11-12T20:00:00Z",
       "tags": [],
       "title": "Skate Lates with Aperol Spritz",
       "url": "https://www.somersethouse.org.uk/whats-on/skate-lates-26-27",
