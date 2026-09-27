@@ -1,0 +1,1611 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="og: https://ogp.me/ns#">
+  <head>
+
+    <script data-cookieconsent="ignore" defer>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag("consent", "default", {
+        ad_personalization: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "denied",
+        personalization_storage: "denied",
+        security_storage: "granted",
+        wait_for_update: 500
+      });
+      gtag("set", "ads_data_redaction", true);
+      gtag("set", "url_passthrough", true);
+
+      // Handle Cookiebot consent updates for Google Ads
+      if (typeof Cookiebot !== 'undefined') {
+        Cookiebot.onaccept = function() {
+          // Fire if EITHER marketing OR statistics is accepted
+          if (Cookiebot.consent.marketing || Cookiebot.consent.statistics) {
+            gtag('consent', 'update', {
+              'ad_storage': 'granted',
+              'ad_user_data': 'granted',
+              'ad_personalization': 'granted',
+              'analytics_storage': 'granted'
+            });
+          }
+        };
+
+        Cookiebot.ondecline = function() {
+          // Only deny if BOTH are declined
+          if (!Cookiebot.consent.marketing && !Cookiebot.consent.statistics) {
+            gtag('consent', 'update', {
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'analytics_storage': 'denied'
+            });
+          }
+        };
+      }
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-K2LLGCV');</script>
+    <!-- End Google Tag Manager -->
+
+    <script
+      id="Cookiebot"
+      src="https://consent.cookiebot.com/uc.js"
+      data-cbid="f6b2ba9b-14e8-48e9-8cc4-28728d039573"
+      data-blockingmode="auto"
+      type="text/javascript"
+      defer
+    ></script>
+
+    <!-- Google Ads Conversion Tag (GDPR Compliant) -->
+    <script type="text/plain" data-cookieconsent="marketing,statistics" async
+            src="https://www.googletagmanager.com/gtag/js?id=AW-833956923"></script>
+    <script>
+      // This script runs immediately but waits for Cookiebot
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // Function to initialize Google Ads
+      function initGoogleAds() {
+        if (typeof gtag !== 'undefined') {
+          gtag('js', new Date());
+          gtag('config', 'AW-833956923');
+          console.log('Google Ads configured: AW-833956923');
+        }
+      }
+
+      // Wait for Cookiebot to be ready
+      function checkCookiebotConsent() {
+        if (typeof Cookiebot !== 'undefined' && Cookiebot.consent) {
+          // Check if consent already given
+          if (Cookiebot.consent.marketing || Cookiebot.consent.statistics) {
+            // Wait for gtag to be available
+            var checkGtag = setInterval(function() {
+              if (typeof gtag !== 'undefined') {
+                clearInterval(checkGtag);
+                initGoogleAds();
+              }
+            }, 100);
+          }
+
+          // Listen for consent changes
+          window.addEventListener('CookiebotOnAccept', function() {
+            if (Cookiebot.consent.marketing || Cookiebot.consent.statistics) {
+              initGoogleAds();
+            }
+          });
+        } else {
+          // Cookiebot not ready yet, check again
+          setTimeout(checkCookiebotConsent, 100);
+        }
+      }
+
+      // Start checking when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkCookiebotConsent);
+      } else {
+        checkCookiebotConsent();
+      }
+    </script>
+
+    <meta charset="utf-8" />
+<meta name="description" content="Everything currently going" />
+<meta name="abstract" content="https://thephotographersgallery.org.uk/whats-on" />
+<link rel="canonical" href="https://thephotographersgallery.org.uk/whats-on" />
+<link rel="shortlink" href="https://thephotographersgallery.org.uk/node/78" />
+<link rel="image_src" href="https://thephotographersgallery.org.uk/sites/default/files/styles/banner_image/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=XRQsJtOd" />
+<meta name="generator" content="Drupal 9 (https://www.drupal.org)" />
+<meta property="og:site_name" content="The Photographers Gallery" />
+<meta property="og:url" content="https://thephotographersgallery.org.uk/whats-on" />
+<meta property="og:title" content="What&#039;s On" />
+<meta property="og:description" content="Everything currently going" />
+<meta property="og:image" content="https://thephotographersgallery.org.uk/sites/default/files/styles/meta_facebook/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=-2JVdWhQ" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:updated_time" content="2026-08-06T14:18:27+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="What&#039;s On | The Photographers Gallery" />
+<meta name="twitter:site" content="@TPGallery" />
+<meta name="twitter:creator" content="@TPGallery" />
+<meta name="twitter:image" content="https://thephotographersgallery.org.uk/sites/default/files/styles/meta_twitter/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=wpY0MhCL" />
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="/themes/pippip/favicon.ico" type="image/vnd.microsoft.icon" />
+
+    <title>What&#039;s On | The Photographers Gallery</title>
+    <link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/core.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/autocomplete.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/menu.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/themes/contrib/stable/css/core/components/progress.module.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/themes/contrib/stable/css/core/components/ajax-progress.module.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/themes/contrib/stable/css/core/components/autocomplete-loading.module.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/core/assets/vendor/jquery.ui/themes/base/theme.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/modules/contrib/better_exposed_filters/css/better_exposed_filters.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/modules/contrib/search_api_autocomplete/css/search_api_autocomplete.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/themes/contrib/classy/css/components/progress.css?teq4wu" />
+<link rel="stylesheet" media="all" href="/themes/pippip/dist/css/global.min.css?teq4wu" />
+<link rel="stylesheet" media="print" href="/themes/pippip/dist/css/print.min.css?teq4wu" />
+
+    
+  </head>
+
+  
+  <body class="whats-on ct__what-s-on-listing">
+        <aside>
+      <a href="#main-content" class="skip-main">
+        Skip to main content
+      </a>
+    </aside>
+
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    
+
+<header id="js-header" class="o-header" role="banner">
+  <div class="grid">
+    <div class="col-sm-12">
+      <div class="o-header__inner  padding-clear">
+
+        <a href="/" title="The Photographers Gallery" rel="home" class="o-header__logo" aria-label="Site logo - link to homepage">
+          <svg width="179" height="62" viewBox="0 0 179 62" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M.046.104h178.616v19.92H.046z"/></defs><g fill="none" fill-rule="evenodd"><path d="M12.088 47.264c0-1.609 0-3.411-2.02-4.475-1.39-.737-3.437-.737-4.092-.737-4.64 0-5.976 1.72-5.976 6.167v7.176c0 2.484 0 6.33 4.065 6.33.956 0 2.238-.08 3.548-1.827v1.774h4.475V51.494H5.812v3.192h1.8v2.183c0 .71 0 1.828-1.472 1.828-1.474 0-1.474-1.173-1.474-1.855v-9.605c0-.874 0-1.829 1.446-1.829 1.5 0 1.5 1.065 1.5 1.775v1.8h4.476v-1.719zm1.186 14.408h4.558l.682-4.394h3.574l.656 4.394H27.3l-3.9-19.265h-6.223l-3.903 19.265zm8.35-7.64h-2.592l1.31-8.568 1.283 8.568zm32.59-11.652v19.292h9.96V58.26h-5.293v-4.639h4.993v-3.41h-4.993v-4.42h5.294V42.38h-9.96zm11.547 19.292h4.367v-8.214c2.593-.026 3.002-.026 3.002 2.102 0 .545-.054 2.865-.054 3.328 0 1.582.327 2.155.654 2.784h4.285c-.41-.464-.656-.846-.656-2.129V55.45c0-2.347-.19-3.302-2.483-3.847 1.474-.792 2.429-1.42 2.429-4.284 0-1.365-.082-2.702-.929-3.684-1.09-1.2-2.837-1.255-4.065-1.255h-6.55v19.292zm5.76-15.936c1.39 0 1.636.3 1.636 1.965 0 1.473-.081 2.183-1.01 2.374-.218.055-.627.055-2.019.055v-4.394h1.392zm12.973 5.185l-2.345-8.514h-4.612l4.612 12.47v6.795h4.529v-6.795l4.802-12.47h-4.638l-2.348 8.514z" fill="#FFF"/><g transform="translate(.252 20.826)"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path d="M.046 19.75h4.666v-7.012h3.356c2.784 0 4.284-.683 4.284-4.367V4.416c0-2.839-1.146-3.957-4.53-3.957H.047V19.75zM4.712 9.327V3.76c.573 0 2.374 0 2.701.136.573.274.573.656.573 2.484 0 2.456 0 2.974-1.719 2.947H4.712zM13.85 19.75h4.667v-8.076h3.247v8.076h4.666V.486h-4.666v7.777h-3.247V.486H13.85V19.75zm14.244-5.866c0 2.237.108 6.112 6.249 6.112 1.392 0 3.492-.081 4.857-1.473 1.42-1.42 1.42-3.275 1.42-4.803V6.353c0-2.102 0-6.249-6.14-6.249-1.392 0-3.548.054-5.022 1.582-1.173 1.228-1.364 2.702-1.364 4.23v7.968zm4.666-8.787c0-1.146.382-1.555 1.528-1.555 1.256 0 1.692.327 1.692 1.583v9.85c0 1.119-.354 1.637-1.61 1.637-1.61 0-1.61-.763-1.61-1.637V5.097zm20.812 8.787c0 2.237.11 6.112 6.249 6.112 1.392 0 3.494-.081 4.857-1.473 1.42-1.42 1.42-3.275 1.42-4.803V6.353c0-2.102 0-6.249-6.14-6.249-1.392 0-3.548.054-5.02 1.582-1.175 1.228-1.366 2.702-1.366 4.23v7.968zm4.667-8.787c0-1.146.38-1.555 1.527-1.555 1.255 0 1.692.327 1.692 1.583v9.85c0 1.119-.356 1.637-1.61 1.637-1.61 0-1.61-.763-1.61-1.637V5.097zm21.38.246c0-1.61 0-3.41-2.02-4.475C76.205.13 74.16.13 73.503.13c-4.638 0-5.976 1.72-5.976 6.167v7.177c0 2.482 0 6.33 4.066 6.33.955 0 2.238-.082 3.548-1.828v1.773h4.475V9.572H73.34v3.192h1.802v2.184c0 .71 0 1.828-1.474 1.828-1.473 0-1.473-1.173-1.473-1.856V5.316c0-.874 0-1.83 1.446-1.83 1.501 0 1.501 1.066 1.501 1.775v1.8h4.475V5.344zm1.63 14.407h4.367v-8.213c2.591-.027 3-.027 3 2.101 0 .546-.053 2.865-.053 3.33 0 1.582.327 2.155.654 2.782H93.5c-.41-.464-.656-.846-.656-2.129V13.53c0-2.347-.19-3.302-2.483-3.848 1.474-.791 2.428-1.418 2.428-4.284 0-1.365-.082-2.702-.927-3.684C90.77.513 89.025.46 87.798.46h-6.55v19.29zm5.758-15.935c1.391 0 1.637.3 1.637 1.965 0 1.473-.081 2.182-1.01 2.373-.218.055-.627.055-2.018.055V3.815h1.391zm7.386 15.935h4.558l.682-4.393h3.574l.655 4.393h4.557L104.516.486h-6.221L94.392 19.75zm8.35-7.64h-2.592l1.31-8.568 1.282 8.568zm6.71 7.64h4.666v-7.012h3.357c2.782 0 4.284-.683 4.284-4.367V4.416c0-2.839-1.147-3.957-4.53-3.957h-7.776V19.75zm4.666-10.423V3.76c.572 0 2.374 0 2.701.136.573.274.573.656.573 2.484 0 2.456 0 2.974-1.72 2.947h-1.554zm8.9 10.423h4.667v-8.076h3.247v8.076h4.666V.486h-4.666v7.777h-3.247V.486h-4.666V19.75zM137.259.459V19.75h9.959v-3.41h-5.293V11.7h4.994V8.29h-4.994V3.868h5.293V.46h-9.959zm11.519 19.291h4.366v-8.213c2.592-.027 3-.027 3 2.101 0 .546-.053 2.865-.053 3.33 0 1.582.327 2.155.655 2.782h4.283c-.408-.464-.654-.846-.654-2.129V13.53c0-2.347-.192-3.302-2.483-3.848 1.473-.791 2.428-1.418 2.428-4.284 0-1.365-.082-2.702-.928-3.684-1.09-1.2-2.838-1.254-4.066-1.254h-6.548v19.29zm5.757-15.935c1.392 0 1.638.3 1.638 1.965 0 1.473-.082 2.182-1.011 2.373-.217.055-.627.055-2.018.055V3.815h1.391zm12.94 8.622c1.72 1.229 1.747 1.365 1.747 2.838 0 .464-.028 1.365-1.474 1.365-1.364 0-1.364-1.092-1.364-1.556v-1.5h-4.612c-.055 2.32-.081 4.065 1.31 5.239 1.01.818 2.592 1.2 4.749 1.2 2.81 0 4.038-.655 4.829-1.473.818-.846 1.227-1.856 1.227-3.957 0-2.947-.71-3.52-2.482-4.747L167.42 7.09c-.82-.546-.874-.928-.874-1.965 0-.792 0-1.692 1.173-1.692 1.201 0 1.284.627 1.284 1.61V6.38h4.42c.11-4.23-.355-6.25-5.403-6.25-4.802 0-6.03 1.61-6.03 5.568 0 2.756.709 3.301 2.674 4.72l2.81 2.02zm7.176-7.804h1.255L174.65 8.78h1.856l2.156-4.148V.486h-4.012v4.147z" fill="#FFF" mask="url(#b)"/></g><path d="M.08 3.384H3.9v15.908h4.72V3.384h3.846V0H.08v3.384zm14.01 15.908h4.664v-8.077h3.248v8.077h4.667V.028H22v7.776h-3.248V.028H14.09v19.264zM28.22 0v19.292h9.959v-3.41h-5.294v-4.64h4.995v-3.41h-4.995v-4.42h5.294V0H28.22zm24.075 21.295H41.661v3.393h5.9v15.889h4.734zM28.528 61.672h10.895v-3.393h-6.162V42.39h-4.733zm23.776 0H41.443v-3.393h6.128V42.39h4.733z" fill="#FFF"/></g></svg>
+        </a>
+
+        <div class="o-header__content">
+          <div class="o-header__content__top">
+            <nav class="m-main-nav" role="navigation">
+              
+              <ul class="menu">
+                    <li class="is-active-trail m-main-nav__link">
+        <a href="/whats-on" class="is-active-trail m-main-nav__link is-active" data-drupal-link-system-path="node/78" aria-current="page">What&#039;s On</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/visit" class="m-main-nav__link" data-drupal-link-system-path="node/2144">Visit</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/learn" class="m-main-nav__link" data-drupal-link-system-path="node/2145">Learn</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/join-support" class="m-main-nav__link" data-drupal-link-system-path="node/2147">Join &amp; Support</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="https://bookshop.thephotographersgallery.org.uk/" class="m-main-nav__link">Shop</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="https://printsales.thephotographersgallery.org.uk/" class="m-main-nav__link">Print Sales</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="https://archive.thephotographersgallery.org.uk" class="m-main-nav__link">Archive</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/photography-culture" class="m-main-nav__link" data-drupal-link-system-path="node/97">Photography Culture</a>
+              </li>
+        </ul>
+  
+
+
+
+              <div class="o-search  o-search__mobile">
+                <div class="o-search__inner">
+                  
+<div class="views-exposed-form m-block m-block--views m-block--views-exposed-filter-blocksearch-search m-block__ m-" data-drupal-selector="views-exposed-form-search-search">
+				<form action="/search" method="get" id="views-exposed-form-search-search" accept-charset="UTF-8">
+  <div class="js-form-item form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-for form-item-for form-no-label">
+        <input placeholder="Search site" aria-label="Search form input" data-drupal-selector="edit-for" data-search-api-autocomplete-search="search" class="form-autocomplete form-text" data-autocomplete-path="/search_api_autocomplete/search?display=search&amp;&amp;filter=for" type="text" id="edit-for" name="for" value="" size="30" maxlength="128" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--2"><button data-twig-suggestion="search_results_submit" class="a-btn button js-form-submit form-submit" value="Apply" data-drupal-selector="edit-submit-search" type="submit" id="edit-submit-search">
+  Apply
+</button>
+</div>
+
+</form>
+
+	</div>
+
+                </div>
+              </div>
+
+              <div class="o-header__primary-cta  o-header__primary-cta__mobile">
+                                
+<div class="m-block m-block--block-content m-block--block-contentaab2e306-b17a-43af-83d3-eb7fc96d259b m-block__become-a-member-[header-cta] m-become-a-member-[header-cta]">
+	        
+        <a href="/join-support/membership" class="m-block__primary-cta  m-block__primary-cta--become-a-member-header-cta">Become a member</a>
+	    <span class="o-sidebar__member-link-wrapper__text"> and get a discount on this event</span>
+</div>
+
+              </div>
+
+              <div class="o-header__find-us  o-header__find-us__mobile">
+                
+<div class="m-block m-block--block-content m-block--block-contentb28544a9-b19a-4392-aff3-2343696c625f m-block__find-us m-find-us">
+				<h4>Find us</h4>
+<p><a href="https://goo.gl/maps/epeVVC9rJxWX8chu9">16-18 Ramillies Street, London W1F7LW</a> Nearest station: Oxford Circus</p>
+<p>Fridays free from 5pm!</p>
+<p><a href="/visit">Plan your visit</a></p>
+
+	</div>
+
+              </div>
+              
+            </nav>
+            <div  class="o-header__search-wrapper">
+              <button class="a-search-button" aria-label="Toggle search dialog"><span class="screen-readers">Search</span>  <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.999 21.285l-6.39-6.39a9.553 9.553 0 001.59-5.294A9.599 9.599 0 009.6 0C4.298 0 .001 4.298.001 9.6c0 5.3 4.297 9.6 9.6 9.6a9.558 9.558 0 005.293-1.593L21.284 24 24 21.285zM2.721 9.602c0-3.8 3.08-6.878 6.88-6.878a6.879 6.879 0 110 13.758 6.88 6.88 0 01-6.88-6.88z" fill="#FFF"/></svg><span class="a-search-button__close"><svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF" fill-rule="evenodd"><path d="M0 20.114L20.114 0 22 1.886 1.886 22z"/><path d="M20.114 22L0 1.886 1.886 0 22 20.114z"/></g></svg></span> </button>
+            </div>
+            <div class="o-header__primary-cta">
+                            
+<div class="m-block m-block--block-content m-block--block-contentaab2e306-b17a-43af-83d3-eb7fc96d259b m-block__become-a-member-[header-cta] m-become-a-member-[header-cta]">
+	        
+        <a href="/join-support/membership" class="m-block__primary-cta  m-block__primary-cta--become-a-member-header-cta">Become a member</a>
+	    <span class="o-sidebar__member-link-wrapper__text"> and get a discount on this event</span>
+</div>
+
+            </div>
+            <div class="o-header__mobile-menu">
+                            
+<div class="m-block m-block--block-content m-block--block-contentb57ca6b2-d164-4f9c-b9a5-4785536b9cd2 m-block__mobile-menu m-mobile-menu">
+				    <a href="https://goo.gl/maps/SSBZ3xLzMdmKD423A" class=""><span class="screen-readers">View on map</span><svg width="20" height="29" viewBox="0 0 20 29" xmlns="http://www.w3.org/2000/svg"><g fill="#FFF"><path d="M10 0C4.486 0 0 4.487 0 10c0 10.384 8.89 18.283 9.269 18.613a1.11 1.11 0 001.517-.05C11.162 28.188 20 19.243 20 10c0-5.513-4.486-10-10-10zm-.043 26.194C7.856 24.07 2.222 17.657 2.222 10c0-4.289 3.49-7.778 7.778-7.778 4.288 0 7.778 3.49 7.778 7.778 0 6.843-5.74 13.871-7.821 16.194z"/><path d="M10 5.556A4.449 4.449 0 005.556 10 4.449 4.449 0 0010 14.444 4.449 4.449 0 0014.444 10 4.449 4.449 0 0010 5.556zm0 6.666A2.224 2.224 0 017.778 10c0-1.226.996-2.222 2.222-2.222s2.222.996 2.222 2.222A2.224 2.224 0 0110 12.222z"/></g></svg></a>
+    <a href="tel:%2B442070879300" class=""><span class="screen-readers">Call us</span><svg width="29" height="28" viewBox="0 0 29 28" xmlns="http://www.w3.org/2000/svg"><path d="M5.702 2.444C4.495 3.222 2.677 5.15 2.198 6.52c-.585 1.67.384 3.327 1.232 4.715 1.855 3.035 3.79 5.391 6.019 7.45 2.243 2.072 4.794 3.855 7.862 5.73 1.388.849 3.044 1.818 4.715 1.233 1.37-.479 3.298-2.297 4.076-3.504.595-.924-.554-1.42-1.246-1.928-1.158-.849-3.006-2.203-3.682-2.262-.537-.048-1.8 1.654-2.325 2.123-.63.562-1.328.864-2.171.612-.814-.244-3.523-2.324-5.795-4.416-1.822-1.679-3.434-3.433-3.726-4.405-.252-.843.05-1.542.612-2.171.469-.525 2.17-1.788 2.124-2.325-.06-.675-1.414-2.525-2.262-3.682-.509-.693-1.005-1.842-1.929-1.246zM4.616.75C7.341-1.006 7.88.63 9.252 2.501c.978 1.335 2.54 3.466 2.648 4.698.121 1.387-.983 2.353-1.946 3.194-.272.238-.53.464-.69.642-.72.805 2.374 3.198 2.981 3.757.66.607 4.44 4.526 5.266 3.79.178-.16.403-.418.641-.69.843-.964 1.808-2.067 3.195-1.946 1.231.108 3.363 1.67 4.698 2.648 1.872 1.373 3.506 1.912 1.75 4.636-1.017 1.577-3.321 3.69-5.108 4.315-2.369.83-4.433-.197-6.423-1.413-3.178-1.942-5.828-3.797-8.177-5.967-2.364-2.185-4.414-4.678-6.373-7.883C.497 10.292-.529 8.228.3 5.858.926 4.072 3.038 1.768 4.616.751z" fill="#FFF"/></svg></a>
+
+	</div>
+
+            </div>
+          </div>
+        </div>
+
+        <button class="a-nav-toggle" title="Toggle Nav" aria-label="Toggle site navigation">
+          <span class="a-nav-toggle__line a-nav-toggle__line-1"></span>
+          <span class="a-nav-toggle__line a-nav-toggle__line-2"></span>
+          <span class="a-nav-toggle__line a-nav-toggle__line-3"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="o-header__search-modal">
+    <div class="grid justify-center" id="header">
+      <div class="col-sm-12">
+          
+<div class="views-exposed-form m-block m-block__search-modal__exposedformsearchpage o-header__search-modal__exposedformsearchpage" data-drupal-selector="views-exposed-form-search-search" id="block-exposedformsearchsearch">
+			<form action="/search" method="get" id="views-exposed-form-search-search" accept-charset="UTF-8">
+  <div class="js-form-item form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-for form-item-for form-no-label">
+        <input placeholder="Search site" aria-label="Search form input" data-drupal-selector="edit-for" data-search-api-autocomplete-search="search" class="form-autocomplete form-text" data-autocomplete-path="/search_api_autocomplete/search?display=search&amp;&amp;filter=for" type="text" id="edit-for--2" name="for" value="" size="30" maxlength="128" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--3"><button data-twig-suggestion="search_results_submit" class="a-btn button js-form-submit form-submit" value="Apply" data-drupal-selector="edit-submit-search-2" type="submit" id="edit-submit-search--2">
+  Apply
+</button>
+</div>
+
+</form>
+
+	</div>
+
+
+      </div>
+    </div>
+  </div>
+</header>
+<div class="o-header__search-modal__overlay"></div>
+
+
+<main id="main-content" role="main" class="wrapper wapper--main">
+        
+<div id="block-pippip-content" class="m-block m-block--system m-block--system-main-block m-block__ m-">
+					
+
+<article  class="o-node o-what-s-on-listing o-full">
+
+	
+	
+		
+
+	<section role="region" aria-label="Page banner">
+		<div class="m-banner m-banner--" >
+
+			<div class="m-banner__content  m-banner__content__desktop">
+				<div class="grid ">
+					<div class="col-sm- 12 m-banner__content__title">
+
+													<div class="m-banner__body ">
+																	<p class="m-banner__pre-title">
+										
+									</p>
+								
+																	<h1 class="m-banner__heading">
+										
+									</h1>
+								
+
+								
+								<div class="m-banner__summary">
+									
+								</div>
+							</div>
+
+													
+					</div>
+				</div>
+			</div>
+
+			
+			<figure class="m-banner__image">
+				<div class="m-banner__overlay"></div>
+				
+  
+		
+<picture>
+		<source media="(max-width: 600px)" srcset="/sites/default/files/styles/mobile_banner/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=5teorDPD" type="image/jpeg">
+		<source media="(max-width: 1000px)" data-srcset="/sites/default/files/styles/banner_image_md/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=UIXZkzm_" type="image/jpeg">
+		<source data-srcset="/sites/default/files/styles/banner_image/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=XRQsJtOd" type="image/jpeg">
+	<img  src="/sites/default/files/styles/banner_image/public/images/banner%20image%20for%20website%20%28NINAGAWA%29.jpg.webp?itok=XRQsJtOd"   alt="A school of goldfish in pink light"  class="eager"  height="1332"  width="2560">
+</picture>
+					<button href="#" aria-label="Image credit" class="a-image-credit no-link" data-credit="Untitled, 2025 ©mika ninagawa, Courtesy of Tomio Koyama Gallery">
+		<span>i</span>
+	</button>
+
+			</figure>
+
+			
+		</div>
+
+		<div class="m-banner__content  m-banner__content__mobile">
+			<div class="grid ">
+				<div class="col-sm- 12">
+
+											<div class="m-banner__body ">
+															<p class="m-banner__pre-title">
+									
+								</p>
+							
+															<h1 class="m-banner__heading">
+									
+								</h1>
+							
+																																								<p class="m-banner__run-dates">
+									
+								</p>
+
+							
+							<div>
+								
+							</div>
+						</div>
+
+											
+				</div>
+			</div>
+		</div>
+    </section>
+
+		<div aria-label="Main content">
+			<div class="grid justify-center">
+									<div class="col-sm-8">
+						<h1 id="page__title">What&#039;s On</h1>
+						<div class="m-entity__body">
+							<p>Everything currently going on, or coming up, in the Gallery and online. Plus explore our past programme for more inspiration, research or context.</p>
+<p>You can browse all, or filter by date, type, series or season.</p>
+
+						</div>
+					</div>
+												<div class="col-sm-4  o-what-s-on-listing__intro__right">
+					<a href="/past-programme"  class="a-btn  a-btn--alt">
+						Past Programme
+					</a>
+				</div>
+											</div>
+
+			<div class="grid justify-center">
+				<div class="col-12">
+					<div class="views-element-container"><div class="grid">
+  <div class="col-sm-12">
+
+    <div class="view view-what-s-on view-id-what_s_on view-display-id-whats_on js-view-dom-id-3d2dc5d392fe15b5d9b24b7a9c031e73c3bab288426fdee7b5718521ae52b4f8 view__what_s_on m-entity m-entity__view">
+
+      <hr>
+      
+      
+      
+      <button class="m-filters__toggle  view__what_s_on__button"><span>Close</span>&nbsp;Filter<span>s</span></button>
+      <div class="view__what_s_on__form">
+        <form class="views-exposed-form bef-exposed-form" data-drupal-selector="views-exposed-form-what-s-on-whats-on" action="/whats-on" method="get" id="views-exposed-form-what-s-on-whats-on" accept-charset="UTF-8">
+  <fieldset data-drupal-selector="edit-type" id="edit-type--wrapper" class="fieldgroup form-composite js-form-item form-item js-form-wrapper form-wrapper">
+      <legend>
+    <span class="fieldset-legend">Type</span>
+  </legend>
+  <div class="fieldset-wrapper">
+                <div id="edit-type" class="form-checkboxes"><div class="form-checkboxes bef-checkboxes form--inline">
+                  <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-22 form-item-type-22">
+        <input data-drupal-selector="edit-type-22" type="checkbox" id="edit-type-22" name="type[22]" value="22" class="form-checkbox" />
+
+        <label for="edit-type-22" class="option">Exhibition</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-246 form-item-type-246">
+        <input data-drupal-selector="edit-type-246" type="checkbox" id="edit-type-246" name="type[246]" value="246" class="form-checkbox" />
+
+        <label for="edit-type-246" class="option">Members Only</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-77 form-item-type-77">
+        <input data-drupal-selector="edit-type-77" type="checkbox" id="edit-type-77" name="type[77]" value="77" class="form-checkbox" />
+
+        <label for="edit-type-77" class="option">Online</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-23 form-item-type-23">
+        <input data-drupal-selector="edit-type-23" type="checkbox" id="edit-type-23" name="type[23]" value="23" class="form-checkbox" />
+
+        <label for="edit-type-23" class="option">Talks &amp; Events</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-24 form-item-type-24">
+        <input data-drupal-selector="edit-type-24" type="checkbox" id="edit-type-24" name="type[24]" value="24" class="form-checkbox" />
+
+        <label for="edit-type-24" class="option">Workshops &amp; Courses</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-78 form-item-type-78">
+        <input data-drupal-selector="edit-type-78" type="checkbox" id="edit-type-78" name="type[78]" value="78" class="form-checkbox" />
+
+        <label for="edit-type-78" class="option">Youth Programme</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-25 form-item-type-25">
+        <input data-drupal-selector="edit-type-25" type="checkbox" id="edit-type-25" name="type[25]" value="25" class="form-checkbox" />
+
+        <label for="edit-type-25" class="option">Tours</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-26 form-item-type-26">
+        <input data-drupal-selector="edit-type-26" type="checkbox" id="edit-type-26" name="type[26]" value="26" class="form-checkbox" />
+
+        <label for="edit-type-26" class="option">Bookshop Event</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-76 form-item-type-76">
+        <input data-drupal-selector="edit-type-76" type="checkbox" id="edit-type-76" name="type[76]" value="76" class="form-checkbox" />
+
+        <label for="edit-type-76" class="option">Offsite</label>
+      </div>
+
+                    <div class="js-form-item form-item js-form-type-checkbox form-type-checkbox js-form-item-type-69 form-item-type-69">
+        <input data-drupal-selector="edit-type-69" type="checkbox" id="edit-type-69" name="type[69]" value="69" class="form-checkbox" />
+
+        <label for="edit-type-69" class="option">Soho Photography Quarter</label>
+      </div>
+
+      </div>
+</div>
+
+          </div>
+</fieldset>
+<div class="date-field-label">Dates</div><div class="date-fields-wrapper"><div id="edit-when" class="form-radios"><div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-when form-item-when">
+        <input data-drupal-selector="edit-when-" type="radio" id="edit-when-" name="when" value="" class="form-radio" />
+
+        <label for="edit-when-" class="option">All</label>
+      </div>
+<div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-when form-item-when">
+        <input data-drupal-selector="edit-when-26-sep-2026-26-sep-2026" type="radio" id="edit-when-26-sep-2026-26-sep-2026" name="when" value="26-Sep-2026--26-Sep-2026" class="form-radio" />
+
+        <label for="edit-when-26-sep-2026-26-sep-2026" class="option">Today</label>
+      </div>
+<div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-when form-item-when">
+        <input data-drupal-selector="edit-when-26-sep-2026-03-oct-2026" type="radio" id="edit-when-26-sep-2026-03-oct-2026" name="when" value="26-Sep-2026--03-Oct-2026" class="form-radio" />
+
+        <label for="edit-when-26-sep-2026-03-oct-2026" class="option">This week</label>
+      </div>
+<div class="js-form-item form-item js-form-type-radio form-type-radio js-form-item-when form-item-when">
+        <input data-drupal-selector="edit-when-03-oct-2026-10-oct-2026" type="radio" id="edit-when-03-oct-2026-10-oct-2026" name="when" value="03-Oct-2026--10-Oct-2026" class="form-radio" />
+
+        <label for="edit-when-03-oct-2026-10-oct-2026" class="option">Next week</label>
+      </div>
+</div>
+<div class="js-form-item form-item js-form-type-textfield form-type-textfield js-form-item-date form-item-date">
+      <label for="edit-date">Pick date</label>
+        <span class="field-prefix"><img src="/themes/pippip/assets/img/calendar.svg" alt="Calendar icon" /></span>
+      <input class="daterange-picker-field form-text" autocomplete="off" data-drupal-selector="edit-date" type="text" id="edit-date" name="date" value="" size="60" maxlength="128" />
+
+        </div>
+</div><div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions"><button data-twig-suggestion="search_results_submit" class="a-btn button js-form-submit form-submit" value="Apply" data-drupal-selector="edit-submit-what-s-on" type="submit" id="edit-submit-what-s-on">
+  Apply
+</button>
+</div>
+
+</form>
+
+      </div>
+
+      
+      
+
+      <hr>
+              <div class="a-grid a-grid--3">
+              <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/open-call-future-archives-whose-archive-it-anyway" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Open Call | Future of Archives: Whose Archive is it Anyway?">
+
+		
+					<span class="o-teaser__post-type">Talks &amp; Events</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner03239_0.jpg.webp?itok=fcAsBnV9" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner03239_0.jpg.webp?itok=fcAsBnV9" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner03239_0.jpg.webp?itok=fcAsBnV9"  title="Open Call | Future of Archives: Whose Archive is it Anyway?"  alt="Colour photograph of a hand holding a black &amp; white leaflet in an archive box"  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+																				 
+			<p class="o-teaser__date">04 Aug 2026 - 01 Nov 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/open-call-future-archives-whose-archive-it-anyway" class="o-teaser__link" title="Open Open Call | Future of Archives: Whose Archive is it Anyway?">
+				Open Call | Future of Archives: Whose Archive is it Anyway?
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Open call for speakers for a one-day event on 16 April 2027 exploring the future of archives and archiving.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://forms.cloud.microsoft/e/6Ug8HGGT3m" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Open Call | Future of Archives: Whose Archive is it Anyway?">
+								Apply now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/autofoto-photobooth-photographers-gallery" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Autofoto photobooth at The Photographers&#039; Gallery">
+
+		
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20_3.jpg.webp?itok=mQMPSFYY" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20_3.jpg.webp?itok=mQMPSFYY" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20_3.jpg.webp?itok=mQMPSFYY"  title="Autofoto photobooth at The Photographers&#039; Gallery"  alt="An analogue Autofoto photobooth situated in the lobby of The Photographers&#039; Gallery."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+																				 
+			<p class="o-teaser__date">01 Mar 2026 - 31 Dec 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/autofoto-photobooth-photographers-gallery" class="o-teaser__link" title="Open Autofoto photobooth at The Photographers&#039; Gallery">
+				Autofoto photobooth at The Photographers&#039; Gallery
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Create a special memory in our 1960s analogue photobooth at the Gallery!</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+					        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/roots" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Roots">
+
+		
+					<span class="o-teaser__post-type">Exhibition</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%285%29_0.jpg.webp?itok=URzMc3mM" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%285%29_0.jpg.webp?itok=URzMc3mM" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%285%29_0.jpg.webp?itok=URzMc3mM"  title="Roots"  alt="A dark forest floor."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Now open!</h3>
+		
+																				 
+			<p class="o-teaser__date">18 Sep 2026 - 15 Nov 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/roots" class="o-teaser__link" title="Open Roots">
+				Roots
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>This group exhibition at The Print Sales Gallery explores trees, memory, cultural heritage and belonging through photography and mixed media across global landscapes.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+					        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/ninagawa-mika-captive-blooms" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open NINAGAWA Mika: Captive Blooms">
+
+		
+					<span class="o-teaser__post-type">Soho Photography Quarter</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20SPQ%20kat%20elliott%29_0.jpg.webp?itok=09rd-Mg8" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20SPQ%20kat%20elliott%29_0.jpg.webp?itok=09rd-Mg8" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20SPQ%20kat%20elliott%29_0.jpg.webp?itok=09rd-Mg8"  title="NINAGAWA Mika: Captive Blooms"  alt="Image of The Photographers Gallery and Soho photography corner, an outdoor display mad eup of large banners on the opposite building to the gallery."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Now open in Soho Photography Quarter!</h3>
+		
+																				 
+			<p class="o-teaser__date">19 Jun 2026 - 01 Jun 2027</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/ninagawa-mika-captive-blooms" class="o-teaser__link" title="Open NINAGAWA Mika: Captive Blooms">
+				NINAGAWA Mika: Captive Blooms
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Discover large-scale works by NINAGAWA Mika in a free outdoor exhibition in Soho Photography Quarter</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+					        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/japanese-women-photographers-1950s-now" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Japanese Women Photographers: From 1950s to Now">
+
+		
+					<span class="o-teaser__post-type">Exhibition</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%2834%29.jpg.webp?itok=Ic78EuLm" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%2834%29.jpg.webp?itok=Ic78EuLm" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%2834%29.jpg.webp?itok=Ic78EuLm"  title="Japanese Women Photographers: From 1950s to Now"  alt="A darkened bar lit with a pink glow. A couple lean across it to meet in a kiss."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Last chance to see</h3>
+		
+																				 
+			<p class="o-teaser__date">24 Jun 2026 - 27 Sep 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/japanese-women-photographers-1950s-now" class="o-teaser__link" title="Open Japanese Women Photographers: From 1950s to Now">
+				Japanese Women Photographers: From 1950s to Now
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>A major exhibition reframing the history of Japanese photography through the voices and lenses of 27 women working from the 1950s to today.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/ticketbooth/shows/1173687757" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Japanese Women Photographers: From 1950s to Now">
+								Book now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/course-collecting-photography-2026" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Course | Collecting Photography 2026">
+
+		
+					<span class="o-teaser__post-type">Workshops &amp; Courses</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Kander%20Studio%20Visit%202%20%C2%A9%20Stefan%20Alveranga-Foster%20banner.jpeg.webp?itok=Y060D1KX" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Kander%20Studio%20Visit%202%20%C2%A9%20Stefan%20Alveranga-Foster%20banner.jpeg.webp?itok=Y060D1KX" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Kander%20Studio%20Visit%202%20%C2%A9%20Stefan%20Alveranga-Foster%20banner.jpeg.webp?itok=Y060D1KX"  title="Course | Collecting Photography 2026"  alt="Photograph of people sitting and standing in an artist&#039;s studio"  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+																				 
+			<p class="o-teaser__date">12 Oct 2026 - 02 Nov 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/course-collecting-photography-2026" class="o-teaser__link" title="Open Course | Collecting Photography 2026">
+				Course | Collecting Photography 2026
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Be guided by an insider’s experience of collecting photography in this four-week course</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/ticketbooth/shows/1173692016" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Course | Collecting Photography 2026">
+								Book now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/william-eggleston-all-goes-unnoticed" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open William Eggleston: All that goes unnoticed">
+
+		
+					<span class="o-teaser__post-type">Exhibition</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/William%20Eggleston%20Website%20Signpost%20Override%20%20%284%29.jpg.webp?itok=xyalmBGP" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/William%20Eggleston%20Website%20Signpost%20Override%20%20%284%29.jpg.webp?itok=xyalmBGP" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/William%20Eggleston%20Website%20Signpost%20Override%20%20%284%29.jpg.webp?itok=xyalmBGP"  title="William Eggleston: All that goes unnoticed"  alt="A child&#039;s tricycle on a suburban street."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Coming soon</h3>
+		
+																				 
+			<p class="o-teaser__date">14 Oct 2026 - 21 Feb 2027</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/william-eggleston-all-goes-unnoticed" class="o-teaser__link" title="Open William Eggleston: All that goes unnoticed">
+				William Eggleston: All that goes unnoticed
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Celebrating 50 years since William Eggleston’s Guide (1976) this major exhibition showcases iconic and rarely seen dye transfer prints by an American pioneer of colour photography.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/shows/1173692530/events" class="a-btn  a-btn--arrow  o-teaser__button" title="Open William Eggleston: All that goes unnoticed">
+								Book advance tickets now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/snap-happy-how-children-became-photographers" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Snap Happy! How Children Became Photographers ">
+
+		
+					<span class="o-teaser__post-type">Exhibition</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20%2810%29_1.jpg.webp?itok=DaIHOV9Q" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20%2810%29_1.jpg.webp?itok=DaIHOV9Q" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20%2810%29_1.jpg.webp?itok=DaIHOV9Q"  title="Snap Happy! How Children Became Photographers "  alt="A plastic troll toy with a big smile and bright blue hair sticking upwards."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Coming soon</h3>
+		
+																				 
+			<p class="o-teaser__date">14 Oct 2026 - 21 Feb 2027</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/snap-happy-how-children-became-photographers" class="o-teaser__link" title="Open Snap Happy! How Children Became Photographers ">
+				Snap Happy! How Children Became Photographers 
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Through photographs and archives, Snap Happy! celebrates the creativity, curiosity and distinctive perspectives of generations of young photographers.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/shows/1173692530/events" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Snap Happy! How Children Became Photographers ">
+								Book advance tickets now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/sanle-sory-colour-years" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Sanlé Sory: Colour Years">
+
+		
+					<span class="o-teaser__post-type">Exhibition</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%28sanle%20sory%29.jpg.webp?itok=a7Xhgu0t" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%28sanle%20sory%29.jpg.webp?itok=a7Xhgu0t" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%28sanle%20sory%29.jpg.webp?itok=a7Xhgu0t"  title="Sanlé Sory: Colour Years"  alt="Colour photograph of a young man wearing a large traditional shirt. Behind him a number of Burkinabe textiles can be seen hanging"  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+					<h3 class="o-teaser__pre-title">Coming soon</h3>
+		
+																				 
+			<p class="o-teaser__date">14 Oct 2026 - 21 Feb 2027</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/sanle-sory-colour-years" class="o-teaser__link" title="Open Sanlé Sory: Colour Years">
+				Sanlé Sory: Colour Years
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Bringing together Sanlé Sory’s rarely seen colour photographs for the first time in the UK capturing daily life, youth culture and fashion in Burkina Faso.</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/shows/1173692530/events" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Sanlé Sory: Colour Years">
+								Book advance tickets now
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/exhibition-tour-sanle-sory-colour-years" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Exhibition Tour | Sanlé Sory: Colour Years">
+
+		
+					<span class="o-teaser__post-type">Tours</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/SSc-0056.jpg.webp?itok=heWJ60K2" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/SSc-0056.jpg.webp?itok=heWJ60K2" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/SSc-0056.jpg.webp?itok=heWJ60K2"  title="Exhibition Tour | Sanlé Sory: Colour Years"  alt="Colour portrait photo of two people smiling."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+												 
+			<p class="o-teaser__date">3:00pm, Sat 31 Oct 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/exhibition-tour-sanle-sory-colour-years" class="o-teaser__link" title="Open Exhibition Tour | Sanlé Sory: Colour Years">
+				Exhibition Tour | Sanlé Sory: Colour Years
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Join curator Taous Dahmani for an informal tour of the exhibition</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/shows/1173694147/events" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Exhibition Tour | Sanlé Sory: Colour Years">
+								Book now - included with general admission
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/exhibition-tour-snap-happy" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Exhibition Tour: Snap Happy!">
+
+		
+					<span class="o-teaser__post-type">Tours</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Robert%20Cooper%20banner.jpeg.webp?itok=vaiOrM-2" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Robert%20Cooper%20banner.jpeg.webp?itok=vaiOrM-2" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/Robert%20Cooper%20banner.jpeg.webp?itok=vaiOrM-2"  title="Exhibition Tour: Snap Happy!"  alt="Self portrait photo of a boy focussing a camera in front of a mirror"  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+												 
+			<p class="o-teaser__date">11:00am, Sat 14 Nov 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/exhibition-tour-snap-happy" class="o-teaser__link" title="Open Exhibition Tour: Snap Happy!">
+				Exhibition Tour: Snap Happy!
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Join curators Annebella Pollen and Clare Grafik to find out more about the exhibition</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/ticketbooth/shows/1173694107/events/428904528" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Exhibition Tour: Snap Happy!">
+								Book now - included with general admission
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+    <div>
+    	
+
+<article  class="o-node o-event o-teaser o-teaser-teaser">
+
+	
+		
+        <div class="grid justify-center">
+            <div class="col-12">
+				
+
+
+	<a href="/whats-on/exhibition-tour-william-eggleston-all-goes-unnoticed-0" class="o-teaser-teaser__thumb o-teaser__thumb" title="Open Exhibition Tour | William Eggleston: All that goes unnoticed">
+
+		
+					<span class="o-teaser__post-type">Tours</span>
+		
+		
+																
+			
+	
+
+<picture>
+	 <source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/EGGWI0389%281%29%20banner.jpeg.webp?itok=JzR7ah30" type="image/webp">
+	<source data-srcset="/sites/default/files/styles/teaser_thumb/public/images/EGGWI0389%281%29%20banner.jpeg.webp?itok=JzR7ah30" type="image/jpeg">
+	<img  data-srcset="/sites/default/files/styles/teaser_thumb/public/images/EGGWI0389%281%29%20banner.jpeg.webp?itok=JzR7ah30"  title="Exhibition Tour | William Eggleston: All that goes unnoticed"  alt=": Colour photograph of the back of a woman’s head. Her hair is swept up in an updo."  class="lazy">
+</picture>
+ 
+		
+			</a>
+
+	<div class="o-teaser-teaser__content o-teaser__content">
+
+		
+												 
+			<p class="o-teaser__date">6:30pm, Thu 26 Nov 2026</p>
+		
+		<h3 class="o-teaser__title">
+			<a href="/whats-on/exhibition-tour-william-eggleston-all-goes-unnoticed-0" class="o-teaser__link" title="Open Exhibition Tour | William Eggleston: All that goes unnoticed">
+				Exhibition Tour | William Eggleston: All that goes unnoticed
+			</a>
+		</h3>
+
+					<p class="o-teaser__body-text">  <p>Join an informal tour of the exhibition to find out more</p>
+
+
+</p>
+		
+	</div>
+
+	<div class="o-teaser-teaser__buttons o-teaser__buttons">
+
+																											<a href="https://thephotographersgallery.ticketsolve.com/shows/1173694223/events" class="a-btn  a-btn--arrow  o-teaser__button" title="Open Exhibition Tour | William Eggleston: All that goes unnoticed">
+								Book now - included with general admission
+							</a>
+																		        	</div>
+			</div>
+		</div>
+	
+
+</article>
+
+  </div>
+
+        </div>
+      
+      
+        <nav class="pager" role="navigation" aria-labelledby="pagination-heading">
+    <h4 id="pagination-heading" class="visually-hidden">Pagination</h4>
+    <ul class="pager__items js-pager__items">
+                                                        <li class="pager__item is-active">
+                                          <a href="?page=0" title="Current page" aria-current="page">
+            <span class="visually-hidden">
+              Current page
+            </span>1</a>
+        </li>
+              <li class="pager__item">
+                                          <a href="?page=1" title="Go to page 2">
+            <span class="visually-hidden">
+              Page
+            </span>2</a>
+        </li>
+                                      <li class="pager__item pager__item--next">
+          <a href="?page=1" title="Go to next page" rel="next">
+            <span class="visually-hidden">Next page</span>
+            <span aria-hidden="true">Next ›</span>
+          </a>
+        </li>
+                          <li class="pager__item pager__item--last">
+          <a href="?page=1" title="Go to last page">
+            <span class="visually-hidden">Last page</span>
+            <span aria-hidden="true">Last »</span>
+          </a>
+        </li>
+          </ul>
+  </nav>
+
+
+      
+      
+
+      
+      
+    </div>
+
+  </div>
+</div></div>
+
+				</div>
+			</div>
+				
+					</div>
+
+	
+
+</article>
+
+	</div>
+
+
+  
+  <section class="pswp m-gallery" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+
+  <div class="pswp__scroll-wrap">
+
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button type="button" class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button type="button" class="pswp__button pswp__button--share" title="Share"></button>
+        <button type="button" class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button type="button" class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button type="button" class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<footer class="o-footer" role="contentinfo">
+  <div class="o-footer__row  o-footer__row__top">
+
+      <div class="grid  justify-center">
+        <div class="col-sm-12">
+          <div class="o-footer__row__newsletter">
+            <div class="o-footer__row__newsletter__inner">
+                          <h2 class="h4">Sign up to our newsletter</h2>
+    
+            <p>Join our newsletter for all the latest news, events, exhibitions and special offers</p>
+    
+        <a href="https://thephotographersgallery.us5.list-manage.com/subscribe?u=c40982440b8f521a208493b86&amp;id=656aa9634e" class="a-btn  a-btn--white">Sign up</a>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="grid">
+      <div class="col-sm-12 col-md-4  o-footer__row__opening-times">
+        
+                
+<div class="m-block m-block--block-content m-block--block-contentda7de4b1-3ff7-4210-a309-72d18f6c0943 m-block__opening-times m-opening-times">
+				<h4>General opening times</h4>
+<ul>
+<li>Monday - Wednesday
+<ul>
+<li>10.30–18.00</li>
+</ul>
+</li>
+<li>Thursday &amp; Friday
+<ul>
+<li>10.30–20.00</li>
+</ul>
+</li>
+<li>Saturday
+<ul>
+<li>10.30–18.00</li>
+</ul>
+</li>
+<li>Sunday &amp; bank holidays
+<ul>
+<li>11.00–18.00</li>
+</ul>
+</li>
+</ul>
+
+	</div>
+
+
+      </div>
+      <div class="col-sm-12 col-md-4  o-footer__row__find-us">
+
+                
+<div class="m-block m-block--block-content m-block--block-contentb28544a9-b19a-4392-aff3-2343696c625f m-block__find-us m-find-us">
+				<h4>Find us</h4>
+<p><a href="https://goo.gl/maps/epeVVC9rJxWX8chu9">16-18 Ramillies Street, London W1F7LW</a> Nearest station: Oxford Circus</p>
+<p>Fridays free from 5pm!</p>
+<p><a href="/visit">Plan your visit</a></p>
+
+	</div>
+
+        
+      </div>
+      <div class="col-sm-12 col-md-4  o-footer__row__about-us">
+
+                
+<div class="m-block m-block--block-content m-block--block-content8142511d-72df-4db3-9818-b2aabfa16471 m-block__about-us m-about-us">
+				<h4>Who we are and what we do</h4>
+<p>Home for the next generation of photography</p>
+<p><a href="/node/1487">About&nbsp;us</a><a href="/node/1497">Contact us</a><a href="/node/1480">Work with us</a></p>
+
+	</div>
+
+
+      </div>
+      <div class="o-footer__row__border-bottom"></div>
+    </div>
+  </div>
+
+  <div class="o-footer__row">
+    <div class="grid">
+      <div class="col-sm-12 col-md-4  o-footer__social-links">
+
+                
+<div class="m-block m-block--block-content m-block--block-contentc6d3c8e2-dc31-4393-b79e-876753e85145 m-block__footer---social-links m-footer---social-links">
+		
+  
+      <div class="m-social-links">
+        <a href="https://www.instagram.com/thephotographersgallery/" rel="noopener nofollow" class="m-social-links__link  m-social-links__link__instagram" aria-label="Open Instagram" title="Open Instagram">
+    <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect width="50" height="50" rx="25"/><path d="M25 15.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM25 13c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98C13.014 21.333 13 21.741 13 25c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C28.668 13.014 28.259 13 25 13zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM25 29a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></g></svg>
+  </a>
+  <a href="https://www.youtube.com/user/GalleryPhotographers" rel="noopener nofollow" class="m-social-links__link  m-social-links__link__youtube" aria-label="Open Youtube" title="Open Youtube">
+    <svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="a"><stop stop-color="#FFF" offset="0%"/><stop stop-color="#FFF" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><circle fill="url(#a)" transform="rotate(-90 15 15)" cx="15" cy="15" r="15"/><circle fill="#000" transform="rotate(-90 15 15)" cx="15" cy="15" r="13.696"/><path d="M21.898 10.939c-.384-.684-.801-.81-1.65-.858-.849-.057-2.982-.081-4.83-.081-1.851 0-3.985.024-4.832.08-.848.05-1.265.174-1.653.859-.396.682-.6 1.858-.6 3.928v.007c0 2.061.204 3.246.6 3.922.388.683.805.807 1.652.865.848.05 2.982.079 4.833.079 1.848 0 3.981-.03 4.83-.078.85-.058 1.267-.182 1.65-.865.4-.676.602-1.86.602-3.922v-.007c0-2.071-.202-3.247-.602-3.93zm-8.252 6.587v-5.312l4.427 2.656-4.427 2.656z" fill="#FFF" fill-rule="nonzero"/></g></svg>
+  </a>
+  <a href="https://www.facebook.com/ThePhotographersGalleryLDN/" rel="noopener nofollow" class="m-social-links__link  m-social-links__link__facebook" aria-label="Open Facebook" title="Open Facebook">
+    <svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><rect width="50" height="50" rx="25"/><path d="M22 21h-3v4h3v12h5V25h3.642L31 21h-4v-1.667c0-.955.192-1.333 1.115-1.333H31v-5h-3.808C23.596 13 22 14.583 22 17.615V21z"/></g></svg>
+  </a>
+  <a href="https://www.tiktok.com/@tphotographersgallery" rel="noopener nofollow" class="m-social-links__link  m-social-links__link__tiktok" aria-label="Open Tiktok" title="Open Tiktok">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2859 3333" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"><path d="M2081 0c55 473 319 755 778 785v532c-266 26-499-61-770-225v995c0 1264-1378 1659-1932 753-356-583-138-1606 1004-1647v561c-87 14-180 36-265 65-254 86-398 247-358 531 77 544 1075 705 992-358V1h551z"/></svg>
+  </a>
+
+    </div>
+  
+</div>
+
+
+      </div>
+      <div class="col-sm-12 col-md-6  o-footer__newsletter-cta">
+
+                        <div class="col-sm-12  o-footer__footer-menu">
+        
+              <ul class="menu">
+                    <li class="m-main-nav__link">
+        <a href="/terms-conditions" class="m-main-nav__link" data-drupal-link-system-path="node/115">Terms &amp; Conditions</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/privacy-cookies-policy" class="m-main-nav__link" data-drupal-link-system-path="node/116">Privacy &amp; Cookies Policy</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/terms-use" class="m-main-nav__link" data-drupal-link-system-path="node/118">Terms of use</a>
+              </li>
+                <li class="m-main-nav__link">
+        <a href="/photographers-gallery-website-accessibility-statement" title="The Photographers&#039; Gallery Website Accessibility Statement" class="m-main-nav__link" data-drupal-link-system-path="node/2758">Website Accessibility</a>
+              </li>
+        </ul>
+  
+
+
+      </div>
+ 
+
+      </div>
+      <div class="col-sm-12 col-md-2  o-footer__artscouncil">
+          <figure class="artscouncil">
+            <svg width="166" height="40" viewBox="0 0 166 40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M.304.728H9.81V12H.304z"/></defs><g fill="none" fill-rule="evenodd"><path d="M65.004 15.203h-.032l-1.575 4.496h3.184l-1.577-4.496zm-1.201-2.188h2.465l4.279 10.899h-2.42l-.937-2.497h-4.418l-.952 2.497h-2.265l4.248-10.9zM73.87 17.67h.72c1.076 0 2.31-.157 2.31-1.516 0-1.31-1.219-1.421-2.31-1.421h-.72v2.938zm-2.186-4.654h2.36c2.341 0 5.134-.078 5.134 2.953 0 1.278-.859 2.339-2.247 2.527v.029c.593.047.935.643 1.156 1.125l1.748 4.264h-2.437L76.09 20.51c-.316-.812-.593-1.125-1.516-1.125h-.704v4.528h-2.185V13.016zm11.663 1.717h-3.123v-1.718h8.433v1.718H85.53v9.182h-2.184zm12.55.281a5.638 5.638 0 00-2.217-.469c-.75 0-1.718.33-1.718 1.515 0 1.89 4.78 1.093 4.78 4.745 0 2.39-1.892 3.297-4.09 3.297-1.188 0-1.719-.154-2.796-.423l.201-1.967c.752.406 1.61.672 2.468.672.828 0 1.935-.423 1.935-1.406 0-2.075-4.776-1.218-4.776-4.824 0-2.437 1.887-3.327 3.81-3.327.934 0 1.808.126 2.606.392l-.203 1.795zm14.786 8.746c-.796.186-1.656.341-2.483.341-3.528 0-5.98-1.763-5.98-5.45 0-3.73 2.279-5.823 5.98-5.823.717 0 1.67.142 2.465.454l-.155 1.842c-.827-.468-1.575-.577-2.357-.577-2.248 0-3.654 1.717-3.654 3.949 0 2.218 1.372 3.889 3.7 3.889.86 0 1.872-.19 2.389-.454l.095 1.83zm6.351-1.376c2.231 0 3.062-1.984 3.062-3.95 0-1.922-.893-3.888-3.062-3.888-2.169 0-3.059 1.966-3.059 3.887 0 1.967.83 3.951 3.06 3.951m0-9.557c3.418 0 5.34 2.312 5.34 5.606 0 3.293-1.892 5.668-5.34 5.668-3.497 0-5.339-2.327-5.339-5.668 0-3.34 1.872-5.606 5.338-5.606m6.79.188h2.187v6.294c0 1.858.591 3.075 2.264 3.075 1.668 0 2.264-1.217 2.264-3.075v-6.294h2.184v6.965c0 2.92-1.655 4.122-4.448 4.122-2.795 0-4.45-1.203-4.45-4.122v-6.965zm10.538 0h2.685l4.151 8.152h.033v-8.152h2.092v10.898h-2.67l-4.167-8.15h-.032v8.15h-2.092zm18.842 10.745c-.796.186-1.654.341-2.48.341-3.53 0-5.983-1.764-5.983-5.45 0-3.73 2.28-5.823 5.982-5.823.716 0 1.67.142 2.463.454l-.153 1.841c-.829-.467-1.576-.576-2.356-.576-2.248 0-3.656 1.716-3.656 3.948 0 2.218 1.373 3.89 3.702 3.89.857 0 1.872-.19 2.386-.454l.095 1.83zm1.655.154h2.185V13.017h-2.185zm3.901-10.899v10.9h6.418v-1.719h-4.232v-9.18zM59.587 28.628v10.896h6.464v-1.717h-4.279v-3.059h3.888V33.03h-3.888v-2.687h4.248v-1.715zm15.127 0v8.148h-.03l-4.153-8.148h-2.687v10.896h2.093v-8.147h.03l4.171 8.147h2.668V28.628z" fill="#FEFEFE"/><g transform="translate(78 27.713)"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path d="M9.344 3.023c-.843-.392-1.937-.577-2.813-.577-2.543 0-3.947 1.716-3.947 3.95 0 2.215 1.373 3.885 3.699 3.885a6.04 6.04 0 001.436-.154V7.285H5.408V5.567H9.81v5.871C8.657 11.75 7.453 12 6.283 12c-3.527 0-5.98-1.765-5.98-5.45 0-3.73 2.28-5.822 5.98-5.822 1.265 0 2.263.171 3.203.453l-.142 1.842z" fill="#FEFEFE" mask="url(#b)"/></g><path fill="#FEFEFE" d="M89.559 28.628v10.896h6.415v-1.717h-4.229v-9.179zm11.63 0l-4.245 10.9h2.264l.952-2.5h4.418l.936 2.5h2.42l-4.277-10.9h-2.468zm1.174 2.183h.028l1.578 4.498h-3.186l1.58-4.498zm13.499-2.183v8.148h-.03l-4.153-8.148h-2.685v10.896h2.091v-8.147h.03l4.171 8.147h2.67V28.628zm6.063 9.179h1.219c1.824 0 3.59-1.356 3.59-3.729 0-2.375-1.766-3.734-3.59-3.734h-1.22v7.463zm-2.185-9.179h2.982c3.339 0 6.29 1.125 6.29 5.45 0 4.322-2.951 5.448-6.29 5.448h-2.982V28.628zM157.962 3.29h-.474l1.242 3.544-.088.31c-.14.453-.261.76-.634.76a.904.904 0 01-.32-.053l-.042.37c.143.033.308.054.467.054.488 0 .735-.48.9-.961l1.398-4.024h-.453l-1.008 2.918h-.007l-.981-2.918zm-1.408 1.75c0 .68-.213 1.463-1.038 1.463-.77 0-1.037-.823-1.037-1.462 0-.64.248-1.463 1.037-1.463.825 0 1.038.782 1.038 1.463zm-2.508 1.75h.433v-.554h.013c.235.447.59.638 1.092.638.963 0 1.442-.796 1.442-1.833 0-1.064-.412-1.833-1.442-1.833-.686 0-1.03.5-1.092.672h-.013V1.643h-.433V6.79zm-2.34-3.5h-.431v.398h-.014c-.322-.42-.626-.48-1.093-.48-1.028 0-1.44.769-1.44 1.833 0 .776.356 1.75 1.474 1.75.447 0 .832-.178 1.067-.685h.012c0 .989-.096 1.799-1.208 1.799-.38 0-.761-.11-1.03-.248l-.034.433c.179.054.599.185 1.057.185 1.203 0 1.64-.796 1.64-1.772V3.29zM149.2 5.04c0-.68.214-1.462 1.038-1.462.789 0 1.037.618 1.037 1.463 0 .639-.282 1.38-1.065 1.38-.734 0-1.01-.693-1.01-1.38zm-4.172 1.75h.433V4.856c0-.584.246-1.277 1.037-1.277.598 0 .832.425.832 1.085V6.79h.43V4.554c0-.77-.327-1.346-1.194-1.346-.728 0-.99.39-1.132.706h-.015V3.29H145c.027.282.027.557.027.824V6.79zm-1.59-4.435h.433v-.576h-.432v.576zm.002 4.436h.43V3.29h-.43v3.5zm-3.641-1.75c0-.681.212-1.463 1.037-1.463.77 0 1.038.824 1.038 1.463 0 .639-.268 1.462-1.038 1.462-.825 0-1.037-.782-1.037-1.462zm2.507-3.398h-.432V3.88h-.014c-.062-.172-.405-.672-1.092-.672-1.031 0-1.442.769-1.442 1.833 0 1.037.48 1.833 1.442 1.833.502 0 .858-.191 1.092-.638h.014v.555h.432V1.643zm-6.69 5.148h.433V4.855c0-.584.247-1.277 1.038-1.277.598 0 .83.425.83 1.085V6.79h.434V4.554c0-.77-.33-1.346-1.196-1.346-.728 0-.99.39-1.132.706h-.015V3.29h-.418c.027.282.027.557.027.824V6.79zm-1.162-3.501h-.432v1.937c0 .584-.247 1.276-1.038 1.276-.596 0-.83-.425-.83-1.084v-2.13h-.432v2.24c0 .769.329 1.345 1.194 1.345.73 0 .989-.39 1.133-.707h.015v.624h.419c-.03-.28-.03-.556-.03-.822v-2.68zm-4.786 3.5h.433V3.66h.79v-.37h-.79v-.303c0-.42-.063-1.057.528-1.057.124 0 .254.027.344.075l.027-.377c-.083-.05-.267-.067-.406-.067-.9 0-.926.739-.926 1.474v.255h-.707v.37h.707v3.13zM127.3 3.346a2.625 2.625 0 00-.845-.137c-1.036 0-1.728.754-1.728 1.833 0 .976.547 1.833 1.674 1.833.329 0 .604-.021.899-.124l-.041-.403a2.275 2.275 0 01-.79.156c-.79 0-1.271-.665-1.271-1.462 0-.852.474-1.463 1.319-1.463.233 0 .515.075.749.178l.034-.411zm-3.946-.99h.432V1.78h-.432v.576zm0 4.436h.432V3.29h-.431v3.5zm-1.587 0h.432V1.64h-.432v5.15zm-1.464-1.75c0 .68-.213 1.462-1.037 1.462-.77 0-1.037-.823-1.037-1.462 0-.64.248-1.463 1.037-1.463.824 0 1.037.782 1.037 1.463zm-2.507 1.75h.433v-.555h.013c.235.447.59.638 1.092.638.962 0 1.442-.796 1.442-1.833 0-1.064-.412-1.833-1.442-1.833-.686 0-1.03.5-1.092.672h-.013V1.643h-.433V6.79zM116.66 3.29h-.431v1.937c0 .584-.247 1.276-1.038 1.276-.598 0-.831-.425-.831-1.084v-2.13h-.433v2.24c0 .769.33 1.345 1.195 1.345.729 0 .989-.39 1.134-.707h.014v.624h.419c-.03-.28-.03-.556-.03-.822v-2.68zm-4.18 1.75c0 .68-.213 1.463-1.04 1.463-.768 0-1.036-.823-1.036-1.462 0-.64.268-1.463 1.037-1.463.826 0 1.039.782 1.039 1.463zm-2.507 3.194h.43v-2.04h.015c.213.453.542.68 1.092.68.963 0 1.44-.796 1.44-1.833 0-1.064-.41-1.833-1.44-1.833-.741 0-1.01.527-1.12.72h-.014l.028-.638h-.431v4.944zm-2.341-4.944h-.431v.398h-.013c-.324-.42-.625-.48-1.094-.48-1.03 0-1.442.769-1.442 1.833 0 .776.357 1.75 1.477 1.75.446 0 .83-.178 1.064-.685h.014c0 .989-.096 1.799-1.21 1.799a2.37 2.37 0 01-1.03-.248l-.032.433c.177.054.596.185 1.056.185 1.202 0 1.64-.796 1.64-1.772V3.29zm-2.507 1.75c0-.68.214-1.462 1.038-1.462.79 0 1.038.618 1.038 1.463 0 .639-.282 1.38-1.066 1.38-.734 0-1.01-.693-1.01-1.38zm-4.171 1.75h.43V4.856c0-.584.249-1.277 1.04-1.277.598 0 .83.425.83 1.085V6.79h.433V4.554c0-.77-.33-1.346-1.195-1.346-.728 0-.99.39-1.134.706h-.014V3.29h-.417c.027.282.027.557.027.824V6.79zm-1.59-4.435h.432v-.576h-.431v.576zm0 4.436h.432V3.29h-.431v3.5zm-3.062-.082c.309.124.645.165.982.165.53 0 1.222-.254 1.222-.995 0-1.147-1.724-1.065-1.724-1.717 0-.448.309-.584.756-.584.24 0 .55.063.776.164l.04-.377a2.772 2.772 0 00-.864-.157c-.577 0-1.14.26-1.14.954 0 1.017 1.683.885 1.683 1.717 0 .398-.365.624-.777.624a2.04 2.04 0 01-.913-.22l-.041.426zm-.851-3.42h-.432v1.938c0 .584-.247 1.276-1.037 1.276-.6 0-.833-.425-.833-1.084v-2.13h-.431v2.24c0 .769.329 1.345 1.195 1.345.728 0 .988-.39 1.133-.707h.014v.624h.419c-.028-.28-.028-.556-.028-.822v-2.68zM87.83 5.042c0-.681.213-1.463 1.038-1.463.77 0 1.037.824 1.037 1.463 0 .639-.267 1.462-1.037 1.462-.825 0-1.038-.782-1.038-1.462zm2.507-3.398h-.432V3.88h-.012c-.063-.172-.407-.672-1.094-.672-1.03 0-1.441.769-1.441 1.833 0 1.037.479 1.833 1.44 1.833.503 0 .86-.191 1.095-.638h.012v.555h.432V1.643zm-6.128 3.15c0-.575.392-1.215 1.03-1.215.645 0 .893.605.893 1.216h-1.923zm2.137 1.45c-.206.13-.666.26-.983.26-.755 0-1.154-.597-1.154-1.34h2.397v-.218c0-.941-.406-1.737-1.395-1.737-.886 0-1.475.762-1.475 1.833 0 1.052.43 1.833 1.593 1.833.322 0 .713-.067 1.017-.191v-.44zM83.163 3.29h-.796v-.996l-.432.15v.846h-.687v.37h.687v2.047c0 .64.027 1.167.796 1.167.213 0 .425-.055.529-.096l-.027-.356a1.012 1.012 0 01-.4.08c-.35 0-.466-.26-.466-.574V3.66h.796v-.37zm-4.09 3.5h.433V5.06c0-.63.185-1.4.872-1.4.11 0 .227.014.316.04v-.45a1.266 1.266 0 00-.301-.041c-.448 0-.743.363-.901.754h-.012V3.29h-.434c.028.253.028.397.028.782V6.79zm-3.728-1.75c0-.81.405-1.462 1.16-1.462.757 0 1.16.652 1.16 1.463 0 .812-.403 1.462-1.16 1.462-.755 0-1.16-.65-1.16-1.462zm-.474 0c0 .955.5 1.834 1.634 1.834 1.135 0 1.635-.88 1.635-1.833 0-.955-.5-1.833-1.635-1.833-1.133 0-1.634.878-1.634 1.833zm-1.234 0c0 .68-.214 1.463-1.038 1.463-.77 0-1.037-.823-1.037-1.462 0-.64.267-1.463 1.037-1.463.824 0 1.038.782 1.038 1.463zm-2.508 3.194h.433v-2.04h.013c.213.453.542.68 1.092.68.962 0 1.442-.796 1.442-1.833 0-1.064-.412-1.833-1.442-1.833-.742 0-1.01.527-1.12.72h-.013l.028-.638h-.433v4.944zM69.693 5.04c0 .68-.212 1.462-1.037 1.462-.77 0-1.038-.823-1.038-1.462 0-.64.269-1.463 1.038-1.463.825 0 1.037.782 1.037 1.463zm-2.505 3.193h.43v-2.04h.014c.214.453.543.68 1.093.68.963 0 1.44-.796 1.44-1.833 0-1.064-.41-1.833-1.44-1.833-.742 0-1.011.527-1.12.72h-.014l.027-.638h-.43v4.944zm-1.14-4.944h-.431v1.937c0 .584-.247 1.276-1.037 1.276-.597 0-.832-.425-.832-1.084v-2.13h-.431v2.24c0 .769.329 1.345 1.195 1.345.727 0 .989-.39 1.134-.707h.012v.624h.419c-.028-.28-.028-.556-.028-.822v-2.68zm-6.35 3.378c.253.11.618.206 1.084.206.742 0 1.573-.384 1.573-1.353 0-1.4-2.2-1.408-2.2-2.37 0-.617.545-.823 1.04-.823.323 0 .66.063.87.178l.078-.432a2.873 2.873 0 00-.942-.158c-.844 0-1.516.48-1.516 1.25 0 1.256 2.197 1.373 2.197 2.315 0 .68-.487.982-1.08.982-.445 0-.776-.103-1.057-.281l-.047.486zM0 20.614l.049 1.269 4.938 1.454-.041-1.11-1.1-.305-.056-1.524 1.081-.344-.041-1.172L0 20.614zm.962.622l-.004-.011 2.017-.581.036 1.117-2.049-.525zm4.128-3.703l.355-1.095-1.876-.607c.126-.4.175-.546.869-.52l1.36.043.37-1.144-1.67-.013c-.614-.005-.841.067-.991.39l-.015-.003c.114-.956-.645-1.23-.838-1.293-.861-.28-1.405.262-1.654 1.03L.442 16.02l4.649 1.513zm-3.52-2.305l.108-.335c.189-.582.602-.515.795-.455.336.107.545.419.41.839l-.115.337-1.198-.386zm5.547-2.515l.661-.94L4.5 9.476l.607-.867-.722-.505-1.88 2.68.722.507.612-.873zm.949-7.941c-.38.202-.647.321-.987.61-1.253 1.05-.499 2.043-.4 2.155 1.116 1.34 2.294-.254 2.904.467.255.306.105.673-.174.906-.329.278-.663.341-1.019.458l.567.771c.201-.087.686-.31 1.14-.692.746-.626.95-1.527.353-2.236-1.114-1.327-2.322.227-2.898-.455-.23-.278-.127-.589.16-.825.235-.2.604-.36.9-.43l-.546-.729zm8.841-3.495c-.199-.036-.595-.108-1.307.06-.966.223-1.979 1.186-1.575 2.931.35 1.51 1.487 2.274 2.79 1.972a3.934 3.934 0 001.152-.446l-.272-.989c-.097.076-.369.356-.915.481-.71.164-1.392-.34-1.606-1.267-.226-.959.115-1.68.858-1.853.516-.118.847-.005 1.038.048l-.163-.937zm2.575 2.046c-.173 1.426.354 2.59 1.751 2.762 1.395.174 2.194-.826 2.37-2.253.176-1.426-.355-2.593-1.757-2.761-1.393-.177-2.187.827-2.364 2.252m1.167.146c.118-.929.441-1.66 1.098-1.581.663.083.804.868.69 1.798-.116.931-.444 1.661-1.1 1.578-.663-.079-.8-.865-.688-1.795m4.589 1.562c-.547 1.076-.223 1.964.755 2.466.983.497 1.891.241 2.44-.84l1.414-2.774-1.019-.521-1.504 2.935c-.22.438-.518.623-.925.414-.414-.21-.44-.563-.216-1l1.493-2.937-1.016-.52-1.422 2.777zm3.555 3.995l.695.726 2.55-2.455.012.011-1.57 3.464.946.977 3.513-3.392-.707-.727-2.43 2.355-.01-.01L33.237 6.6l-.927-.97zm9.029 4.771c-.01-.208-.028-.612-.353-1.265-.435-.894-1.604-1.663-3.216-.877-1.392.677-1.877 1.956-1.295 3.16.275.56.554.878.7 1.025l.893-.484c-.09-.077-.418-.283-.663-.79-.32-.65.016-1.434.864-1.851.89-.433 1.665-.26 2.003.429.232.47.196.817.183 1.018l.884-.365zm-3.932 3.696l.2 1.128 4.807-.847-.198-1.125zm.337 2.893l-.188 2.754.88.067.112-1.611 3.994.279.08-1.157zM4.377 31.79l1.382 1.643.31-.272-1.104-1.3 1.48-1.247 1.006 1.206.308-.27-1.003-1.202 1.333-1.122L9.14 30.49l.312-.266-1.333-1.586zm3.471 3.63l.337.22 2.41-3.58.012.008-.71 4.723.463.322 2.732-4.06-.337-.222-2.428 3.609-.013-.01.728-4.748-.463-.322zm7.564 1.258l.84.241-.47 1.648c-.245.051-.445.022-.686-.038-1.24-.346-1.303-1.622-1.057-2.478.428-1.479 1.475-1.74 2.144-1.542.358.105.763.372.902.572l.156-.448a2.842 2.842 0 00-.925-.518c-1.315-.373-2.362.565-2.708 1.765-.254.894-.295 2.562 1.351 3.035.39.113.767.148 1.16.056l.662-2.322-1.257-.353-.112.382zm3.547-2.14v4.88h2.023l-.002-.4h-1.588v-4.48zm4.221-.488l-.212 5.155.414-.12.053-1.429 1.875-.525.78 1.174.442-.125-2.908-4.262-.444.131zm.34.39l.014-.004 1.536 2.328-1.624.483.074-2.808zm5.101 2.69l.34-.23-2.344-3.616.011-.006 4.071 2.496.467-.29-2.66-4.112-.343.232 2.362 3.639-.014.006-4.076-2.52-.472.29zm4.968-3.944l.467-.584c.966-1.25.532-2.474-.587-3.349-1.242-.974-2.34-.856-3.336.428l-.398.497 3.854 3.008zm-3.26-3.1l.228-.28c1.003-1.303 2.082-.62 2.688-.135.963.75 1.234 1.72.566 2.576l-.277.361-3.204-2.523zm18.748 9.439h.506V1h-.506z"/></g></svg>
+          </figure>
+      </div>
+      <div class="o-footer__row__border-bottom"></div>
+    </div>
+  </div>
+
+  
+  <div class="o-footer__row">
+    <div class="grid">
+      <div class="col-sm-12  o-footer__row__bottom">
+        <p>Copyright: The Photographers Gallery 2026 - Registered Charity Number: 262548 - The Photographers’ Gallery Limited is registered in London no. 986208</p>
+
+        <small><a href="https://un.titled.co.uk" aria-label="An Un.titled Site">An <span>Un.titled</span> Site</a></small>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </div>
+
+    
+
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"node\/78","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"ajaxPageState":{"libraries":"eJx1TW0KwjAUu1CxRyqvXewKr32l6Zzz9A4VfymEkA9IIubECLh3I5ZwLXpa-oyGIeri75pQpBlENTRrcEmFPHwUfnUFKRl0yQZ8s1FFywOul37CZ7V47n_cvsqkNUfISGuQXoJs05LVrpjwf3LHgxP1_Xsr2OlffKm2bIony2JXRg","theme":"pippip","theme_token":null},"ajaxTrustedUrl":{"\/whats-on":true,"\/search":true},"search_api_autocomplete":{"search":{"auto_submit":true},"block_html":"Shortcuts:\u003Ca href=\u0022\/free-digital-guide\u0022 hreflang=\u0022en\u0022\u003EFree Digital Guide\u003C\/a\u003E\u003Ca href=\u0022\/join-support\/membership\u0022 hreflang=\u0022en\u0022\u003EMembership\u003C\/a\u003E\u003Ca href=\u0022\/bookshop\u0022 hreflang=\u0022en\u0022\u003EBookshop\u003C\/a\u003E\u003Ca href=\u0022\/print-sales-gallery\u0022 hreflang=\u0022en\u0022\u003EPrint Sales Gallery\u003C\/a\u003E\u003Ca href=\u0022\/photography-culture\/screen-walks\u0022 hreflang=\u0022en\u0022\u003EScreen Walks\u003C\/a\u003E\u003Ca href=\u0022\/unthinkingphotography\u0022 hreflang=\u0022en\u0022\u003Eunthinking.photography\u003C\/a\u003E"},"user":{"uid":0,"permissionsHash":"e8c9fa3f6e9facf2bdb196536e603f87c5477cdf16ac72efa4fe5e736574f4cd"}}</script>
+<script src="/core/assets/vendor/jquery/jquery.min.js?v=3.7.1"></script>
+<script src="/core/assets/vendor/once/once.min.js?v=1.0.1"></script>
+<script src="/core/misc/drupalSettingsLoader.js?v=10.3.10"></script>
+<script src="/core/misc/drupal.js?v=10.3.10"></script>
+<script src="/core/misc/drupal.init.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/version-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/data-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/disable-selection-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/form-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/jquery-patch-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/scroll-parent-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/unique-id-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/focusable-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/ie-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/keycode-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/plugin-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/safe-active-element-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/safe-blur-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widget-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/labels-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widgets/autocomplete-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/jquery.ui/ui/widgets/menu-min.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/tabbable/index.umd.min.js?v=6.2.0"></script>
+<script src="/core/misc/autocomplete.js?v=10.3.10"></script>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0"></script>
+<script src="/themes/pippip/dist/js/defaults.min.js?v=1.1.x"></script>
+<script src="/themes/pippip/dist/js/global.min.js?v=1.1.x"></script>
+<script src="/themes/pippip/dist/js/whatson.min.js?v=1.x"></script>
+<script src="/modules/contrib/better_exposed_filters/js/better_exposed_filters.js?v=4.x"></script>
+<script src="/modules/contrib/better_exposed_filters/js/bef_select_all_none.js?v=4.x"></script>
+<script src="/core/misc/progress.js?v=10.3.10"></script>
+<script src="/core/assets/vendor/loadjs/loadjs.min.js?v=4.3.0"></script>
+<script src="/core/misc/debounce.js?v=10.3.10"></script>
+<script src="/core/misc/announce.js?v=10.3.10"></script>
+<script src="/core/misc/message.js?v=10.3.10"></script>
+<script src="/core/misc/ajax.js?v=10.3.10"></script>
+<script src="/themes/contrib/stable/js/ajax.js?v=10.3.10"></script>
+<script src="/core/misc/jquery.tabbable.shim.js?v=10.3.10"></script>
+<script src="/core/misc/position.js?v=10.3.10"></script>
+<script src="/modules/contrib/search_api_autocomplete/js/search_api_autocomplete.js?teq4wu"></script>
+<script src="/modules/custom/search_autocomplete_extension/js/search-autocomplete-extension.js?teq4wu"></script>
+
+  </body>
+</html>

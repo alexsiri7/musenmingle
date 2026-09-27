@@ -1,0 +1,378 @@
+---
+source: tests/source_photographers_gallery.rs
+expression: out
+---
+[
+  {
+    "date_text": "04 Aug 2026 - 01 Nov 2026",
+    "event": null,
+    "post_type": "Talks & Events",
+    "source_event_id": "open-call-future-archives-whose-archive-it-anyway"
+  },
+  {
+    "date_text": "01 Mar 2026 - 31 Dec 2026",
+    "event": null,
+    "post_type": null,
+    "source_event_id": "autofoto-photobooth-photographers-gallery"
+  },
+  {
+    "date_text": "18 Sep 2026 - 15 Nov 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "roots|2026-09-18|photographers",
+      "description": null,
+      "ends_at": "2026-11-15T00:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%285%29_0.jpg.webp?itok=URzMc3mM",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-09-17T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Roots",
+      "url": "https://thephotographersgallery.org.uk/whats-on/roots",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Exhibition",
+    "source_event_id": "roots"
+  },
+  {
+    "date_text": "19 Jun 2026 - 01 Jun 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "ninagawa-mika-captive-blooms|2026-06-19|photographers",
+      "description": null,
+      "ends_at": "2027-05-31T23:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20SPQ%20kat%20elliott%29_0.jpg.webp?itok=09rd-Mg8",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-06-18T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "NINAGAWA Mika: Captive Blooms",
+      "url": "https://thephotographersgallery.org.uk/whats-on/ninagawa-mika-captive-blooms",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Soho Photography Quarter",
+    "source_event_id": "ninagawa-mika-captive-blooms"
+  },
+  {
+    "date_text": "24 Jun 2026 - 27 Sep 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "japanese-women-photographers-from-1950s-to-now|2026-06-24|photographers",
+      "description": null,
+      "ends_at": "2026-09-26T23:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%2834%29.jpg.webp?itok=Ic78EuLm",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-06-23T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Japanese Women Photographers: From 1950s to Now",
+      "url": "https://thephotographersgallery.org.uk/whats-on/japanese-women-photographers-1950s-now",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Exhibition",
+    "source_event_id": "japanese-women-photographers-1950s-now"
+  },
+  {
+    "date_text": "12 Oct 2026 - 02 Nov 2026",
+    "event": null,
+    "post_type": "Workshops & Courses",
+    "source_event_id": "course-collecting-photography-2026"
+  },
+  {
+    "date_text": "14 Oct 2026 - 21 Feb 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "william-eggleston-all-that-goes-unnoticed|2026-10-14|photographers",
+      "description": null,
+      "ends_at": "2027-02-21T00:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/signpost-images/William%20Eggleston%20Website%20Signpost%20Override%20%20%284%29.jpg.webp?itok=xyalmBGP",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "William Eggleston: All that goes unnoticed",
+      "url": "https://thephotographersgallery.org.uk/whats-on/william-eggleston-all-goes-unnoticed",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Exhibition",
+    "source_event_id": "william-eggleston-all-goes-unnoticed"
+  },
+  {
+    "date_text": "14 Oct 2026 - 21 Feb 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "snap-happy-how-children-became-photographers|2026-10-14|photographers",
+      "description": null,
+      "ends_at": "2027-02-21T00:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/banner%20image%20for%20website%20%2810%29_1.jpg.webp?itok=DaIHOV9Q",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Snap Happy! How Children Became Photographers",
+      "url": "https://thephotographersgallery.org.uk/whats-on/snap-happy-how-children-became-photographers",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Exhibition",
+    "source_event_id": "snap-happy-how-children-became-photographers"
+  },
+  {
+    "date_text": "14 Oct 2026 - 21 Feb 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "sanle-sory-colour-years|2026-10-14|photographers",
+      "description": null,
+      "ends_at": "2027-02-21T00:00:00Z",
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/signpost-images/Website%20Signpost%20Override%20%20%28sanle%20sory%29.jpg.webp?itok=a7Xhgu0t",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-13T23:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Sanlé Sory: Colour Years",
+      "url": "https://thephotographersgallery.org.uk/whats-on/sanle-sory-colour-years",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Exhibition",
+    "source_event_id": "sanle-sory-colour-years"
+  },
+  {
+    "date_text": "3:00pm, Sat 31 Oct 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "exhibition-tour-sanle-sory-colour-years|2026-10-31|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/SSc-0056.jpg.webp?itok=heWJ60K2",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-31T15:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Exhibition Tour | Sanlé Sory: Colour Years",
+      "url": "https://thephotographersgallery.org.uk/whats-on/exhibition-tour-sanle-sory-colour-years",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Tours",
+    "source_event_id": "exhibition-tour-sanle-sory-colour-years"
+  },
+  {
+    "date_text": "11:00am, Sat 14 Nov 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "exhibition-tour-snap-happy|2026-11-14|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/Robert%20Cooper%20banner.jpeg.webp?itok=vaiOrM-2",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T11:00:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Exhibition Tour: Snap Happy!",
+      "url": "https://thephotographersgallery.org.uk/whats-on/exhibition-tour-snap-happy",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Tours",
+    "source_event_id": "exhibition-tour-snap-happy"
+  },
+  {
+    "date_text": "6:30pm, Thu 26 Nov 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "exhibition-tour-william-eggleston-all-that-goes-unnoticed|2026-11-26|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/EGGWI0389%281%29%20banner.jpeg.webp?itok=JzR7ah30",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T18:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Exhibition Tour | William Eggleston: All that goes unnoticed",
+      "url": "https://thephotographersgallery.org.uk/whats-on/exhibition-tour-william-eggleston-all-goes-unnoticed-0",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Tours",
+    "source_event_id": "exhibition-tour-william-eggleston-all-goes-unnoticed-0"
+  },
+  {
+    "date_text": "6:30pm, Thu 26 Nov 2026",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "discussion-how-to-read-face|2026-11-26|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/%28Inter%29Faces%20of%20Predictions_scan%20template_1_2_2.jpg.webp?itok=r6jZOrPL",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T18:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Discussion: How to read a face",
+      "url": "https://thephotographersgallery.org.uk/whats-on/discussion-how-read-face",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Talks & Events‚ Bookshop Event",
+    "source_event_id": "discussion-how-read-face"
+  },
+  {
+    "date_text": "6:30pm, Thu 21 Jan 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "exhibition-tour-sanle-sory-colour-years|2027-01-21|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/SSc-0064%20copy.jpeg.webp?itok=55dAWj8s",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-21T18:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Exhibition Tour | Sanlé Sory: Colour Years",
+      "url": "https://thephotographersgallery.org.uk/whats-on/exhibition-tour-sanle-sory-colour-years-0",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Tours",
+    "source_event_id": "exhibition-tour-sanle-sory-colour-years-0"
+  },
+  {
+    "date_text": "28 Jan 2027 - 25 Mar 2027",
+    "event": null,
+    "post_type": "Workshops & Courses",
+    "source_event_id": "course-behind-scenes-how-photographers-gallery-works"
+  },
+  {
+    "date_text": "6:30pm, Thu 04 Feb 2027",
+    "event": {
+      "address": "16–18 Ramillies Street, London W1F 7LW",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "exhibition-tour-william-eggleston-all-that-goes-unnoticed|2027-02-04|photographers",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://thephotographersgallery.org.uk/sites/default/files/styles/teaser_thumb/public/images/EGGWI0347%20copy.jpeg.webp?itok=DwAOG2sR",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-04T18:30:00Z",
+      "tags": [
+        "photography"
+      ],
+      "title": "Exhibition Tour | William Eggleston: All that goes unnoticed",
+      "url": "https://thephotographersgallery.org.uk/whats-on/exhibition-tour-william-eggleston-all-goes-unnoticed",
+      "venue_name": "The Photographers' Gallery"
+    },
+    "post_type": "Tours",
+    "source_event_id": "exhibition-tour-william-eggleston-all-goes-unnoticed"
+  }
+]

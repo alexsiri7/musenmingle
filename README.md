@@ -191,6 +191,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     venue or pin; category from title keywords or the row's default. Each
     calendar is a `platform = 'luma'` row; the list and reasons are in
     `docs/luma-calendars.md`. Facts + link only (terms).
+  - `photographers-gallery` — listing-only CSS scraper (no JSON-LD): the
+    paginated "What's on" teasers' post type, date line (date-only range or
+    a start time and date) and title; exhibitions (with the Soho
+    Photography Quarter displays), talks and tours, and single-date
+    workshops (open calls, untyped items and multi-week courses skipped);
+    facts + link only (terms).
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
