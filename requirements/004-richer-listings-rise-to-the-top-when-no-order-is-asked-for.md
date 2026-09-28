@@ -2,9 +2,9 @@
 created: '2026-09-27'
 github_issue: 201
 id: '004'
-status: idea
+status: done
 title: Richer listings rise to the top when no order is asked for
-updated: '2026-09-27'
+updated: '2026-09-28'
 ---
 
 ## Why
