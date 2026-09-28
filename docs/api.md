@@ -76,7 +76,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
 | `within_walk_min` | `20` | Instead of `radius_km`: events within this many minutes' walk of `near`, 1–60, estimated from straight-line distance at 5 km/h with a 1.3 detour factor (the same estimate as the map's "≈ N min walk"). Only with `near`; not with `radius_km` |
 | `pick` | `openings` | A quick pick (the home page's chips), relative to today in London: `open_now`, `tonight`, `openings`, `last_chance` or `hands_on` (see below) |
-| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise`, `relevance` or `richest` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `soonest` (the home page defaults to `richest`) |
+| `sort` | `ending` | Order: `soonest`, `nearest`, `ending`, `added`, `surprise`, `relevance`, `fullest` or `richest` (see below). Default `relevance` with `q`, else `nearest` with `near`, else `fullest` (the home page defaults to `richest`) |
 | `limit` | `20` | Page size, 1–100 (default 50) |
 | `cursor` | `next_cursor` of the previous page | Next page |
 
@@ -182,9 +182,16 @@ Order (`sort`), ties broken by `id`:
   first. The default whenever `q` is set (with or without `near`). Without
   `q` it falls back to `soonest`, with `"sort_fallback": {"requested":
   "relevance", ...}`.
-
+- `fullest` ("Day by day, fullest listings first"; the API's default
+  without `sort`, `q` or `near`): day by day (the London day an event
+  starts, or the window's first day, `from` or else today, for one already
+  running; a multi-session event's next session day), and within a day by
+  a score, highest first: a thumbnail we may show 8, a description 4, a
+  price (or free) 2, a known venue or coordinates 1
+  (`repo::fullness_sql`); ties by `starts_at`, then `id`. The day comes
+  first, so an event tonight is never listed after one next week.
 - `richest` ("Soonest, fullest listings first"; the home page's default
-  without a search or Near me, never the API's): day by day (the London day
+  without a search or Near me, not the API's): day by day (the London day
   an event starts, or today for one already running), and within a day
   listings with a picture and a description first, interleaved with
   facts-only ones: two rich listings, then one facts-only, each kind by
@@ -201,8 +208,8 @@ sort: saves stay in the visitor's browser and the server does not track them.
 Pagination: `next_cursor` is `null` on the last page. Otherwise, repeat the
 request with the **same filters and sort** plus `cursor=<next_cursor>`.
 Cursors are opaque and only valid for the sort that issued them (anything
-else is a 400). A `surprise` cursor carries its day's shuffle (a `richest` one
-its day), so paging across midnight keeps the order.
+else is a 400). A `surprise` cursor carries its day's shuffle (a `richest` or
+`fullest` one its day), so paging across midnight keeps the order.
 Unknown parameters are rejected with 400.
 
 ```http

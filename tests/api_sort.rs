@@ -340,7 +340,7 @@ async fn every_sort_paginates_and_nearest_falls_back_without_near() {
     }
     let app = app(&pool);
     for sort in [
-        "soonest", "nearest", "ending", "added", "surprise", "richest",
+        "soonest", "nearest", "ending", "added", "surprise", "richest", "fullest",
     ] {
         let base = format!("/v1/events?sort={sort}&near=51.5,-0.1");
         let (status, all) = get(&app, &base).await;
@@ -515,8 +515,21 @@ async fn richest_interleaves_rich_listings_day_by_day() {
             "short but priced"
         ]
     );
-    // The API's default is still soonest.
-    assert_eq!(list(&pool, "", now).await[4], "f1");
+    // The API's default is fullest: a strict score within each day (#201).
+    assert_eq!(
+        list(&pool, "", now).await,
+        [
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "f2",
+            "f1",
+            "short but priced",
+            "tomorrow",
+            "thumb only"
+        ]
+    );
 
     // Pages (numbered over the whole listing) walk every event once.
     let app = app(&pool);
@@ -530,6 +543,220 @@ async fn richest_interleaves_rich_listings_day_by_day() {
     let cursor = page["next_cursor"].as_str().unwrap();
     let (status, _) = get(&app, &format!("/v1/events?limit=2&cursor={cursor}")).await;
     assert_eq!(status, StatusCode::BAD_REQUEST);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+/// Set `event`'s fullness (#201): a thumbnail we may show (8), a
+/// description (4), free (2); the place (1) comes from `Ev::at`.
+async fn fill(pool: &PgPool, e: Ev, thumb: bool, desc: bool, free: bool) -> Uuid {
+    let id = insert(pool, e).await;
+    enrich_listing(pool, id, thumb, if desc { 50 } else { 0 }, free).await;
+    id
+}
+
+#[tokio::test]
+async fn fullest_is_the_default_day_by_day() {
+    let Some(db) = TestDb::create("fullest_is_the_default_day_by_day").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let place = Some((51.5, -0.1));
+    let at = |title, starts_at| Ev {
+        at: place,
+        ..ev(title, starts_at)
+    };
+    // (score) on the 10th, today.
+    fill(
+        &pool,
+        at("full today", "2026-10-10T21:00:00Z"),
+        true,
+        true,
+        true,
+    )
+    .await; // 15
+    fill(
+        &pool,
+        Ev {
+            ends_at: Some("2026-11-30T17:00:00Z"),
+            ..ev("exhibition", "2026-09-01T10:00:00Z")
+        },
+        true,
+        false,
+        false,
+    )
+    .await; // 8
+    fill(
+        &pool,
+        ev("picture only", "2026-10-10T20:00:00Z"),
+        true,
+        false,
+        false,
+    )
+    .await; // 8
+    fill(
+        &pool,
+        at("words price place", "2026-10-10T13:00:00Z"),
+        false,
+        true,
+        true,
+    )
+    .await; // 7
+    let tie_a = insert(&pool, ev("tie a", "2026-10-10T15:00:00Z")).await; // 0
+    let tie_b = insert(&pool, ev("tie b", "2026-10-10T15:00:00Z")).await; // 0
+    insert(&pool, ev("tonight bare", "2026-10-10T19:00:00Z")).await; // 0
+    // Later days.
+    fill(
+        &pool,
+        at("tomorrow full", "2026-10-11T10:00:00Z"),
+        true,
+        true,
+        true,
+    )
+    .await; // 15
+    insert(&pool, ev("15th bare", "2026-10-15T10:00:00Z")).await; // 0
+    fill(
+        &pool,
+        ev("15th rich", "2026-10-15T18:00:00Z"),
+        true,
+        true,
+        false,
+    )
+    .await; // 12
+    fill(
+        &pool,
+        at("16th full", "2026-10-16T10:00:00Z"),
+        true,
+        true,
+        true,
+    )
+    .await; // 15
+    fill(
+        &pool,
+        ev("next week picture", "2026-10-17T10:00:00Z"),
+        true,
+        false,
+        false,
+    )
+    .await; // 8
+    let ties = if tie_a < tie_b {
+        ["tie a", "tie b"]
+    } else {
+        ["tie b", "tie a"]
+    };
+
+    let now = "2026-10-10T12:00:00Z";
+    // The day comes first (tonight's bare listing before next week's
+    // picture); within it the score, then the start, then the id. The
+    // exhibition that opened last month counts as today.
+    let default = list(&pool, "", now).await;
+    assert_eq!(
+        default,
+        [
+            "full today",
+            "exhibition",
+            "picture only",
+            "words price place",
+            ties[0],
+            ties[1],
+            "tonight bare",
+            "tomorrow full",
+            "15th rich",
+            "15th bare",
+            "16th full",
+            "next week picture",
+        ]
+    );
+    assert_eq!(list(&pool, "sort=fullest", now).await, default);
+    // With a window, running events count as on its first day.
+    assert_eq!(
+        list(&pool, "from=2026-10-15", now).await,
+        [
+            "15th rich",
+            "exhibition",
+            "15th bare",
+            "16th full",
+            "next week picture"
+        ]
+    );
+    // Explicit sorts stay strict.
+    assert_eq!(
+        list(&pool, "sort=soonest", now).await,
+        [
+            "exhibition",
+            "words price place",
+            ties[0],
+            ties[1],
+            "tonight bare",
+            "picture only",
+            "full today",
+            "tomorrow full",
+            "15th bare",
+            "15th rich",
+            "16th full",
+            "next week picture",
+        ]
+    );
+
+    let app = app(&pool);
+    let (status, body) = get(&app, "/v1/events").await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    assert_eq!(body["sort"], "fullest");
+    let (_, body) = get(&app, "/v1/events?sort=soonest").await;
+    assert_eq!(body["sort"], "soonest");
+    // Near me keeps its own default: strictly by distance.
+    let (_, body) = get(&app, "/v1/events?near=51.5,-0.1").await;
+    assert_eq!(body["sort"], "nearest");
+    let distances: Vec<f64> = body["events"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|e| e["distance_km"].as_f64().unwrap())
+        .collect();
+    assert!(!distances.is_empty());
+    assert!(distances.is_sorted(), "{distances:?}");
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn fullest_pages_walk_every_event_once() {
+    let Some(db) = TestDb::create("fullest_pages_walk_every_event_once").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    // Far in the future, as the API uses the real clock. Few days, few
+    // start times and few scores, so every key ties somewhere.
+    let leak = |s: String| -> &'static str { s.leak() };
+    for i in 0..55 {
+        let starts_at = format!("2030-10-0{}T1{}:00:00Z", 1 + i % 4, i % 3);
+        let e = Ev {
+            at: (i % 7 == 0).then_some((51.5, -0.1)),
+            ..ev(leak(format!("e{i}")), leak(starts_at))
+        };
+        fill(&pool, e, i % 2 == 0, i % 3 == 0, i % 5 == 0).await;
+    }
+    let app = app(&pool);
+    let (status, all) = get(&app, "/v1/events?limit=100").await;
+    assert_eq!(status, StatusCode::OK, "{all}");
+    assert_eq!(all["sort"], "fullest");
+    let walked = walk_pages(&app, "/v1/events?limit=2").await;
+    assert_eq!(walked, titles(&all));
+    let mut unique = walked.clone();
+    unique.sort();
+    unique.dedup();
+    assert_eq!(unique.len(), 55);
+    // Its cursor is its own.
+    let (_, page) = get(&app, "/v1/events?limit=2").await;
+    let cursor = page["next_cursor"].as_str().unwrap();
+    for other in ["soonest", "richest"] {
+        let (status, _) = get(
+            &app,
+            &format!("/v1/events?sort={other}&limit=2&cursor={cursor}"),
+        )
+        .await;
+        assert_eq!(status, StatusCode::BAD_REQUEST, "{other}");
+    }
     pool.close().await;
     db.drop_db().await;
 }
