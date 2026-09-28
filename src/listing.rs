@@ -246,6 +246,11 @@ pub enum Sort {
     /// interleaved with facts-only ones ([`richest_slot`]). The home page's
     /// default without a search or Near me (#205); never the API's default.
     Richest,
+    /// Day by day (the London day an event starts, or the window's first
+    /// day if it is already running), then the richness score
+    /// `repo::fullness_sql` descending, then start time. The API's default
+    /// without `sort`, `q` or `near` (#201); not on the home page.
+    Fullest,
 }
 
 /// How many rich listings (`repo::RICH_SQL`) come before each facts-only
@@ -267,7 +272,7 @@ pub fn richest_slot(rich: bool, rank: i64) -> i64 {
 }
 
 impl Sort {
-    pub const ALL: [Sort; 7] = [
+    pub const ALL: [Sort; 8] = [
         Sort::Richest,
         Sort::Soonest,
         Sort::Nearest,
@@ -275,6 +280,7 @@ impl Sort {
         Sort::Added,
         Sort::Surprise,
         Sort::Relevance,
+        Sort::Fullest,
     ];
 
     pub fn as_str(self) -> &'static str {
@@ -286,6 +292,7 @@ impl Sort {
             Sort::Surprise => "surprise",
             Sort::Relevance => "relevance",
             Sort::Richest => "richest",
+            Sort::Fullest => "fullest",
         }
     }
 
@@ -299,6 +306,7 @@ impl Sort {
             Sort::Surprise => "Surprise me",
             Sort::Relevance => "Best match",
             Sort::Richest => "Soonest, fullest listings first",
+            Sort::Fullest => "Day by day, fullest listings first",
         }
     }
 
@@ -344,6 +352,15 @@ pub enum EventOrder {
         today: NaiveDate,
         after: Option<(NaiveDate, i64, Uuid)>,
     },
+    /// [`Sort::Fullest`]: by (day, slot, start, id), the slot being
+    /// `repo::FULLEST_MAX_SCORE` minus the score. `from_day` is the
+    /// window's first London day (running events count as on it); like
+    /// `Richest`'s `today` it comes from the cursor on later pages.
+    /// `after` is the last event's day, slot and start.
+    Fullest {
+        from_day: NaiveDate,
+        after: Option<(NaiveDate, i64, DateTime<Utc>, Uuid)>,
+    },
 }
 
 impl EventOrder {
@@ -356,6 +373,7 @@ impl EventOrder {
             EventOrder::Shuffled { .. } => Sort::Surprise,
             EventOrder::ByRelevance { .. } => Sort::Relevance,
             EventOrder::Richest { .. } => Sort::Richest,
+            EventOrder::Fullest { .. } => Sort::Fullest,
         }
     }
 }
@@ -412,6 +430,9 @@ pub enum Cursor {
     /// [`Sort::Richest`]: the day the order is for, the last event's day
     /// and slot, and its id.
     Richest(NaiveDate, NaiveDate, i64, Uuid),
+    /// [`Sort::Fullest`]: the window's first day, the last event's day,
+    /// slot and start, and its id.
+    Fullest(NaiveDate, NaiveDate, i64, DateTime<Utc>, Uuid),
 }
 
 impl Cursor {
@@ -427,6 +448,12 @@ impl Cursor {
                 "f:{}-{}-{slot}:{id}",
                 today.format("%Y%m%d"),
                 day.format("%Y%m%d")
+            ),
+            Cursor::Fullest(from_day, day, slot, t, id) => format!(
+                "g:{}-{}-{slot}-{}:{id}",
+                from_day.format("%Y%m%d"),
+                day.format("%Y%m%d"),
+                t.timestamp_micros()
             ),
         };
         plain.bytes().map(|b| format!("{b:02x}")).collect()
@@ -466,6 +493,15 @@ impl Cursor {
                 let day = |s: &str| NaiveDate::parse_from_str(s, "%Y%m%d").ok();
                 let (today, d, slot) = (day(p.next()?)?, day(p.next()?)?, p.next()?.parse().ok()?);
                 Some(Cursor::Richest(today, d, slot, id))
+            }
+            "g" => {
+                // The start's micros come last: they may be negative.
+                let mut p = pos.splitn(4, '-');
+                let day = |s: &str| NaiveDate::parse_from_str(s, "%Y%m%d").ok();
+                let (from_day, d) = (day(p.next()?)?, day(p.next()?)?);
+                let slot = p.next()?.parse().ok()?;
+                let t = DateTime::from_timestamp_micros(p.next()?.parse().ok()?)?;
+                Some(Cursor::Fullest(from_day, d, slot, t, id))
             }
             _ => None,
         }
@@ -743,14 +779,18 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
             .unwrap_or(DEFAULT_RADIUS_KM),
     });
     // Without `sort`: best match for a search, else an area means nearest
-    // first (as before `sort` existed).
+    // first (as before `sort` existed), else day by day with the fullest
+    // listings first (#201).
     let requested = sort.unwrap_or(if filter.search.is_some() {
         Sort::Relevance
     } else if near.is_some() {
         Sort::Nearest
     } else {
-        Sort::Soonest
+        Sort::Fullest
     });
+    let from_day = from
+        .or(filter.live_at.map(london_today))
+        .unwrap_or_else(|| london_today(now));
     let (applied, fell_back_from) = match (requested, near) {
         (Sort::Nearest, None) => (Sort::Soonest, Some(Sort::Nearest)),
         (Sort::Relevance, _) if filter.search.is_none() => (Sort::Soonest, Some(Sort::Relevance)),
@@ -808,7 +848,17 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
             today,
             after: Some((day, slot, id)),
         },
-        (Sort::Soonest | Sort::Surprise | Sort::Richest, Some(_)) => return mismatch(),
+        (Sort::Fullest, None) => EventOrder::Fullest {
+            from_day,
+            after: None,
+        },
+        (Sort::Fullest, Some(Cursor::Fullest(from_day, day, slot, t, id))) => EventOrder::Fullest {
+            from_day,
+            after: Some((day, slot, t, id)),
+        },
+        (Sort::Soonest | Sort::Surprise | Sort::Richest | Sort::Fullest, Some(_)) => {
+            return mismatch();
+        }
     };
     Ok(EventQuery {
         filter,
@@ -875,7 +925,7 @@ mod tests {
     fn defaults() {
         let q = parse_query("").unwrap();
         assert_eq!(q.filter, EventFilter::default());
-        assert_eq!(q.order, EventOrder::ByStart { after: None });
+        assert!(matches!(q.order, EventOrder::Fullest { after: None, .. }));
         assert_eq!(q.limit, DEFAULT_LIMIT);
         let EventOrder::ByDistance { near, .. } = parse_query("near=51.5,-0.1").unwrap().order
         else {
@@ -1049,7 +1099,7 @@ mod tests {
         }
         let start = Cursor::Start(t, id).encode();
         let distance = Cursor::Distance(0.5, id).encode();
-        assert!(parse_query(&format!("cursor={start}")).is_ok());
+        assert!(parse_query(&format!("sort=soonest&cursor={start}")).is_ok());
         assert!(parse_query(&format!("cursor={distance}")).is_err());
         assert!(parse_query(&format!("near=51.5,-0.1&cursor={distance}")).is_ok());
         assert!(parse_query(&format!("near=51.5,-0.1&cursor={start}")).is_err());
@@ -1065,7 +1115,7 @@ mod tests {
     fn sorts_parse_with_defaults_and_fallback() {
         let now = Utc.with_ymd_and_hms(2026, 10, 10, 23, 30, 0).unwrap();
         let q = |raw: &str| parse_query_at(raw, now).unwrap();
-        assert_eq!(q("").order.sort(), Sort::Soonest);
+        assert_eq!(q("").order.sort(), Sort::Fullest);
         assert_eq!(q("near=51.5,-0.1").order.sort(), Sort::Nearest);
         assert_eq!(q("near=51.5,-0.1&sort=soonest").order.sort(), Sort::Soonest);
         assert!(q("near=51.5,-0.1&sort=soonest").near.is_some());
@@ -1125,7 +1175,7 @@ mod tests {
             EventOrder::Richest { today, after: None }
         );
         // Never the API's default.
-        assert_eq!(q("").unwrap().order.sort(), Sort::Soonest);
+        assert_eq!(q("").unwrap().order.sort(), Sort::Fullest);
         let (seed, day, id) = (
             NaiveDate::from_ymd_opt(2026, 10, 9).unwrap(),
             NaiveDate::from_ymd_opt(2026, 10, 12).unwrap(),
@@ -1144,6 +1194,60 @@ mod tests {
         assert!(q(&format!("cursor={c}")).is_err());
         let start = Cursor::Start(now, id).encode();
         assert!(q(&format!("sort=richest&cursor={start}")).is_err());
+    }
+
+    #[test]
+    fn fullest_is_the_default_with_its_own_cursor() {
+        // 23:30 UTC on 10 October is 00:30 on the 11th in London.
+        let now = Utc.with_ymd_and_hms(2026, 10, 10, 23, 30, 0).unwrap();
+        let q = |raw: &str| parse_query_at(raw, now);
+        let day = |d| NaiveDate::from_ymd_opt(2026, 10, d).unwrap();
+        let fullest = |from_day| EventOrder::Fullest {
+            from_day,
+            after: None,
+        };
+        // The window's first day: `from`, else the `open_at` day, else today.
+        assert_eq!(q("").unwrap().order, fullest(day(11)));
+        assert_eq!(q("sort=fullest").unwrap().order, fullest(day(11)));
+        assert_eq!(q("from=2026-10-20").unwrap().order, fullest(day(20)));
+        assert_eq!(
+            q("open_at=2026-10-18T11:30").unwrap().order,
+            fullest(day(18))
+        );
+        // Not the default with an area or a search, or when another is asked.
+        assert_eq!(q("near=51.5,-0.1").unwrap().order.sort(), Sort::Nearest);
+        assert_eq!(q("q=print").unwrap().order.sort(), Sort::Relevance);
+        assert_eq!(
+            q("sort=soonest").unwrap().order,
+            EventOrder::ByStart { after: None }
+        );
+        assert_eq!(
+            q("sort=fullest&near=51.5,-0.1").unwrap().order.sort(),
+            Sort::Fullest
+        );
+
+        let id = Uuid::new_v4();
+        let t = Utc.with_ymd_and_hms(2026, 10, 12, 18, 30, 0).unwrap()
+            + chrono::Duration::microseconds(123_456);
+        let before_1970 = Utc.with_ymd_and_hms(1969, 12, 31, 23, 0, 0).unwrap();
+        for c in [
+            Cursor::Fullest(day(9), day(12), 3, t, id),
+            Cursor::Fullest(day(9), day(12), 0, before_1970, id),
+        ] {
+            assert_eq!(Cursor::decode(&c.encode()), Some(c));
+        }
+        let c = Cursor::Fullest(day(9), day(12), 3, t, id).encode();
+        assert_eq!(
+            q(&format!("cursor={c}")).unwrap().order,
+            EventOrder::Fullest {
+                from_day: day(9),
+                after: Some((day(12), 3, t, id))
+            }
+        );
+        assert!(q(&format!("sort=soonest&cursor={c}")).is_err());
+        assert!(q(&format!("sort=richest&cursor={c}")).is_err());
+        let start = Cursor::Start(t, id).encode();
+        assert!(q(&format!("cursor={start}")).is_err());
     }
 
     #[test]

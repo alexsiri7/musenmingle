@@ -1584,8 +1584,9 @@ pub struct ListedEvent {
     /// page's cursor; NULL for other sorts.
     pub relevance: Option<f64>,
     /// `sort=richest`: the event's day and slot
-    /// ([`crate::listing::richest_slot`]), for the next page's cursor; NULL
-    /// for other sorts.
+    /// ([`crate::listing::richest_slot`]); `sort=fullest`: its day and
+    /// [`FULLEST_MAX_SCORE`] minus its [`fullness_sql`] score. For the next
+    /// page's cursor; NULL for other sorts.
     pub rich_day: Option<NaiveDate>,
     pub rich_slot: Option<i64>,
 }
@@ -1606,14 +1607,28 @@ pub const RICH_SHORT_DESCRIPTION: i32 = 40;
 /// everything else together 4, so a rich listing always has a picture.
 pub const RICH_MIN_SCORE: i32 = 5;
 
-/// An event's (`ev`) richness score, from the weights above. The
-/// thumbnail test is `thumbnail_meta`'s: stored bytes from a source that
-/// lets us show images.
+/// Richness score weights of `sort=fullest`, the API's default (#201): an
+/// image outweighs everything else together.
+pub const FULL_WEIGHT_IMAGE: i32 = 8;
+pub const FULL_WEIGHT_DESCRIPTION: i32 = 4;
+pub const FULL_WEIGHT_PRICE: i32 = 2;
+pub const FULL_WEIGHT_PLACE: i32 = 1;
+pub const FULLEST_MAX_SCORE: i32 =
+    FULL_WEIGHT_IMAGE + FULL_WEIGHT_DESCRIPTION + FULL_WEIGHT_PRICE + FULL_WEIGHT_PLACE;
+const _: () =
+    assert!(FULL_WEIGHT_IMAGE > FULL_WEIGHT_DESCRIPTION + FULL_WEIGHT_PRICE + FULL_WEIGHT_PLACE);
+
+/// Whether an event (`ev`) has a thumbnail we may show: `thumbnail_meta`'s
+/// test, stored bytes from a source that lets us show images.
+const SHOWABLE_THUMBNAIL_SQL: &str = "EXISTS (SELECT 1 FROM events.thumbnails t
+                            JOIN events.sources s ON s.id = t.source_id
+                            WHERE t.event_id = ev.id AND t.bytes IS NOT NULL AND s.store_image)";
+
+/// An event's (`ev`) richness score for `sort=richest`, from the `RICH_*`
+/// weights.
 pub fn richness_sql() -> String {
     format!(
-        "(CASE WHEN EXISTS (SELECT 1 FROM events.thumbnails t
-                            JOIN events.sources s ON s.id = t.source_id
-                            WHERE t.event_id = ev.id AND t.bytes IS NOT NULL AND s.store_image)
+        "(CASE WHEN {SHOWABLE_THUMBNAIL_SQL}
                THEN {RICH_WEIGHT_THUMBNAIL} ELSE 0 END
           + CASE WHEN length(COALESCE(ev.description, '')) >= {RICH_LONG_DESCRIPTION}
                    THEN {RICH_WEIGHT_LONG_DESCRIPTION}
@@ -1624,6 +1639,21 @@ pub fn richness_sql() -> String {
                  THEN {RICH_WEIGHT_AI_NOTE} ELSE 0 END
           + CASE WHEN ev.opening_hours IS NOT NULL OR ev.is_free OR ev.price_min IS NOT NULL
                  THEN {RICH_WEIGHT_HOURS_OR_PRICE} ELSE 0 END)"
+    )
+}
+
+/// An event's (`ev`) richness score for `sort=fullest`, from the `FULL_*`
+/// weights: a thumbnail we may show, a description, a price (or free), a
+/// known venue or coordinates.
+pub fn fullness_sql() -> String {
+    format!(
+        "(CASE WHEN {SHOWABLE_THUMBNAIL_SQL} THEN {FULL_WEIGHT_IMAGE} ELSE 0 END
+          + CASE WHEN btrim(COALESCE(ev.description, '')) <> ''
+                 THEN {FULL_WEIGHT_DESCRIPTION} ELSE 0 END
+          + CASE WHEN ev.is_free OR ev.price_min IS NOT NULL
+                 THEN {FULL_WEIGHT_PRICE} ELSE 0 END
+          + CASE WHEN ev.venue_id IS NOT NULL OR (ev.lat IS NOT NULL AND ev.lng IS NOT NULL)
+                 THEN {FULL_WEIGHT_PLACE} ELSE 0 END)"
     )
 }
 
@@ -2099,7 +2129,8 @@ const FIRST_SEEN: &str = "COALESCE((SELECT min(es.first_seen_at) FROM events.eve
 /// Placeholders: `$1`..`$11` [`LISTING_FILTER`], `$12` price_max, `$13`..`$20`
 /// the area (NULL without `near`), `$21`/`$22` the cursor, `$23` the limit,
 /// `$24` the sort's parameter (`now` for `ending`, the seed for `surprise`,
-/// today for `richest`), `$25` the `richest` cursor's slot.
+/// today for `richest`, the window's first day for `fullest`), `$25` the
+/// `richest`/`fullest` cursor's slot, `$26` the `fullest` cursor's start.
 pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<ListedEvent>> {
     let f = &query.filter;
     let near = query.near;
@@ -2157,28 +2188,35 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
             "($21::date IS NULL OR (rich_day, rich_slot, id) > ($21, $25::int8, $22::uuid))",
             "rich_day, rich_slot, id",
         ),
+        EventOrder::Fullest { .. } => (
+            "NULL::timestamptz".to_string(),
+            "TRUE",
+            "($21::date IS NULL
+              OR (rich_day, rich_slot, starts_at, id) > ($21, $25::int8, $26::timestamptz, $22::uuid))",
+            "rich_day, rich_slot, starts_at, id",
+        ),
     };
-    // Other sorts bind `$25` as NULL; it must still appear in the SQL.
+    // Other sorts bind `$25`/`$26` as NULL; they must still appear in the SQL.
     let extra = match &query.order {
-        EventOrder::Richest { .. } => extra.to_string(),
-        _ => format!("{extra} AND $25::int8 IS NULL"),
+        EventOrder::Fullest { .. } => extra.to_string(),
+        EventOrder::Richest { .. } => format!("{extra} AND $26::timestamptz IS NULL"),
+        _ => format!("{extra} AND $25::int8 IS NULL AND $26::timestamptz IS NULL"),
     };
-    // `richest`: each event's London day (today if already running; a
-    // multi-session event's next session day) and
-    // whether it is rich; the slot is numbered over the whole filtered set,
-    // before the cursor, so pages don't shift.
+    // `richest`/`fullest`: each event's London day (the day `$24` if
+    // already running; a multi-session event's next session day).
+    let rich_day = format!(
+        "COALESCE((SELECT min((j.starts_at AT TIME ZONE 'Europe/London')::date)
+                   FROM jsonb_to_recordset(ev.sessions) AS j(starts_at timestamptz)
+                   WHERE (j.starts_at AT TIME ZONE 'Europe/London')::date >= $24::date),
+                  GREATEST({LOCAL_FIRST_DAY}, $24::date)) AS rich_day"
+    );
+    // `richest` also needs whether it is rich; the slot is numbered over the
+    // whole filtered set, before the cursor, so pages don't shift.
     let (rich_cols, slot) = match &query.order {
         EventOrder::Richest { .. } => {
             let (n, m) = (crate::listing::RICH_RUN, crate::listing::RICH_RUN + 1);
             (
-                format!(
-                    "COALESCE((SELECT min((j.starts_at AT TIME ZONE 'Europe/London')::date)
-                               FROM jsonb_to_recordset(ev.sessions) AS j(starts_at timestamptz)
-                               WHERE (j.starts_at AT TIME ZONE 'Europe/London')::date >= $24::date),
-                              GREATEST({LOCAL_FIRST_DAY}, $24::date)) AS rich_day,
-                     {} >= {RICH_MIN_SCORE} AS rich",
-                    richness_sql()
-                ),
+                format!("{rich_day}, {} >= {RICH_MIN_SCORE} AS rich", richness_sql()),
                 format!(
                     "CASE WHEN rich THEN rn + (rn - 1) / {n} ELSE rn * {m} END AS rich_slot
                      FROM (SELECT *, row_number() OVER (PARTITION BY rich_day, rich
@@ -2186,6 +2224,14 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
                 ),
             )
         }
+        EventOrder::Fullest { .. } => (
+            format!(
+                "{rich_day}, NULL::bool AS rich,
+                 ({FULLEST_MAX_SCORE} - {})::int8 AS fullest_slot",
+                fullness_sql()
+            ),
+            "fullest_slot AS rich_slot FROM (SELECT *".to_string(),
+        ),
         _ => (
             "NULL::date AS rich_day, NULL::bool AS rich".to_string(),
             "NULL::int8 AS rich_slot FROM (SELECT *".to_string(),
@@ -2258,11 +2304,26 @@ pub async fn list_events(pool: &PgPool, query: &EventQuery) -> sqlx::Result<Vec<
                 .bind(query.limit + 1)
                 .bind(today.format("%Y-%m-%d").to_string())
                 .bind(after.map(|a| a.1))
+                .bind(None::<DateTime<Utc>>)
+                .fetch_all(pool)
+                .await;
+        }
+        EventOrder::Fullest { from_day, after } => {
+            return q
+                .bind(after.map(|a| a.0))
+                .bind(after.map(|a| a.3))
+                .bind(query.limit + 1)
+                .bind(from_day.format("%Y-%m-%d").to_string())
+                .bind(after.map(|a| a.1))
+                .bind(after.map(|a| a.2))
                 .fetch_all(pool)
                 .await;
         }
     };
-    q.bind(None::<i64>).fetch_all(pool).await
+    q.bind(None::<i64>)
+        .bind(None::<DateTime<Utc>>)
+        .fetch_all(pool)
+        .await
 }
 
 /// Which tag column a facet counts.

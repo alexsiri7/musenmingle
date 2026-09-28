@@ -915,7 +915,7 @@ impl Filters {
         if self.free {
             s.append_pair("free", "true");
         }
-        // The home page's own default (the API's is soonest).
+        // The home page's own default (the API's is fullest).
         let default_sort = String::from(Sort::Richest.as_str());
         let sort = if self.sort.is_empty() && self.q.is_empty() && self.here.is_empty() {
             &default_sort
@@ -1155,6 +1155,7 @@ fn order_text(sort: Sort) -> &'static str {
         Sort::Surprise => "Surprise me: random order, reshuffled daily",
         Sort::Relevance => "Best match first",
         Sort::Richest => "Day by day, listings with a picture and a description first",
+        Sort::Fullest => "Day by day, fullest listings first",
     }
 }
 
@@ -1620,7 +1621,7 @@ fn filter_form(
                         label for="sort" { "Sort" }
                         select id="sort" name="sort" {
                             @for s in Sort::ALL {
-                                @if s != Sort::Relevance || !f.q.is_empty() {
+                                @if s != Sort::Fullest && (s != Sort::Relevance || !f.q.is_empty()) {
                                     option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
                                 }
                             }

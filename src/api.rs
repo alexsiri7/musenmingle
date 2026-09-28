@@ -598,6 +598,11 @@ pub(crate) async fn event_page(
                     .rich_day
                     .zip(last.rich_slot)
                     .map(|(day, slot)| Cursor::Richest(*today, day, slot, id)),
+                EventOrder::Fullest { from_day, .. } => {
+                    last.rich_day.zip(last.rich_slot).map(|(day, slot)| {
+                        Cursor::Fullest(*from_day, day, slot, last.event.starts_at, id)
+                    })
+                }
             }
         })
         .map(|c| c.encode());
