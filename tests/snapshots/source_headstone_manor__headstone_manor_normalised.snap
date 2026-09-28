@@ -34,7 +34,7 @@ expression: out
       "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "story-of-music-hall|2026-10-06|headstone-manor",
+      "dedupe_key": "tuesday-talk-story-of-music-hall|2026-10-06|headstone-manor",
       "description": "Take a lively trip through the rise of the British Music Hall, meeting the colourful stars whose songs and cheeky humour charmed a nation. With stories, scandals, sparkle and a chance to sing along to some familiar favourites - it’s an irresistible journey into a world that still delights today. About the Speaker: Judy Karbritz is Harrow's Community Poet and writes regular columns for the Harrow Times and Barnet Borough Times. She has broadcast on LBC and local BBC radio and performed in amateur dramatics. She has been giving entertaining talks for twenty years and performs locally and regularly speaks on cruise ships.",
       "ends_at": null,
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/1780169711974blob.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784556300&s=0d8f5f8cd3bb6b40412b9c51fe90ca78",
@@ -48,7 +48,7 @@ expression: out
       },
       "starts_at": "2026-10-06T13:00:00Z",
       "tags": [],
-      "title": "The Story of The Music Hall",
+      "title": "Tuesday Talk: The Story of The Music Hall",
       "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-story-of-the-music-hall",
       "venue_name": "Headstone Manor & Museum"
     },
@@ -168,7 +168,7 @@ expression: out
       "category": "community",
       "dedupe_key": "creepy-creature-pond-dipping|2026-10-27|headstone-manor",
       "description": "Grab your wellies and join us for a splashing good time! During October half term, we're pond dipping with the Friends of Headstone Manor Park in The Yeading Brook to discover what amazing creatures live beneath the surface. This fun family event is part of our nature week celebrations – perfect for curious kids and nature-loving adults alike. Bring your wellies and your curiosity – we'll provide everything else. Perfect for families who love getting hands-on with nature!",
-      "ends_at": null,
+      "ends_at": "2026-10-27T11:30:00Z",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/FB_IMG_1770721351868.jpg?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.4794&fp-y=0.4255&dm=1784561154&s=150450dda2f4348cdaedc69ab3189373",
       "lat": 51.5947,
       "lng": -0.3542,
@@ -178,6 +178,16 @@ expression: out
         "max": "7",
         "min": "4"
       },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-10-27T10:00:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-10-27T11:30:00Z"
+        }
+      ],
       "starts_at": "2026-10-27T10:00:00Z",
       "tags": [
         "family"
@@ -193,6 +203,10 @@ expression: out
       "end": null,
       "genre": "Family Events",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/FB_IMG_1770721351868.jpg?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.4794&fp-y=0.4255&dm=1784561154&s=150450dda2f4348cdaedc69ab3189373",
+      "instances": [
+        "2026-10-27 10:00",
+        "2026-10-27 11:30"
+      ],
       "path": "/events/hmm-creepy-creature-pond-dipping",
       "pre_title": "October Half Term",
       "price_text": "£7 Standard | £4 Concessions",
@@ -365,7 +379,7 @@ expression: out
       "category": "community",
       "dedupe_key": "spooky-halloween-craft|2026-10-30|headstone-manor",
       "description": "Join us at The Granary for a frightfully fun family adventure! Create your own glowing Halloween creatures – spooky spiders, witches, bats and more – decorating them with eyes and colours at our craft tables, then head outside to bring them to life by flapping and dancing with your fluorescent creations. Plus, enjoy Halloween wordsearch and colouring activities while you're here!",
-      "ends_at": null,
+      "ends_at": "2026-10-30T11:30:00Z",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Glowing-Spooky-Creations.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562055&s=1ec6f44607523f4acef7d3c9b5ed2773",
       "lat": 51.5947,
       "lng": -0.3542,
@@ -375,6 +389,16 @@ expression: out
         "max": "7",
         "min": "4"
       },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-10-30T10:00:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-10-30T11:30:00Z"
+        }
+      ],
       "starts_at": "2026-10-30T10:00:00Z",
       "tags": [
         "family"
@@ -390,6 +414,10 @@ expression: out
       "end": null,
       "genre": "Family Events",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Glowing-Spooky-Creations.png?w=640&h=360&q=100&auto=format&fit=crop&dm=1784562055&s=1ec6f44607523f4acef7d3c9b5ed2773",
+      "instances": [
+        "2026-10-30 10:00",
+        "2026-10-30 11:30"
+      ],
       "path": "/events/hmm-spooky-halloween-craft",
       "pre_title": "October Half Term",
       "price_text": "£7 Standard | £4 Concessions",
@@ -430,7 +458,7 @@ expression: out
       "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "history-of-roman-harrow|2026-11-03|headstone-manor",
+      "dedupe_key": "tuesday-talk-history-of-roman-harrow|2026-11-03|headstone-manor",
       "description": "Join us on a journey through the landmarks of Roman Harrow. Meet the potters of Sulloniacae and spend the night at the roadside Mutatio (service station), which may have once stood upon Brockley-Hill. See the artistry of the settlement’s productive labours and the reach of their wares – which have been found as far North as the famous Hadrian’s Wall. In this accompanying exhibition talk, we will explore the Roman history of Harrow and consider what it meant to be Romano-British, during one of the most evocative periods of British history. About the Speaker: Louis is Head of Classics at St. Dominic's Sixth Form College and is a Romanist at heart. He has a background in the Archaeology and Museum sectors, and is currently completing a second Heritage Lottery Funded research excavation, upon the grounds of the College itself. Louis is also a knowledgeable tour guide, with extensive experience guiding groups around Rome, Ostia Antica, Pompeii & Herculamneum. If you are interested in this talk, check out the exhibition in the museum - it explores the Roman history of Harrow, tracing the lives of the people who lived, worked, and passed through this busy community. From the potters whose craft found its way as far north as Hadrian's Wall, to the travellers who stopped at the roadside mutation — an ancient service station thought to have stood on Brockley Hill — the story of Roman Harrow offers a vivid window into what it meant to be Romano-British.",
       "ends_at": null,
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/HOD-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784553067&s=7efac62cba879d6b803a923918b26c45",
@@ -444,7 +472,7 @@ expression: out
       },
       "starts_at": "2026-11-03T14:00:00Z",
       "tags": [],
-      "title": "The History of Roman Harrow",
+      "title": "Tuesday Talk: The History of Roman Harrow",
       "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-history-of-roman-harrow",
       "venue_name": "Headstone Manor & Museum"
     },
@@ -497,7 +525,7 @@ expression: out
       "category": "community",
       "dedupe_key": "exploring-harrows-wartime-bomb-map|2026-11-10|headstone-manor",
       "description": "Harrow's wartime bomb map is one of the most remarkable local records to survive the Second World War; colour-coded street by street to document exactly what the Blitz, the Doodlebugs and the V2 rockets did to the borough and its people. We are delighted to offer guided talks at our brand-new interactive bomb-damage map, a remarkable survival from the Second World War that recorded, street by street and house by house, exactly what the bombing of Harrow looked like. Colour-coded under official wartime instruction, the map tells the story not just of destruction but of the families displaced, and the extraordinary effort by ordinary people to keep the borough functioning through some of the darkest years in living memory. Our knowledgeable guide will lead you through the map's hidden language: what each colour meant, which weapons caused which damage, and how the record was used for everything from rehousing applications to hospital planning. Whether you have family roots in the area or are simply curious about the history beneath today's streets, this is a rare chance to see Harrow's wartime experience close up, in vivid and human detail.",
-      "ends_at": null,
+      "ends_at": "2026-11-10T11:15:00Z",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/IMG_20260602_141758.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784554523&s=0211940955acf32e1256f214d3976e6b",
       "lat": 51.5947,
       "lng": -0.3542,
@@ -507,6 +535,16 @@ expression: out
         "max": "3",
         "min": "3"
       },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-10T10:00:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-10T11:15:00Z"
+        }
+      ],
       "starts_at": "2026-11-10T10:00:00Z",
       "tags": [],
       "title": "Exploring Harrow’s Wartime Bomb Map",
@@ -520,6 +558,10 @@ expression: out
       "end": null,
       "genre": "Events for Adults",
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/IMG_20260602_141758.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784554523&s=0211940955acf32e1256f214d3976e6b",
+      "instances": [
+        "2026-11-10 10:00",
+        "2026-11-10 11:15"
+      ],
       "path": "/events/hmm-exploring-harrows-wartime-bomb-map",
       "pre_title": null,
       "price_text": "£3 per person",
@@ -534,7 +576,7 @@ expression: out
       "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "impact-of-americans-coming-to-england-eastcote-during-ww2|2026-11-10|headstone-manor",
+      "dedupe_key": "tuesday-talk-impact-of-americans-coming-to-england-eastcote-during-ww2|2026-11-10|headstone-manor",
       "description": "Codebreaking played a crucial role in the Allied victory during the Second World War. Yet few people realise just how closely American and British personnel worked together to decipher Nazi Germany's encoded messages. This presentation explores the vital contribution of the Americans who came to England, and specifically to Eastcote, during the war. Discover how they were recruited and trained, and how they worked alongside British servicemen and women in one of the most secret and important intelligence operations of the conflict. The talk also examines the friendly rivalry between Britain and the United States, and how this competitive spirit was channelled into a highly effective partnership. Attendees will have the opportunity to view a collection of rare photographs of American personnel working at Eastcote, uncovered through the speaker's extensive research and previously unseen by GCHQ Museum archivists. Learn about the achievements of the Wrens and their American naval counterparts across the Atlantic, whose dedication, skill and determination helped shorten the war and contribute to the Allied victory. About the Speaker: Ronald Koorm has published four books on Military history, codebreaking, and has given numerous talks to museums, history societies, Universities, libraries, and other organisations.",
       "ends_at": null,
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/bombe-wave-bw-ncm-2016-107w-1.jpg?w=640&h=360&q=100&auto=format&fit=crop&dm=1784557060&s=e00757dd557059c6e02edbaf839a5228",
@@ -548,7 +590,7 @@ expression: out
       },
       "starts_at": "2026-11-10T14:00:00Z",
       "tags": [],
-      "title": "The Impact of the Americans coming to England and Eastcote during WW2",
+      "title": "Tuesday Talk: The Impact of the Americans coming to England and Eastcote during WW2",
       "url": "https://headstonemanor.org/events/hmm-tuesday-talk-the-impact-of-the-americans-coming-to-england-and-eastcote-during-ww2",
       "venue_name": "Headstone Manor & Museum"
     },
@@ -718,7 +760,7 @@ expression: out
       "address": "Headstone Recreation Ground, Pinner View, Harrow HA2 6PX",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "in-search-of-father-christmas|2026-12-08|headstone-manor",
+      "dedupe_key": "tuesday-talk-in-search-of-father-christmas|2026-12-08|headstone-manor",
       "description": "We all know Father Christmas, don’t we? Maybe we don’t know him as well as we think as the cheery gift-giver of today is both very ancient and relatively modern, he is both fictional and real and is born from many legends, many traditions and many individuals. Father Christmas is composed of controversies and intrigues. Let’s go in search of this fascinating figure! About the Speaker: Nick Dobson used to be a Librarian so he’s very boring! He was Principal Librarian for Redbridge, but since 2012 he has earned a meagre living by doing talks on a wide range of subjects. Nick is a former National Fuchsia Champion which his wife thinks is even more boring and he has performed in semi-professional productions of light opera throughout London and the south east. Nick’s family is related by marriage to Charles Dickens, but it is a very tenuous link, so that’s boring too! You did ask!",
       "ends_at": null,
       "image_url": "https://harrow-arts.transforms.svdcdn.com/production/HMM/Whats-On-Autumn-26/Father-Xmas.png?w=640&h=360&q=100&auto=format&fit=crop&crop=focalpoint&fp-x=0.476&fp-y=0.3177&dm=1784562261&s=eb0ea41901d82e71c48db64d196d5e0e",
@@ -732,7 +774,7 @@ expression: out
       },
       "starts_at": "2026-12-08T14:00:00Z",
       "tags": [],
-      "title": "In Search of Father Christmas",
+      "title": "Tuesday Talk: In Search of Father Christmas",
       "url": "https://headstonemanor.org/events/hmm-tuesday-talk-in-search-of-father-christmas",
       "venue_name": "Headstone Manor & Museum"
     },
