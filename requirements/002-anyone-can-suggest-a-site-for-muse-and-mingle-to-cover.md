@@ -2,9 +2,9 @@
 created: '2026-09-26'
 github_issue: 2
 id: '002'
-status: idea
+status: done
 title: Anyone can suggest a site for Muse & Mingle to cover
-updated: '2026-09-26'
+updated: '2026-09-28'
 ---
 
 ## Why
