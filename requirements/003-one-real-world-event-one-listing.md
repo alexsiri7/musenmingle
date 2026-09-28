@@ -2,9 +2,9 @@
 created: '2026-09-26'
 github_issue: 3
 id: '003'
-status: idea
+status: done
 title: One real-world event, one listing
-updated: '2026-09-26'
+updated: '2026-09-28'
 ---
 
 ## Why
