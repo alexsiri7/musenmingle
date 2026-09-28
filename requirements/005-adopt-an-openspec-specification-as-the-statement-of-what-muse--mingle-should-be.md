@@ -1,8 +1,8 @@
 ---
 created: '2026-09-28'
-github_issue: null
+github_issue: 253
 id: '005'
-status: draft
+status: idea
 title: Adopt an OpenSpec specification as the statement of what Muse & Mingle should
   be
 updated: '2026-09-28'
@@ -18,4 +18,4 @@ The repository holds its specification in OpenSpec format under openspec/specs/,
 
 ## Issues
 
-_None yet._
+- #253 — Add Muse & Mingle's OpenSpec specification and validate it in CI
