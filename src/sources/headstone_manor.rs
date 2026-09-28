@@ -39,17 +39,21 @@
 //!   exhibitions, only the "Details" tab's on tabbed ones) and the sidebar's
 //!   Price, Venue (a room, kept in the payload only: every item is at the
 //!   museum) and Duration. The "Booking info" tab (a £1 booking fee) never
-//!   feeds the description or the price.
+//!   feeds the description or the price. Its pre-title is prefixed to
+//!   talks' titles ("Tuesday Talk: …"), as a talk can share its
+//!   exhibition's title. Its "Dates and times" instance list (London wall
+//!   clock, inside a Vue `<template>`) gives same-day sessions such as 10:00
+//!   and 11:30, stored as #207 sessions when the first is the card's time.
 
 use async_trait::async_trait;
-use chrono::{DateTime, NaiveTime, Utc};
+use chrono::{DateTime, NaiveDateTime, NaiveTime, Utc};
 use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
-use crate::model::{Category, NewEvent, RawEvent};
+use crate::model::{Category, NewEvent, RawEvent, Session};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, is_london_midnight, london_date, london_to_utc,
     map_category, parse_datetime, parse_price,
@@ -112,6 +116,10 @@ pub struct Detail {
     pub price_text: Option<String>,
     pub room: Option<String>,
     pub duration: Option<String>,
+    /// The raw `datetime`s ("2026-10-30 10:00", London wall clock) of the
+    /// "Dates and times" instance list, in page order.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub instances: Vec<String>,
 }
 
 fn selector(s: &str) -> Selector {
@@ -230,6 +238,13 @@ pub fn parse_detail(html: &str) -> Detail {
         price_text: meta("Price"),
         room: meta("Venue"),
         duration: meta("Duration"),
+        // The list sits in a Vue `<template>`, whose content scraper parses
+        // as a separate fragment: ancestor selectors don't reach it.
+        instances: doc
+            .select(&selector("time.c-instance-list__date-time[datetime]"))
+            .filter_map(|e| e.value().attr("datetime"))
+            .map(str::to_string)
+            .collect(),
     }
 }
 
@@ -326,6 +341,33 @@ fn london_midnight(t: DateTime<Utc>) -> DateTime<Utc> {
     london_to_utc(london_date(t).and_time(NaiveTime::MIN))
 }
 
+/// The detail page's instances as sessions, or none unless there are at
+/// least two, all readable, the first at the card's start.
+fn instance_sessions(payload: &Value, starts_at: DateTime<Utc>) -> Vec<Session> {
+    let times: Option<Vec<DateTime<Utc>>> = payload
+        .get("instances")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .map(|v| {
+            let s = v.as_str()?;
+            NaiveDateTime::parse_from_str(s, "%Y-%m-%d %H:%M")
+                .ok()
+                .map(london_to_utc)
+        })
+        .collect();
+    match times {
+        Some(times) if times.len() >= 2 && times[0] == starts_at => times
+            .into_iter()
+            .map(|t| Session {
+                starts_at: t,
+                ends_at: None,
+            })
+            .collect(),
+        _ => Vec::new(),
+    }
+}
+
 /// Normalise a Headstone Manor [`RawEvent`] payload (a card plus its detail
 /// page).
 pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
@@ -344,6 +386,15 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     else {
         return Ok(None);
     };
+    let title = match text("pre_title").map(clean_text).filter(|p| !p.is_empty()) {
+        Some(pre)
+            if category == Category::Talk
+                && !title.to_lowercase().starts_with(&pre.to_lowercase()) =>
+        {
+            format!("{pre}: {title}")
+        }
+        _ => title,
+    };
     let starts_at = parse_time(&title, "start", text("start"))?
         .ok_or_else(|| SourceError::Parse(format!("{title:?}: no date")))?;
     let ends_at = parse_time(&title, "end", text("end"))?;
@@ -357,9 +408,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         (starts_at, ends_at, all_day)
     };
 
-    Ok(Some(NewEvent {
+    let mut ev = NewEvent {
         sessions: Vec::new(),
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+        dedupe_key: String::new(),
         description: clean_description(text("description")),
         title,
         venue_name: Some(VENUE_NAME.to_string()),
@@ -378,7 +429,12 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         } else {
             Vec::new()
         },
-    }))
+    };
+    if category != Category::Exhibition {
+        ev.set_sessions(instance_sessions(payload, starts_at));
+    }
+    ev.dedupe_key = dedupe_key(&ev.title, ev.starts_at, Some(VENUE_NAME));
+    Ok(Some(ev))
 }
 
 #[async_trait]
@@ -706,6 +762,7 @@ mod tests {
         let raw = card_event(&card, &site(), Some(&detail));
         let e = normalise_payload(&raw.payload).unwrap().unwrap();
         assert_eq!(e.price.min, Some(Decimal::new(450, 2)));
+        assert_eq!(e.title, "Tuesday Talk: Music Hall");
         assert_eq!(e.tags, Vec::<String>::new());
 
         let untabbed = parse_detail(
@@ -718,5 +775,128 @@ mod tests {
             untabbed.description.as_deref(),
             Some("<p>An exhibition.</p>\n<p>Sponsored by the Friends.</p>")
         );
+    }
+
+    fn instance_list(times: &[&str]) -> String {
+        let items: String = times
+            .iter()
+            .map(|t| {
+                format!(
+                    r#"<li class="o-list__item c-instance-list__item"><event-manager type="instance"><template v-slot:default="{{ instance }}"><h3><time class="c-instance-list__date-time" datetime="{t}">{t}</time></h3></template></event-manager></li>"#
+                )
+            })
+            .collect();
+        format!(
+            r#"<html><body><div class="c-instance-list"><ul class="o-list c-instance-list__list">{items}</ul></div></body></html>"#
+        )
+    }
+
+    #[test]
+    fn instance_times_are_read_from_inside_templates() {
+        let detail = parse_detail(&instance_list(&["2026-10-30 10:00", "2026-10-30 11:30"]));
+        assert_eq!(detail.instances, ["2026-10-30 10:00", "2026-10-30 11:30"]);
+    }
+
+    #[test]
+    fn same_day_instances_become_sessions() {
+        let normalise = |start: &str, times: &[&str]| {
+            let card = card(
+                "/events/x",
+                "Spooky Craft",
+                FAMILY_EVENTS,
+                Some(start),
+                None,
+            );
+            let detail = parse_detail(&instance_list(times));
+            let raw = card_event(&card, &site(), Some(&detail));
+            normalise_payload(&raw.payload).unwrap().unwrap()
+        };
+        for (start, times, first, last) in [
+            (
+                "2026-10-30T10:00:00+00:00",
+                ["2026-10-30 10:00", "2026-10-30 11:30"],
+                "2026-10-30T10:00:00+00:00",
+                "2026-10-30T11:30:00+00:00",
+            ),
+            (
+                "2026-10-17T10:00:00+01:00",
+                ["2026-10-17 10:00", "2026-10-17 11:30"],
+                "2026-10-17T09:00:00+00:00",
+                "2026-10-17T10:30:00+00:00",
+            ),
+        ] {
+            let e = normalise(start, &times);
+            assert_eq!(e.sessions.len(), 2);
+            assert_eq!(e.sessions[0].starts_at.to_rfc3339(), first);
+            assert_eq!(e.starts_at.to_rfc3339(), first);
+            assert_eq!(e.ends_at.unwrap().to_rfc3339(), last);
+            assert!(!e.all_day);
+        }
+
+        let start = "2026-10-30T10:00:00+00:00";
+        for times in [
+            &["2026-10-30 11:30", "2026-10-30 13:00"][..],
+            &["2026-10-30 10:00"],
+            &["2026-10-30 10:00", "30 Oct 11:30am"],
+        ] {
+            let e = normalise(start, times);
+            assert!(e.sessions.is_empty(), "{times:?}");
+            assert_eq!(e.starts_at.to_rfc3339(), start);
+            assert_eq!(e.ends_at, None);
+        }
+    }
+
+    #[test]
+    fn talks_take_their_series_pre_title() {
+        let at = Some("2026-11-03T14:00:00+00:00");
+        let later = Some("2027-01-03T00:00:00+00:00");
+        for (card, pre_title, title) in [
+            (
+                card(
+                    "/events/hmm-tuesday-talk-x",
+                    "The History of Roman Harrow",
+                    "Events for Adults",
+                    at,
+                    None,
+                ),
+                "Tuesday Talk",
+                "Tuesday Talk: The History of Roman Harrow",
+            ),
+            (
+                card(
+                    "/events/hmm-tuesday-talk-x",
+                    "Tuesday Talk: Music Hall",
+                    "Events for Adults",
+                    at,
+                    None,
+                ),
+                "Tuesday Talk",
+                "Tuesday Talk: Music Hall",
+            ),
+            (
+                card("/events/x", "Spooky Craft", FAMILY_EVENTS, at, None),
+                "October Half Term",
+                "Spooky Craft",
+            ),
+            (
+                card(
+                    "/exhibitions/x",
+                    "The History of Roman Harrow",
+                    "Exhibitions",
+                    at,
+                    later,
+                ),
+                "Potters, Potteries & Pagans",
+                "The History of Roman Harrow",
+            ),
+        ] {
+            let detail = parse_detail(&format!(
+                r#"<html><body><h1><small class="c-page-header__pre-title">{pre_title}</small>{}</h1></body></html>"#,
+                card.title
+            ));
+            let raw = card_event(&card, &site(), Some(&detail));
+            let e = normalise_payload(&raw.payload).unwrap().unwrap();
+            assert_eq!(e.title, title);
+        }
     }
 }
