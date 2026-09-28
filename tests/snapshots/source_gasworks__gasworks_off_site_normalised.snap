@@ -1,0 +1,26 @@
+---
+source: tests/source_gasworks.rs
+expression: "s.normalise(&raw).expect(\"normalise\")"
+---
+{
+  "title": "Elders, 2046: For Living and Dying Otherwise",
+  "description": null,
+  "venue_name": "Wellcome Collection",
+  "address": "183 Euston Road, London NW1 2BE",
+  "lat": null,
+  "lng": null,
+  "starts_at": "2026-10-08T23:00:00Z",
+  "ends_at": "2026-10-09T23:00:00Z",
+  "all_day": true,
+  "price": {
+    "is_free": false,
+    "min": null,
+    "max": null,
+    "currency": null
+  },
+  "url": "https://www.gasworks.org.uk/events/elders-2046-for-living-and-dying-otherwise/",
+  "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/09/11/SDP_EP003644_260814_1625_v2/66b3d81aeb3a94bc8cf035e5c65c25f8.jpg",
+  "category": "community",
+  "tags": [],
+  "dedupe_key": "elders-2046-for-living-dying-otherwise|2026-10-09|wellcome-collection"
+}

@@ -5,8 +5,9 @@
 //!   group allows both listings but asks for `Crawl-delay: 20` and
 //!   `Request-rate: 1/60`. FetchContext honours the Crawl-delay; the
 //!   one-request-a-minute rate is a built-in floor in
-//!   `config::BUILTIN_MIN_INTERVALS`. So a run makes exactly three requests
-//!   (robots.txt and the two listings) and never fetches detail pages.
+//!   `config::BUILTIN_MIN_INTERVALS`. A run makes robots.txt, the two
+//!   listings and up to [`MAX_DETAILS`] event detail pages, 60 s apart, so
+//!   it asks the runner for a longer `fetch_timeout`.
 //! * No JSON-LD, so CSS. Each listing has optional `section#current` and
 //!   `section#forthcoming` blocks, then `section#archive` (past shows).
 //!   Only cards outside the archive are read. A page with no current cards is
@@ -32,8 +33,16 @@
 //! * Price: the site footer says "FREE ADMISSION" (gallery admission); it is
 //!   applied to exhibitions only. Event prices are unknown.
 //! * Descriptions: the listing's `precis` is cut short by the site ("…"),
-//!   and detail pages aren't fetched, so no description is stored.
-//! * Every item is at the gallery.
+//!   and detail pages are read for the location only, so no description is
+//!   stored.
+//! * Venue: exhibitions are at the gallery. An event's detail page has a
+//!   second header `h2` ("12:30–1pm", or "Various times at Wellcome
+//!   Collection, 183 Euston Road, London NW1 2BE"). When it names another
+//!   place with a UK postcode, that place is the venue and address (#200).
+//!   A missing, failed or over-cap detail page keeps Gasworks. Exhibition
+//!   detail pages are not fetched.
+
+use std::time::Duration;
 
 use async_trait::async_trait;
 use chrono::{DateTime, NaiveDate, NaiveTime, Utc};
@@ -46,12 +55,16 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{clean_text, dedupe_key, london_date, london_to_utc, parse_price, words};
+use crate::venues::postcode;
 
 pub const KEY: &str = "gasworks";
 pub const EXHIBITIONS_PATH: &str = "/exhibitions/";
 pub const EVENTS_PATH: &str = "/events/";
 const VENUE_NAME: &str = "Gasworks";
 const VENUE_ADDRESS: &str = "155 Vauxhall Street, London SE11 5RH";
+const VENUE_POSTCODE: &str = "SE11 5RH";
+/// At most this many event detail pages a run.
+pub const MAX_DETAILS: usize = 6;
 const MONTHS: [&str; 12] = [
     "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec",
 ];
@@ -183,6 +196,29 @@ pub fn parse_listing(
     listing
 }
 
+/// The location line of an event's detail page: the header's `h2` that is
+/// not the date line.
+pub fn parse_detail(html: &str) -> Option<String> {
+    Html::parse_document(html)
+        .select(&selector("header.page-header h2:not(.date)"))
+        .next()
+        .map(element_text)
+        .filter(|t| !t.is_empty())
+}
+
+/// The venue and address named by a location line ("Various times at
+/// Wellcome Collection, 183 Euston Road, London NW1 2BE"), when it is a
+/// place other than Gasworks with a UK postcode.
+pub fn off_site_venue(location: &str) -> Option<(String, String)> {
+    let location = clean_text(location);
+    let at = location.to_lowercase().find(" at ")?;
+    let (venue, address) = location[at + " at ".len()..].split_once(',')?;
+    let (venue, address) = (venue.trim(), clean_text(address));
+    let on_site =
+        postcode(&address)? == VENUE_POSTCODE || venue.to_lowercase().contains("gasworks");
+    (!venue.is_empty() && !on_site).then(|| (venue.to_string(), address))
+}
+
 /// Expand a two-digit year after a month ("13 Dec 26" → "13 Dec 2026").
 pub fn expand_years(text: &str) -> String {
     let tokens: Vec<&str> = text.split_whitespace().collect();
@@ -268,17 +304,20 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         return Ok(None);
     }
     let starts_at = london_midnight(first);
+    let (venue, address) = text("location")
+        .and_then(|l| off_site_venue(&l))
+        .unwrap_or_else(|| (VENUE_NAME.to_string(), VENUE_ADDRESS.to_string()));
     let price = match text("admission_text") {
         Some(a) if exhibition => parse_price(&a),
         _ => Price::default(),
     };
     Ok(Some(NewEvent {
         sessions: Vec::new(),
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+        dedupe_key: dedupe_key(&title, starts_at, Some(&venue)),
         title,
         description: None,
-        venue_name: Some(VENUE_NAME.to_string()),
-        address: Some(VENUE_ADDRESS.to_string()),
+        venue_name: Some(venue),
+        address: Some(address),
         lat: None,
         lng: None,
         starts_at,
@@ -296,6 +335,12 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
 impl Source for Gasworks {
     fn key(&self) -> &str {
         KEY
+    }
+
+    fn fetch_timeout(&self) -> Option<Duration> {
+        // The 60 s floor per request (robots.txt, two listings, detail
+        // pages), plus a margin.
+        Some(Duration::from_secs(60 * (3 + MAX_DETAILS as u64) + 60))
     }
 
     async fn fetch(&self, ctx: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
@@ -320,13 +365,38 @@ impl Source for Gasworks {
         if events.total == 0 {
             ctx.report_error(format!("no event cards on {EVENTS_PATH}"));
         }
-        for item in events.items {
-            if !out
+        let mut details = 0;
+        for mut item in events.items {
+            if out
                 .iter()
                 .any(|r| r.source_event_id == item.source_event_id)
             {
-                out.push(item);
+                continue;
             }
+            let wanted = item.payload["title"]
+                .as_str()
+                .is_some_and(|t| category_for_event(t).is_some());
+            let location = match item.source_url.as_deref().map(Url::parse) {
+                Some(Ok(url)) if wanted => {
+                    let id = &item.source_event_id;
+                    details += 1;
+                    if details > MAX_DETAILS {
+                        ctx.report_error(format!("{id}: over the {MAX_DETAILS} detail-page cap"));
+                        None
+                    } else {
+                        match ctx.get_text(&url).await {
+                            Ok(html) => parse_detail(&html),
+                            Err(e) => {
+                                ctx.report_error(format!("{id}: {e}"));
+                                None
+                            }
+                        }
+                    }
+                }
+                _ => None,
+            };
+            item.payload["location"] = json!(location);
+            out.push(item);
         }
         Ok(out)
     }
@@ -420,6 +490,51 @@ mod tests {
         let e = norm("events", "Elders, 2046", "9 – 10 Oct 26").unwrap();
         assert_eq!(e.starts_at, london(2026, 10, 9));
         assert_eq!(e.ends_at, Some(london(2026, 10, 10)));
+    }
+
+    #[test]
+    fn off_site_venue_needs_a_named_place_with_a_postcode() {
+        assert_eq!(
+            off_site_venue(
+                "Various times at Wellcome Collection, 183 Euston Road,  London NW1 2BE"
+            ),
+            Some((
+                "Wellcome Collection".to_string(),
+                "183 Euston Road, London NW1 2BE".to_string()
+            ))
+        );
+        assert_eq!(off_site_venue("12:30–1pm"), None);
+        assert_eq!(
+            off_site_venue("6–9pm at Gasworks, 155 Vauxhall Street, London SE11 5RH"),
+            None
+        );
+        assert_eq!(
+            off_site_venue("6–9pm at The yard, 155 Vauxhall Street, London SE11 5RH"),
+            None
+        );
+        assert_eq!(off_site_venue("Meet at the front desk"), None);
+        assert_eq!(off_site_venue("7pm at Somewhere, 1 High Street"), None);
+    }
+
+    #[test]
+    fn an_off_site_location_is_the_venue() {
+        let mut p = payload("events", "Elders, 2046", "9 – 10 Oct 26");
+        p["location"] =
+            json!("Various times at Wellcome Collection, 183 Euston Road,  London NW1 2BE");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert_eq!(e.venue_name.as_deref(), Some("Wellcome Collection"));
+        assert_eq!(
+            e.address.as_deref(),
+            Some("183 Euston Road, London NW1 2BE")
+        );
+        assert_eq!(
+            e.dedupe_key,
+            dedupe_key("Elders, 2046", e.starts_at, Some("Wellcome Collection"))
+        );
+        p["location"] = json!("12:30–1pm");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert_eq!(e.venue_name.as_deref(), Some(VENUE_NAME));
+        assert_eq!(e.address.as_deref(), Some(VENUE_ADDRESS));
     }
 
     #[test]
