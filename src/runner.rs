@@ -402,10 +402,13 @@ impl Runner {
         let mut events: Vec<RunEvent> = Vec::new();
         let mut page_texts = crate::enrich::PageTexts::new();
 
-        let fetched = tokio::time::timeout(self.source_timeout, source.fetch(&self.ctx)).await;
+        let timeout = source
+            .fetch_timeout()
+            .map_or(self.source_timeout, |t| t.max(self.source_timeout));
+        let fetched = tokio::time::timeout(timeout, source.fetch(&self.ctx)).await;
         let ok = match fetched {
             Err(_) => {
-                errors.push(format!("timed out after {:?}", self.source_timeout));
+                errors.push(format!("timed out after {timeout:?}"));
                 false
             }
             Ok(Err(e)) => {

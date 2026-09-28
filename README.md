@@ -223,11 +223,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     clock), ranges, "From" dates and untimed days all day; film screenings
     and children's/family sessions skipped; talks → talk, workshops →
     workshop, the rest → community.
-  - `gasworks` — CSS on the `/exhibitions/` and `/events/` listings only
-    (no JSON-LD; the current and forthcoming sections, not the archive; no
-    detail pages, as robots.txt asks for one request a minute, a built-in
-    60 s floor): two-digit years expanded, everything all day (no times
-    are listed), ranges to their last day; free admission on exhibitions;
+  - `gasworks` — CSS on the `/exhibitions/` and `/events/` listings (no
+    JSON-LD; the current and forthcoming sections, not the archive), plus
+    each in-scope event's detail page (capped at 6 a run; robots.txt asks
+    for one request a minute, a built-in 60 s floor, so the source asks
+    for a longer fetch timeout) for its location line: an event held
+    elsewhere (another venue with its own postcode, #200) gets that venue
+    and address, otherwise, or when the page is missing, fails or is over
+    the cap, Gasworks; two-digit years expanded, everything all day (no
+    times are listed), ranges to their last day; free admission on exhibitions;
     screenings and children's/family sessions skipped; tours/talks → talk,
     the rest → community; no descriptions.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
@@ -696,7 +700,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `RUST_LOG` | both | `info` | tracing filter |
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
 | `RATE_LIMIT_OVERRIDES` | ingest | — | `host=ms,host=ms` per-host overrides |
-| `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout |
+| `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout (a source can ask for longer via `Source::fetch_timeout`, e.g. gasworks) |
 | `REQUESTY_API_KEY` | ingest | unset → AI enrichment and embeddings off | Requesty key ([AI enrichment](#ai-enrichment)) |
 | `TFL_APP_KEY` | api | unset → TfL's anonymous limits | TfL Unified API key for public-transport times (`/v1/transit`, docs/map.md) |
 | `TRANSIT_LONDON` | api | `tfl` | `off` switches London public-transport times off |

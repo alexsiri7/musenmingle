@@ -80,6 +80,12 @@ pub trait Source: Send + Sync {
     /// (e.g. a concert from a general-purpose API); that is not an error.
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError>;
 
+    /// A longer fetch timeout than the run's `SOURCE_TIMEOUT_SECS`, for a
+    /// source whose site asks for a slow rate. Only ever lengthens it.
+    fn fetch_timeout(&self) -> Option<std::time::Duration> {
+        None
+    }
+
     /// The implementing type's path (`musenmingle::sources::<module>::<Type>`),
     /// used by the scraper QA check to notice code changes
     /// (`crate::qa::code`). Do not override.
