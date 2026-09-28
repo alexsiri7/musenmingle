@@ -282,6 +282,47 @@ async fn a_source_can_ask_for_a_longer_fetch_timeout() {
     db.drop_db().await;
 }
 
+#[tokio::test]
+async fn a_shorter_fetch_timeout_does_not_shorten_the_runners() {
+    let Some(db) = TestDb::create("a_shorter_fetch_timeout_does_not_shorten_the_runners").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query("UPDATE events.sources SET enabled = false")
+        .execute(&pool)
+        .await
+        .unwrap();
+    repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
+    let now = Utc::now();
+    let r = Runner {
+        factory: Box::new(move |_| {
+            Ok(Box::new(FakeSource {
+                now,
+                delay: Some(Duration::from_millis(300)),
+                fetch_timeout: Some(Duration::from_millis(100)),
+            }))
+        }),
+        ..runner(pool.clone(), now, None, Duration::from_secs(5))
+    };
+    let RunSummary::Ran(reports) = r.run_once(now).await.unwrap() else {
+        panic!("expected a run");
+    };
+    assert!(reports[0].ok);
+
+    pool.close().await;
+    db.drop_db().await;
+}
+
 async fn skip_state(pool: &sqlx::PgPool) -> (Option<String>, Option<DateTime<Utc>>) {
     sqlx::query_as("SELECT skip_reason, skipped_at FROM events.sources WHERE key = 'fake'")
         .fetch_one(pool)
