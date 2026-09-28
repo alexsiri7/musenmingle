@@ -9,7 +9,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
 use musenmingle::model::RawEvent;
 use musenmingle::sources::Source;
-use musenmingle::sources::gasworks::{Gasworks, Section, parse_detail, parse_listing};
+use musenmingle::sources::gasworks::{Gasworks, MAX_DETAILS, Section, parse_detail, parse_listing};
 use reqwest::StatusCode;
 use url::Url;
 use wiremock::matchers::{method, path, path_regex};
@@ -245,6 +245,88 @@ async fn failed_detail_page_is_reported_and_keeps_the_card() {
         let e = s.normalise(raw).expect("normalise").expect("in scope");
         assert_eq!(e.venue_name.as_deref(), Some("Gasworks"));
     }
+}
+
+#[tokio::test]
+async fn detail_page_without_a_location_line_is_reported() {
+    let server = MockServer::start().await;
+    mount_listings(&server).await;
+    for p in EVENT_DETAILS {
+        mount_page(&server, p, "<html><body></body></html>".to_string()).await;
+    }
+
+    let ctx = ctx();
+    let s = Gasworks::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), EVENT_DETAILS.len());
+    assert!(
+        errors.iter().all(|e| e.contains("no location line")),
+        "{errors:?}"
+    );
+    assert_eq!(raws.len(), 6);
+    for raw in &raws {
+        let e = s.normalise(raw).expect("normalise").expect("in scope");
+        assert_eq!(e.venue_name.as_deref(), Some("Gasworks"));
+    }
+}
+
+#[tokio::test]
+async fn detail_pages_past_the_cap_are_reported_and_not_fetched() {
+    let cards: String = (1..=MAX_DETAILS + 1)
+        .map(|i| {
+            format!(
+                r#"<article class="list-item"><header><h3>Event</h3><h2 class="date">1 Oct 30</h2><h1><a href="/events/talk-{i}/">Talk {i}</a></h1></header></article>"#
+            )
+        })
+        .collect();
+    let events = format!(
+        r#"<html><body><main><section id="current">{cards}</section><section id="archive"></section></main></body></html>"#
+    );
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    mount_page(
+        &server,
+        "/exhibitions/",
+        fixture(&format!("{DIR}/exhibitions.html")),
+    )
+    .await;
+    mount_page(&server, "/events/", events).await;
+    for i in 1..=MAX_DETAILS {
+        mount_page(
+            &server,
+            &format!("/events/talk-{i}/"),
+            fixture(&format!("{DIR}/detail-elders-2046.html")),
+        )
+        .await;
+    }
+    let over = format!("/events/talk-{}/", MAX_DETAILS + 1);
+    Mock::given(method("GET"))
+        .and(path(over.as_str()))
+        .respond_with(ResponseTemplate::new(200))
+        .expect(0)
+        .mount(&server)
+        .await;
+
+    let ctx = ctx();
+    let s = Gasworks::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("detail-page cap"), "{errors:?}");
+    let venues: Vec<_> = raws
+        .iter()
+        .filter(|r| r.source_event_id.starts_with("events/talk-"))
+        .map(|r| {
+            s.normalise(r)
+                .expect("normalise")
+                .expect("in scope")
+                .venue_name
+        })
+        .collect();
+    let mut expected = vec![Some("Wellcome Collection".to_string()); MAX_DETAILS];
+    expected.push(Some("Gasworks".to_string()));
+    assert_eq!(venues, expected);
 }
 
 #[tokio::test]

@@ -39,8 +39,8 @@
 //!   second header `h2` ("12:30–1pm", or "Various times at Wellcome
 //!   Collection, 183 Euston Road, London NW1 2BE"). When it names another
 //!   place with a UK postcode, that place is the venue and address (#200).
-//!   A missing, failed or over-cap detail page keeps Gasworks. Exhibition
-//!   detail pages are not fetched.
+//!   A failed or over-cap detail page, or one without that line, is
+//!   reported and keeps Gasworks. Exhibition detail pages are not fetched.
 
 use std::time::Duration;
 
@@ -62,7 +62,6 @@ pub const EXHIBITIONS_PATH: &str = "/exhibitions/";
 pub const EVENTS_PATH: &str = "/events/";
 const VENUE_NAME: &str = "Gasworks";
 const VENUE_ADDRESS: &str = "155 Vauxhall Street, London SE11 5RH";
-const VENUE_POSTCODE: &str = "SE11 5RH";
 /// At most this many event detail pages a run.
 pub const MAX_DETAILS: usize = 6;
 const MONTHS: [&str; 12] = [
@@ -214,8 +213,8 @@ pub fn off_site_venue(location: &str) -> Option<(String, String)> {
     let at = location.to_lowercase().find(" at ")?;
     let (venue, address) = location[at + " at ".len()..].split_once(',')?;
     let (venue, address) = (venue.trim(), clean_text(address));
-    let on_site =
-        postcode(&address)? == VENUE_POSTCODE || venue.to_lowercase().contains("gasworks");
+    let on_site = Some(postcode(&address)?) == postcode(VENUE_ADDRESS)
+        || venue.to_lowercase().contains("gasworks");
     (!venue.is_empty() && !on_site).then(|| (venue.to_string(), address))
 }
 
@@ -385,7 +384,15 @@ impl Source for Gasworks {
                         None
                     } else {
                         match ctx.get_text(&url).await {
-                            Ok(html) => parse_detail(&html),
+                            Ok(html) => {
+                                let location = parse_detail(&html);
+                                if location.is_none() {
+                                    ctx.report_error(format!(
+                                        "{id}: no location line on the detail page"
+                                    ));
+                                }
+                                location
+                            }
                             Err(e) => {
                                 ctx.report_error(format!("{id}: {e}"));
                                 None
