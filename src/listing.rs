@@ -1174,6 +1174,11 @@ mod tests {
             q("sort=richest").unwrap().order,
             EventOrder::Richest { today, after: None }
         );
+        // Anchored on today, not on the window's first day like fullest.
+        assert_eq!(
+            q("sort=richest&from=2026-10-20").unwrap().order,
+            EventOrder::Richest { today, after: None }
+        );
         // Never the API's default.
         assert_eq!(q("").unwrap().order.sort(), Sort::Fullest);
         let (seed, day, id) = (
