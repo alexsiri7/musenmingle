@@ -2,9 +2,9 @@
 created: '2026-09-26'
 github_issue: 1
 id: '001'
-status: idea
+status: done
 title: Browse and filter London cultural events
-updated: '2026-09-26'
+updated: '2026-09-28'
 ---
 
 ## Why
