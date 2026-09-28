@@ -43,7 +43,9 @@ the venue's own site before it.
    If the events pages are disallowed, do not write the scraper.
 6. **Be light.** Cap detail-page fetches per run, pick a sensible
    `interval_minutes` (daily is plenty for most venues) and keep the run
-   comfortably under `SOURCE_TIMEOUT_SECS`.
+   comfortably under `SOURCE_TIMEOUT_SECS`. A site whose robots.txt forces a
+   slow rate can override `Source::fetch_timeout` instead of dropping data
+   (see `gasworks`).
 7. **Skips are not errors.** Return `Ok(None)` from `normalise` for pages that
    are not in-scope events (online-only, open-ended programmes, out-of-scope
    categories). Report genuine per-page failures with `ctx.report_error`; they

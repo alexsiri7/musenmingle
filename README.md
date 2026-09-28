@@ -696,7 +696,7 @@ Both binaries apply pending migrations on start (sqlx takes a migration lock).
 | `RUST_LOG` | both | `info` | tracing filter |
 | `RATE_LIMIT_MS` | ingest | `2000` | Min ms between requests to one host |
 | `RATE_LIMIT_OVERRIDES` | ingest | — | `host=ms,host=ms` per-host overrides |
-| `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout |
+| `SOURCE_TIMEOUT_SECS` | ingest | `300` | Per-source fetch timeout (a source can ask for longer via `Source::fetch_timeout`, e.g. gasworks) |
 | `REQUESTY_API_KEY` | ingest | unset → AI enrichment and embeddings off | Requesty key ([AI enrichment](#ai-enrichment)) |
 | `TFL_APP_KEY` | api | unset → TfL's anonymous limits | TfL Unified API key for public-transport times (`/v1/transit`, docs/map.md) |
 | `TRANSIT_LONDON` | api | `tfl` | `off` switches London public-transport times off |
