@@ -531,3 +531,104 @@ async fn qa_rules_record_findings_and_counts_for_the_run() {
     pool.close().await;
     db.drop_db().await;
 }
+
+/// Emits one exhibition, which `normalise` skips once `on_now` is set: a
+/// site that drops the start date when something opens (#254).
+struct OpensThenSkippedSource {
+    now: DateTime<Utc>,
+    on_now: Arc<AtomicBool>,
+}
+
+#[async_trait]
+impl Source for OpensThenSkippedSource {
+    fn key(&self) -> &str {
+        "fake"
+    }
+
+    async fn fetch(&self, _: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
+        Ok(vec![raw("exhibition", 3)])
+    }
+
+    fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
+        if self.on_now.load(Ordering::SeqCst) {
+            return Ok(None);
+        }
+        let fake = FakeSource {
+            now: self.now,
+            delay: None,
+            fetch_timeout: None,
+        };
+        let mut ev = fake.normalise(raw)?.unwrap();
+        ev.ends_at = Some(ev.starts_at + chrono::Duration::days(90));
+        Ok(Some(ev))
+    }
+}
+
+#[tokio::test]
+async fn a_skipped_event_keeps_the_row_an_earlier_run_stored() {
+    let Some(db) = TestDb::create("a_skipped_event_keeps_the_row_an_earlier_run_stored").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    sqlx::query("UPDATE events.sources SET enabled = false")
+        .execute(&pool)
+        .await
+        .unwrap();
+    repo::upsert_source(
+        &pool,
+        "fake",
+        SourceKind::Scraper,
+        "https://fake.test",
+        60,
+        true,
+    )
+    .await
+    .unwrap();
+    let now = Utc::now();
+    let on_now = Arc::new(AtomicBool::new(false));
+    let factory_on_now = on_now.clone();
+    let r = Runner {
+        factory: Box::new(move |_| {
+            Ok(Box::new(OpensThenSkippedSource {
+                now,
+                on_now: factory_on_now.clone(),
+            }))
+        }),
+        ..runner(pool.clone(), now, None, Duration::from_secs(5))
+    };
+    let stored = || async {
+        sqlx::query_as::<_, (DateTime<Utc>, Option<DateTime<Utc>>)>(
+            "SELECT starts_at, ends_at FROM events.events",
+        )
+        .fetch_all(&pool)
+        .await
+        .unwrap()
+    };
+
+    let RunSummary::Ran(first) = r.run_once(now).await.unwrap() else {
+        panic!("expected a run");
+    };
+    assert_eq!((first[0].created, first[0].errors), (1, 0));
+    let before = stored().await;
+    assert_eq!(before.len(), 1);
+
+    on_now.store(true, Ordering::SeqCst);
+    let RunSummary::Ran(second) = r
+        .run_once(now + chrono::Duration::minutes(61))
+        .await
+        .unwrap()
+    else {
+        panic!("expected a run");
+    };
+    assert_eq!(second.len(), 1);
+    assert_eq!((second[0].skipped, second[0].errors), (1, 0));
+    assert_eq!(
+        stored().await,
+        before,
+        "the skip leaves the stored row alone"
+    );
+
+    pool.close().await;
+    db.drop_db().await;
+}

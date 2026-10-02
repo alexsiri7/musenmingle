@@ -15,7 +15,9 @@
 //! * A detail page has the title (`h2.single_event_title`), an optional
 //!   subtitle (the session's theme, or "Multiple dates"), the dates
 //!   (`p.single_event_type_dates`: "Saturday 10 October 2026" or "Saturday 3
-//!   October 2026 - Sunday 28 March 2027"), sidebar blocks headed "Timings"
+//!   October 2026 - Sunday 28 March 2027"; once an exhibition has opened,
+//!   "On now until Sunday, 14 March 2027", and no page, card, JSON-LD or
+//!   sitemap says when it started any more), sidebar blocks headed "Timings"
 //!   (session times, "1:00pm to 4:00pm.", in `p.bottom_p`), "Fees" and
 //!   "Other information", and the event's categories as `event-category-*`
 //!   classes on the `<article>`. The sidebar nests `<p>` in `<p>`, which the
@@ -24,7 +26,10 @@
 //!   "11:30am to 12:30pm.") the first is the event's time. A day with no
 //!   session times is stored `all_day`, and so are exhibitions (both ends
 //!   London midnight). Anything but an exhibition spanning more than one day
-//!   is a run of sessions and skipped.
+//!   is a run of sessions and skipped. So is anything "On now until" a date:
+//!   an exhibition's stored row, from a run before it opened, keeps the real
+//!   start, which any guess would overwrite. `qa_scope` tells the scraper
+//!   check.
 //! * Category from the article's classes: exhibitions first; online and
 //!   off-site events skipped; then talks, workshops; tours, films and
 //!   training courses skipped; late events, family, young people's, over-60s
@@ -62,6 +67,7 @@ const VENUE_ADDRESS: &str = "Lloyd Park, Forest Road, Walthamstow, London E17 4P
 const VENUE_LAT: f64 = 51.5913;
 const VENUE_LNG: f64 = -0.0203;
 const NO_SUBTITLE: &str = "Multiple dates";
+const ON_NOW: &str = "On now until ";
 
 pub struct WilliamMorrisGallery {
     base_url: Url,
@@ -310,6 +316,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let Some(dates_text) = text("dates_text") else {
         return Ok(None);
     };
+    if dates_text.trim_start().starts_with(ON_NOW) {
+        return Ok(None);
+    }
     let (first, last) = parse_dates(dates_text)
         .ok_or_else(|| SourceError::Parse(format!("{title:?}: bad dates {dates_text:?}")))?;
     let Some(category) = category(&strings("categories")) else {
@@ -467,6 +476,14 @@ impl Source for WilliamMorrisGallery {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Anything the site shows as \"On now until\" a date (an exhibition \
+             that has opened) is left out on purpose: the site no longer says \
+             when it started, and the event stored before it opened stays listed.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -569,6 +586,20 @@ mod tests {
         undated["dates_text"] = Value::Null;
         assert!(normalise(&undated).is_none());
         assert!(normalise(&event("Saturday 10 October 2026", &[], &["audience"])).is_none());
+    }
+
+    #[test]
+    fn exhibitions_on_now_are_skipped_and_the_qa_scope_says_so() {
+        let on_now = event(
+            "On now until Sunday, 14 March 2027",
+            &[],
+            &["exhibition-type"],
+        );
+        assert!(normalise(&on_now).is_none());
+        let scope = WilliamMorrisGallery::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        assert!(scope.contains("On now until"));
     }
 
     #[test]
