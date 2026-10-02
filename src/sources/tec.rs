@@ -42,6 +42,8 @@
 //!   `map_category` over the category names and title, then
 //!   `default_category`; with none of those the event is skipped. The
 //!   JSON-LD carries no categories: title, then `default_category`.
+//!   Without a `default_category` that leaves out film screenings, tours,
+//!   gigs and the like; `qa_scope` tells the scraper check.
 //! * Price: `cost` text (its `currency_code` is unreliable: "USD" for "£"
 //!   prices), widened by the description's ticket lines (online and
 //!   livestream lines excluded) when it is paid; or the JSON-LD offers. TEC strings are HTML-escaped (the
@@ -729,7 +731,39 @@ impl Source for Tec {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload, &self.config)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        let c = &self.config;
+        match c.default_category {
+            None => c
+                .category_map
+                .values()
+                .all(|cat| KEYWORD_CATEGORIES.contains(cat))
+                .then_some(
+                    "Only talks, workshops, exhibitions, fairs and community events: \
+                     events whose site categories or title name one of those (lecture, \
+                     class, course, discussion, display, meetup and the like). Anything \
+                     else (film screenings, tours, gigs, concerts, performances) is left \
+                     out on purpose.",
+                ),
+            Some(_) => (!c.skip_categories.is_empty()).then_some(
+                "Events the site files under some of its own categories (such as \
+                 tours, gigs or performances) are left out on purpose; everything \
+                 else is kept.",
+            ),
+        }
+    }
 }
+
+/// The categories `map_category` can give, which `Tec::qa_scope`'s note
+/// names as kept; a `category_map` to any other would make the note false.
+const KEYWORD_CATEGORIES: [Category; 5] = [
+    Category::Talk,
+    Category::Workshop,
+    Category::Exhibition,
+    Category::Expo,
+    Category::Community,
+];
 
 #[cfg(test)]
 mod tests {
@@ -895,6 +929,44 @@ mod tests {
         .unwrap()
         .tags;
         assert_eq!(tags, ["classes & workshops"]);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let tec = |config: Value| {
+            Tec::from_row(
+                "tec-x",
+                Url::parse("https://x.test/").unwrap(),
+                Some(&config),
+            )
+            .unwrap()
+        };
+        let scope = tec(json!({"skip_categories": ["tours"]}))
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "talks",
+            "workshops",
+            "exhibitions",
+            "film screenings",
+            "tours",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
+        let skips = tec(json!({"default_category": "talk", "skip_categories": ["music"]}))
+            .qa_scope()
+            .unwrap();
+        assert!(skips.contains("left out on purpose"), "{skips}");
+        assert!(
+            tec(json!({"default_category": "talk"}))
+                .qa_scope()
+                .is_none()
+        );
+        assert!(
+            tec(json!({"category_map": {"gigs": "music"}}))
+                .qa_scope()
+                .is_none()
+        );
     }
 
     #[test]
