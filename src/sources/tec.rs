@@ -733,15 +733,37 @@ impl Source for Tec {
     }
 
     fn qa_scope(&self) -> Option<&'static str> {
-        self.config.default_category.is_none().then_some(
-            "Only talks, workshops, exhibitions, fairs and community events: \
-             events whose site categories or title name one of those (lecture, \
-             class, course, discussion, display, meetup and the like). Anything \
-             else (film screenings, tours, gigs, concerts, performances) is left \
-             out on purpose.",
-        )
+        let c = &self.config;
+        match c.default_category {
+            None => c
+                .category_map
+                .values()
+                .all(|cat| KEYWORD_CATEGORIES.contains(cat))
+                .then_some(
+                    "Only talks, workshops, exhibitions, fairs and community events: \
+                     events whose site categories or title name one of those (lecture, \
+                     class, course, discussion, display, meetup and the like). Anything \
+                     else (film screenings, tours, gigs, concerts, performances) is left \
+                     out on purpose.",
+                ),
+            Some(_) => (!c.skip_categories.is_empty()).then_some(
+                "Events the site files under some of its own categories (such as \
+                 tours, gigs or performances) are left out on purpose; everything \
+                 else is kept.",
+            ),
+        }
     }
 }
+
+/// The categories `map_category` can give, which `Tec::qa_scope`'s note
+/// names as kept; a `category_map` to any other would make the note false.
+const KEYWORD_CATEGORIES: [Category; 5] = [
+    Category::Talk,
+    Category::Workshop,
+    Category::Exhibition,
+    Category::Expo,
+    Category::Community,
+];
 
 #[cfg(test)]
 mod tests {
@@ -910,7 +932,7 @@ mod tests {
     }
 
     #[test]
-    fn the_qa_scope_names_what_is_left_out_unless_there_is_a_default() {
+    fn the_qa_scope_names_what_is_left_out() {
         let tec = |config: Value| {
             Tec::from_row(
                 "tec-x",
@@ -931,8 +953,17 @@ mod tests {
         ] {
             assert!(scope.contains(word), "{word}");
         }
+        let skips = tec(json!({"default_category": "talk", "skip_categories": ["music"]}))
+            .qa_scope()
+            .unwrap();
+        assert!(skips.contains("left out on purpose"), "{skips}");
         assert!(
             tec(json!({"default_category": "talk"}))
+                .qa_scope()
+                .is_none()
+        );
+        assert!(
+            tec(json!({"category_map": {"gigs": "music"}}))
                 .qa_scope()
                 .is_none()
         );

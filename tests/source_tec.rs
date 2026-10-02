@@ -87,6 +87,20 @@ fn every_seeded_config_is_valid() {
     }
 }
 
+/// Every venue that leaves events out says so to the scraper check.
+#[test]
+fn every_seeded_venue_that_skips_events_has_a_qa_scope() {
+    for (key, base, config) in seed_rows() {
+        let skips = config.get("default_category").is_none()
+            || config
+                .get("skip_categories")
+                .is_some_and(|s| s != &json!([]));
+        if skips {
+            assert!(source(&key, &base).qa_scope().is_some(), "{key}");
+        }
+    }
+}
+
 #[test]
 fn housmans_api_normalised() {
     let raws = api_page("tec-housmans", 1);
