@@ -593,6 +593,9 @@ mod tests {
             "Art & design",
             "more than one day",
             "Cinema",
+            "Single-date",
+            "Contemporary music",
+            "left out on purpose",
         ] {
             assert!(scope.contains(words), "{words}");
         }
