@@ -662,7 +662,10 @@ fn widen_with_ticket_lines(price: Price, description: Option<&str>) -> Price {
         .filter(|p| p.currency.as_deref() == Some(currency))
         .collect();
     Price {
-        min: tiers.iter().filter_map(|p| p.min).chain([min]).min(),
+        min: [min]
+            .into_iter()
+            .chain(tiers.iter().filter_map(|p| p.min))
+            .min(),
         max: tiers.iter().filter_map(|p| p.max).chain([max]).max(),
         ..price
     }
@@ -956,6 +959,23 @@ mod tests {
         assert_eq!(range(cost, "<p>Tickets $30</p>"), stored("16.40"));
         assert_eq!(range("", "<p>Tickets £25</p>"), (None, None, None, false));
         assert!(range("Free", "<p>Tickets £25</p>").3);
+        // A cheaper tier lowers the floor; a restated one keeps the cost's text.
+        let gbp = |min: &str, max: &str| {
+            (
+                Some(min.to_string()),
+                Some(max.to_string()),
+                Some("GBP".to_string()),
+                false,
+            )
+        };
+        assert_eq!(
+            range("£16.40 – £16.40", "<p>Bursary Ticket – £8.00</p>"),
+            gbp("8.00", "16.40")
+        );
+        assert_eq!(
+            range("£11.10 – £16.40", "<p>Bursary ticket (£11.1)</p>"),
+            gbp("11.10", "16.40")
+        );
     }
 
     #[test]
