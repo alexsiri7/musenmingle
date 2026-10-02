@@ -143,6 +143,10 @@ fn normalised_titles_follow_the_listing() {
             "Architecture on Stage: Walters and Cohen",
         ),
         (
+            "2026/architecture-on-stage-worofila",
+            "Architecture on Stage: Worofila",
+        ),
+        (
             "2026/robert-ryman-the-real-thing",
             "Robert Ryman: The Real Thing",
         ),

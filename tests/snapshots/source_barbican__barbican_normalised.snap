@@ -140,6 +140,51 @@ expression: out
     "event": {
       "address": "Silk Street, London EC2Y 8DS",
       "all_day": false,
+      "category": "talk",
+      "dedupe_key": "architecture-on-stage-worofila|2026-11-03|barbican",
+      "description": "Senegalese practice Worofila presents this year's Rick Mather lecture, celebrating the work of architects who are making important contributions to thinking about sustainability. Led by Nzinga Mboup and Nicolas Rondet, Worofila is an architecture practice based in Dakar. Its work focuses on designing buildings that work with the local climate and make use of locally sourced, low-impact materials, traditional knowledge, and simple, community-led ways of building and maintaining them. The lecture coincides with the publication of Ecosystems: A Contemporary African Architecture (MACK), which brings together Worofila’s work to date, from housing and public buildings to infrastructure and spaces for learning and experimentation.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/20240813_SC_121%20%281%29_0.jpg?itok=qdVLvFMZ",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16.50",
+        "min": "16.50"
+      },
+      "starts_at": "2026-11-03T19:00:00Z",
+      "tags": [
+        "art-design",
+        "talks-events"
+      ],
+      "title": "Architecture on Stage: Worofila",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/architecture-on-stage-worofila",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/architecture-on-stage-worofila",
+    "payload": {
+      "art_forms": [
+        "art-design",
+        "talks-events"
+      ],
+      "date_text": "Tue 3 Nov 2026, 19:00",
+      "description": "\n  <p><span>Senegalese practice Worofila presents this year's Rick Mather lecture, celebrating the work of architects who are making important contributions to thinking about sustainability. </span></p>\n\n<p><span>Led by <strong>Nzinga Mboup</strong> and <strong>Nicolas Rondet</strong>, Worofila is an architecture practice based in Dakar. Its work focuses on designing buildings that work with the local climate and make use of locally sourced, low-impact materials, traditional knowledge, and simple, community-led ways of building and maintaining them.</span></p><p><span>The lecture coincides with the publication of </span><em><span>Ecosystems: A Contemporary African Architecture</span></em><span> (MACK), which brings together Worofila’s work to date, from housing and public buildings to infrastructure and spaces for learning and experimentation.</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/20240813_SC_121%20%281%29_0.jpg?itok=qdVLvFMZ",
+      "listing_title": "Architecture on Stage: Worofila",
+      "price_text": "£16.50 (£15 + £1.50 transaction fee)",
+      "room": "Frobisher Auditorium 1",
+      "starts": "2026-11-03T19:00:00Z",
+      "subtitle": "Architecture on Stage",
+      "title": "The 2026 Rick Mather Lecture: Worofila",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/architecture-on-stage-worofila"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
       "category": "community",
       "dedupe_key": "black-british-book-festival-2026|2026-10-04|barbican",
       "description": "Back for its fifth year, the Black British Book Festival is a landmark celebration of Black books, ideas and culture with Candice Carty-Williams, Corinne Bailey Rae, Wretch 32 and more. Hear from Candice Carty-Williams on love, mess and the phenomenon of Queenie. Corinne Bailey Rae goes deep on sound, beauty and creative freedom. Wretch 32 makes the case that bars are literature, breaking down the art of the pen like never before. And closing it all out is The Black Poetry Shutdown with the UK's sharpest spoken-word talent such as Malika Booker, Lady Sanity, Jah Digga and more. Across the rest of the day, expect a line-up that spans literature, music, science, money, love, identity and the internet. There's something for everyone with storytelling, craft, superheroes and more for the youngest readers. Aspiring authors get a programme packed with practical, no-fluff sessions and the brand-new Black British Book Festival × Pan Macmillan collaboration - a real shot at getting published.",
