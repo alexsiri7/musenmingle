@@ -50,6 +50,8 @@ fn stored_start() -> DateTime<Utc> {
     Utc.with_ymd_and_hms(2026, 11, 12, 0, 0, 0).unwrap()
 }
 
+const SCOPE: &str = "Only talks; the venue's film screenings are left out on purpose.";
+
 /// Fetches the venue's listing and one detail page; emits one event with
 /// the time missing.
 struct VenueSource {
@@ -93,6 +95,10 @@ impl Source for VenueSource {
             category: Category::Talk,
             tags: vec![],
         }))
+    }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(SCOPE)
     }
 }
 
@@ -335,6 +341,7 @@ async fn first_check_files_one_issue_and_never_changes_events() {
     let input: Value =
         serde_json::from_str(body["messages"][1]["content"].as_str().unwrap()).unwrap();
     assert_eq!(input["records"][0]["starts_at"], "2026-11-12 00:00");
+    assert_eq!(input["source_scope"], SCOPE);
     assert!(
         input["pages"][1]["text"]
             .as_str()

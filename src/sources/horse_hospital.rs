@@ -24,6 +24,7 @@
 //!   workshop, Talk → talk, Exhibition → exhibition, in that precedence.
 //!   Most of the programme is gigs (Music, Performance, Improvisation,
 //!   Sound, Dance, Film alone), which are skipped (`Ok(None)`).
+//!   `qa_scope` tells the scraper check the same.
 
 use async_trait::async_trait;
 use chrono::{DateTime, NaiveTime, Utc};
@@ -255,6 +256,15 @@ impl Source for HorseHospital {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only talks, workshops and exhibitions: events whose site categories \
+             include Talk, Workshop or Exhibition. Events listed only under Music, \
+             Performance, Improvisation, Sound, Dance or Film (gigs, concerts, \
+             screenings) are left out on purpose.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -339,5 +349,15 @@ mod tests {
                 .unwrap()
                 .is_none()
         );
+    }
+
+    #[test]
+    fn the_qa_scope_names_the_skipped_site_categories() {
+        let scope = HorseHospital::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in ["Talk", "Workshop", "Exhibition", "Music"] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
