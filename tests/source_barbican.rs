@@ -73,6 +73,17 @@ fn listing_images() -> BTreeMap<String, String> {
     images
 }
 
+/// Card title of every listed event path, from all listing fixtures.
+fn listing_titles() -> BTreeMap<String, String> {
+    let mut titles = BTreeMap::new();
+    for (_, _, stem) in LISTINGS {
+        for (path, title) in parse_listing(&fixture(&format!("{DIR}/{stem}.html"))).titles {
+            titles.entry(path).or_insert(title);
+        }
+    }
+    titles
+}
+
 fn scraper() -> Barbican {
     Barbican::new(SITE.parse().unwrap())
 }
@@ -95,11 +106,13 @@ fn listing_snapshot() {
 fn normalised_output_snapshot() {
     let s = scraper();
     let images = listing_images();
+    let titles = listing_titles();
     let mut out = Vec::new();
     for id in detail_ids() {
         let url: Url = format!("{SITE}{}", event_path(&id)).parse().unwrap();
         let image = images.get(&event_path(&id)).map(String::as_str);
-        let raw = parse_detail(&detail_html(&id), &url, image).expect("detail parses");
+        let title = titles.get(&event_path(&id)).map(String::as_str);
+        let raw = parse_detail(&detail_html(&id), &url, image, title).expect("detail parses");
         assert_eq!(raw.source_event_id, id);
         out.push(serde_json::json!({
             "id": id,
@@ -108,6 +121,60 @@ fn normalised_output_snapshot() {
         }));
     }
     insta::assert_json_snapshot!("barbican_normalised", out);
+}
+
+#[test]
+fn normalised_titles_follow_the_listing() {
+    // Scraper check #251: the venue's title, not the detail page's h1.
+    let s = scraper();
+    let images = listing_images();
+    let titles = listing_titles();
+    for (id, expected) in [
+        (
+            "2025/concrete-and-clay-archiving-the-barbican",
+            "Concrete and Clay: Archiving the Barbican",
+        ),
+        (
+            "2026/an-evening-with-fran-lebowitz",
+            "An Evening with Fran Lebowitz",
+        ),
+        (
+            "2026/architecture-on-stage-walters-and-cohen",
+            "Architecture on Stage: Walters and Cohen",
+        ),
+        (
+            "2026/robert-ryman-the-real-thing",
+            "Robert Ryman: The Real Thing",
+        ),
+    ] {
+        let path = event_path(id);
+        let url: Url = format!("{SITE}{path}").parse().unwrap();
+        let raw = parse_detail(
+            &detail_html(id),
+            &url,
+            images.get(&path).map(String::as_str),
+            titles.get(&path).map(String::as_str),
+        )
+        .expect("detail parses");
+        let event = s.normalise(&raw).expect("normalise").expect("in scope");
+        assert_eq!(event.title, expected, "{id}");
+    }
+
+    // A card title cut short ("…Curatorial Assistant...") leaves the h1.
+    let path = event_path("2026/robert-ryman-exhibition-tour-with-curatorial-assistant");
+    assert_eq!(titles.get(&path), None);
+    let url: Url = format!("{SITE}{path}").parse().unwrap();
+    let raw = parse_detail(
+        &detail_html("2026/robert-ryman-exhibition-tour-with-curatorial-assistant"),
+        &url,
+        None,
+        None,
+    )
+    .expect("detail parses");
+    assert_eq!(
+        raw.payload["title"],
+        "Exhibition Tour with Curatorial Assistant Amber Li"
+    );
 }
 
 #[test]
@@ -213,6 +280,7 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
     }
     let site = server.uri();
     let images = listing_images();
+    let titles = listing_titles();
     for raw in &raws {
         let path = event_path(&raw.source_event_id);
         let expected = format!("{site}{path}");
@@ -221,6 +289,11 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
             raw.payload["image_url"].as_str(),
             images.get(&path).map(String::as_str),
             "{path}: the listing card's JPEG, not the AVIF og:image"
+        );
+        assert_eq!(
+            raw.payload["listing_title"].as_str(),
+            titles.get(&path).map(String::as_str),
+            "{path}"
         );
     }
     let mut got: Vec<String> = raws.into_iter().map(|r| r.source_event_id).collect();
@@ -321,7 +394,7 @@ async fn listing_pagination_stops_at_the_page_cap() {
 }
 
 #[tokio::test]
-async fn a_cross_listed_event_keeps_its_first_card_image() {
+async fn a_cross_listed_event_keeps_its_first_card_image_and_title() {
     let server = MockServer::start().await;
     Mock::given(method("GET"))
         .and(path("/robots.txt"))
@@ -331,11 +404,15 @@ async fn a_cross_listed_event_keeps_its_first_card_image() {
         .mount(&server)
         .await;
     let id = "2026/robert-ryman-the-real-thing";
-    for (form, image) in [("art-design", "first.jpg"), ("talks-events", "second.jpg")] {
+    for (form, image, title) in [
+        ("art-design", "first.jpg", "First title"),
+        ("talks-events", "second.jpg", "Second title"),
+    ] {
         let body = format!(
             r#"<html><body><article class="listing--event">
             <div class="search-listing__image"><img src="/{image}"></div>
             <a class="search-listing__link" href="{}"></a>
+            <h2 class="listing-title listing-title--event">{title}</h2>
             </article></body></html>"#,
             event_path(id)
         );
@@ -362,4 +439,5 @@ async fn a_cross_listed_event_keeps_its_first_card_image() {
         raws[0].payload["image_url"].as_str(),
         Some(format!("{SITE}/first.jpg").as_str())
     );
+    assert_eq!(raws[0].payload["listing_title"], "First title");
 }

@@ -12,6 +12,11 @@
 //!   `article.listing--event`; only `/whats-on/<year>/event/<slug>` links are
 //!   kept (series pages are hubs). The same slug can exist under two years
 //!   (a tour repeated in 2026 and 2027), so the source id is `<year>/<slug>`.
+//!   Each card's image and title are kept for its detail page.
+//! * The title is the listing card's (`h2.listing-title`): the detail page
+//!   splits it into an h1 and an h2 whose role varies (the rest of the title,
+//!   a series name that goes first, a promoter, a tagline), so they can't be
+//!   rejoined by a rule. Card titles cut short with `...` fall back to the h1.
 //! * Every detail page is fetched. Times come from the header's
 //!   `.event-byline .date-range time[datetime]` attributes, which are genuine
 //!   UTC: "Thu 22 Oct 2026, 19:00" is `2026-10-22T18:00:00Z` (BST) and
@@ -24,7 +29,8 @@
 //!   under music); art & design spanning more than one London day →
 //!   exhibition. Anything else is skipped: single-slot art & design items are
 //!   concerts, performances and gallery tours, and take part on its own or
-//!   the other art forms are club nights, gigs and shows.
+//!   the other art forms are club nights, gigs and shows. `qa_scope` tells
+//!   the scraper check the same.
 //! * Price is the first ticket-price row only ("Standard £20.50 (£19 + £1.50
 //!   transaction fee)" → £20.50, or a bare "Free"); the other rows are
 //!   member and concession prices ("Free entry", "Free"). Pages without a
@@ -88,6 +94,9 @@ pub struct ListingPage {
     pub event_paths: Vec<String>,
     /// Absolute URL of each event's card image, by event path.
     pub image_urls: BTreeMap<String, String>,
+    /// Each event's card title (`h2.listing-title`), by event path; titles
+    /// cut short with `...`/`…` are left out.
+    pub titles: BTreeMap<String, String>,
     /// The "Load More" link (`?page=N`), relative to the page's own URL.
     pub next_page: Option<String>,
 }
@@ -118,8 +127,10 @@ pub fn parse_listing(html: &str) -> ListingPage {
     let base = Url::parse(SITE).expect("valid url");
     let link = selector("a.search-listing__link[href]");
     let image = selector(".search-listing__image img[src]");
+    let card_title = selector("h2.listing-title");
     let mut event_paths: Vec<String> = Vec::new();
     let mut image_urls = BTreeMap::new();
+    let mut titles = BTreeMap::new();
     for card in doc.select(&selector("article.listing--event")) {
         let Some(Ok(u)) = card
             .select(&link)
@@ -144,6 +155,14 @@ pub fn parse_listing(html: &str) -> ListingPage {
         {
             image_urls.insert(path.clone(), img.to_string());
         }
+        if let Some(title) = card
+            .select(&card_title)
+            .next()
+            .map(element_text)
+            .filter(|t| !t.is_empty() && !t.ends_with("...") && !t.ends_with('…'))
+        {
+            titles.insert(path.clone(), title);
+        }
         event_paths.push(path);
     }
     let next_page = doc
@@ -154,6 +173,7 @@ pub fn parse_listing(html: &str) -> ListingPage {
     ListingPage {
         event_paths,
         image_urls,
+        titles,
         next_page,
     }
 }
@@ -210,9 +230,15 @@ fn is_avif(image_url: &str) -> bool {
 
 /// Parse one detail page into a [`RawEvent`] (None if it has no title).
 /// `url` is the address the page was fetched from; `<year>/<slug>` of its
-/// path is the stable source id. `listing_image` is the event's card image
-/// from [`ListingPage::image_urls`].
-pub fn parse_detail(html: &str, url: &Url, listing_image: Option<&str>) -> Option<RawEvent> {
+/// path is the stable source id. `listing_image` and `listing_title` are the
+/// event's card image and title from [`ListingPage::image_urls`] and
+/// [`ListingPage::titles`].
+pub fn parse_detail(
+    html: &str,
+    url: &Url,
+    listing_image: Option<&str>,
+    listing_title: Option<&str>,
+) -> Option<RawEvent> {
     let doc = Html::parse_document(html);
     let first_text = |s: &str| {
         doc.select(&selector(s))
@@ -242,6 +268,7 @@ pub fn parse_detail(html: &str, url: &Url, listing_image: Option<&str>) -> Optio
         source_url: Some(url.to_string()),
         payload: json!({
             "url": url.as_str(),
+            "listing_title": listing_title,
             "title": title,
             "subtitle": first_text("h2.heading-group__secondary"),
             "date_text": first_text(".event-byline .date-range"),
@@ -274,11 +301,15 @@ pub fn category(art_forms: &[&str], multi_day: bool) -> Option<Category> {
 
 /// Normalise a Barbican [`RawEvent`] payload.
 pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
-    let title = payload
-        .get("title")
-        .and_then(Value::as_str)
-        .map(clean_text)
-        .filter(|t| !t.is_empty())
+    let text = |key: &str| {
+        payload
+            .get(key)
+            .and_then(Value::as_str)
+            .map(clean_text)
+            .filter(|t| !t.is_empty())
+    };
+    let title = text("listing_title")
+        .or_else(|| text("title"))
         .ok_or_else(|| SourceError::Parse("detail page without title".into()))?;
     let time = |key: &str| -> Result<Option<_>, SourceError> {
         payload
@@ -351,6 +382,7 @@ impl Source for Barbican {
     async fn fetch(&self, ctx: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
         let mut paths: Vec<String> = Vec::new();
         let mut images: BTreeMap<String, String> = BTreeMap::new();
+        let mut titles: BTreeMap<String, String> = BTreeMap::new();
         for listing in LISTING_PATHS {
             let mut url = self
                 .base_url
@@ -365,6 +397,9 @@ impl Source for Barbican {
                 }
                 for (path, image) in page.image_urls {
                     images.entry(path).or_insert(image);
+                }
+                for (path, title) in page.titles {
+                    titles.entry(path).or_insert(title);
                 }
                 let Some(next) = page.next_page else {
                     break;
@@ -389,7 +424,12 @@ impl Source for Barbican {
                 }
             };
             match ctx.get_text(&url).await {
-                Ok(html) => match parse_detail(&html, &url, images.get(path).map(String::as_str)) {
+                Ok(html) => match parse_detail(
+                    &html,
+                    &url,
+                    images.get(path).map(String::as_str),
+                    titles.get(path).map(String::as_str),
+                ) {
                     Some(raw) => out.push(raw),
                     None => ctx.report_error(format!("{path}: no page title")),
                 },
@@ -401,6 +441,16 @@ impl Source for Barbican {
 
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
+    }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only Talks & events (except anything also filed under Cinema) and \
+             Art & design exhibitions running over more than one day. \
+             Single-date Art & design items (concerts, gigs and performances, \
+             including ones also tagged Contemporary music, gallery tours and \
+             late openings) are left out on purpose.",
+        )
     }
 }
 
@@ -472,7 +522,7 @@ mod tests {
 
     fn image_url(html: &str, listing_image: Option<&str>) -> Option<String> {
         let url = Url::parse("https://www.barbican.org.uk/whats-on/2026/event/talk").unwrap();
-        let raw = parse_detail(html, &url, listing_image).unwrap();
+        let raw = parse_detail(html, &url, listing_image, None).unwrap();
         raw.payload["image_url"].as_str().map(str::to_string)
     }
 
@@ -489,6 +539,63 @@ mod tests {
         let html = detail_with_og_image(og_jpeg);
         assert_eq!(image_url(&html, None).as_deref(), Some(og_jpeg));
         assert_eq!(image_url(&html, Some(jpeg)).as_deref(), Some(jpeg));
+    }
+
+    #[test]
+    fn listing_title_wins_over_the_page_heading() {
+        let mut payload = concrete_and_clay("");
+        payload["title"] = json!("Concrete and Clay");
+        let title = |p: &Value| normalise_payload(p).unwrap().unwrap().title;
+        assert_eq!(title(&payload), "Concrete and Clay");
+        payload["listing_title"] = json!("");
+        assert_eq!(title(&payload), "Concrete and Clay");
+        payload["listing_title"] = json!("Concrete and Clay: Archiving the Barbican");
+        assert_eq!(title(&payload), "Concrete and Clay: Archiving the Barbican");
+    }
+
+    #[test]
+    fn cut_short_card_titles_are_dropped() {
+        let card = |slug: &str, title: &str| {
+            format!(
+                r#"<article class="listing--event">
+                <a class="search-listing__link" href="/whats-on/2026/event/{slug}"></a>
+                <h2 class="listing-title listing-title--event"> {title} </h2>
+                </article>"#
+            )
+        };
+        let html = format!(
+            "<html><body>{}{}{}</body></html>",
+            card("whole", "Robert Ryman: The Real Thing"),
+            card(
+                "cut",
+                "Robert Ryman: Exhibition Tour with Curatorial Assistant..."
+            ),
+            card("ellipsis", "Darbar: Exploring the Beauty of Raga…"),
+        );
+        let page = parse_listing(&html);
+        assert_eq!(page.event_paths.len(), 3);
+        assert_eq!(
+            page.titles,
+            BTreeMap::from([(
+                "/whats-on/2026/event/whole".to_string(),
+                "Robert Ryman: The Real Thing".to_string()
+            )])
+        );
+    }
+
+    #[test]
+    fn the_qa_scope_names_the_kept_and_skipped_art_forms() {
+        let scope = Barbican::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for words in [
+            "Talks & events",
+            "Art & design",
+            "more than one day",
+            "Cinema",
+        ] {
+            assert!(scope.contains(words), "{words}");
+        }
     }
 
     #[test]
