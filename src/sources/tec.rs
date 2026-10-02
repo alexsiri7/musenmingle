@@ -42,6 +42,8 @@
 //!   `map_category` over the category names and title, then
 //!   `default_category`; with none of those the event is skipped. The
 //!   JSON-LD carries no categories: title, then `default_category`.
+//!   Without a `default_category` that leaves out film screenings, tours,
+//!   gigs and the like; `qa_scope` tells the scraper check.
 //! * Price: `cost` text (its `currency_code` is unreliable: "USD" for "£"
 //!   prices), widened by the description's ticket lines (online and
 //!   livestream lines excluded) when it is paid; or the JSON-LD offers. TEC strings are HTML-escaped (the
@@ -729,6 +731,16 @@ impl Source for Tec {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload, &self.config)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        self.config.default_category.is_none().then_some(
+            "Only talks, workshops, exhibitions, fairs and community events: \
+             events whose site categories or title name one of those (lecture, \
+             class, course, discussion, display, meetup and the like). Anything \
+             else (film screenings, tours, gigs, concerts, performances) is left \
+             out on purpose.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -895,6 +907,35 @@ mod tests {
         .unwrap()
         .tags;
         assert_eq!(tags, ["classes & workshops"]);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out_unless_there_is_a_default() {
+        let tec = |config: Value| {
+            Tec::from_row(
+                "tec-x",
+                Url::parse("https://x.test/").unwrap(),
+                Some(&config),
+            )
+            .unwrap()
+        };
+        let scope = tec(json!({"skip_categories": ["tours"]}))
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "talks",
+            "workshops",
+            "exhibitions",
+            "film screenings",
+            "tours",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
+        assert!(
+            tec(json!({"default_category": "talk"}))
+                .qa_scope()
+                .is_none()
+        );
     }
 
     #[test]
