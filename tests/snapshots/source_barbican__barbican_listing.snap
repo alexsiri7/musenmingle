@@ -40,7 +40,22 @@ expression: pages
         "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Untitled%20design%20%288%29.png?h=7adbbeb1&itok=e2zV5Uyj",
         "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curatorial-assistant": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-01/Untitled%20design%20%287%29.png?h=7adbbeb1&itok=L7vfXwsT"
       },
-      "next_page": "?page=1"
+      "next_page": "?page=1",
+      "titles": {
+        "/whats-on/2025/event/concrete-and-clay-archiving-the-barbican": "Concrete and Clay: Archiving the Barbican",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki": "Architecture on Stage: Takero Shimazaki",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen": "Architecture on Stage: Walters and Cohen",
+        "/whats-on/2026/event/architecture-on-stage-worofila": "Architecture on Stage: Worofila",
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom": "Lawrence Abu Hamdan: The Crack and the Boom",
+        "/whats-on/2026/event/lawrence-abu-hamdan-zifzafa": "Lawrence Abu Hamdan: Zifzafa",
+        "/whats-on/2026/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith": "Robert Ryman: Exhibition Tour with Curator Wells Fray-Smith",
+        "/whats-on/2026/event/robert-ryman-the-real-thing": "Robert Ryman: The Real Thing",
+        "/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar": "Ryman in Rhythm: Sarathy Korwar",
+        "/whats-on/2026/event/ryman-in-rhythm-tyroneisaacstuart": "Ryman in Rhythm: tyroneisaacstuart",
+        "/whats-on/2026/event/yuko-mohri-and-christian-marclay-performance": "Yuko Mohri and Christian Marclay Performance",
+        "/whats-on/2026/event/yuko-mohri-in-concert": "Yuko Mohri: In Concert",
+        "/whats-on/2027/event/robert-ryman-exhibition-tour-with-curator-wells-fray-smith": "Robert Ryman: Exhibition Tour with Curator Wells Fray-Smith"
+      }
     }
   },
   {
@@ -64,7 +79,16 @@ expression: pages
         "/whats-on/2027/event/ryman-in-rhythm-soweto-kinch": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/soweto%20kinch.jpg?h=2590c66e&itok=vY9bC3V8",
         "/whats-on/2027/event/ximena-garrido-lecca": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/6.%20Ximena%E2%80%AFGarrido-Lecca%20%281%29.jpg?h=0b25c2cf&itok=zqX8pwYb"
       },
-      "next_page": null
+      "next_page": null,
+      "titles": {
+        "/whats-on/2027/event/alice-adams": "Alice Adams",
+        "/whats-on/2027/event/characters-of-fashion": "Characters of Fashion",
+        "/whats-on/2027/event/dayanita-singh": "Dayanita Singh",
+        "/whats-on/2027/event/magdalene-odundo": "Magdalene Odundo",
+        "/whats-on/2027/event/rosa-barba": "Rosa Barba",
+        "/whats-on/2027/event/ryman-in-rhythm-soweto-kinch": "Ryman in Rhythm: Soweto Kinch",
+        "/whats-on/2027/event/ximena-garrido-lecca": "Ximena Garrido-Lecca"
+      }
     }
   },
   {
@@ -104,7 +128,24 @@ expression: pages
         "/whats-on/2026/event/realm-of-the-rebels": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Touretteshero_Logo_RebelPlay_2ee%20%281%29.jpg?h=a9e6bb62&itok=d6hXw_Tg",
         "/whats-on/2026/event/spirit-moves-us-sound-movement-session-with-seyi-adelekun": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Spirit%20Moves%20Us.jpg?h=7be64629&itok=ROuVtXLG"
       },
-      "next_page": "?page=1"
+      "next_page": "?page=1",
+      "titles": {
+        "/whats-on/2026/event/an-evening-with-fran-lebowitz": "An Evening with Fran Lebowitz",
+        "/whats-on/2026/event/an-evening-with-nick-park": "An Evening with Nick Park",
+        "/whats-on/2026/event/architecture-on-stage-takero-shimazaki": "Architecture on Stage: Takero Shimazaki",
+        "/whats-on/2026/event/architecture-on-stage-walters-and-cohen": "Architecture on Stage: Walters and Cohen",
+        "/whats-on/2026/event/basic-forms-reimagining-public-space": "Basic Forms: Reimagining Public Space",
+        "/whats-on/2026/event/black-british-book-festival-2026": "Black British Book Festival 2026",
+        "/whats-on/2026/event/blindboy-the-blindboy-podcast-live": "Blindboy - The Blindboy Podcast LIVE",
+        "/whats-on/2026/event/darbar-a-voice-without-borders-by-sandeep-narayan": "Darbar: A Voice Without Borders by Sandeep Narayan",
+        "/whats-on/2026/event/darbar-breathwork-to-energise-with-davel-patel": "Darbar: Breathwork to Energise with Davel Patel",
+        "/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk": "Darbar: Two Gharanas, One Musician — Shahbaz Hussain (Talk)",
+        "/whats-on/2026/event/darbar-yogabliss-to-live-music-with-kanwal-ahluwalia": "Darbar: Yogabliss to Live Music with Kanwal Ahluwalia",
+        "/whats-on/2026/event/lawrence-abu-hamdan-the-crack-and-the-boom": "Lawrence Abu Hamdan: The Crack and the Boom",
+        "/whats-on/2026/event/piano-masterclass-with-sofya-gulyak": "Piano Masterclass with Sofya Gulyak",
+        "/whats-on/2026/event/realm-of-the-rebels": "Realm of The Rebels",
+        "/whats-on/2026/event/spirit-moves-us-sound-movement-session-with-seyi-adelekun": "Spirit Moves Us: Sound & Movement Session with Seyi Adelekun"
+      }
     }
   },
   {
@@ -144,7 +185,23 @@ expression: pages
         "/whats-on/2027/event/bbc-so-total-immersion-music-for-wellbeing": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Night_Tracks_YELLOW%20%281%29.png?h=eba629ac&itok=waLg7ynj",
         "/whats-on/2027/event/total-immersion-music-for-wellbeing-talk": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-04/1_SO_Night_Tracks_YELLOW%20%281%29.png?h=eba629ac&itok=waLg7ynj"
       },
-      "next_page": "?page=2"
+      "next_page": "?page=2",
+      "titles": {
+        "/whats-on/2026/event/an-evening-with-sir-chris-hoy": "An Evening with Sir Chris Hoy",
+        "/whats-on/2026/event/an-evening-with-yotam-ottolenghi-simple-too": "An Evening with Yotam Ottolenghi - Simple Too",
+        "/whats-on/2026/event/architecture-on-stage-worofila": "Architecture on Stage: Worofila",
+        "/whats-on/2026/event/chris-packhams-world-of-wonder-a-planet-on-the-edge": "Chris Packham’s World of Wonder: A Planet on the Edge",
+        "/whats-on/2026/event/darbar-raga-meditation-with-jason-kalidas-eartha-love": "Darbar: Raga Meditation with Jason Kalidas & Eartha Love",
+        "/whats-on/2026/event/darbar-the-benaras-gharana-by-sunanda-sharma": "Darbar: The Benaras Gharana by Sunanda Sharma",
+        "/whats-on/2026/event/darbar-the-science-of-slower-breathing-with-davel-patel": "Darbar: The Science of Slower Breathing with Davel Patel",
+        "/whats-on/2026/event/darbar-the-singing-violin": "Darbar: The Singing Violin",
+        "/whats-on/2026/event/harry-enfield-and-no-chums-0": "Harry Enfield: And No Chums!",
+        "/whats-on/2026/event/how-the-body-keeps-the-score-dr-bessel-van-der-kolk": "How The Body Keeps the Score – Dr Bessel van der Kolk",
+        "/whats-on/2026/event/young-barbican-conservatory-sunday": "Young Barbican: Conservatory Sunday",
+        "/whats-on/2026/event/young-barbican-pick-mix-signal-decay-15": "Young Barbican Pick & Mix: Signal Decay (15)",
+        "/whats-on/2027/event/bbc-so-total-immersion-music-for-wellbeing": "BBC SO Total Immersion: Music for Wellbeing",
+        "/whats-on/2027/event/total-immersion-music-for-wellbeing-talk": "Total Immersion: Music for Wellbeing - Talk"
+      }
     }
   },
   {
@@ -178,7 +235,21 @@ expression: pages
         "/whats-on/2027/event/young-barbican-pick-mix-the-whole-world-is-watching-18": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/Incident_Still1.jpg?h=d64d5dd5&itok=n_jElLgk",
         "/whats-on/2027/event/young-barbican-takeover-festival-2027": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/YOUNG%20BARBICAN%20TAKEOVER%2033%20%C2%A9%202026%20Jenny%20Arrowsmith%20%281%29.jpg?h=7c632e8b&itok=R2iTwctS"
       },
-      "next_page": null
+      "next_page": null,
+      "titles": {
+        "/whats-on/2027/event/a-new-history-of-our-future-with-peter-frankopan": "A New History of Our Future, with Peter Frankopan",
+        "/whats-on/2027/event/bbc-so-total-immersion-the-music-of-rebecca-saunders-0": "BBC SO Total Immersion: The Music of Rebecca Saunders",
+        "/whats-on/2027/event/how-geography-explains-our-world-with-tim-marshall": "How Geography Explains Our World, with Tim Marshall",
+        "/whats-on/2027/event/john-waters-live": "John Waters Live!!!",
+        "/whats-on/2027/event/roberto-saviano-quel-che-resta-di-me": "Roberto Saviano - Quel che resta di me",
+        "/whats-on/2027/event/the-amol-rajan-connection-live": "The Amol Rajan Connection: Live",
+        "/whats-on/2027/event/total-immersion-the-music-of-rebecca-saunders-talk": "Total Immersion: The Music of Rebecca Saunders - Talk",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk": "Total Immersion: The World of Tove Jansson - Talk",
+        "/whats-on/2027/event/total-immersion-the-world-of-tove-jansson-talk-0": "Total Immersion: The World of Tove Jansson - Talk",
+        "/whats-on/2027/event/young-barbican-events-irl-sessions": "Young Barbican Events: irl sessions",
+        "/whats-on/2027/event/young-barbican-pick-mix-the-whole-world-is-watching-18": "Young Barbican Pick & Mix: The Whole World is Watching (18*)",
+        "/whats-on/2027/event/young-barbican-takeover-festival-2027": "Young Barbican Takeover Festival 2027"
+      }
     }
   }
 ]
