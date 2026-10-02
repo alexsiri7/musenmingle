@@ -12,7 +12,7 @@ use crate::enrich::output::normalise_for_match;
 use crate::runner::RunEvent;
 
 /// Bump when the prompt, the input or the validation changes.
-pub const QA_PROMPT_VERSION: i32 = 2;
+pub const QA_PROMPT_VERSION: i32 = 3;
 pub const SYSTEM_PROMPT: &str = include_str!("prompt.txt");
 
 pub const FIELDS: &[&str] = &[
