@@ -158,7 +158,8 @@ not code: `events.sources.platform` names the shared implementation
    | `venue` | none | `{"name", "address"}` for events without a venue; also marks them as in London |
    | `category_map` | `{}` | TEC category slug → category, checked first |
    | `skip_categories` | `[]` | TEC category slugs to skip (films, music, tours, …) |
-   | `default_category` | none | category when neither the map nor keywords match |
+   | `default_category` | none | category when neither the map nor keywords (title, or for the list view also the description) match |
+   | `skip_keywords` | `[]` | title words or phrases whose events are skipped (e.g. yoga) |
 
    An unknown field or category makes the row a recorded skip
    (`invalid config`), not a crash.
