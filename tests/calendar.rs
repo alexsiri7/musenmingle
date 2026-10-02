@@ -318,7 +318,11 @@ async fn week_view_across_the_clock_change() {
     assert!(!b.contains("cal-day pad"));
     assert!(b.contains("href=\"/calendar?view=week&amp;date=2026-10-12\" rel=\"prev\""));
     assert!(b.contains("href=\"/calendar?view=week&amp;date=2026-10-26\" rel=\"next\""));
-    assert!(!b.contains(&format!("/events/{talk}")));
+    // Exclude the sidebar: its "starting" panel is the real next 7 days
+    // (wall-clock `today()`, not this view's `date`), so it can legitimately
+    // list the talk when the test happens to run in early October.
+    let grid = &b[..b.find("<aside").unwrap()];
+    assert!(!grid.contains(&format!("/events/{talk}")));
     assert_eq!(b.matches(&format!("href=\"/events/{show}\"")).count(), 1);
     // Strip + last day (it opened the week before).
     assert_eq!(b.matches(&format!("href=\"/events/{short}\"")).count(), 2);

@@ -43,7 +43,8 @@
 //!   `default_category`; with none of those the event is skipped. The
 //!   JSON-LD carries no categories: title, then `default_category`.
 //! * Price: `cost` text (its `currency_code` is unreliable: "USD" for "£"
-//!   prices), or the JSON-LD offers. TEC strings are HTML-escaped (the
+//!   prices), widened by the description's ticket lines (online and
+//!   livestream lines excluded) when it is paid; or the JSON-LD offers. TEC strings are HTML-escaped (the
 //!   JSON-LD descriptions twice), so all text goes through `clean_text`.
 //! * The content policy is decided per venue in its seed row.
 
@@ -53,7 +54,7 @@ use async_trait::async_trait;
 use chrono::{DateTime, Days, NaiveDate, NaiveTime, Utc};
 use chrono_tz::Europe::London;
 use rust_decimal::Decimal;
-use scraper::Html;
+use scraper::{Html, Selector};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use url::Url;
@@ -530,9 +531,12 @@ fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, 
         let starts_at = parse_london_wall_clock(start).ok_or_else(|| bad(start))?;
         Times::timed(starts_at, end.and_then(parse_london_wall_clock))
     };
-    let price = text_of(event.get("cost"))
-        .map(|c| parse_price(&c))
-        .unwrap_or_default();
+    let price = widen_with_ticket_lines(
+        text_of(event.get("cost"))
+            .map(|c| parse_price(&c))
+            .unwrap_or_default(),
+        event.get("description").and_then(Value::as_str),
+    );
 
     Ok(Some(Parsed {
         description: clean_description(event.get("description").and_then(Value::as_str)),
@@ -628,6 +632,43 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
         tags: Vec::new(),
         title,
     }))
+}
+
+/// TEC's `cost` is what the venue typed into the price field, which can
+/// omit tiers its description lists ("Solidarity Ticket – £26.94"); a paid
+/// cost is widened by the description's ticket lines (`p`/`li` blocks with
+/// "ticket", no online/livestream, same currency).
+fn widen_with_ticket_lines(price: Price, description: Option<&str>) -> Price {
+    let (Some(min), Some(max), Some(currency), Some(description)) =
+        (price.min, price.max, price.currency.as_deref(), description)
+    else {
+        return price;
+    };
+    if price.is_free {
+        return price;
+    }
+    let lines = Selector::parse("p, li").expect("valid selector");
+    let tiers: Vec<Price> = Html::parse_fragment(description)
+        .select(&lines)
+        .map(|el| clean_text(&el.inner_html()))
+        .filter(|line| {
+            let lower = line.to_lowercase();
+            lower.contains("ticket")
+                && !lower.contains("online")
+                && !lower.contains("livestream")
+                && !lower.contains("live stream")
+        })
+        .map(|line| parse_price(&line))
+        .filter(|p| p.currency.as_deref() == Some(currency))
+        .collect();
+    Price {
+        min: [min]
+            .into_iter()
+            .chain(tiers.iter().filter_map(|p| p.min))
+            .min(),
+        max: tiers.iter().filter_map(|p| p.max).chain([max]).max(),
+        ..price
+    }
 }
 
 /// Price from the JSON-LD offers: numeric prices give a range, a text price
@@ -877,6 +918,64 @@ mod tests {
         let raw = items.into_iter().next().unwrap().unwrap();
         assert_eq!(raw.source_event_id, "/event/x/2026-09-27/");
         assert_eq!(raw.payload["event"]["image"], Value::Null);
+    }
+
+    #[test]
+    fn cost_is_widened_by_description_ticket_lines() {
+        let range = |cost: &str, description: &str| {
+            let price = norm(
+                &api(json!({"cost": cost, "description": description})),
+                json!({}),
+            )
+            .unwrap()
+            .price;
+            (
+                price.min.map(|d| d.to_string()),
+                price.max.map(|d| d.to_string()),
+                price.currency,
+                price.is_free,
+            )
+        };
+        let tiers = "<p>Solidarity Ticket &#8211; &#163;26.94</p><p>Standard Ticket – £16.40</p>\
+                     <p>A limited number of bursary tickets (£11.13) are available.</p>";
+        let cost = "£11.13 – £16.40";
+        let stored = |max: &str| {
+            (
+                Some("11.13".to_string()),
+                Some(max.to_string()),
+                Some("GBP".to_string()),
+                false,
+            )
+        };
+        assert_eq!(range(cost, tiers), stored("26.94"));
+        assert_eq!(
+            range(
+                cost,
+                "<p>Online ticket – £5</p><ul><li>Livestream ticket £40</li></ul>"
+            ),
+            stored("16.40")
+        );
+        assert_eq!(range(cost, "<p>The book costs £30.</p>"), stored("16.40"));
+        assert_eq!(range(cost, "<p>Tickets $30</p>"), stored("16.40"));
+        assert_eq!(range("", "<p>Tickets £25</p>"), (None, None, None, false));
+        assert!(range("Free", "<p>Tickets £25</p>").3);
+        // A cheaper tier lowers the floor; a restated one keeps the cost's text.
+        let gbp = |min: &str, max: &str| {
+            (
+                Some(min.to_string()),
+                Some(max.to_string()),
+                Some("GBP".to_string()),
+                false,
+            )
+        };
+        assert_eq!(
+            range("£16.40 – £16.40", "<p>Bursary Ticket – £8.00</p>"),
+            gbp("8.00", "16.40")
+        );
+        assert_eq!(
+            range("£11.10 – £16.40", "<p>Bursary ticket (£11.1)</p>"),
+            gbp("11.10", "16.40")
+        );
     }
 
     #[test]
