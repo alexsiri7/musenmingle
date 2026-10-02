@@ -137,6 +137,8 @@ pub struct QaDue {
     pub reason: DueReason,
     pub code_hash: String,
     price: ModelPrice,
+    /// The source's [`Source::qa_scope`].
+    scope: Option<&'static str>,
 }
 
 /// What a check did (logged by the runner).
@@ -276,6 +278,7 @@ impl QaChecker {
             reason,
             code_hash,
             price,
+            scope: source.qa_scope(),
         }))
     }
 
@@ -466,6 +469,7 @@ impl QaChecker {
             .collect();
         let input = input::build(
             &row.key,
+            due.scope,
             london_date(now),
             &pages,
             &detail_records,

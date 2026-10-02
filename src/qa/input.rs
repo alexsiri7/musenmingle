@@ -283,8 +283,10 @@ fn page_json(id: usize, p: &Page, text: &str) -> Value {
 
 /// Build the judge's input. `pages[0]` is the listing (or API response)
 /// unless it is a detail page; `detail_records` pairs each checked record with the index of its page.
+/// `scope` is the source's scope note: shown to the judge, never grounding.
 pub fn build(
     source_key: &str,
+    scope: Option<&str>,
     today_london: NaiveDate,
     pages: &[PageIn<'_>],
     detail_records: &[(&RunEvent, usize)],
@@ -369,7 +371,7 @@ pub fn build(
     let not_shown = visible.len() - listing_records.len();
 
     let skeleton = |texts: &[String]| {
-        json!({
+        let mut v = json!({
             "today_london": today_london.format("%Y-%m-%d").to_string(),
             "source": source_key,
             "pages": pages.iter().zip(texts).enumerate()
@@ -377,8 +379,11 @@ pub fn build(
             "records": records,
             "listing_records": listing_records,
             "listing_records_not_shown": not_shown,
-        })
-        .to_string()
+        });
+        if let Some(s) = scope {
+            v["source_scope"] = json!(s);
+        }
+        v.to_string()
     };
     let empty = vec![String::new(); pages.len()];
     let room = MAX_INPUT_CHARS.saturating_sub(skeleton(&empty).len());
@@ -590,7 +595,14 @@ pub(crate) mod tests {
                 json: false,
             },
         ];
-        let input = build("fake", today(), &pages, &[(&all[0], 1), (&all[1], 2)], &all);
+        let input = build(
+            "fake",
+            None,
+            today(),
+            &pages,
+            &[(&all[0], 1), (&all[1], 2)],
+            &all,
+        );
         assert!(
             input.message.len() <= MAX_INPUT_CHARS,
             "{}",
@@ -623,5 +635,24 @@ pub(crate) mod tests {
         assert!(is_run_record("Big Show", &all));
         assert!(is_run_record("The Big Show: Late (sold out)", &all));
         assert!(!is_run_record("Another thing", &all));
+    }
+
+    #[test]
+    fn the_source_scope_reaches_the_judge_but_not_grounding() {
+        let pages = [PageIn {
+            kind: PageKind::Listing,
+            url: "https://venue.test/whats-on",
+            body: "<html><body><p>Music: A Gig. Talk: A Talk.</p></body></html>",
+            json: false,
+        }];
+        let scope = "Only talks. Gigs are left out on purpose.";
+        let input = build("fake", Some(scope), today(), &pages, &[], &[]);
+        let v: Value = serde_json::from_str(&input.message).unwrap();
+        assert_eq!(v["source_scope"], scope);
+        assert!(!input.grounding_all.contains("left out on purpose"));
+
+        let input = build("fake", None, today(), &pages, &[], &[]);
+        let v: Value = serde_json::from_str(&input.message).unwrap();
+        assert!(v.get("source_scope").is_none());
     }
 }

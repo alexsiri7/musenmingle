@@ -12,7 +12,7 @@ use crate::enrich::output::normalise_for_match;
 use crate::runner::RunEvent;
 
 /// Bump when the prompt, the input or the validation changes.
-pub const QA_PROMPT_VERSION: i32 = 3;
+pub const QA_PROMPT_VERSION: i32 = 4;
 pub const SYSTEM_PROMPT: &str = include_str!("prompt.txt");
 
 pub const FIELDS: &[&str] = &[
@@ -269,6 +269,7 @@ mod tests {
     fn input(all: &[RunEvent]) -> JudgeInput {
         build(
             "fake",
+            None,
             NaiveDate::from_ymd_opt(2026, 10, 1).unwrap(),
             &[
                 PageIn {
@@ -448,5 +449,10 @@ mod tests {
             let err = validate(&content, &input, &all).unwrap_err();
             assert!(err.contains(want), "{content}\n→ {err}");
         }
+    }
+
+    #[test]
+    fn the_prompt_explains_the_source_scope() {
+        assert!(SYSTEM_PROMPT.contains("\"source_scope\""));
     }
 }

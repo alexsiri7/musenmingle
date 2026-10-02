@@ -86,6 +86,13 @@ pub trait Source: Send + Sync {
         None
     }
 
+    /// What this source leaves out on purpose, in a sentence for the scraper
+    /// QA judge (`crate::qa`), so it doesn't report deliberate skips as
+    /// missed events. `None`: no scope note.
+    fn qa_scope(&self) -> Option<&'static str> {
+        None
+    }
+
     /// The implementing type's path (`musenmingle::sources::<module>::<Type>`),
     /// used by the scraper QA check to notice code changes
     /// (`crate::qa::code`). Do not override.

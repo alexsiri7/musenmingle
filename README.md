@@ -564,7 +564,9 @@ it. `src/qa/` looks for it in three layers:
    except up to 4 detail pages when the run's own fetches don't include
    any); the judge gets the listing and up to 2 detail pages as main-content
    text (Readability via `dom_smoothie`, falling back to the visible text)
-   plus JSON-LD, and our records, within ~12k tokens (`qa::input`). Its
+   plus JSON-LD, and our records, within ~12k tokens (`qa::input`), plus
+   the source's scope note when it has one (`Source::qa_scope`: what it
+   leaves out on purpose, so deliberate skips aren't reported as missed). Its
    answer is validated strictly (`qa::output`: fixed fields and verdicts,
    quotes copied verbatim from the pages; retried once, then `invalid`).
    Model `QA_MODEL` (zero-retention `model_prices` row required), at most

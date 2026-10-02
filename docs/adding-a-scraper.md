@@ -120,6 +120,12 @@ quote. The AI can be wrong: check each row on the page first. Then:
 3. The issue closes itself when a later check (weekly, or the next run after
    the source's file changes) finds no problems.
 
+If the "missed" events are ones the scraper skips on purpose (its
+documented, tested `Ok(None)` scope), don't add them. Give the source a
+`qa_scope` note instead, or correct its existing one, saying what it leaves
+out in the site's own words (e.g. the categories the listing shows). That
+changes the source's file, so the next run rechecks it.
+
 ## Adding a venue on The Events Calendar
 
 Many venue sites run WordPress with The Events Calendar (TEC). They share
