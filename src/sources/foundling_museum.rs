@@ -13,7 +13,8 @@
 //! * Category from the card: Exhibitions & Displays → exhibition; Talks,
 //!   Tours (in-museum and walking tours) and Conferences → talk; Workshops →
 //!   workshop. Families and Concerts are skipped, and so are online
-//!   editions (`…-online` slugs, "online" in the title) (`Ok(None)`).
+//!   editions (`…-online` slugs, "online" in the title) (`Ok(None)`);
+//!   `qa_scope` tells the scraper check.
 //! * Exhibitions are read from their card alone: a date-only range with the
 //!   year on the end (`30 Jun – 25 Oct 2026`; a start after the end means it
 //!   began the year before) or on both ends (`17 Nov 2026 – 18 Apr 2027`),
@@ -467,6 +468,16 @@ impl Source for FoundlingMuseum {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only cards whose category is Exhibitions & Displays, Talks, Tours \
+             (in-museum and walking tours), Conferences or Workshops. Families \
+             (including the offsite Foundling Libraries sessions) and Concerts are \
+             left out on purpose, as are online editions (\"online\" in the title \
+             or an event slug ending in -online).",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -634,5 +645,23 @@ mod tests {
         let mut online = payload("Talks", "9 Oct 2026", Some("9 Oct 2026 6:30pm"));
         online["card"]["slug"] = json!("wet-nursing-foundling-babies-online");
         assert!(normalise_payload(&online).unwrap().is_none());
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = FoundlingMuseum::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "Exhibitions",
+            "Talks",
+            "Workshops",
+            "Families",
+            "Foundling Libraries",
+            "Concerts",
+            "online",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
