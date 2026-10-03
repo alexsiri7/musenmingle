@@ -4,7 +4,10 @@
 //! recent runs (newest first):
 //!
 //! 1. **Zero events**: the run completed (`ok`) but found 0 events while the
-//!    average of the last `trailing_runs` successful runs before it is > 0.
+//!    average of the last `trailing_runs` successful runs before it is at
+//!    least `zero_min_trailing_avg` (default 2). A source that normally lists
+//!    about one item (a one-show gallery) is simply empty between items, so
+//!    it is left to rule 2 and the scraper QA check.
 //!    (A failed run also records 0 events; failures are rule 2's job, so a
 //!    single transient 429/timeout does not open an issue.) Sources flagged
 //!    `events.sources.may_be_empty` (normally empty between postings) are
@@ -39,6 +42,9 @@ pub struct HealthConfig {
     pub consecutive_error_runs: usize,
     pub drop_threshold_pct: f64,
     pub min_history_for_drop: usize,
+    /// Rule 1 needs at least this trailing average: a source that lists
+    /// about one item is empty whenever that one ends.
+    pub zero_min_trailing_avg: f64,
 }
 
 impl Default for HealthConfig {
@@ -48,6 +54,7 @@ impl Default for HealthConfig {
             consecutive_error_runs: 2,
             drop_threshold_pct: 60.0,
             min_history_for_drop: 3,
+            zero_min_trailing_avg: 2.0,
         }
     }
 }
@@ -165,7 +172,11 @@ pub fn evaluate(runs: &[RunStats], cfg: &HealthConfig) -> Vec<Trip> {
         trailing.iter().map(|&n| f64::from(n)).sum::<f64>() / trailing.len() as f64
     };
 
-    if current.ok && current.events_found == 0 && !trailing.is_empty() && avg > 0.0 {
+    if current.ok
+        && current.events_found == 0
+        && !trailing.is_empty()
+        && avg >= cfg.zero_min_trailing_avg
+    {
         trips.push(Trip::ZeroEvents { trailing_avg: avg });
     }
 
@@ -479,6 +490,21 @@ mod tests {
                 vec!["zero"],
             ),
             (
+                "zero after one-event runs",
+                vec![r(0, 0, true), r(1, 0, true), r(1, 0, true), r(1, 0, true)],
+                vec![],
+            ),
+            (
+                "zero below the minimum average",
+                vec![r(0, 0, true), r(2, 0, true), r(1, 0, true)],
+                vec![],
+            ),
+            (
+                "zero at the minimum average",
+                vec![r(0, 0, true), r(2, 0, true), r(2, 0, true)],
+                vec!["zero"],
+            ),
+            (
                 "zero after zero runs",
                 vec![r(0, 0, true), r(0, 0, true), r(0, 0, true)],
                 vec![],
@@ -577,7 +603,7 @@ mod tests {
     #[test]
     fn may_be_empty_skips_only_zero_events() {
         let cfg = HealthConfig::default();
-        let gap = [r(0, 0, true), r(1, 0, true), r(1, 0, true)];
+        let gap = [r(0, 0, true), r(2, 0, true), r(2, 0, true)];
         assert!(evaluate_source(&gap, &cfg, true).is_empty());
         assert_eq!(kinds(&evaluate_source(&gap, &cfg, false)), ["zero"]);
         assert_eq!(
@@ -610,7 +636,12 @@ mod tests {
             consecutive_error_runs: 3,
             drop_threshold_pct: 20.0,
             min_history_for_drop: 1,
+            zero_min_trailing_avg: 1.0,
         };
+        assert_eq!(
+            kinds(&evaluate(&[r(0, 0, true), r(1, 0, true)], &cfg)),
+            ["zero"]
+        );
         assert_eq!(
             kinds(&evaluate(&[r(7, 0, true), r(10, 0, true)], &cfg)),
             ["drop"]

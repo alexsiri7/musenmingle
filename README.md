@@ -307,8 +307,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   (`src/thumbs.rs`, `events.thumbnails`, served at `/thumbs/...`).
 - **Health checks** (`src/health.rs`, `src/github.rs`): after each run a source
   trips if (1) a successful run found 0 events while its trailing average
-  is > 0 (unless the source is flagged `may_be_empty`, for sources that are
-  normally empty between postings), (2) it had errors on 2 consecutive runs,
+  is at least 2 (a source that normally lists about one item, such as a
+  one-show gallery, is just empty between items; sources that are normally
+  busier but can legitimately empty out are flagged `may_be_empty`), (2) it had errors on 2 consecutive runs,
   or (3) its count dropped > 60 % vs the trailing average. A trip opens
   **one** GitHub issue `Scraper broken: <key>` labelled
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
