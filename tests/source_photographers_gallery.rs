@@ -6,6 +6,7 @@ mod common;
 use common::fixture;
 use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
+use musenmingle::model::Category;
 use musenmingle::sources::Source;
 use musenmingle::sources::photographers_gallery::{PhotographersGallery, next_page, parse_listing};
 use url::Url;
@@ -40,6 +41,46 @@ fn normalised_output_snapshot() {
         })
         .collect();
     insta::assert_json_snapshot!("photographers_gallery_normalised", out);
+}
+
+/// Issue #260: the scraper check of 2026-09-29 found three listings missing.
+/// The bookshop talk was a real miss (its only post type was "Bookshop
+/// Event"); the photobooth and the course are skipped on purpose (`qa_scope`).
+/// Page captured 2026-10-03; expected values are the page's.
+#[test]
+fn qa_2026_09_29_page_values() {
+    const TALK: &str = "book-presentation-talk-signing-carol-allen-storey-defying-myth";
+    const SKIPPED: [&str; 2] = [
+        "autofoto-photobooth-photographers-gallery",
+        "course-collecting-photography-2026",
+    ];
+    let s = PhotographersGallery::new(SITE.parse().unwrap());
+    let url = Url::parse(&format!("{SITE}/whats-on")).unwrap();
+    let listing = parse_listing(&fixture(&format!("{DIR}/qa-2026-09-29.html")), &url);
+    let normalised = |id: &str| {
+        let raw = listing
+            .iter()
+            .find(|r| r.source_event_id == id)
+            .unwrap_or_else(|| panic!("{id} not listed"));
+        s.normalise(raw).expect("normalise")
+    };
+
+    for id in SKIPPED {
+        assert!(normalised(id).is_none(), "{id}");
+    }
+    let talk = normalised(TALK).expect("in scope");
+    assert_eq!(talk.category, Category::Talk);
+    assert!(!talk.all_day);
+    insta::assert_json_snapshot!(
+        "photographers_gallery_qa_2026_09_29",
+        serde_json::json!({
+            "title": talk.title,
+            "starts_at": talk.starts_at,
+            "ends_at": talk.ends_at,
+            "all_day": talk.all_day,
+            "category": talk.category,
+        })
+    );
 }
 
 #[test]

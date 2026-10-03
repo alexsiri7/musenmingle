@@ -21,11 +21,12 @@
 //!   wall-clock start and one date (`6:30pm, Thu 26 Nov 2026`), stored with
 //!   no end. Anything else is a parse error.
 //! * Category from the post type: exhibitions and the Soho Photography
-//!   Quarter's outdoor displays → exhibition; talks & events and exhibition
-//!   tours → talk; workshops & courses → workshop. Items without a post type
-//!   (the photobooth), open calls, other types and runs of dates that aren't
-//!   exhibitions (multi-week courses, whose session times appear only on
-//!   their pages) are skipped (`Ok(None)`).
+//!   Quarter's outdoor displays → exhibition; talks & events, bookshop events
+//!   (book launches and signings) and exhibition tours → talk; workshops &
+//!   courses → workshop. Items without a post type (the photobooth), open
+//!   calls, other types and runs of dates that aren't exhibitions
+//!   (multi-week courses, whose session times appear only on their pages)
+//!   are skipped (`Ok(None)`); `qa_scope` tells the scraper check.
 //! * Terms allow personal use only, so the seed row is facts + link only;
 //!   the summary and image are still emitted as found (the upsert applies the
 //!   policy).
@@ -246,7 +247,7 @@ pub fn category(post_type: &str) -> Option<Category> {
         Some(Category::Exhibition)
     } else if has("workshops & courses") {
         Some(Category::Workshop)
-    } else if has("talks & events") || has("tours") {
+    } else if has("talks & events") || has("bookshop event") || has("tours") {
         Some(Category::Talk)
     } else {
         None
@@ -349,6 +350,17 @@ impl Source for PhotographersGallery {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only items whose post type is Exhibition, Soho Photography Quarter, \
+             Talks & Events, Bookshop Event, Tours or Workshops & Courses. Left out \
+             on purpose: items with no post type (the Autofoto photobooth), open \
+             calls, and anything but an exhibition whose date line is a range of \
+             days (courses such as \"Collecting Photography\", whose session times \
+             appear only on their own pages).",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -427,7 +439,7 @@ mod tests {
             Some(Category::Talk)
         );
         assert_eq!(category("Tours"), Some(Category::Talk));
-        assert_eq!(category("Bookshop Event"), None);
+        assert_eq!(category("Bookshop Event"), Some(Category::Talk));
         assert_eq!(category(""), None);
     }
 
@@ -539,5 +551,26 @@ mod tests {
         );
         assert_eq!(next_page(&html("/shop?page=1"), &page), None);
         assert_eq!(next_page("<nav class=\"pager\"></nav>", &page), None);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_kept_and_left_out() {
+        let scope = PhotographersGallery::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for kept in [
+            "Exhibition",
+            "Soho Photography Quarter",
+            "Talks & Events",
+            "Bookshop Event",
+            "Tours",
+            "Workshops & Courses",
+        ] {
+            assert!(scope.contains(kept), "{kept}");
+            assert!(category(kept).is_some(), "{kept}");
+        }
+        for word in ["no post type", "photobooth", "open", "range of", "courses"] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
