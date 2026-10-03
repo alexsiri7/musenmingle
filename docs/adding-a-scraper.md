@@ -49,8 +49,11 @@ the venue's own site before it.
 7. **Skips are not errors.** Return `Ok(None)` from `normalise` for pages that
    are not in-scope events (online-only, open-ended programmes, out-of-scope
    categories). Report genuine per-page failures with `ctx.report_error`; they
-   feed the health checker. A source whose normal state can be zero upcoming
-   events (e.g. a calendar that only lists its next meetup) gets
+   feed the health checker. The zero-events health rule only applies to
+   sources averaging at least 2 events, so a one-show gallery going empty
+   between shows never trips it. Any other source whose normal state can
+   be zero upcoming events (e.g. a seasonal programme, or a calendar that
+   lists only its next meetup like `luma-creative-ai-meetup`) gets
    `events.sources.may_be_empty = TRUE` in its seed migration, so the
    zero-events health rule does not file `scraper-broken` issues for it.
 8. **Times:** use `normalise::parse_datetime` (honours offsets) or
