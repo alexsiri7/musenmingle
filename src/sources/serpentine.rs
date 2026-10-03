@@ -182,6 +182,8 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     if online || open_ended {
         return Ok(None);
     }
+    // Measured on the venue's literal span, before an all-day end is floored.
+    let multi_day = ends_at.is_some_and(|e| e - starts_at > chrono::Duration::days(2));
 
     let all_day = is_london_midnight(starts_at);
     let ends_at = if all_day {
@@ -226,7 +228,6 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .as_deref()
         .map(|u| u.replace(['-', '/'], " "))
         .unwrap_or_default();
-    let multi_day = ends_at.is_some_and(|e| e - starts_at > chrono::Duration::days(2));
     let category = map_category(&[title.as_str(), slug_hint.as_str()]).unwrap_or(if multi_day {
         Category::Exhibition
     } else {

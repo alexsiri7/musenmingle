@@ -6,6 +6,7 @@ mod common;
 use common::fixture;
 use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
+use musenmingle::model::Category;
 use musenmingle::normalise::{is_london_midnight, london_date};
 use musenmingle::sources::Source;
 use musenmingle::sources::serpentine::{
@@ -142,6 +143,16 @@ fn date_only_start_is_all_day_even_with_a_closing_time_end() {
         timed.ends_at.map(|e| e.to_rfc3339()).as_deref(),
         Some("2027-01-31T18:00:00+00:00")
     );
+
+    // Over two days only counting the closing hour: still an exhibition.
+    let short_run = event("2026-07-01T00:00:00+00:00", "2026-07-03T18:00:00+00:00");
+    assert!(short_run.all_day);
+    assert_eq!(short_run.category, Category::Exhibition);
+
+    // Closing hour on the opening day: no span left once floored.
+    let one_day = event("2026-06-06T00:00:00+00:00", "2026-06-06T18:00:00+00:00");
+    assert!(one_day.all_day);
+    assert_eq!(one_day.ends_at, None);
 }
 
 #[test]
