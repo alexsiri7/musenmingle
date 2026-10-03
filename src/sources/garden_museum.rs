@@ -20,9 +20,10 @@
 //! * Categories come from the listing's event types: exhibitions → exhibition,
 //!   talks → talk, workshops → workshop, festivals and lates → community.
 //!   Items whose only type is `livestreams` (online) or another type are
-//!   skipped without fetching their page. A talk or workshop spanning several
-//!   days with no time is a series overview whose sessions are listed on
-//!   their own ("Garden/Art/Garden"), and is skipped (`Ok(None)`).
+//!   skipped without fetching their page. A non-exhibition item spanning
+//!   several days with no time is a series overview whose sessions are listed
+//!   on their own ("Garden/Art/Garden"), and is skipped (`Ok(None)`);
+//!   `qa_scope` tells the scraper check.
 //! * Price: the listing's `is_free` flag decides free entry. Otherwise only
 //!   booking lines with a currency amount count, minus livestream tickets;
 //!   "Friends go free!" on a ticketed exhibition must not read as free.
@@ -600,6 +601,16 @@ impl Source for GardenMuseum {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only exhibitions, talks, workshops, festivals and lates. Online-only \
+             livestreams are left out on purpose, as are talk, workshop, festival or \
+             lates series listed as one item over several days or months with no \
+             time (such as \"Garden/Art/Garden\"): those are series overviews, \
+             and each session is listed on its own.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -717,6 +728,21 @@ mod tests {
             .unwrap();
         assert_eq!(e.starts_at.to_rfc3339(), "2026-10-07T23:00:00+00:00");
         assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-12-20T00:00:00+00:00");
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = GardenMuseum::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "exhibitions",
+            "livestreams",
+            "talk, workshop, festival or lates series",
+            "Garden/Art/Garden",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 
     #[test]
