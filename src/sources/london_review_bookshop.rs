@@ -25,6 +25,7 @@
 //!   miniature auditorium"); the page names no other venue, so every event
 //!   is placed at the shop. Retail evenings ("Late Night Shopping") and film
 //!   screenings are skipped (`Ok(None)`); everything else is a talk.
+//!   `qa_scope` tells the scraper check.
 
 use async_trait::async_trait;
 use chrono::{Datelike, NaiveDate, NaiveTime, Utc, Weekday};
@@ -279,6 +280,14 @@ impl Source for LondonReviewBookshop {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only author talks held in the shop. Retail evenings (\"Late Night \
+             Shopping\", such as \"October Late Night Shopping\"), film screenings and \
+             film nights are left out on purpose: they are not talks.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -344,6 +353,21 @@ mod tests {
         );
         assert_eq!(category("October Late Night Shopping"), None);
         assert_eq!(category("Screening: Blue"), None);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = LondonReviewBookshop::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "author talks",
+            "Late Night Shopping",
+            "film screenings",
+            "film nights",
+        ] {
+            assert!(scope.contains(word), "{word:?} missing from {scope:?}");
+        }
     }
 
     #[test]
