@@ -554,10 +554,21 @@ mod tests {
     }
 
     #[test]
-    fn the_qa_scope_names_what_is_left_out() {
+    fn the_qa_scope_names_what_is_kept_and_left_out() {
         let scope = PhotographersGallery::new(Url::parse("https://x.test/").unwrap())
             .qa_scope()
             .unwrap();
+        for kept in [
+            "Exhibition",
+            "Soho Photography Quarter",
+            "Talks & Events",
+            "Bookshop Event",
+            "Tours",
+            "Workshops & Courses",
+        ] {
+            assert!(scope.contains(kept), "{kept}");
+            assert!(category(kept).is_some(), "{kept}");
+        }
         for word in ["no post type", "photobooth", "open", "range of", "courses"] {
             assert!(scope.contains(word), "{word}");
         }
