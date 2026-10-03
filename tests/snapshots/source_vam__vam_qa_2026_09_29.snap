@@ -1,0 +1,11 @@
+---
+source: tests/source_vam.rs
+expression: "serde_json::json!({\n    \"title\": e.title, \"starts_at\": e.starts_at, \"ends_at\": e.ends_at,\n    \"all_day\": e.all_day, \"category\": e.category,\n})"
+---
+{
+  "all_day": true,
+  "category": "exhibition",
+  "ends_at": "2026-10-17T23:00:00Z",
+  "starts_at": "2026-04-17T23:00:00Z",
+  "title": "On the Sly, Justinien Tribillon"
+}

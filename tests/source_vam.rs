@@ -71,6 +71,55 @@ fn timed_events_match_the_event_pages() {
     assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-10-17T23:00:00+00:00");
 }
 
+/// Issue #261: the scraper check of 2026-09-29 found On the Sly's start
+/// wrong (the microdata says 28 June; the card, like the rest of V&A East's
+/// opening season, says 18 April) and ten listings "missed" that are skipped
+/// on purpose (`qa_scope`). Expected values are the page's.
+#[test]
+fn qa_2026_09_29_page_values() {
+    const SKIPPED: [&str; 10] = [
+        "Digital Art Season: On Agency",
+        "Taster Lecture Recording: Aphrodite and the Greek Art of Love",
+        "Antique to Early Christian (in-person)",
+        "Arts of the Islamic World (In-Person)",
+        "National Art Library and Archive talks Monday at 14.00",
+        "V&A East Educators Connect: The Music is Black",
+        "Mini Play for Babies - Autumn Series",
+        "African & Caribbean Heritage tour: Past Meets Present",
+        "Members' Welcome Tour",
+        "Objects of Fashion: Unravelling Stories (Online)",
+    ];
+    let s = source();
+    let raws = parse_listing(&fixture(&format!("{DIR}/whatson.html")));
+    for title in SKIPPED {
+        let raw = raws
+            .iter()
+            .find(|r| r.payload["title"] == title)
+            .unwrap_or_else(|| panic!("{title} not listed"));
+        assert!(s.normalise(raw).expect("normalise").is_none(), "{title}");
+    }
+
+    let raw = raws
+        .iter()
+        .find(|r| r.source_event_id == "event/7QWn70064G/on-the-sly-justinien-tribillon")
+        .expect("in fixture");
+    let e = s.normalise(raw).unwrap().expect("kept");
+    // "Saturday, 18 April 2026 - Sunday, 18 October 2026"
+    assert!(e.all_day);
+    assert_eq!(e.starts_at.to_rfc3339(), "2026-04-17T23:00:00+00:00");
+    assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-10-17T23:00:00+00:00");
+    insta::assert_json_snapshot!(
+        "vam_qa_2026_09_29",
+        serde_json::json!({
+            "title": e.title,
+            "starts_at": e.starts_at,
+            "ends_at": e.ends_at,
+            "all_day": e.all_day,
+            "category": e.category,
+        })
+    );
+}
+
 #[tokio::test]
 async fn fetches_the_listing_via_fetch_context() {
     let server = MockServer::start().await;
