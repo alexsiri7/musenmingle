@@ -20,9 +20,9 @@
 //! * Categories come from the listing's event types: exhibitions → exhibition,
 //!   talks → talk, workshops → workshop, festivals and lates → community.
 //!   Items whose only type is `livestreams` (online) or another type are
-//!   skipped without fetching their page. A talk or workshop spanning several
-//!   days with no time is a series overview whose sessions are listed on
-//!   their own ("Garden/Art/Garden"), and is skipped (`Ok(None)`);
+//!   skipped without fetching their page. A non-exhibition item spanning
+//!   several days with no time is a series overview whose sessions are listed
+//!   on their own ("Garden/Art/Garden"), and is skipped (`Ok(None)`);
 //!   `qa_scope` tells the scraper check.
 //! * Price: the listing's `is_free` flag decides free entry. Otherwise only
 //!   booking lines with a currency amount count, minus livestream tickets;
@@ -605,10 +605,10 @@ impl Source for GardenMuseum {
     fn qa_scope(&self) -> Option<&'static str> {
         Some(
             "Only exhibitions, talks, workshops, festivals and lates. Online-only \
-             livestreams are left out on purpose, as are talk or workshop series \
-             listed as one item over several days or months with no time (such as \
-             \"Garden/Art/Garden\"): those are series overviews, and each session \
-             is listed on its own.",
+             livestreams are left out on purpose, as are talk, workshop, festival or \
+             lates series listed as one item over several days or months with no \
+             time (such as \"Garden/Art/Garden\"): those are series overviews, \
+             and each session is listed on its own.",
         )
     }
 }
@@ -735,7 +735,12 @@ mod tests {
         let scope = GardenMuseum::new(Url::parse("https://x.test/").unwrap())
             .qa_scope()
             .unwrap();
-        for word in ["exhibitions", "livestreams", "series", "Garden/Art/Garden"] {
+        for word in [
+            "exhibitions",
+            "livestreams",
+            "talk, workshop, festival or lates series",
+            "Garden/Art/Garden",
+        ] {
             assert!(scope.contains(word), "{word}");
         }
     }
