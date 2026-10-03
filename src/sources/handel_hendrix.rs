@@ -49,6 +49,15 @@ const VENUE_NAME: &str = "Handel Hendrix House";
 const VENUE_ADDRESS: &str = "25 Brook Street, Mayfair, London W1K 4HB";
 const VENUE_LAT: f64 = 51.512780;
 const VENUE_LNG: f64 = -0.148120;
+/// The categories kept, which `qa_scope`'s note names; `map_category`'s
+/// table is shared, so anything else it learns to give is still skipped.
+const KEPT_CATEGORIES: [Category; 5] = [
+    Category::Exhibition,
+    Category::Talk,
+    Category::Workshop,
+    Category::Expo,
+    Category::Community,
+];
 
 pub struct HandelHendrix {
     base_url: Url,
@@ -229,8 +238,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         return Ok(None);
     };
     let body = clean_description(text("body"));
-    let category =
-        map_category(&[text("eyebrow").unwrap_or_default(), title.as_str()]).or_else(|| {
+    let category = map_category(&[text("eyebrow").unwrap_or_default(), title.as_str()])
+        .filter(|c| KEPT_CATEGORIES.contains(c))
+        .or_else(|| {
             body.as_deref()
                 .is_some_and(describes_demonstration)
                 .then_some(Category::Talk)
