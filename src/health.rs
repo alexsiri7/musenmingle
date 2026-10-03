@@ -6,7 +6,9 @@
 //! 1. **Zero events**: the run completed (`ok`) but found 0 events while the
 //!    average of the last `trailing_runs` successful runs before it is > 0.
 //!    (A failed run also records 0 events; failures are rule 2's job, so a
-//!    single transient 429/timeout does not open an issue.)
+//!    single transient 429/timeout does not open an issue.) Sources flagged
+//!    `events.sources.may_be_empty` (normally empty between postings) are
+//!    exempt; rules 2 and 3 still apply to them.
 //! 2. **Consecutive errors**: the last `consecutive_error_runs` runs
 //!    (including this one) all had errors or failed.
 //! 3. **Count drop**: the run found some events, but fewer than
@@ -185,6 +187,16 @@ pub fn evaluate(runs: &[RunStats], cfg: &HealthConfig) -> Vec<Trip> {
     trips
 }
 
+/// [`evaluate`] for a source: a source flagged `may_be_empty` (its normal
+/// state can be zero upcoming events) is exempt from rule 1.
+pub fn evaluate_source(runs: &[RunStats], cfg: &HealthConfig, may_be_empty: bool) -> Vec<Trip> {
+    let mut trips = evaluate(runs, cfg);
+    if may_be_empty {
+        trips.retain(|t| !matches!(t, Trip::ZeroEvents { .. }));
+    }
+    trips
+}
+
 /// Title of the health issue for a source.
 pub fn issue_title(key: &str) -> String {
     format!("Scraper broken: {key}")
@@ -313,7 +325,7 @@ impl HealthChecker {
         let limit = (self.config.trailing_runs + self.config.consecutive_error_runs).max(10) as i64;
         let runs = repo::recent_runs(pool, source.id, limit).await?;
         let stats: Vec<RunStats> = runs.iter().map(RunStats::from).collect();
-        let trips = evaluate(&stats, &self.config);
+        let trips = evaluate_source(&stats, &self.config, source.may_be_empty);
         let title = issue_title(&source.key);
 
         if !trips.is_empty() {
@@ -560,6 +572,35 @@ mod tests {
         for (name, runs, want) in cases {
             assert_eq!(kinds(&evaluate(&runs, &cfg)), want, "case {name}");
         }
+    }
+
+    #[test]
+    fn may_be_empty_skips_only_zero_events() {
+        let cfg = HealthConfig::default();
+        let gap = [r(0, 0, true), r(1, 0, true), r(1, 0, true)];
+        assert!(evaluate_source(&gap, &cfg, true).is_empty());
+        assert_eq!(kinds(&evaluate_source(&gap, &cfg, false)), ["zero"]);
+        assert_eq!(
+            kinds(&evaluate_source(
+                &[r(0, 1, false), r(0, 1, false), r(1, 0, true)],
+                &cfg,
+                true
+            )),
+            ["errors"]
+        );
+        assert_eq!(
+            kinds(&evaluate_source(
+                &[
+                    r(3, 0, true),
+                    r(10, 0, true),
+                    r(10, 0, true),
+                    r(10, 0, true)
+                ],
+                &cfg,
+                true
+            )),
+            ["drop"]
+        );
     }
 
     #[test]

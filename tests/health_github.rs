@@ -248,3 +248,74 @@ async fn single_failure_is_degraded_and_consecutive_errors_trip() {
     pool.close().await;
     db.drop_db().await;
 }
+
+#[tokio::test]
+async fn may_be_empty_source_is_healthy_with_zero_events() {
+    let Some(db) = TestDb::create("may_be_empty_source_is_healthy_with_zero_events").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let src = repo::source_by_key(&pool, "luma-creative-ai-meetup")
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(src.may_be_empty);
+    let serpentine = repo::source_by_key(&pool, "serpentine-galleries")
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(!serpentine.may_be_empty);
+
+    // #268: the calendar's only meetup has passed and the next is not posted.
+    add_run(&pool, &src, 30, 1, 0, true).await;
+    add_run(&pool, &src, 20, 1, 0, true).await;
+    add_run(&pool, &src, 10, 0, 0, true).await;
+
+    let gh = MockServer::start().await;
+    mock_list(&gh, json!([]), 1).await;
+    Mock::given(method("POST"))
+        .and(path(format!("/repos/{REPO}/issues")))
+        .respond_with(ResponseTemplate::new(500))
+        .expect(0)
+        .mount(&gh)
+        .await;
+    assert_eq!(
+        checker(&gh).check_source(&pool, &src).await.unwrap(),
+        HealthAction::Healthy
+    );
+    assert!(
+        repo::open_health_issue(&pool, src.id)
+            .await
+            .unwrap()
+            .is_none()
+    );
+    gh.verify().await;
+
+    // The issue filed before the flag existed is closed as recovered.
+    let title = "Scraper broken: luma-creative-ai-meetup";
+    let gh2 = MockServer::start().await;
+    mock_list(&gh2, json!([{"number": 268, "title": title}]), 1).await;
+    Mock::given(method("POST"))
+        .and(path(format!("/repos/{REPO}/issues/268/comments")))
+        .respond_with(ResponseTemplate::new(201).set_body_json(json!({"id": 1})))
+        .expect(1)
+        .mount(&gh2)
+        .await;
+    Mock::given(method("PATCH"))
+        .and(path(format!("/repos/{REPO}/issues/268")))
+        .and(body_partial_json(json!({"state": "closed"})))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_json(json!({"number": 268, "title": title})),
+        )
+        .expect(1)
+        .mount(&gh2)
+        .await;
+    assert_eq!(
+        checker(&gh2).check_source(&pool, &src).await.unwrap(),
+        HealthAction::Closed(vec![268])
+    );
+    gh2.verify().await;
+
+    pool.close().await;
+    db.drop_db().await;
+}

@@ -30,10 +30,13 @@ pub struct SourceRow {
     pub platform: Option<String>,
     /// The platform's per-venue settings.
     pub config: Option<serde_json::Value>,
+    /// The source's normal state can be zero upcoming events (e.g. a calendar
+    /// that only lists its next meetup), so the health checker's zero-events
+    /// rule does not apply to it.
+    pub may_be_empty: bool,
 }
 
-const SOURCE_COLS: &str =
-    "id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at, platform, config";
+const SOURCE_COLS: &str = "id, key, kind, base_url, domain, interval_minutes, enabled, last_run_at, platform, config, may_be_empty";
 
 /// Enabled sources whose interval has elapsed at `now` (or that never ran).
 pub async fn due_sources(pool: &PgPool, now: DateTime<Utc>) -> sqlx::Result<Vec<SourceRow>> {
