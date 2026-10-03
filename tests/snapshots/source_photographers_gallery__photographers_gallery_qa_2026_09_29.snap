@@ -1,0 +1,11 @@
+---
+source: tests/source_photographers_gallery.rs
+expression: "serde_json::json!({\n    \"title\": talk.title, \"starts_at\": talk.starts_at, \"ends_at\": talk.ends_at,\n    \"all_day\": talk.all_day, \"category\": talk.category,\n})"
+---
+{
+  "all_day": false,
+  "category": "talk",
+  "ends_at": null,
+  "starts_at": "2026-10-22T17:30:00Z",
+  "title": "Book Presentation, Talk & Signing, Carol Allen Storey: Defying the Myth"
+}
