@@ -265,6 +265,12 @@ async fn may_be_empty_source_is_healthy_with_zero_events() {
         .unwrap()
         .unwrap();
     assert!(!serpentine.may_be_empty);
+    // #272: same one-meetup-at-a-time shape.
+    let new_media = repo::source_by_key(&pool, "luma-new-media-london")
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(new_media.may_be_empty);
 
     // #268: the calendar's only meetup has passed and the next is not posted.
     add_run(&pool, &src, 30, 1, 0, true).await;
