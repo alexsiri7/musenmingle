@@ -6,8 +6,11 @@ mod common;
 use common::fixture;
 use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
+use musenmingle::normalise::{is_london_midnight, london_date};
 use musenmingle::sources::Source;
-use musenmingle::sources::serpentine::{Serpentine, parse_detail, parse_listing};
+use musenmingle::sources::serpentine::{
+    Serpentine, normalise_payload, parse_detail, parse_listing,
+};
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -55,6 +58,90 @@ fn normalised_output_snapshot() {
         }));
     }
     insta::assert_json_snapshot!("serpentine_normalised", out);
+}
+
+/// Issue #256: the scraper check of 2026-09-29 found the Pavilion stored with
+/// a 00:00 start the page never states (its JSON-LD has a date-only start and
+/// an 18:00 end). Pages captured 2026-10-03; expected values are the pages'.
+#[test]
+fn qa_2026_09_29_page_values() {
+    const PAVILION: &str =
+        "serpentine-pavilion-2026-by-isabel-abascal-and-alessandro-arienzo-lanza-atelier";
+    const KANWAR: &str = "amar-kanwar-exhibition";
+    let listing = parse_listing(&fixture(&format!("{DIR}/qa-2026-09-29.html")));
+    for slug in [PAVILION, KANWAR] {
+        let p = format!("/whats-on/{slug}/");
+        assert!(listing.iter().any(|l| l.ends_with(&p)), "{p} not listed");
+    }
+
+    let s = Serpentine::new("https://www.serpentinegalleries.org".parse().unwrap());
+    let mut out = Vec::new();
+    for (slug, file) in [(PAVILION, "qa-2026-09-29-2"), (KANWAR, "qa-2026-09-29-3")] {
+        let html = fixture(&format!("{DIR}/{file}.html"));
+        let raw = parse_detail(&html, &format!("/whats-on/{slug}/")).expect("event page");
+        let e = s.normalise(&raw).expect("normalise").expect("in scope");
+        out.push((slug, e));
+    }
+
+    let (_, pavilion) = &out[0];
+    assert!(pavilion.all_day);
+    assert_eq!(london_date(pavilion.starts_at).to_string(), "2026-06-06");
+    let (_, kanwar) = &out[1];
+    assert!(!kanwar.all_day);
+    assert_eq!(
+        kanwar
+            .starts_at
+            .with_timezone(&chrono_tz::Europe::London)
+            .format("%H:%M")
+            .to_string(),
+        "10:00"
+    );
+
+    let compact: Vec<_> = out
+        .iter()
+        .map(|(slug, e)| {
+            serde_json::json!({
+                "slug": slug,
+                "title": e.title,
+                "starts_at": e.starts_at,
+                "ends_at": e.ends_at,
+                "all_day": e.all_day,
+            })
+        })
+        .collect();
+    insta::assert_json_snapshot!("serpentine_qa_2026_09_29", compact);
+}
+
+#[test]
+fn date_only_start_is_all_day_even_with_a_closing_time_end() {
+    let event = |start: &str, end: &str| {
+        normalise_payload(&serde_json::json!({
+            "jsonld": {
+                "name": "X",
+                "startDate": start,
+                "endDate": end,
+                "location": {"name": "Serpentine Pavilion"},
+            },
+            "price_text": null,
+        }))
+        .unwrap()
+        .unwrap()
+    };
+
+    let date_only = event("2026-06-06T00:00:00+00:00", "2026-10-25T18:00:00+00:00");
+    assert!(date_only.all_day);
+    assert!(is_london_midnight(date_only.starts_at));
+    assert_eq!(
+        date_only.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+        Some("2026-10-24T23:00:00+00:00")
+    );
+
+    let timed = event("2026-09-23T10:00:00+00:00", "2027-01-31T18:00:00+00:00");
+    assert!(!timed.all_day);
+    assert_eq!(
+        timed.ends_at.map(|e| e.to_rfc3339()).as_deref(),
+        Some("2027-01-31T18:00:00+00:00")
+    );
 }
 
 #[test]

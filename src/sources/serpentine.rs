@@ -9,7 +9,9 @@
 //! * Quirk: the site emits London wall-clock times with a `+00:00` offset even
 //!   during BST (e.g. Park Nights "8pm" appears as `T20:00:00+00:00`), so times
 //!   are parsed with [`parse_london_wall_clock`], ignoring the offset. Dates
-//!   without a time appear as `T00:00:00+00:00`, so midnight is `all_day`.
+//!   without a time appear as `T00:00:00+00:00`, so a midnight start is
+//!   `all_day` even when the end has a time (the Pavilion's last day is
+//!   `T18:00`, its closing hour); the run then ends at its last day's midnight.
 //! * Quirk: JSON-LD `offers.price` is unreliable (e.g. `"107."` for a £10/£7
 //!   ticket). The human-readable "Price: ..." line in the page banner is
 //!   preferred (CSS fallback), JSON-LD price only when it is absent.
@@ -21,6 +23,7 @@
 //!   from the static table in [`venue_details`].
 
 use async_trait::async_trait;
+use chrono::NaiveTime;
 use scraper::{Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
@@ -30,8 +33,8 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
-    clean_description, clean_text, dedupe_key, is_london_midnight, map_category,
-    parse_london_wall_clock, parse_price, price_from_amounts,
+    clean_description, clean_text, dedupe_key, is_london_midnight, london_date, london_to_utc,
+    map_category, parse_london_wall_clock, parse_price, price_from_amounts,
 };
 
 pub const KEY: &str = "serpentine-galleries";
@@ -180,6 +183,15 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         return Ok(None);
     }
 
+    let all_day = is_london_midnight(starts_at);
+    let ends_at = if all_day {
+        ends_at
+            .map(|e| london_to_utc(london_date(e).and_time(NaiveTime::MIN)))
+            .filter(|e| *e > starts_at)
+    } else {
+        ends_at
+    };
+
     let location = str_or_name(ev, "location");
     let (venue_name, address, lat, lng) = match location.and_then(venue_details) {
         Some((n, a, lat, lng)) => (
@@ -240,7 +252,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         lng,
         starts_at,
         ends_at,
-        all_day: is_london_midnight(starts_at) && ends_at.is_none_or(is_london_midnight),
+        all_day,
         price,
         url,
         image_url: image_url(ev),
