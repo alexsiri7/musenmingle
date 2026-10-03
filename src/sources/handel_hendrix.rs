@@ -22,7 +22,8 @@
 //!   category comes from keywords in the eyebrow and title only (concert
 //!   bodies mention "readings" and "musical conversation"), plus a body
 //!   that describes a demonstration (the food historians' Georgian cooking
-//!   evenings), a talk. Anything else is skipped.
+//!   evenings), a talk. Anything else is skipped; `qa_scope` tells the
+//!   scraper check.
 
 use async_trait::async_trait;
 use chrono::{Datelike, NaiveDate, NaiveTime};
@@ -48,6 +49,15 @@ const VENUE_NAME: &str = "Handel Hendrix House";
 const VENUE_ADDRESS: &str = "25 Brook Street, Mayfair, London W1K 4HB";
 const VENUE_LAT: f64 = 51.512780;
 const VENUE_LNG: f64 = -0.148120;
+/// The categories kept, which `qa_scope`'s note names; `map_category`'s
+/// table is shared, so anything else it learns to give is still skipped.
+const KEPT_CATEGORIES: [Category; 5] = [
+    Category::Exhibition,
+    Category::Talk,
+    Category::Workshop,
+    Category::Expo,
+    Category::Community,
+];
 
 pub struct HandelHendrix {
     base_url: Url,
@@ -228,8 +238,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         return Ok(None);
     };
     let body = clean_description(text("body"));
-    let category =
-        map_category(&[text("eyebrow").unwrap_or_default(), title.as_str()]).or_else(|| {
+    let category = map_category(&[text("eyebrow").unwrap_or_default(), title.as_str()])
+        .filter(|c| KEPT_CATEGORIES.contains(c))
+        .or_else(|| {
             body.as_deref()
                 .is_some_and(describes_demonstration)
                 .then_some(Category::Talk)
@@ -326,6 +337,18 @@ impl Source for HandelHendrix {
 
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
+    }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only exhibitions, talks, workshops, fairs and community events: pages \
+             whose eyebrow or title names one of those (lecture, conversation, \
+             reading, class, display and the like), or whose description describes \
+             a demonstration. Concerts, recitals and the rest of the music programme \
+             (salons, sessions, children's concerts, ensembles, anniversary \
+             celebrations) are left out on purpose, as are recurring or open-ended \
+             programmes whose dates name no year (\"Every Thursday\", \"From 19th June\").",
+        )
     }
 }
 
@@ -482,5 +505,22 @@ mod tests {
         );
         let ev = normalise_payload(&ev).unwrap().unwrap();
         assert_eq!(ev.category, Category::Talk);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = HandelHendrix::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "exhibitions",
+            "talks",
+            "demonstration",
+            "Concerts",
+            "salons",
+            "no year",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
