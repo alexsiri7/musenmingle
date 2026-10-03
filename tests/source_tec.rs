@@ -19,7 +19,10 @@ use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const SEED: &str = "migrations/20260927400002_seed_tec_venues.sql";
 /// Later migrations merging into a seeded row's config.
-const CONFIG_UPDATES: &[&str] = &["migrations/20261002000001_tec_bow_arts_categories.sql"];
+const CONFIG_UPDATES: &[&str] = &[
+    "migrations/20261002000001_tec_bow_arts_categories.sql",
+    "migrations/20261003000001_tec_slbi_categories.sql",
+];
 const API_PATH: &str = "/wp-json/tribe/events/v1/events";
 
 fn read_migration(file: &str) -> String {
@@ -209,6 +212,32 @@ fn bow_arts_jsonld_normalised() {
 fn slbi_jsonld_normalised() {
     let raws = list_view("tec-slbi");
     insta::assert_json_snapshot!("tec_slbi_jsonld_normalised", normalised("tec-slbi", &raws));
+}
+
+/// Scraper check 2026-10-01 (#267): events whose text matches no category
+/// keyword were dropped; they are kept as community events, and keywords
+/// still win over the default.
+#[test]
+fn slbi_qa_2026_10_01_kept() {
+    let events = normalised("tec-slbi", &list_view("tec-slbi"));
+    assert_eq!(events.len(), 7);
+    assert!(events.iter().all(|e| !e["event"].is_null()));
+    let category = |title: &str| -> Vec<&Value> {
+        events
+            .iter()
+            .map(|e| &e["event"])
+            .filter(|e| e["title"].as_str().unwrap().starts_with(title))
+            .map(|e| &e["category"])
+            .collect()
+    };
+    assert_eq!(category("Mushroom University"), ["community", "community"]);
+    assert_eq!(category("SLBI Open Evening"), ["community"]);
+    assert_eq!(
+        category("Harvest Festival: A Family Celebration of Plants"),
+        ["community"]
+    );
+    assert_eq!(category("Botanical Cyanotype Workshop"), ["workshop"]);
+    assert_eq!(category("Photomonth at the SLBI"), ["exhibition"]);
 }
 
 #[test]
