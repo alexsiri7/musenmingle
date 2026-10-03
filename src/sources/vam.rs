@@ -482,16 +482,45 @@ mod tests {
         for &(venue, ..) in VENUES {
             assert!(scope.contains(venue), "{venue}");
         }
-        for word in [
-            "tour",
-            "year course",
-            "online",
-            "educators",
-            "no venue",
-            "Every",
-            "several days",
+        for kept in [
+            "display",
+            "exhibition",
+            "season",
+            "festival",
+            "special event",
+            "talk",
+            "lecture",
+            "one-day course",
+            "workshop",
         ] {
+            assert!(scope.contains(kept), "{kept}");
+            assert!(category_for(kept).is_some(), "{kept}");
+        }
+        for word in SKIP_TYPES.iter().chain(SKIP_WORDS) {
             assert!(scope.contains(word), "{word}");
         }
+        for word in ["no venue", "\"Every", "\"Now open\"", "several days"] {
+            assert!(scope.contains(word), "{word}");
+        }
+    }
+
+    #[test]
+    fn only_exhibitions_take_their_dates_from_the_visible_line() {
+        let card = |kind: &str| {
+            json!({
+                "title": "Half-term Festival",
+                "type": kind,
+                "venue": VENUES[0].0,
+                "date_text": "Saturday, 18 April 2026 - Sunday, 18 October 2026",
+                "start": "2026-06-28",
+                "end": "2026-06-29",
+            })
+        };
+        let festival = normalise_payload(&card("Festival")).unwrap().unwrap();
+        assert_eq!(festival.starts_at, london_midnight(day("2026-06-28")));
+        assert_eq!(festival.ends_at, Some(london_midnight(day("2026-06-29"))));
+        let exhibition = normalise_payload(&card("Exhibition")).unwrap().unwrap();
+        assert_eq!(exhibition.starts_at, london_midnight(day("2026-04-18")));
+        assert_eq!(exhibition.ends_at, Some(london_midnight(day("2026-10-18"))));
     }
 }
