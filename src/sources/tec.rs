@@ -29,7 +29,11 @@
 //!   a fixed "UTC+0"/"UTC+1" and so an hour or two off in one half of the
 //!   year (checked 2026-09-27: Freud Museum's 6:00 pm talk has
 //!   `utc_start_date` 16:00; New River Studios' 7:30 pm gig has
-//!   `+00:00` in October). All-day events are stored date-only.
+//!   `+00:00` in October). All-day events are stored date-only. The
+//!   venue's calendar can carry one start time for days that differ, so a
+//!   timed API event spanning several days whose description has a block
+//!   headed by its start date with a clock range ("Wednesday 14 October /
+//!   Private View 5 – 9pm") starts at that time (#262).
 //! * Venue: the event's TEC venue, else the row's `config.venue` (sites
 //!   that leave events without a venue), else unknown. Only London events
 //!   are kept: the row's own venue, coordinates inside Greater London, or,
@@ -55,7 +59,7 @@
 use std::collections::BTreeMap;
 
 use async_trait::async_trait;
-use chrono::{DateTime, Days, NaiveDate, NaiveTime, Utc};
+use chrono::{DateTime, Datelike, Days, NaiveDate, NaiveTime, Utc};
 use chrono_tz::Europe::London;
 use rust_decimal::Decimal;
 use scraper::{Html, Selector};
@@ -63,6 +67,7 @@ use serde::Deserialize;
 use serde_json::{Value, json};
 use url::Url;
 
+use super::the_showroom::find_clock_range;
 use super::{SkipReason, Source, SourceError, jsonld};
 use crate::fetch::{FetchContext, FetchError};
 use crate::model::{Category, NewEvent, Price, RawEvent};
@@ -551,8 +556,18 @@ fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, 
         let last = end.map(day).transpose()?.unwrap_or(first);
         Times::all_day(first, last)
     } else {
-        let starts_at = parse_london_wall_clock(start).ok_or_else(|| bad(start))?;
-        Times::timed(starts_at, end.and_then(parse_london_wall_clock))
+        let mut starts_at = parse_london_wall_clock(start).ok_or_else(|| bad(start))?;
+        let ends_at = end.and_then(parse_london_wall_clock);
+        let first = london_date(starts_at);
+        if ends_at.is_some_and(|e| london_date(e) > first)
+            && let Some(t) = event
+                .get("description")
+                .and_then(Value::as_str)
+                .and_then(|d| first_day_time(d, first))
+        {
+            starts_at = london_to_utc(first.and_time(t));
+        }
+        Times::timed(starts_at, ends_at)
     };
     let price = widen_with_ticket_lines(
         text_of(event.get("cost"))
@@ -584,6 +599,36 @@ fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, 
 /// The time of day of an instant in London.
 fn london_time(t: DateTime<Utc>) -> NaiveTime {
     t.with_timezone(&London).time()
+}
+
+/// A multi-day event's first-day time from its description (#262): the
+/// venue's calendar can hold one start time for a fair whose days differ
+/// ("Wednesday 14 October / Private View 5 – 9pm"). The first `p`/`li`
+/// block that begins with `day`'s date gives its clock range's start.
+fn first_day_time(description: &str, day: NaiveDate) -> Option<NaiveTime> {
+    let blocks = Selector::parse("p, li").expect("valid selector");
+    let month = day.format("%B").to_string().to_lowercase();
+    Html::parse_fragment(description)
+        .select(&blocks)
+        .find_map(|el| {
+            let text = clean_text(&el.inner_html()).to_lowercase();
+            let mut tokens = text
+                .split_whitespace()
+                .map(|t| t.trim_end_matches([',', ':']))
+                .peekable();
+            tokens.next_if(|t| crate::hours::parse_day(t).is_some());
+            let number = tokens.next()?;
+            let number = ["st", "nd", "rd", "th"]
+                .iter()
+                .find_map(|s| number.strip_suffix(s))
+                .unwrap_or(number);
+            (number.parse() == Ok(day.day())).then_some(())?;
+            let m = tokens.next()?;
+            (m == month || m == &month[..3]).then_some(())?;
+            tokens.next_if(|t| *t == day.year().to_string());
+            let rest: Vec<&str> = tokens.collect();
+            find_clock_range(&rest.join(" ")).map(|(start, _)| start)
+        })
 }
 
 fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>, SourceError> {
@@ -853,6 +898,45 @@ mod tests {
 
         let same_end = api(json!({"end_date": "2026-09-27 12:30:00"}));
         assert_eq!(norm(&same_end, json!({})).unwrap().ends_at, None);
+    }
+
+    #[test]
+    fn multi_day_events_take_the_first_days_time_from_the_description() {
+        let start = |description: &str, end_date: &str| {
+            let payload = api(json!({"start_date": "2026-10-14 18:00:00",
+                "end_date": end_date, "description": description}));
+            let event = norm(&payload, json!({"default_category": "exhibition"})).unwrap();
+            (
+                event.starts_at.to_rfc3339(),
+                event.ends_at.map(|t| t.to_rfc3339()),
+            )
+        };
+        let days = "<p><strong>Wednesday 14 October<br /></strong>Private View 5 – 9pm</p>\
+                    <p><strong>Thursday 15 October<br /></strong>General Admission 11am – 5pm</p>";
+        assert_eq!(
+            start(days, "2026-10-18 18:00:00"),
+            (
+                "2026-10-14T16:00:00+00:00".into(),
+                Some("2026-10-18T17:00:00+00:00".into())
+            )
+        );
+        let kept = "2026-10-14T17:00:00+00:00";
+        assert_eq!(start(days, "2026-10-14 21:00:00").0, kept);
+        let narrative =
+            "<p>The fair runs from Wednesday 14th October – Sunday 18th October, 5 – 9pm</p>";
+        assert_eq!(start(narrative, "2026-10-18 18:00:00").0, kept);
+        let other_day = "<p>Thursday 15 October General Admission 11am – 5pm</p>";
+        assert_eq!(start(other_day, "2026-10-18 18:00:00").0, kept);
+        let list = "<ul><li>Weds 14 October: Private View 5 – 9pm</li></ul>";
+        assert_eq!(
+            start(list, "2026-10-18 18:00:00").0,
+            "2026-10-14T16:00:00+00:00"
+        );
+        let suffix_and_year = "<p>14th October 2026 Private View 5 – 9pm</p>";
+        assert_eq!(
+            start(suffix_and_year, "2026-10-18 18:00:00").0,
+            "2026-10-14T16:00:00+00:00"
+        );
     }
 
     #[test]
