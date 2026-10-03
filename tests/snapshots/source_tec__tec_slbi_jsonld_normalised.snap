@@ -54,23 +54,128 @@ expression: "normalised(\"tec-slbi\", &raws)"
     "id": "/event/botanical-cyanotype-workshop/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "mushroom-university|2026-10-05|south-botanical-institute",
+      "description": "Register here Develop skills on how to identify fungi in these co-learning identification sessions with Fabrice Boltho and friends. Learn how to identify fungi at our identification sessions with Fabrice Boltho and friends. Bring your specimens and photos and we’ll teach you how to identify local fungi. This is a co-learning space of mixed abilities. …",
+      "ends_at": "2026-10-05T18:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/mushroom-u.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-05T16:30:00Z",
+      "tags": [],
+      "title": "Mushroom University",
+      "url": "https://www.slbi.org.uk/event/mushroom-university-8/",
+      "venue_name": "South London Botanical Institute"
+    },
     "id": "/event/mushroom-university-8/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "slbi-open-evening|2026-10-15|south-botanical-institute",
+      "description": "Get ready to explore the house and garden in our open evening event. Get ready to explore the wonders of nature and immerse yourself in the world of plants at the SLBI Open House and Garden event. Join us for a evening of creativity, discovery, and botanical inspiration at the South London Botanical Institute. There …",
+      "ends_at": "2026-10-15T18:00:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/3b595706f3d1d653f6d9d8236ffb7177-hcHwrc.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-15T16:30:00Z",
+      "tags": [],
+      "title": "SLBI Open Evening",
+      "url": "https://www.slbi.org.uk/event/slbi-open-evening-4/",
+      "venue_name": "The South London Botanical Institute"
+    },
     "id": "/event/slbi-open-evening-4/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "slbi-series-urban-rewilding-pasts-possible-futures|2026-10-15|south-botanical-institute",
+      "description": "Professor Gemma Harvey shares her work on biogeomorphology and landscape restoration and rewilding.Join Professor Gemma Harvey share her work on landscape restoration and rewilding. Gemma will discuss what rewilding means in urban areas, drawing on her recent work in Walthamstow. She will outline the interactive and developmental relationship between plants, animals and landforms- known as …",
+      "ends_at": "2026-10-15T19:00:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/10a012107341cf048b29cbe8629a4ca9-FE8Q7o.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "8.00",
+        "min": "8.00"
+      },
+      "starts_at": "2026-10-15T18:00:00Z",
+      "tags": [],
+      "title": "SLBI Series. Urban rewilding: pasts and possible futures.",
+      "url": "https://www.slbi.org.uk/event/slbi-series-urban-rewilding-pasts-and-possible-futures/",
+      "venue_name": "The South London Botanical Institute"
+    },
     "id": "/event/slbi-series-urban-rewilding-pasts-and-possible-futures/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "mushroom-university|2026-10-19|south-botanical-institute",
+      "description": "Register here Develop skills on how to identify fungi in these co-learning identification sessions with Fabrice Boltho and friends. Learn how to identify fungi at our identification sessions with Fabrice Boltho and friends. Bring your specimens and photos and we’ll teach you how to identify local fungi. This is a co-learning space of mixed abilities. …",
+      "ends_at": "2026-10-19T18:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/mushroom-u.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-19T16:30:00Z",
+      "tags": [],
+      "title": "Mushroom University",
+      "url": "https://www.slbi.org.uk/event/mushroom-university-9/",
+      "venue_name": "South London Botanical Institute"
+    },
     "id": "/event/mushroom-university-9/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "harvest-festival-family-celebration-of-plants|2026-10-29|south-botanical-institute",
+      "description": "Explore seasonal plants through creative art, an autumn plant hunt, seed collecting and more! Get creative and curious with seasonal plants! Print with apples, potatoes and leeks, make your own botanical scarecrow, and head out on an autumnal plant hunt around the garden. Peek at your favourite veggies under the microscope, collect seeds to plant …",
+      "ends_at": "2026-10-29T12:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/bccb76e2be7096285327bf25aee2ed2d-BNTtGD.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-29T11:00:00Z",
+      "tags": [],
+      "title": "Harvest Festival: A Family Celebration of Plants",
+      "url": "https://www.slbi.org.uk/event/harvest-festival-a-family-celebration-of-plants/",
+      "venue_name": "The South London Botanical Institute"
+    },
     "id": "/event/harvest-festival-a-family-celebration-of-plants/"
   }
 ]
