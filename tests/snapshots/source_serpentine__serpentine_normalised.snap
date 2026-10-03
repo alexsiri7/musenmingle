@@ -232,11 +232,11 @@ expression: out
   {
     "event": {
       "address": "Kensington Gardens, London W2 3XA",
-      "all_day": false,
+      "all_day": true,
       "category": "exhibition",
       "dedupe_key": "serpentine-pavilion-2026-by-lanza-atelier|2026-06-06|serpentine-pavilion",
       "description": "Serpentine Pavilion 2026: a serpentine by LANZA atelier, founded by Isabel Abascal and Alessandro Arienzo",
-      "ends_at": "2026-10-25T18:00:00Z",
+      "ends_at": "2026-10-24T23:00:00Z",
       "image_url": "https://d37zoqglehb9o7.cloudfront.net/uploads/2026/06/Serpentine-Pavilion-2026_Aerial-View_6_1989.jpg",
       "lat": 51.5046,
       "lng": -0.1756,
