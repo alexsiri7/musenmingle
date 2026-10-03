@@ -269,6 +269,7 @@ mod tests {
             last_run_at: None,
             platform: None,
             config: None,
+            may_be_empty: false,
         }
     }
 

@@ -18,7 +18,7 @@ PR as its seed migration (see "Adding a Luma calendar" in
 | Source key | Calendar | Calendar id | Config | Why |
 |---|---|---|---|---|
 | `luma-new-media-london` | New Media London | `cal-fMoq9nuFiKXYCzi` | default `community` | Audiovisual / new-media art meetups and workshops (TouchDesigner, Pure Data) at London galleries and warehouses. |
-| `luma-creative-ai-meetup` | Creative AI Meetup (Luba Elliott) | `cal-bDC6E5p1xVynAEf` | default `talk` | Long-running London talks series on AI in art, music and writing, held at venues such as arebyte and IDEALondon. |
+| `luma-creative-ai-meetup` | Creative AI Meetup (Luba Elliott) | `cal-bDC6E5p1xVynAEf` | default `talk` | Long-running London talks series on AI in art, music and writing, held at venues such as arebyte and IDEALondon. Lists only the next meetup, so it is often empty; flagged `may_be_empty` (#268). |
 | `luma-mason-and-fifth` | Mason & Fifth | `cal-mJXPpBb7tgosK3a` | no default; skips screenings, listening parties, sound baths, parties, retail pop-ups, fitness | Westbourne Park (W9) creative space: author talks, craft and writing workshops. It also runs music, film, wellness and retail events, so only titles that match a talk/workshop/exhibition keyword are kept. |
 | `luma-for-writers` | For Writers (Second Brain HQ) | `cal-rc3wsjuGa6p18Et` | default `workshop` | Writing and dramaturgy drop-ins in Brixton. |
 
