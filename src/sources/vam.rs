@@ -23,6 +23,10 @@
 //!   says "Talk 19:00 - 20:00 … closing 20:45". Winter stamps are right
 //!   (`14:00:00 +0000` for the 14:00 library talks). [`parse_vam_time`] reads
 //!   the stamp's UTC instant as London wall-clock time, which fixes both.
+//!   For exhibitions, an explicit range in the card's visible calendar line
+//!   ("Saturday, 18 April 2026 - Sunday, 18 October 2026") wins over the
+//!   microdata, which sometimes gives a later start (checked 2026-09-29,
+//!   #261; see [`visible_range`]).
 //! * Displays on `/event/` pages carry opening hours as times over months;
 //!   like other exhibitions they are all day over their London dates.
 //! * Categories from the card's type label: display/exhibition/season →
@@ -32,7 +36,8 @@
 //!   on-demand items, members-only, schools and educators' events, recurring
 //!   series ("Every Monday …"), open-ended displays ("Now open" without a
 //!   closing date) and timed non-exhibition items spanning several days
-//!   (session series whose start and end are months apart).
+//!   (session series whose start and end are months apart); `qa_scope` tells
+//!   the scraper check.
 //! * Content policy (seed): facts + link only; see the migration.
 
 use std::str::FromStr;
@@ -200,6 +205,22 @@ pub fn parse_vam_time(s: &str) -> Option<DateTime<Utc>> {
     Some(london_to_utc(t.naive_utc()))
 }
 
+/// An explicit range in a card's visible calendar line ("Saturday, 18 April
+/// 2026 - Sunday, 18 October 2026", hyphen or en dash) → first and last day.
+/// The V&A's microdata start can disagree with it: On the Sly (V&A East)
+/// says 28 June in `startDate` but 18 April on the card, the date the whole
+/// season opened (checked 2026-09-29, #261). `None` for every other form of
+/// the line ("Closes …", "On now until …", single dates, "Every …"), for a
+/// weekday that doesn't match its date and for a reversed range.
+pub fn visible_range(date_text: &str) -> Option<(NaiveDate, NaiveDate)> {
+    let (first, last) = date_text
+        .split_once(" – ")
+        .or_else(|| date_text.split_once(" - "))?;
+    let day = |s: &str| NaiveDate::parse_from_str(s.trim(), "%A, %d %B %Y").ok();
+    let (first, last) = (day(first)?, day(last)?);
+    (first <= last).then_some((first, last))
+}
+
 /// Offer price (`5.0`, `0`, `£6.00`, `£1,600.00`) → [`Price`].
 pub fn parse_offer_price(amount: Option<&str>, currency: Option<&str>) -> Price {
     let Some(amount) = amount else {
@@ -274,35 +295,36 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .ok_or_else(|| SourceError::Parse(format!("{title}: no startDate")))?;
     let end = str_field(payload, "end");
     let bad = |s: &str| SourceError::Parse(format!("{title}: unrecognised date {s:?}"));
-    let (starts_at, ends_at, all_day) =
-        if let Ok(first) = NaiveDate::parse_from_str(start, "%Y-%m-%d") {
-            if date_text.eq_ignore_ascii_case("now open") {
-                return Ok(None); // open-ended; the end date is a placeholder
-            }
-            let last = match end {
-                Some(e) => NaiveDate::parse_from_str(e, "%Y-%m-%d").map_err(|_| bad(e))?,
-                None => first,
-            };
-            (london_midnight(first), Some(london_midnight(last)), true)
-        } else {
-            let s = parse_vam_time(start).ok_or_else(|| bad(start))?;
-            let e = match end {
-                Some(e) => Some(parse_vam_time(e).ok_or_else(|| bad(e))?),
-                None => None,
-            };
-            if category == Category::Exhibition {
-                let last = london_date(e.unwrap_or(s));
-                (
-                    london_midnight(london_date(s)),
-                    Some(london_midnight(last)),
-                    true,
-                )
-            } else if e.is_some_and(|e| london_date(e) != london_date(s)) {
-                return Ok(None); // a series of sessions over several days
-            } else {
-                (s, e, false)
-            }
+    let visible = (category == Category::Exhibition)
+        .then(|| visible_range(date_text))
+        .flatten();
+    let (starts_at, ends_at, all_day) = if let Ok(first) =
+        NaiveDate::parse_from_str(start, "%Y-%m-%d")
+    {
+        if date_text.eq_ignore_ascii_case("now open") {
+            return Ok(None); // open-ended; the end date is a placeholder
+        }
+        let last = match end {
+            Some(e) => NaiveDate::parse_from_str(e, "%Y-%m-%d").map_err(|_| bad(e))?,
+            None => first,
         };
+        let (first, last) = visible.unwrap_or((first, last));
+        (london_midnight(first), Some(london_midnight(last)), true)
+    } else {
+        let s = parse_vam_time(start).ok_or_else(|| bad(start))?;
+        let e = match end {
+            Some(e) => Some(parse_vam_time(e).ok_or_else(|| bad(e))?),
+            None => None,
+        };
+        if category == Category::Exhibition {
+            let (first, last) = visible.unwrap_or((london_date(s), london_date(e.unwrap_or(s))));
+            (london_midnight(first), Some(london_midnight(last)), true)
+        } else if e.is_some_and(|e| london_date(e) != london_date(s)) {
+            return Ok(None); // a series of sessions over several days
+        } else {
+            (s, e, false)
+        }
+    };
     if ends_at.is_some_and(|e| e < starts_at) {
         return Err(SourceError::Parse(format!(
             "{title}: ends before it starts"
@@ -357,6 +379,22 @@ impl Source for Vam {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only events at the four London sites (V&A South Kensington, V&A East \
+             Museum, V&A East Storehouse, Young V&A) whose type is a display, \
+             exhibition, season, festival, special event, talk, lecture, one-day \
+             course or workshop. Left out on purpose: tours (including members' \
+             tours), film screenings, year courses (in-person and online), drop-in \
+             play, online, livestream, recording and on-demand items, members-only, \
+             schools and educators' events, items with no venue (museum-wide seasons \
+             such as the Digital Art Season), recurring series whose date line \
+             starts \"Every …\" (the National Art Library talks), open-ended \
+             displays (\"Now open\"), and timed events that run over several days \
+             (session series such as Mini Play).",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -405,5 +443,55 @@ mod tests {
         let p = parse_offer_price(Some("5.0"), Some("GBP"));
         assert_eq!(p.min, Some(Decimal::from(5)));
         assert_eq!(parse_offer_price(None, Some("GBP")), Price::default());
+    }
+
+    fn day(s: &str) -> NaiveDate {
+        NaiveDate::parse_from_str(s, "%Y-%m-%d").unwrap()
+    }
+
+    #[test]
+    fn visible_ranges() {
+        assert_eq!(
+            visible_range("Saturday, 18 April 2026 - Sunday, 18 October 2026"),
+            Some((day("2026-04-18"), day("2026-10-18")))
+        );
+        assert_eq!(
+            visible_range("Tuesday, 29 September 2026 – Tuesday, 1 December 2026"),
+            Some((day("2026-09-29"), day("2026-12-01")))
+        );
+        for text in [
+            "On now until Sunday, 18 October 2026",
+            "Closes Sunday, 18 October 2026",
+            "Saturday, 3 October 2026",
+            "Every Monday until 28th December 2026, excluding bank holidays",
+            "Now open",
+            "Friday, 18 April 2026 - Sunday, 18 October 2026",
+            // dRMM's own line: 30 October 2026 is a Friday.
+            "Tuesday, 25 November 2025 - Saturday, 30 October 2026",
+            "Sunday, 18 October 2026 - Saturday, 18 April 2026",
+        ] {
+            assert_eq!(visible_range(text), None, "{text}");
+        }
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_kept_and_left_out() {
+        let scope = Vam::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for &(venue, ..) in VENUES {
+            assert!(scope.contains(venue), "{venue}");
+        }
+        for word in [
+            "tour",
+            "year course",
+            "online",
+            "educators",
+            "no venue",
+            "Every",
+            "several days",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }

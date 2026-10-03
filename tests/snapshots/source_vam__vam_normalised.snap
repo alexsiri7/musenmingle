@@ -1031,7 +1031,7 @@ expression: out
       "address": "East Bank, 107 Carpenters Rd, Queen Elizabeth Olympic Park, Stratford, London E20 2AR",
       "all_day": true,
       "category": "exhibition",
-      "dedupe_key": "on-sly-justinien-tribillon|2026-06-28|v-east",
+      "dedupe_key": "on-sly-justinien-tribillon|2026-04-18|v-east",
       "description": "Can workers reclaim independence through thetools in their workplaces? In factories and workshops, materials and machinery are often left idle for substantial parts of the day. When workers find ways of using them ‘on the sly’, a secret world of creativity emerges. In this film, artist Justinien Tribillon draws inspiration from the French word perruque, a term used to describe the practice of covertly making things for yourself, while at work. Researching and filmingthese practices in east London, Tribillon focuses on the precise and repetitive movement of hands. These motions become slow and tender as these individuals craft one piece of work they can bring home.",
       "ends_at": "2026-10-17T23:00:00Z",
       "image_url": "https://assets-cdn.vam.ac.uk/2026/04/15/16/43/38/7e4a5afa-c3f2-4aa4-b3d9-945b363924b1/on-the-sly-justinien-tribillon_320.jpg",
@@ -1043,7 +1043,7 @@ expression: out
         "max": "0",
         "min": "0"
       },
-      "starts_at": "2026-06-27T23:00:00Z",
+      "starts_at": "2026-04-17T23:00:00Z",
       "tags": [
         "display"
       ],
