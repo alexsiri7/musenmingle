@@ -616,7 +616,7 @@ fn first_day_time(description: &str, day: NaiveDate) -> Option<NaiveTime> {
                 .split_whitespace()
                 .map(|t| t.trim_end_matches([',', ':']))
                 .peekable();
-            tokens.next_if(|t| is_weekday(t));
+            tokens.next_if(|t| crate::hours::parse_day(t).is_some());
             let number = tokens.next()?;
             let number = ["st", "nd", "rd", "th"]
                 .iter()
@@ -629,20 +629,6 @@ fn first_day_time(description: &str, day: NaiveDate) -> Option<NaiveTime> {
             let rest: Vec<&str> = tokens.collect();
             find_clock_range(&rest.join(" ")).map(|(start, _)| start)
         })
-}
-
-fn is_weekday(token: &str) -> bool {
-    [
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-        "sunday",
-    ]
-    .iter()
-    .any(|d| token == *d || token == &d[..3])
 }
 
 fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>, SourceError> {
@@ -941,6 +927,11 @@ mod tests {
         assert_eq!(start(narrative, "2026-10-18 18:00:00").0, kept);
         let other_day = "<p>Thursday 15 October General Admission 11am – 5pm</p>";
         assert_eq!(start(other_day, "2026-10-18 18:00:00").0, kept);
+        let list = "<ul><li>Weds 14 October: Private View 5 – 9pm</li></ul>";
+        assert_eq!(
+            start(list, "2026-10-18 18:00:00").0,
+            "2026-10-14T16:00:00+00:00"
+        );
         let suffix_and_year = "<p>14th October 2026 Private View 5 – 9pm</p>";
         assert_eq!(
             start(suffix_and_year, "2026-10-18 18:00:00").0,
