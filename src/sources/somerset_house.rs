@@ -29,7 +29,8 @@
 //!   off (`18:00 → 23:00` for "6–10pm") and some other `dateStart`s disagree
 //!   with the human date text.
 //! * Permanent or standing items (the Courtauld Gallery, a twice-weekly tour)
-//!   are ranges longer than [`MAX_RANGE_DAYS`] and are skipped (`Ok(None)`).
+//!   are ranges longer than [`MAX_RANGE_DAYS`] and are skipped (`Ok(None)`);
+//!   `qa_scope` tells the scraper check.
 //! * Items are at Somerset House unless their free-text `space` contains a
 //!   postcode outside WC2R (the "3 Evenings" series is in Wapping).
 
@@ -425,6 +426,14 @@ impl Source for SomersetHouse {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Standing programmes listed for more than a year are left out on purpose: \
+             recurring tours such as the twice-weekly Historical Highlights Tour \
+             (\"Every Tue & Sat\") and permanent galleries such as the Courtauld Gallery.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -537,6 +546,31 @@ mod tests {
             "dateEnd": "2026-10-07T20:00",
         });
         assert!(!normalise_payload(&timed).unwrap().unwrap().all_day);
+    }
+
+    #[test]
+    fn standing_tours_are_skipped() {
+        let node = serde_json::json!({
+            "title": "Historical Highlights Tour",
+            "dateStart": "2025-07-22T00:00",
+            "dateEnd": "2026-12-29T00:00",
+            "dateText": "Every Tue & Sat",
+        });
+        assert!(normalise_payload(&node).unwrap().is_none());
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = SomersetHouse::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "more than a year",
+            "Historical Highlights Tour",
+            "Courtauld",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 
     #[test]
