@@ -22,7 +22,8 @@
 //!   category comes from keywords in the eyebrow and title only (concert
 //!   bodies mention "readings" and "musical conversation"), plus a body
 //!   that describes a demonstration (the food historians' Georgian cooking
-//!   evenings), a talk. Anything else is skipped.
+//!   evenings), a talk. Anything else is skipped; `qa_scope` tells the
+//!   scraper check.
 
 use async_trait::async_trait;
 use chrono::{Datelike, NaiveDate, NaiveTime};
@@ -327,6 +328,18 @@ impl Source for HandelHendrix {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only exhibitions, talks, workshops, fairs and community events: pages \
+             whose eyebrow or title names one of those (lecture, conversation, \
+             reading, class, display and the like), or whose description describes \
+             a demonstration. Concerts, recitals and the rest of the music programme \
+             (salons, sessions, children's concerts, ensembles, anniversary \
+             celebrations) are left out on purpose, as are recurring or open-ended \
+             programmes whose dates name no year (\"Every Thursday\", \"From 19th June\").",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -482,5 +495,22 @@ mod tests {
         );
         let ev = normalise_payload(&ev).unwrap().unwrap();
         assert_eq!(ev.category, Category::Talk);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = HandelHendrix::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "exhibitions",
+            "talks",
+            "demonstration",
+            "Concerts",
+            "salons",
+            "no year",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
