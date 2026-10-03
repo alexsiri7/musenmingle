@@ -162,6 +162,21 @@ fn select_gallery_normalised() {
     );
 }
 
+/// Scraper check 2026-09-30 (#262): the venue's calendar starts the fair
+/// at 18:00, its description's "Wednesday 14 October / Private View
+/// 5 – 9pm" at 17:00.
+#[test]
+fn qa_2026_09_30_page_values() {
+    let events = normalised("tec-select-gallery", &api_page("tec-select-gallery", 1));
+    let fair = events
+        .iter()
+        .map(|e| &e["event"])
+        .find(|e| e["title"] == "Affordable Art Fair Battersea 2026")
+        .expect("fair listed");
+    assert_eq!(fair["starts_at"], "2026-10-14T16:00:00Z");
+    assert_eq!(fair["ends_at"], "2026-10-18T17:00:00Z");
+}
+
 #[test]
 fn freud_museum_normalised() {
     let raws = api_page("tec-freud-museum", 1);
