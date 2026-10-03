@@ -13,15 +13,21 @@
 //!   rejects, so control characters are replaced by spaces before parsing.
 //! * Times are London wall clock without an offset (`2026-10-04 18:30:00`,
 //!   printed "4th October 2026 · 6:30pm"), read with
-//!   `parse_london_wall_clock`. Every event is timed.
+//!   `parse_london_wall_clock`. Every event is timed. Some `endDate`s
+//!   carry the wrong day (a 3:00pm–4:30pm talk ending 19 days later), so
+//!   only their clock time is used: on the start's day, or the next when
+//!   it is earlier (an overnight event).
 //! * Categories: `concerts` (the Sunday Concerts, recitals, opera) and
 //!   `film` are skipped even when also tagged `festivals`; otherwise
 //!   `talks-debates` → talk, `workshops` → workshop, `festivals` →
-//!   community. Online-only events are skipped (hybrid ones are kept).
+//!   community. Online-only events are skipped (hybrid ones are kept);
+//!   `qa_scope` tells the scraper check.
 //! * Every event is at Conway Hall (rooms such as the Brockway Room are
 //!   inside it). No prices on the listing, so price is unknown.
 
 use async_trait::async_trait;
+use chrono::{DateTime, Days, Utc};
+use chrono_tz::Europe::London;
 use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
@@ -30,7 +36,9 @@ use super::jsonld::image_url;
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
-use crate::normalise::{clean_description, clean_text, dedupe_key, parse_london_wall_clock};
+use crate::normalise::{
+    clean_description, clean_text, dedupe_key, london_to_utc, parse_london_wall_clock,
+};
 
 pub const KEY: &str = "conway-hall";
 const LISTING_PATH: &str = "/whats-on/";
@@ -131,6 +139,20 @@ pub fn parse_listing(html: &str, page_url: &Url) -> Vec<Result<RawEvent, SourceE
     out
 }
 
+/// The end of an event starting at `starts_at` whose JSON-LD `endDate` is
+/// `end`: `end`'s London clock time on the start's day, or on the next day
+/// when it is earlier. `None` when unparseable or not after the start.
+pub fn end_time(starts_at: DateTime<Utc>, end: &str) -> Option<DateTime<Utc>> {
+    let end = parse_london_wall_clock(end)?.with_timezone(&London).time();
+    let start = starts_at.with_timezone(&London).naive_local();
+    let day = if end < start.time() {
+        start.date().checked_add_days(Days::new(1))?
+    } else {
+        start.date()
+    };
+    Some(london_to_utc(day.and_time(end))).filter(|e| *e > starts_at)
+}
+
 /// Category from the site's categories; `None` means out of scope.
 pub fn category(site_categories: &[&str]) -> Option<Category> {
     let has = |c: &str| site_categories.contains(&c);
@@ -203,9 +225,7 @@ impl Source for ConwayHall {
         let starts_at = parse_london_wall_clock(start).ok_or_else(|| {
             SourceError::Parse(format!("{title:?}: unrecognised startDate {start:?}"))
         })?;
-        let ends_at = date("endDate")
-            .and_then(parse_london_wall_clock)
-            .filter(|e| *e > starts_at);
+        let ends_at = date("endDate").and_then(|e| end_time(starts_at, e));
         // The series ("Ethical Matters", "Intelligence Squared", …).
         let tags: Vec<String> = p["series"]
             .as_str()
@@ -231,6 +251,15 @@ impl Source for ConwayHall {
             tags,
         }))
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only talks and debates, workshops and festival events held at Conway Hall. \
+             Concerts (the Sunday Concerts, recitals, opera) and films are left out on \
+             purpose, even when also listed under festivals (Bloomsbury Festival), as \
+             are online-only events.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -252,6 +281,38 @@ mod tests {
         assert_eq!(category(&["concerts", "festivals"]), None);
         assert_eq!(category(&["film"]), None);
         assert_eq!(category(&[]), None);
+    }
+
+    #[test]
+    fn the_end_keeps_its_clock_time_on_the_start_day() {
+        let start = parse_london_wall_clock("2026-10-04 15:00:00").unwrap();
+        assert_eq!(
+            end_time(start, "2026-10-23 16:30:00"),
+            parse_london_wall_clock("2026-10-04 16:30")
+        );
+        let start = parse_london_wall_clock("2026-10-17 19:00:00").unwrap();
+        assert_eq!(
+            end_time(start, "2026-10-18 14:00:00"),
+            parse_london_wall_clock("2026-10-18 14:00")
+        );
+        assert_eq!(end_time(start, "2026-10-17 19:00:00"), None);
+        assert_eq!(end_time(start, "soon"), None);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = ConwayHall::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "talks",
+            "Sunday Concerts",
+            "films",
+            "festivals",
+            "online-only",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 
     #[test]
