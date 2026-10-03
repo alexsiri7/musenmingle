@@ -284,8 +284,8 @@ impl Source for LondonReviewBookshop {
     fn qa_scope(&self) -> Option<&'static str> {
         Some(
             "Only author talks held in the shop. Retail evenings (\"Late Night \
-             Shopping\", such as \"October Late Night Shopping\") and film screenings \
-             are left out on purpose: they are not talks.",
+             Shopping\", such as \"October Late Night Shopping\"), film screenings and \
+             film nights are left out on purpose: they are not talks.",
         )
     }
 }
@@ -360,7 +360,12 @@ mod tests {
         let scope = LondonReviewBookshop::new(Url::parse("https://x.test/").unwrap())
             .qa_scope()
             .unwrap();
-        for word in ["author talks", "Late Night Shopping", "film screenings"] {
+        for word in [
+            "author talks",
+            "Late Night Shopping",
+            "film screenings",
+            "film nights",
+        ] {
             assert!(scope.contains(word), "{word:?} missing from {scope:?}");
         }
     }
