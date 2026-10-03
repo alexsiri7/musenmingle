@@ -41,9 +41,11 @@
 //!   event; otherwise the first slug in `category_map`, then
 //!   `map_category` over the category names and title, then
 //!   `default_category`; with none of those the event is skipped. The
-//!   JSON-LD carries no categories: title, then `default_category`.
-//!   Without a `default_category` that leaves out film screenings, tours,
-//!   gigs and the like; `qa_scope` tells the scraper check.
+//!   JSON-LD carries no categories: title, then description, then
+//!   `default_category`. Without a `default_category` that leaves out film
+//!   screenings, tours, gigs and the like; `qa_scope` tells the scraper
+//!   check. On both paths, a title containing one of the row's
+//!   `skip_keywords` skips the event.
 //! * Price: `cost` text (its `currency_code` is unreliable: "USD" for "£"
 //!   prices), widened by the description's ticket lines (online and
 //!   livestream lines excluded) when it is paid; or the JSON-LD offers. TEC strings are HTML-escaped (the
@@ -66,7 +68,7 @@ use crate::fetch::{FetchContext, FetchError};
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, in_london_bbox, is_london_midnight, london_date,
-    london_to_utc, map_category, parse_london_wall_clock, parse_price, price_from_amounts,
+    london_to_utc, map_category, parse_london_wall_clock, parse_price, price_from_amounts, words,
 };
 
 /// `events.sources.platform` of TEC venues.
@@ -99,6 +101,9 @@ pub struct TecConfig {
     /// For venues whose uncategorised events are all one kind.
     #[serde(default)]
     pub default_category: Option<Category>,
+    /// Words or phrases whose presence in a title skips the event.
+    #[serde(default)]
+    pub skip_keywords: Vec<String>,
 }
 
 fn default_api_path() -> Option<String> {
@@ -361,6 +366,15 @@ fn has_word(text: &str, word: &str) -> bool {
         .any(|w| w.eq_ignore_ascii_case(word))
 }
 
+/// Whether `title` contains `keyword`'s words, in order, as whole words.
+fn has_keyword(title: &str, keyword: &str) -> bool {
+    let (title, keyword) = (words(title), words(keyword));
+    !keyword.is_empty()
+        && title
+            .windows(keyword.len())
+            .any(|w| w == keyword.as_slice())
+}
+
 /// A number, or a number in a string.
 fn number(v: Option<&Value>) -> Option<f64> {
     match v? {
@@ -436,6 +450,13 @@ pub fn normalise_payload(
     let Some(p) = parsed else {
         return Ok(None);
     };
+    if config
+        .skip_keywords
+        .iter()
+        .any(|k| has_keyword(&p.title, k))
+    {
+        return Ok(None);
+    }
     let Some(venue) = p.venue else {
         return Ok(None);
     };
@@ -619,18 +640,22 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
         })
         .or_else(|| Venue::from_config(config));
 
+    let description = node
+        .get("description")
+        .and_then(Value::as_str)
+        // TEC escapes the HTML description once more for JSON-LD.
+        .and_then(|d| clean_description(Some(&clean_text(&d.replace("\\n", " ")))));
+    let category = map_category(
+        &[Some(title.as_str()), description.as_deref()].map(Option::unwrap_or_default),
+    );
     Ok(Some(Parsed {
-        description: node
-            .get("description")
-            .and_then(Value::as_str)
-            // TEC escapes the HTML description once more for JSON-LD.
-            .and_then(|d| clean_description(Some(&clean_text(&d.replace("\\n", " "))))),
+        description,
         times,
         venue,
         price: jsonld_price(node),
         url: node.get("url").and_then(Value::as_str).map(str::to_string),
         image_url: jsonld::image_url(node),
-        category: map_category(&[title.as_str()]),
+        category,
         tags: Vec::new(),
         title,
     }))
@@ -1125,5 +1150,68 @@ mod tests {
             jsonld(json!({"eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode"}));
         assert_eq!(norm(&online, rules), None);
         assert_eq!(norm(&jsonld(json!({})), json!({})), None, "no category");
+    }
+
+    #[test]
+    fn skip_keywords_match_whole_title_words() {
+        let rules = json!({"skip_keywords": ["yoga"], "default_category": "exhibition"});
+        let yoga = api(json!({"title": "Yoga Sessions at the Rum Factory"}));
+        assert_eq!(norm(&yoga, rules.clone()), None);
+        let yoga = jsonld(json!({"name": "Yoga Sessions at the Lakeside Centre"}));
+        assert_eq!(norm(&yoga, rules.clone()), None);
+        let mentions_yoga = jsonld(json!({"name": "Open To Ideas Workshop: Table Talk",
+                                          "description": "With a yoga teacher."}));
+        assert_eq!(
+            norm(&mentions_yoga, rules).map(|e| e.category),
+            Some(Category::Workshop)
+        );
+        let yogurt = api(json!({"title": "Yogurt tasting"}));
+        let rules = json!({"skip_keywords": ["yoga"], "default_category": "community"});
+        assert!(norm(&yogurt, rules).is_some());
+        assert_eq!(
+            config(json!({"skip_keywords": ["yoga"]})).skip_keywords,
+            ["yoga"]
+        );
+    }
+
+    #[test]
+    fn jsonld_category_title_then_description_then_default() {
+        let cat = |name: &str, description: &str, rules: Value| {
+            norm(
+                &jsonld(json!({"name": name, "description": description})),
+                rules,
+            )
+            .map(|e| e.category)
+        };
+        assert_eq!(
+            cat(
+                "Bow Families: paper lanterns",
+                "A hands-on workshop.",
+                json!({})
+            ),
+            Some(Category::Workshop)
+        );
+        assert_eq!(
+            cat("Book talk", "Part of the exhibition.", json!({})),
+            Some(Category::Talk)
+        );
+        let hunjan = "Bhajan Hunjan: speaking through materials";
+        assert_eq!(cat(hunjan, "Forty years of work.", json!({})), None);
+        assert_eq!(
+            cat(
+                hunjan,
+                "Forty years of work.",
+                json!({"default_category": "exhibition"})
+            ),
+            Some(Category::Exhibition)
+        );
+        let bow_arts = json!({"default_category": "exhibition", "skip_keywords": ["yoga"]});
+        let late = jsonld(json!({
+            "name": "Late Opening &amp; Curator Tours: Bhajan Hunjan: speaking through materials"
+        }));
+        assert_eq!(
+            norm(&late, bow_arts).map(|e| e.category),
+            Some(Category::Exhibition)
+        );
     }
 }

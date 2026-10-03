@@ -4,7 +4,28 @@ expression: "normalised(\"tec-slbi\", &raws)"
 ---
 [
   {
-    "event": null,
+    "event": {
+      "address": "323 Norwood Road, London SE24 9AQ",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "photomonth-at-slbi-estelle-vincent-nature-in-process|2026-10-02|south-botanical-institute",
+      "description": "Using plants, soil and alternative photographic processes, Estelle Vincent creates images in collaboration with the natural world. This exhibition brings together works exploring cyanotypes, plant-based chemistry, souped film and soil chromatography. The resulting works reveal photography as a living process shaped by the materials of the landscape itself, allowing the land to inscribe itself directly …",
+      "ends_at": "2026-10-16T18:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/Estelle-Vincent_Seasonal-Toning_2025_2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-02T16:30:00Z",
+      "tags": [],
+      "title": "Photomonth at the SLBI: Estelle Vincent – Nature in Process",
+      "url": "https://www.slbi.org.uk/event/photo-exhibition-nature-in-process/",
+      "venue_name": "South London Botanical Institute"
+    },
     "id": "/event/photo-exhibition-nature-in-process/"
   },
   {

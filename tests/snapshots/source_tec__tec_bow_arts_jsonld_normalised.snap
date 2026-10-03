@@ -4,7 +4,28 @@ expression: "normalised(\"tec-bow-arts\", &raws)"
 ---
 [
   {
-    "event": null,
+    "event": {
+      "address": "181-183 Bow Road, London, E3 2SJ",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "bhajan-hunjan-speaking-through-materials|2026-10-09|bow-road-nunnery",
+      "description": "\\'Bhajan Hunjan: speaking through materials\\' will for the first time bring together works from Hunjan’s rich and various career to date, spanning over 40 years of practice.",
+      "ends_at": "2026-12-20T16:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/03/Painting-She-Observed-Acrylic-on-canvas-3-x-5-ft-1989.jpg",
+      "lat": 51.528885,
+      "lng": -0.0178442,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-09T09:00:00Z",
+      "tags": [],
+      "title": "Bhajan Hunjan: speaking through materials",
+      "url": "https://bowarts.org/event/bhajan-hunjan-speaking-through-materials/",
+      "venue_name": "Bow Road & Nunnery Gallery"
+    },
     "id": "/event/bhajan-hunjan-speaking-through-materials/"
   },
   {
@@ -33,15 +54,78 @@ expression: "normalised(\"tec-bow-arts\", &raws)"
     "id": "/event/on-the-wall-exhibition/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "181-183 Bow Road, London, E3 2SJ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "bow-families-creating-your-own-paper-lanterns-brightening-mid-autumn-stories-with-alison-lam|2026-09-27|bow-road-nunnery",
+      "description": "What would your light say if you didn’t speak? Join artist Alison Lam for a cozy, hands-on workshop making your own paper lanterns telling your stories during the Moon Festival. Open to children and families of all ages – all materials provided.",
+      "ends_at": "2026-09-27T12:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/07/Paper-Lanterns.jpeg",
+      "lat": 51.528885,
+      "lng": -0.0178442,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-09-27T10:00:00Z",
+      "tags": [],
+      "title": "Bow Families: creating your own paper lanterns and brightening mid-autumn stories with Alison Lam",
+      "url": "https://bowarts.org/event/bow-families-creating-your-paper-lanterns-and-brightening-mid-autumn-stories-with-alison-lam/",
+      "venue_name": "Bow Road & Nunnery Gallery"
+    },
     "id": "/event/bow-families-creating-your-paper-lanterns-and-brightening-mid-autumn-stories-with-alison-lam/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "49 Pennington Street, Wapping, London, E1W 2BD",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "expressions-of-fluidity-story-tale-map-lucia-scarselletta|2026-10-01|rum-factory",
+      "description": "Expressions of Fluidity: Story-tale Map brings together sculpture, film and textile to explore the circulation of materials and embodied techniques through migration, labour and systems of exchange.",
+      "ends_at": "2026-10-11T17:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/08/CROPPED-Cincha-Alhaja-2026-Repurposed-Leather-Steel-Wood-credit-Lucia-Scarselletta.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-01T11:00:00Z",
+      "tags": [],
+      "title": "Expressions of Fluidity: Story-tale Map – Lucía Scarselletta",
+      "url": "https://bowarts.org/event/expressions-of-fluidity-story-tale-map/",
+      "venue_name": "The Rum Factory"
+    },
     "id": "/event/expressions-of-fluidity-story-tale-map/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "49 Pennington Street, Wapping, London, E1W 2BD",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "opening-night-expressions-of-fluidity-story-tale-map|2026-10-01|rum-factory",
+      "description": "All are invited to join us for the opening night of Expressions of Fluidity: Story-tale Map, a new exhibition at the Rum Factory with artist Lucía Scarselletta.",
+      "ends_at": "2026-10-01T20:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/08/Cincha-Alhaja-Detail-2026-Repurposed-Leather-Steel-credit-Lucia-Scarselletta.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-01T17:00:00Z",
+      "tags": [],
+      "title": "Opening Night – Expressions of Fluidity: Story-tale Map",
+      "url": "https://bowarts.org/event/opening-night-expressions-of-fluidity-story-tale-map/",
+      "venue_name": "The Rum Factory"
+    },
     "id": "/event/opening-night-expressions-of-fluidity-story-tale-map/"
   },
   {
@@ -128,7 +212,28 @@ expression: "normalised(\"tec-bow-arts\", &raws)"
     "id": "/event/workshop-workshop-braided-lazos-lucia-scarselletta/"
   },
   {
-    "event": null,
+    "event": {
+      "address": "835 Romford Road, London, E12 5JY",
+      "all_day": false,
+      "category": "exhibition",
+      "dedupe_key": "old-manor-park-library-open-studios-2026|2026-10-11|old-manor-park-library",
+      "description": "Old Manor Park Library are opening their doors this October for an artist-led Open Studios! Meet the artists inside these Bow Arts studios, and explore their work ranging from print, textiles, drawing, painting, and more.",
+      "ends_at": "2026-10-11T15:00:00Z",
+      "image_url": "https://bowarts.org/wp-content/uploads/2026/09/oldparkopenstudios_photocredit_Tatiana187-scaled.jpg",
+      "lat": 51.5531062,
+      "lng": 0.0537788,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-11T10:00:00Z",
+      "tags": [],
+      "title": "Old Manor Park Library Open Studios 2026",
+      "url": "https://bowarts.org/event/old-manor-park-library-open-studios-2026/",
+      "venue_name": "Old Manor Park Library"
+    },
     "id": "/event/old-manor-park-library-open-studios-2026/"
   },
   {
