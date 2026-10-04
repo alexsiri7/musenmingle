@@ -712,8 +712,9 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
 fn parse_cost(cost: &str) -> Price {
     let price = parse_price(cost);
     let free_floor = cost
-        .strip_prefix("Free")
-        .is_some_and(|rest| rest.trim_start().starts_with(['-', '–', '—']));
+        .get(..4)
+        .is_some_and(|word| word.eq_ignore_ascii_case("free"))
+        && cost[4..].trim_start().starts_with(['-', '–', '—']);
     if free_floor && price.max.is_some() {
         Price {
             min: Some(Decimal::ZERO),
@@ -1166,6 +1167,7 @@ mod tests {
                 false
             )
         );
+        assert_eq!(range("FREE – £42.00", "").0, Some("0".to_string()));
         assert!(range("Free", "<p>Tickets £25</p>").3);
         // A cheaper tier lowers the floor; a restated one keeps the cost's text.
         let gbp = |min: &str, max: &str| {
