@@ -51,9 +51,10 @@
 //!   check. On both paths, a title containing one of the row's
 //!   `skip_keywords` skips the event.
 //! * Price: `cost` text (its `currency_code` is unreliable: "USD" for "£"
-//!   prices), widened by the description's ticket lines (online and
-//!   livestream lines excluded) when it is paid; or the JSON-LD offers. TEC strings are HTML-escaped (the
-//!   JSON-LD descriptions twice), so all text goes through `clean_text`.
+//!   prices; a leading "Free –" is a £0 tier), widened by the description's
+//!   ticket lines (online and livestream lines excluded) when it is paid; or
+//!   the JSON-LD offers. TEC strings are HTML-escaped (the JSON-LD
+//!   descriptions twice), so all text goes through `clean_text`.
 //! * The content policy is decided per venue in its seed row.
 
 use std::collections::BTreeMap;
@@ -571,7 +572,7 @@ fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, 
     };
     let price = widen_with_ticket_lines(
         text_of(event.get("cost"))
-            .map(|c| parse_price(&c))
+            .map(|c| parse_cost(&c))
             .unwrap_or_default(),
         event.get("description").and_then(Value::as_str),
     );
@@ -704,6 +705,23 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
         tags: Vec::new(),
         title,
     }))
+}
+
+/// TEC writes a free cheapest tier as "Free" in a cost range ("Free –
+/// £42.00"), which `parse_price` alone would read as just £42.
+fn parse_cost(cost: &str) -> Price {
+    let price = parse_price(cost);
+    let free_floor = cost
+        .strip_prefix("Free")
+        .is_some_and(|rest| rest.trim_start().starts_with(['-', '–', '—']));
+    if free_floor && price.max.is_some() {
+        Price {
+            min: Some(Decimal::ZERO),
+            ..price
+        }
+    } else {
+        price
+    }
 }
 
 /// TEC's `cost` is what the venue typed into the price field, which can
@@ -1139,6 +1157,15 @@ mod tests {
         assert_eq!(range(cost, "<p>The book costs £30.</p>"), stored("16.40"));
         assert_eq!(range(cost, "<p>Tickets $30</p>"), stored("16.40"));
         assert_eq!(range("", "<p>Tickets £25</p>"), (None, None, None, false));
+        assert_eq!(
+            range("Free &#8211; &#163;42.00", ""),
+            (
+                Some("0".to_string()),
+                Some("42.00".to_string()),
+                Some("GBP".to_string()),
+                false
+            )
+        );
         assert!(range("Free", "<p>Tickets £25</p>").3);
         // A cheaper tier lowers the floor; a restated one keeps the cost's text.
         let gbp = |min: &str, max: &str| {

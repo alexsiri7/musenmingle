@@ -1,0 +1,140 @@
+---
+source: tests/source_tec.rs
+expression: events
+---
+[
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "poetry-series-nell-perry|2026-10-09|housmans-bookshop",
+      "description": "@ Join us for another evening of cutting edge, brilliant poetry. This time we will be launching Nell Perry’s incredible new work of hybridised poetics His Splendid Tables, published by Runamok ! His Splendid Tables is a collection of hybrid writing combining wayward translation and poetic essay to explore, variously, what is lost and what is gained in the elegiac process, and unremembered myths and histories of feminized people. ‘Borstal Unthrum Loom’ interweaves a translation of Moschus’ ‘Lament for Bion’ into an extinct Kentish dialect, with found material from the Assize trial records of Kentish witches and later writings thereon, to consider the social construction of the witch, and the treatment of women labelled, tried and executed as such, and to examine the poetics and dynamics of the pastoral. ‘fey’ explores and resists representations of feminized bodies in various iterations, from Arthurian texts, of the mythical figure of Morgan le Fay, to explore how the multiple meanings of the term ‘fey’ link femininity with illness, disorder, whimsy, the supernatural and death. “Perry’s mythscape is a dappled and torn document, both rich and bereft.” Megan Zword This is a free event, but please RSVP below. Please also feel free to BYOB!",
+      "ends_at": "2026-10-09T20:00:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/09/Poetry-Series-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-10-09T18:00:00Z",
+      "tags": [
+        "in store",
+        "literary event"
+      ],
+      "title": "POETRY SERIES: NELL PERRY",
+      "url": "https://housmans.com/event/poetry-series-nell-perry/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/poetry-series-nell-perry/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "zine-launch-tranny-central|2026-10-10|housmans-bookshop",
+      "description": "@ JOIN US FOR FOR THE LAUNCH OF THIS INCREDIBLE HISTORY OF THE GAY LIBERATION FRONT’S TRANSSEXUAL, TRANSVESTITE AND DRAG QUEEN GROUP, FROM TGIRLSONFILM Come for the launch of the third bumper edition of “Tranny Central”, with new archival goodies and newly commissioned articles. In Tranny Central, TGirlsonFilm summons the spirits of our radical trans-sisters of the Gay Liberation Front. Take a trip back to the suffocating howl of seventies London and bask in the hash hazed memories of Rachel Pollack’s flat. The US had the Compton Cafeteria and Stonewall Riots: how did London’s premiere transvestite and transsexuals react to the bubbling queer rebellion? Often dismissed and erased, it’s time to know the history. Get in your glad rags, grab your slap, and head straight to Tranny Central girl! Words, Research & Organisation by Jaye Hudson Visual Design by Ror Brown Illustrations by Bug Bites We are delighted and honoured to have readings from: Roz Kaveney Morgan M Page & Jaye Hudson COPIES OF THE ZINE WILL BE AVAILABLE TO PURCHASE ON THE NIGHT. DRINKS WILL BE PROVIDED BUT PLEASE FEEL FREE TO BYOB. EVENT STARTS AT 19:30, DOORS AT 19:00. A s always, tickets are priced on a sliding scale. If you are unable to pay for a ticket please do not hesitate to contact us at shop@housmans.com, and a free ticket will be made available. If you choose ‘book + entry’ your copies of the book will be available to collect on the evening. If you would like to collect it earlier, or arrange for delivery, please contact us (postage is £2.95). Telephone 020 7837 4473 or email shop@housmans.com. Doors Open at 6:45pm, Event Starts 7:00.",
+      "ends_at": "2026-10-10T20:00:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/09/LAUNCH-Instagram.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "9.00",
+        "min": "2.50"
+      },
+      "starts_at": "2026-10-10T18:30:00Z",
+      "tags": [
+        "book launch",
+        "in store",
+        "literary event"
+      ],
+      "title": "ZINE LAUNCH: TRANNY CENTRAL",
+      "url": "https://housmans.com/event/zine-launch-tranny-central/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/zine-launch-tranny-central/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-age-of-hobsbawm-by-emile-chabal|2026-10-13|housmans-bookshop",
+      "description": "@ Join Emile Chabal as he discusses his new intellectual biography of Eric Hobsbawm, The Age of Hobsbawm: The Life of a Revolutionary Historian. Eric Hobsbawm (1917–2012) was one of the foremost European intellectuals of the twentieth century. He published hundreds of articles on modern history and culture, and his books became canonical works and bestsellers on both sides of the Atlantic. His crystal-clear writing, vast erudition, and ability to make his Marxist analysis digestible to a wide audience brought him worldwide renown. Yet Hobsbawm was no academic hermit. Through his globetrotting journalism, he was embedded in an extraordinary web of politicians, activists, and fellow intellectuals across Europe, South Asia, and the Americas, including Manmohan Singh, Che Guevara, Luiz Inácio Lula da Silva, Fernand Braudel, E. P. Thompson, Arno Mayer, and Salvador Allende. Emile Chabal traces the origins of Hobsbawm’s ideas and most famous writings by exploring his scholarly foundations, delving deep into the archives to uncover hidden links and unexpected conversations that shaped his pathbreaking work. Going well beyond the Ages series of modern history books for which Hobsbawm is best known, Chabal offers the first substantial interpretation of Hobsbawm’s entire body of writing and gives us unique insights into the generations of Marxist writers with whom Hobsbawm was in conversation—authors whose work continues to shape political debates globally. As always, tickets are priced on a sliding scale. If you are unable to pay for a ticket please do not hesitate to contact us at shop@housmans.com, and a free ticket will be made available. If you choose ‘book + entry’ your copies of the book will be available to collect on the evening. If you would like to collect it earlier, or arrange for delivery, please contact us (postage is £2.95). Telephone 020 7837 4473 or email shop@housmans.com. Doors Open at 6:45pm, Event Starts 7:00.",
+      "ends_at": "2026-10-13T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/preeti-insta1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.99",
+        "min": "5.00"
+      },
+      "starts_at": "2026-10-13T18:00:00Z",
+      "tags": [],
+      "title": "BOOK LAUNCH: THE AGE OF HOBSBAWM by Emile Chabal",
+      "url": "https://housmans.com/event/book-launch-the-age-of-hobsbawm-by-emile-chabal/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/book-launch-the-age-of-hobsbawm-by-emile-chabal/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "taj-ali-in-conversation-with-kojo-koram|2026-10-14|housmans-bookshop",
+      "description": "@ Taj Ali and Kojo Koram are two of the most truly radical thinkers working in Britain today. They both have great experience as front line organisers but also, on the theoretical level, advance a rigorous and materialist anti-racism, rooted in a Marxist understanding of power and exploitation; that works towards a praxis based on class solidarity. So we are absolutely delighted to welcome them to Housmans, to engage in a conversation around their recent books: Taj’s Come what may, we’re here to stay: The story of South Asian resistance in Britain (Manchester University Press) and Kojo’s The Next Fix:The Winners and Losers in the Future of Drugs (Verso). Come what may, we’re here to stay: The story of South Asian resistance in Britain tells the inspirational story of how the South-Asian community in Britain organised against racism in the past and how it continues to fight in the present. British South Asians have a long tradition of radical political activism. The 1970s and 1980s saw the community grappling with prejudice in the workplace and violence in the streets. But this history is deeper than you might think, from students agitating for independence at the heart of the British Empire to seafarers organising global strikes on the eve of the Second World War. In Come what may Taj reveals how successive generations fought for rights, dignity and a sense of belonging while actively shaping the country they now call home. He shows that British South Asian political life has often been defined less by religious difference than by shared commitments to anti-imperialism and anti-racism. In pursuit of these goals, alliances have been forged with other movements, from Irish republicanism to Black Power. As racism rears its ugly head again, Come what may, we’re here to stay asks: are we doomed to repeat the past or will we learn from our mistakes and build a better world together? From America’s plantation-turned-prison known as Angola in Louisiana to the psychedelic boom of Silicon Valley, Kojo Koram ‘ s The Next Fix tracks a seismic shift in global drug policy. Kojo —legal scholar and acclaimed author of Uncommon Wealth —travels across five continents to examine how criminalized substances are being rebranded as commodities in a new billion-dollar industry. Legal cannabis dispen­saries now trade in what once led to life sentences. Psychedelics have become fertile ground for biotech. But for all these developments, prisons still swell with underprivileged users and addicts, and enforcement falls hardest along lines of race and class. This is not a polemic for or against legalization. It is a powerful, clear-eyed reckoning with how we got here—and what kind of future is taking shape in a world addicted to economic “fixes” every bit as much as it is troubled by drugs. Combining report­age, political analysis and vivid personal testimony, The Next Fix tells the untold story of drugs, capital­ism and inequality in the twenty-first century. This is a truly exciting opportunity to see two incredible thinkers in conversation. Please book ahead to avoid disappointment. As always, tickets are priced on a sliding scale. If you are unable to pay for a ticket please do not hesitate to contact us at shop@housmans.com, and a free ticket will be made available. If you choose ‘book + entry’ your copies of the book will be available to collect on the evening. If you would like to collect it earlier, or arrange for delivery, please contact us (postage is £2.95). Telephone 020 7837 4473 or email shop@housmans.com. Doors Open at 6:45pm, Event Starts 7:00",
+      "ends_at": "2026-10-14T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/08/preeti-insta2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "42.00",
+        "min": "0"
+      },
+      "starts_at": "2026-10-14T18:00:00Z",
+      "tags": [
+        "book talk"
+      ],
+      "title": "TAJ ALI IN CONVERSATION WITH KOJO KORAM",
+      "url": "https://housmans.com/event/taj-ali-in-conversation-with-kojo/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/taj-ali-in-conversation-with-kojo/"
+  },
+  {
+    "event": {
+      "address": "5 Caledonian Road, London N1 9DX",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "book-launch-listening-with-love-by-vishwam-gurudas|2026-10-21|housmans-bookshop",
+      "description": "@ You are warmly invited to this peaceful evening of heart meditation and discussion where we explore together what it means to really Listen with Love, with radical yoga instructor and thinker Vishwam Gurudas Many of us are deeply concerned about what’s happening in the world, in our communities, and in the lives of the people closest to us. We might wonder, why do so many systems seem to be stuck in ways that are harming people and planet? Our schools and healthcare systems, ecosystems and economies, political systems and more are in crisis while most of us feel helpless to help. We seem locked in. But what if we could loosen the knots that bind us, and in doing so help those around us to also loosen their own knots? What might seem like impossibly huge global systems can only keep going the way they are if we remain tight, closed and disconnected. As we open our hearts and minds, rediscover our voices and our capacity to listen with deep compassion, things shift. Systems change. Including our own. Are you ready for the adventure? This is the Revolution of Love. This special evening is a unique opportunity to connect with others who care about our world, who want to help nurture vibrant community, and are willing to Listen with Love. Sharing heart meditation is one simple way to help find the inner quiet and the deep, abiding love for life that can support us all. All welcome! OUR AUTHOR Vishwam Gurudas is an experienced Heart Minister, Yoga Teacher & Teacher Trainer with the Heart Of Living Yoga Foundation. He is also a scholar of intimacy, love and revolutionary transformation with a PhD from the University of Edinburgh. For the past six years he has been hosting meditative writing circles, developing his capacity as a listener and as a writer. You can find various poems, essays and stories of his online and in print including in Earth Pathways Diary, Permaculture Magazine, Bella Caledonia and Southlight Magazine. Listening with Love is his first sole-authored book and the first published by Flowing with Life Press. Originally from rural Iowa, he has lived in various parts of Scotland and England over the the past thirty years. He is now delighted to dwell in the spacious peace of the Shetland Islands where he works with children with complex needs, gardens, writes and more. As always, tickets are priced on a sliding scale. If you are unable to pay for a ticket please do not hesitate to contact us at shop@housmans.com, and a free ticket will be made available. If you choose ‘book + entry’ your copies of the book will be available to collect on the evening. If you would like to collect it earlier, or arrange for delivery, please contact us (postage is £2.95). Telephone 020 7837 4473 or email shop@housmans.com. Doors Open at 6:45pm, Event Starts 7:00",
+      "ends_at": "2026-10-21T19:30:00Z",
+      "image_url": "https://housmans.com/wp-content/uploads/2026/09/1000123861.webp",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "9.99",
+        "min": "2.50"
+      },
+      "starts_at": "2026-10-21T18:00:00Z",
+      "tags": [],
+      "title": "BOOK LAUNCH: ‘Listening with Love’ by Vishwam Gurudas",
+      "url": "https://housmans.com/event/book-launch-listening-with-love-by-vishwam-gurudas/",
+      "venue_name": "Housmans Bookshop"
+    },
+    "id": "/event/book-launch-listening-with-love-by-vishwam-gurudas/"
+  }
+]
