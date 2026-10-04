@@ -1,0 +1,23 @@
+name: OpenSpec
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: openspec-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: openspec validate
+    runs-on: ubuntu-latest
+    env:
+      OPENSPEC_TELEMETRY: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npx -y @fission-ai/openspec@latest validate --specs --strict
