@@ -79,8 +79,11 @@ fn source(key: &str, base: &str) -> Tec {
 }
 
 fn api_page(key: &str, page: u32) -> Vec<RawEvent> {
-    let body: Value =
-        serde_json::from_str(&fixture(&format!("scrapers/{key}/api-page-{page}.json"))).unwrap();
+    api_fixture(&format!("scrapers/{key}/api-page-{page}.json"))
+}
+
+fn api_fixture(file: &str) -> Vec<RawEvent> {
+    let body: Value = serde_json::from_str(&fixture(file)).unwrap();
     let (items, _) = parse_api_page(&body).unwrap();
     items.into_iter().map(Result::unwrap).collect()
 }
@@ -145,6 +148,23 @@ fn housmans_jsonld_normalised() {
         "tec_housmans_jsonld_normalised",
         normalised("tec-housmans", &raws)
     );
+}
+
+/// Scraper check #99 (#297): a "Free – £42.00" cost is a sliding scale
+/// from £0, not £42.
+#[test]
+fn housmans_qa_2026_10_04_normalised() {
+    let raws = api_fixture("scrapers/tec-housmans/qa-2026-10-04.json");
+    let events = normalised("tec-housmans", &raws);
+    let taj = events
+        .iter()
+        .find(|e| e["event"]["title"] == "TAJ ALI IN CONVERSATION WITH KOJO KORAM")
+        .expect("Taj Ali event");
+    assert_eq!(
+        taj["event"]["price"],
+        json!({"is_free": false, "min": "0", "max": "42.00", "currency": "GBP"})
+    );
+    insta::assert_json_snapshot!("tec_housmans_qa_2026_10_04_normalised", events);
 }
 
 #[test]

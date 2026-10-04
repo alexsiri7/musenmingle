@@ -178,7 +178,7 @@ expression: "normalised(\"tec-housmans\", &raws)"
         "currency": "GBP",
         "is_free": false,
         "max": "42.00",
-        "min": "42.00"
+        "min": "0"
       },
       "starts_at": "2026-10-14T18:00:00Z",
       "tags": [
