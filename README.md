@@ -310,7 +310,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   is at least 2 (a source that normally lists about one item, such as a
   one-show gallery, is just empty between items; any other source whose
   normal state can be zero upcoming events is flagged `may_be_empty`), (2) it had errors on 2 consecutive runs,
-  or (3) its count dropped > 60 % vs the trailing average. A trip opens
+  or (3) its count dropped > 60 % vs a trailing average of at least 5 (a
+  gallery listing a few shows can lose most of them when several close
+  together). A trip opens
   **one** GitHub issue `Scraper broken: <key>` labelled
   `scraper-broken` (deduped via `events.health_issues` *and* a lookup of open
   issues by label + title, so it survives DB resets). Recovery comments on and

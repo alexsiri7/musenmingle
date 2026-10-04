@@ -16,7 +16,11 @@
 //!    (including this one) all had errors or failed.
 //! 3. **Count drop**: the run found some events, but fewer than
 //!    `(100 - drop_threshold_pct)%` of the trailing average (needs at least
-//!    `min_history_for_drop` prior successful runs).
+//!    `min_history_for_drop` prior successful runs). It only applies when
+//!    the trailing average is at least `drop_min_trailing_avg` (default 5):
+//!    below that, a 60% drop can only mean falling to one listing, which a
+//!    multi-show gallery does whenever several shows close together, so such
+//!    sources are left to rules 1 and 2 and the scraper QA check.
 //!
 //! On a trip, [`HealthChecker`] opens ONE `scraper-broken` issue per source
 //! titled `Scraper broken: <key>`. Dedupe is two-layered: the open row in
@@ -45,6 +49,10 @@ pub struct HealthConfig {
     /// Rule 1 needs at least this trailing average: a source that lists
     /// about one item is empty whenever that one ends.
     pub zero_min_trailing_avg: f64,
+    /// Rule 3 needs at least this trailing average: below it, a 60% drop
+    /// can only mean falling to one listing, which a source listing a few
+    /// items does whenever several end together.
+    pub drop_min_trailing_avg: f64,
 }
 
 impl Default for HealthConfig {
@@ -55,6 +63,7 @@ impl Default for HealthConfig {
             drop_threshold_pct: 60.0,
             min_history_for_drop: 3,
             zero_min_trailing_avg: 2.0,
+            drop_min_trailing_avg: 5.0,
         }
     }
 }
@@ -185,7 +194,11 @@ pub fn evaluate(runs: &[RunStats], cfg: &HealthConfig) -> Vec<Trip> {
         trips.push(Trip::ConsecutiveErrors { runs: k });
     }
 
-    if current.events_found > 0 && trailing.len() >= cfg.min_history_for_drop && avg > 0.0 {
+    if current.events_found > 0
+        && trailing.len() >= cfg.min_history_for_drop
+        && avg > 0.0
+        && avg >= cfg.drop_min_trailing_avg
+    {
         let floor = avg * (1.0 - cfg.drop_threshold_pct / 100.0);
         if f64::from(current.events_found) < floor {
             trips.push(Trip::CountDrop {
@@ -557,6 +570,28 @@ mod tests {
                 vec!["drop"],
             ),
             (
+                "drop at a small multi-show source (#299)",
+                vec![
+                    r(1, 0, true),
+                    r(3, 0, true),
+                    r(3, 0, true),
+                    r(3, 0, true),
+                    r(3, 0, true),
+                    r(3, 0, true),
+                ],
+                vec![],
+            ),
+            (
+                "drop below the minimum average",
+                vec![r(1, 0, true), r(5, 0, true), r(5, 0, true), r(4, 0, true)],
+                vec![],
+            ),
+            (
+                "drop at the minimum average",
+                vec![r(1, 0, true), r(5, 0, true), r(5, 0, true), r(5, 0, true)],
+                vec!["drop"],
+            ),
+            (
                 "drop exactly 60% is fine",
                 vec![
                     r(4, 0, true),
@@ -637,6 +672,7 @@ mod tests {
             drop_threshold_pct: 20.0,
             min_history_for_drop: 1,
             zero_min_trailing_avg: 1.0,
+            drop_min_trailing_avg: 1.0,
         };
         assert_eq!(
             kinds(&evaluate(&[r(0, 0, true), r(1, 0, true)], &cfg)),

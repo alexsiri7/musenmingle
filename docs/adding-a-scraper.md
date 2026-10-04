@@ -56,6 +56,9 @@ the venue's own site before it.
    lists only its next meetup like `luma-creative-ai-meetup`) gets
    `events.sources.may_be_empty = TRUE` in its seed migration, so the
    zero-events health rule does not file `scraper-broken` issues for it.
+   Likewise, the count-drop rule only applies to sources averaging at
+   least 5, so a gallery listing a few shows dropping to one when several
+   close together does not trip it.
 8. **Times:** use `normalise::parse_datetime` (honours offsets) or
    `parse_london_wall_clock` when a site prints local times with a bogus
    offset. Verify against the human-readable time on the page. When the
