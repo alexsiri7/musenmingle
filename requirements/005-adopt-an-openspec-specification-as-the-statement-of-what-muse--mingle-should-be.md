@@ -2,10 +2,10 @@
 created: '2026-09-28'
 github_issue: 253
 id: '005'
-status: idea
+status: done
 title: Adopt an OpenSpec specification as the statement of what Muse & Mingle should
   be
-updated: '2026-09-28'
+updated: '2026-10-05'
 ---
 
 ## Why
