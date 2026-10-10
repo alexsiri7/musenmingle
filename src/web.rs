@@ -1524,6 +1524,34 @@ fn quick_pick_row(picks: &[QuickPick]) -> Markup {
     }
 }
 
+/// The sort control, outside the filter panel next to the quick picks
+/// (#309), so a quick pick and an order are one tap apart. It carries every
+/// other filter (the quick pick included) as hidden inputs, submits with
+/// its button without JavaScript, and `web.js` submits it on change.
+fn sort_form(f: &Filters) -> Markup {
+    let mut g = f.clone();
+    g.cursor.clear();
+    let query = g.page_query();
+    html! {
+        form class="sort-form" method="get" action="/" {
+            label for="sort" { "Sort" }
+            select id="sort" name="sort" data-autosubmit {
+                @for s in Sort::ALL {
+                    @if s != Sort::Fullest && (s != Sort::Relevance || !f.q.is_empty()) {
+                        option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
+                    }
+                }
+            }
+            @for (k, v) in url::form_urlencoded::parse(query.as_bytes()) {
+                @if k != "sort" {
+                    input type="hidden" name=(k) value=(v);
+                }
+            }
+            button type="submit" data-autosubmit-button { "Sort" }
+        }
+    }
+}
+
 /// The filter bar: date and type quick links (plain links, so they work
 /// without JavaScript), then the full form for everything else.
 ///
@@ -1546,6 +1574,7 @@ fn filter_form(
                 (search_form(f))
                 (quick_pick_row(picks))
                 div class="filter-toggle-row" {
+                (sort_form(f))
                 details class="filter-panel" {
                 summary {
                     "Filters"
@@ -1617,16 +1646,6 @@ fn filter_form(
                             }
                         }
                     }
-                    div class="field" {
-                        label for="sort" { "Sort" }
-                        select id="sort" name="sort" {
-                            @for s in Sort::ALL {
-                                @if s != Sort::Fullest && (s != Sort::Relevance || !f.q.is_empty()) {
-                                    option value=(s.as_str()) selected[effective_sort(f) == s] { (s.label()) }
-                                }
-                            }
-                        }
-                    }
                     (area_select(f, facets.and_then(|v| v.get("borough"))))
                     (near_me_field(f))
                     (tag_select("medium", "Medium", "Any medium", MEDIUM_TAGS, &f.medium, facets.and_then(|v| v.get("medium")), label_of))
@@ -1648,6 +1667,11 @@ fn filter_form(
                     }
                     @if !f.pick.is_empty() {
                         input type="hidden" name="pick" value=(f.pick);
+                    }
+                    // The sort control lives outside the panel (#309); keep
+                    // the chosen order when the panel's filters are applied.
+                    @if !f.sort.is_empty() {
+                        input type="hidden" name="sort" value=(f.sort);
                     }
                     div class="field actions" {
                         button type="submit" { "Show events" }

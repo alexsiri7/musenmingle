@@ -1074,8 +1074,18 @@
           // Like an area, Near me lists the closest first unless a sort
           // (or a search, ranked by match) was chosen.
           var params = new URLSearchParams(root.location.search);
-          var sort = form.querySelector('select[name="sort"]');
-          if (sort && !params.get("sort") && !params.get("q")) sort.value = "nearest";
+          // The sort control sits outside this form (#309), so carry the
+          // order as a hidden input.
+          if (!params.get("sort") && !params.get("q")) {
+            var sort = form.querySelector('[name="sort"]');
+            if (!sort) {
+              sort = doc.createElement("input");
+              sort.type = "hidden";
+              sort.name = "sort";
+              form.appendChild(sort);
+            }
+            sort.value = "nearest";
+          }
           say("Showing events near you…");
           form.submit();
         },
@@ -1242,7 +1252,26 @@
     });
   }
 
+  // ------------------------------------------------------------ / (sort)
+
+  // The home page's sort control (#309) has a submit button so it works
+  // without JavaScript; with it, choosing an order submits at once and the
+  // button is hidden.
+  function setUpAutosubmit() {
+    var selects = doc.querySelectorAll("select[data-autosubmit]");
+    Array.prototype.forEach.call(selects, function (select) {
+      var form = select.closest("form");
+      if (!form) return;
+      var button = form.querySelector("[data-autosubmit-button]");
+      if (button) button.hidden = true;
+      select.addEventListener("change", function () {
+        form.submit();
+      });
+    });
+  }
+
   function start() {
+    setUpAutosubmit();
     setUpNearMe();
     setUpTransit();
     setUpTransitCards();

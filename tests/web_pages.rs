@@ -732,6 +732,62 @@ async fn home_filter_panel_is_closed_with_removable_chips() {
     db.drop_db().await;
 }
 
+/// The `<form class="sort-form" …>…</form>` on a page.
+fn sort_form(body: &str) -> &str {
+    let at = body
+        .find("<form class=\"sort-form\"")
+        .unwrap_or_else(|| panic!("sort form in {body}"));
+    &body[at..at + body[at..].find("</form>").unwrap()]
+}
+
+#[tokio::test]
+async fn home_sort_sits_beside_the_quick_picks_and_keeps_them() {
+    let Some(db) = TestDb::create("home_sort_sits_beside_the_quick_picks_and_keeps_them").await
+    else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    insert(&pool, Ev::new("Paid", days(1))).await;
+    let app = app(&pool);
+
+    // The sort control is outside the (closed) filter panel, and the panel
+    // no longer has its own (#309).
+    let p = get(&app, "/?pick=open_now").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    let form_at = p.body.find("<form class=\"sort-form\"").unwrap();
+    assert!(form_at < p.body.find("<details class=\"filter-panel\"").unwrap());
+    assert_eq!(p.body.matches("name=\"sort\"").count(), 1, "{}", p.body);
+    let form = sort_form(&p.body);
+    assert!(form.contains("<select id=\"sort\" name=\"sort\""), "{form}");
+    // It keeps the quick pick, and works without JavaScript (a submit button).
+    assert!(
+        form.contains("<input type=\"hidden\" name=\"pick\" value=\"open_now\">"),
+        "{form}"
+    );
+    assert!(form.contains("<button type=\"submit\""), "{form}");
+
+    // Quick pick plus an order: the order is chosen, the pick stays active,
+    // and applying the panel's filters keeps the order.
+    let p = get(&app, "/?pick=open_now&sort=ending").await;
+    assert_eq!(p.status, StatusCode::OK, "{}", p.body);
+    let form = sort_form(&p.body);
+    assert!(
+        form.contains("<option value=\"ending\" selected>"),
+        "{form}"
+    );
+    assert!(form.contains("name=\"pick\" value=\"open_now\""), "{form}");
+    assert!(!form.contains("type=\"hidden\" name=\"sort\""), "{form}");
+    let panel = &p.body[p.body.find("<form class=\"filters\"").unwrap()..];
+    assert!(
+        panel.contains("<input type=\"hidden\" name=\"sort\" value=\"ending\">"),
+        "{panel}"
+    );
+    let open_now = href_near(&p.body, "Open now<span class=\"pill-count\">");
+    assert_eq!(open_now, "/", "the active Open now chip links back to /");
+    pool.close().await;
+    db.drop_db().await;
+}
+
 #[tokio::test]
 async fn home_near_me_filters_by_walking_time() {
     let Some(db) = TestDb::create("home_near_me_filters_by_walking_time").await else {
