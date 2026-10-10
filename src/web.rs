@@ -1745,6 +1745,17 @@ fn save_button(e: &EventJson) -> Markup {
     }
 }
 
+/// Hide toggle for home-page cards (#318). Rendered `hidden`; web.js shows
+/// it and keeps the hidden ids in localStorage (never sent to us).
+fn hide_button(e: &EventJson) -> Markup {
+    html! {
+        button type="button" class="hide" hidden aria-pressed="false" data-hide-id=(e.id) {
+            span class="hide-label" { "Hide" }
+            span class="vh" { ": " (e.title) }
+        }
+    }
+}
+
 /// Our origin for absolute links (share URLs, Open Graph): `https://` +
 /// `CANONICAL_HOST`, else the production host.
 static SHARE_ORIGIN: LazyLock<String> = LazyLock::new(|| {
@@ -1918,7 +1929,8 @@ fn running_hours(e: &EventJson, now: DateTime<Utc>) -> Option<&crate::hours::Ope
     (e.starts_at <= now && london(now).date_naive() <= last_day).then_some(h)
 }
 
-fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
+/// An event card; `hideable` adds the Hide button (home page only).
+fn card(e: &EventJson, now: DateTime<Utc>, hideable: bool) -> Markup {
     let detail = format!("/events/{}", e.id);
     let primary = primary_source(e);
     let page_url = event_url(e.id);
@@ -1963,6 +1975,7 @@ fn card(e: &EventJson, now: DateTime<Utc>) -> Markup {
                         a class="button" href=(detail) { "Details" span class="vh" { ": " (e.title) } }
                     }
                     (save_button(e))
+                    @if hideable { (hide_button(e)) }
                     span class="card-tools" {
                         (share_button(e, now, false))
                         @if let Some(m) = &maps {
@@ -2224,8 +2237,14 @@ async fn home_page(State(state): State<AppState>, RawQuery(raw): RawQuery) -> Re
                             }
                             span { (order) }
                         }
+                        // Filled and shown by web.js when events here are hidden.
+                        p class="hidden-bar" data-hidden-bar hidden {
+                            span data-hidden-count role="status" {}
+                            " · "
+                            button type="button" class="link-button" data-hidden-toggle aria-pressed="false" { "Show" }
+                        }
                         section class="cards" aria-label="Events" {
-                            @for e in &events { (card(e, now)) }
+                            @for e in &events { (card(e, now, true)) }
                         }
                     }
                     @if let Some(href) = more {
@@ -2872,7 +2891,7 @@ async fn venue_page(State(state): State<AppState>, Path(slug): Path<String>) -> 
                             span { "Soonest first" }
                         }
                         section class="cards" aria-labelledby="venue-events-h" {
-                            @for e in &events { (card(e, now)) }
+                            @for e in &events { (card(e, now, false)) }
                         }
                     }
                 }
