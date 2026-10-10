@@ -367,7 +367,10 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
         p.body.matches("class=\"hide\" hidden").count(),
         p.body.matches("<article class=\"card\"").count()
     );
-    assert!(p.body.contains("<p class=\"hidden-bar\" data-hidden-bar hidden>"));
+    assert!(
+        p.body
+            .contains("<p class=\"hidden-bar\" data-hidden-bar hidden>")
+    );
     // Footer suggestion form.
     assert!(
         p.body.contains(

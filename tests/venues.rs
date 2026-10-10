@@ -297,7 +297,10 @@ async fn venue_pages_list_upcoming_events_and_events_link_to_them() {
     assert!(body.contains("openstreetmap.org/?mlat=51.474"));
     assert!(body.contains("Glass &amp; &lt;light&gt;"), "escaped");
     assert!(!body.contains("Old show"), "past events are not listed");
-    assert!(!body.contains("class=\"hide\""), "hiding is for the home page only");
+    assert!(
+        !body.contains("class=\"hide\""),
+        "hiding is for the home page only"
+    );
     assert!(!body.contains("style="), "no inline styles");
 
     // Event pages, cards and the JSON link to the venue page.
