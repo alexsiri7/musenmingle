@@ -42,6 +42,30 @@ Visitors SHALL be able to save events without an account, with saves kept only i
 - WHEN they open their Saved page
 - THEN it is marked "No longer listed"
 
+### Requirement: Visitors can hide events they have already checked
+
+Visitors SHALL be able to hide an event from the home page's results, so that working through the listings leaves only events they have not looked at yet. Hidden events SHALL be kept only in the visitor's own browser, like saves, and never sent to or stored by the server. Hidden events SHALL be left out of the results by default; a visible control SHALL say how many are hidden on the current page and let the visitor show them, and each hidden event SHALL be able to be unhidden. Hiding and saving SHALL be independent: saving an event SHALL NOT hide it. Hiding is an enhancement: without JavaScript the hide controls SHALL NOT be shown and every event is listed.
+
+#### Scenario: Hidden by default
+- GIVEN a visitor hid an exhibition yesterday
+- WHEN they open the home page today
+- THEN the exhibition is not in the results and the page says one event is hidden
+
+#### Scenario: Showing hidden events
+- GIVEN a page with hidden events
+- WHEN the visitor chooses to show hidden events
+- THEN they appear, marked as hidden, each with a way to unhide it
+
+#### Scenario: Saved events stay visible
+- GIVEN a visitor saves an event and does not hide it
+- WHEN they browse the home page
+- THEN the event is still listed
+
+#### Scenario: Hides stay on the device
+- GIVEN a visitor hides events
+- WHEN the server's requests and storage are inspected
+- THEN no record of the hidden events is found
+
 ### Requirement: Near me, right now
 
 A map page SHALL list events on now or starting within the next few hours (or later today), nearest first from an area, as a list that works without JavaScript, and with JavaScript SHALL draw a map from Muse & Mingle's own self-hosted London map tiles. A visitor MAY use their exact position; it SHALL stay on their device, with walking distances computed in the browser. Only this page SHALL ask for location access.
