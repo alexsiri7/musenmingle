@@ -253,7 +253,13 @@ async fn month_view_places_events_once_with_markers() {
     assert!(strip.contains("Platform show"));
     assert!(strip.contains("until 31 Jan 2027"), "{strip}");
     // The 16–25 Oct run: in the strip, plus "Opens" and "Last day" markers.
-    assert_eq!(b.matches(&format!("href=\"/events/{short}\"")).count(), 3);
+    // Count outside the sidebar: its "starting" panel uses the wall-clock
+    // `today()`, so it lists this run when the test runs in early October.
+    let grid = &b[..b.find("<aside").unwrap()];
+    assert_eq!(
+        grid.matches(&format!("href=\"/events/{short}\"")).count(),
+        3
+    );
     let opens = day_cell(b, "2026-10-16");
     assert!(opens.contains("<li class=\"cal-ev opens\">"), "{opens}");
     assert!(opens.contains("<span class=\"cal-flag\">Opens</span>"));
@@ -324,8 +330,11 @@ async fn week_view_across_the_clock_change() {
     let grid = &b[..b.find("<aside").unwrap()];
     assert!(!grid.contains(&format!("/events/{talk}")));
     assert_eq!(b.matches(&format!("href=\"/events/{show}\"")).count(), 1);
-    // Strip + last day (it opened the week before).
-    assert_eq!(b.matches(&format!("href=\"/events/{short}\"")).count(), 2);
+    // Strip + last day (it opened the week before), outside the sidebar.
+    assert_eq!(
+        grid.matches(&format!("href=\"/events/{short}\"")).count(),
+        2
+    );
     let sun = day_cell(b, "2026-10-25");
     assert!(sun.contains(&format!("/events/{late}")));
     assert!(sun.contains("Last day"));
