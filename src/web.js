@@ -116,6 +116,75 @@
     return [item].concat(items);
   }
 
+  // ------------------------------------------------------------ hidden (#318)
+
+  // Events the visitor has hidden from the home page: ids only, newest
+  // first, kept in this browser like saves and never sent anywhere.
+  var HIDDEN_KEY = "musenmingle.hidden.v1";
+  var MAX_HIDDEN = 5000; // oldest dropped beyond this (long since ended)
+
+  function isId(x) {
+    return typeof x === "string" && /^[0-9a-f-]{36}$/i.test(x);
+  }
+
+  /** Hidden event ids (newest first); [] when storage is missing or corrupt. */
+  function loadHidden(storage) {
+    if (!storage) return [];
+    try {
+      var raw = storage.getItem(HIDDEN_KEY);
+      if (!raw) return [];
+      var data = JSON.parse(raw);
+      return data && Array.isArray(data.ids) ? data.ids.filter(isId) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /** true if written (false in private mode / over quota). */
+  function storeHidden(storage, ids) {
+    if (!storage) return false;
+    try {
+      storage.setItem(HIDDEN_KEY, JSON.stringify({ ids: ids.slice(0, MAX_HIDDEN) }));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function isHidden(ids, id) {
+    return ids.indexOf(id) !== -1;
+  }
+
+  /** Ids with `id` added (at the front) or removed. */
+  function toggleHidden(ids, id) {
+    if (isHidden(ids, id)) {
+      return ids.filter(function (i) {
+        return i !== id;
+      });
+    }
+    return [id].concat(ids);
+  }
+
+  /**
+   * What the home page shows for the cards `pageIds` given the hidden ids:
+   * `out` are taken out of the results, `marked` are shown but marked as
+   * hidden (while `showing`), `text` is the control's count ("" for none)
+   * and `toggle` its button label.
+   */
+  function hiddenView(pageIds, hiddenIds, showing) {
+    var hidden = pageIds.filter(function (id) {
+      return isHidden(hiddenIds, id);
+    });
+    var n = hidden.length;
+    return {
+      out: showing ? [] : hidden,
+      marked: showing ? hidden : [],
+      count: n,
+      text: n === 0 ? "" : n + " hidden on this page",
+      toggle: showing ? "Hide them again" : "Show",
+    };
+  }
+
   // ------------------------------------------------------------ formatting
 
   var dateParts = null;
@@ -582,6 +651,12 @@
     storeSaved: storeSaved,
     isSaved: isSaved,
     toggle: toggle,
+    HIDDEN_KEY: HIDDEN_KEY,
+    loadHidden: loadHidden,
+    storeHidden: storeHidden,
+    isHidden: isHidden,
+    toggleHidden: toggleHidden,
+    hiddenView: hiddenView,
     when: when,
     eventWhen: eventWhen,
     nextSession: nextSession,
@@ -704,10 +779,127 @@
     refresh();
   });
 
+  // A toast with an Undo button (hides and swipes); lasts a little longer
+  // than a plain one so there's time to reach it.
+  function toastUndo(text, undo) {
+    var t = doc.getElementById("toast");
+    if (!t) return say(text);
+    var b = el("button", "toast-undo", "Undo");
+    b.type = "button";
+    b.addEventListener("click", function () {
+      t.hidden = true;
+      undo();
+    });
+    t.replaceChildren(doc.createTextNode(text + " · "), b);
+    t.hidden = false;
+    say(text);
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      t.hidden = true;
+    }, 5000);
+  }
+
+  // ------------------------------------------------------------ / (hide, #318)
+
+  // The home page's Hide buttons and the "N hidden on this page · Show"
+  // control are rendered hidden; without storage they stay that way and
+  // every event is listed.
+  var hiddenBar = null;
+  var showingHidden = false;
+
+  function hideButtons() {
+    return doc.querySelectorAll("button.hide[data-hide-id]");
+  }
+
+  function applyHidden() {
+    if (!hiddenBar) return;
+    var ids = loadHidden(storage);
+    var buttons = hideButtons();
+    var pageIds = Array.prototype.map.call(buttons, function (b) {
+      return b.getAttribute("data-hide-id");
+    });
+    var view = hiddenView(pageIds, ids, showingHidden);
+    if (view.count === 0) {
+      showingHidden = false;
+      view = hiddenView(pageIds, ids, false);
+    }
+    Array.prototype.forEach.call(buttons, function (b) {
+      var id = b.getAttribute("data-hide-id");
+      var hidden = isHidden(ids, id);
+      var card = b.closest("article");
+      b.hidden = false;
+      b.setAttribute("aria-pressed", hidden ? "true" : "false");
+      var label = b.querySelector(".hide-label");
+      if (label) label.textContent = hidden ? "Unhide" : "Hide";
+      if (card) {
+        card.classList.toggle("is-hidden", isHidden(view.out, id));
+        card.classList.toggle("was-hidden", isHidden(view.marked, id));
+      }
+    });
+    hiddenBar.hidden = view.count === 0;
+    hiddenBar.querySelector("[data-hidden-count]").textContent = view.text;
+    var toggleBtn = hiddenBar.querySelector("[data-hidden-toggle]");
+    toggleBtn.textContent = view.toggle;
+    toggleBtn.setAttribute("aria-pressed", showingHidden ? "true" : "false");
+  }
+
+  /** Hide or unhide `id`; false (and says why) if the browser won't store it. */
+  function setHidden(id, hide) {
+    var ids = loadHidden(storage);
+    if (isHidden(ids, id) === hide) return true;
+    if (!storeHidden(storage, toggleHidden(ids, id))) {
+      say("Couldn't hide: this browser isn't letting the site store data.");
+      return false;
+    }
+    applyHidden();
+    return true;
+  }
+
+  // Keyboard focus would be lost with the card: move it to the next listed
+  // card's title, or to the control.
+  function focusAfter(card) {
+    var next = card && card.nextElementSibling;
+    while (next && next.classList.contains("is-hidden")) next = next.nextElementSibling;
+    var target = (next && next.querySelector("h2 a")) || hiddenBar.querySelector("[data-hidden-toggle]");
+    if (target) target.focus();
+  }
+
+  function hideCard(id, card, viaKeyboard) {
+    if (!setHidden(id, true)) return;
+    if (viaKeyboard && card && card.classList.contains("is-hidden")) focusAfter(card);
+    toastUndo("Hidden", function () {
+      setHidden(id, false);
+    });
+  }
+
+  function setUpHide() {
+    hiddenBar = doc.querySelector("[data-hidden-bar]");
+    if (!hiddenBar || !storage) {
+      hiddenBar = null;
+      return;
+    }
+    hiddenBar.querySelector("[data-hidden-toggle]").addEventListener("click", function () {
+      showingHidden = !showingHidden;
+      applyHidden();
+    });
+    doc.addEventListener("click", function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest("button.hide[data-hide-id]") : null;
+      if (!b) return;
+      var id = b.getAttribute("data-hide-id");
+      if (isHidden(loadHidden(storage), id)) {
+        if (setHidden(id, false)) say("Unhidden.");
+      } else {
+        hideCard(id, b.closest("article"), ev.detail === 0);
+      }
+    });
+    applyHidden();
+  }
+
   // Other tabs.
   if (root.addEventListener) {
     root.addEventListener("storage", function (e) {
       if (e.key === STORAGE_KEY) refresh();
+      if (e.key === HIDDEN_KEY) applyHidden();
     });
   }
 
@@ -1277,6 +1469,7 @@
     setUpTransitCards();
     setUpHandoffs();
     refresh();
+    setUpHide();
     renderSaved();
     renderSavedCalendar();
   }

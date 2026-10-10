@@ -358,6 +358,16 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
     assert!(p.body.contains(
         "<a href=\"/saved\">Saved<span class=\"count\" data-saved-count hidden>0</span></a>"
     ));
+    // Hide toggles (#318): rendered hidden on every card, as is the
+    // "N hidden" control, so without JavaScript every event is listed.
+    assert!(p.body.contains(&format!(
+        "<button type=\"button\" class=\"hide\" hidden aria-pressed=\"false\" data-hide-id=\"{drawing}\"><span class=\"hide-label\">Hide</span><span class=\"vh\">: Life drawing</span></button>"
+    )), "{}", p.body);
+    assert_eq!(
+        p.body.matches("class=\"hide\" hidden").count(),
+        p.body.matches("<article class=\"card\"").count()
+    );
+    assert!(p.body.contains("<p class=\"hidden-bar\" data-hidden-bar hidden>"));
     // Footer suggestion form.
     assert!(
         p.body.contains(
@@ -376,6 +386,7 @@ async fn home_lists_upcoming_events_escaped_with_safe_links() {
         "public, max-age=31536000, immutable"
     );
     assert!(js.body.contains("musenmingle.saved.v1"));
+    assert!(js.body.contains("musenmingle.hidden.v1"));
 
     // The stylesheet URL is versioned by content (new markup never meets old CSS).
     let at = p

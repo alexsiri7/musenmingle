@@ -281,10 +281,10 @@ button, a.button {
   font-size: 0.875rem; font-weight: 500; letter-spacing: 0.01em; line-height: 1.3; text-align: center;
 }
 button:hover, a.button:hover { background: var(--cobalt); border-color: var(--cobalt); color: var(--on-cobalt); }
-button.secondary, .save {
+button.secondary, .save, .hide {
   background: var(--canvas); color: var(--ink); border-color: var(--ink);
 }
-button.secondary:hover, .save:hover { background: var(--fill); color: var(--ink); border-color: var(--ink); }
+button.secondary:hover, .save:hover, .hide:hover { background: var(--fill); color: var(--ink); border-color: var(--ink); }
 .save-icon { width: 1rem; height: 1rem; flex: none; }
 .save-icon path { fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linejoin: miter; }
 .save[aria-pressed="true"] { border-color: var(--cobalt); color: var(--cobalt); }
@@ -387,8 +387,24 @@ figure.thumb img { object-fit: cover; display: block; }
   border-top: 1px solid var(--line-soft);
 }
 .card-actions .cta { margin: 0; }
-.card-actions a.button, .card-actions .save { font-size: 0.8125rem; padding: 0.5rem 0.875rem; }
-.card-actions .save { flex: 0 0 auto; }
+.card-actions a.button, .card-actions .save, .card-actions .hide { font-size: 0.8125rem; padding: 0.5rem 0.875rem; }
+.card-actions .save, .card-actions .hide { flex: 0 0 auto; }
+/* hidden events (#318): taken out of the results, or shown marked */
+.hide { color: var(--ink-2); border-color: var(--line); }
+.card.is-hidden { display: none; }
+.card.was-hidden { opacity: 0.6; border-style: dashed; }
+.card.was-hidden:hover, .card.was-hidden:focus-within { opacity: 1; }
+.hidden-bar { font-family: var(--mono); font-size: 0.6875rem; color: var(--ink-3); margin: 0 0 var(--md); }
+button.link-button {
+  display: inline; min-height: 0; padding: 0; border: 0; background: none; color: var(--cobalt);
+  font: inherit; text-decoration: underline; cursor: pointer;
+}
+button.link-button:hover { background: none; color: var(--ink); }
+.toast-undo {
+  display: inline; min-height: 0; padding: 0; border: 0; background: none; color: inherit;
+  font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer;
+}
+.toast-undo:hover { background: none; color: inherit; }
 .links { font-family: var(--mono); font-size: 0.6875rem; line-height: 1.6; color: var(--ink-3); }
 .links a { color: var(--ink-2); }
 
@@ -831,7 +847,7 @@ button.pop-close:hover { background: var(--fill); color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media print {
-  header.site nav, .utility, footer.site form, .save, .filter-bar, .cal-toolbar, .head-actions, .cal-rail { display: none !important; }
+  header.site nav, .utility, footer.site form, .save, .hide, .hidden-bar, .filter-bar, .cal-toolbar, .head-actions, .cal-rail { display: none !important; }
   body { background: #fff; }
 }
 .sources-table td:nth-child(3), .sources-table td:nth-child(4), .sources-table td:nth-child(5) { font-family: var(--mono); font-size: 0.75rem; }
