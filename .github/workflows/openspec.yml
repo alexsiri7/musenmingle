@@ -20,4 +20,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npx -y @fission-ai/openspec@latest validate --specs --strict
+      - run: npx -y @fission-ai/openspec@1.14.0 validate --specs --strict
