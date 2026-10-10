@@ -359,8 +359,10 @@ async fn matched_by_the_events_own_text() {
     // WHEN memberships are synced
     ingest_run(&pool, &[text_match("Prints and drawings")], 0).await;
     // THEN the event matches art_pass
+    // AND, as that text states no offer, carries none
     let listed = api_events(&app(&pool), "").await;
-    assert!(art_pass(&listed[0]).is_some(), "{}", listed[0]);
+    let m = art_pass(&listed[0]).unwrap_or_else(|| panic!("{}", listed[0]));
+    assert_eq!(m["offer"], Value::Null, "{m}");
     pool.close().await;
     db.drop_db().await;
 }
@@ -401,6 +403,14 @@ async fn filtering_for_the_art_pass() {
     record_offer(&pool, "Tate Modern", TATE_OFFER, TATE_SOURCE).await;
     ingest_run(&pool, &events, 1).await;
     let app = app(&pool);
+
+    // The filter shows how many current events match.
+    let (status, _, home) = get(&app, "/").await;
+    assert_eq!(status, StatusCode::OK, "{home}");
+    assert!(
+        home.contains("<option value=\"art_pass\">National Art Pass (2)</option>"),
+        "{home}"
+    );
 
     // WHEN the events are listed with membership=art_pass
     // THEN only the two matching events are returned, each showing the
@@ -486,6 +496,7 @@ async fn unknown_membership_in_the_api() {
     let Some((db, pool)) = setup("unknown_membership_in_the_api").await else {
         return;
     };
+    ingest_run(&pool, &[text_match("Prints and drawings")], 0).await;
     let app = app(&pool);
     // A known membership is a valid parameter...
     let (status, _, body) = get(&app, "/v1/events?membership=art_pass").await;
@@ -497,9 +508,10 @@ async fn unknown_membership_in_the_api() {
     let v: Value = serde_json::from_str(&body).unwrap();
     let error = v["error"].as_str().unwrap();
     assert!(error.contains("membership"), "{error}");
-    // ...and the website ignores it.
+    // ...and the website ignores it rather than filtering everything out.
     let (status, _, page) = get(&app, "/?membership=unknown").await;
     assert_eq!(status, StatusCode::OK, "{page}");
+    assert_eq!(card_titles(&page), ["Prints and drawings"]);
     pool.close().await;
     db.drop_db().await;
 }
