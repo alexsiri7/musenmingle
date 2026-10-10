@@ -20,7 +20,7 @@ const LEFT = "0414a989-8ba8-41da-a6ac-b92720727755";
 const RIGHT = "1f3632de-af3f-4c79-9ecb-f4bc48b0821f";
 const WIDTH = 360; // a phone-width card, in px
 
-test("Scenario: Swipe to sort through events", { todo: "until #324 implements swiping" }, () => {
+test("Scenario: Swipe to sort through events", () => {
   // GIVEN a visitor on a phone browsing the home page
   const s = memoryStorage();
   // WHEN they swipe one event card left and another right

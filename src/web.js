@@ -185,6 +185,30 @@
     };
   }
 
+  // ------------------------------------------------------------ swipe (#322)
+
+  var SWIPE_SLOP = 10; // px moved before a drag counts as either direction
+  var SWIPE_SHARE = 0.4; // of the card's width: a deliberate swipe
+  var FLICK_PX = 60; // a shorter, fast flick also counts…
+  var FLICK_SPEED = 0.6; // …at this many px per ms
+
+  /** "x" for a sideways drag, "y" for scrolling, null while too small to tell. */
+  function swipeAxis(dx, dy) {
+    var ax = Math.abs(dx);
+    var ay = Math.abs(dy);
+    if (ax < SWIPE_SLOP && ay < SWIPE_SLOP) return null;
+    return ax > ay * 1.5 ? "x" : "y";
+  }
+
+  /** On release: "hide" (left), "save" (right) or null (snap back). */
+  function swipeAction(dx, width, ms) {
+    var ax = Math.abs(dx);
+    var far = width > 0 && ax >= width * SWIPE_SHARE;
+    var flick = ax >= FLICK_PX && ms > 0 && ax / ms >= FLICK_SPEED;
+    if (!far && !flick) return null;
+    return dx < 0 ? "hide" : "save";
+  }
+
   // ------------------------------------------------------------ formatting
 
   var dateParts = null;
@@ -657,6 +681,8 @@
     isHidden: isHidden,
     toggleHidden: toggleHidden,
     hiddenView: hiddenView,
+    swipeAxis: swipeAxis,
+    swipeAction: swipeAction,
     when: when,
     eventWhen: eventWhen,
     nextSession: nextSession,
@@ -893,6 +919,107 @@
       }
     });
     applyHidden();
+    setUpSwipe();
+  }
+
+  // ------------------------------------------------------------ / (swipe, #322)
+
+  // On touch screens a card swiped left is hidden and one swiped right is
+  // saved, each with an Undo toast; the buttons stay as the accessible way.
+  // Cards keep `touch-action: pan-y`, so the browser still scrolls on
+  // vertical drags (and cancels our pointer).
+  function saveCard(card) {
+    var b = card.querySelector("button.save[data-save-id]");
+    if (!b) return;
+    var id = b.getAttribute("data-save-id");
+    if (isSaved(loadSaved(storage), id)) {
+      toast("Already saved");
+      return;
+    }
+    var items = toggle(loadSaved(storage), eventFromButton(b), new Date().toISOString());
+    if (!storeSaved(storage, items)) {
+      say("Couldn't save: this browser isn't letting the site store data.");
+      return;
+    }
+    refresh();
+    toastUndo("Saved", function () {
+      var now = loadSaved(storage);
+      if (isSaved(now, id) && storeSaved(storage, toggle(now, { id: id }, ""))) refresh();
+    });
+  }
+
+  function setUpSwipe() {
+    var first = doc.querySelector("article.card button.hide[data-hide-id]");
+    var list = first && first.closest("section.cards");
+    if (!list || !root.PointerEvent) return;
+    list.classList.add("swipeable");
+    var drag = null;
+    var swipedAt = -1;
+
+    var end = function (ev, act) {
+      if (!drag || ev.pointerId !== drag.pointer) return;
+      var d = drag;
+      drag = null;
+      d.card.classList.remove("swiping", "swipe-hide", "swipe-save");
+      d.card.style.removeProperty("--swipe-x");
+      if (!d.axis) return;
+      swipedAt = ev.timeStamp;
+      var action = act ? swipeAction(d.dx, d.card.offsetWidth, ev.timeStamp - d.t0) : null;
+      if (action === "hide" && !isHidden(loadHidden(storage), d.id)) hideCard(d.id, d.card, false);
+      else if (action === "save") saveCard(d.card);
+    };
+
+    list.addEventListener("pointerdown", function (ev) {
+      if (ev.pointerType !== "touch" || drag) return;
+      var card = ev.target.closest("article.card");
+      var hide = card && card.querySelector("button.hide[data-hide-id]");
+      if (!hide || hide.hidden) return;
+      drag = {
+        card: card,
+        id: hide.getAttribute("data-hide-id"),
+        pointer: ev.pointerId,
+        x0: ev.clientX,
+        y0: ev.clientY,
+        t0: ev.timeStamp,
+        axis: false,
+        dx: 0,
+      };
+    });
+    list.addEventListener("pointermove", function (ev) {
+      if (!drag || ev.pointerId !== drag.pointer) return;
+      var dx = ev.clientX - drag.x0;
+      if (!drag.axis) {
+        var axis = swipeAxis(dx, ev.clientY - drag.y0);
+        if (axis === "y") drag = null;
+        if (axis !== "x") return;
+        drag.axis = true;
+        drag.card.classList.add("swiping");
+      }
+      drag.dx = dx;
+      // A custom property through the CSSOM (allowed by our CSP, unlike a
+      // style attribute); the transform itself is in web.css.
+      drag.card.style.setProperty("--swipe-x", dx + "px");
+      drag.card.classList.toggle("swipe-hide", swipeAction(dx, drag.card.offsetWidth, 0) === "hide");
+      drag.card.classList.toggle("swipe-save", swipeAction(dx, drag.card.offsetWidth, 0) === "save");
+    });
+    list.addEventListener("pointerup", function (ev) {
+      end(ev, true);
+    });
+    list.addEventListener("pointercancel", function (ev) {
+      end(ev, false);
+    });
+    // A swipe that started on a link must not also follow it.
+    list.addEventListener(
+      "click",
+      function (ev) {
+        if (swipedAt >= 0 && ev.timeStamp - swipedAt < 500) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+        swipedAt = -1;
+      },
+      true
+    );
   }
 
   // Other tabs.
