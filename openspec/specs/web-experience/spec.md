@@ -44,7 +44,7 @@ Visitors SHALL be able to save events without an account, with saves kept only i
 
 ### Requirement: Visitors can hide events they have already checked
 
-Visitors SHALL be able to hide an event from the home page's results, so that working through the listings leaves only events they have not looked at yet. Hidden events SHALL be kept only in the visitor's own browser, like saves, and never sent to or stored by the server. Hidden events SHALL be left out of the results by default; a visible control SHALL say how many are hidden on the current page and let the visitor show them, and each hidden event SHALL be able to be unhidden. Hiding and saving SHALL be independent: saving an event SHALL NOT hide it. Hiding is an enhancement: without JavaScript the hide controls SHALL NOT be shown and every event is listed.
+Visitors SHALL be able to hide an event from the home page's results, so that working through the listings leaves only events they have not looked at yet. Hidden events SHALL be kept only in the visitor's own browser, like saves, and never sent to or stored by the server. Hidden events SHALL be left out of the results by default; a visible control SHALL say how many are hidden on the current page and let the visitor show them, and each hidden event SHALL be able to be unhidden. Hiding and saving SHALL be independent: saving an event SHALL NOT hide it. Hiding is an enhancement: without JavaScript the hide controls SHALL NOT be shown and every event is listed. On touch screens, swiping an event card left SHALL hide it and swiping it right SHALL save it, with the buttons kept as the accessible alternative and a brief way to undo a swipe.
 
 #### Scenario: Hidden by default
 - GIVEN a visitor hid an exhibition yesterday
@@ -60,6 +60,11 @@ Visitors SHALL be able to hide an event from the home page's results, so that wo
 - GIVEN a visitor saves an event and does not hide it
 - WHEN they browse the home page
 - THEN the event is still listed
+
+#### Scenario: Swipe to sort through events
+- GIVEN a visitor on a phone browsing the home page
+- WHEN they swipe one event card left and another right
+- THEN the first is hidden and the second is saved, and each swipe can be undone
 
 #### Scenario: Hides stay on the device
 - GIVEN a visitor hides events
