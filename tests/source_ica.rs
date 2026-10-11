@@ -115,6 +115,34 @@ fn normalised_output_snapshot() {
     insta::assert_json_snapshot!("ica_normalised", out);
 }
 
+/// The Makers Market card (saved 2026-10-11, #321): a single day whose
+/// detail page lists no performances, so it is all-day.
+#[test]
+fn a_detail_page_without_performances_is_all_day() {
+    let card = serde_json::json!({
+        "path": "/talks/makers-market",
+        "tab": "all-events",
+        "title": "Makers Market",
+        "date_text": "Sun, 6 December",
+        "description": "The inaugural ICA Makers Market brings together local artists, designers and independent makers for a day of seasonal shopping, gift-buying and mulled wine.",
+        "image": "//www.ica.art/media/14237.jpg",
+    });
+    let listed_on = NaiveDate::from_ymd_opt(2026, 10, 11).unwrap();
+    assert!(needs_detail(&card, Section::Talks, listed_on));
+    let detail = parse_detail(&fixture(&detail_file("/talks/makers-market")));
+    let raw = raw_event(
+        &card,
+        Section::Talks,
+        &Url::parse(SITE).unwrap(),
+        listed_on,
+        Some(detail),
+    );
+    let event = Ica::new(SITE.parse().unwrap())
+        .normalise(&raw)
+        .expect("normalise");
+    insta::assert_json_snapshot!("ica_makers_market", event);
+}
+
 #[tokio::test]
 async fn fetches_the_listings_and_details_via_fetch_context() {
     let server = MockServer::start().await;
