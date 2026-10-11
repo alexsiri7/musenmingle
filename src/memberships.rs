@@ -9,6 +9,8 @@
 //! `repo::sync_memberships` applies it to every event after each ingest run
 //! (`events.event_memberships`).
 
+use std::sync::LazyLock;
+
 use crate::normalise::padded_words;
 
 /// A membership we know about.
@@ -34,9 +36,18 @@ pub const MEMBERSHIPS: &[Membership] = &[Membership {
     names: &["national art pass", "art pass"],
 }];
 
+/// The keys of [`MEMBERSHIPS`], in order: the `membership=` vocabulary.
+pub static KEYS: LazyLock<Vec<&'static str>> =
+    LazyLock::new(|| MEMBERSHIPS.iter().map(|m| m.key).collect());
+
 /// The membership with this key.
 pub fn get(key: &str) -> Option<&'static Membership> {
     MEMBERSHIPS.iter().find(|m| m.key == key)
+}
+
+/// A membership's display name; unknown keys come back as given.
+pub fn label(key: &str) -> &str {
+    get(key).map_or(key, |m| m.name)
 }
 
 /// An event's match with a membership.
@@ -104,6 +115,8 @@ mod tests {
         assert_eq!(m.name, "National Art Pass");
         assert_eq!(m.url, "https://www.artfund.org/national-art-pass");
         assert!(get("unknown").is_none());
+        assert_eq!(*KEYS, ["art_pass"]);
+        assert_eq!(label("art_pass"), "National Art Pass");
     }
 
     #[test]

@@ -11,7 +11,7 @@ they are not renamed or removed without notice; new fields may be added.
 The same process also serves human-facing HTML pages (not part of this
 API's stability promise): `GET /` (upcoming events with a filter form that
 takes `q`, `from`, `to`, `category`, `free`, `when`, `price_max`, `near=<area or borough key>`, `sort`, `pick`,
-`source`, `medium`, `format`, `good_for`, `venue_type`, `music` and `cursor`, and shows the
+`source`, `medium`, `format`, `good_for`, `venue_type`, `music`, `membership` and `cursor`, and shows the
 `counts`/facet counts next to its options),
 `GET /events/{id}` (with Open Graph tags, and Share / Directions / Add-to-calendar hand-offs from `src/share.rs`), `GET /events/{id}.ics` (the event as a one-event iCalendar file: exact UTC times, or an all-day span for date-only events; `text/calendar`, downloaded as `<slug>.ics`), `GET /sources`, `GET /saved`, `GET /about`, `GET`/`POST /contact` (venue contact form; see `docs/venue-requests.md`), `POST /suggest` (form-encoded `url`,
 `note`; same rules and status codes as `POST /v1/suggestions`) and
@@ -71,6 +71,7 @@ Lists events. Every parameter is optional; they combine freely.
 | `venue_type` | `venue_type=museum` | Events at any of these kinds of venue: `museum` (museums and public, non-commercial galleries and arts centres), `commercial_gallery`, `artist_run`, `community`, `other`. Every event has exactly one (see "Venue type" below). Repeatable |
 | `borough` | `borough=southwark&borough=city-of-london` | Events in any of these London boroughs (see "Borough" below): `barking-and-dagenham`, `barnet`, `bexley`, `brent`, `bromley`, `camden`, `city-of-london`, `croydon`, `ealing`, `enfield`, `greenwich`, `hackney`, `hammersmith-and-fulham`, `haringey`, `harrow`, `havering`, `hillingdon`, `hounslow`, `islington`, `kensington-and-chelsea`, `kingston-upon-thames`, `lambeth`, `lewisham`, `merton`, `newham`, `redbridge`, `richmond-upon-thames`, `southwark`, `sutton`, `tower-hamlets`, `waltham-forest`, `wandsworth`, `westminster`. Events without a known borough never match. Repeatable |
 | `music` | `music=jazz` | Music events with any of these subtags: `classical`, `contemporary`, `experimental`, `jazz`, `sound_art` (see "Music" below). Repeatable |
+| `membership` | `membership=art_pass` | Events matching any of these memberships: `art_pass` (see "Memberships" below). An unknown key is a `400` naming the parameter. Repeatable |
 | `facets` | `true` | Also return `facets`: tag counts (see below) |
 | `near` | `51.508,-0.128` | Events within `radius_km` of `<lat>,<lng>` (whatever the sort; nearest first when `sort` and `q` are absent). Events without coordinates are left out |
 | `radius_km` | `2.5` | Radius for `near` (default 5, max 100). Only with `near` |
@@ -357,7 +358,8 @@ With `facets=true` the response also has
   "good_for": { "friends": 14, "kids": 3 },
   "venue_type": { "museum": 120, "commercial_gallery": 64 },
   "borough": { "westminster": 80, "southwark": 31, "unknown": 12 },
-  "music": { "jazz": 4, "classical": 2 }
+  "music": { "jazz": 4, "classical": 2 },
+  "membership": { "art_pass": 38 }
 }
 ```
 
@@ -422,7 +424,9 @@ every ingest run. An event matches when its venue is on the membership's
 hand-kept list (then `offer` is the venue's offer in words, e.g. "50% off
 exhibitions"), or when its source tags or stored excerpt name the
 membership ("National Art Pass", "Art Pass"; then `offer` is null). Empty
-when none applies.
+when none applies. `membership=art_pass` lists only the events matching
+it. The chosen membership lives only in the request URL; nothing about it
+is stored.
 
 **Breaking change (2026-09-26):** `image_url` was removed from event
 objects; use `thumbnail_url` + `image_credit`.

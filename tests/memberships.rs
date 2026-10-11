@@ -2,8 +2,7 @@
 //! membership like the National Art Pass gets you in free or cheaper), one
 //! per scenario of `openspec/specs/memberships/spec.md`, through the public
 //! interface only: an ingest run with a fake source, then the read API and
-//! the HTML pages. Those still ignored wait for #316 (filter, web and API);
-//! run them with `cargo test --test memberships -- --ignored`.
+//! the HTML pages.
 
 mod common;
 
@@ -261,7 +260,6 @@ fn sort_form(body: &str) -> &str {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 and #316 land"]
 async fn the_national_art_pass_is_known() {
     let Some((db, pool)) = setup("the_national_art_pass_is_known").await else {
         return;
@@ -291,7 +289,6 @@ async fn the_national_art_pass_is_known() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 and #316 land"]
 async fn a_participating_venue() {
     let Some((db, pool)) = setup("a_participating_venue").await else {
         return;
@@ -384,7 +381,6 @@ async fn no_match() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 and #316 land"]
 async fn filtering_for_the_art_pass() {
     let Some((db, pool)) = setup("filtering_for_the_art_pass").await else {
         return;
@@ -436,7 +432,6 @@ async fn filtering_for_the_art_pass() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 and #316 land"]
 async fn combined_with_other_filters() {
     let Some((db, pool)) = setup("combined_with_other_filters").await else {
         return;
@@ -487,7 +482,6 @@ async fn combined_with_other_filters() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #316 lands"]
 async fn unknown_membership_in_the_api() {
     let Some((db, pool)) = setup("unknown_membership_in_the_api").await else {
         return;
@@ -536,7 +530,6 @@ async fn row_counts(pool: &PgPool) -> Vec<(String, i64)> {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 and #316 land"]
 async fn choosing_a_membership() {
     let Some((db, pool)) = setup("choosing_a_membership").await else {
         return;
