@@ -169,6 +169,30 @@ fn currency_for_symbol(c: char) -> Option<&'static str> {
     }
 }
 
+/// Lowercase `s` with every run of non-alphanumerics (except `_`) as one
+/// space, padded, so `contains(" word ")` is a word-boundary match.
+pub fn padded_words(s: &str) -> String {
+    let mut out = String::from(" ");
+    let mut space = true;
+    for c in s.chars().flat_map(char::to_lowercase) {
+        let c = match c {
+            'é' | 'è' | 'ê' => 'e',
+            c => c,
+        };
+        if c.is_alphanumeric() || c == '_' {
+            out.push(c);
+            space = false;
+        } else if !space {
+            out.push(' ');
+            space = true;
+        }
+    }
+    if !space {
+        out.push(' ');
+    }
+    out
+}
+
 fn contains_word(haystack: &str, word: &str) -> bool {
     haystack
         .split(|c: char| !c.is_alphanumeric())

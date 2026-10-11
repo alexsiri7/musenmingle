@@ -405,6 +405,9 @@ pub(crate) struct EventJson {
     /// Music subtags (`crate::music::MUSIC_TAGS`; deterministic, only for
     /// `music` events).
     pub(crate) music_tags: Vec<String>,
+    /// The memberships that get you in free or for less
+    /// (`crate::memberships`; deterministic).
+    pub(crate) memberships: Vec<MembershipJson>,
     /// Private view / opening / launch (AI enrichment; null = unknown).
     pub(crate) is_opening: Option<bool>,
     /// AI-written notes, labelled as such; never the venue's words.
@@ -425,6 +428,18 @@ pub(crate) struct EventJson {
     /// absent when the event has no venue (e.g. an area or no name).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) venue_slug: Option<String>,
+}
+
+/// A membership an event matches.
+#[derive(Serialize)]
+pub(crate) struct MembershipJson {
+    pub(crate) key: &'static str,
+    pub(crate) name: &'static str,
+    /// The provider's page about it.
+    pub(crate) url: &'static str,
+    /// The venue's offer in words; null when only the event's own text
+    /// names the membership.
+    pub(crate) offer: Option<String>,
 }
 
 /// One line of an event's weekly opening hours.
@@ -513,6 +528,20 @@ impl EventJson {
             good_for: e.good_for,
             vibe_tags: e.vibe_tags,
             music_tags: e.music_tags,
+            memberships: e
+                .memberships
+                .0
+                .into_iter()
+                .filter_map(|m| {
+                    let known = crate::memberships::get(&m.membership)?;
+                    Some(MembershipJson {
+                        key: known.key,
+                        name: known.name,
+                        url: known.url,
+                        offer: m.offer,
+                    })
+                })
+                .collect(),
             is_opening: e.is_opening,
             ai: match (e.ai_grounding, e.ai_model, e.ai_enriched_at) {
                 (Some(grounding), Some(model), Some(generated_at)) => Some(AiNoteJson {

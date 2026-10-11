@@ -327,6 +327,11 @@ impl Runner {
             Ok(n) => tracing::info!(count = n, "music subtags updated"),
             Err(e) => tracing::error!(error = %e, "updating music subtags failed"),
         }
+        match repo::sync_memberships(&self.pool).await {
+            Ok(0) => {}
+            Ok(n) => tracing::info!(count = n, "memberships updated"),
+            Err(e) => tracing::error!(error = %e, "updating memberships failed"),
+        }
         Ok(reports)
     }
 

@@ -8,6 +8,8 @@
 //! `repo::sync_music_tags` applies it to every event after each ingest run;
 //! the listing filters on `music=` (`crate::listing`).
 
+use crate::normalise::padded_words;
+
 /// The music subtags, in the order the filter shows them.
 pub const MUSIC_TAGS: &[&str] = &[
     "classical",
@@ -103,30 +105,6 @@ const KEYWORDS: &[(&str, &[&str])] = &[
     ),
 ];
 
-/// Lowercase `s` with every run of non-alphanumerics (except `_`) as one
-/// space, padded, so `contains(" word ")` is a word-boundary match.
-fn padded(s: &str) -> String {
-    let mut out = String::from(" ");
-    let mut space = true;
-    for c in s.chars().flat_map(char::to_lowercase) {
-        let c = match c {
-            'é' | 'è' | 'ê' => 'e',
-            c => c,
-        };
-        if c.is_alphanumeric() || c == '_' {
-            out.push(c);
-            space = false;
-        } else if !space {
-            out.push(' ');
-            space = true;
-        }
-    }
-    if !space {
-        out.push(' ');
-    }
-    out
-}
-
 /// The music subtags of an event (in [`MUSIC_TAGS`] order), from its
 /// category, source tags and title. Empty unless `category` is `music`.
 pub fn tags_for(category: &str, source_tags: &[String], title: &str) -> Vec<&'static str> {
@@ -135,8 +113,8 @@ pub fn tags_for(category: &str, source_tags: &[String], title: &str) -> Vec<&'st
     }
     let hay: Vec<String> = source_tags
         .iter()
-        .map(|t| padded(t))
-        .chain(std::iter::once(padded(title)))
+        .map(|t| padded_words(t))
+        .chain(std::iter::once(padded_words(title)))
         .collect();
     MUSIC_TAGS
         .iter()

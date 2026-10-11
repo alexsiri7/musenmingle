@@ -827,6 +827,85 @@ pub async fn sync_music_tags(pool: &PgPool) -> sqlx::Result<u64> {
     .rows_affected())
 }
 
+/// Set every event's memberships (`events.event_memberships`) from
+/// [`crate::memberships::matches`] (its venue's entries in
+/// `events.venue_memberships`, its source tags and stored excerpt). Returns
+/// how many events changed. Run after each ingest run.
+pub async fn sync_memberships(pool: &PgPool) -> sqlx::Result<u64> {
+    use std::collections::HashMap;
+    let mut by_venue: HashMap<i64, Vec<(String, String)>> = HashMap::new();
+    let offers: Vec<(i64, String, String)> =
+        sqlx::query_as("SELECT venue_id, membership, offer FROM events.venue_memberships")
+            .fetch_all(pool)
+            .await?;
+    for (venue_id, membership, offer) in offers {
+        by_venue
+            .entry(venue_id)
+            .or_default()
+            .push((membership, offer));
+    }
+    let mut current: HashMap<Uuid, Vec<(String, Option<String>)>> = HashMap::new();
+    let stored: Vec<(Uuid, String, Option<String>)> = sqlx::query_as(
+        "SELECT event_id, membership, offer FROM events.event_memberships
+         ORDER BY event_id, membership",
+    )
+    .fetch_all(pool)
+    .await?;
+    for (event_id, membership, offer) in stored {
+        current
+            .entry(event_id)
+            .or_default()
+            .push((membership, offer));
+    }
+    type Row = (Uuid, Option<i64>, Vec<String>, Option<String>);
+    let events: Vec<Row> =
+        sqlx::query_as("SELECT id, venue_id, tags, description FROM events.events")
+            .fetch_all(pool)
+            .await?;
+    let mut changed = Vec::new();
+    let (mut ids, mut keys, mut offers) = (Vec::new(), Vec::new(), Vec::new());
+    for (id, venue_id, tags, description) in &events {
+        let venue = venue_id.and_then(|v| by_venue.get(&v));
+        let mut want: Vec<(String, Option<String>)> = crate::memberships::matches(
+            venue.map_or(&[][..], Vec::as_slice),
+            tags,
+            description.as_deref(),
+        )
+        .into_iter()
+        .map(|m| (m.membership.to_string(), m.offer))
+        .collect();
+        want.sort();
+        if current.get(id).map_or(&[][..], Vec::as_slice) == want.as_slice() {
+            continue;
+        }
+        changed.push(*id);
+        for (key, offer) in want {
+            ids.push(*id);
+            keys.push(key);
+            offers.push(offer);
+        }
+    }
+    if changed.is_empty() {
+        return Ok(0);
+    }
+    let mut tx = pool.begin().await?;
+    sqlx::query("DELETE FROM events.event_memberships WHERE event_id = ANY($1)")
+        .bind(&changed)
+        .execute(&mut *tx)
+        .await?;
+    sqlx::query(
+        "INSERT INTO events.event_memberships (event_id, membership, offer)
+         SELECT * FROM unnest($1::uuid[], $2::text[], $3::text[])",
+    )
+    .bind(&ids)
+    .bind(&keys)
+    .bind(&offers)
+    .execute(&mut *tx)
+    .await?;
+    tx.commit().await?;
+    Ok(changed.len() as u64)
+}
+
 pub async fn upsert_event(
     pool: &PgPool,
     source_id: i64,
@@ -1505,13 +1584,25 @@ pub struct EventRow {
     pub hours_note: Option<String>,
     /// Our page for the event's venue (`/venues/<slug>`, #204), if linked.
     pub venue_slug: Option<String>,
+    /// The memberships it matches (`crate::memberships`), by key.
+    pub memberships: sqlx::types::Json<Vec<MembershipMatch>>,
+}
+
+/// One of an event's memberships, as `events.event_memberships` holds it.
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct MembershipMatch {
+    pub membership: String,
+    pub offer: Option<String>,
 }
 
 const EVENT_COLS: &str = "id, title, description, venue_name, address, lat, lng, starts_at,
     ends_at, all_day, sessions, is_free, price_min, price_max, currency, url, image_url, category, tags,
     dedupe_key, medium_tags, format_tags, good_for, vibe_tags, music_tags, is_opening, whats_cool,
     one_liner, ai_grounding, ai_model, ai_enriched_at, opening_hours, hours_note,
-    (SELECT vn.slug FROM events.venues vn WHERE vn.id = venue_id) AS venue_slug";
+    (SELECT vn.slug FROM events.venues vn WHERE vn.id = venue_id) AS venue_slug,
+    COALESCE((SELECT jsonb_agg(jsonb_build_object('membership', em.membership, 'offer', em.offer)
+                               ORDER BY em.membership)
+              FROM events.event_memberships em WHERE em.event_id = id), '[]') AS memberships";
 
 pub async fn get_event(pool: &PgPool, id: Uuid) -> sqlx::Result<Option<EventRow>> {
     sqlx::query_as(AssertSqlSafe(format!(

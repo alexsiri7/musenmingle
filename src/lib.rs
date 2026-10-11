@@ -21,6 +21,7 @@ pub mod ics;
 pub mod issue_cap;
 pub mod listing;
 pub mod matching;
+pub mod memberships;
 pub mod model;
 pub mod music;
 pub mod netguard;

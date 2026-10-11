@@ -247,6 +247,14 @@ GET /v1/events?from=2026-10-01&to=2026-10-05&category=talk&near=51.508,-0.128&ra
       "good_for": ["solo", "first_timers"],
       "vibe_tags": ["intimate"],
       "music_tags": [],
+      "memberships": [
+        {
+          "key": "art_pass",
+          "name": "National Art Pass",
+          "url": "https://www.artfund.org/national-art-pass",
+          "offer": "50% off exhibitions"
+        }
+      ],
       "is_opening": false,
       "ai": {
         "label": "AI-generated",
@@ -404,6 +412,17 @@ event's source tags and title (a source may put a subtag itself, e.g.
 `jazz`, in `tags`; keywords such as "string quartet" → `classical`,
 "free improvisation" → `experimental`, "sound installation" → `sound_art`
 catch the rest).
+
+### Memberships
+
+`memberships` lists the memberships (spec change #313; for now only
+`art_pass`, the National Art Pass) that get you into the event free or for
+less: deterministic (no AI), from `src/memberships.rs`, refreshed after
+every ingest run. An event matches when its venue is on the membership's
+hand-kept list (then `offer` is the venue's offer in words, e.g. "50% off
+exhibitions"), or when its source tags or stored excerpt name the
+membership ("National Art Pass", "Art Pass"; then `offer` is null). Empty
+when none applies.
 
 **Breaking change (2026-09-26):** `image_url` was removed from event
 objects; use `thumbnail_url` + `image_credit`.
