@@ -669,6 +669,8 @@ async fn sources_lists_refused_sites() {
             "wimbledonmuseum.org.uk",
         ]
     );
+    // Art Fund's terms forbid building a database from its site (#310).
+    assert_eq!(domains_from_issue(310), ["artfund.org"]);
     // The two refusals seeded by migration ..08.
     refused.retain(|r| r["checked_on"] == "2026-09-25");
     assert_eq!(
