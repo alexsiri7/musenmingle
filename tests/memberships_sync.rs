@@ -1,5 +1,6 @@
 //! `repo::sync_memberships` (#315): it records each event's memberships
-//! once, and follows its venue's offer when that changes or goes away.
+//! once, and follows its venue's offer when that changes or goes away; and
+//! the seeded National Art Pass venues (#317).
 
 mod common;
 
@@ -59,6 +60,8 @@ async fn memberships_follow_the_venue_and_the_text() {
         return;
     };
     let pool = db.migrated_pool().await;
+    // The test keeps its own list, not the seeded venues (#317).
+    set_offer(&pool, "DELETE FROM events.venue_memberships").await;
     let src = repo::upsert_source(
         &pool,
         "memberships-test",
@@ -132,6 +135,63 @@ async fn memberships_follow_the_venue_and_the_text() {
     set_offer(&pool, "DELETE FROM events.venue_memberships").await;
     assert_eq!(repo::sync_memberships(&pool).await.unwrap(), 1);
     assert_eq!(stored(&pool).await, [text_only]);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn the_seeded_art_pass_venues_cite_their_own_pages() {
+    let Some(db) = TestDb::create("the_seeded_art_pass_venues_cite_their_own_pages").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let seeded: Vec<(String, String, String)> = sqlx::query_as(
+        "SELECT v.name, vm.offer, vm.source_note
+         FROM events.venue_memberships vm JOIN events.venues v ON v.id = vm.venue_id
+         WHERE vm.membership = 'art_pass' ORDER BY v.name",
+    )
+    .fetch_all(&pool)
+    .await
+    .unwrap();
+    assert_eq!(seeded.len(), 11, "{seeded:?}");
+    for (venue, _, note) in &seeded {
+        let (url, date) = note.split_once(' ').unwrap();
+        assert!(url.starts_with("https://"), "{venue}: {note}");
+        assert!(!url.contains("artfund.org"), "{venue}: {note}");
+        assert!(
+            chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d").is_ok(),
+            "{venue}: {note}"
+        );
+    }
+    assert!(seeded.contains(&(
+        "Tate Modern".into(),
+        "50% off exhibitions".into(),
+        "https://www.tate.org.uk/about-us/frequently-asked-questions 2026-10-11".into(),
+    )));
+
+    // A listing at a seeded venue its source names the same way gets the offer.
+    let src = repo::upsert_source(
+        &pool,
+        "memberships-test",
+        SourceKind::Scraper,
+        "https://example.org",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+    ingest(&pool, src, &event("Prints", "Whitechapel Gallery", None)).await;
+    repo::sync_venues(&pool).await.unwrap();
+    assert_eq!(repo::sync_memberships(&pool).await.unwrap(), 1);
+    assert_eq!(
+        stored(&pool).await,
+        [(
+            "Prints".to_string(),
+            "art_pass".to_string(),
+            Some("50% off exhibition tickets (£8.25, standard £16.50)".to_string()),
+        )]
+    );
     pool.close().await;
     db.drop_db().await;
 }
