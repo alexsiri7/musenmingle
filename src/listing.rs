@@ -92,6 +92,9 @@ pub struct EventFilter {
     /// `music=` (repeatable, [`crate::music::MUSIC_TAGS`]): music events
     /// with ANY of those subtags.
     pub music: Vec<String>,
+    /// `membership=` (repeatable, [`crate::memberships::KEYS`]): events
+    /// matching ANY of those memberships.
+    pub memberships: Vec<String>,
     /// Time-of-day / day-of-week bucket (`when=`).
     pub when: Option<When>,
     /// Free events and GBP events whose lowest price is at most this;
@@ -565,6 +568,12 @@ pub fn parse_query_at(raw: &str, now: DateTime<Utc>) -> Result<EventQuery, Strin
                 &crate::borough::BOROUGH_KEYS,
             )?,
             "music" => push_tag(&mut filter.music, "music", &value, crate::music::MUSIC_TAGS)?,
+            "membership" => push_tag(
+                &mut filter.memberships,
+                "membership",
+                &value,
+                &crate::memberships::KEYS,
+            )?,
             "facets" => {
                 facets = match value.as_ref() {
                     "true" => true,
@@ -972,6 +981,14 @@ mod tests {
         assert!(parse_query("music=rock").is_err());
         let q = parse_query("category=music").unwrap();
         assert_eq!(q.filter.categories, [Category::Music]);
+    }
+
+    #[test]
+    fn membership_uses_the_known_memberships() {
+        let q = parse_query("membership=art_pass&membership=art_pass").unwrap();
+        assert_eq!(q.filter.memberships, ["art_pass"]);
+        let err = parse_query("membership=unknown").unwrap_err();
+        assert!(err.contains("membership"), "{err}");
     }
 
     #[test]

@@ -363,6 +363,7 @@ figure.thumb img { object-fit: cover; display: block; }
 .venue { font-family: var(--mono); font-size: 0.75rem; line-height: 1.33; color: var(--ink-2); margin: 0; }
 .card p { margin: 0; }
 .one-liner { font-size: 0.875rem; line-height: 1.57; color: var(--ink-2); }
+.membership { font-family: var(--mono); font-size: 0.75rem; line-height: 1.33; color: var(--ink-2); }
 .ai-mark {
   display: inline-block; margin-right: 0.375rem; padding: 0 0.375rem; border: 1px solid var(--line);
   font-family: var(--mono); font-size: 0.6875rem; line-height: 1.5; color: var(--ink-3); white-space: nowrap;

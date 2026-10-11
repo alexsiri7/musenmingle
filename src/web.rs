@@ -787,6 +787,9 @@ struct Filters {
     venue_type: String,
     /// `music=` subtag (`crate::music::MUSIC_TAGS`).
     music: String,
+    /// `membership=` key (`crate::memberships::KEYS`); an unknown one is
+    /// dropped, so it never empties the page.
+    membership: String,
     cursor: String,
 }
 
@@ -814,6 +817,7 @@ impl Filters {
                 "good_for" => f.good_for = v,
                 "venue_type" => f.venue_type = v,
                 "music" => f.music = v,
+                "membership" if crate::memberships::get(&v).is_some() => f.membership = v,
                 "source" if !v.is_empty() && !f.sources.contains(&v) => f.sources.push(v),
                 "cursor" => f.cursor = v,
                 _ => {}
@@ -859,6 +863,7 @@ impl Filters {
             ("good_for", &self.good_for),
             ("venue_type", &self.venue_type),
             ("music", &self.music),
+            ("membership", &self.membership),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -894,6 +899,7 @@ impl Filters {
             good_for: self.good_for.clone(),
             venue_type: self.venue_type.clone(),
             music: self.music.clone(),
+            membership: self.membership.clone(),
             cursor: String::new(),
         };
         format!("/?{}", rest.page_query())
@@ -941,6 +947,7 @@ impl Filters {
             ("good_for", &self.good_for),
             ("venue_type", &self.venue_type),
             ("music", &self.music),
+            ("membership", &self.membership),
         ] {
             if !v.is_empty() {
                 s.append_pair(k, v);
@@ -1287,6 +1294,12 @@ fn relaxations(f: &Filters, today: NaiveDate, names: &[(String, String)]) -> Vec
             link_with(f, |g| g.music.clear()),
         ));
     }
+    if !f.membership.is_empty() {
+        out.push((
+            format!("Membership: {}", crate::memberships::label(&f.membership)),
+            link_with(f, |g| g.membership.clear()),
+        ));
+    }
     for src in &f.sources {
         let name = names
             .iter()
@@ -1419,7 +1432,8 @@ async fn quick_picks(state: &AppState, f: &Filters) -> sqlx::Result<Vec<QuickPic
         && f.format.is_empty()
         && f.good_for.is_empty()
         && f.venue_type.is_empty()
-        && f.music.is_empty();
+        && f.music.is_empty()
+        && f.membership.is_empty();
     let pick_on = |p: &str| f.pick == p && bare;
     let today_s = today.format("%Y-%m-%d").to_string();
     let picks = [
@@ -1655,6 +1669,7 @@ fn filter_form(
                     @if f.category.is_empty() || f.category == Category::Music.as_str() || !f.music.is_empty() {
                         (tag_select("music", "Music", "Any music", crate::music::MUSIC_TAGS, &f.music, facets.and_then(|v| v.get("music")), crate::music::label))
                     }
+                    (tag_select("membership", "Membership", "Any", &crate::memberships::KEYS, &f.membership, facets.and_then(|v| v.get("membership")), crate::memberships::label))
                     div class="field check" {
                         input id="free" name="free" type="checkbox" value="true" checked[f.free];
                         label for="free" { (with_count("Free only", price(|c| c.price.free))) }
@@ -1955,6 +1970,9 @@ fn card(e: &EventJson, now: DateTime<Utc>, hideable: bool) -> Markup {
                 @if let Some(o) = e.ai.as_ref().and_then(|a| a.one_liner.as_deref()) {
                     p class="one-liner" title="AI-written summary" { (ai_mark()) (o) }
                 }
+                @for m in &e.memberships {
+                    p class="membership" { (membership_text(m)) }
+                }
                 p class="tags" {
                     span class="badge" { (title_case(&e.category)) }
                     @if e.is_opening == Some(true) {
@@ -2003,6 +2021,15 @@ fn card(e: &EventJson, now: DateTime<Utc>, hideable: bool) -> Markup {
                 }
             }
         }
+    }
+}
+
+/// A membership an event matches, with its offer when the venue has one
+/// ("National Art Pass: 50% off exhibitions").
+fn membership_text(m: &api::MembershipJson) -> String {
+    match &m.offer {
+        Some(offer) => format!("{}: {offer}", m.name),
+        None => m.name.to_string(),
     }
 }
 
@@ -2635,6 +2662,13 @@ async fn event_detail_page(State(state): State<AppState>, Path(id): Path<String>
                                     }
                                 }
                             }
+                            @if !e.memberships.is_empty() {
+                                p class="tag-chips" aria-label="Memberships" {
+                                    @for m in &e.memberships {
+                                        a class="tag-chip" href={ "/?membership=" (m.key) } { (membership_text(m)) } " "
+                                    }
+                                }
+                            }
                             @if !e.music_tags.is_empty() {
                                 p class="tag-chips" aria-label="Music" {
                                     @for t in &e.music_tags {
@@ -2759,6 +2793,10 @@ async fn venue_page(State(state): State<AppState>, Path(slug): Path<String>) -> 
         Ok(e) => e,
         Err(err) => return internal_error(err),
     };
+    let memberships = match repo::venue_memberships(&state.pool, v.id).await {
+        Ok(m) => m,
+        Err(err) => return internal_error(err),
+    };
     let page_url = format!("{}/venues/{}", SHARE_ORIGIN.as_str(), v.slug);
     let place = ShareEvent {
         id: Uuid::nil(),
@@ -2845,6 +2883,18 @@ async fn venue_page(State(state): State<AppState>, Path(slug): Path<String>) -> 
                             }
                             @if let Some(k) = kind {
                                 div { dt { "Type" } dd { (title_case(k)) } }
+                            }
+                            @for m in &memberships {
+                                div {
+                                    dt { "Membership" }
+                                    dd {
+                                        (crate::memberships::label(&m.membership)) ": " (m.offer)
+                                        span class="sub" {
+                                            "Source: " (m.source_note) " · "
+                                            a href={ "/?membership=" (m.membership) } { "Events it covers" }
+                                        }
+                                    }
+                                }
                             }
                             @if let Some(h) = hours {
                                 div {

@@ -1645,6 +1645,27 @@ pub async fn venue_by_slug(pool: &PgPool, slug: &str) -> sqlx::Result<Option<Ven
     .await
 }
 
+/// A venue's entry for a membership (`events.venue_memberships`).
+#[derive(Debug, Clone, FromRow)]
+pub struct VenueMembership {
+    pub membership: String,
+    /// The offer in words.
+    pub offer: String,
+    /// Where that fact came from (the venue's page and date, or the author).
+    pub source_note: String,
+}
+
+/// The memberships a venue takes part in, by key.
+pub async fn venue_memberships(pool: &PgPool, venue_id: i64) -> sqlx::Result<Vec<VenueMembership>> {
+    sqlx::query_as(
+        "SELECT membership, offer, source_note FROM events.venue_memberships
+         WHERE venue_id = $1 ORDER BY membership",
+    )
+    .bind(venue_id)
+    .fetch_all(pool)
+    .await
+}
+
 /// A venue's events still to come or running at `now`, soonest first.
 pub async fn venue_events(
     pool: &PgPool,
@@ -1863,16 +1884,40 @@ const RULE_CLOSES: &str = "(r->>'closes')::time";
 /// event with opening hours is open that weekday.
 /// The filters of an [`EventFilter`] that are SQL built from constants
 /// rather than [`LISTING_FILTER`]'s placeholders: [`live_sql`] and
-/// [`venue_type_sql`], [`borough_sql`], [`music_sql`]. Every listing query applies it after
-/// [`LISTING_FILTER`], so counts and listings agree.
+/// [`venue_type_sql`], [`borough_sql`], [`music_sql`], [`membership_sql`]. Every listing
+/// query applies it after [`LISTING_FILTER`], so counts and listings agree.
 fn filter_extra_sql(f: &EventFilter) -> String {
     format!(
-        "{} AND {} AND {} AND {}",
+        "{} AND {} AND {} AND {} AND {}",
         live_sql(f),
         venue_type_sql(f),
         borough_sql(f),
-        music_sql(f)
+        music_sql(f),
+        membership_sql(f)
     )
+}
+
+/// The memberships an event (`ev`) matches, as an SQL array.
+const EVENT_MEMBERSHIPS_SQL: &str =
+    "ARRAY(SELECT em.membership FROM events.event_memberships em WHERE em.event_id = ev.id)";
+
+/// `membership=` ([`EventFilter::memberships`]): events matching ANY of the
+/// given memberships. Built only from [`crate::memberships::KEYS`] (unknown
+/// values are dropped; `crate::listing` rejects them).
+fn membership_sql(f: &EventFilter) -> String {
+    let chosen: Vec<String> = crate::memberships::KEYS
+        .iter()
+        .filter(|k| f.memberships.iter().any(|v| v == *k))
+        .map(|k| format!("'{k}'"))
+        .collect();
+    if chosen.is_empty() {
+        "TRUE".into()
+    } else {
+        format!(
+            "{EVENT_MEMBERSHIPS_SQL} && ARRAY[{}]::text[]",
+            chosen.join(", ")
+        )
+    }
 }
 
 /// `music=` ([`EventFilter::music`]): events with ANY of the given music
@@ -2431,16 +2476,19 @@ pub enum Facet {
     Borough,
     /// Music subtags ([`crate::music::MUSIC_TAGS`]).
     Music,
+    /// Memberships ([`crate::memberships::KEYS`]).
+    Membership,
 }
 
 impl Facet {
-    pub const ALL: [Facet; 6] = [
+    pub const ALL: [Facet; 7] = [
         Facet::Medium,
         Facet::Format,
         Facet::GoodFor,
         Facet::VenueType,
         Facet::Borough,
         Facet::Music,
+        Facet::Membership,
     ];
 
     /// The facet's values of an event (`ev`) as an SQL array.
@@ -2452,11 +2500,12 @@ impl Facet {
             Facet::VenueType => "ARRAY[ev.venue_type]",
             Facet::Borough => "ARRAY[COALESCE(ev.borough, 'unknown')]",
             Facet::Music => "ev.music_tags",
+            Facet::Membership => EVENT_MEMBERSHIPS_SQL,
         }
     }
 
     /// The API name (`medium`, `format`, `good_for`, `venue_type`,
-    /// `borough`, `music`).
+    /// `borough`, `music`, `membership`).
     pub fn name(self) -> &'static str {
         match self {
             Facet::Medium => "medium",
@@ -2465,6 +2514,7 @@ impl Facet {
             Facet::VenueType => "venue_type",
             Facet::Borough => "borough",
             Facet::Music => "music",
+            Facet::Membership => "membership",
         }
     }
 }
@@ -2485,6 +2535,7 @@ pub async fn facet_counts(
         Facet::VenueType => f.venue_types.clear(),
         Facet::Borough => f.boroughs.clear(),
         Facet::Music => f.music.clear(),
+        Facet::Membership => f.memberships.clear(),
     }
     let near = query.near;
     let b = near.map(|n| n.bounding_box());
