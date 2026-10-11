@@ -8,7 +8,7 @@ People, not only programs, use Muse & Mingle. The website lets them browse, filt
 
 ### Requirement: Browsing works as shareable links
 
-The home page SHALL list upcoming events from today (London) with a plain filter form (search, dates, category, free, time of day, price, area or borough, source, tags, venue type, music subtag, order) and quick-pick chips (Tonight, This weekend, Free, Openings this week, Last chance, Hands-on, Talks, Open now) showing live counts, with empty chips hidden. Every filtered view SHALL be a shareable URL, and results SHALL page with a "More" link. Event cards SHALL lead to Muse & Mingle's own event page and keep a "See it on <venue>" link.
+The home page SHALL list upcoming events from today (London) with a plain filter form (search, dates, category, free, time of day, price, area or borough, source, tags, venue type, music subtag, membership, order) and quick-pick chips (Tonight, This weekend, Free, Openings this week, Last chance, Hands-on, Talks, Open now) showing live counts, with empty chips hidden. Every filtered view SHALL be a shareable URL, and results SHALL page with a "More" link. Event cards SHALL lead to Muse & Mingle's own event page and keep a "See it on <venue>" link.
 
 #### Scenario: Shared filter
 - GIVEN a visitor filters to free talks this weekend

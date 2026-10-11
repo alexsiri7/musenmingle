@@ -8,7 +8,7 @@ Ingested events are worthless until something can ask for them. The read API giv
 
 ### Requirement: Events are filtered by what the person wants
 
-Listing events SHALL accept optional filters that combine freely: a London date window, one or more categories, free only, a maximum price, time of day (evening, after work, weekend, daytime), a quick pick (open now, tonight, openings, last chance, hands-on), sources, specific event ids, AI tags (medium, format, good for), venue type, London borough, music subtag, and a point with a radius or a walking time. An event with an end SHALL match a date window it overlaps; one without an end SHALL match when it starts inside the window; a multi-session event SHALL match on its sessions, not the days between them. Events with known weekly opening hours SHALL be judged "on now" or "evening" by those hours. Unknown parameters and invalid values SHALL be rejected with a clear 400 error.
+Listing events SHALL accept optional filters that combine freely: a London date window, one or more categories, free only, a maximum price, time of day (evening, after work, weekend, daytime), a quick pick (open now, tonight, openings, last chance, hands-on), sources, specific event ids, AI tags (medium, format, good for), venue type, London borough, music subtag, membership, and a point with a radius or a walking time. An event with an end SHALL match a date window it overlaps; one without an end SHALL match when it starts inside the window; a multi-session event SHALL match on its sessions, not the days between them. Events with known weekly opening hours SHALL be judged "on now" or "evening" by those hours. Unknown parameters and invalid values SHALL be rejected with a clear 400 error.
 
 #### Scenario: Long exhibition in a later window
 - GIVEN an exhibition running 1 September to 30 November
@@ -37,7 +37,7 @@ Listing events SHALL accept a search query that matches titles most strongly, th
 
 ### Requirement: Results come in stable pages with counts
 
-Results SHALL be returned in pages of a requested size (up to 100) with an opaque cursor for the next page, and paging through a result set SHALL return every matching event exactly once. A cursor SHALL be valid only for the order that issued it. On request, the response SHALL include per-option counts for time of day and price, and facet counts for tags, venue type, borough and music subtag, each ignoring its own selection so it says how many events choosing that option would show.
+Results SHALL be returned in pages of a requested size (up to 100) with an opaque cursor for the next page, and paging through a result set SHALL return every matching event exactly once. A cursor SHALL be valid only for the order that issued it. On request, the response SHALL include per-option counts for time of day and price, and facet counts for tags, venue type, borough, music subtag and membership, each ignoring its own selection so it says how many events choosing that option would show.
 
 #### Scenario: Paging a long list
 - GIVEN 120 matching events

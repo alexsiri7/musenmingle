@@ -427,6 +427,17 @@ async fn filtering_for_the_art_pass() {
         2,
         "{page}"
     );
+
+    // The detail page shows the offer as a link to the filtered list.
+    let id = listed[0]["id"].as_str().unwrap();
+    let (status, _, detail) = get(&app, &format!("/events/{id}")).await;
+    assert_eq!(status, StatusCode::OK, "{detail}");
+    assert!(
+        detail.contains(&format!(
+            "<a class=\"tag-chip\" href=\"/?membership=art_pass\">National Art Pass: {TATE_OFFER}</a>"
+        )),
+        "{detail}"
+    );
     pool.close().await;
     db.drop_db().await;
 }
