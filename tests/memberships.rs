@@ -2,9 +2,8 @@
 //! membership like the National Art Pass gets you in free or cheaper), one
 //! per scenario of `openspec/specs/memberships/spec.md`, through the public
 //! interface only: an ingest run with a fake source, then the read API and
-//! the HTML pages. Each is ignored until its implementing issue (#315 model
-//! and matching, #316 filter, web and API) makes it pass; run them with
-//! `cargo test --test memberships -- --ignored`.
+//! the HTML pages. Those still ignored wait for #316 (filter, web and API);
+//! run them with `cargo test --test memberships -- --ignored`.
 
 mod common;
 
@@ -327,7 +326,6 @@ async fn a_participating_venue() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 lands"]
 async fn matched_by_venue() {
     let Some((db, pool)) = setup("matched_by_venue").await else {
         return;
@@ -349,7 +347,6 @@ async fn matched_by_venue() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 lands"]
 async fn matched_by_the_events_own_text() {
     let Some((db, pool)) = setup("matched_by_the_events_own_text").await else {
         return;
@@ -368,7 +365,6 @@ async fn matched_by_the_events_own_text() {
 }
 
 #[tokio::test]
-#[ignore = "acceptance test for #313; passes once #315 lands"]
 async fn no_match() {
     let Some((db, pool)) = setup("no_match").await else {
         return;
