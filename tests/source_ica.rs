@@ -26,7 +26,8 @@ const PAGES: [(&str, &str, Section); 2] = [
     (EXHIBITIONS_PATH, "exhibitions.html", Section::Exhibitions),
 ];
 
-/// The date the fixtures were saved.
+/// The date the fixtures were saved (the Makers Market card and its
+/// detail page, an untimed single day (#321), were added on 2026-10-11).
 fn listed_on() -> NaiveDate {
     NaiveDate::from_ymd_opt(2026, 9, 27).unwrap()
 }
@@ -79,7 +80,7 @@ fn saved_robots_allow_the_listings_and_details() {
 fn programme_tabs_and_films_are_left_out() {
     let raws = raws();
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
-    assert_eq!(raws.len(), 15, "{ids:?}");
+    assert_eq!(raws.len(), 16, "{ids:?}");
     assert!(ids.iter().all(|id| !id.starts_with("/films/")));
     assert!(
         ids.iter()
@@ -96,7 +97,7 @@ fn programme_tabs_and_films_are_left_out() {
         .iter()
         .filter(|r| !r.payload["detail"].is_null())
         .count();
-    assert_eq!(details, 8);
+    assert_eq!(details, 9);
 }
 
 #[test]
@@ -113,34 +114,6 @@ fn normalised_output_snapshot() {
         })
         .collect();
     insta::assert_json_snapshot!("ica_normalised", out);
-}
-
-/// The Makers Market card (saved 2026-10-11, #321): a single day whose
-/// detail page lists no performances, so it is all-day.
-#[test]
-fn a_detail_page_without_performances_is_all_day() {
-    let card = serde_json::json!({
-        "path": "/talks/makers-market",
-        "tab": "all-events",
-        "title": "Makers Market",
-        "date_text": "Sun, 6 December",
-        "description": "The inaugural ICA Makers Market brings together local artists, designers and independent makers for a day of seasonal shopping, gift-buying and mulled wine.",
-        "image": "//www.ica.art/media/14237.jpg",
-    });
-    let listed_on = NaiveDate::from_ymd_opt(2026, 10, 11).unwrap();
-    assert!(needs_detail(&card, Section::Talks, listed_on));
-    let detail = parse_detail(&fixture(&detail_file("/talks/makers-market")));
-    let raw = raw_event(
-        &card,
-        Section::Talks,
-        &Url::parse(SITE).unwrap(),
-        listed_on,
-        Some(detail),
-    );
-    let event = Ica::new(SITE.parse().unwrap())
-        .normalise(&raw)
-        .expect("normalise");
-    insta::assert_json_snapshot!("ica_makers_market", event);
 }
 
 #[tokio::test]
