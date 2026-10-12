@@ -22,8 +22,10 @@
 //! * A single day has no time on the listing, so its detail page is read
 //!   (at most [`MAX_DETAILS`] a run): `.performance-list .performance`
 //!   gives "Thu, 01 Oct 2026" + "07:00 pm", timed in London wall clock. A
-//!   single day whose detail page has no time for that day is a parse
-//!   error, never silently all-day. Ranges never read detail pages (an
+//!   detail page with no performance list at all (an untimed day such as
+//!   the Makers Market, #321) makes the day all-day; one whose performances
+//!   name no time for that day, or a missing detail page, is a parse error,
+//!   never silently all-day. Ranges never read detail pages (an
 //!   exhibition's performance list is hourly timed-entry slots).
 //! * Categories: cards in the `/exhibitions` `#exhibitions` tab →
 //!   exhibition. Everything else by title: film screenings ("Artist's Film
@@ -326,6 +328,11 @@ fn detail_time(detail: &Value, day: NaiveDate, listed_on: NaiveDate) -> Option<N
     })
 }
 
+/// Whether a fetched detail page has no performance list at all.
+fn lists_no_performances(detail: &Value) -> bool {
+    detail["performances"].as_array().is_some_and(Vec::is_empty)
+}
+
 fn london_midnight(d: NaiveDate) -> DateTime<Utc> {
     london_to_utc(d.and_time(NaiveTime::MIN))
 }
@@ -356,12 +363,15 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
             }
             (london_midnight(first), last.map(london_midnight), true)
         }
-        When::Day(day) => {
-            let time = detail_time(&p["detail"], day, listed_on).ok_or_else(|| {
-                SourceError::Parse(format!("{title:?}: no time for {day} on the detail page"))
-            })?;
-            (london_to_utc(day.and_time(time)), None, false)
-        }
+        When::Day(day) => match detail_time(&p["detail"], day, listed_on) {
+            Some(time) => (london_to_utc(day.and_time(time)), None, false),
+            None if lists_no_performances(&p["detail"]) => (london_midnight(day), None, true),
+            None => {
+                return Err(SourceError::Parse(format!(
+                    "{title:?}: no time for {day} on the detail page"
+                )));
+            }
+        },
     };
     let price = p["detail"]["price_text"]
         .as_str()
@@ -619,6 +629,22 @@ mod tests {
         );
         let err = normalise_payload(&no_detail).unwrap_err();
         assert!(err.to_string().contains("no time"), "{err}");
+    }
+
+    #[test]
+    fn a_single_day_without_performances_is_all_day() {
+        let ev = normalise_payload(&payload(
+            "talks",
+            "all-events",
+            "Makers Market",
+            "Sun, 6 December",
+            json!({"performances": [], "price_text": null}),
+        ))
+        .unwrap()
+        .unwrap();
+        assert!(ev.all_day);
+        assert_eq!(ev.starts_at.to_rfc3339(), "2026-12-06T00:00:00+00:00");
+        assert_eq!(ev.ends_at, None);
     }
 
     #[test]

@@ -211,8 +211,8 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     community.
   - `ica` — CSS on the ICA's `/talks` and `/exhibitions` listings (no
     JSON-LD), plus the detail page of each single-day event (capped at 20
-    a run) for its time (London wall clock); ranges and "From" dates all
-    day; residencies and the young artists' programme, film screenings and
+    a run) for its time (London wall clock); ranges, "From" dates and days
+    whose detail page lists no performances all day; residencies and the young artists' programme, film screenings and
     members-only events skipped; `/live` concerts not read; exhibitions →
     exhibition, book launches → talk, performances → community.
   - `the-showroom` — CSS on the `/exhibitions/` and `/events/` listings

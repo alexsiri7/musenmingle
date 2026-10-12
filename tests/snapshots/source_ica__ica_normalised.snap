@@ -87,6 +87,32 @@ expression: out
     "source_event_id": "/talks/book-launch-wet-proof"
   },
   {
+    "date_text": "Sun, 6 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": true,
+      "category": "community",
+      "dedupe_key": "makers-market|2026-12-06|ica",
+      "description": "The inaugural ICA Makers Market brings together local artists, designers and independent makers for a day of seasonal shopping, gift-buying and mulled wine.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14237.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-06T00:00:00Z",
+      "tags": [],
+      "title": "Makers Market",
+      "url": "https://www.ica.art/talks/makers-market",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/talks/makers-market"
+  },
+  {
     "date_text": "29 September – 29 November 2026",
     "event": {
       "address": "The Mall, London SW1Y 5AH",
