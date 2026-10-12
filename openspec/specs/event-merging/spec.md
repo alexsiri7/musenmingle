@@ -8,7 +8,7 @@ The same exhibition or talk often appears in several sources with slightly diffe
 
 ### Requirement: One real-world event is one listing
 
-When several sources describe the same real-world event, the system SHALL store and show it once, carrying every source that listed it with that source's own link, oldest source first. A listing SHALL join an existing event when their London dates agree (the same day, or overlapping ranges when both run over several days), their venues agree (the same or a contained name after normalisation, or coordinates within 150 m) and their titles agree after ignoring punctuation, capitalisation, leading articles, subtitles, years, venue words and filler such as "exhibition" or "tickets".
+When several sources describe the same real-world event, the system SHALL store and show it once, carrying every source that listed it with that source's own link, oldest source first.
 
 #### Scenario: Same exhibition, two sources
 - GIVEN "The Turner Prize 2026" at "Tate Britain" from Ticketmaster
@@ -16,6 +16,16 @@ When several sources describe the same real-world event, the system SHALL store 
 - WHEN both are ingested
 - THEN one event exists
 - AND it lists both sources, each with its own link
+
+### Requirement: Listings match on dates, venue and title
+
+A listing SHALL join an existing event when their London dates agree (the same day, or overlapping ranges when both run over several days), their venues agree (the same or a contained name after normalisation, or coordinates within 150 m) and their titles agree after ignoring punctuation, capitalisation, leading articles, subtitles, years, venue words and filler such as "exhibition" or "tickets".
+
+#### Scenario: Matching listing
+- GIVEN an existing event
+- AND a listing whose London dates, venue and title agree with it under these rules
+- WHEN the listing is ingested
+- THEN it joins the existing event
 
 ### Requirement: Distinct events stay apart
 
@@ -33,13 +43,23 @@ The system SHALL NOT merge events on different dates, at different venues, or di
 
 ### Requirement: Disagreements resolve by trust, consistently
 
-When merged sources disagree on a detail, the merged event SHALL take each field from the most trustworthy source for it, and the choice SHALL be the same on every run: the title stays as first seen; dates, description and image come from the venue's own site; price and primary link come from an API when it reports them; any other field keeps its existing value and a newcomer only fills gaps; tags are combined. A third-party listings site SHALL never win a field, only fill gaps, and pages SHALL link to the venue's own site before it.
+When merged sources disagree on a detail, the merged event SHALL take each field from the most trustworthy source for it, and the choice SHALL be the same on every run: the title stays as first seen; dates, description and image come from the venue's own site; price and primary link come from an API when it reports them; any other field keeps its existing value and a newcomer only fills gaps; tags are combined.
 
 #### Scenario: Venue and API disagree on time
 - GIVEN Ticketmaster lists a talk at 19:00 and the venue's own site lists it at 18:30
 - WHEN the event is merged
 - THEN its start is 18:30
 - AND re-running ingestion does not change it
+
+### Requirement: Third-party listings sites only fill gaps
+
+A third-party listings site SHALL never win a field, only fill gaps, and pages SHALL link to the venue's own site before it.
+
+#### Scenario: Listings site and venue site
+- GIVEN an event listed by a third-party listings site and by the venue's own site
+- WHEN the event is merged and shown
+- THEN the listings site wins no field and only fills gaps
+- AND its page links to the venue's own site before the listings site
 
 ### Requirement: Wrong merges can be corrected durably
 

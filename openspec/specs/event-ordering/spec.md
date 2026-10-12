@@ -8,17 +8,35 @@ Order decides what a person sees first. Muse & Mingle is a visual discovery app,
 
 ### Requirement: Default order groups by day, richest first
 
-When a request for events asks for no order, uses no search and no proximity point, results SHALL be grouped by Europe/London day, soonest first, and within each day ordered by how much we know about the event, highest first. Richness SHALL weigh, in order: a thumbnail we may show (outweighing all the others combined), a description, a price (including free), and a known venue or coordinates. A multi-day event SHALL belong to the first day it is on within the requested window (today, when no window is given and it is already open); a multi-session event to its next session's day. Ties SHALL fall back to start time, then a fixed identifier.
+When a request for events asks for no order, uses no search and no proximity point, results SHALL be grouped by Europe/London day, soonest first, and within each day ordered by how much we know about the event, highest first. Ties SHALL fall back to start time, then a fixed identifier.
 
 #### Scenario: Timeliness beats richness
 - GIVEN a text-only talk tonight and a well-illustrated exhibition opening next week
 - WHEN events are listed with no order
 - THEN the talk comes before the exhibition
 
+### Requirement: Richness weighs what we can show
+
+Richness SHALL weigh, in order: a thumbnail we may show (outweighing all the others combined), a description, a price (including free), and a known venue or coordinates.
+
 #### Scenario: Image wins within a day
 - GIVEN two events today, one with a thumbnail only and one with a description, price and venue but no thumbnail
 - WHEN events are listed with no order
 - THEN the event with the thumbnail comes first
+
+#### Scenario: Weighing richness
+- GIVEN events on the same day
+- WHEN their richness is weighed
+- THEN a thumbnail we may show counts most, outweighing all the others combined, then a description, then a price (including free), then a known venue or coordinates
+
+### Requirement: Long-running events belong to one day
+
+A multi-day event SHALL belong to the first day it is on within the requested window (today, when no window is given and it is already open); a multi-session event to its next session's day.
+
+#### Scenario: Next session's day
+- GIVEN a multi-session event
+- WHEN events are listed with no order
+- THEN it is grouped under its next session's day
 
 #### Scenario: Exhibition that opened last month
 - GIVEN an exhibition that opened last month and is still running
@@ -28,7 +46,7 @@ When a request for events asks for no order, uses no search and no proximity poi
 
 ### Requirement: An explicit order always wins
 
-When the request names an order, or gives a proximity point without one, that order SHALL be applied unchanged and richness SHALL play no part. The available orders SHALL be: soonest, nearest (distance from the given point), ending (effective end ascending, only events not yet ended), recently added to Muse & Mingle, surprise (a random order stable for a London day), best search match (the default with a search), and richest. The response SHALL say which order was applied, and when a requested order cannot apply (nearest without a point, best match without a search) SHALL fall back to soonest and say so.
+When the request names an order, or gives a proximity point without one, that order SHALL be applied unchanged and richness SHALL play no part. The response SHALL say which order was applied, and when a requested order cannot apply (nearest without a point, best match without a search) SHALL fall back to soonest and say so.
 
 #### Scenario: Proximity filter
 - GIVEN events near a point with different richness and dates
@@ -40,6 +58,15 @@ When the request names an order, or gives a proximity point without one, that or
 - WHEN events are listed
 - THEN they are ordered soonest first
 - AND the response says nearest was requested and soonest applied
+
+### Requirement: The orders on offer
+
+The available orders SHALL be: soonest, nearest (distance from the given point), ending (effective end ascending, only events not yet ended), recently added to Muse & Mingle, surprise (a random order stable for a London day), best search match (the default with a search), and richest.
+
+#### Scenario: Choosing an order
+- GIVEN a request for events
+- WHEN it names an order
+- THEN it can choose soonest, nearest (distance from the given point), ending (effective end ascending, only events not yet ended), recently added to Muse & Mingle, surprise (a random order stable for a London day), best search match (the default with a search), or richest
 
 ### Requirement: The home page leads with rich listings without hiding facts-only venues
 

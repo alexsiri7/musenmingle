@@ -29,17 +29,27 @@ The system SHALL run ingestion on a fixed tick and, on each tick, SHALL run ever
 
 ### Requirement: Sites are fetched politely
 
-Every request the system makes to a source site SHALL identify itself as MuseNMingleBot with a link to the venue information on the About page, SHALL obey that site's robots.txt (including Crawl-delay), and SHALL respect a per-domain minimum interval between requests, 2 seconds by default, which configuration MAY raise but SHALL NOT lower below a site's built-in floor. Requests SHALL reach only public internet addresses over http(s), follow at most 3 redirects and read at most 10 MB of a body. Secrets in URLs SHALL NOT appear in logs or errors.
+Every request the system makes to a source site SHALL identify itself as MuseNMingleBot with a link to the venue information on the About page, SHALL obey that site's robots.txt (including Crawl-delay), and SHALL respect a per-domain minimum interval between requests, 2 seconds by default, which configuration MAY raise but SHALL NOT lower below a site's built-in floor.
 
 #### Scenario: robots.txt disallows a path
 - GIVEN a venue whose robots.txt disallows `/events/`
 - WHEN its source asks to fetch a page under `/events/`
 - THEN the request is not sent and the fetch fails
 
+### Requirement: Fetches stay on the public web within limits
+
+Requests SHALL reach only public internet addresses over http(s), follow at most 3 redirects and read at most 10 MB of a body. Secrets in URLs SHALL NOT appear in logs or errors.
+
 #### Scenario: Redirect to a private address
 - GIVEN a source page that redirects to a host resolving to a private IP address
 - WHEN it is fetched
 - THEN the redirect is refused
+
+#### Scenario: Fetch limits
+- GIVEN a source fetching a page
+- WHEN the request is made
+- THEN it reaches only a public internet address over http(s), follows at most 3 redirects and reads at most 10 MB of the body
+- AND any secret in its URL appears in no log or error
 
 ### Requirement: Extraction is deterministic
 
@@ -53,7 +63,7 @@ Each source SHALL extract events with deterministic code (structured data first,
 
 ### Requirement: Listings become consistent events
 
-Every stored event SHALL have a title, a start in UTC derived from Europe/London wall-clock time, and one category: exhibition, expo, community, talk, workshop or music. Events given by date only SHALL be marked all-day, spanning London midnight of their first day to their last day inclusive. Prices SHALL be kept as a minimum and maximum with currency, and free events SHALL be recognised as free. A multi-session event, such as a fortnightly workshop series, SHALL be stored once with its list of sessions. Where a listing states weekly opening hours for a multi-day run, they SHALL be kept.
+Every stored event SHALL have a title, a start in UTC derived from Europe/London wall-clock time, and one category: exhibition, expo, community, talk, workshop or music. Events given by date only SHALL be marked all-day, spanning London midnight of their first day to their last day inclusive. Prices SHALL be kept as a minimum and maximum with currency, and free events SHALL be recognised as free.
 
 #### Scenario: Exhibition with dates only
 - GIVEN a gallery listing "12 September – 30 November"
@@ -64,6 +74,20 @@ Every stored event SHALL have a title, a start in UTC derived from Europe/London
 - GIVEN a talk listed at 18:30 on a day in British Summer Time
 - WHEN it is ingested
 - THEN its start is stored as 17:30 UTC
+
+### Requirement: Sessions and opening hours are kept
+
+A multi-session event, such as a fortnightly workshop series, SHALL be stored once with its list of sessions. Where a listing states weekly opening hours for a multi-day run, they SHALL be kept.
+
+#### Scenario: Fortnightly workshop series
+- GIVEN a listing for a fortnightly workshop series
+- WHEN it is ingested
+- THEN it is stored once with its list of sessions
+
+#### Scenario: Exhibition with opening hours
+- GIVEN a listing for a multi-day run that states weekly opening hours
+- WHEN it is ingested
+- THEN its opening hours are kept
 
 ### Requirement: New venues are configuration where a platform allows
 

@@ -41,10 +41,29 @@ Submissions from the same client SHALL be limited to 5 per hour and 20 per day, 
 
 ### Requirement: Each accepted suggestion becomes one scraper issue
 
-Each accepted suggestion SHALL become exactly one GitHub issue labelled `new-scraper`, carrying the URL, the note and a checklist, so the autonomous worker can write that site's scraper. If filing fails, the suggestion SHALL stay pending and be filed by a later ingest run, adopting an open issue with the same title rather than duplicating it. Issues filed by the site's public forms SHALL share a daily cap; past it, submissions SHALL wait and be filed oldest first on later days, and the owner SHALL get one digest a day while any wait. A suggested site SHALL only start producing events once a hand-written scraper or platform entry for it lands.
+Each accepted suggestion SHALL become exactly one GitHub issue labelled `new-scraper`, carrying the URL, the note and a checklist, so the autonomous worker can write that site's scraper. If filing fails, the suggestion SHALL stay pending and be filed by a later ingest run, adopting an open issue with the same title rather than duplicating it.
 
 #### Scenario: GitHub unavailable
 - GIVEN GitHub is failing
 - WHEN a new site is suggested
 - THEN the answer is accepted without an issue number
 - AND the next ingest run files exactly one new-scraper issue for it
+
+### Requirement: Public forms share a daily filing cap
+
+Issues filed by the site's public forms SHALL share a daily cap; past it, submissions SHALL wait and be filed oldest first on later days, and the owner SHALL get one digest a day while any wait.
+
+#### Scenario: Daily cap reached
+- GIVEN the public forms have filed their daily cap of issues
+- WHEN another site is suggested
+- THEN it waits and is filed oldest first on a later day
+- AND the owner gets one digest a day while any wait
+
+### Requirement: A suggestion alone produces no events
+
+A suggested site SHALL only start producing events once a hand-written scraper or platform entry for it lands.
+
+#### Scenario: Suggested site without a scraper
+- GIVEN an accepted suggestion with no hand-written scraper or platform entry yet
+- WHEN ingest runs
+- THEN the site produces no events
