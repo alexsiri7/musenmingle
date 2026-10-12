@@ -8,12 +8,21 @@ People, not only programs, use Muse & Mingle. The website lets them browse, filt
 
 ### Requirement: Browsing works as shareable links
 
-The home page SHALL list upcoming events from today (London) with a plain filter form (search, dates, category, free, time of day, price, area or borough, source, tags, venue type, music subtag, membership, order) and quick-pick chips (Tonight, This weekend, Free, Openings this week, Last chance, Hands-on, Talks, Open now) showing live counts, with empty chips hidden. Every filtered view SHALL be a shareable URL, and results SHALL page with a "More" link. Event cards SHALL lead to Muse & Mingle's own event page and keep a "See it on <venue>" link.
+The home page SHALL list upcoming events from today (London) with a plain filter form (search, dates, category, free, time of day, price, area or borough, source, tags, venue type, music subtag, membership, order) and quick-pick chips (Tonight, This weekend, Free, Openings this week, Last chance, Hands-on, Talks, Open now) showing live counts, with empty chips hidden. Every filtered view SHALL be a shareable URL, and results SHALL page with a "More" link.
 
 #### Scenario: Shared filter
 - GIVEN a visitor filters to free talks this weekend
 - WHEN they share the page's address
 - THEN the recipient sees the same filtered list
+
+### Requirement: Event cards lead to our event page
+
+Event cards SHALL lead to Muse & Mingle's own event page and keep a "See it on <venue>" link.
+
+#### Scenario: Event card links
+- GIVEN an event card in a listing
+- WHEN its links are shown
+- THEN it leads to Muse & Mingle's own event page and keeps a "See it on <venue>" link
 
 ### Requirement: Event pages hand off to the person's tools
 
@@ -44,7 +53,16 @@ Visitors SHALL be able to save events without an account, with saves kept only i
 
 ### Requirement: Visitors can hide events they have already checked
 
-Visitors SHALL be able to hide an event from the home page's results, so that working through the listings leaves only events they have not looked at yet. Hidden events SHALL be kept only in the visitor's own browser, like saves, and never sent to or stored by the server. Hidden events SHALL be left out of the results by default; a visible control SHALL say how many are hidden on the current page and let the visitor show them, and each hidden event SHALL be able to be unhidden. Hiding and saving SHALL be independent: saving an event SHALL NOT hide it. Hiding is an enhancement: without JavaScript the hide controls SHALL NOT be shown and every event is listed. On touch screens, swiping an event card left SHALL hide it and swiping it right SHALL save it, with the buttons kept as the accessible alternative and a brief way to undo a swipe.
+Visitors SHALL be able to hide an event from the home page's results, so that working through the listings leaves only events they have not looked at yet. Hidden events SHALL be kept only in the visitor's own browser, like saves, and never sent to or stored by the server.
+
+#### Scenario: Hides stay on the device
+- GIVEN a visitor hides events
+- WHEN the server's requests and storage are inspected
+- THEN no record of the hidden events is found
+
+### Requirement: Hidden events are left out until shown
+
+Hidden events SHALL be left out of the results by default; a visible control SHALL say how many are hidden on the current page and let the visitor show them, and each hidden event SHALL be able to be unhidden.
 
 #### Scenario: Hidden by default
 - GIVEN a visitor hid an exhibition yesterday
@@ -56,20 +74,37 @@ Visitors SHALL be able to hide an event from the home page's results, so that wo
 - WHEN the visitor chooses to show hidden events
 - THEN they appear, marked as hidden, each with a way to unhide it
 
+### Requirement: Hiding and saving are independent
+
+Hiding and saving SHALL be independent: saving an event SHALL NOT hide it.
+
 #### Scenario: Saved events stay visible
 - GIVEN a visitor saves an event and does not hide it
 - WHEN they browse the home page
 - THEN the event is still listed
+
+### Requirement: Hiding needs JavaScript
+
+Hiding is an enhancement: without JavaScript the hide controls SHALL NOT be shown and every event is listed.
+
+#### Scenario: Hiding without JavaScript
+- GIVEN a browser with JavaScript off
+- WHEN a visitor opens the home page
+- THEN no hide controls are shown and every event is listed
+
+### Requirement: Swiping sorts event cards
+
+On touch screens, swiping an event card left SHALL hide it and swiping it right SHALL save it, with the buttons kept as the accessible alternative and a brief way to undo a swipe.
 
 #### Scenario: Swipe to sort through events
 - GIVEN a visitor on a phone browsing the home page
 - WHEN they swipe one event card left and another right
 - THEN the first is hidden and the second is saved, and each swipe can be undone
 
-#### Scenario: Hides stay on the device
-- GIVEN a visitor hides events
-- WHEN the server's requests and storage are inspected
-- THEN no record of the hidden events is found
+#### Scenario: Swiping with buttons kept
+- GIVEN a visitor on a touch screen
+- WHEN they swipe an event card left or right
+- THEN it is hidden or saved, the hide and save buttons stay as the accessible alternative, and the swipe can briefly be undone
 
 ### Requirement: Near me, right now
 

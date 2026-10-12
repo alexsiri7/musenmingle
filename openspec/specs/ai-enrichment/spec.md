@@ -8,17 +8,28 @@ Listings say little about why an event is worth going to or who it suits. AI enr
 
 ### Requirement: Enrichment adds labelled tags and notes after ingest
 
-After each ingest run the system SHALL add to upcoming events tags from fixed vocabularies (medium, format, good for, vibe), named artists, whether it is an opening, a short "what's cool" note (at most 220 characters, British English, no hype) and a one-line summary. Its input SHALL be only what is stored about the event plus, for listings scraped in the same run from sources that allow descriptions, their cleaned page text, which SHALL be dropped after the run and never stored, logged or cached. It SHALL NEVER fetch pages or receive visitor data. AI text SHALL always be labelled as AI-written on pages and in the API, and SHALL NEVER be presented as the venue's words.
+After each ingest run the system SHALL add to upcoming events tags from fixed vocabularies (medium, format, good for, vibe), named artists, whether it is an opening, a short "what's cool" note (at most 220 characters, British English, no hype) and a one-line summary. AI text SHALL always be labelled as AI-written on pages and in the API, and SHALL NEVER be presented as the venue's words.
 
 #### Scenario: Event page with a note
 - GIVEN an enriched event
 - WHEN its page is shown
 - THEN the note appears labelled "✨ AI note" with a link to how Muse & Mingle uses AI
 
+### Requirement: Enrichment sees only what we hold
+
+Enrichment's input SHALL be only what is stored about the event plus, for listings scraped in the same run from sources that allow descriptions, their cleaned page text, which SHALL be dropped after the run and never stored, logged or cached. Enrichment SHALL NEVER fetch pages or receive visitor data.
+
 #### Scenario: Facts-only source
 - GIVEN an event from a source whose terms forbid keeping descriptions
 - WHEN it is enriched
 - THEN only its stored facts are sent
+
+#### Scenario: Enrichment input
+- GIVEN an event being enriched
+- WHEN its input is built
+- THEN it holds only what is stored about the event plus, for listings scraped in the same run from sources that allow descriptions, their cleaned page text
+- AND that page text is dropped after the run and never stored, logged or cached
+- AND no page is fetched and no visitor data is received
 
 ### Requirement: Output is validated and grounded
 

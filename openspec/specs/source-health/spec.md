@@ -8,7 +8,7 @@ Scrapers break quietly when sites change. Source health makes every data source'
 
 ### Requirement: Every source's state is visible
 
-The system SHALL list every configured source with its display name, kind, interval, whether it is enabled, its last real run (time, events found, errors, duration, success), any skip with its reason, its quality-check summary, and one status, first match wins: unconfigured while skipped; broken while a repair issue is open; pending if it never ran; degraded if its last run failed or had errors; otherwise healthy. A broken source SHALL link to its open repair issue. The same information SHALL be shown on a public Sources page, where each source links to its events.
+The system SHALL list every configured source with its display name, kind, interval, whether it is enabled, its last real run (time, events found, errors, duration, success), any skip with its reason, its quality-check summary, and one status, first match wins: unconfigured while skipped; broken while a repair issue is open; pending if it never ran; degraded if its last run failed or had errors; otherwise healthy. A broken source SHALL link to its open repair issue.
 
 #### Scenario: Broken source
 - GIVEN a source with an open repair issue
@@ -16,9 +16,19 @@ The system SHALL list every configured source with its display name, kind, inter
 - THEN its status is broken
 - AND it links to that issue
 
+### Requirement: Source states are public
+
+The same information SHALL be shown on a public Sources page, where each source links to its events.
+
+#### Scenario: Sources page
+- GIVEN configured sources
+- WHEN the public Sources page is shown
+- THEN it shows the same information as the source listing
+- AND each source links to its events
+
 ### Requirement: Breakage opens exactly one repair issue
 
-After each run the system SHALL trip a source's health check when a successful run found no events although its recent average is above zero, when it had errors on two consecutive runs, or when its event count fell more than 60% below its recent average. A trip SHALL open exactly one repair issue titled "Scraper broken: <source>", deduplicated against both its own records and the open issues on GitHub, so a lost database does not duplicate it. When the source recovers the system SHALL comment on the issue and close it. Without GitHub access, trips SHALL be logged.
+After each run the system SHALL trip a source's health check when a successful run found no events although its recent average is above zero, when it had errors on two consecutive runs, or when its event count fell more than 60% below its recent average. A trip SHALL open exactly one repair issue titled "Scraper broken: <source>", deduplicated against both its own records and the open issues on GitHub, so a lost database does not duplicate it.
 
 #### Scenario: Two failing runs
 - GIVEN a source whose last run had errors
@@ -26,10 +36,23 @@ After each run the system SHALL trip a source's health check when a successful r
 - THEN one "Scraper broken" issue is opened
 - AND a third failing run opens no further issue
 
+### Requirement: Recovery closes the repair issue
+
+When the source recovers the system SHALL comment on the issue and close it.
+
 #### Scenario: Recovery
 - GIVEN a source with an open repair issue
 - WHEN a later run succeeds normally
 - THEN the issue is commented on and closed
+
+### Requirement: Without GitHub, trips are logged
+
+Without GitHub access, trips SHALL be logged.
+
+#### Scenario: No GitHub access
+- GIVEN the system has no GitHub access
+- WHEN a source's health check trips
+- THEN the trip is logged
 
 ### Requirement: Stored events match what the source says
 
@@ -42,7 +65,33 @@ Each source's stored events SHALL match what its pages say, and every in-scope e
 
 ### Requirement: An AI check compares extraction with the page
 
-The system SHALL periodically compare a source's stored events with the pages its run fetched, using an AI judge: when the source was never checked, when its scraper code changed, a week after its last check, or when its latest run hit a rule the last check did not see. The check SHALL fetch at most four extra detail pages, SHALL store only page addresses, sizes, the verdict and short verbatim quotes (never page text), SHALL run within its own daily spending cap, and SHALL NEVER write event data. Wrong fields or missed events SHALL open one "Scraper check" repair issue per source listing stored value, what the page says and the quote; later checks SHALL comment on it and a clean check SHALL close it.
+The system SHALL periodically compare a source's stored events with the pages its run fetched, using an AI judge: when the source was never checked, when its scraper code changed, a week after its last check, or when its latest run hit a rule the last check did not see.
+
+#### Scenario: When a check is due
+- GIVEN a source that was never checked, whose scraper code changed, whose last check was a week ago, or whose latest run hit a rule the last check did not see
+- WHEN its run finishes
+- THEN an AI judge compares its stored events with the pages the run fetched
+
+### Requirement: The AI check is bounded and never writes events
+
+The check SHALL fetch at most four extra detail pages, SHALL store only page addresses, sizes, the verdict and short verbatim quotes (never page text), SHALL run within its own daily spending cap, and SHALL NEVER write event data.
+
+#### Scenario: Running a check
+- GIVEN a source's AI check is due
+- WHEN it runs
+- THEN it fetches at most four extra detail pages and stays within its own daily spending cap
+- AND it stores only page addresses, sizes, the verdict and short verbatim quotes, never page text
+- AND it writes no event data
+
+### Requirement: AI check findings become one repair issue
+
+Wrong fields or missed events SHALL open one "Scraper check" repair issue per source listing stored value, what the page says and the quote; later checks SHALL comment on it and a clean check SHALL close it.
+
+#### Scenario: Findings over several checks
+- GIVEN an AI check that finds a wrong field
+- WHEN it completes
+- THEN one "Scraper check" issue is opened for the source, listing the stored value, what the page says and the quote
+- AND later checks comment on it, and a clean check closes it
 
 #### Scenario: Missed events
 - GIVEN a source whose listing page shows seven events it did not store

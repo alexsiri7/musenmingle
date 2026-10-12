@@ -8,22 +8,49 @@ Ingested events are worthless until something can ask for them. The read API giv
 
 ### Requirement: Events are filtered by what the person wants
 
-Listing events SHALL accept optional filters that combine freely: a London date window, one or more categories, free only, a maximum price, time of day (evening, after work, weekend, daytime), a quick pick (open now, tonight, openings, last chance, hands-on), sources, specific event ids, AI tags (medium, format, good for), venue type, London borough, music subtag, membership, and a point with a radius or a walking time. An event with an end SHALL match a date window it overlaps; one without an end SHALL match when it starts inside the window; a multi-session event SHALL match on its sessions, not the days between them. Events with known weekly opening hours SHALL be judged "on now" or "evening" by those hours. Unknown parameters and invalid values SHALL be rejected with a clear 400 error.
-
-#### Scenario: Long exhibition in a later window
-- GIVEN an exhibition running 1 September to 30 November
-- WHEN events are listed for 1 to 5 October
-- THEN the exhibition is included
+Listing events SHALL accept optional filters that combine freely: a London date window, one or more categories, free only, a maximum price, time of day (evening, after work, weekend, daytime), a quick pick (open now, tonight, openings, last chance, hands-on), sources, specific event ids, AI tags (medium, format, good for), venue type, London borough, music subtag, membership, and a point with a radius or a walking time.
 
 #### Scenario: Free talks near a point
 - GIVEN talks and workshops across London
 - WHEN events are listed with category talk, free only, and within 3 km of Charing Cross
 - THEN only free talks within 3 km are returned, each with its distance
 
+### Requirement: Date windows match what is on in them
+
+An event with an end SHALL match a date window it overlaps; one without an end SHALL match when it starts inside the window; a multi-session event SHALL match on its sessions, not the days between them.
+
+#### Scenario: Long exhibition in a later window
+- GIVEN an exhibition running 1 September to 30 November
+- WHEN events are listed for 1 to 5 October
+- THEN the exhibition is included
+
+#### Scenario: Matching a date window
+- GIVEN events with an end, events without an end and multi-session events
+- WHEN events are listed for a date window
+- THEN an event with an end matches when it overlaps the window, one without an end when it starts inside the window, and a multi-session event when one of its sessions is in the window, not the days between them
+
+### Requirement: Opening hours decide what is on
+
+Events with known weekly opening hours SHALL be judged "on now" or "evening" by those hours.
+
 #### Scenario: Closed on Mondays
 - GIVEN an exhibition whose opening hours exclude Mondays
 - WHEN events on now are listed on a Monday evening
 - THEN the exhibition is not included
+
+#### Scenario: Judged by opening hours
+- GIVEN an event with known weekly opening hours
+- WHEN events on now or in the evening are listed
+- THEN the event is judged by those hours
+
+### Requirement: Invalid listing requests are rejected
+
+Unknown parameters and invalid values SHALL be rejected with a clear 400 error.
+
+#### Scenario: Unknown parameter
+- GIVEN a listing request with an unknown parameter or an invalid value
+- WHEN it is made
+- THEN it is rejected with a clear 400 error
 
 ### Requirement: Free-text search
 
