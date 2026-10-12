@@ -67,11 +67,10 @@ Each source's stored events SHALL match what its pages say, and every in-scope e
 
 The system SHALL periodically compare a source's stored events with the pages its run fetched, using an AI judge: when the source was never checked, when its scraper code changed, a week after its last check, or when its latest run hit a rule the last check did not see.
 
-#### Scenario: Missed events
-- GIVEN a source whose listing page shows seven events it did not store
-- WHEN its AI check runs
-- THEN one "Scraper check" issue is opened naming the missed events
-- AND the stored events are unchanged
+#### Scenario: When a check is due
+- GIVEN a source that was never checked, whose scraper code changed, whose last check was a week ago, or whose latest run hit a rule the last check did not see
+- WHEN its run finishes
+- THEN an AI judge compares its stored events with the pages the run fetched
 
 ### Requirement: The AI check is bounded and never writes events
 
@@ -93,3 +92,9 @@ Wrong fields or missed events SHALL open one "Scraper check" repair issue per so
 - WHEN it completes
 - THEN one "Scraper check" issue is opened for the source, listing the stored value, what the page says and the quote
 - AND later checks comment on it, and a clean check closes it
+
+#### Scenario: Missed events
+- GIVEN a source whose listing page shows seven events it did not store
+- WHEN its AI check runs
+- THEN one "Scraper check" issue is opened naming the missed events
+- AND the stored events are unchanged
