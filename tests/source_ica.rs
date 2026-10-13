@@ -7,7 +7,7 @@ use chrono::NaiveDate;
 use common::fixture;
 use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
-use musenmingle::model::RawEvent;
+use musenmingle::model::{Price, RawEvent};
 use musenmingle::sources::Source;
 use musenmingle::sources::ica::{
     EXHIBITIONS_PATH, Ica, Section, TALKS_PATH, needs_detail, parse_detail, parse_listing,
@@ -202,4 +202,81 @@ async fn an_empty_talks_page_is_an_error() {
         .await
         .unwrap_err();
     assert!(err.to_string().contains("no cards"), "{err}");
+}
+
+#[test]
+fn a_detail_page_without_times_gives_an_all_day_event() {
+    let card = serde_json::json!({
+        "path": "/talks/makers-market", "tab": "all-events", "title": "Makers Market",
+        "date_text": "Sun, 6 December", "description": null, "image": null,
+    });
+    let detail = parse_detail(&fixture(&detail_file("/talks/makers-market")));
+    assert_eq!(detail["performances"], serde_json::json!([]));
+    assert!(detail["price_text"].is_null());
+    let listed_on = NaiveDate::from_ymd_opt(2026, 10, 10).unwrap();
+    let raw = raw_event(
+        &card,
+        Section::Talks,
+        &Url::parse(SITE).unwrap(),
+        listed_on,
+        Some(detail),
+    );
+    let ev = Ica::new(SITE.parse().unwrap())
+        .normalise(&raw)
+        .expect("normalise")
+        .expect("in scope");
+    assert!(ev.all_day);
+    assert_eq!(ev.starts_at.to_rfc3339(), "2026-12-06T00:00:00+00:00");
+    assert_eq!(ev.ends_at, None);
+    assert_eq!(ev.price, Price::default());
+}
+
+#[tokio::test]
+async fn untimed_detail_pages_everywhere_report_an_error() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    let cards: String = [("a", "Sun, 6 December"), ("b", "Mon, 7 December"), ("c", "Tue, 8 December")]
+        .iter()
+        .map(|(slug, date)| {
+            format!(
+                r#"<div class="item"><a href="/talks/{slug}"><div class="title">Talk {slug}</div><div class="date">{date}</div></a></div>"#
+            )
+        })
+        .collect();
+    Mock::given(method("GET"))
+        .and(path(TALKS_PATH))
+        .respond_with(ResponseTemplate::new(200).set_body_string(format!(
+            r#"<html><div class="category-section" id="all-events">{cards}</div></html>"#
+        )))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path(EXHIBITIONS_PATH))
+        .respond_with(ResponseTemplate::new(200).set_body_string("<html></html>"))
+        .mount(&server)
+        .await;
+    for slug in ["a", "b", "c"] {
+        Mock::given(method("GET"))
+            .and(path(format!("/talks/{slug}")))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_string(fixture(&detail_file("/talks/makers-market"))),
+            )
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let got = Ica::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(got.len(), 3);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("performance time"), "{errors:?}");
 }

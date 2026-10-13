@@ -22,8 +22,12 @@
 //! * A single day has no time on the listing, so its detail page is read
 //!   (at most [`MAX_DETAILS`] a run): `.performance-list .performance`
 //!   gives "Thu, 01 Oct 2026" + "07:00 pm", timed in London wall clock. A
-//!   single day whose detail page has no time for that day is a parse
-//!   error, never silently all-day. Ranges never read detail pages (an
+//!   detail page that lists no performances at all (the Makers Market: a
+//!   date, no time announced yet) gives an all-day event; one whose
+//!   performances don't include that day is a parse error. A run in which
+//!   none of at least [`MIN_DETAILS_FOR_TIME_CHECK`] detail pages lists a
+//!   performance reports an error: the page layout has changed, rather
+//!   than every event being all-day. Ranges never read detail pages (an
 //!   exhibition's performance list is hourly timed-entry slots).
 //! * Categories: cards in the `/exhibitions` `#exhibitions` tab →
 //!   exhibition. Everything else by title: film screenings ("Artist's Film
@@ -54,6 +58,9 @@ pub const KEY: &str = "ica";
 pub const MAX_RANGE_DAYS: i64 = 366;
 /// Detail pages read per run (single-day events only).
 pub const MAX_DETAILS: usize = 20;
+/// Detail pages a run must read before "none lists a performance" means
+/// the layout changed rather than a few untimed events.
+pub const MIN_DETAILS_FOR_TIME_CHECK: usize = 3;
 pub const TALKS_PATH: &str = "/talks";
 pub const EXHIBITIONS_PATH: &str = "/exhibitions";
 const VENUE_NAME: &str = "ICA";
@@ -219,6 +226,12 @@ pub fn parse_detail(html: &str) -> Value {
     json!({"performances": performances, "price_text": price})
 }
 
+/// Whether a detail page read by `fetch` lists no performances at all
+/// (`false` for no detail page).
+fn lists_no_performances(detail: &Value) -> bool {
+    detail["performances"].as_array().is_some_and(Vec::is_empty)
+}
+
 /// The stored payload for a card; `listed_on` is the London date of the
 /// fetch, kept for year inference; `detail` is [`parse_detail`]'s output
 /// for single-day cards.
@@ -356,12 +369,15 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
             }
             (london_midnight(first), last.map(london_midnight), true)
         }
-        When::Day(day) => {
-            let time = detail_time(&p["detail"], day, listed_on).ok_or_else(|| {
-                SourceError::Parse(format!("{title:?}: no time for {day} on the detail page"))
-            })?;
-            (london_to_utc(day.and_time(time)), None, false)
-        }
+        When::Day(day) => match detail_time(&p["detail"], day, listed_on) {
+            Some(time) => (london_to_utc(day.and_time(time)), None, false),
+            None if lists_no_performances(&p["detail"]) => (london_midnight(day), None, true),
+            None => {
+                return Err(SourceError::Parse(format!(
+                    "{title:?}: no time for {day} on the detail page"
+                )));
+            }
+        },
     };
     let price = p["detail"]["price_text"]
         .as_str()
@@ -414,6 +430,8 @@ impl Source for Ica {
         }
         let mut out: Vec<RawEvent> = Vec::new();
         let mut details = 0;
+        let mut read = 0;
+        let mut untimed = 0;
         for (card, section) in &cards {
             let mut detail = None;
             if needs_detail(card, *section, listed_on) {
@@ -424,7 +442,12 @@ impl Source for Ica {
                 }
                 details += 1;
                 match ctx.get_text(&self.url(path)?).await {
-                    Ok(html) => detail = Some(parse_detail(&html)),
+                    Ok(html) => {
+                        let parsed = parse_detail(&html);
+                        read += 1;
+                        untimed += usize::from(lists_no_performances(&parsed));
+                        detail = Some(parsed);
+                    }
                     Err(e) => {
                         ctx.report_error(format!("{path}: {e}"));
                         continue;
@@ -432,6 +455,11 @@ impl Source for Ica {
                 }
             }
             out.push(raw_event(card, *section, &self.base_url, listed_on, detail));
+        }
+        if read >= MIN_DETAILS_FOR_TIME_CHECK && untimed == read {
+            ctx.report_error(format!(
+                "none of {read} detail pages lists a performance time: has the page layout changed?"
+            ));
         }
         Ok(out)
     }
@@ -619,6 +647,23 @@ mod tests {
         );
         let err = normalise_payload(&no_detail).unwrap_err();
         assert!(err.to_string().contains("no time"), "{err}");
+    }
+
+    #[test]
+    fn a_single_day_with_no_performances_is_all_day() {
+        let ev = normalise_payload(&payload(
+            "talks",
+            "all-events",
+            "Makers Market",
+            "Sun, 6 December",
+            json!({"performances": [], "price_text": null}),
+        ))
+        .unwrap()
+        .unwrap();
+        assert!(ev.all_day);
+        assert_eq!(ev.starts_at.to_rfc3339(), "2026-12-06T00:00:00+00:00");
+        assert_eq!(ev.ends_at, None);
+        assert_eq!(ev.category, Category::Community);
     }
 
     #[test]
