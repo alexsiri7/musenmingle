@@ -160,12 +160,17 @@ pub fn nuxt_payload(html: &str) -> Result<Value, String> {
     Ok(devalue(&values, &json!(0), &mut Vec::new()))
 }
 
-fn find_key<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
+/// The page's own calendar query: a GraphQL result holding nothing but
+/// `solspace_calendar`. Series widgets embed theirs next to `categories`
+/// and `entries` (of their series, not the calendar), and object keys
+/// (cache hashes) have no reliable order, so the shape decides.
+fn find_calendar(value: &Value) -> Option<&Value> {
     match value {
-        Value::Object(map) => map
-            .get(key)
-            .or_else(|| map.values().find_map(|v| find_key(v, key))),
-        Value::Array(items) => items.iter().find_map(|v| find_key(v, key)),
+        Value::Object(map) => match map.get("solspace_calendar") {
+            Some(calendar) if map.len() == 1 => Some(calendar),
+            _ => map.values().find_map(find_calendar),
+        },
+        Value::Array(items) => items.iter().find_map(find_calendar),
         _ => None,
     }
 }
@@ -173,7 +178,7 @@ fn find_key<'a>(value: &'a Value, key: &str) -> Option<&'a Value> {
 /// The calendar events in a page's payload.
 fn calendar_events(html: &str) -> Result<Vec<Value>, String> {
     let payload = nuxt_payload(html)?;
-    find_key(&payload, "solspace_calendar")
+    find_calendar(&payload)
         .and_then(|c| c.get("events"))
         .and_then(Value::as_array)
         .cloned()
