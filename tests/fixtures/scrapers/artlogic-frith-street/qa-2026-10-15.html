@@ -1,0 +1,2353 @@
+
+
+
+                        
+    <!DOCTYPE html>
+    <!-- Site by Artlogic - https://artlogic.net -->
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <script>
+            /* Artlogic deterministic page-ready signal (see e2e/ + pageload perf notes).
+               Installs a default window.modulesReady that latches window.__artlogicReady,
+               adds a `modules-ready` class to <html>/<body>, and dispatches `artlogic:ready`
+               exactly once. Themes may still wrap window.modulesReady (prevReady pattern);
+               their wrapper chains through to this. All gallery JS loader paths converge on
+               window.modulesReady(); the legacy galleries.js now calls it after init too. */
+            (function () {
+                var prev = window.modulesReady;
+                window.modulesReady = function () {
+                    if (typeof prev === 'function') { try { prev(); } catch (e) {} }
+                    if (window.__artlogicReady) { return; }
+                    window.__artlogicReady = true;
+                    try { document.documentElement.className += ' modules-ready'; } catch (e) {}
+                    try { if (document.body) { document.body.className += ' modules-ready'; } } catch (e) {}
+                    try { document.dispatchEvent(new CustomEvent('artlogic:ready')); } catch (e) {}
+                };
+            })();
+            </script>
+            <title>Colin Self | 18 Sep - 7 Nov 2026 | Frith Street Gallery</title>
+        <meta property="og:site_name" content="Frith Street Gallery" />
+        <meta property="og:title" content="Colin Self | 18 Sep - 7 Nov 2026" />
+        <meta property="og:description" content="Preview: 17 September, 6&ndash;8pm Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin Selfs at the Institute of Contemporary Arts in 1986. The show includes rarely seen pieces from..." />
+        <meta property="og:image" content="https://static-assets.artlogic.net/w_1200,h_630,c_fill,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/255/colin-self-installation-12-2000px-copy.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://www.frithstreetgallery.com/exhibitions/255-colin-self-unseen/">
+        <meta property="twitter:title" content="Colin Self | 18 Sep - 7 Nov 2026">
+        <meta property="twitter:description" content="Preview: 17 September, 6&ndash;8pm Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin Selfs at the Institute of Contemporary Arts in 1986. The show includes rarely seen pieces from...">
+        <meta property="twitter:text:description" content="Preview: 17 September, 6&ndash;8pm Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin Selfs at the Institute of Contemporary Arts in 1986. The show includes rarely seen pieces from...">
+        <meta property="twitter:image" content="https://static-assets.artlogic.net/w_1200,h_630,c_fill,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/exhibitions/main_image_override/255/colin-self-installation-12-2000px-copy.jpg">
+        <link rel="canonical" href="https://www.frithstreetgallery.com/exhibitions/255-colin-self-unseen/" />
+        <meta name="google" content="notranslate" />
+            <meta name="description" content="Preview: 17 September, 6&ndash;8pm Frith Street Gallery is delighted to announce a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since Colin Self's Colin Selfs at the Institute of Contemporary Arts in 1986. The show includes rarely seen pieces from..." />
+            <meta name="publication_date" content="2021-07-06 13:50:39" />
+            <meta name="generator" content="Artlogic CMS - https://artlogic.net" />
+            
+            <meta name="accessibility_version" content="1.1"/>
+            
+            
+                <meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0" />
+
+            
+
+<link rel="icon" href="/usr/images/preferences/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/usr/images/preferences/favicon.ico" type="image/x-icon" />
+
+<meta name="application-name" content="Frith Street Gallery"/>
+<meta name="msapplication-TileColor" content="#ffffff"/>
+            
+            
+            
+                <link rel="stylesheet" media="print" href="/lib/g/2.0/styles/print.css">
+                <link rel="stylesheet" media="print" href="/styles/print.css">
+
+            <script src="/lib/js/datadog-logs/datadog-logs.js" type="text/javascript"></script>
+<script>
+try {
+    function checkStatisticsCookiePreference() {
+        // Get the cookie_preferences item from localStorage
+        const cookiePreferences = localStorage.getItem('cookie_preferences');
+
+        // Check if the item exists
+        if (!cookiePreferences) {
+            console.log('No cookie_preferences found in localStorage');
+            return false;
+        }
+
+        // Parse the JSON string
+        const preferences = JSON.parse(cookiePreferences);
+
+        // Check if statistics is set to true
+        const statisticsEnabled = preferences?.statistics === true;
+
+        console.debug('Statistics enabled:', statisticsEnabled);
+        return statisticsEnabled;
+    }
+
+    // Usage
+    const hasStatistics = checkStatisticsCookiePreference();
+
+    if (hasStatistics) {
+        // --- Check for artlogic_id cookie ---
+        const artlogicIdSet = document.cookie
+            .split('; ')
+            .some(cookie => cookie.startsWith('artlogic_id='));
+
+        console.debug('artlogic_id cookie set:', artlogicIdSet);
+
+        if (artlogicIdSet) {
+            window.DD_LOGS && window.DD_LOGS.init({
+                // TODO add proxy?
+                clientToken: 'pub0866d56abaa16869f0d9bb4a3c7da950',
+                site: 'datadoghq.eu',
+                forwardConsoleLogs: ["error"],
+                forwardErrorsToLogs: true,
+                service: 'artlogiccms',
+                // version: '1.3.4',  // TODO implement versioning in future.
+                sessionSampleRate: 100,
+                trackSessionAcrossSubdomains: true
+            });
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('site', 'frithstreetgallery'.toLowerCase())
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('hostname', 'web-eu-021'.toLowerCase())
+
+            // report any missing JS files
+            window.addEventListener('error', function(event) {
+                // Filter out standard JS runtime execution errors
+                if (event.target && event.target.tagName === 'SCRIPT') {
+                    window.DD_LOGS && window.DD_LOGS.logger.error(
+                        'A script failed to load: ' + (event.target?.src || event.target?.href),
+                        {'script': (event.target?.src || event.target?.href)}
+                    )
+                }
+            }, true); // The 'true' flag activates the capturing phase
+        }
+    }
+} catch (error) {
+    console.error(error);
+}
+</script>
+
+            
+
+            <script>
+            (window.Promise && window.Array.prototype.find) || document.write('<script src="/lib/js/polyfill/polyfill_es6.min.js"><\/script>');
+            </script>
+
+
+            
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/font-awesome/font-awesome-4.6.3/css/font-awesome.min.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/archimedes-frontend-core.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/accessibility.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/jquery.archimedes-frontend-core-plugins-0.1.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.artlogic.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/slick-1.8.1/slick.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/pageload/1.1/jquery.pageload.1.1.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_base.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_main.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/user_custom.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_responsive.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/artlogic-site-icons/artlogic-site-icons-1.0/artlogic-site-icons.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/plyr/3.5.10/plyr.css?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"/>
+<!-- add crtical css to improve performance -->
+		<script>window.ARTLOGIC_ASSET_SUFFIX="_ver_c69e2b0a62v8c960dag2333b579be9b8d8ef3a9f692e53498c0";</script>
+		<script data-context="helper"  src="/lib/g/2.0/scripts/import_helpers.js"></script>
+		<script data-context="helper"  src="/lib/jquery/3.7.1/jquery-3.7.1.min.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/webpack_import_helpers.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/jquery/3.7.1/plugins/jquery.compat.selector.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.browser.min.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.easing.min.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.archimedes-frontend-core-plugins-0.1.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.fitvids.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/core/dynamic.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-core.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-modules.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" type="module"  traceurOptions="--async-functions" src="/lib/g/2.0/scripts/galleries_js_loader__mjs.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/feature_panels.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/g/themes/aperture/2.0/scripts/script.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/shop.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/recaptcha.js?c=69e2b0a62&v=8c960da&g=2333b579be9b8d8ef3a9f692e53498c0"></script>
+            
+            
+                
+
+
+    <script>
+        function get_cookie_preference(category) {
+            result = false;
+            try {
+                var cookie_preferences = localStorage.getItem('cookie_preferences') || "";
+                if (cookie_preferences) {
+                    cookie_preferences = JSON.parse(cookie_preferences);
+                    if (cookie_preferences.date) {
+                        var expires_on = new Date(cookie_preferences.date);
+                        expires_on.setDate(expires_on.getDate() + 365);
+                        console.log('cookie preferences expire on', expires_on.toISOString());
+                        var valid = expires_on > new Date();
+                        if (valid && cookie_preferences.hasOwnProperty(category) && cookie_preferences[category]) {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch(e) {
+                console.warn('get_cookie_preference() failed');
+                return result;
+            }
+            return result;
+        }
+
+        window.google_analytics_init = function(page){
+            var collectConsent = true;
+            var useConsentMode = true;
+            var analyticsProperties = ['G-TW1P1RGT4R', 'UA-201047395-27'];
+            var analyticsCookieType = 'statistics';
+            var disableGa = false;
+            var sendToArtlogic = true;
+            var artlogicProperties = {
+                'UA': 'UA-157296318-1',
+                'GA': 'G-GLQ6WNJKR5',
+            };
+
+            analyticsProperties = analyticsProperties.concat(Object.values(artlogicProperties));
+
+            var uaAnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('UA-'));
+            var ga4AnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('G-')).concat(analyticsProperties.filter((p) => p.startsWith('AW-')));
+
+            if (collectConsent) {
+                disableGa = !get_cookie_preference(analyticsCookieType);
+
+                for (var i=0; i < analyticsProperties.length; i++){
+                    var key = 'ga-disable-' + analyticsProperties[i];
+
+                    window[key] = disableGa;
+                }
+
+                if (disableGa) {
+                    if (document.cookie.length) {
+                        var cookieList = document.cookie.split(/; */);
+
+                        for (var i=0; i < cookieList.length; i++) {
+                            var splitCookie = cookieList[i].split('='); //this.split('=');
+
+                            if (splitCookie[0].indexOf('_ga') == 0 || splitCookie[0].indexOf('_gid') == 0 || splitCookie[0].indexOf('__utm') == 0) {
+                                //h.deleteCookie(splitCookie[0]);
+                                var domain = location.hostname;
+                                var cookie_name = splitCookie[0];
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                                // now delete the version without a subdomain
+                                domain = domain.split('.');
+                                domain.shift();
+                                domain = domain.join('.');
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (uaAnalyticsProperties.length) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+                if (!disableGa) {
+                    var anonymizeIps = false;
+
+                    for (var i=0; i < uaAnalyticsProperties.length; i++) {
+                        var propertyKey = '';
+
+                        if (i > 0) {
+                            propertyKey = 'tracker' + String(i + 1);
+                        }
+
+                        var createArgs = [
+                            'create',
+                            uaAnalyticsProperties[i],
+                            'auto',
+                        ];
+
+                        if (propertyKey) {
+                            createArgs.push({'name': propertyKey});
+                        }
+
+                        ga.apply(null, createArgs);
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            propertyKey ? propertyKey + '.send' : 'send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+
+                    if (sendToArtlogic) {
+                        ga('create', 'UA-157296318-1', 'auto', {'name': 'artlogic_tracker'});
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            'artlogic_tracker.send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+                }
+            }
+
+            if (ga4AnalyticsProperties.length) {
+                if (!disableGa || useConsentMode) {
+                    (function(d, script) {
+                        script = d.createElement('script');
+                        script.type = 'text/javascript';
+                        script.async = true;
+                        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4AnalyticsProperties[0];
+                        d.getElementsByTagName('head')[0].appendChild(script);
+                    }(document));
+
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function (){dataLayer.push(arguments);}
+                    window.gtag('js', new Date());
+
+                    if (useConsentMode) {
+                        gtag('consent', 'default', {
+                            'ad_storage': 'denied',
+                            'analytics_storage': 'denied',
+                            'functionality_storage': 'denied',
+                            'personalization_storage': 'denied',
+                            'security': 'denied',
+                        });
+
+                        if (disableGa) {
+                            // If this has previously been granted, it will need set back to denied (ie on cookie change)
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'denied',
+                            });
+                        } else {
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'granted',
+                            });
+                        }
+                    }
+
+                    for (var i=0; i < ga4AnalyticsProperties.length; i++) {
+                        window.gtag('config', ga4AnalyticsProperties[i]);
+                    }
+
+                }
+            }
+        }
+
+        var waitForPageLoad = true;
+
+        if (waitForPageLoad) {
+            window.addEventListener('load', function() {
+                window.google_analytics_init();
+                window.archimedes.archimedes_core.analytics.init();
+            });
+        } else {
+            window.google_analytics_init();
+        }
+    </script>
+
+            
+                 <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xsyb6n78fo");
+</script>
+            
+
+        </head>
+        
+        
+        
+        <body class="section-exhibitions page-exhibitions site-responsive responsive-top-size-1023 responsive-nav-slide-nav responsive-nav-side-position-fullscreen responsive-layout-forced-lists responsive-layout-forced-image-lists responsive-layout-forced-tile-lists analytics-track-all-links site-lib-version-2-0 ajax_load_more_pagination_enabled scroll_sub_nav_enabled responsive_src_image_sizing hero_heading_title_position_overlay page-param-255-colin-self-unseen page-param-id-255 page-param-type-exhibition_id  layout-fixed-header site-type-template pageload-ajax-navigation-active layout-animation-enabled layout-lazyload-enabled prevent_user_image_save" data-viewport-width="1024" data-site-name="frithstreetgallery" data-connected-db-name="frithstreetgallery" data-pathname="/exhibitions/255-colin-self-unseen/"
+>
+            <script>document.getElementsByTagName('body')[0].className+=' browser-js-enabled';</script>
+            
+
+
+            
+            
+
+
+
+
+
+
+        <div id="responsive_slide_nav_content_wrapper">
+
+    <div id="container">
+
+        
+    
+
+
+    <div class="header-fixed-wrapper">
+    <header id="header" class="clearwithin header_fixed topnav_dropdown_header  header_layout_right">
+        <div class="inner clearwithin">
+
+            
+
+
+<div id="logo" class=" user-custom-logo-image"><a href="/">Frith Street Gallery</a></div>
+
+
+            
+                <div id="skiplink-container">
+                    <div>
+                        <a href="#main_content" class="skiplink">Skip to main content</a>
+                    </div>
+                </div>
+            
+        
+            <div class="header-ui-wrapper">
+
+                    <div id="responsive_slide_nav_wrapper" class="mobile_menu_align_center" data-nav-items-animation-delay>
+                        <div id="responsive_slide_nav_wrapper_inner" data-responsive-top-size=1023>
+                        
+                            <nav id="top_nav" aria-label="Main site" class="navigation noprint clearwithin">
+                                
+<div id="top_nav_reveal" class="hidden"><ul><li><a href="#" role="button" aria-label="Close">Menu</a></li></ul></div>
+
+        
+    <div id="full_nav" class="nav navigation" role="navigation">
+        
+<ul class='ul_top' data-level="1">
+    <li id="li_top_1"  class="first top"><a href="/artists/" class="first top" aria-label="Link to Frith Street Gallery Artists page">Artists</a>
+</li>
+    <li id="li_top_2"  class="top active_dir active"><a href="/exhibitions/" class="top active_dir active" aria-label="Link to Frith Street Gallery Exhibitions page (current nav item)">Exhibitions</a>
+</li>
+    <li id="li_top_3"  class="top"><a href="/news/" class="top" aria-label="Link to Frith Street Gallery News page">News</a>
+</li>
+    <li id="li_top_4"  class="top"><a href="/about/" data-original-url="/contact/" class="top" aria-label="Link to Frith Street Gallery About page">About</a>
+</li>
+    <li id="li_top_5"  class="last top"><a href="/publications/" class="last top" aria-label="Link to Frith Street Gallery Publications page">Publications</a>    </li>
+</ul>
+
+        <div class="clear"></div>
+    </div>
+
+
+
+                                
+                                
+
+
+
+                                
+                            </nav>
+                        
+                        </div>
+                    </div>
+                
+
+                <div class="header-icons-wrapper  active cart-icon-active">
+                    
+                    
+
+                        
+
+
+
+<!--excludeindexstart-->
+<div id="store_cart_widget" class="hide_when_empty">
+    <div class="store_cart_widget_inner">
+        <div id="scw_heading"><a href="/store/basket/" class="scw_checkout_link">Cart</a></div>
+        <div id="scw_items">
+            <a href="/store/basket/" aria-label="Your store basket is empty" data-currency="&pound;">
+                <span class="scw_total_items"><span class="scw_total_count">0</span><span class="scw_total_items_text"> items</span></span>
+               
+
+                    <span class="scw_total_price">
+                        <span class="scw_total_price_currency widget_currency">&pound;</span>
+                        <span class="scw_total_price_amount widget_total_price" 
+                                data-cart_include_vat_in_price="False" 
+                                data-total_price_without_vat_in_base_currency="0" 
+                                data-total_price_with_vat_in_base_currency="0"
+                                data-conversion_rate='{"GBP": {"conversion_rate": 1, "name": "&pound;", "stripe_code": "gbp"}}'
+                                data-count="0">
+                        </span>
+                    </span>
+      
+                
+            </a>
+        </div>
+        <div id="scw_checkout">
+            <div class="scw_checkout_button"><a href="/store/basket/" class="scw_checkout_link">Checkout</a></div>
+        </div>
+            <div id="scw_popup" class="hidden scw_popup_always_show">
+                <div id="scw_popup_inner">
+                    <h3>Item added to cart</h3>
+                    <div id="scw_popup_buttons_container">
+                        <div class="button"><a href="/store/basket/">View cart & checkout</a></div>
+                        <div id="scw_popup_close" class="link"><a href="#">Continue shopping</a></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        
+    </div>
+</div>
+<!--excludeindexend-->
+
+                    
+     
+                        <div id="slide_nav_reveal" tabindex="0" role="button">Menu</div>
+                </div>
+                
+                
+
+                
+
+
+
+                
+
+                
+            </div>
+        </div>
+        
+
+
+
+    </header>
+    </div>
+
+
+
+        
+            
+
+
+
+
+
+        <div id="main_content" role="main" class="clearwithin">
+            <!--contentstart-->
+            
+
+
+
+
+
+
+
+
+
+
+    <div class="exhibition">
+        
+
+
+
+
+
+
+<div class="subsection-exhibition-detail-page subsection-wrapper record-page-content-combined record-content-group-images-override record-content-content record-content-selected-artists record-content-has-section-overview record-content-has-section-news record-content-has-section-related_content  advanced-content " 
+     data-search-record-type="exhibitions" data-search-record-id="255">
+
+
+    
+
+
+        <div class="exhibition-header heading_wrapper clearwithin has_location">
+            
+        <a href="/exhibitions/255-colin-self-unseen/" >
+                <h1 class="has_subtitle"><span class="h1_heading">Colin Self</span><span class="separator">: </span> <span class="h1_subtitle">Unseen</span></h1>
+            </a>
+
+            
+            
+                <div id="exhibition-status-current" class="hidden">
+                    Current exhibition
+                </div>
+
+                <div class="subtitle has_subnav">
+
+                    <span class="subtitle_date">18 Sep - 7 Nov 2026</span>
+
+                    
+                            <span class="location">
+                                    <a href="/about/" data-original-url="/contact/">Golden Square</a>
+                            </span>
+
+                </div>
+
+
+
+
+                
+
+
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    <div id="sub_nav"
+         class="navigation  noprint clearafter clearwithin"
+         role="navigation" aria-label="Exhibition subnavigation">
+        <ul>
+                
+
+                        <li id="fp-fp-sub-item-exhibition-film"><a href="#" role="button"
+                               data-subsection-type="Exhibition Film">Exhibition Film</a></li>
+        </ul>
+    </div>
+
+
+
+
+        </div>
+
+
+    
+
+
+    <div id="content" class="content_alt clearwithin">
+
+
+        
+
+                
+
+                    <div class="divider"></div>
+
+                <div class="feature_panel_wrapper scroll_section_container scroll_section_hide_first_heading" id="custom-feature-panel-container">
+                    
+
+    
+    <div class="feature_panels  ">
+        <div class="feature_panels_inner clearwithin">
+            <ul>
+
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_content_alignment_center panel_type_2 feature_variant_1  no_image panel_id_3924  panel_number_1 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><blockquote>
+<p style="color: rgb(162, 172, 171); text-align: left;">&lsquo;I think it&rsquo;s Colin who is the greatest living British artist.&rsquo;</p>
+<p style="color: rgb(162, 172, 171); text-align: left;">&ndash; Marianne Faithfull</p>
+</blockquote></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3909  panel_number_2 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/67/678269f240364411a301fb40786dc3b6/colin-self-installation-09-2000px-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:75vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3909 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/67/678269f240364411a301fb40786dc3b6/colin-self-installation-09-2000px-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3909"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:75vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3904  panel_number_3 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;"><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;">Frith Street Gallery is delighted to present a major exhibition of works by Colin Self. Presented across two floors, this is the artist's first London retrospective since <em>Colin Self's Colin Selfs&nbsp;</em>at the Institute of Contemporary Arts in 1986. The show includes rarely seen pieces from public and private collections, as well as the first showing of&nbsp;<em>365: A Journey in that direction &ndash; </em>an endlessly fascinating and eclectic multi-media installation of 365 wall-based works ongoing since the year 2000.</span><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; color: #212121; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;"></span></p>
+<p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;"><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;">Colin Self: <em>Unseen</em> is curated by writer and curator Ian Collins.</span></p>
+<p style="text-align: center;">&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+<p style="text-align: center;"><strong>Special hours during Frieze London:</strong></p>
+<p style="text-align: center;"><strong>Monday 12&ndash;Saturday 17 October, 11am-6pm</strong></p>
+<p style="text-align: center;">&nbsp;</p>
+<hr>
+<p style="text-align: center;">&nbsp;</p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3903  panel_number_4 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/46/4697f64395e64cdb80628c479d59e70e/colin-self-installation-12-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:75vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3903 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/46/4697f64395e64cdb80628c479d59e70e/colin-self-installation-12-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3903"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:75vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3911  panel_number_5 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;"><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;">Turning 85 this year, the artist was born between Luftwaffe bombing raids on his native city of Norwich and just before the fields beyond his family house were claimed for Rackheath Airfield, a huge American military base. Self has always had a sense of living on the edge &ndash; between city and country, land and sea, nature reserves and rubbish dumps, peace and war, past and present.&nbsp;</span><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; color: #212121; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;"></span><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;"></span></p>
+<p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: 8.0pt; line-height: 13.8pt;"><span>The exhibition begins with several works relating to war and militarism, from the Cold War and World War Two, to the ancient aggression of the Odyssey's Cyclops.</span></p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3906  panel_number_6 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/04/04a0c7f668294a6db10acffbdf2497cf/colin-self-installation-08-2000px-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:75vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3906 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/04/04a0c7f668294a6db10acffbdf2497cf/colin-self-installation-08-2000px-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3906"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:75vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+                        
+                        
+
+
+
+    
+    
+
+    
+    
+    <li class="panel panel_type_4 feature_variant_1    panel_id_3907 panel_number_7 panel_image_text_adjacent panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+                </section>
+            
+            
+                <!--
+                        
+            
+            --><span class="image restricted-image-container lazyload_disable_min_height" data-width="1500" data-height="2000" data-record-type="" >
+                    
+
+                        <span>
+
+                            <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_620,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ba/bae67292c8ac4647ba047dc242889554/colin-self-installation-07-2000px-.jpg" alt="In the 1960s Self was the only Pop Artist on either side of the Atlantic to address the nuclear menace...."  /></span>
+
+                        </span>
+                
+            
+            </span><!--
+    
+                        
+        
+            --><div class="content">
+                <div class="slider-content">
+                        <div class="description prose" data-fieldname="content"><p><span style="mso-fareast-font-family: 'Times New Roman'; mso-bidi-font-family: 'Sabon Next LT'; color: #212121; mso-font-kerning: 0pt; mso-fareast-language: EN-GB;">In the 1960s Self was the only Pop Artist on either side of the Atlantic to address the nuclear menace. Working across a wide range of media, his seven-decade artistic career has been a peaceful and even paradisal response to threats of annihilation. This has renewed resonance amid current global tensions.</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h6><span class="cms_gray">Vitrine: <em>Leopardskin Nuclear Bomber No. 2</em>, 1963. </span><span class="cms_gray">Tate, purchased 1993</span></h6>
+<h6><span class="cms_gray">Wall:&nbsp;<em>Guard Dog on a Missile Base No. 1</em>, 1965. </span><span class="cms_gray">Tate, purchased 1974</span></h6></div>
+                    
+                </div>
+            </div><!--
+    
+                -->
+
+            
+    </li>
+
+
+
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3938 panel_number_8 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="2000" data-height="1500"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/d1/d150c63da955468eb4760fbf0fa50902/colin-self-installation-10-2000px-.jpg" alt="Left: Prelude to 1000 Temporary Objects of our Times No.7 (Nude Triptych), 1971 Right: Cyclops from 'The Odyssey' suite, 2002"  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><h6><span class="cms_gray">Left: <em>Prelude to 1000 Temporary Objects of our Times No.7 (Nude Triptych)</em><span>, 1971 </span></span></h6>
+<h6><span class="cms_gray"><span>Right:&nbsp;<em>Cyclops from 'The Odyssey' suite</em>, 2002</span></span></h6>
+<p>&nbsp;</p></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3939  panel_number_9 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p><span>Self often makes work in sequences and the </span><span>ground floor</span><span> gallery mirrors this through thematic groupings that traverse the decades.</span></p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3912  panel_number_10 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ce/ce6aa349c27b43e1ad86e1c3c203382a/colin-self-installation-20-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:100vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3912 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ce/ce6aa349c27b43e1ad86e1c3c203382a/colin-self-installation-20-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3912"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:100vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3941  panel_number_11 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p><span>Spilling over painting in oil and watercolour, drawing, printmaking, frottage, collage, sculpture and ceramics, the art of Colin Self is endlessly inventive, gently subversive and profoundly playful. It stands for humane optimism in the face of oblivion.</span></p>
+<div>&nbsp;</div></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3908 panel_number_12 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="3576" data-height="2860"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/4f/4ff40eede30f4491bb294a9f61585bd6/colin-self-installation-22-copy.jpg" alt="Left: The Baedecker bombing of Norwich (1942?) My mother going 'up the City' with me in my pushchair - seeing..."  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><h6><span class="cms_gray">Left: <em>The Baedecker bombing of Norwich (1942?) My mother going 'up the City' with me in my pushchair - seeing the devastation</em>, 1970-90s. </span></h6>
+<h6><span class="cms_gray">Right: <em>Mickey Mouse in Norwich</em>,<em> 14th July</em>, 1982</span></h6>
+<p>&nbsp;</p>
+<p>By the time Colin was growing up, American culture began to permeate Britain.&nbsp;<span> In the 1930s, symbols of America such as Mickey Mouse and Donald Duck preceded the arrival of G.I.s into Norwich with the US entry into the war.</span></p>
+<p>&nbsp;</p>
+<h6>&nbsp;</h6></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+                        
+                        
+
+
+
+    
+    
+
+    
+    
+    <li class="panel panel_type_4 feature_variant_2    panel_id_3943 panel_number_13 panel_image_text_adjacent panel_style_standard panel_variant_2 fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+                </section>
+            
+            
+                <!--
+                        
+            
+            --><span class="image restricted-image-container lazyload_disable_min_height" data-width="1500" data-height="2000" data-record-type="" >
+                    
+
+                        <span>
+
+                            <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_620,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/f5/f54f4851774b464eb5b8ea1a8b5055c5/colin-self-installation-23-2000px-.jpg" alt="This sequence of charcoal drawings and collage depict views from his van window as he travelled around Norfolk's recycling centres,..."  /></span>
+
+                        </span>
+                
+            
+            </span><!--
+    
+                        
+        
+            --><div class="content">
+                <div class="slider-content">
+                        <div class="description prose" data-fieldname="content"><p><span>This sequence of charcoal drawings and collage depict views from his van window as he travelled around Norfolk's recycling centres, beaches and car boot sales, scavenging for materials.</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h6><span class="cms_gray">Top: <em>The Acle Sale, from Inside my Van, about to Draw, 25th August</em>, 1988</span></h6>
+<h6><span class="cms_gray">Left: <em>There are Places I Remember&hellip; (A place in the road from N. Walsham to Bacton, Norfolk - at a crossroads from Edingthorpe to Honing and N. Walsham to Bacton: - Edingthorpe Green?)</em>, 1985</span></h6>
+<h6><span class="cms_gray">Right: <em>Double Crossing (level crossings at Bungalow Lane, Whitlingham [Nch], Norfolk) [The day my auntie Eva died. (My father's sister)]</em>, 1985</span></h6>
+<p>&nbsp;</p></div>
+                    
+                </div>
+            </div><!--
+    
+                -->
+
+            
+    </li>
+
+
+
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3948 panel_number_14 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="5001" data-height="3783"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/6c/6c97b6b111fb4f23b3c39bb99042e4e1/nart1053.jpg" alt="The Acle Sale, from Inside my Van, about to Draw, 25th August, 1988. Photo &copy; Norfolk Museums Service"  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><h6><span class="cms_gray"><em>The Acle Sale, from Inside my Van, about to Draw, 25th August</em>, 1988. </span><span class="cms_gray">Photo &copy; Norfolk Museums Service</span></h6></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3944 panel_number_15 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="2000" data-height="1500"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/e2/e2d5ee5d27a0407f812a39d7661d3ed3/colin-self-installation-24-2000px-.jpg" alt="A master of technique, in these three works Self has used spray paint on leaves to create representations of the..."  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><p><span>A master of technique, in these three works Self has used spray paint on leaves to create </span><span>representations</span><span>&nbsp;of the plants themselves.&nbsp;</span></p>
+<p><span>&nbsp;</span></p>
+<p><span>(<em>Crepuscular Iris</em>, 1981 (centre) is one of the Self works used in the final Marianne Faithfull studio album&nbsp;<em>She Walks in Beauty</em>.)&nbsp;</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h6><span class="cms_gray">Left: <em>Ferns, from the Voltaire suite</em>, 2020-21</span></h6>
+<h6><span class="cms_gray">Centre: <em>Crepuscular Iris</em>, 1981</span></h6>
+<h6><span class="cms_gray">Right: <em>Golden Rod No.2. 'Energy Flows through a Field' (Captain Beefheart), from the Voltaire suite</em>, 2020-21</span></h6></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3942 panel_number_16 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="2000" data-height="1500"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/32/32bd31c43ada419aa43a6f533179b5db/colin-self-installation-26-2000px-.jpg" alt="The fields surrounding his childhood home were gradually covered by an American air base and became a bombing target, leading..."  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><p><span>The fields surrounding his childhood home were gradually covered by an American air base and became a bombing target, leading him to feel as though he was living on the edge of danger, an experience that entered </span><span>his</span><span> psyche. </span><span>This&nbsp;</span><span>is referenced in the</span><span>&nbsp;next </span><span>part</span><span> of the exhibition with imagery of birds, including <em>Dead Dove of Peace</em>&nbsp;<em>(Springs Fireplace Road series)</em>, 2009 (centre) </span><span>alongside </span><span>a hopeful dove over a Russian cityscape entitled <em>Peace on Earth, 1986</em>&nbsp;(right).</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h6><span class="cms_gray">Left: <em>Prelude to 1000 Temporary Objects of Our Times No.1 (Blackbird 2), 25 August</em>, 1971</span></h6>
+<h6><span class="cms_gray">Centre: <em>Dead Dove of Peace</em>&nbsp;<em>(Springs Fireplace Road series)</em>, 2009</span></h6>
+<h6><span class="cms_gray">Right: <em>Peace on Earth</em>, 1986</span></h6></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3945 panel_number_17 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="2000" data-height="1500"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/eb/ebee9f4062244185a62ad71e1dcefe00/colin-self-installation-27-2000px-.jpg" alt="With his vernacular imperatives and virtuoso use of anything he finds, Self shows us what a master illusionist he is,..."  /></span>
+            </span>
+
+            </span>
+    
+            
+            <div class="content">
+                    <div class="description prose" data-fieldname="content"><p><span>With his vernacular imperatives and virtuoso use of anything he finds, </span><span>Self</span><span>&nbsp;shows us what a master illusionist he is, while at the same time </span><span>revealing to </span><span>us exactly how he is making </span><span>the work</span><span>. The illusion embodies its own artifice.</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h6><span class="cms_gray">Left: <em>Ploughman</em>, 1983</span></h6>
+<h6><span class="cms_gray">Centre: <em>The Ploughman</em>, 2006</span></h6>
+<h6><span class="cms_gray">Right: <em>The Ploughman</em>, 2007</span></h6>
+<p>&nbsp;</p></div>
+            </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+                        
+                        
+
+
+
+    
+    
+
+    
+    
+    <li class="panel panel_type_4 feature_variant_2    panel_id_3922 panel_number_18 panel_image_text_adjacent panel_style_standard panel_variant_2 fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+                </section>
+            
+            
+                <!--
+                        
+            
+            --><span class="image image_align_caption restricted-image-container lazyload_disable_min_height" data-width="1966" data-height="3354" data-record-type="" >
+                    
+
+                        <span>
+
+                            <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg'}"  data-src="https://static-assets.artlogic.net/w_620,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/ab/ab96fb7fc53f4decbe8945116ce36203/colin-self-installation-27-copy.jpg" alt="It is not that many artists have not used collage to similar sleight of hand in making an image but..."  /></span>
+
+                        </span>
+                            <div class="caption">
+                                    <h6 class="title"><span class="cms_gray"><em>The Ploughman</em>, 2007</span></h6>
+                            </div>
+                
+            
+            </span><!--
+    
+                        
+        
+            --><div class="content">
+                <div class="slider-content">
+                        <div class="description prose" data-fieldname="content"><blockquote>
+<p>It is not that many artists have not used collage to similar sleight of hand in making an image but more often they use it to jar and jolt the illusion. For Self, it is the illusion.</p>
+<p>&ndash; Tacita Dean</p>
+</blockquote></div>
+                    
+                </div>
+            </div><!--
+    
+                -->
+
+            
+    </li>
+
+
+
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+
+    
+
+    
+
+
+    <li class="panel panel_type_8 feature_variant_1  clearwithin panel_id_3946 panel_number_19 panel_type_8 panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+            
+            
+            
+            <span class="image " data-width="2000" data-height="1500"><span>
+                        <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg'}"  data-src="https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/5a/5a526fa245674af5a3c6458bb280ff12/colin-self-installation-29-2000px-.jpg" alt="" /></span>
+            </span>
+
+            </span>
+    
+            
+    
+    </li>
+
+
+
+                        
+                    
+                    
+                        
+                        
+
+
+
+    
+    
+
+    
+    
+    <li class="panel panel_type_4 feature_variant_1    panel_id_3926 panel_number_20 panel_image_text_adjacent panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+                </section>
+            
+            
+                <!--
+                        
+            
+            --><span class="image " data-width="3300" data-height="2804" data-record-type="" >
+                    
+
+                        <span>
+
+                            <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg'}"  data-src="https://static-assets.artlogic.net/w_620,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/39/39155cd76a0a4ca094112a3275bff796/cornfield-with-bales-s.jpg" alt="Colin Self has let so much into his work over the years: he has let in the fig packets and..."  /></span>
+
+                        </span>
+                            <div class="caption">
+                                    <h6><span class="cms_gray"><em>Cornfield with Bales, Plumstead, Norfolk, Looking East, 1984</em></span><span class="cms_gray"></span></h6>
+                            </div>
+                
+            
+            </span><!--
+    
+                        
+        
+            --><div class="content">
+                <div class="slider-content">
+                        <div class="description prose" data-fieldname="content"><blockquote>
+<p><span>Colin Self has let so much into his work over the years: he has let in the fig packets and chocolate wrappers, and the dust and the straw. He has let in the desolate beauty and destruction of his native rural Norfolk landscape, which often manifests as exquisite charcoal drawings and watercolours. </span></p>
+<p><span>&ndash; Tacita Dean</span></p>
+</blockquote></div>
+                    
+                </div>
+            </div><!--
+    
+                -->
+
+            
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3947  panel_number_21 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/c3/c323884278434d658e450e4e62ef1464/colin-self-installation-18-2000px-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:100vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3947 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/c3/c323884278434d658e450e4e62ef1464/colin-self-installation-18-2000px-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3947"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:100vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3917  panel_number_22 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <span class="subtitle" data-fieldname="subtitle">365: A journey in that direction</span>
+                <div class="description prose" data-fieldname="content"><p><span>Our survey includes a first showing of <em>365: A journey in that direction</em> &ndash; a multi-media mosaic evolving since the millennium. A pictorial diary has not stopped at the Self-imposed limit suggested by the title. Speeding up through lockdown, the idea of the days of a year represented in 365 20x20cm canvases is now exceeded. At this moment the journey in the direction of wherever inspiration leads comprises 372 visual and thoughtful stepping-stones in a series still in progress.</span></p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3921  panel_number_23 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/aa/aa25f67c42e14e5f829757f7e1bdaa2f/colin-self-installation-04-.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:75vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3921 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/aa/aa25f67c42e14e5f829757f7e1bdaa2f/colin-self-installation-04-.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3921"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:75vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3981  panel_number_24 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p><span>Every <em>365</em> picture has a story, hidden or revealed. Here are ironic nods to giants &ndash; a Dali-like self-portrait with joke-shop swivel eyes; a boyhood photo set in a Mondrian grid (<em>Broadland Boogie Woogie</em>). A Wymondham College scarf has been cut into seven collaged pieces. Wooden birds spring from a dismembered cuckoo clock. The latest tile in the mosaic, ending a full-wall Frith Street Gallery display, depicts Aloka, the rescue mutt peace-walking with Buddhist monks through America. It is the antidote to <em>Guard Dog on a Missile Base No. I</em> with which, in one of the 20th century&rsquo;s most powerful drawings, Colin Self referenced the Cuban Missile Crisis of 1962.</span></p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel  panel_type_3 feature_variant_1   panel_id_3915  panel_number_25 panel_hero fp_unnamed" >
+
+        <section  
+             class="scroll_section "
+             data-subsection-type="None"
+             tabindex=-1 aria-label="panel_hero">
+
+                
+                <span class="hero_section  parallax-disabled " data-image-src="https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/61/616c68febc014d12977073842c6f727b/colin-self-installation-01-_web-2.jpg" data-image-mobile-src="" data-color="#000" data-opacity="1" style="background-color:#000">
+
+                    <span class="inner" style="height:25vh">
+                        <span class="hero_heading ">
+                            
+                        </span>
+                    </span>
+                    <span class="hero_image_responsive" style="background-color:#000;">
+                            
+
+                            
+        <style>
+            #parallax-slide-3915 {background-image:url('https://static-assets.artlogic.net/w_4000,h_2500,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/images/feature_panels/image/items/61/616c68febc014d12977073842c6f727b/colin-self-installation-01-_web-2.jpg'); opacity:1;  }
+            @media screen and (max-width: 459px) {
+                
+            }
+        </style>
+    
+
+                            <span id="parallax-slide-3915"></span>
+                    </span>
+                </span>
+                <span class="hero_section_placeholder" style="height:25vh"></span>
+        </section>
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3927  panel_number_26 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><p>He sees in the driftwood and pebbles that he finds on nearby Bacton beach the profiles of people and the shapes of animals. His collagist instinct identifies through assemblage the features of cartoon characters. It is not only that he makes use of what he finds, but what he finds propels the form and idea of the work itself: the genesis and manifestation of the work become one and the same thing.</p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_artwork_grid grid_no_of_columns_6 panel_type_6 feature_variant_1  panel_id_3920  panel_number_27 panel_image_grid panel_style_standard panel_variant_standard fp_unnamed" >
+
+
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+                <div class="scroll_section_header">
+                    <div class="subheading" role="heading" aria-level="2">
+                                <span class="subtitle">A selection of works from 365: A journey in that direction, 2000-26</span>
+
+                    </div>
+                </div>
+                    
+                    
+
+
+
+
+
+    <div class="records_list image_list  grid_dynamic_layout_feature_panels_image_grid collapse_single_column gd_no_of_columns_6 gd_image_cropping_uncropped gd_image_spacing_20 image_grid clearwithin">
+        <ul class="clearwithin">
+                
+
+                <li class=" item"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5710/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/204.jpg" alt="204"  />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+                
+
+                <li class=" item"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5785/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/119-copy.jpg" alt="" />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+                
+
+                <li class=" item"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5780/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/292.jpg" alt="292"  />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+                
+
+                <li class=" item last"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5781/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/109.jpg" alt="109"  />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+                        </ul>
+                        <ul class="clearwithin">
+                        
+                
+
+                <li class=" item"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5782/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/107.jpg" alt="107"  />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+                
+
+                <li class=" item"   data-record-type="images">
+
+                            <a href="/content/feature/3920/image5783/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/exhibitions/images/feature_panels/3920/115.jpg" alt="115"  />
+                                </span>
+                            </span>
+
+
+
+                        </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+            </section>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3916  panel_number_28 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><blockquote>
+<p>Colin Self is not interested in the hierarchy of images. For him, the image on a biscuit packet has equal potency to the image of the Mona Lisa.&nbsp;</p>
+<p>&ndash; Tacita Dean</p>
+</blockquote></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_2  panel_id_3914  panel_number_29 panel_text panel_style_standard panel_variant_2 fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <span class="subtitle" data-fieldname="subtitle">Booklet</span>
+                <div class="description prose" data-fieldname="content"><p><span>Several texts on this webpage are taken from a booklet produced on the occasion of the exhibition featuring essays by Tacita Dean and exhibition's curator Ian Collins.&nbsp;</span></p>
+<p>&nbsp;</p>
+<p><span class="cms_button"><a href="http://frithstreetgallery.com/usr/library/documents/main/colinself_unseen_booklet.pdf" target="_blank" rel="noopener">Download booklet</a></span></p>
+<p>&nbsp;</p>
+<p><a href="https://frithstreetgallery.com/usr/library/documents/main/colinself_unseen_booklet.pdf" target="_blank" rel="noopener"><span class="cms_button"><img src="https://static-assets.artlogic.net/c_limit,f_auto,fl_lossy,q_auto/ws-frithstreetgallery/usr/library/main/images/colinself_16seiten_10_page_1_web.jpg" alt="" width="309" height="437"></span></a></p></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                    
+
+                        
+                        
+
+                            
+
+
+
+    
+    
+    
+
+    
+
+    <li class="panel panel_type_9 feature_variant_1  no_image clearwithin panel_id_3919 panel_number_30 panel_image_text_full panel_style_standard panel_variant_standard fp_unnamed"  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type="Exhibition Film"
+             tabindex=-1 aria-label="">
+            </section>
+            
+            <span class="image">
+                <span>
+                    <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/1234039601?h=6ac9787440&badge=0&autopause=0&player_id=0&app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="Colin Self: Unseen"></iframe></div><!--script-sanitized--><!--script-sanitized-->
+                </span>
+            </span>
+    
+                
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><h5 class="cms_gray">Video by Jon Lowe</h5></div>
+        </div>
+    
+    </li>
+
+
+
+                        
+                    
+                    
+
+                        
+
+
+
+    
+    <li class="panel panel_type_2 feature_variant_1  no_image panel_id_3929  panel_number_31 panel_text panel_style_standard panel_variant_standard fp_unnamed  "  >
+            <section id=""
+             class="scroll_section scroll_section_standard_panels"
+             data-subsection-type=""
+             tabindex=-1 aria-label="">
+            </section>
+        <div class="content">
+                <div class="description prose" data-fieldname="content"><div>
+<h6><span class="cms_gray">All works &copy; the artist, DACS 2026</span></h6>
+<h6><span class="cms_gray"><span>Photos of individual works from <em>365: A journey in that direction</em>: Ken Adlard⁠</span></span></h6>
+<h6><span class="cms_gray">Installation views: Ben Westoby / Fine Art Documentation</span></h6>
+<p>&nbsp;</p>
+<p><span class="cms_gray"><a href="/usr/library/documents/main/press-release_colin-self_unseen_2026.pdf" class="cms_button" target="_blank" rel="noopener"><span>Download press release</span></a></span></p>
+<p>&nbsp;</p>
+<p><span class="cms_gray cms_black">The lower gallery at Golden Square is accessed by 21 steps. We regret that it is not wheelchair accessible. High-resolution photography of 365: A journey in that direction is available to view at the gallery and via <a href="https://www.instagram.com/p/DdbDteRlzcG/?img_index=1" target="_blank" rel="noopener">our Instagram</a>. For futher information please contact <a href="mailto:info@frithstreetgallery.com?subject=Visitor%20access%20to%20lower%20gallery" target="_blank" rel="noopener">info@frithstreetgallery.com</a></span></p>
+</div></div>
+        </div>
+
+    </li>
+
+
+
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+
+                </div>
+
+
+
+
+        
+            <div class="back_to_link">
+                <div class="divider inner"></div>
+                <div class="link"><a href="/exhibitions/">Back to exhibitions</a></div>
+            </div>
+
+        
+
+
+    </div>
+
+    
+
+
+</div>
+
+
+    </div>
+
+
+            <!--contentend-->
+        </div>
+
+        
+
+
+            
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="footer" role="contentinfo" class=" advanced_footer">
+    <div class="inner">
+            
+        <div id="mailinglist_form">
+            <div class="mailinglist_form_wrapper">
+                <h2>Sign up to our mailing list</h2>
+                
+    
+    
+    
+
+<div id="artlogic_mailinglist_signup_form_wrapper">
+    <div class="form">
+
+        <form id="artlogic_mailinglist_signup_form" class="mailing_list_form clearwithin  " method="post" onsubmit="return false;" data-field-error="Please fill in all required fields." data-field-thanks-heading="Thank you" data-field-error-heading="Sorry" data-field-thanks-content="You have been added to our mailing list" data-field-exists-heading="Thank you" data-field-exists-content="You are already on our mailing list">
+        
+            <div id="error" class="error" tabindex="-1"></div>
+
+                
+                <div id="firstname_row" class="form_row">
+                                <label for="ml_firstname">First name *</label>
+                                <input name="firstname" class="inputField" id="ml_firstname" type="text" required autocomplete="given-name" value="" />
+                </div>
+                
+                <div id="lastname_row" class="form_row">
+                                <label for="ml_lastname">Last name *</label>
+                                <input name="lastname" class="inputField" id="ml_lastname" type="text" required autocomplete="family-name" value="" />
+                </div>
+                
+                <div id="email_row" class="form_row">
+                                <label for="ml_email">Email *</label>
+                                <input name="email" class="inputField" id="ml_email" type="email" required autocomplete="email" value="" />
+                </div>
+
+                <input type="hidden" name="interests" value="">
+                <input type="hidden" name="phone" value="">
+                <input type="hidden" name="organisation" value="">
+                <input type="hidden" name="categories" value="">
+                <input type="hidden" name="position" value="">
+
+
+            <input type="hidden" name="tmp_send" value="1" />
+            <input type="hidden" name="lang" value="" />
+            <input type="hidden" name="originating_page" value="/exhibitions/255-colin-self-unseen/" />
+            <input type="hidden" name="encoded_data" value="eyJub3RfaGlkZGVuIjogZmFsc2V9" />
+
+
+            <div id="email_warning">
+                <div id="email_warning_inner"></div>
+            </div>
+            
+
+            <div id="mailing_submit_button" class="rowElem">
+                <div class="button"><a class="submit_button" role="button" href="#">Submit</a></div>
+            </div>
+        </form>
+
+            
+
+
+
+<div id="privacy_policy_form_msg" class="privacy_policy_form_msg prose">
+    <div class="asterisk">
+        <p>
+            * denotes required fields
+        </p>
+    </div>
+        <p>
+            We will process the personal data you have supplied to communicate with you in accordance with our <a href="/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. 
+            You can unsubscribe or change your preferences at any time by clicking the link in our emails.
+        </p>
+</div>
+    </div>
+</div>
+
+
+
+            </div>
+        </div>
+
+                <div class="advanced_footer_item clearwithin">
+                    
+        <div id="contact_info">
+                <h4>Contact<span style="color: #010101; font-size: 1.45rem;"><br></span></h4>
+<p class="p1"><span class="s1">Email:<span class="Apple-converted-space">&nbsp;</span></span></p>
+<p class="p1"><a href="mailto:info@frithstreetgallery.com"><span class="s1">info@frithstreetgallery.com</span></a></p>
+<p class="p1"><span class="s1">Phone:<span class="Apple-converted-space">&nbsp;</span></span></p>
+<p class="p1"><a href="tel:+44%20(0)20%207494%201550"><span class="s1">+44 (0)20 7494 1550</span></a></p>
+        </div>
+
+                </div>
+            
+            <div class="advanced_footer_item advanced_footer_item_1">
+                <h4>Golden Square&nbsp;</h4>
+<p class="p1"><span class="s1">17&ndash;18 Golden Square</span></p>
+<p class="p1"><span class="s1">London</span></p>
+<p class="p1"><span class="s1">W1F 9JJ</span></p>
+            </div>
+            <div class="advanced_footer_item advanced_footer_item_2">
+                <h4>Soho Square</h4>
+<p>60 Frith Street</p>
+<p>London</p>
+<p>W1D 3JJ</p>
+<h6 class="cms_gray">&nbsp;</h6>
+            </div>
+            <div class="advanced_footer_item advanced_footer_item_3">
+                <h4>Gallery Hours</h4>
+<p class="p1"><span class="s1">Tuesday&ndash;Friday:&nbsp;</span><span class="s1">11&ndash;6</span></p>
+<p class="p1"><span class="s1">Saturday: 11&ndash;5 (during exhibitions)</span></p>
+<p class="p1"><span class="s1">Sunday&ndash;Monday: Closed</span></p>
+<p class="p1">&nbsp;</p>
+<p style="text-align: left;">Special hours during Frieze London:</p>
+<p style="text-align: left;">Monday 12 October&ndash;Saturday 17 October, 11-6</p>
+            </div>
+
+            
+    
+        <div id="social_links" class="clearwithin">
+            <div id="facebook" class="social_links_item"><a href="https://www.facebook.com/frithstreetgallery/" class=""><span class="social_media_icon facebook"></span>Facebook<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="instagram" class="social_links_item"><a href="https://www.instagram.com/frithstreetgallery" class=""><span class="social_media_icon instagram"></span>Instagram<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="linkedin" class="social_links_item"><a href="https://www.linkedin.com/company/frith-street-gallery-limited" class=""><span class="social_media_icon linkedin"></span>LinkedIn<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="mailinglist" class="social_links_item"><a href="/mailing-list/" class=""><span class="social_media_icon mailinglist"></span>Join the mailing list</a></div>
+        </div>
+
+            <div class="clear"></div>
+            
+    <div class="copyright">
+            
+    <div class="small-links-container">
+            <div class="privacy-policy"><a href="/privacy-policy/">Privacy Policy</a></div>
+            <div class="cookie-policy"><a href="/cookie-policy/">Cookie Policy</a></div>
+            <div class="cookie_notification_preferences"><a href="javascript:void(0)" role="button" class="link-no-ajax">Manage cookies</a></div>
+            <div id="terms_conditions_url"><a href="/terms-and-conditions">Terms & Conditions</a></div>
+
+
+
+    </div>
+
+        <div id="copyright" class="noprint">
+            <div class="copyright-text">
+                    Copyright &copy; 2026 Frith Street Gallery
+            </div>
+                
+        
+        <div id="artlogic" class="noprint"><a href="https://artlogic.net/" target="_blank" rel="noopener noreferrer">
+                Site by Artlogic
+        </a></div>
+
+        </div>
+        
+    </div>
+
+        <div class="clear"></div>
+    </div>
+</div>
+        <div class="clear"></div>
+
+            <div id="cookie_notification" role="region" aria-label="Cookie banner" data-mode="consent" data-cookie-notification-settings="">
+    <div class="inner">
+        <div id="cookie_notification_message" class="prose">
+                <p><span>This website places cookies on your computer to improve your experience. By continuing to browse the site, you are agreeing to our use of cookies. For more details, see our </span><a href="https://www.frithstreetgallery.com/legal/cookies" class="a">cookie policy</a><span>.</span></p>
+<p> </p>
+<p>We partner with Microsoft Clarity and Microsoft Advertising to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replay to improve and market our products/services. Website usage data is captured using first and third-party cookies and other tracking technologies to determine the popularity of products/services and online activity. Additionally, we use this information for site optimization, fraud/security purposes, and advertising. For more information about how Microsoft collects and uses your data, visit the <a href="https://www.microsoft.com/privacy/privacystatement" data-linktype="external">Microsoft Privacy Statement</a>.</p>
+        </div>
+        <div id="cookie_notification_preferences" class="link"><a href="javascript:;" role="button">Manage cookies</a></div>
+        <div id="cookie_notification_reject" class="button"><a href="javascript:;" role="button">Reject non essential</a></div>
+        <div id="cookie_notification_accept" class="button"><a href="javascript:;" role="button">Accept all</a></div>
+
+    </div>
+</div>
+    <div id="manage_cookie_preferences_popup_container">
+        <div id="manage_cookie_preferences_popup_overlay"></div>
+        <div id="manage_cookie_preferences_popup_inner">
+            <div id="manage_cookie_preferences_popup_box" role="dialog" aria-modal="true" aria-label="Cookie preferences">
+                <div id="manage_cookie_preferences_close_popup_link" class="close">
+                    <a href="javascript:;" role="button" aria-label="close">
+                        <svg width="20px" height="20px" viewBox="0 0 488 488" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="close" fill="#5D5D5D" fill-rule="nonzero">
+                                    <polygon id="Path" points="488 468 468 488 244 264 20 488 0 468 224 244 0 20 20 0 244 224 468 0 488 20 264 244"></polygon>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <h2>Cookie preferences</h2>
+                    <p>Check the boxes for the cookie categories you allow our site to use</p>
+                
+                <div id="manage_cookie_preferences_form_wrapper">
+                    <div class="form form_style_simplified">
+
+                        <form id="cookie_preferences_form">
+                            <fieldset>
+                                <legend class="visually-hidden">Cookie options</legend>
+                                <div>
+                                    <label><input type="checkbox" name="essential" disabled checked value="1"> Strictly necessary</label>
+                                    <div class="note">Required for the website to function and cannot be disabled.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="functionality"  value="1"> Preferences and functionality</label>
+                                    <div class="note">Improve your experience on the website by storing choices you make about how it should function.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="statistics"  value="1"> Statistics</label>
+                                    <div class="note">Allow us to collect anonymous usage data in order to improve the experience on our website.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="marketing"  value="1"> Marketing</label>
+                                    <div class="note">Allow us to identify our visitors so that we can offer personalised, targeted marketing.</div>
+                                </div>
+                            </fieldset>
+                            
+                            <div class="button">
+                                <a href="javascript:;" id="cookie_preferences_form_submit" role="button">Save preferences</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+            
+
+
+
+
+
+
+    </div>
+
+        </div>
+
+
+
+
+            
+            
+                
+
+
+
+
+
+            
+            
+        <!-- sentry-verification-string -->
+</body>
+    </html>
+
+
