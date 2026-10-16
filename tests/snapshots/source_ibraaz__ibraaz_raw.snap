@@ -54,56 +54,6 @@ expression: raws()
     }
   },
   {
-    "source_event_id": "29493",
-    "source_url": "https://ibraaz.org/whats-on/who-is-your-we",
-    "payload": {
-      "categories": [
-        {
-          "slug": "talks",
-          "title": "Talk"
-        }
-      ],
-      "datesText": {
-        "html": "<p>Thu 1 Oct, 6–8pm</p>"
-      },
-      "description": "<p style=\"margin-left:0px;\">Whether it's the family WhatsApp group, a five-a-side football team, a choir, a union, or a work team, our lives are mapped across collective being in ways that ground the every day. But what makes a group a 'we', and what do we owe it?</p><p style=\"margin-left:0px;\">This event takes Ibraaz’s current exhibition <i>Rakyat Pasti Menang</i> from Indonesian collective Taring Padi as a starting point for answering this question. In their 30 years of existence, Taring Padi’s determination to ‘agitate, educate, and organise’ has been structured around a set of principles that allow them to mobilise and exist as a ‘we’.</p><p style=\"margin-left:0px;\">Through other examples of global, local and personal networks of collective being, this event explores how collective realities can be shaped and how we can understand our responsibility to the collectives we belong to.</p><p style=\"margin-left:0px;\"><strong>Doors open at 5.30pm; event starts at 6pm and ends at 8pm.</strong></p><p>Image courtesy of Taring Padi.</p>",
-      "endDate": "2026-10-01T20:00:00+00:00",
-      "heading": "Hekayyatna and Al Shaibani",
-      "id": 29493,
-      "image_url": "https://ibraaz-website.imgix.net/29493/RapatTP-1.jpg",
-      "location": "Majlis",
-      "slug": "who-is-your-we",
-      "startDate": "2026-10-01T18:00:00+00:00",
-      "title": "Who is your 'we'?",
-      "url": "https://ibraaz.org/whats-on/who-is-your-we"
-    }
-  },
-  {
-    "source_event_id": "29753",
-    "source_url": "https://ibraaz.org/whats-on/colonial-sensitivities",
-    "payload": {
-      "categories": [
-        {
-          "slug": "talks",
-          "title": "Talk"
-        }
-      ],
-      "datesText": {
-        "html": "<p>Sat 3 Oct, 3–4.30pm</p>"
-      },
-      "description": "<p><strong>Randa Abdel-Fattah</strong>'s <i>Discipline</i> is a searing critique of Western liberalism and its complicity with the enduring colonial violence of Zionism. The novel, first published in Australia in 2025, follows a cast of Arab Muslim characters working in media and educational institutions who are forced to choose between conflict and compromise with the mainstream colonial culture. Those same institutions – the media, literary festivals, higher education establishments – have repeatedly sought to discipline Abdel-Fattah in real life, attempting to silence her through smear campaigns and cancellations. </p><p>Ibraaz welcomes Randa Abdel-Fattah to London to mark the UK launch of <i>Discipline</i>, where she will be in conversation with writer <strong>Omar Robert Hamilton</strong>. </p>",
-      "endDate": "2026-10-03T17:00:00+00:00",
-      "heading": "Randa Abdel-Fattah in conversation",
-      "id": 29753,
-      "image_url": "https://ibraaz-website.imgix.net/29753/Randa2.png",
-      "location": "Majlis",
-      "slug": "colonial-sensitivities",
-      "startDate": "2026-10-03T15:00:00+00:00",
-      "title": "Colonial Sensitivities",
-      "url": "https://ibraaz.org/whats-on/colonial-sensitivities"
-    }
-  },
-  {
     "source_event_id": "28059",
     "source_url": "https://ibraaz.org/whats-on/earshot-library-in-residence",
     "payload": {
@@ -117,13 +67,13 @@ expression: raws()
         "html": "<p>8 Oct 2026 - 27 Jun 2027</p>"
       },
       "endDate": "2027-06-27T23:59:59+00:00",
-      "heading": "Library-in-Residence",
+      "heading": null,
       "id": 28059,
       "image_url": "https://ibraaz-website.imgix.net/earshot/Strike-on-journalists-in-South-Lebanon-Earshot-Unmanned-Aerial-Vehicle-UAV-Analysis-2023_01_2026-08-14-134933_vrob.jpg",
       "location": "Iqra",
       "slug": "earshot-library-in-residence",
       "startDate": "2026-10-08T00:00:00+00:00",
-      "title": "Earshot",
+      "title": "Earshot Library-in-Residence",
       "url": "https://ibraaz.org/whats-on/earshot-library-in-residence"
     }
   },
@@ -153,63 +103,6 @@ expression: raws()
     }
   },
   {
-    "source_event_id": "28743",
-    "source_url": "https://ibraaz.org/whats-on/autumn-opening",
-    "payload": {
-      "categories": [
-        {
-          "slug": "exhibitions",
-          "title": "Exhibition"
-        },
-        {
-          "slug": "library-in-residence",
-          "title": "Library-in-Residence"
-        }
-      ],
-      "datesText": {
-        "html": "<p>Thu 8 Oct, 6–8pm</p>"
-      },
-      "description": "<p style=\"margin-left:0px;\">Join us to celebrate the opening of Ibraaz’s autumn programme of sonic and spatial interventions with Gabrielle Goliath's <a target=\"_blank\" href=\"https://ibraaz.org/whats-on/elegy-gabrielle-goliath\" rel=\"noreferrer noopener\"><i><u>Elegy</u></i></a><i> </i>and the <a target=\"_blank\" href=\"https://ibraaz.org/whats-on/earshot-library-in-residence\" rel=\"noreferrer noopener\"><u>Earshot Library-in-Residence</u></a>.<br /><br />Through testimony and sonic inquiry, these exhibitions explore how sound, memories and evidence are gathered and listened to. <br /><br />Also on view are Taring Padi’s <a target=\"_blank\" href=\"https://ibraaz.org/whats-on/taring-padi\" rel=\"noreferrer noopener\"><i><u>Rakyat Pasti Menang</u></i></a> in the Majlis and Joe Namy’s <a target=\"_blank\" href=\"https://ibraaz.org/whats-on/cosmic-breath-joe-namy\" rel=\"noreferrer noopener\"><i><u>Cosmic Breath</u></i></a> in the Musalla.  </p><p style=\"margin-left:0px;\"><strong>About Elegy: </strong> </p><p style=\"margin-left:0px;\">In the Minassa, Gabrielle Goliath’s <i>Elegy</i> gathers collective acts of mourning around lives and histories marked by violence, erasure and structural loss. Developed over more than a decade through encounters in Johannesburg, Cape Town, São Paulo, Paris and Amsterdam, the work brings together voices and moving images across eight funerary monoliths, moving between contexts including rape culture and femicide in South Africa, the genocide of Ovaherero and Nama peoples in Namibia, and the ongoing devastation of Palestinian life. <br /> <br /><strong>About Earshot-Library-in-Residence:</strong> </p><p style=\"margin-left:0px;\">In the Iqra, Earshot-Library-in-Residence brings sound not as atmosphere, but as argument. Over nine months, the space becomes a site of sonic inquiry, where recordings are interrogated and listening becomes both exercise and method. <i>From the Field</i>, a multichannel audio experience drawn from Earshot’s eco-acoustic field recordings, plays alongside three listening stations presenting <i>The Crack and the Boom</i>, <i>Authentic Audio</i> and <i>The Sonic Identikit</i>. Together, they ask not only what a sound is, but how it is heard, by whom, through which technologies, and within what social, legal and political conditions.  </p><p style=\"margin-left:0px;\"><strong>Join us between 6–8pm for the opening evening. Please RSVP to confirm your attendance.</strong></p>",
-      "endDate": "2026-10-08T20:00:00+00:00",
-      "heading": "Gabrielle Goliath and Earshot",
-      "id": 28743,
-      "image_url": "https://ibraaz-website.imgix.net/28743/Gabrielle-Earshot_image.png",
-      "location": "Ibraaz",
-      "slug": "autumn-opening",
-      "startDate": "2026-10-08T18:00:00+00:00",
-      "title": "Autumn Opening",
-      "url": "https://ibraaz.org/whats-on/autumn-opening"
-    }
-  },
-  {
-    "source_event_id": "29870",
-    "source_url": "https://ibraaz.org/whats-on/ibraaz-one-year",
-    "payload": {
-      "categories": [
-        {
-          "slug": "exhibitions",
-          "title": "Exhibition"
-        },
-        {
-          "slug": "music",
-          "title": "Music"
-        }
-      ],
-      "datesText": {
-        "html": "<p>Thu 15 Oct, 6–9pm</p>"
-      },
-      "endDate": "2026-10-15T21:00:00+00:00",
-      "heading": "Art, ideas, music, film, publishing, food, prayer, and debate",
-      "id": 29870,
-      "image_url": "https://ibraaz-website.imgix.net/29870/Website-Banner-1.png",
-      "location": "Majlis",
-      "slug": "ibraaz-one-year",
-      "startDate": "2026-10-15T18:00:00+00:00",
-      "title": "Ibraaz: One Year",
-      "url": "https://ibraaz.org/whats-on/ibraaz-one-year"
-    }
-  },
-  {
     "source_event_id": "29775",
     "source_url": "https://ibraaz.org/whats-on/global-majority-as-idea-and-practice",
     "payload": {
@@ -231,6 +124,30 @@ expression: raws()
       "startDate": "2026-10-17T16:00:00+00:00",
       "title": "Global Majority as Idea and Practice",
       "url": "https://ibraaz.org/whats-on/global-majority-as-idea-and-practice"
+    }
+  },
+  {
+    "source_event_id": "30698",
+    "source_url": "https://ibraaz.org/whats-on/foragers",
+    "payload": {
+      "categories": [
+        {
+          "slug": "film",
+          "title": "Film"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sun 18 Oct, 3–4.30pm</p>"
+      },
+      "endDate": "2026-10-18T16:30:00+00:00",
+      "heading": "Jumana Manna",
+      "id": 30698,
+      "image_url": "https://ibraaz-website.imgix.net/30698/foragers.jpg",
+      "location": "Majlis",
+      "slug": "foragers",
+      "startDate": "2026-10-18T15:00:00+00:00",
+      "title": "Foragers",
+      "url": "https://ibraaz.org/whats-on/foragers"
     }
   },
   {
@@ -258,6 +175,78 @@ expression: raws()
     }
   },
   {
+    "source_event_id": "30129",
+    "source_url": "https://ibraaz.org/whats-on/gathering-breath",
+    "payload": {
+      "categories": [
+        {
+          "slug": "workshops",
+          "title": "Workshop"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sat 24 Oct &amp; Sat 14 Nov, 2-5pm</p>"
+      },
+      "endDate": "2026-11-14T14:00:00+00:00",
+      "heading": "Breath, movement, and somatic practice",
+      "id": 30129,
+      "image_url": "https://ibraaz-website.imgix.net/30129/Picture-1-copy.tiff",
+      "location": "Musalla",
+      "slug": "gathering-breath",
+      "startDate": "2026-10-24T14:00:00+00:00",
+      "title": "Gathering Breath",
+      "url": "https://ibraaz.org/whats-on/gathering-breath"
+    }
+  },
+  {
+    "source_event_id": "30350",
+    "source_url": "https://ibraaz.org/whats-on/milisuthando",
+    "payload": {
+      "categories": [
+        {
+          "slug": "film",
+          "title": "Film"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sun 25 Oct, 3–5.30pm</p>"
+      },
+      "endDate": "2026-10-25T17:00:00+00:00",
+      "heading": "Milisuthando Bongela",
+      "id": 30350,
+      "image_url": "https://ibraaz-website.imgix.net/30350/Milisuthando-Still-1-Xoliswa-Bongela-H-2022.jpeg",
+      "location": "Majlis",
+      "slug": "milisuthando",
+      "startDate": "2026-10-25T15:00:00+00:00",
+      "title": "MILISUTHANDO",
+      "url": "https://ibraaz.org/whats-on/milisuthando"
+    }
+  },
+  {
+    "source_event_id": "31082",
+    "source_url": "https://ibraaz.org/whats-on/indonesian-noise",
+    "payload": {
+      "categories": [
+        {
+          "slug": "talks",
+          "title": "Talk"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Wed 28 October, 6-7:30pm</p>"
+      },
+      "endDate": "2026-10-28T19:30:00+00:00",
+      "heading": "Hypatia Vourloumis",
+      "id": 31082,
+      "image_url": "https://ibraaz-website.imgix.net/31082/Indonesian-Noise_2026-10-01-143415_kqmj.jpg",
+      "location": "Majlis",
+      "slug": "indonesian-noise",
+      "startDate": "2026-10-28T18:00:00+00:00",
+      "title": "Indonesian Noise",
+      "url": "https://ibraaz.org/whats-on/indonesian-noise"
+    }
+  },
+  {
     "source_event_id": "29484",
     "source_url": "https://ibraaz.org/whats-on/after-the-lecture-money",
     "payload": {
@@ -279,6 +268,30 @@ expression: raws()
       "startDate": "2026-10-29T18:00:00+00:00",
       "title": "MØN€Y",
       "url": "https://ibraaz.org/whats-on/after-the-lecture-money"
+    }
+  },
+  {
+    "source_event_id": "31091",
+    "source_url": "https://ibraaz.org/whats-on/twelve-days-that-shook-the-middle-east",
+    "payload": {
+      "categories": [
+        {
+          "slug": "talks",
+          "title": "Talk"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Fri 30 Oct, 6-8pm</p>"
+      },
+      "endDate": "2026-10-30T20:00:00+00:00",
+      "heading": "Marwan Bishara and Richard Sanders",
+      "id": 31091,
+      "image_url": "https://ibraaz-website.imgix.net/31091/Israeli_airstrike_on_Gaza_Strip_during_Gaza_War_23-25.png",
+      "location": "Majlis",
+      "slug": "twelve-days-that-shook-the-middle-east",
+      "startDate": "2026-10-30T18:00:00+00:00",
+      "title": "Twelve Days That Shook the Middle East",
+      "url": "https://ibraaz.org/whats-on/twelve-days-that-shook-the-middle-east"
     }
   },
   {
@@ -304,6 +317,130 @@ expression: raws()
       "startDate": "2026-11-04T18:00:00+00:00",
       "title": "Eden at Dawn",
       "url": "https://ibraaz.org/whats-on/eden-at-dawn"
+    }
+  },
+  {
+    "source_event_id": "31075",
+    "source_url": "https://ibraaz.org/whats-on/eyes-dazzle-as-they-search-for-the-truth",
+    "payload": {
+      "categories": [
+        {
+          "slug": "talks",
+          "title": "Talk"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Thu 5 Nov, 6–8pm</p>"
+      },
+      "endDate": "2026-11-05T20:00:00+00:00",
+      "heading": "Amin Yousefi and David Campany",
+      "id": 31075,
+      "image_url": "https://ibraaz-website.imgix.net/31075/Amin-Yousefi.png",
+      "location": "Majlis",
+      "slug": "eyes-dazzle-as-they-search-for-the-truth",
+      "startDate": "2026-11-05T18:00:00+00:00",
+      "title": "Eyes Dazzle as They Search for the Truth",
+      "url": "https://ibraaz.org/whats-on/eyes-dazzle-as-they-search-for-the-truth"
+    }
+  },
+  {
+    "source_event_id": "31155",
+    "source_url": "https://ibraaz.org/whats-on/the-trembling-city",
+    "payload": {
+      "categories": [
+        {
+          "slug": "talks",
+          "title": "Talk"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sun 8 Nov, 3-4:30pm</p>"
+      },
+      "endDate": "2026-11-08T16:30:00+00:00",
+      "heading": "Gascia Ouzounian with Susan Schuppli",
+      "id": 31155,
+      "image_url": "https://ibraaz-website.imgix.net/31155/DSCF3313-0-copy_2026-10-03-104200_cwxs.jpg",
+      "location": "Majlis",
+      "slug": "the-trembling-city",
+      "startDate": "2026-11-08T15:00:00+00:00",
+      "title": "The Trembling City: Book Launch",
+      "url": "https://ibraaz.org/whats-on/the-trembling-city"
+    }
+  },
+  {
+    "source_event_id": "33097",
+    "source_url": "https://ibraaz.org/whats-on/kazdoura",
+    "payload": {
+      "categories": [
+        {
+          "slug": "music",
+          "title": "Music"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sat 14 Nov, 7-8pm</p>"
+      },
+      "endDate": "2026-11-14T20:00:00+00:00",
+      "heading": null,
+      "id": 33097,
+      "image_url": "https://ibraaz-website.imgix.net/33097/Divine.jpg",
+      "location": "Majlis",
+      "slug": "kazdoura",
+      "startDate": "2026-11-14T19:00:00+00:00",
+      "title": "Kazdoura",
+      "url": "https://ibraaz.org/whats-on/kazdoura"
+    }
+  },
+  {
+    "source_event_id": "30357",
+    "source_url": "https://ibraaz.org/whats-on/yugantar",
+    "payload": {
+      "categories": [
+        {
+          "slug": "film",
+          "title": "Film"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sun 15 Nov, 3–4.30pm</p>"
+      },
+      "endDate": "2026-11-15T16:30:00+00:00",
+      "heading": "Yugantar Film Collective",
+      "id": 30357,
+      "image_url": "https://ibraaz-website.imgix.net/30357/Molkarin-Still2.tif",
+      "location": "Majlis",
+      "slug": "yugantar",
+      "startDate": "2026-11-15T15:00:00+00:00",
+      "title": "Yugantar",
+      "url": "https://ibraaz.org/whats-on/yugantar"
+    }
+  },
+  {
+    "source_event_id": "30369",
+    "source_url": "https://ibraaz.org/whats-on/performance-lecture-the-glass-essays",
+    "payload": {
+      "categories": [
+        {
+          "slug": "film",
+          "title": "Film"
+        },
+        {
+          "slug": "performance",
+          "title": "Performance"
+        }
+      ],
+      "datesText": {
+        "html": "<p>Sun 6 Dec, 3–5pm</p>"
+      },
+      "endDate": "2026-12-06T16:30:00+00:00",
+      "heading": "River Yuhao Cao",
+      "id": 30369,
+      "image_url": "https://ibraaz-website.imgix.net/30369/092_Glass-Essays_River-Cao_LUX_20260213_Crd-Devika-Bilimoria_HighRes.jpg",
+      "location": "Majlis",
+      "slug": "performance-lecture-the-glass-essays",
+      "startDate": "2026-12-06T15:00:00+00:00",
+      "title": "The Glass Essays: Performance Lecture",
+      "url": "https://ibraaz.org/whats-on/performance-lecture-the-glass-essays"
     }
   }
 ]

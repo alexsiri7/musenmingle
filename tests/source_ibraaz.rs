@@ -16,28 +16,31 @@ use wiremock::{Mock, MockServer, ResponseTemplate};
 const DIR: &str = "scrapers/ibraaz";
 const SITE: &str = "https://ibraaz.org";
 /// Listing order, as on `/whats-on/`.
-const SLUGS: [&str; 12] = [
+const SLUGS: [&str; 18] = [
     "cosmic-breath-joe-namy",
     "taring-padi",
-    "who-is-your-we",
-    "colonial-sensitivities",
     "earshot-library-in-residence",
     "elegy-gabrielle-goliath",
-    "autumn-opening",
-    "ibraaz-one-year",
     "global-majority-as-idea-and-practice",
+    "foragers",
     "another-kind-of-relation",
+    "gathering-breath",
+    "milisuthando",
+    "indonesian-noise",
     "after-the-lecture-money",
+    "twelve-days-that-shook-the-middle-east",
     "eden-at-dawn",
+    "eyes-dazzle-as-they-search-for-the-truth",
+    "the-trembling-city",
+    "kazdoura",
+    "yugantar",
+    "performance-lecture-the-glass-essays",
 ];
 /// The event pages saved as fixtures.
-const DETAILS: [&str; 7] = [
+const DETAILS: [&str; 4] = [
     "cosmic-breath-joe-namy",
     "taring-padi",
-    "who-is-your-we",
-    "colonial-sensitivities",
     "elegy-gabrielle-goliath",
-    "autumn-opening",
     "eden-at-dawn",
 ];
 
@@ -72,7 +75,7 @@ fn listing_has_every_current_and_forthcoming_event() {
     assert_eq!(slugs, SLUGS);
     assert_eq!(
         raws[2].source_url.as_deref(),
-        Some("https://ibraaz.org/whats-on/who-is-your-we")
+        Some("https://ibraaz.org/whats-on/earshot-library-in-residence")
     );
 }
 
@@ -166,7 +169,10 @@ async fn fetches_listing_and_event_pages_via_fetch_context() {
     }
     assert_eq!(
         raws[2].source_url,
-        Some(format!("{}/whats-on/who-is-your-we", server.uri()))
+        Some(format!(
+            "{}/whats-on/earshot-library-in-residence",
+            server.uri()
+        ))
     );
 }
 
