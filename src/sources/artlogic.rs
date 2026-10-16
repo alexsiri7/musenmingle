@@ -634,6 +634,15 @@ fn parse_side(s: &str) -> Option<Side> {
     (side.day.is_some() || side.month.is_some()).then_some(side)
 }
 
+/// The opening reception rather than part of the show's name: Frith Street
+/// puts "Opening Thursday, November 19, 6-8pm" in a card's subtitle.
+fn is_opening_note(subtitle: &str) -> bool {
+    let lower = subtitle.to_lowercase();
+    ["opening ", "private view", "reception"]
+        .iter()
+        .any(|m| lower.starts_with(m))
+}
+
 fn text_of(v: Option<&Value>) -> Option<String> {
     v.and_then(Value::as_str)
         .map(clean_text)
@@ -649,7 +658,7 @@ pub fn normalise_payload(
         .get("card")
         .ok_or_else(|| SourceError::Parse("payload without card".into()))?;
     let heading = text_of(card.get("heading"));
-    let subtitle = text_of(card.get("subtitle"));
+    let subtitle = text_of(card.get("subtitle")).filter(|s| !is_opening_note(s));
     let places: Vec<String> = card
         .get("places")
         .and_then(Value::as_array)

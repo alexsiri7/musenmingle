@@ -187,6 +187,39 @@ fn a_listing_that_lands_on_one_show_is_read_from_its_header() {
     );
 }
 
+/// Scraper check #339: the opening in Frith Street's subtitle is not part of
+/// the title.
+#[test]
+fn frith_street_qa_2026_10_15_page_values() {
+    const KEY: &str = "artlogic-frith-street";
+    let (base, _) = seed_row(KEY);
+    let base = Url::parse(&base).unwrap();
+    let events: Vec<Value> = [
+        ("qa-2026-10-15", "/exhibitions/255-colin-self-unseen/"),
+        (
+            "qa-2026-10-15-2",
+            "/exhibitions/256-jaki-irvine-five-lines-of-song-smoke-opening-thursday-november-19-6-8pm/",
+        ),
+    ]
+    .into_iter()
+    .map(|(file, path)| {
+        let card = parse_single_show(
+            &fixture(&format!("scrapers/{KEY}/{file}.html")),
+            &base.join(path).unwrap(),
+        )
+        .unwrap_or_else(|| panic!("{file}: no card"));
+        let event = &normalised(KEY, &[card])[0]["event"];
+        json!({
+            "title": event["title"],
+            "starts_at": event["starts_at"],
+            "ends_at": event["ends_at"],
+        })
+    })
+    .collect();
+    assert_eq!(events[1]["title"], "Jaki Irvine: Five lines of song-smoke");
+    insta::assert_json_snapshot!("artlogic_frith_street_qa_2026_10_15", events);
+}
+
 #[test]
 fn past_and_online_sections_are_not_read() {
     for (key, want) in [
