@@ -46,6 +46,28 @@ fn normalised_output_snapshot() {
     insta::assert_json_snapshot!("somerset_house_normalised", out);
 }
 
+/// Scraper check #304: "Wonder Events" ("From 7 Feb 2027", no time) is
+/// date-only. The listing was saved on 2026-10-16 (page 4, cumulative).
+#[test]
+fn qa_2026_10_07_page_values() {
+    let s = SomersetHouse::new("https://www.somersethouse.org.uk".parse().unwrap());
+    let page = parse_listing(&fixture(&format!("{DIR}/qa-2026-10-07.html"))).expect("parse");
+    let raw = page
+        .events
+        .iter()
+        .find(|r| r.source_event_id == "wonder-events")
+        .expect("Wonder Events item");
+    let event = s.normalise(raw).expect("normalise").expect("kept");
+    let got = serde_json::json!({
+        "title": event.title,
+        "starts_at": event.starts_at,
+        "ends_at": event.ends_at,
+        "all_day": event.all_day,
+    });
+    insta::assert_json_snapshot!("somerset_house_qa_2026_10_07", got);
+    assert!(event.all_day);
+}
+
 #[test]
 fn props_json_with_invalid_escape_parses() {
     let html = r#"<html><body><script id="props" type="application/json">{"x":"<\!-- c -->","data":{"page":{"items":{"edges":[{"node":{"url":"/whats-on/a","title":"A","dateStart":"2026-10-01T00:00"}}],"pageInfo":{"totalPages":1},"total":1}}}}</script></body></html>"#;

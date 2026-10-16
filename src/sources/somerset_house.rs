@@ -24,7 +24,9 @@
 //! * Quirk: open-ended items ("From Thu 12 Nov 2026") can carry an unrelated
 //!   `dateStart` with the "From" date in `dateEnd`, so for a "From <date>"
 //!   `dateText` that date is the start, at the first time in `timeText`
-//!   ("Sessions from 8pm") when there is one.
+//!   ("Sessions from 8pm") when there is one. Without one the item is
+//!   all-day, and a listed end that is not a London midnight is dropped
+//!   ("Wonder Events": `11:30 → 11:30` for "From 7 Feb 2027", #304).
 //! * Known site data errors are stored as published: some ends are an hour
 //!   off (`18:00 → 23:00` for "6–10pm") and some other `dateStart`s disagree
 //!   with the human date text.
@@ -280,12 +282,14 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
     let title = node_str(node, "/title")
         .map(clean_text)
         .ok_or_else(|| SourceError::Parse("listing item without title".into()))?;
+    // An open-ended "From <date>" item with no time in `timeText` is date-only
+    // (#304): its listed `dateStart`/`dateEnd` clock times are not shown.
+    let mut untimed_from = false;
     let listed_start = match node_str(node, "/dateText").and_then(open_ended_start_date) {
         Some(date) => {
-            let time = node_str(node, "/timeText")
-                .and_then(parse_start_time)
-                .unwrap_or(NaiveTime::MIN);
-            london_to_utc(date.and_time(time))
+            let time = node_str(node, "/timeText").and_then(parse_start_time);
+            untimed_from = time.is_none();
+            london_to_utc(date.and_time(time.unwrap_or(NaiveTime::MIN)))
         }
         None => node_str(node, "/dateStart")
             .and_then(parse_london_wall_clock)
@@ -311,6 +315,10 @@ pub fn normalise_payload(node: &Value) -> Result<Option<NewEvent>, SourceError> 
                 }
                 None => (listed_start, None, true),
             }
+        }
+        _ if untimed_from => {
+            let ends_at = listed_end.filter(|e| *e > listed_start && is_london_midnight(*e));
+            (listed_start, ends_at, true)
         }
         _ => {
             let ends_at = listed_end.filter(|e| *e > listed_start);
@@ -506,6 +514,23 @@ mod tests {
             event.ends_at.map(|e| e.to_rfc3339()).as_deref(),
             Some("2027-01-03T00:00:00+00:00")
         );
+        assert!(event.all_day);
+    }
+
+    #[test]
+    fn from_date_without_a_time_is_all_day_whatever_the_listed_clock() {
+        // #304: "Wonder Events" lists dateStart = dateEnd = 11:30 but the page
+        // only says "From 7 Feb 2027".
+        let node = serde_json::json!({
+            "title": "Wonder Events",
+            "dateStart": "2027-02-07T11:30",
+            "dateEnd": "2027-02-07T11:30",
+            "dateText": "From 7 Feb 2027",
+            "timeText": "",
+        });
+        let event = normalise_payload(&node).unwrap().unwrap();
+        assert_eq!(event.starts_at.to_rfc3339(), "2027-02-07T00:00:00+00:00");
+        assert_eq!(event.ends_at, None);
         assert!(event.all_day);
     }
 
