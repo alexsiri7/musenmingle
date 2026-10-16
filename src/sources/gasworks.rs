@@ -21,10 +21,12 @@
 //! * Date lines have two-digit years on the last day only: "1 Oct – 13 Dec
 //!   26", "9 – 10 Oct 26", "1 Oct 26". The year is expanded to 20xx and the
 //!   line is parsed with The Showroom's `parse_when` (a start without a year
-//!   takes the end's year, or the year before). There are never times, so
-//!   everything is all-day (London midnights): `ends_at` is the last day of
-//!   a range, none for a single day or a "From <day>" run. Runs longer than
-//!   `the_showroom::MAX_RANGE_DAYS` are skipped.
+//!   takes the end's year, or the year before). Listing dates never have
+//!   times, so exhibitions and multi-day events are all-day (London
+//!   midnights): `ends_at` is the last day of a range, none for a single day
+//!   or a "From <day>" run. Runs longer than `the_showroom::MAX_RANGE_DAYS`
+//!   are skipped. A single-day event whose detail page's location line has a
+//!   clock range ("12:30–1pm") is timed on that day (#338).
 //! * Categories: exhibitions → exhibition. Events by title (the type label is
 //!   always just "Event") via The Showroom's `event_category`, with tours
 //!   and conversations as talks: screenings
@@ -33,8 +35,8 @@
 //! * Price: the site footer says "FREE ADMISSION" (gallery admission); it is
 //!   applied to exhibitions only. Event prices are unknown.
 //! * Descriptions: the listing's `precis` is cut short by the site ("…"),
-//!   and detail pages are read for the location only, so no description is
-//!   stored.
+//!   and detail pages are read for the time and location only, so no
+//!   description is stored.
 //! * Venue: exhibitions are at the gallery. An event's detail page has a
 //!   second header `h2` ("12:30–1pm", or "Various times at Wellcome
 //!   Collection, 183 Euston Road, London NW1 2BE"). When it names another
@@ -50,7 +52,7 @@ use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
-use super::the_showroom::{MAX_RANGE_DAYS, When, event_category, parse_when};
+use super::the_showroom::{MAX_RANGE_DAYS, When, event_category, find_clock_range, parse_when};
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
@@ -302,8 +304,22 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
     if last.is_some_and(|l| (l - first).num_days() > MAX_RANGE_DAYS) {
         return Ok(None);
     }
-    let starts_at = london_midnight(first);
-    let (venue, address) = text("location")
+    let location = text("location");
+    let clock = location
+        .as_deref()
+        .and_then(find_clock_range)
+        .filter(|_| last.is_none() && !date_text.to_lowercase().starts_with("from "));
+    let (starts_at, ends_at, all_day) = match clock {
+        Some((from, to)) => {
+            let s = london_to_utc(first.and_time(from));
+            let e = to
+                .map(|t| london_to_utc(first.and_time(t)))
+                .filter(|e| *e > s);
+            (s, e, false)
+        }
+        None => (london_midnight(first), last.map(london_midnight), true),
+    };
+    let (venue, address) = location
         .and_then(|l| off_site_venue(&l))
         .unwrap_or_else(|| (VENUE_NAME.to_string(), VENUE_ADDRESS.to_string()));
     let price = match text("admission_text") {
@@ -320,8 +336,8 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         lat: None,
         lng: None,
         starts_at,
-        ends_at: last.map(london_midnight),
-        all_day: true,
+        ends_at,
+        all_day,
         price,
         url: text("url"),
         image_url: text("image_url"),
@@ -542,6 +558,35 @@ mod tests {
         let e = normalise_payload(&p).unwrap().unwrap();
         assert_eq!(e.venue_name.as_deref(), Some(VENUE_NAME));
         assert_eq!(e.address.as_deref(), Some(VENUE_ADDRESS));
+    }
+
+    #[test]
+    fn a_clock_range_on_the_detail_page_times_a_single_day_event() {
+        let mut p = payload("events", "Curator's Tour: Disco Inferno", "7 Nov 26");
+        p["location"] = json!("12:30–1pm");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert!(!e.all_day);
+        // GMT in November.
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-11-07T12:30:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-11-07T13:00:00+00:00");
+        // Off site with a time: both apply.
+        p["location"] = json!("6–9pm at Somewhere Else, 1 High Street, London NW1 2BE");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert!(!e.all_day);
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-11-07T18:00:00+00:00");
+        assert_eq!(e.venue_name.as_deref(), Some("Somewhere Else"));
+        // No clock range: all day.
+        p["location"] =
+            json!("Various times at Wellcome Collection, 183 Euston Road, London NW1 2BE");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert!(e.all_day);
+        assert_eq!(e.starts_at, london(2026, 11, 7));
+        // Multi-day and open-ended runs stay all day.
+        for date in ["9 – 10 Oct 26", "From 7 Nov 26"] {
+            let mut p = payload("events", "Elders, 2046", date);
+            p["location"] = json!("12:30–1pm");
+            assert!(normalise_payload(&p).unwrap().unwrap().all_day, "{date}");
+        }
     }
 
     #[test]

@@ -135,7 +135,24 @@ fn off_site_normalised_output_snapshot() {
     );
 }
 
+#[test]
+fn timed_normalised_output_snapshot() {
+    let s = Gasworks::new(SITE.parse().unwrap());
+    let mut raw = listing("events.html", "/events/", Section::Events)
+        .into_iter()
+        .find(|r| r.source_event_id == CURATORS_TOUR)
+        .expect("Curator's Tour card");
+    raw.payload["location"] = serde_json::json!(parse_detail(&fixture(&format!(
+        "{DIR}/detail-curators-tour.html"
+    ))));
+    insta::assert_json_snapshot!(
+        "gasworks_timed_normalised",
+        s.normalise(&raw).expect("normalise")
+    );
+}
+
 const ELDERS: &str = "events/elders-2046-for-living-and-dying-otherwise";
+const CURATORS_TOUR: &str = "events/curators-tour-disco-inferno";
 const EVENT_DETAILS: [&str; 4] = [
     "/exhibitions/gasworks-x-cotch-presents-disco-inferno/",
     "/events/elders-2046-for-living-and-dying-otherwise/",
