@@ -1,0 +1,10 @@
+---
+source: tests/source_somerset_house.rs
+expression: got
+---
+{
+  "all_day": true,
+  "ends_at": null,
+  "starts_at": "2027-02-07T00:00:00Z",
+  "title": "Wonder Events"
+}
