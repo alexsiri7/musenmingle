@@ -1,0 +1,26 @@
+---
+source: tests/source_gasworks.rs
+expression: "s.normalise(&raw).expect(\"normalise\")"
+---
+{
+  "title": "Curator's Tour: Disco Inferno",
+  "description": null,
+  "venue_name": "Gasworks",
+  "address": "155 Vauxhall Street, London SE11 5RH",
+  "lat": null,
+  "lng": null,
+  "starts_at": "2026-11-07T12:30:00Z",
+  "ends_at": "2026-11-07T13:00:00Z",
+  "all_day": false,
+  "price": {
+    "is_free": false,
+    "min": null,
+    "max": null,
+    "currency": null
+  },
+  "url": "https://www.gasworks.org.uk/events/curators-tour-disco-inferno/",
+  "image_url": "https://www.gasworks.org.uk/CACHE/images/2026/08/13/AmarDios_1xSBOEa/294f012ccd8aefdb290906caf4aef728.jpg",
+  "category": "talk",
+  "tags": [],
+  "dedupe_key": "curators-tour-disco-inferno|2026-11-07|gasworks"
+}
