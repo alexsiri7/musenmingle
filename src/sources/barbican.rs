@@ -28,9 +28,9 @@
 //!   Barbican, festivals); talks & events → talk (including talks also filed
 //!   under music); art & design spanning more than one London day →
 //!   exhibition. Anything else is skipped: single-slot art & design items are
-//!   concerts, performances and gallery tours, and take part on its own or
-//!   the other art forms are club nights, gigs and shows. `qa_scope` tells
-//!   the scraper check the same.
+//!   concerts, performances, gallery tours and partner symposia, and take
+//!   part on its own or the other art forms are club nights, gigs and shows.
+//!   `qa_scope` tells the scraper check the same.
 //! * Price is the first ticket-price row only ("Standard £20.50 (£19 + £1.50
 //!   transaction fee)" → £20.50, or a bare "Free"); the other rows are
 //!   member and concession prices ("Free entry", "Free"). Pages without a
@@ -448,8 +448,9 @@ impl Source for Barbican {
             "Only Talks & events (except anything also filed under Cinema) and \
              Art & design exhibitions running over more than one day. \
              Single-date Art & design items (concerts, gigs and performances, \
-             including ones also tagged Contemporary music, gallery tours and \
-             late openings) are left out on purpose.",
+             including ones also tagged Contemporary music, gallery tours, \
+             late openings, and symposia or study days held with a partner \
+             institution) are left out on purpose.",
         )
     }
 }
@@ -595,6 +596,7 @@ mod tests {
             "Cinema",
             "Single-date",
             "Contemporary music",
+            "symposia",
             "left out on purpose",
         ] {
             assert!(scope.contains(words), "{words}");
