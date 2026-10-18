@@ -51,7 +51,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     current and future exhibition listings → detail pages for the date range.
   - `garden-museum` — reads the what's-on listing's embedded `script#json-data`
     (no JSON-LD) → event pages for times, location, booking prices and
-    description; exhibitions, talks, workshops, festivals and lates.
+    description; exhibitions, talks, workshops, festivals and lates; a same-day
+    event dropped early from `json-data` is recovered from the listing's
+    server-rendered "now & next" carousel.
   - `goldsmiths-cca` — CSS-selector scraper (no JSON-LD): the homepage's
     exhibition list (title, dates, image) → exhibition pages for the
     subtitle and description.

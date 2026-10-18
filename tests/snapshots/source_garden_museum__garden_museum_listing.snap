@@ -4,6 +4,16 @@ expression: listing()
 ---
 [
   {
+    "path": "/whats-on/benton-end-a-paradise-of-pollen-and-paint/",
+    "title": "Benton End: A Paradise of Pollen and Paint",
+    "types": [
+      "exhibitions"
+    ],
+    "audience": [],
+    "is_free": false,
+    "image_url": "https://www.gardenmuseum.org.uk/wp-content/uploads/2026/01/BentonEnd_GardenMuseum©BJDeakin_Photograpy-1628-Edit-916x516.jpg"
+  },
+  {
     "path": "/whats-on/garden-art-garden/",
     "title": "Garden/Art/Garden: a series of talks exploring gardens as an artform",
     "types": [
