@@ -825,6 +825,23 @@ mod tests {
     }
 
     #[test]
+    fn listing_without_json_data_yields_now_next_cards() {
+        let html = r#"<html><body><section id="whats-on-now-next">
+            <article class="card--base card--whats-on">
+              <span class="card__colour card__event-type-festivals"></span>
+              <h3 class="card__title">Harvest Festival 2026</h3>
+              <a href="https://www.gardenmuseum.org.uk/whats-on/harvest-festival-2026/"
+                 class="card__accessible-link">Harvest Festival 2026</a>
+            </article>
+        </section></body></html>"#;
+        let items = parse_listing(html).unwrap();
+        assert_eq!(items.len(), 1);
+        assert_eq!(items[0].path, "/whats-on/harvest-festival-2026/");
+        assert_eq!(items[0].title, "Harvest Festival 2026");
+        assert_eq!(items[0].types, ["festivals"]);
+    }
+
+    #[test]
     fn booking_prices_ignore_friends_and_livestreams() {
         let lines = |v: &[&str]| v.iter().map(|s| s.to_string()).collect::<Vec<_>>();
         // Ticketed exhibition whose only price wording is "Friends go free!".
