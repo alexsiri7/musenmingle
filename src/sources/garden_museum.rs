@@ -9,7 +9,10 @@
 //!   (an array of `{title, link, image_url, primary_type_slug, date_range,
 //!   dates, is_free, …}`), so no JavaScript is needed; that array is the
 //!   index. Its `dates` are unreliable as ends (single days carry the next
-//!   day as well), so dates are not taken from it.
+//!   day as well), so dates are not taken from it. It drops a single-day
+//!   event before its day is over while the server-rendered "What's on now &
+//!   next" carousel (`#whats-on-now-next`) still shows it (#351), so that
+//!   carousel's cards are read too.
 //! * Every in-scope item's page (`/whats-on/<slug>/`) is fetched, up to
 //!   [`MAX_DETAIL_PAGES`] per run (the listing is soonest first), for the
 //!   header date line (`6 Oct 2026, 6:30pm - 7:30pm`, `8 Oct - 20 Dec 2026`,
@@ -122,13 +125,73 @@ fn str_list(v: &Value) -> Vec<String> {
         .unwrap_or_default()
 }
 
+/// `/whats-on/<slug>/` for a link to one of the site's event pages.
+fn event_path(link: &str) -> Option<String> {
+    let u = Url::parse(link).ok()?;
+    if !u.host_str().is_some_and(|h| SITE_HOSTS.contains(&h)) || u.query().is_some() {
+        return None;
+    }
+    let slug = u.path().strip_prefix("/whats-on/")?.strip_suffix('/')?;
+    let valid = !slug.is_empty()
+        && slug
+            .chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-');
+    valid.then(|| format!("/whats-on/{slug}/"))
+}
+
+/// The "What's on now & next" carousel's cards. The card shows no audience
+/// or free-entry flag, so those stay empty / false.
+fn now_next_cards(doc: &Html) -> Vec<ListingItem> {
+    let link_sel = selector("a.card__accessible-link[href]");
+    let title_sel = selector(".card__title");
+    let colour_sel = selector(".card__colour");
+    let img_sel = selector(".card__image img[src]");
+    let mut out = Vec::new();
+    for card in doc.select(&selector("#whats-on-now-next article.card--whats-on")) {
+        let Some(path) = card
+            .select(&link_sel)
+            .next()
+            .and_then(|a| a.value().attr("href"))
+            .and_then(event_path)
+        else {
+            continue;
+        };
+        let types = card
+            .select(&colour_sel)
+            .flat_map(|e| e.value().classes())
+            .filter_map(|c| c.strip_prefix("card__event-type-"))
+            .map(str::to_string)
+            .collect();
+        out.push(ListingItem {
+            path,
+            title: card
+                .select(&title_sel)
+                .next()
+                .map(element_text)
+                .unwrap_or_default(),
+            types,
+            audience: Vec::new(),
+            is_free: false,
+            image_url: card
+                .select(&img_sel)
+                .next()
+                .and_then(|i| i.value().attr("src"))
+                .filter(|s| !s.is_empty())
+                .map(str::to_string),
+        });
+    }
+    out
+}
+
 /// Parse the listing page's `script#json-data` array, in document order,
-/// de-duplicated by path. A page without the script yields no items; a
-/// script that is not a JSON array is an error.
+/// de-duplicated by path, preceded by the "now & next" cards the array no
+/// longer has (it drops a single-day event before its day is over). A page
+/// without the script yields only those cards; a script that is not a JSON
+/// array is an error.
 pub fn parse_listing(html: &str) -> Result<Vec<ListingItem>, SourceError> {
     let doc = Html::parse_document(html);
     let Some(script) = doc.select(&selector("script#json-data")).next() else {
-        return Ok(Vec::new());
+        return Ok(now_next_cards(&doc));
     };
     let text: String = script.text().collect();
     let data: Value = serde_json::from_str(text.trim())
@@ -138,25 +201,14 @@ pub fn parse_listing(html: &str) -> Result<Vec<ListingItem>, SourceError> {
         .ok_or_else(|| SourceError::Parse("listing json-data is not an array".into()))?;
     let mut out: Vec<ListingItem> = Vec::new();
     for item in items {
-        let Some(Ok(u)) = item.get("link").and_then(Value::as_str).map(Url::parse) else {
-            continue;
-        };
-        if !u.host_str().is_some_and(|h| SITE_HOSTS.contains(&h)) || u.query().is_some() {
-            continue;
-        }
-        let Some(slug) = u
-            .path()
-            .strip_prefix("/whats-on/")
-            .and_then(|s| s.strip_suffix('/'))
+        let Some(path) = item
+            .get("link")
+            .and_then(Value::as_str)
+            .and_then(event_path)
         else {
             continue;
         };
-        let valid = !slug.is_empty()
-            && slug
-                .chars()
-                .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-');
-        let path = format!("/whats-on/{slug}/");
-        if !valid || out.iter().any(|i| i.path == path) {
+        if out.iter().any(|i| i.path == path) {
             continue;
         }
         out.push(ListingItem {
@@ -172,6 +224,11 @@ pub fn parse_listing(html: &str) -> Result<Vec<ListingItem>, SourceError> {
                 .map(str::to_string),
         });
     }
+    let now_next: Vec<ListingItem> = now_next_cards(&doc)
+        .into_iter()
+        .filter(|c| !out.iter().any(|i| i.path == c.path))
+        .collect();
+    out.splice(0..0, now_next);
     Ok(out)
 }
 

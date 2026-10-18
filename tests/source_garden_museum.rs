@@ -44,9 +44,13 @@ fn scraper() -> GardenMuseum {
 }
 
 /// The real listing page with its `json-data` cut down to the items that
-/// have a saved event page (the full listing has 57 items).
+/// have a saved event page (the full listing has 57 items), without the
+/// "now & next" carousel (it links an event with no saved page).
 fn trimmed_listing_html() -> String {
     let html = fixture(&format!("{DIR}/whats-on.html"));
+    let carousel = html.find(r#"<section class="whats-on-now-next"#).unwrap();
+    let carousel_end = carousel + html[carousel..].find("</section>").unwrap() + "</section>".len();
+    let html = format!("{}{}", &html[..carousel], &html[carousel_end..]);
     let open = r#"<script id="json-data" type="application/json">"#;
     let start = html.find(open).expect("json-data script") + open.len();
     let end = start + html[start..].find("</script>").unwrap();
@@ -95,6 +99,42 @@ fn normalised_output_snapshot() {
         }));
     }
     insta::assert_json_snapshot!("garden_museum_normalised", out);
+}
+
+/// Scraper check #351: on its day, "Harvest Festival 2026" is gone from the
+/// listing's json-data but still in its "now & next" carousel. Pages saved
+/// 2026-10-18: the listing, then the event pages of the check (-2, -3) and
+/// of the missed event (-4).
+#[test]
+fn qa_2026_10_18_page_values() {
+    let s = scraper();
+    let items = parse_listing(&fixture(&format!("{DIR}/qa-2026-10-18.html"))).expect("listing");
+    let harvest = &items[0];
+    assert_eq!(harvest.path, "/whats-on/harvest-festival-2026/");
+    assert_eq!(harvest.types, ["festivals"]);
+    let mut out = Vec::new();
+    for (page, slug) in [
+        ("qa-2026-10-18-2", "garden-cafe-whos-game"),
+        ("qa-2026-10-18-3", "winter-flowers-week-2026"),
+        ("qa-2026-10-18-4", "harvest-festival-2026"),
+    ] {
+        let item = items
+            .iter()
+            .find(|i| i.slug() == slug)
+            .unwrap_or_else(|| panic!("{slug} not in the listing"));
+        let url: Url = format!("{SITE}{}", item.path).parse().unwrap();
+        let html = fixture(&format!("{DIR}/{page}.html"));
+        let raw = parse_detail(&html, &url, item).expect("detail parses");
+        let event = s.normalise(&raw).expect("normalise").expect("kept");
+        out.push(serde_json::json!({
+            "title": event.title,
+            "category": event.category,
+            "starts_at": event.starts_at,
+            "ends_at": event.ends_at,
+            "venue_name": event.venue_name,
+        }));
+    }
+    insta::assert_json_snapshot!("garden_museum_qa_2026_10_18", out);
 }
 
 #[tokio::test]
