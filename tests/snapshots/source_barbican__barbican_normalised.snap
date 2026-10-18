@@ -318,6 +318,26 @@ expression: out
   },
   {
     "event": null,
+    "id": "2026/robert-ryman-a-new-way-of-seeing-courtauld-symposium",
+    "payload": {
+      "art_forms": [
+        "art-design"
+      ],
+      "date_text": "Fri 20 Nov 2026, 15:00",
+      "description": "\n  <p><span>This half-day symposium revisits the American painter Robert Ryman’s work, connections and legacy from a range of perspectives, marking the major retrospective of his work in our Art Gallery.</span></p>\n\n<p><span>For almost 60 years, Ryman devoted himself to making paintings without pictorial or symbolic content, instead focusing his attention on the physical properties of materials and their effects. In works that range from intimate to monumental, and flat to three-dimensional, Ryman explored the basic assumptions of painting – that it involves paint, on a surface, hung on a wall. His body of work is marked equally by surprise and subtlety, sameness and difference, and by shifting uses of paint, gesture, support, size, line, fastenings to the wall and space.</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/84%20Maeght%20Paris%20Nguyen%20A.jpg?h=13b90b22&itok=jFAb97P9",
+      "listing_title": "Robert Ryman: A New Way of Seeing – Courtauld Symposium",
+      "price_text": "Free",
+      "room": "The Courtauld at Vernon Square, Lecture Theatre 2",
+      "starts": "2026-11-20T15:00:00Z",
+      "subtitle": "Courtauld Symposium",
+      "title": "Robert Ryman: A New Way of Seeing",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/robert-ryman-a-new-way-of-seeing-courtauld-symposium"
+    }
+  },
+  {
+    "event": null,
     "id": "2026/robert-ryman-exhibition-tour-with-curatorial-assistant",
     "payload": {
       "art_forms": [

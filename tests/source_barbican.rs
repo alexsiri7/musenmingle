@@ -182,6 +182,24 @@ fn normalised_titles_follow_the_listing() {
 }
 
 #[test]
+fn an_off_site_partner_symposium_is_out_of_scope() {
+    // Scraper check #345: tagged Art & design only, a single slot, and held
+    // at The Courtauld, not the Barbican.
+    let id = "2026/robert-ryman-a-new-way-of-seeing-courtauld-symposium";
+    let path = event_path(id);
+    let url: Url = format!("{SITE}{path}").parse().unwrap();
+    let raw = parse_detail(
+        &detail_html(id),
+        &url,
+        listing_images().get(&path).map(String::as_str),
+        listing_titles().get(&path).map(String::as_str),
+    )
+    .expect("detail parses");
+    assert_eq!(raw.payload["art_forms"], serde_json::json!(["art-design"]));
+    assert!(scraper().normalise(&raw).expect("normalise").is_none());
+}
+
+#[test]
 fn every_detail_fixture_is_linked_from_a_listing() {
     let linked: Vec<String> = LISTINGS
         .iter()
