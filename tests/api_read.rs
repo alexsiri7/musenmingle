@@ -671,6 +671,8 @@ async fn sources_lists_refused_sites() {
     );
     // Art Fund's terms forbid building a database from its site (#310).
     assert_eq!(domains_from_issue(310), ["artfund.org"]);
+    // Autograph's terms forbid storing any part of its site elsewhere (#346).
+    assert_eq!(domains_from_issue(346), ["autograph.org.uk"]);
     // The two refusals seeded by migration ..08.
     refused.retain(|r| r["checked_on"] == "2026-09-25");
     assert_eq!(
