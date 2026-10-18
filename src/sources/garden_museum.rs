@@ -91,7 +91,7 @@ fn element_text(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
 }
 
-/// One entry of the listing's embedded JSON.
+/// One entry of the listing's embedded JSON or its "now & next" carousel.
 #[derive(Debug, Clone, PartialEq, serde::Serialize)]
 pub struct ListingItem {
     /// `/whats-on/<slug>/`.
