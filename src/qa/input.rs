@@ -525,6 +525,16 @@ pub(crate) mod tests {
     }
 
     #[test]
+    fn asides_inside_other_asides_are_not_duplicated() {
+        let html = "<html><body><main>body text</main>\
+                    <aside>Outer <aside>Inner detail</aside> wrapper</aside>\
+                    </body></html>";
+        let texts = aside_texts(html);
+        assert_eq!(texts.len(), 1, "{texts:?}");
+        assert_eq!(texts[0].matches("Inner detail").count(), 1, "{texts:?}");
+    }
+
+    #[test]
     fn listings_fall_back_to_visible_text() {
         // Readability keeps a few hundred characters of this listing.
         let (text, from) = page_text(SOMERSET_LISTING, PageKind::Listing, false);

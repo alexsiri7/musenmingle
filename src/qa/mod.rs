@@ -18,7 +18,8 @@
 //!    deduped `scraper-broken` issue per source, closed by a clean check.
 //!
 //! The AI verifies but never supplies data: nothing it says is written to
-//! `events.events`; fixes go through scraper code.
+//! `events.events`; fixes go through scraper code, or through [`input`]
+//! when the judge misread a page we had right.
 
 pub mod code;
 pub mod input;

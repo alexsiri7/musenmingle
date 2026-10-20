@@ -590,7 +590,9 @@ it. `src/qa/` looks for it in three layers:
    it; a clean check closes it.
 
 The AI verifies but never supplies data: nothing it says is written to
-`events.events`; fixes go through the scraper's code.
+`events.events`; fixes go through the scraper's code, or, when the
+judge misread a page we had right, through `qa::input` (bumping
+`QA_PROMPT_VERSION`).
 
 ### Merging and overrides
 
