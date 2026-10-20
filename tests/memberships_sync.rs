@@ -1,5 +1,6 @@
 //! `repo::sync_memberships` (#315): it records each event's memberships
-//! once, and follows its venue's offer when that changes or goes away.
+//! once, and follows its venue's offer when that changes or goes away; and
+//! the seeded National Art Pass venues (#317).
 
 mod common;
 
@@ -59,6 +60,8 @@ async fn memberships_follow_the_venue_and_the_text() {
         return;
     };
     let pool = db.migrated_pool().await;
+    // The test keeps its own list, not the seeded venues (#317).
+    set_offer(&pool, "DELETE FROM events.venue_memberships").await;
     let src = repo::upsert_source(
         &pool,
         "memberships-test",
@@ -132,6 +135,141 @@ async fn memberships_follow_the_venue_and_the_text() {
     set_offer(&pool, "DELETE FROM events.venue_memberships").await;
     assert_eq!(repo::sync_memberships(&pool).await.unwrap(), 1);
     assert_eq!(stored(&pool).await, [text_only]);
+    pool.close().await;
+    db.drop_db().await;
+}
+
+#[tokio::test]
+async fn the_seeded_art_pass_venues_cite_their_own_pages() {
+    let Some(db) = TestDb::create("the_seeded_art_pass_venues_cite_their_own_pages").await else {
+        return;
+    };
+    let pool = db.migrated_pool().await;
+    let seeded: Vec<(String, String, String)> = sqlx::query_as(
+        "SELECT v.name, vm.offer, vm.source_note
+         FROM events.venue_memberships vm JOIN events.venues v ON v.id = vm.venue_id
+         WHERE vm.membership = 'art_pass' ORDER BY v.name",
+    )
+    .fetch_all(&pool)
+    .await
+    .unwrap();
+    assert_eq!(seeded.len(), 11, "{seeded:?}");
+    for (venue, _, note) in &seeded {
+        let (url, date) = note.split_once(' ').unwrap();
+        assert!(url.starts_with("https://"), "{venue}: {note}");
+        assert!(!url.contains("artfund.org"), "{venue}: {note}");
+        assert!(
+            chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d").is_ok(),
+            "{venue}: {note}"
+        );
+    }
+    assert!(seeded.contains(&(
+        "Tate Modern".into(),
+        "50% off exhibitions".into(),
+        "https://www.tate.org.uk/about-us/frequently-asked-questions 2026-10-11".into(),
+    )));
+
+    // A listing at a seeded venue its source names the same way gets the offer.
+    let src = repo::upsert_source(
+        &pool,
+        "memberships-test",
+        SourceKind::Scraper,
+        "https://example.org",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+    ingest(&pool, src, &event("Prints", "Whitechapel Gallery", None)).await;
+    repo::sync_venues(&pool).await.unwrap();
+    assert_eq!(repo::sync_memberships(&pool).await.unwrap(), 1);
+    assert_eq!(
+        stored(&pool).await,
+        [(
+            "Prints".to_string(),
+            "art_pass".to_string(),
+            Some("50% off exhibition tickets (£8.25, standard £16.50)".to_string()),
+        )]
+    );
+    pool.close().await;
+    db.drop_db().await;
+}
+
+/// The migration before `20261020100001_seed_art_pass_venues.sql`.
+const BEFORE_ART_PASS_SEED: i64 = 20261018100001;
+
+#[tokio::test]
+async fn the_art_pass_seed_attaches_to_venues_that_already_exist() {
+    let Some(db) = TestDb::create("the_art_pass_seed_attaches_to_venues_that_already_exist").await
+    else {
+        return;
+    };
+    let pool = musenmingle::db::connect(&db.url()).await.unwrap();
+    musenmingle::db::ensure_schema(&pool).await.unwrap();
+    musenmingle::db::migrator()
+        .run_to(BEFORE_ART_PASS_SEED, &pool)
+        .await
+        .unwrap();
+    let src = repo::upsert_source(
+        &pool,
+        "memberships-test",
+        SourceKind::Scraper,
+        "https://example.org",
+        60,
+        true,
+    )
+    .await
+    .unwrap()
+    .id;
+    // In production `repo::sync_venues` has made these rows from listings
+    // before the seed runs.
+    let venues = [
+        "Tate Modern",
+        "Tate Britain",
+        "Barbican Centre",
+        "Whitechapel Gallery",
+        "Estorick Collection",
+        "The Photographers' Gallery",
+        "The Courtauld Gallery",
+        "Old Royal Naval College",
+        "Garden Museum",
+        "Handel Hendrix House",
+        "Foundling Museum",
+    ];
+    for venue in venues {
+        ingest(&pool, src, &event(venue, venue, None)).await;
+    }
+    repo::sync_venues(&pool).await.unwrap();
+    let before: Vec<(i64, String)> =
+        sqlx::query_as("SELECT id, name FROM events.venues ORDER BY id")
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+
+    musenmingle::db::migrate(&pool).await.unwrap();
+
+    let after: Vec<(i64, String)> =
+        sqlx::query_as("SELECT id, name FROM events.venues ORDER BY id")
+            .fetch_all(&pool)
+            .await
+            .unwrap();
+    assert_eq!(after, before, "the seed made no second venue row");
+    let attached: Vec<String> = sqlx::query_scalar(
+        "SELECT v.name FROM events.venue_memberships vm
+         JOIN events.venues v ON v.id = vm.venue_id
+         WHERE vm.membership = 'art_pass' ORDER BY v.name",
+    )
+    .fetch_all(&pool)
+    .await
+    .unwrap();
+    let mut expected = venues.map(str::to_string).to_vec();
+    expected.sort();
+    assert_eq!(attached, expected);
+    assert_eq!(
+        repo::sync_memberships(&pool).await.unwrap(),
+        venues.len() as u64
+    );
     pool.close().await;
     db.drop_db().await;
 }

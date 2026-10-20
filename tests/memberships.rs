@@ -66,14 +66,18 @@ impl Source for FakeSource {
     }
 }
 
-/// A fresh database where `fake` is the only enabled source.
+/// A fresh database where `fake` is the only enabled source and no venue
+/// takes part in a membership until a scenario records it (not the seeded
+/// venues, #317).
 async fn setup(name: &str) -> Option<(TestDb, PgPool)> {
     let db = TestDb::create(name).await?;
     let pool = db.migrated_pool().await;
-    sqlx::query("UPDATE events.sources SET enabled = false")
-        .execute(&pool)
-        .await
-        .unwrap();
+    for sql in [
+        "UPDATE events.sources SET enabled = false",
+        "DELETE FROM events.venue_memberships",
+    ] {
+        sqlx::query(sql).execute(&pool).await.unwrap();
+    }
     repo::upsert_source(
         &pool,
         "fake",
