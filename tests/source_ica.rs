@@ -26,7 +26,8 @@ const PAGES: [(&str, &str, Section); 2] = [
     (EXHIBITIONS_PATH, "exhibitions.html", Section::Exhibitions),
 ];
 
-/// The date the fixtures were saved.
+/// The date the fixtures were saved (the Makers Market card and its
+/// detail page, an untimed single day (#321), were added on 2026-10-11).
 fn listed_on() -> NaiveDate {
     NaiveDate::from_ymd_opt(2026, 9, 27).unwrap()
 }
@@ -79,7 +80,7 @@ fn saved_robots_allow_the_listings_and_details() {
 fn programme_tabs_and_films_are_left_out() {
     let raws = raws();
     let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
-    assert_eq!(raws.len(), 15, "{ids:?}");
+    assert_eq!(raws.len(), 16, "{ids:?}");
     assert!(ids.iter().all(|id| !id.starts_with("/films/")));
     assert!(
         ids.iter()
@@ -96,7 +97,7 @@ fn programme_tabs_and_films_are_left_out() {
         .iter()
         .filter(|r| !r.payload["detail"].is_null())
         .count();
-    assert_eq!(details, 8);
+    assert_eq!(details, 9);
 }
 
 #[test]
