@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use chrono::{DateTime, NaiveDate, Utc};
 use chrono_tz::Europe::London;
 use dom_smoothie::{Readability, TextMode};
-use scraper::{Html, Node, Selector};
+use scraper::{ElementRef, Html, Node, Selector};
 use serde_json::{Value, json};
 
 use crate::enrich::output::normalise_for_match;
@@ -59,10 +59,14 @@ pub struct PageIn<'a> {
 /// Text of every text node outside `head`, `script`, `style`, `noscript`,
 /// `template` and `svg`, whitespace-collapsed.
 pub fn visible_text(html: &str) -> String {
+    node_text(Html::parse_document(html).root_element())
+}
+
+/// [`visible_text`] of one element.
+fn node_text(root: ElementRef<'_>) -> String {
     const HIDDEN: &[&str] = &["head", "script", "style", "noscript", "template", "svg"];
-    let doc = Html::parse_document(html);
     let mut parts: Vec<&str> = Vec::new();
-    for node in doc.tree.root().descendants() {
+    for node in root.descendants() {
         let Node::Text(text) = node.value() else {
             continue;
         };
@@ -94,6 +98,22 @@ pub fn main_text(html: &str) -> String {
         .unwrap_or_default()
 }
 
+/// The visible text of each outermost `<aside>`, which Readability always
+/// drops; event pages often keep their date, time and place there.
+fn aside_texts(html: &str) -> Vec<String> {
+    let doc = Html::parse_document(html);
+    let sel = Selector::parse("aside").expect("valid selector");
+    doc.select(&sel)
+        .filter(|a| {
+            !a.ancestors()
+                .filter_map(ElementRef::wrap)
+                .any(|e| e.value().name() == "aside")
+        })
+        .map(node_text)
+        .filter(|t| !t.is_empty())
+        .collect()
+}
+
 /// Every parseable `application/ld+json` block, whatever its type.
 pub fn json_ld_blocks(html: &str) -> Vec<Value> {
     let doc = Html::parse_document(html);
@@ -123,7 +143,11 @@ pub fn page_text(body: &str, kind: PageKind, json: bool) -> (String, &'static st
         }
     };
     if use_main {
-        (main, "readability")
+        let text = std::iter::once(main)
+            .chain(aside_texts(body))
+            .collect::<Vec<_>>()
+            .join("\n\n");
+        (text, "readability")
     } else {
         (visible_text(body), "visible")
     }
@@ -442,6 +466,8 @@ pub(crate) mod tests {
     const BARBICAN_DETAIL: &str = include_str!(
         "../../tests/fixtures/scrapers/barbican/detail/2026/ryman-in-rhythm-sarathy-korwar.html"
     );
+    const TWO_TEMPLE_PLACE_DETAIL: &str =
+        include_str!("../../tests/fixtures/scrapers/two-temple-place/qa-2026-10-20-2.html");
     const SOMERSET_LISTING: &str =
         include_str!("../../tests/fixtures/scrapers/somerset-house/whats-on-page-1.html");
     const HUNTERIAN_LISTING: &str =
@@ -483,6 +509,19 @@ pub(crate) mod tests {
         assert_eq!(from, "readability");
         assert!(text.chars().count() >= MIN_MAIN_CHARS);
         assert!(text.contains("Sarathy Korwar"), "{text}");
+    }
+
+    #[test]
+    fn detail_pages_keep_their_asides() {
+        // Two Temple Place gives an event's date and time only in its
+        // sidebar, and copies the description between a tour's slots.
+        let (text, from) = page_text(TWO_TEMPLE_PLACE_DETAIL, PageKind::Detail, false);
+        assert_eq!(from, "readability");
+        assert!(text.contains("Doors open from 11:45am."), "{text}");
+        assert!(
+            text.contains("DATE & TIME Fri 11 December 2026 10:30 – 11:30 GMT"),
+            "{text}"
+        );
     }
 
     #[test]

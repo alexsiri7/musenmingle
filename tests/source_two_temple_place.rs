@@ -37,6 +37,37 @@ fn normalised_output_snapshot() {
     insta::assert_json_snapshot!("two_temple_place_normalised", out);
 }
 
+/// Issue #354: the scraper check read "Doors open from 11:45am." on
+/// `two-temple-place-126` as contradicting its 10:30 start. The page's own
+/// date block says 10:30 – 11:30, like its listing card; the doors line is
+/// copied from the 12:00 slot's page (`two-temple-place-127`).
+#[test]
+fn qa_2026_10_20_page_values() {
+    let s = TwoTemplePlace::new(SITE.parse().unwrap());
+    let page = Url::parse(&format!("{SITE}/whats-on/")).unwrap();
+    let listing = fixture(&format!("{DIR}/qa-2026-10-20.html"));
+    let out: Vec<_> = parse_listing(&listing, &page)
+        .into_iter()
+        .filter(|raw| {
+            ["two-temple-place-126", "two-temple-place-127"].contains(&raw.source_event_id.as_str())
+        })
+        .map(|raw| {
+            let e = s.normalise(&raw).expect("normalise").expect("in scope");
+            serde_json::json!({
+                "source_event_id": raw.source_event_id,
+                "title": e.title,
+                "starts_at": e.starts_at,
+                "ends_at": e.ends_at,
+            })
+        })
+        .collect();
+    for (n, when) in [(2, "10:30 – 11:30 GMT"), (3, "12:00 – 13:00 GMT")] {
+        let detail = fixture(&format!("{DIR}/qa-2026-10-20-{n}.html"));
+        assert!(detail.contains(&format!("<br>{when}</p>")), "page {n}");
+    }
+    insta::assert_json_snapshot!("two_temple_place_qa_2026_10_20", out);
+}
+
 #[test]
 fn only_upcoming_cards_are_read() {
     let page = Url::parse(&format!("{SITE}/whats-on/")).unwrap();
