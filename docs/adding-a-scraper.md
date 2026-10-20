@@ -125,7 +125,10 @@ quote. The AI can be wrong: check each row on the page first. Then:
    `-2`, `-3`, … if several).
 2. Add a snapshot test on them whose expected values are the page's, i.e.
    the "page says" column, and fix the scraper until it passes. This is the
-   regression test.
+   regression test. If it already passes, the scraper was right and the
+   judge misread the page: find what its input (`qa::input::page_text`)
+   leaves out of the saved page, fix that with a unit test, and bump
+   `QA_PROMPT_VERSION` (`src/qa/output.rs`).
 3. The issue closes itself when a later check (weekly, or the next run after
    the source's file changes) finds no problems.
 

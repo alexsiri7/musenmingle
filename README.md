@@ -570,7 +570,8 @@ it. `src/qa/` looks for it in three layers:
    the pages that run fetched (`FetchContext` capture: no extra requests,
    except up to 4 detail pages when the run's own fetches don't include
    any); the judge gets the listing and up to 2 detail pages as main-content
-   text (Readability via `dom_smoothie`, falling back to the visible text)
+   text (Readability via `dom_smoothie` plus the `<aside>`s it always drops,
+   falling back to the visible text)
    plus JSON-LD, and our records, within ~12k tokens (`qa::input`), plus
    the source's scope note when it has one (`Source::qa_scope`: what it
    leaves out on purpose, so deliberate skips aren't reported as missed). Its
@@ -589,7 +590,9 @@ it. `src/qa/` looks for it in three layers:
    it; a clean check closes it.
 
 The AI verifies but never supplies data: nothing it says is written to
-`events.events`; fixes go through the scraper's code.
+`events.events`; fixes go through the scraper's code, or, when the
+judge misread a page we had right, through `qa::input` (bumping
+`QA_PROMPT_VERSION`).
 
 ### Merging and overrides
 
