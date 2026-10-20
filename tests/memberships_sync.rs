@@ -196,8 +196,8 @@ async fn the_seeded_art_pass_venues_cite_their_own_pages() {
     db.drop_db().await;
 }
 
-/// The migration before `20261011100001_seed_art_pass_venues.sql`.
-const BEFORE_ART_PASS_SEED: i64 = 20261011000001;
+/// The migration before `20261020100001_seed_art_pass_venues.sql`.
+const BEFORE_ART_PASS_SEED: i64 = 20261018100001;
 
 #[tokio::test]
 async fn the_art_pass_seed_attaches_to_venues_that_already_exist() {
