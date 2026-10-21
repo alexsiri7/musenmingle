@@ -174,9 +174,8 @@ pub struct Detail {
     pub image_url: Option<String>,
 }
 
-/// The non-empty paragraphs matching `paragraph` in the sidebar block headed
-/// `heading`.
-fn sidebar_paragraphs(doc: &Html, heading: &str, paragraph: &str) -> Vec<String> {
+/// The non-empty paragraphs of the sidebar block headed `heading`.
+fn sidebar_paragraphs(doc: &Html, heading: &str) -> Vec<String> {
     doc.select(&selector("aside div.event_detail"))
         .find(|block| {
             block
@@ -186,7 +185,7 @@ fn sidebar_paragraphs(doc: &Html, heading: &str, paragraph: &str) -> Vec<String>
         })
         .map(|block| {
             block
-                .select(&selector(paragraph))
+                .select(&selector("p"))
                 .map(element_text)
                 .filter(|t| !t.is_empty())
                 .collect()
@@ -214,8 +213,8 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
         .map(str::to_string)
         .collect();
     let price_text = [
-        sidebar_paragraphs(&doc, "Fees", "p"),
-        sidebar_paragraphs(&doc, "Other information", "p"),
+        sidebar_paragraphs(&doc, "Fees"),
+        sidebar_paragraphs(&doc, "Other information"),
     ]
     .into_iter()
     .find_map(|ps| ps.into_iter().next());
@@ -223,7 +222,10 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
         title,
         subtitle: first_text("div.event_header_details h3"),
         dates_text: first_text("p.single_event_type_dates"),
-        sessions: sidebar_paragraphs(&doc, "Timings", "p:not(.timings_date)"),
+        sessions: sidebar_paragraphs(&doc, "Timings")
+            .into_iter()
+            .skip(1)
+            .collect(),
         categories,
         price_text,
         description: first_text("div.event_description"),
