@@ -4,38 +4,17 @@ expression: out
 ---
 [
   {
-    "event": {
-      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
-      "all_day": true,
-      "category": "exhibition",
-      "dedupe_key": "earthly-paradise-radical-living-in-uk|2026-10-03|william-morris",
-      "description": "Exploring the people, places and stories that have shaped our relationship to home. This autumn, William Morris Gallery presents Earthly Paradise: Radical Living in the UK, a major touring exhibition that explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. Spanning two centuries, the exhibition spotlights the homes of many important British artists and thinkers, including William Morris’s Red House; Vanessa Bell and Duncan Grant’s modernist home, Charleston; Cedric Morris’s Benton End; Derek Jarman’s Prospect Cottage; and Dial House, the self-sustaining anarcho-pacifist open house founded in 1967 by Penny Rimbaud and Gee Vaucher, members of the influential anarchist punk band Crass. Earthly Paradise is part of Art Fund’s Going Places programme, a series of exhibitions touring the UK, created by museums working together to share their collections. The exhibition has been developed in partnership with Tŷ Pawb in Wrexham, Blackwell – The Arts & Crafts house in Bowness-on-Windermere, and Dovecot Studios in Edinburgh, who are working together under the name Four Lanterns. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. The exhibition brings together works from the collections of the William Morris Gallery and Blackwell – The Arts & Crafts house, alongside works from collections across the UK including Tate, National Trust, National Portrait Gallery and the Lee Miller Archive. It will be accompanied by ten newly commissioned and freely available texts that draw out some of the many perspectives explored in the exhibition by writers including Charlie Porter, Sheena Patel, Dr Lucy Brownson, Nathalie Olah and Adam Sutherland. Following its presentation at William Morris Gallery it will tour to Tŷ Pawb, Wrexham (April – September 2027), Blackwell – The Arts & Crafts house, Bowness-on-Windermere (October 2027 – February 2028) and Dovecot Studios, Edinburgh (March – September 2028). Going Places is an Art Fund programme made possible with major support from The National Lottery Heritage Fund and The Julia Rausing Trust, with additional support from a generous group of trusts, foundations and individuals. The Four Lanterns network is supported directly by the Woven Foundation. Art Fund is continuing to fundraise to reach the full potential of the programme and make the biggest impact for museums and visitors across the UK. Earthly Paradise is also supported by The Ampersand Foundation. Read the press release Title images: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester The Ghetto, 43 Kitchen, 1993, Tom Hunter",
-      "ends_at": "2027-03-28T00:00:00Z",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/04/Exhibition-page-banner-collage-EP-1.png",
-      "lat": 51.5913,
-      "lng": -0.0203,
-      "price": {
-        "currency": null,
-        "is_free": true,
-        "max": "0",
-        "min": "0"
-      },
-      "starts_at": "2026-10-02T23:00:00Z",
-      "tags": [],
-      "title": "Earthly Paradise: Radical Living in the UK",
-      "url": "https://www.wmgallery.org.uk/event/earthly-paradise/",
-      "venue_name": "William Morris Gallery"
-    },
+    "event": null,
     "id": "event/earthly-paradise",
     "payload": {
       "categories": [
         "all-ages",
-        "exhibition-type-2",
-        "upcoming-exhibitions"
+        "exhibition-type",
+        "exhibition-type-2"
       ],
-      "dates_text": "Saturday 3 October 2026 - Sunday 28 March 2027",
-      "description": "Exploring the people, places and stories that have shaped our relationship to home. This autumn, William Morris Gallery presents Earthly Paradise: Radical Living in the UK, a major touring exhibition that explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. Spanning two centuries, the exhibition spotlights the homes of many important British artists and thinkers, including William Morris’s Red House; Vanessa Bell and Duncan Grant’s modernist home, Charleston; Cedric Morris’s Benton End; Derek Jarman’s Prospect Cottage; and Dial House, the self-sustaining anarcho-pacifist open house founded in 1967 by Penny Rimbaud and Gee Vaucher, members of the influential anarchist punk band Crass. Earthly Paradise is part of Art Fund’s Going Places programme, a series of exhibitions touring the UK, created by museums working together to share their collections. The exhibition has been developed in partnership with Tŷ Pawb in Wrexham, Blackwell – The Arts & Crafts house in Bowness-on-Windermere, and Dovecot Studios in Edinburgh, who are working together under the name Four Lanterns. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. The exhibition brings together works from the collections of the William Morris Gallery and Blackwell – The Arts & Crafts house, alongside works from collections across the UK including Tate, National Trust, National Portrait Gallery and the Lee Miller Archive. It will be accompanied by ten newly commissioned and freely available texts that draw out some of the many perspectives explored in the exhibition by writers including Charlie Porter, Sheena Patel, Dr Lucy Brownson, Nathalie Olah and Adam Sutherland. Following its presentation at William Morris Gallery it will tour to Tŷ Pawb, Wrexham (April – September 2027), Blackwell – The Arts & Crafts house, Bowness-on-Windermere (October 2027 – February 2028) and Dovecot Studios, Edinburgh (March – September 2028). Going Places is an Art Fund programme made possible with major support from The National Lottery Heritage Fund and The Julia Rausing Trust, with additional support from a generous group of trusts, foundations and individuals. The Four Lanterns network is supported directly by the Woven Foundation. Art Fund is continuing to fundraise to reach the full potential of the programme and make the biggest impact for museums and visitors across the UK. Earthly Paradise is also supported by The Ampersand Foundation. Read the press release Title images: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester The Ghetto, 43 Kitchen, 1993, Tom Hunter",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/04/Exhibition-page-banner-collage-EP-1.png",
+      "dates_text": "On now until Sunday 28 March 2027",
+      "description": "Exploring the people, places and stories that have shaped our relationship to home. William Morris Gallery presents Earthly Paradise: Radical Living in the UK, a major touring exhibition that explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. Spanning two centuries, the exhibition spotlights the homes of many important British artists and thinkers, including William Morris’s Red House; Vanessa Bell and Duncan Grant’s modernist home, Charleston; Cedric Morris’s Benton End; Derek Jarman’s Prospect Cottage; and Dial House, the self-sustaining anarcho-pacifist open house founded in 1967 by Penny Rimbaud and Gee Vaucher, members of the influential anarchist punk band Crass. Earthly Paradise is part of Art Fund’s Going Places programme, a series of exhibitions touring the UK, created by museums working together to share their collections. The exhibition has been developed in partnership with Tŷ Pawb in Wrexham, Blackwell – The Arts & Crafts house in Bowness-on-Windermere, and Dovecot Studios in Edinburgh, who are working together under the name Four Lanterns. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. The exhibition brings together works from the collections of the William Morris Gallery and Blackwell – The Arts & Crafts house, alongside works from collections across the UK including Tate, National Trust, National Portrait Gallery and the Lee Miller Archive. It will be accompanied by ten newly commissioned and freely available texts that draw out some of the many perspectives explored in the exhibition by writers including Charlie Porter, Sheena Patel, Dr Lucy Brownson, Nathalie Olah and Adam Sutherland. Following its presentation at William Morris Gallery it will tour to Tŷ Pawb, Wrexham (April – September 2027), Blackwell – The Arts & Crafts house, Bowness-on-Windermere (October 2027 – February 2028) and Dovecot Studios, Edinburgh (March – September 2028). Going Places is an Art Fund programme made possible with major support from The National Lottery Heritage Fund and The Julia Rausing Trust, with additional support from a generous group of trusts, foundations and individuals. The Four Lanterns network is supported directly by the Woven Foundation. Art Fund is continuing to fundraise to reach the full potential of the programme and make the biggest impact for museums and visitors across the UK. Earthly Paradise is also supported by The Ampersand Foundation. Read the press release Title images: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester The Ghetto, 43 Kitchen, 1993, Tom Hunter",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/04/Tom-Hunter-lightbox.jpg",
       "price_text": "FREE admission.",
       "sessions": [],
       "subtitle": "Radical Living in the UK",
@@ -52,7 +31,7 @@ expression: out
         "wellbeing",
         "workshops"
       ],
-      "dates_text": "On now until Sunday, 14 March 2027",
+      "dates_text": "On now until Sunday 14 March 2027",
       "description": "Art and craft workshops for health and wellbeing. Flow State Sessions aim to create a gentle space for creativity – where no experience in art is necessary. Flow is the mental state in which a person performing an activity is fully immersed in a feeling of energised focus, full involvement, and enjoyment in the process of the activity rather than just the outcomes. Research has shown that engaging in Flow State can be a useful tool to manage stress, anxiety and negative feelings. Run by art therapists, the aim is to create a calm, accessible and supportive space, where participants feel at ease to learn new skills to enter Flow State and inspired to nurture their creativity. Our programme has been designed specifically for those with low to moderate mental health needs such as mild anxiety or low mood. T hey are also suitable for those feeling isolated, stressed or overwhelmed due to having an ongoing health condition or being a carer, for example. All sessions take place at William Morris Gallery. Upcoming dates: 27 September 2026 – Collage landscapes 18 October 2026 – Nature clay tiles 8 November 2026 – Doodle weaving 13 December 2026 – Movement map books 10 January 2026 – Photo embroidery 14 February 2026 – Printing 14 March 2026 – Group still-life As we are an arts organisation rather than mental health providers, these workshops are not suitable for those with complex mental health needs or for those in crisis. If you are in need of support, please contact the Waltham Forest Single Point of Access. If you have any questions, comments or additional access requirements, please do not hesitate to contact us.",
       "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2025/04/painting-banner-2to1-scaled.jpg",
       "price_text": "These sessions are FREE of charge.",
@@ -65,12 +44,12 @@ expression: out
   {
     "event": {
       "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
-      "all_day": false,
+      "all_day": true,
       "category": "workshop",
-      "dedupe_key": "family-day-welcome-home|2026-10-10|william-morris",
-      "description": "Celebrate a new chapter at William Morris Gallery with a special Family Day marking the redisplay of our permanent collection, and the launch of the new exhibition Earthly Paradise. Working with artist Lucy Rainbow, families will design their own front doors inspired by ideas of welcome, belonging and new beginnings. As we celebrate reopening the Gallery’s doors, children and their grown-ups can imagine how they would welcome friends, neighbours and loved ones into their own homes. Once their designs are complete, families will create a colourful screenprinted souvenir poster to take home, marking this special moment in the Gallery’s history. As part of the day, families can be among the first to try our brand-new permanent collection family trail, packed with opportunities to discover fascinating objects, stories and ideas throughout the newly redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, full of creative prompts and activities to help explore the exhibition together. Sessions will take place in the Learning Rooms on the second floor, with step-free access available via lift. A quiet breakout space will be available throughout the day for anyone who would benefit from taking some time away from the activity. Sensory satchels can also be borrowed to support a comfortable and enjoyable visit.",
-      "ends_at": "2026-10-10T15:00:00Z",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/3-to-2-front-door-scaled.jpeg",
+      "dedupe_key": "lets-chat-kweyol-discover-language-celebrate-culture-connect-community|2026-10-24|william-morris",
+      "description": "Celebrate language, culture and heritage with the launch of Let’s chat Kwéyòl A Waltham Forest, Antigua & Barbuda and Dominica Twinning Association event for B lack History Month 2026: Honouring Our Communities. Do you speak Creole (now Kwéyòl in Dominica and St. Lucia)? Whether you speak it fluently or just understand it a little then come to the launch of Let’s chat Kwéyòl! For people who came to Britain from Creole-speaking countries such as Dominica, St. Lucia and Mauritius they may have continued speaking the language and passed it on to their children. However, there are many who have lost the ability or did not learn it at all. For Black History Month 2026 and beyond the Twinning Association will be honouring those who brought the language to our communities. This event takes place during Dominica’s annual Kwéyòl/Creole week, so participants are encouraged to wear some madras. This launch will be followed by monthly sessions from 21 November. If you only understand it a little, then you will get help to understand more and grow confident to speak it. Families are encouraged to come along – places are limited so please book ahead! The WFTA is part of the William Morris Community Residency.",
+      "ends_at": null,
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Crop-for-event-banner.png",
       "lat": 51.5913,
       "lng": -0.0203,
       "price": {
@@ -79,30 +58,129 @@ expression: out
         "max": "0",
         "min": "0"
       },
-      "starts_at": "2026-10-10T12:00:00Z",
+      "starts_at": "2026-10-23T23:00:00Z",
       "tags": [],
-      "title": "Family Day: Welcome Home",
-      "url": "https://www.wmgallery.org.uk/event/family-day-welcome-home/",
+      "title": "Let’s chat Kwéyòl!: Discover a language. Celebrate a culture. Connect a community.",
+      "url": "https://www.wmgallery.org.uk/event/lets-chat-kweyol/",
       "venue_name": "William Morris Gallery"
     },
-    "id": "event/family-day-welcome-home",
+    "id": "event/lets-chat-kweyol",
     "payload": {
       "categories": [
         "all-ages",
-        "families",
         "free-events",
         "workshops"
       ],
-      "dates_text": "Saturday 10 October 2026",
-      "description": "Celebrate a new chapter at William Morris Gallery with a special Family Day marking the redisplay of our permanent collection, and the launch of the new exhibition Earthly Paradise. Working with artist Lucy Rainbow, families will design their own front doors inspired by ideas of welcome, belonging and new beginnings. As we celebrate reopening the Gallery’s doors, children and their grown-ups can imagine how they would welcome friends, neighbours and loved ones into their own homes. Once their designs are complete, families will create a colourful screenprinted souvenir poster to take home, marking this special moment in the Gallery’s history. As part of the day, families can be among the first to try our brand-new permanent collection family trail, packed with opportunities to discover fascinating objects, stories and ideas throughout the newly redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, full of creative prompts and activities to help explore the exhibition together. Sessions will take place in the Learning Rooms on the second floor, with step-free access available via lift. A quiet breakout space will be available throughout the day for anyone who would benefit from taking some time away from the activity. Sensory satchels can also be borrowed to support a comfortable and enjoyable visit.",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/3-to-2-front-door-scaled.jpeg",
-      "price_text": "FREE sessions. Open to all families with children under 18. All children must be accompanied by an adult.",
-      "sessions": [
-        "1:00pm to 4:00pm."
+      "dates_text": "Saturday 24 October 2026",
+      "description": "Celebrate language, culture and heritage with the launch of Let’s chat Kwéyòl A Waltham Forest, Antigua & Barbuda and Dominica Twinning Association event for B lack History Month 2026: Honouring Our Communities. Do you speak Creole (now Kwéyòl in Dominica and St. Lucia)? Whether you speak it fluently or just understand it a little then come to the launch of Let’s chat Kwéyòl! For people who came to Britain from Creole-speaking countries such as Dominica, St. Lucia and Mauritius they may have continued speaking the language and passed it on to their children. However, there are many who have lost the ability or did not learn it at all. For Black History Month 2026 and beyond the Twinning Association will be honouring those who brought the language to our communities. This event takes place during Dominica’s annual Kwéyòl/Creole week, so participants are encouraged to wear some madras. This launch will be followed by monthly sessions from 21 November. If you only understand it a little, then you will get help to understand more and grow confident to speak it. Families are encouraged to come along – places are limited so please book ahead! The WFTA is part of the William Morris Community Residency.",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Crop-for-event-banner.png",
+      "price_text": "FREE event. Open to all generations. Book your spot using the button below.",
+      "sessions": [],
+      "subtitle": "Discover a language. Celebrate a culture. Connect a community.",
+      "title": "Let’s chat Kwéyòl!",
+      "url": "https://www.wmgallery.org.uk/event/lets-chat-kweyol/"
+    }
+  },
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "tomorrow-is-built-today-with-tim-oshodi-abel-holsborough|2026-10-28|william-morris",
+      "description": "Join us for a special film screening and discussion exploring how communities come together to imagine and build alternative futures in response to the housing crisis. Part of the Earthly Paradise programme of talks. Tomorrow is Built Today tells the story of Nubia Way, built in the 1990s by Fusions Jameen, London’s first black housing co-operative in Downham, Lewisham, it was constructed using the principles of Walter Segal and self-builders were offered long-term discounted rents in return for building their homes. Through interviews with the original self-builders, historians, architects and economists, this new documentary from the Architecture Foundation celebrates the legacy of Nubia Way and examines self-building as an act of resistance against the housing discrimination faced by Black British communities. Following the screening, Tim Oshodi, one of the original self-builders at Nubia Way, will be joined by artist Abel Holsborough for a conversation exploring the connections between Nubia Way and House for Artists, the Barking-based artist residential project where Holsborough lives and which forms the focus of his commission for Earthly Paradise. Together, they will reflect on how housing can support creativity, collective care and shared ways of living. House for Artists presents a new model for arts participation, fostering community both within the building and across the local neighbourhood. Resident artists are provided with studio space alongside shared responsibility for a public programme of events and activities. Communal gardens, flexible shared spaces and collective facilities encourage collaboration, mutual support and everyday acts of hosting and care. Bringing together two ambitious housing models from different generations, this conversation considers how architecture, creativity and collective action can help shape more equitable futures. The event also includes a private view of Earthly Paradise: Radical Living in the UK. Tim Oshodi was previously a Director of the National Communities Resource Centre which trained up to 100 000 people from low income neighbourhoods on how to achieve their vision of regeneration. He project manages community self-build schemes and continues to campaign and work passionately for social justice. Abel Holsborough (they/he) is an artist, character, and proud East Londoner. They use photography, performance and writing to explore the un-monumental and question what constitutes useful art. Their practice builds on interests in ‘not-quite’ archives and obscure/local histories which also feeds into their work as the lead miller of the last working windmill in London. They have recently worked with organisations such as Museum of the Home, Grizedale Arts, Create London (A House for Artists), Waltham Forest Council and William Morris Gallery. Image: Nubia Way build, Tim Oshodi",
+      "ends_at": "2026-10-28T20:30:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Nubia-Way-build-scaled.jpg",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-28T19:00:00Z",
+      "tags": [],
+      "title": "Tomorrow Is Built Today: With Tim Oshodi and Abel Holsborough",
+      "url": "https://www.wmgallery.org.uk/event/tomorrow-is-built-today/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/tomorrow-is-built-today",
+    "payload": {
+      "categories": [
+        "adults",
+        "film",
+        "talks-and-discussions"
       ],
+      "dates_text": "Wednesday 28 October 2026",
+      "description": "Join us for a special film screening and discussion exploring how communities come together to imagine and build alternative futures in response to the housing crisis. Part of the Earthly Paradise programme of talks. Tomorrow is Built Today tells the story of Nubia Way, built in the 1990s by Fusions Jameen, London’s first black housing co-operative in Downham, Lewisham, it was constructed using the principles of Walter Segal and self-builders were offered long-term discounted rents in return for building their homes. Through interviews with the original self-builders, historians, architects and economists, this new documentary from the Architecture Foundation celebrates the legacy of Nubia Way and examines self-building as an act of resistance against the housing discrimination faced by Black British communities. Following the screening, Tim Oshodi, one of the original self-builders at Nubia Way, will be joined by artist Abel Holsborough for a conversation exploring the connections between Nubia Way and House for Artists, the Barking-based artist residential project where Holsborough lives and which forms the focus of his commission for Earthly Paradise. Together, they will reflect on how housing can support creativity, collective care and shared ways of living. House for Artists presents a new model for arts participation, fostering community both within the building and across the local neighbourhood. Resident artists are provided with studio space alongside shared responsibility for a public programme of events and activities. Communal gardens, flexible shared spaces and collective facilities encourage collaboration, mutual support and everyday acts of hosting and care. Bringing together two ambitious housing models from different generations, this conversation considers how architecture, creativity and collective action can help shape more equitable futures. The event also includes a private view of Earthly Paradise: Radical Living in the UK. Tim Oshodi was previously a Director of the National Communities Resource Centre which trained up to 100 000 people from low income neighbourhoods on how to achieve their vision of regeneration. He project manages community self-build schemes and continues to campaign and work passionately for social justice. Abel Holsborough (they/he) is an artist, character, and proud East Londoner. They use photography, performance and writing to explore the un-monumental and question what constitutes useful art. Their practice builds on interests in ‘not-quite’ archives and obscure/local histories which also feeds into their work as the lead miller of the last working windmill in London. They have recently worked with organisations such as Museum of the Home, Grizedale Arts, Create London (A House for Artists), Waltham Forest Council and William Morris Gallery. Image: Nubia Way build, Tim Oshodi",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Nubia-Way-build-scaled.jpg",
+      "price_text": "Book your ticket to reserve a place.",
+      "sessions": [
+        "7:00pm to 8:30pm."
+      ],
+      "subtitle": "With Tim Oshodi and Abel Holsborough",
+      "title": "Tomorrow Is Built Today",
+      "url": "https://www.wmgallery.org.uk/event/tomorrow-is-built-today/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/free-community-group-tours-earthly-paradise",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Sunday 1 November 2026 - Sunday 28 March 2027",
+      "description": "Book a free community group tour of Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have shaped art and activism across Britain over the last 200 years. Through painting, drawing, photography, sound, objects and archival material, Earthly Paradise highlights individuals and communities who challenged social conventions and created new ways of living, working and imagining society. We are welcoming local community groups, faith groups and charities for free tours of the exhibition: From November 2026 to March 2027 Available on Mondays when the Gallery is closed to the public Group sizes: Minimum 10 people and maximum 20 people FREE of charge NOTE: These tours are being organised specifically for existing groups and organisations within the community. As tour spaces are limited, we prioritise local not-for-profit and charitable organisations only. If you are an individual or a group of friends wishing to attend a free tour, please check our What’s On for the next ‘Introduction to Earthly Paradise’, which take place each month during the show’s run. These are also free of charge and do not require a booking. Image: Exhibition install photograph by Graham Pearson for William Morris Gallery",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/089A2541.jpg",
+      "price_text": "LIMITED AVAILABILITY",
+      "sessions": [],
       "subtitle": null,
-      "title": "Family Day: Welcome Home",
-      "url": "https://www.wmgallery.org.uk/event/family-day-welcome-home/"
+      "title": "Free Community Group Tours: Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/free-community-group-tours-earthly-paradise/"
+    }
+  },
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "uncovering-queer-roots-of-british-arts-crafts-with-neal-shasore-michael-hal|2026-11-12|william-morris",
+      "description": "Neal Shasore and Michael Hall explore the vital role of queer people in shaping cultural heritage Part of the Earthly Paradise programme of talks. Neal Shasore’s essay Domesticating the Queer: Translation, Transmission and Transgression in the Long Arts and Crafts Movemen t forms part of the Earthly Paradise Reader, published to accompany Earthly Paradise: Radical Living in the UK. This ‘In Conversation’ explores the importance of queer community within our history and the influence within the legacy of what we deem as our cultural heritage. Shasore will be joined by Michael Hall, author of A Queer Inheritance: Alternative Histories in the The National Trust. Together they will discuss how homes served as a private haven against public norms for those who defied them, allowing them the freedom to express themselves fully, and how mainstream culture has co-opted these expressions. Michael Hall has published several books on architecture, country houses and collecting. A former Architectural Editor of Country Life and Editor of Apollo, he was Editor of The Burlington Magazine 2017–24. His book A Queer Inheritance: Alternative Histories in the National Trust was published by Bloomsbury earlier this year. Neal Shasore is an architectural historian and educator. He is the founder of the School of Building whose vision is for well-crafted places, thoughtfully remade, and carefully sustained. He is a trustee of the Architectural Heritage Fund and the Craft Study Centre. Image: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester",
+      "ends_at": "2026-11-12T20:00:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/JRL20020048-scaled.jpg",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-11-12T19:00:00Z",
+      "tags": [],
+      "title": "Uncovering the Queer Roots of British Arts and Crafts: With Neal Shasore and Michael Hal",
+      "url": "https://www.wmgallery.org.uk/event/uncovering-the-queer-roots-of-british-arts-and-crafts/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/uncovering-the-queer-roots-of-british-arts-and-crafts",
+    "payload": {
+      "categories": [
+        "adults",
+        "talks-and-discussions"
+      ],
+      "dates_text": "Thursday 12 November 2026",
+      "description": "Neal Shasore and Michael Hall explore the vital role of queer people in shaping cultural heritage Part of the Earthly Paradise programme of talks. Neal Shasore’s essay Domesticating the Queer: Translation, Transmission and Transgression in the Long Arts and Crafts Movemen t forms part of the Earthly Paradise Reader, published to accompany Earthly Paradise: Radical Living in the UK. This ‘In Conversation’ explores the importance of queer community within our history and the influence within the legacy of what we deem as our cultural heritage. Shasore will be joined by Michael Hall, author of A Queer Inheritance: Alternative Histories in the The National Trust. Together they will discuss how homes served as a private haven against public norms for those who defied them, allowing them the freedom to express themselves fully, and how mainstream culture has co-opted these expressions. Michael Hall has published several books on architecture, country houses and collecting. A former Architectural Editor of Country Life and Editor of Apollo, he was Editor of The Burlington Magazine 2017–24. His book A Queer Inheritance: Alternative Histories in the National Trust was published by Bloomsbury earlier this year. Neal Shasore is an architectural historian and educator. He is the founder of the School of Building whose vision is for well-crafted places, thoughtfully remade, and carefully sustained. He is a trustee of the Architectural Heritage Fund and the Craft Study Centre. Image: Photograph of Edward Carpenter and his partner George Merrill, c.1900. Digital image provided by The John Rylands Research Institute and Library, The University of Manchester",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/JRL20020048-scaled.jpg",
+      "price_text": "Book your ticket to reserve a place. Pay what you can by donation (suggested £10)",
+      "sessions": [
+        "7:00pm to 8:00pm."
+      ],
+      "subtitle": "With Neal Shasore and Michael Hal",
+      "title": "Uncovering the Queer Roots of British Arts and Crafts",
+      "url": "https://www.wmgallery.org.uk/event/uncovering-the-queer-roots-of-british-arts-and-crafts/"
     }
   },
   {
@@ -110,10 +188,10 @@ expression: out
       "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
       "all_day": false,
       "category": "workshop",
-      "dedupe_key": "mini-morris-feathered-friends|2026-10-15|william-morris",
-      "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds. In October we’re celebrating the much-anticipated reopening of the Gallery following its refurbishment. Inspired by the beautiful birds that appear throughout William Morris’s designs, children will create their very own clay pot bird to take home. Children will explore shape and texture as they decorate their bird, taking inspiration from the nature and wildlife that Morris loved so much. It’s a wonderful opportunity to get creative, discover the newly reopened Gallery and enjoy some hands-on fun together. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge. Image: Strawberry Thief printed cotton, William Morris. Design registered 1883",
-      "ends_at": "2026-10-15T10:00:00Z",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/F54-Strawberry-Thief-Chintz.jpg",
+      "dedupe_key": "family-day-useful-beautiful|2026-11-14|william-morris",
+      "description": "Explore the beauty of everyday objects through the art of metal embossing. Join us for a creative Family Day exploring the beauty of everyday objects through the art of metal embossing. Inspired by metal objects on display in Earthly Paradise, families will discover how artists and designers have transformed practical items into beautiful works of art. Taking inspiration from Rory Hutton’s Useful & Beautiful print, decorative metalwork from the exhibition, and William Morris’s own candlestick from Red House, participants will explore the relationship between creativity, craftsmanship and everyday life. Using copper embossing foil, children and their grown-ups will create their own candlestick artwork, embossing the outline of a candlestick before decorating it with colourful designs, patterns and imagery inspired by the Gallery’s collections. Alongside the workshop, families can also explore our new William Morris Gallery family trail, designed to help children discover objects, stories, and ideas throughout the redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, encouraging creative exploration of the exhibition together. These free drop-in sessions are open to all families with children under 18. The activity is most suitable for children aged 4+ years. All materials will be provided. If sessions become busy, we will run a waiting list throughout the day. Sessions will take place in the Learning Rooms on the Second Floor, with lift access available. All children must be accompanied by an adult. A breakout space will be available for anyone who needs it. Sensory satchels are also available to borrow. Families will be encouraged to explore both the newly redisplayed permanent collection and Earthly Paradise using our family resources.",
+      "ends_at": "2026-11-14T16:00:00Z",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/IMG_4142-scaled.jpg",
       "lat": 51.5913,
       "lng": -0.0203,
       "price": {
@@ -122,31 +200,173 @@ expression: out
         "max": "0",
         "min": "0"
       },
-      "starts_at": "2026-10-15T09:00:00Z",
+      "starts_at": "2026-11-14T13:00:00Z",
       "tags": [],
-      "title": "Mini Morris: Feathered Friends",
-      "url": "https://www.wmgallery.org.uk/event/mini-morris-feathered-friends/",
+      "title": "Family Day: Useful and Beautiful",
+      "url": "https://www.wmgallery.org.uk/event/family-day-useful-and-beautiful/",
       "venue_name": "William Morris Gallery"
     },
-    "id": "event/mini-morris-feathered-friends",
+    "id": "event/family-day-useful-and-beautiful",
     "payload": {
       "categories": [
-        "audience",
         "families",
         "free-events",
         "workshops"
       ],
-      "dates_text": "Thursday 15 October 2026",
-      "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds. In October we’re celebrating the much-anticipated reopening of the Gallery following its refurbishment. Inspired by the beautiful birds that appear throughout William Morris’s designs, children will create their very own clay pot bird to take home. Children will explore shape and texture as they decorate their bird, taking inspiration from the nature and wildlife that Morris loved so much. It’s a wonderful opportunity to get creative, discover the newly reopened Gallery and enjoy some hands-on fun together. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge. Image: Strawberry Thief printed cotton, William Morris. Design registered 1883",
-      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/F54-Strawberry-Thief-Chintz.jpg",
-      "price_text": "These are FREE sessions but donations in support of our public programme are always welcomed.",
+      "dates_text": "Saturday 14 November 2026",
+      "description": "Explore the beauty of everyday objects through the art of metal embossing. Join us for a creative Family Day exploring the beauty of everyday objects through the art of metal embossing. Inspired by metal objects on display in Earthly Paradise, families will discover how artists and designers have transformed practical items into beautiful works of art. Taking inspiration from Rory Hutton’s Useful & Beautiful print, decorative metalwork from the exhibition, and William Morris’s own candlestick from Red House, participants will explore the relationship between creativity, craftsmanship and everyday life. Using copper embossing foil, children and their grown-ups will create their own candlestick artwork, embossing the outline of a candlestick before decorating it with colourful designs, patterns and imagery inspired by the Gallery’s collections. Alongside the workshop, families can also explore our new William Morris Gallery family trail, designed to help children discover objects, stories, and ideas throughout the redisplayed galleries. Visitors can also pick up a family activity booklet for Earthly Paradise, encouraging creative exploration of the exhibition together. These free drop-in sessions are open to all families with children under 18. The activity is most suitable for children aged 4+ years. All materials will be provided. If sessions become busy, we will run a waiting list throughout the day. Sessions will take place in the Learning Rooms on the Second Floor, with lift access available. All children must be accompanied by an adult. A breakout space will be available for anyone who needs it. Sensory satchels are also available to borrow. Families will be encouraged to explore both the newly redisplayed permanent collection and Earthly Paradise using our family resources.",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/IMG_4142-scaled.jpg",
+      "price_text": "FREE sessions. Open to all families with children under 18. All children must be accompanied by an adult.",
       "sessions": [
-        "10:00am to 11:00am.",
-        "11:30am to 12:30pm."
+        "1:00pm to 4:00pm."
       ],
-      "subtitle": "Feathered Friends",
-      "title": "Mini Morris",
-      "url": "https://www.wmgallery.org.uk/event/mini-morris-feathered-friends/"
+      "subtitle": null,
+      "title": "Family Day: Useful and Beautiful",
+      "url": "https://www.wmgallery.org.uk/event/family-day-useful-and-beautiful/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/an-introduction-to-earthly-paradise-november26",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Tuesday 24 November 2026",
+      "description": "Drop in to William Morris Gallery for a special introduction to Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. Learn more about the ideas behind the exhibition with this introduction to the show’s objects and themes. Read more about the exhibition here. Image: Guild of Handicraft Exercise Class, © Guild of Handicraft Trust",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/Guild-of-Handicraft-scaled.jpg",
+      "price_text": "Free. Drop-in.",
+      "sessions": [
+        "12:00pm to 12:45pm."
+      ],
+      "subtitle": "With the curators",
+      "title": "An Introduction to Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/an-introduction-to-earthly-paradise-november26/"
+    }
+  },
+  {
+    "event": {
+      "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+      "all_day": true,
+      "category": "talk",
+      "dedupe_key": "room-of-ones-own-creating-feminist-dwellings-exploring-feminist-approaches-to-housing|2026-12-01|william-morris",
+      "description": "A panel discussion with Dr. Lucy Brownson, Tracey Downie, and Emily Wheeler Part of the Earthly Paradise programme of talks. Join us for a thought-provoking discussion exploring feminist approaches to housing and the role they can play in creating more equitable, supportive and inclusive communities for women. Bringing together Tracey Downie from Women’s Pioneer Housing Association, Emily Wheeler of Furnishing Futures and researcher Dr. Lucy Brownson, this conversation will examine the intersections of gender, housing, domestic space and social justice. Together, our speakers will discuss how housing policy, design and provision can better respond to the realities faced by women, from affordability and security to dignity, wellbeing and belonging. Through their work, they offer practical and imaginative models for building a housing system that works for everyone. Emily Wheeler is the founder of Furnishing Futures, a London-based charity that creates fully furnished, trauma-informed homes for women and children who have escaped domestic abuse. A former social worker, interior designer and writer, she has worked closely with women and children experiencing the combined challenges of severe domestic abuse, poor housing and inequality as well as understanding the power of design to change lives. Emily’s expertise, knowledge and experience in both social work and interiors gives her a unique perspective on how our homes affect our physical and emotional wellbeing and the positive impact that safe and comfortable homes have on individuals, families and society as a whole. Tracey Downee joined Women’s Pioneer Housing Association as Chief Executive in 2022. She was previously Executive Director of Housing Management at Homes for Haringey and brings over 25 years’ experience in the housing sector primarily working in London-based housing associations with a commitment to resident engagement, community development and challenging inequality. She brings a wealth of experience from past senior, executive and non-executive roles to her role as CEO. Tracey mentors through the Future of London Leaders programme and is Board Chair of Ekaya Housing Association. Dr. Lucy Brownson is an archivist, researcher, educator and cultural organiser based in Sheffield and London. She is a lecturer at University College London, teaching archival theory and practice, and a longtime co-organiser of Sheffield Feminist Archive, a community archive project documenting grassroots feminism across South Yorkshire. Brownson is interested in queer, feminist and liberatory approaches to archival practice, countercultural genealogies of knowledge and memory, and how histories of political activism are documented and taken forward. Image: Earthly Paradise install image – Matrix. Home Truths Exhibition, created 1980. Photographs of A4 boards by Cockpit Gallery. Courtesy Matrix",
+      "ends_at": null,
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Image-66-scaled.jpg",
+      "lat": 51.5913,
+      "lng": -0.0203,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-01T00:00:00Z",
+      "tags": [],
+      "title": "A Room of One’s Own – Creating Feminist Dwellings: Exploring feminist approaches to housing",
+      "url": "https://www.wmgallery.org.uk/event/a-room-of-ones-own-creating-feminist-dwellings/",
+      "venue_name": "William Morris Gallery"
+    },
+    "id": "event/a-room-of-ones-own-creating-feminist-dwellings",
+    "payload": {
+      "categories": [
+        "adults",
+        "talks-and-discussions"
+      ],
+      "dates_text": "Tuesday 1 December 2026",
+      "description": "A panel discussion with Dr. Lucy Brownson, Tracey Downie, and Emily Wheeler Part of the Earthly Paradise programme of talks. Join us for a thought-provoking discussion exploring feminist approaches to housing and the role they can play in creating more equitable, supportive and inclusive communities for women. Bringing together Tracey Downie from Women’s Pioneer Housing Association, Emily Wheeler of Furnishing Futures and researcher Dr. Lucy Brownson, this conversation will examine the intersections of gender, housing, domestic space and social justice. Together, our speakers will discuss how housing policy, design and provision can better respond to the realities faced by women, from affordability and security to dignity, wellbeing and belonging. Through their work, they offer practical and imaginative models for building a housing system that works for everyone. Emily Wheeler is the founder of Furnishing Futures, a London-based charity that creates fully furnished, trauma-informed homes for women and children who have escaped domestic abuse. A former social worker, interior designer and writer, she has worked closely with women and children experiencing the combined challenges of severe domestic abuse, poor housing and inequality as well as understanding the power of design to change lives. Emily’s expertise, knowledge and experience in both social work and interiors gives her a unique perspective on how our homes affect our physical and emotional wellbeing and the positive impact that safe and comfortable homes have on individuals, families and society as a whole. Tracey Downee joined Women’s Pioneer Housing Association as Chief Executive in 2022. She was previously Executive Director of Housing Management at Homes for Haringey and brings over 25 years’ experience in the housing sector primarily working in London-based housing associations with a commitment to resident engagement, community development and challenging inequality. She brings a wealth of experience from past senior, executive and non-executive roles to her role as CEO. Tracey mentors through the Future of London Leaders programme and is Board Chair of Ekaya Housing Association. Dr. Lucy Brownson is an archivist, researcher, educator and cultural organiser based in Sheffield and London. She is a lecturer at University College London, teaching archival theory and practice, and a longtime co-organiser of Sheffield Feminist Archive, a community archive project documenting grassroots feminism across South Yorkshire. Brownson is interested in queer, feminist and liberatory approaches to archival practice, countercultural genealogies of knowledge and memory, and how histories of political activism are documented and taken forward. Image: Earthly Paradise install image – Matrix. Home Truths Exhibition, created 1980. Photographs of A4 boards by Cockpit Gallery. Courtesy Matrix",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/Image-66-scaled.jpg",
+      "price_text": "Book your ticket to reserve a place.",
+      "sessions": [],
+      "subtitle": "Exploring feminist approaches to housing",
+      "title": "A Room of One’s Own – Creating Feminist Dwellings",
+      "url": "https://www.wmgallery.org.uk/event/a-room-of-ones-own-creating-feminist-dwellings/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/an-introduction-to-earthly-paradise-december26",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Tuesday 15 December 2026",
+      "description": "Drop in to William Morris Gallery for a special introduction to Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. Learn more about the ideas behind the exhibition with this introduction to the show’s objects and themes. Read more about the exhibition here. Image: Jane with Leopards Head, Earls Court, 1980. Photography by Smiler. Estate of Mark Cawson and Sorika",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/JANEWI1-scaled.jpg",
+      "price_text": "Free. Drop-in.",
+      "sessions": [
+        "12:00pm to 12:45pm."
+      ],
+      "subtitle": "With the curators",
+      "title": "An Introduction to Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/an-introduction-to-earthly-paradise-december26/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/an-introduction-to-earthly-paradise-january27",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Tuesday 26 January 2027",
+      "description": "Drop in to William Morris Gallery for a special introduction to Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. Learn more about the ideas behind the exhibition with this introduction to the show’s objects and themes. Read more about the exhibition here. Image: Khadambi Asalache at his home, 575 Wandsworth Road, November 1988. Gerard Mankowitz/Iconic Images",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/KHADAM1-scaled.jpg",
+      "price_text": "Free. Drop-in.",
+      "sessions": [
+        "12:00pm to 12:45pm."
+      ],
+      "subtitle": "With the curators",
+      "title": "An Introduction to Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/an-introduction-to-earthly-paradise-january27/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/an-introduction-to-earthly-paradise-february27",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Tuesday 23 February 2027",
+      "description": "Drop in to William Morris Gallery for a special introduction to Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. Learn more about the ideas behind the exhibition with this introduction to the show’s objects and themes. Read more about the exhibition here. Image: Krishna, Vijay, Onky, Minka and Sean. Bonnington Square © Crispin Hughes Photo Co-op. Courtesy of Martin Parr Foundation",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/KRISHN1-scaled.jpg",
+      "price_text": "Free. Drop-in.",
+      "sessions": [
+        "12:00pm to 12:45pm."
+      ],
+      "subtitle": "With the curators",
+      "title": "An Introduction to Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/an-introduction-to-earthly-paradise-february27/"
+    }
+  },
+  {
+    "event": null,
+    "id": "event/an-introduction-to-earthly-paradise-march27",
+    "payload": {
+      "categories": [
+        "adults",
+        "free-events",
+        "tours"
+      ],
+      "dates_text": "Tuesday 23 March 2027",
+      "description": "Drop in to William Morris Gallery for a special introduction to Earthly Paradise: Radical Living in the UK Earthly Paradise: Radical Living in the UK explores the people and places that have helped shape art and activism across Britain over the last 200 years. Through objects, painting, drawing, photography, sound and archival material, Earthly Paradise highlights individuals and communities that defied contemporary conventions and the homes they created to realise their new visions of society. The exhibition considers the role that money and class have played in providing access to these spaces and the freedom to challenge social norms. It traces the roles activist groups and those excluded from and overlooked by mainstream society have played in imagining new ways of living and seeing the world. The exhibition is curated by Hadrian Garrard, Director of William Morris Gallery; Linsey Young, independent curator; and Tayyabah Tahir, Assistant Curator at William Morris Gallery. Learn more about the ideas behind the exhibition with this introduction to the show’s objects and themes. Read more about the exhibition here. Image: Bedroom Wall (with Patrick, Gwen and Richard), circa 2005. Gareth McConnell",
+      "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/09/GARETH1-scaled.jpg",
+      "price_text": "Free. Drop-in.",
+      "sessions": [
+        "12:00pm to 12:45pm."
+      ],
+      "subtitle": "With the curators",
+      "title": "An Introduction to Earthly Paradise",
+      "url": "https://www.wmgallery.org.uk/event/an-introduction-to-earthly-paradise-march27/"
     }
   }
 ]

@@ -12,16 +12,18 @@
 //!   JSON string of more cards (or of a "No more items to see" notice with
 //!   none), which is followed while it returns cards. Cards are de-duplicated
 //!   by path; every card's detail page is fetched, since only it has times.
-//! * A detail page has the title (`h2.single_event_title`), an optional
-//!   subtitle (the session's theme, or "Multiple dates"), the dates
+//! * A detail page has the title (`div.title_and_icon h2`, its last word
+//!   wrapped with a decorative icon), an optional subtitle (the header's
+//!   `h3`: the session's theme, or "Multiple dates"), the dates
 //!   (`p.single_event_type_dates`: "Saturday 10 October 2026" or "Saturday 3
 //!   October 2026 - Sunday 28 March 2027"; once an exhibition has opened,
-//!   "On now until Sunday, 14 March 2027", and no page, card, JSON-LD or
+//!   "On now until Sunday 14 March 2027", and no page, card, JSON-LD or
 //!   sitemap says when it started any more), sidebar blocks headed "Timings"
-//!   (session times, "1:00pm to 4:00pm.", in `p.bottom_p`), "Fees" and
-//!   "Other information", and the event's categories as `event-category-*`
-//!   classes on the `<article>`. The sidebar nests `<p>` in `<p>`, which the
-//!   parser splits into siblings, so blocks are read paragraph by paragraph.
+//!   (the date in `p.timings_date`, then a paragraph per session, "1:00pm to
+//!   4:00pm."), "Fees" and "Other information", and the event's categories
+//!   as `event-category-*` classes on the `<article>`. The sidebar nests
+//!   `<p>` in `<p>`, which the parser splits into siblings, so blocks are
+//!   read paragraph by paragraph.
 //! * Times are London wall-clock; of several sessions ("10:00am to 11:00am.",
 //!   "11:30am to 12:30pm.") the first is the event's time. A day with no
 //!   session times is stored `all_day`, and so are exhibitions (both ends
@@ -172,8 +174,9 @@ pub struct Detail {
     pub image_url: Option<String>,
 }
 
-/// The non-empty paragraphs of the sidebar block headed `heading`.
-fn sidebar_paragraphs(doc: &Html, heading: &str) -> Vec<String> {
+/// The non-empty paragraphs matching `paragraph` in the sidebar block headed
+/// `heading`.
+fn sidebar_paragraphs(doc: &Html, heading: &str, paragraph: &str) -> Vec<String> {
     doc.select(&selector("aside div.event_detail"))
         .find(|block| {
             block
@@ -183,7 +186,7 @@ fn sidebar_paragraphs(doc: &Html, heading: &str) -> Vec<String> {
         })
         .map(|block| {
             block
-                .select(&selector("p"))
+                .select(&selector(paragraph))
                 .map(element_text)
                 .filter(|t| !t.is_empty())
                 .collect()
@@ -200,7 +203,7 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
             .map(element_text)
             .filter(|t| !t.is_empty())
     };
-    let title = first_text("h2.single_event_title")?;
+    let title = first_text("div.title_and_icon h2")?;
     let categories = doc
         .select(&selector("article.event"))
         .next()
@@ -210,22 +213,17 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
         .filter_map(|c| c.strip_prefix("event-category-"))
         .map(str::to_string)
         .collect();
-    let sessions = doc
-        .select(&selector("aside div.event_detail p.bottom_p"))
-        .map(element_text)
-        .filter(|t| !t.is_empty())
-        .collect();
     let price_text = [
-        sidebar_paragraphs(&doc, "Fees"),
-        sidebar_paragraphs(&doc, "Other information"),
+        sidebar_paragraphs(&doc, "Fees", "p"),
+        sidebar_paragraphs(&doc, "Other information", "p"),
     ]
     .into_iter()
     .find_map(|ps| ps.into_iter().next());
     Some(Detail {
         title,
-        subtitle: first_text("h3.single_event_subtitle"),
+        subtitle: first_text("div.event_header_details h3"),
         dates_text: first_text("p.single_event_type_dates"),
-        sessions,
+        sessions: sidebar_paragraphs(&doc, "Timings", "p:not(.timings_date)"),
         categories,
         price_text,
         description: first_text("div.event_description"),

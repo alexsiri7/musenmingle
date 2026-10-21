@@ -1,8 +1,9 @@
 //! William Morris Gallery scraper: snapshot tests over saved HTML fixtures
 //! and an end-to-end fetch against wiremock.
 //!
-//! The listing is saved in full with the detail page of every card on it,
-//! plus one real response of the "Load more" endpoint (`filter.json`).
+//! The listing is saved in full, with its grid full, plus the real response
+//! of the "Load more" endpoint for the rest (`filter.json`) and the detail
+//! page of every card on either.
 
 mod common;
 
@@ -32,10 +33,13 @@ fn detail_html(slug: &str) -> String {
     fixture(&format!("{DIR}/detail/{slug}.html"))
 }
 
-fn listing_paths() -> Vec<String> {
+/// The listing's event paths, then those "Load more" adds.
+fn all_paths() -> Vec<String> {
     let listing = parse_listing(&fixture(&format!("{DIR}/whats-on.html")));
     assert!(listing.rejected.is_empty(), "{:?}", listing.rejected);
-    listing.paths
+    let (more, rejected) = parse_more(&fixture(&format!("{DIR}/filter.json"))).unwrap();
+    assert!(rejected.is_empty(), "{rejected:?}");
+    listing.paths.into_iter().chain(more).collect()
 }
 
 async fn serve_robots(server: &MockServer) {
@@ -61,8 +65,8 @@ async fn serve(server: &MockServer, at: &str, body: String) {
 #[test]
 fn listing_snapshot() {
     let listing = parse_listing(&fixture(&format!("{DIR}/whats-on.html")));
-    assert_eq!(listing.paths.len(), 4);
-    assert_eq!(listing.grid_cards, 3);
+    assert_eq!(listing.paths.len(), 10);
+    assert_eq!(listing.grid_cards, GRID_PAGE);
     let (more, rejected) = parse_more(&fixture(&format!("{DIR}/filter.json"))).unwrap();
     assert!(rejected.is_empty());
     insta::assert_json_snapshot!(
@@ -83,7 +87,7 @@ fn no_more_response_has_no_cards() {
 fn normalised_output_snapshot() {
     let s = WilliamMorrisGallery::new(SITE.parse().unwrap());
     let site: Url = SITE.parse().unwrap();
-    let out: Vec<serde_json::Value> = listing_paths()
+    let out: Vec<serde_json::Value> = all_paths()
         .iter()
         .map(|p| {
             let detail = parse_detail(&detail_html(slug(p))).expect("detail");
@@ -108,14 +112,26 @@ async fn fetches_listing_and_details_via_fetch_context() {
         fixture(&format!("{DIR}/whats-on.html")),
     )
     .await;
-    // Three grid cards: nothing to load more.
     Mock::given(method("GET"))
         .and(path(FILTER_PATH))
-        .respond_with(ResponseTemplate::new(200))
-        .expect(0)
+        .and(query_param("id", "364"))
+        .and(query_param("offset", GRID_PAGE.to_string()))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/filter.json"))),
+        )
+        .expect(1)
         .mount(&server)
         .await;
-    let paths = listing_paths();
+    Mock::given(method("GET"))
+        .and(path(FILTER_PATH))
+        .and(query_param("offset", "13"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(more_body(
+            r#"<article class="no_more">No more items to see</article>"#,
+        )))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let paths = all_paths();
     for p in &paths {
         serve(&server, p, detail_html(slug(p))).await;
     }
@@ -135,12 +151,12 @@ async fn fetches_listing_and_details_via_fetch_context() {
     }
     let family_day = raws
         .iter()
-        .find(|r| r.source_event_id == "event/family-day-welcome-home")
+        .find(|r| r.source_event_id == "event/family-day-useful-and-beautiful")
         .unwrap();
     let event = s.normalise(family_day).unwrap().unwrap();
     assert_eq!(event.category, Category::Workshop);
     assert_eq!(event.venue_name.as_deref(), Some("William Morris Gallery"));
-    assert_eq!(event.starts_at.to_rfc3339(), "2026-10-10T12:00:00+00:00");
+    assert_eq!(event.starts_at.to_rfc3339(), "2026-11-14T13:00:00+00:00");
     assert!(event.price.is_free);
     assert_eq!(event.price.max, Some(Decimal::ZERO));
 }
