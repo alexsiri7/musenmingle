@@ -14,9 +14,11 @@ tests are `tests/js/mobile_apps.test.js`.
   WebView's history (on the first page it does nothing; Home leaves the
   app). Nothing may add a `backButton` listener or a back callback (in
   `mobile/` or in the site's scripts).
-- **Offline**: when the site can't be reached the app shows
-  `mobile/www/index.html` (`server.errorPath`), a self-contained branded
-  page. It is the only file in the bundle (`webDir`); Capacitor serves just
+- **Offline**: when the site can't be reached (no connection, DNS or TLS
+  failure) the app shows `mobile/www/index.html` (`server.errorPath`), a
+  self-contained branded page. HTTP errors (a 404, a form's 400) show the
+  site's own page: `MainActivity` stops Capacitor from sending those to the
+  offline page too. It is the only file in the bundle (`webDir`); Capacitor serves just
   that page, so it inlines its CSS and icon and loads nothing.
 - **Venue links leave the app**: Capacitor opens every host other than ours
   in the phone's browser. Keep `server.allowNavigation` unset (or our host
