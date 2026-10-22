@@ -42,8 +42,55 @@ const bundledFiles = () =>
     .filter((e) => e.isFile())
     .map((e) => e.name);
 
-// Source text without its comments, so a commented-out line never counts.
-const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+// Splits JS-like source (JS, TS, Java, Kotlin, Swift) into code, literal
+// (string, template, regex) and comment spans. A `/` starts a regex only
+// where a value is expected, so `/^https?:\/\//` is not a comment.
+const VALUE_EXPECTED = /(^|[(,=:[!&|?{};+\-*%<>~^]|\breturn|\btypeof)\s*$/;
+
+function literalEnd(src, i) {
+  const close = src[i] === "/" ? "/" : src[i];
+  let inClass = false;
+  let j = i + 1;
+  for (; j < src.length && (inClass || src[j] !== close); j++) {
+    if (src[j] === "\\") j++;
+    else if (close === "/" && src[j] === "\n") break;
+    else if (close === "/") inClass = src[j] === "[" || (inClass && src[j] !== "]");
+  }
+  return j + 1;
+}
+
+function spans(src) {
+  const out = [];
+  let start = 0;
+  const cut = (kind, end) => {
+    end = Math.min(end, src.length);
+    if (end > start) out.push({ kind, text: src.slice(start, end) });
+    start = end;
+  };
+  for (let i = 0; i < src.length; i = Math.max(i + 1, start)) {
+    let kind;
+    let end;
+    if (src.startsWith("//", i)) {
+      [kind, end] = ["comment", src.indexOf("\n", i)];
+    } else if (src.startsWith("/*", i)) {
+      [kind, end] = ["comment", src.indexOf("*/", i + 2) + 2];
+    } else if ("\"'`".includes(src[i]) || (src[i] === "/" && VALUE_EXPECTED.test(src.slice(0, i)))) {
+      [kind, end] = ["literal", literalEnd(src, i)];
+    } else {
+      continue;
+    }
+    cut("code", i);
+    cut(kind, end <= i ? src.length : end);
+  }
+  cut("code", src.length);
+  return out;
+}
+
+const blank = (text) => text.replace(/[^\n]/g, " ");
+
+// Source text with its comments blanked (offsets kept), so a commented-out
+// line never counts.
+const code = (src) => spans(src).map((s) => (s.kind === "comment" ? blank(s.text) : s.text)).join("");
 
 // Files under `dir` ending in one of `exts`, skipping dependencies and build output.
 function sources(dir, exts) {
@@ -55,24 +102,14 @@ function sources(dir, exts) {
 }
 
 // The `{ … }` block starting at the first `{` at or after `from`, matched
-// past strings and comments.
+// past literals and comments.
 function blockAt(src, from) {
-  const start = src.indexOf("{", from);
+  const bare = spans(src).map((s) => (s.kind === "code" ? s.text : blank(s.text))).join("");
+  const start = bare.indexOf("{", from);
   let depth = 0;
-  for (let i = start; i < src.length; i++) {
-    const ch = src[i];
-    if (ch === '"' || ch === "'" || ch === "`") {
-      for (i++; i < src.length && src[i] !== ch; i++) if (src[i] === "\\") i++;
-    } else if (src.startsWith("//", i)) {
-      i = src.indexOf("\n", i);
-      if (i === -1) break;
-    } else if (src.startsWith("/*", i)) {
-      i = src.indexOf("*/", i) + 1;
-    } else if (ch === "{") {
-      depth++;
-    } else if (ch === "}" && --depth === 0) {
-      return src.slice(start, i + 1);
-    }
+  for (let i = start; i < bare.length; i++) {
+    if (bare[i] === "{") depth++;
+    else if (bare[i] === "}" && --depth === 0) return src.slice(start, i + 1);
   }
   throw new Error(`unbalanced block at ${from}`);
 }
@@ -219,7 +256,7 @@ test("Scenario: Location refused", { todo: "until #363 and #364 ask for location
   const refuse = { getCurrentPosition: (_ok, fail) => fail({ code: 1 }) };
   await assert.rejects(m.locate(refuse), (e) => e.reason === "denied");
   assert.match(m.locateMessage("denied", "Central London"), /^Location permission was not given/);
-  const src = read("src/map.mjs");
+  const src = code(read("src/map.mjs"));
   assert.equal(src.split("locate(navigator.geolocation)").length, 2);
   const listener = src.indexOf('locateBtn.addEventListener("click"');
   assert.notEqual(listener, -1);
