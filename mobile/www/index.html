@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muse &amp; Mingle: offline</title>
+<!-- Shown by the app when the site can't be reached (server.errorPath in
+     capacitor.config.json). Self-contained: the app serves only this page
+     from the bundle, so it can't load stylesheets, fonts or images. -->
+<style>
+  :root { color-scheme: light dark; --canvas: #fff; --ink: #111; --ink-2: #555; --cobalt: #0038ff; }
+  @media (prefers-color-scheme: dark) {
+    :root { --canvas: #161616; --ink: #f2f2f2; --ink-2: #c6c6c6; --cobalt: #8ea3ff; }
+  }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex; flex-direction: column; justify-content: center; gap: 1rem;
+    padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(2.5rem, env(safe-area-inset-bottom));
+    background: var(--canvas); color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.5;
+  }
+  svg { width: 4rem; height: 4rem; }
+  h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.02em; }
+  p { margin: 0; max-width: 32rem; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8.5" y="8.5" width="47" height="47" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="32" cy="32" r="9" fill="var(--cobalt)"/></svg>
+<h1>You're offline</h1>
+<p>Muse &amp; Mingle needs an internet connection to show what's on in London.</p>
+<p>Check your connection, then close and reopen the app.</p>
+</body>
+</html>

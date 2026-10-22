@@ -15,7 +15,6 @@ const ROOT = path.join(__dirname, "..", "..");
 // DEFAULT_SITE_HOST in src/web.rs.
 const SITE = "https://musenmingle.interstellarai.net";
 
-const ANDROID = "until #363 builds the Android app";
 const IOS = "until #364 builds the iPhone app";
 const STORES = "until #365 publishes both apps";
 
@@ -139,7 +138,7 @@ test("code() keeps a same-line regex after any keyword that takes an operand", (
   assert.ok(!code("a = b / c; // backButton").includes("backButton"));
 });
 
-test("Scenario: Android install", { todo: ANDROID }, () => {
+test("Scenario: Android install", () => {
   // WHEN a person searches Google Play for Muse & Mingle on an Android phone
   // THEN they can install the app and open it from their home screen
   // Operator check (#365): found by searching Google Play, installs, opens
@@ -161,7 +160,7 @@ test("Scenario: iPhone install", { todo: IOS }, () => {
   assert.ok(fs.existsSync(path.join(ROOT, "mobile/ios/App/App/Assets.xcassets/AppIcon.appiconset")));
 });
 
-test("Scenario: Browsing in the app", { todo: ANDROID }, () => {
+test("Scenario: Browsing in the app", () => {
   // WHEN a person opens the app and filters by today and free
   // THEN they see the same events the website shows for today and free
   // The app shows the live site, so the filter runs the website's query on
@@ -171,7 +170,7 @@ test("Scenario: Browsing in the app", { todo: ANDROID }, () => {
   assert.notEqual(server.cleartext, true);
 });
 
-test("Scenario: New website feature", { todo: ANDROID }, () => {
+test("Scenario: New website feature", () => {
   // WHEN a feature ships on the website
   // THEN it is available in the apps without waiting for a separate app redesign
   assert.equal(config().server.url, SITE);
@@ -183,7 +182,7 @@ test("Scenario: New website feature", { todo: ANDROID }, () => {
   }
 });
 
-test("Scenario: No connection", { todo: ANDROID }, () => {
+test("Scenario: No connection", () => {
   // WHEN a person opens the app with no internet connection
   // THEN the app shows a Muse & Mingle message saying it is offline, not a
   // browser error page
@@ -197,6 +196,21 @@ test("Scenario: No connection", { todo: ANDROID }, () => {
   assert.match(page, /offline|no (internet )?connection/i);
   // It is shown exactly when the network is down: no remote assets.
   assert.doesNotMatch(page, /(src|href)\s*=\s*["']?(https?:)?\/\//i);
+});
+
+test("The app shows the site's own HTTP error pages, not the offline page", () => {
+  // Capacitor's BridgeWebViewClient loads errorPath for main-frame HTTP errors
+  // too; MainActivity installs a subclass that leaves a 404 or 400 to the site.
+  const java = sources("mobile/android/app/src/main/java", [".java"]).map(code).join("\n");
+  const cls = java.match(/class\s+(\w+)\s+extends\s+BridgeWebViewClient\b/);
+  assert.ok(cls, "no BridgeWebViewClient subclass");
+  const body = blockAt(java, cls.index);
+  const override = body.indexOf("void onReceivedHttpError(");
+  assert.ok(override >= 0, "onReceivedHttpError is not overridden");
+  assert.doesNotMatch(blockAt(body, override), /onReceivedHttpError|loadUrl|getErrorUrl/);
+  const onCreate = java.indexOf("void onCreate(");
+  assert.ok(onCreate >= 0, "MainActivity.onCreate not found");
+  assert.match(blockAt(java, onCreate), new RegExp(`\\.setWebViewClient\\(\\s*new\\s+${cls[1]}\\(`));
 });
 
 test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () => {
@@ -218,7 +232,7 @@ test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () =
   assert.ok(swift.some((s) => /allowsBackForwardNavigationGestures\s*=\s*true/.test(s)));
 });
 
-test("Scenario: Going to the venue", { todo: ANDROID }, () => {
+test("Scenario: Going to the venue", () => {
   // WHEN a person taps the link to an event's source page
   // THEN the venue's page opens in the phone's browser
   // Capacitor opens every host it is not allowed to navigate to in the
@@ -228,7 +242,7 @@ test("Scenario: Going to the venue", { todo: ANDROID }, () => {
   for (const host of allowed) assert.equal(host, new URL(SITE).host);
 });
 
-test("Scenario: Saving in the app", { todo: ANDROID }, () => {
+test("Scenario: Saving in the app", () => {
   // WHEN a person saves an event in the app
   // THEN the save is kept on the phone and nothing about it is sent to Muse &
   // Mingle or anyone else
@@ -243,6 +257,8 @@ test("Scenario: Saving in the app", { todo: ANDROID }, () => {
     assert.doesNotMatch(dep, TRACKERS);
     assert.ok(dep.startsWith("@capacitor/") || dep === "typescript", dep);
   }
+  // Nor does Android copy the WebView's storage to a cloud backup.
+  assert.match(androidManifest(), /android:allowBackup="false"/);
 });
 
 test("Scenario: Store privacy label", { todo: STORES }, () => {

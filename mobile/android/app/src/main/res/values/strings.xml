@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Muse &amp; Mingle</string>
+    <string name="title_activity_main">Muse &amp; Mingle</string>
+    <string name="package_name">net.interstellarai.musenmingle</string>
+    <string name="custom_url_scheme">net.interstellarai.musenmingle</string>
+</resources>

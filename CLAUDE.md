@@ -159,5 +159,6 @@ There is no local Docker; never try to use testcontainers.
 - `src/share.rs` — event hand-offs (pure): `.ics`, Google Calendar link, Google/Apple Maps links
 - `src/web.rs` + `src/web.css` + `src/web.js` — HTML pages (`/`, `/events/{id}`, `/venues/{slug}`, `/sources`, `/saved`, `/about`, `POST /suggest`, `/thumbs/...`) and the Saved-events script
 - `src/web/map.rs` + `src/map.mjs` — `/map` ("Near me, right now"), `/tiles/london.pmtiles` (range requests) and the vendored map assets; `docs/map.md` (tiles refresh, licences, privacy)
+- `mobile/` — the Android app (#363): a Capacitor shell whose WebView loads the live site (`server.url`), with a bundled offline page (`www/index.html`) and no SDKs beyond Capacitor's; `.github/workflows/android.yml` builds the release AAB, signed with the upload key from Doppler; `docs/mobile.md`, tests in `tests/js/mobile_apps.test.js`
 - `ops/sql/create-role.sql` — one-off role/grants script for the DB owner
 - `tests/` — integration tests (`common/` helpers), `fixtures/`, `snapshots/`

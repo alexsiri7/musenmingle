@@ -1,0 +1,13 @@
+{
+  "name": "musenmingle-mobile",
+  "private": true,
+  "description": "Muse & Mingle phone app: a Capacitor shell around the live website (see docs/mobile.md).",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.3"
+  }
+}

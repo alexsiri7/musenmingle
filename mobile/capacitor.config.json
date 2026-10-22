@@ -1,0 +1,14 @@
+{
+  "appId": "net.interstellarai.musenmingle",
+  "appName": "Muse & Mingle",
+  "webDir": "www",
+  "server": {
+    "url": "https://musenmingle.interstellarai.net",
+    "errorPath": "index.html"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false
+  }
+}
