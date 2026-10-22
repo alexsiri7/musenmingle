@@ -242,6 +242,8 @@ test("Scenario: Saving in the app", () => {
     assert.doesNotMatch(dep, TRACKERS);
     assert.ok(dep.startsWith("@capacitor/") || dep === "typescript", dep);
   }
+  // Nor does Android copy the WebView's storage to a cloud backup.
+  assert.match(androidManifest(), /android:allowBackup="false"/);
 });
 
 test("Scenario: Store privacy label", { todo: STORES }, () => {
