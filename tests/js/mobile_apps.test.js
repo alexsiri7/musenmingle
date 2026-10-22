@@ -44,8 +44,10 @@ const bundledFiles = () =>
 
 // Splits JS-like source (JS, TS, Java, Kotlin, Swift) into code, literal
 // (string, template, regex) and comment spans. A `/` starts a regex only
-// where a value is expected, so `/^https?:\/\//` is not a comment.
-const VALUE_EXPECTED = /(^|[(,=:[!&|?{};+\-*%<>~^]|\breturn|\btypeof)\s*$/;
+// where a value is expected (after an operator, punctuation or a keyword that
+// takes an operand), so `/^https?:\/\//` is not a comment.
+const VALUE_EXPECTED =
+  /(^|[(,=:[!&|?{};+\-*%<>~^]|\b(?:return|typeof|case|else|delete|void|throw|do|instanceof|new|yield|in|of|extends|await|default))\s*$/;
 
 function literalEnd(src, i) {
   const close = src[i] === "/" ? "/" : src[i];
