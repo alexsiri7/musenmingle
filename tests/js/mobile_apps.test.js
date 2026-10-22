@@ -15,7 +15,6 @@ const ROOT = path.join(__dirname, "..", "..");
 // DEFAULT_SITE_HOST in src/web.rs.
 const SITE = "https://musenmingle.interstellarai.net";
 
-const IOS = "until #364 builds the iPhone app";
 const STORES = "until #365 publishes both apps";
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
@@ -150,7 +149,7 @@ test("Scenario: Android install", () => {
   assert.ok(fs.existsSync(path.join(ROOT, "mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png")));
 });
 
-test("Scenario: iPhone install", { todo: IOS }, () => {
+test("Scenario: iPhone install", () => {
   // WHEN a person searches the App Store for Muse & Mingle on an iPhone
   // THEN they can install the app and open it from their home screen
   // Operator check (#365): found by searching the App Store, installs, opens
@@ -213,7 +212,39 @@ test("The app shows the site's own HTTP error pages, not the offline page", () =
   assert.match(blockAt(java, onCreate), new RegExp(`\\.setWebViewClient\\(\\s*new\\s+${cls[1]}\\(`));
 });
 
-test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () => {
+test("The iPhone app opens calendar files in Safari, not the offline page", () => {
+  // Capacitor's iOS delegate loads errorPath for every failed load. WebKit
+  // can't show the site's .ics files, so the app's own delegate sends them to
+  // Safari and keeps that interruption (and cancelled loads) from Capacitor.
+  const swift = sources("mobile/ios/App/App", [".swift"]).map(code).join("\n");
+  const cls = swift.match(/class\s+(\w+)\s*:\s*NSObject\s*,\s*WKNavigationDelegate\b/);
+  assert.ok(cls, "no WKNavigationDelegate of the app's own");
+  assert.match(swift, new RegExp(`=\\s*${cls[1]}\\(capacitor:`));
+  assert.match(swift, /webView\.navigationDelegate\s*=/);
+  const body = blockAt(swift, cls.index);
+  const response = body.indexOf("decidePolicyFor navigationResponse");
+  assert.ok(response >= 0, "navigation responses are not decided");
+  assert.match(blockAt(body, response), /canShowMIMEType[\s\S]*UIApplication\.shared\.open\([\s\S]*\(\.cancel\)/);
+  // Everything else (venue links to Safari, the loading state) stays Capacitor's.
+  const responds = body.indexOf("func responds(to");
+  assert.ok(responds >= 0, "responds(to:) is not overridden");
+  assert.match(blockAt(body, responds), /super\.responds\(to:\s*aSelector\)\s*\|\|\s*capacitor\.responds\(to:\s*aSelector\)/);
+  const forwarding = body.indexOf("func forwardingTarget(for");
+  assert.ok(forwarding >= 0, "forwardingTarget(for:) is not overridden");
+  assert.match(blockAt(body, forwarding), /capacitor\.responds\(to:\s*aSelector\)\s*\?\s*capacitor\s*:\s*nil/);
+  for (const fail of ["didFail", "didFailProvisionalNavigation"]) {
+    const at = body.indexOf(`${fail} navigation`);
+    assert.ok(at >= 0, `${fail} is not overridden`);
+    const method = blockAt(body, at);
+    const guard = method.search(/if\s+!Self\.isInterruption\(error\)/);
+    assert.ok(guard >= 0, `${fail} does not skip interruptions`);
+    assert.match(blockAt(method, guard), new RegExp(`capacitor\\.webView\\?\\(webView,\\s*${fail}:\\s*navigation,\\s*withError:\\s*error\\)`));
+  }
+  assert.match(body, /NSURLErrorCancelled/);
+  assert.match(body, /"WebKitErrorDomain"\s*&&\s*error\.code\s*==\s*102/);
+});
+
+test("Scenario: Back gesture", () => {
   // WHEN a person opens an event and uses the back gesture
   // THEN they return to the list they came from
   // Operator check on both phones: open an event, go back, the same list at
@@ -257,8 +288,10 @@ test("Scenario: Saving in the app", () => {
     assert.doesNotMatch(dep, TRACKERS);
     assert.ok(dep.startsWith("@capacitor/") || dep === "typescript", dep);
   }
-  // Nor does Android copy the WebView's storage to a cloud backup.
+  // Nor does either phone copy the WebView's storage to a backup.
   assert.match(androidManifest(), /android:allowBackup="false"/);
+  const swift = sources("mobile/ios/App/App", [".swift"]).map(code);
+  assert.ok(swift.some((s) => /\.isExcludedFromBackup\s*=\s*true/.test(s)));
 });
 
 test("Scenario: Store privacy label", { todo: STORES }, () => {
@@ -273,7 +306,7 @@ test("Scenario: Store privacy label", { todo: STORES }, () => {
   assert.match(read("mobile/ios/App/App/PrivacyInfo.xcprivacy"), /<key>NSPrivacyTracking<\/key>\s*<false\/>/);
 });
 
-test("Scenario: Location refused", { todo: "until #363 and #364 ask for location" }, async () => {
+test("Scenario: Location refused", async () => {
   // WHEN a person refuses location permission
   // THEN they can still browse, filter and save events, and "Near me"
   // explains that it needs location
