@@ -198,6 +198,21 @@ test("Scenario: No connection", () => {
   assert.doesNotMatch(page, /(src|href)\s*=\s*["']?(https?:)?\/\//i);
 });
 
+test("The app shows the site's own HTTP error pages, not the offline page", () => {
+  // Capacitor's BridgeWebViewClient loads errorPath for main-frame HTTP errors
+  // too; MainActivity installs a subclass that leaves a 404 or 400 to the site.
+  const java = sources("mobile/android/app/src/main/java", [".java"]).map(code).join("\n");
+  const cls = java.match(/class\s+(\w+)\s+extends\s+BridgeWebViewClient\b/);
+  assert.ok(cls, "no BridgeWebViewClient subclass");
+  const body = blockAt(java, cls.index);
+  const override = body.indexOf("void onReceivedHttpError(");
+  assert.ok(override >= 0, "onReceivedHttpError is not overridden");
+  assert.doesNotMatch(blockAt(body, override), /onReceivedHttpError|loadUrl|getErrorUrl/);
+  const onCreate = java.indexOf("void onCreate(");
+  assert.ok(onCreate >= 0, "MainActivity.onCreate not found");
+  assert.match(blockAt(java, onCreate), new RegExp(`\\.setWebViewClient\\(\\s*new\\s+${cls[1]}\\(`));
+});
+
 test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () => {
   // WHEN a person opens an event and uses the back gesture
   // THEN they return to the list they came from
