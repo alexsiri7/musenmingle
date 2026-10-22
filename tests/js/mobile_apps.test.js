@@ -212,6 +212,28 @@ test("The app shows the site's own HTTP error pages, not the offline page", () =
   assert.match(blockAt(java, onCreate), new RegExp(`\\.setWebViewClient\\(\\s*new\\s+${cls[1]}\\(`));
 });
 
+test("The iPhone app opens calendar files in Safari, not the offline page", () => {
+  // Capacitor's iOS delegate loads errorPath for every failed load. WebKit
+  // can't show the site's .ics files, so the app's own delegate sends them to
+  // Safari and keeps that interruption (and cancelled loads) from Capacitor.
+  const swift = sources("mobile/ios/App/App", [".swift"]).map(code).join("\n");
+  const cls = swift.match(/class\s+(\w+)\s*:\s*NSObject\s*,\s*WKNavigationDelegate\b/);
+  assert.ok(cls, "no WKNavigationDelegate of the app's own");
+  assert.match(swift, new RegExp(`=\\s*${cls[1]}\\(capacitor:`));
+  assert.match(swift, /webView\.navigationDelegate\s*=/);
+  const body = blockAt(swift, cls.index);
+  const response = body.indexOf("decidePolicyFor navigationResponse");
+  assert.ok(response >= 0, "navigation responses are not decided");
+  assert.match(blockAt(body, response), /canShowMIMEType[\s\S]*UIApplication\.shared\.open\([\s\S]*\(\.cancel\)/);
+  for (const fail of ["didFail navigation", "didFailProvisionalNavigation navigation"]) {
+    const at = body.indexOf(fail);
+    assert.ok(at >= 0, `${fail} is not overridden`);
+    assert.match(blockAt(body, at), /if\s+!Self\.isInterruption\(error\)/);
+  }
+  assert.match(body, /NSURLErrorCancelled/);
+  assert.match(body, /"WebKitErrorDomain"\s*&&\s*error\.code\s*==\s*102/);
+});
+
 test("Scenario: Back gesture", () => {
   // WHEN a person opens an event and uses the back gesture
   // THEN they return to the list they came from

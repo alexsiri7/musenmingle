@@ -21,8 +21,16 @@ tests are `tests/js/mobile_apps.test.js`.
   failure) the app shows `mobile/www/index.html` (`server.errorPath`), a
   self-contained branded page. HTTP errors (a 404, a form's 400) show the
   site's own page: on Android `MainActivity` stops Capacitor from sending
-  those to the offline page too (iOS only does so for failed loads). It is the only file in the bundle (`webDir`); Capacitor serves just
+  those to the offline page too (iOS only does so for failed loads). On
+  iPhone, Capacitor sends every failed load there, so `ViewController.swift`
+  puts its own navigation delegate in front of Capacitor's and keeps loads
+  that the app itself stopped (a newer tap, a file handed to Safari) away
+  from it. It is the only file in the bundle (`webDir`); Capacitor serves just
   that page, so it inlines its CSS and icon and loads nothing.
+- **Calendar files**: WebKit can't show the site's `.ics` files ("Add to
+  calendar", "Download .ics"), so on iPhone the app opens them in Safari,
+  which offers to add them to Calendar. "Subscribe" (`webcal://`) goes
+  straight to Calendar.
 - **Venue links leave the app**: Capacitor opens every host other than ours
   in the phone's browser. Keep `server.allowNavigation` unset (or our host
   only).
@@ -127,6 +135,9 @@ screen with the icon; filters and saved events behave as on the website;
 back from an event (the back gesture; on iPhone the swipe from the left
 edge) returns to the same list and scroll position; in airplane mode the
 app shows the offline page; "See it on …" opens the phone's browser
-(Safari on iPhone); refusing location leaves everything but "Near me"
+(Safari on iPhone); on iPhone "Add to calendar" on an event and
+"Download .ics" on `/calendar` open Safari's add-to-Calendar sheet, not
+the offline page; refusing location leaves everything but "Near me"
 working; on iPhone the page starts below the status bar, and a device
-backup leaves `Library/WebKit` out.
+backup leaves `Library/WebKit` out (a failure to exclude it is logged
+in the device console).
