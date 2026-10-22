@@ -129,6 +129,16 @@ function memoryStorage() {
   };
 }
 
+test("code() keeps a same-line regex after any keyword that takes an operand", () => {
+  const keywords = ["return", "typeof", "case", "else", "delete", "void", "throw", "do", "instanceof", "new",
+    "yield", "in", "of", "extends", "await", "default"];
+  for (const kw of keywords) {
+    const src = `${kw} /^https?:\\/\\//i.test(u); App.addListener("backButton", f);`;
+    assert.ok(code(src).includes("backButton"), `${kw} hid the listener`);
+  }
+  assert.ok(!code("a = b / c; // backButton").includes("backButton"));
+});
+
 test("Scenario: Android install", { todo: ANDROID }, () => {
   // WHEN a person searches Google Play for Muse & Mingle on an Android phone
   // THEN they can install the app and open it from their home screen
