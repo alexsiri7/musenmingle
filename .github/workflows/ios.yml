@@ -1,0 +1,112 @@
+name: iOS
+
+# Builds the iPhone app (mobile/, docs/mobile.md) as a release IPA, signed
+# with the distribution certificate and provisioning profile from Doppler.
+# Pull requests build it unsigned when those aren't available; main and
+# manual runs fail without them.
+on:
+  pull_request:
+    paths: ["mobile/**", ".github/workflows/ios.yml"]
+  push:
+    branches: [main]
+    paths: ["mobile/**", ".github/workflows/ios.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ipa:
+    name: release IPA
+    runs-on: macos-26
+    env:
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      - run: npx cap sync ios
+      - name: Fetch the signing credentials from Doppler
+        if: env.DOPPLER_TOKEN != ''
+        uses: dopplerhq/secrets-fetch-action@v2.0.0
+        with:
+          doppler-token: ${{ env.DOPPLER_TOKEN }}
+          inject-env-vars: true
+      - name: Require the signing credentials outside pull requests
+        run: |
+          if [ -n "${IOS_CERTIFICATE_BASE64:-}" ]; then
+            echo "IOS_SIGN=1" >> "$GITHUB_ENV"
+          elif [ "$GITHUB_EVENT_NAME" != pull_request ]; then
+            echo "::error::No iOS signing credentials: set DOPPLER_TOKEN and the IOS_* Doppler secrets (docs/mobile.md)."
+            exit 1
+          fi
+      - name: Install the certificate and provisioning profile
+        if: env.IOS_SIGN == '1'
+        run: |
+          keychain="$RUNNER_TEMP/signing.keychain-db"
+          password="$(uuidgen)"
+          security create-keychain -p "$password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$password" "$keychain"
+          echo "$IOS_CERTIFICATE_BASE64" | base64 --decode > "$RUNNER_TEMP/distribution.p12"
+          security import "$RUNNER_TEMP/distribution.p12" -k "$keychain" -P "$IOS_CERTIFICATE_PASSWORD" -f pkcs12 -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -k "$password" "$keychain" > /dev/null
+          security list-keychains -d user -s "$keychain" $(security list-keychains -d user | tr -d '"')
+
+          echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$RUNNER_TEMP/profile.mobileprovision"
+          security cms -D -i "$RUNNER_TEMP/profile.mobileprovision" > "$RUNNER_TEMP/profile.plist"
+          uuid="$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$RUNNER_TEMP/profile.plist")"
+          profiles="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
+          mkdir -p "$profiles"
+          cp "$RUNNER_TEMP/profile.mobileprovision" "$profiles/$uuid.mobileprovision"
+          {
+            echo "IOS_PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/profile.plist")"
+            echo "IOS_TEAM_ID=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' "$RUNNER_TEMP/profile.plist")"
+          } >> "$GITHUB_ENV"
+      - name: Archive the app
+        working-directory: mobile/ios/App
+        run: |
+          if [ "${IOS_SIGN:-}" = 1 ]; then
+            signing=(CODE_SIGN_STYLE=Manual "CODE_SIGN_IDENTITY=Apple Distribution"
+              "DEVELOPMENT_TEAM=$IOS_TEAM_ID" "PROVISIONING_PROFILE_SPECIFIER=$IOS_PROFILE_NAME")
+          else
+            signing=(CODE_SIGNING_ALLOWED=NO)
+          fi
+          xcodebuild -project App.xcodeproj -scheme App -configuration Release \
+            -destination generic/platform=iOS -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CURRENT_PROJECT_VERSION=${{ github.run_number }} "${signing[@]}" archive
+      - name: Export the signed IPA
+        if: env.IOS_SIGN == '1'
+        run: |
+          plist="$RUNNER_TEMP/ExportOptions.plist"
+          /usr/libexec/PlistBuddy -c 'Add :method string app-store-connect' \
+            -c 'Add :signingStyle string manual' \
+            -c "Add :teamID string $IOS_TEAM_ID" \
+            -c 'Add :provisioningProfiles dict' \
+            -c "Add :provisioningProfiles:net.interstellarai.musenmingle string $IOS_PROFILE_NAME" "$plist"
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist "$plist" -exportPath "$RUNNER_TEMP/ipa"
+          mv "$RUNNER_TEMP"/ipa/*.ipa "$RUNNER_TEMP/MuseAndMingle.ipa"
+      - name: Package the unsigned IPA
+        if: env.IOS_SIGN != '1'
+        run: |
+          cd "$RUNNER_TEMP"
+          mkdir Payload
+          cp -R App.xcarchive/Products/Applications/App.app Payload/
+          zip -qry MuseAndMingle.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: musenmingle-ios-${{ github.run_number }}
+          path: ${{ runner.temp }}/MuseAndMingle.ipa
+          if-no-files-found: error

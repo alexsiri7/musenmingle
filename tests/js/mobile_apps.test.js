@@ -15,7 +15,6 @@ const ROOT = path.join(__dirname, "..", "..");
 // DEFAULT_SITE_HOST in src/web.rs.
 const SITE = "https://musenmingle.interstellarai.net";
 
-const IOS = "until #364 builds the iPhone app";
 const STORES = "until #365 publishes both apps";
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), "utf8");
@@ -150,7 +149,7 @@ test("Scenario: Android install", () => {
   assert.ok(fs.existsSync(path.join(ROOT, "mobile/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png")));
 });
 
-test("Scenario: iPhone install", { todo: IOS }, () => {
+test("Scenario: iPhone install", () => {
   // WHEN a person searches the App Store for Muse & Mingle on an iPhone
   // THEN they can install the app and open it from their home screen
   // Operator check (#365): found by searching the App Store, installs, opens
@@ -213,7 +212,7 @@ test("The app shows the site's own HTTP error pages, not the offline page", () =
   assert.match(blockAt(java, onCreate), new RegExp(`\\.setWebViewClient\\(\\s*new\\s+${cls[1]}\\(`));
 });
 
-test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () => {
+test("Scenario: Back gesture", () => {
   // WHEN a person opens an event and uses the back gesture
   // THEN they return to the list they came from
   // Operator check on both phones: open an event, go back, the same list at
@@ -257,8 +256,10 @@ test("Scenario: Saving in the app", () => {
     assert.doesNotMatch(dep, TRACKERS);
     assert.ok(dep.startsWith("@capacitor/") || dep === "typescript", dep);
   }
-  // Nor does Android copy the WebView's storage to a cloud backup.
+  // Nor does either phone copy the WebView's storage to a backup.
   assert.match(androidManifest(), /android:allowBackup="false"/);
+  const swift = sources("mobile/ios/App/App", [".swift"]).map(code);
+  assert.ok(swift.some((s) => /\.isExcludedFromBackup\s*=\s*true/.test(s)));
 });
 
 test("Scenario: Store privacy label", { todo: STORES }, () => {
@@ -273,7 +274,7 @@ test("Scenario: Store privacy label", { todo: STORES }, () => {
   assert.match(read("mobile/ios/App/App/PrivacyInfo.xcprivacy"), /<key>NSPrivacyTracking<\/key>\s*<false\/>/);
 });
 
-test("Scenario: Location refused", { todo: "until #363 and #364 ask for location" }, async () => {
+test("Scenario: Location refused", async () => {
   // WHEN a person refuses location permission
   // THEN they can still browse, filter and save events, and "Near me"
   // explains that it needs location
