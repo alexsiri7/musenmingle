@@ -42,6 +42,41 @@ const bundledFiles = () =>
     .filter((e) => e.isFile())
     .map((e) => e.name);
 
+// Source text without its comments, so a commented-out line never counts.
+const code = (src) => src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+
+// Files under `dir` ending in one of `exts`, skipping dependencies and build output.
+function sources(dir, exts) {
+  return fs
+    .readdirSync(path.join(ROOT, dir), { recursive: true })
+    .filter((f) => exts.some((x) => f.endsWith(x)))
+    .filter((f) => !f.split(path.sep).some((d) => ["node_modules", "build", ".gradle", "Pods"].includes(d)))
+    .map((f) => read(path.join(dir, f)));
+}
+
+// The `{ … }` block starting at the first `{` at or after `from`, matched
+// past strings and comments.
+function blockAt(src, from) {
+  const start = src.indexOf("{", from);
+  let depth = 0;
+  for (let i = start; i < src.length; i++) {
+    const ch = src[i];
+    if (ch === '"' || ch === "'" || ch === "`") {
+      for (i++; i < src.length && src[i] !== ch; i++) if (src[i] === "\\") i++;
+    } else if (src.startsWith("//", i)) {
+      i = src.indexOf("\n", i);
+      if (i === -1) break;
+    } else if (src.startsWith("/*", i)) {
+      i = src.indexOf("*/", i) + 1;
+    } else if (ch === "{") {
+      depth++;
+    } else if (ch === "}" && --depth === 0) {
+      return src.slice(start, i + 1);
+    }
+  }
+  throw new Error(`unbalanced block at ${from}`);
+}
+
 const TRACKERS =
   /analytics|firebase|crashlytics|sentry|segment|amplitude|mixpanel|admob|ads|facebook|appsflyer|adjust|branch|onesignal|bugsnag|datadog|posthog/i;
 
@@ -121,13 +156,16 @@ test("Scenario: Back gesture", { todo: "until #363 and #364 handle back" }, () =
   // Operator check on both phones: open an event, go back, the same list at
   // the same scroll position.
   // Android: with @capacitor/app and no backButton listener, back goes back
-  // in the WebView's history.
+  // in the WebView's history. The site runs inside the app's bridge, so its
+  // scripts must not take back over either.
   assert.ok(shellDeps().includes("@capacitor/app"));
+  const scripts = [...sources("mobile", [".js", ".mjs", ".ts", ".java", ".kt"]), read("src/web.js"), read("src/map.mjs")];
+  for (const src of scripts.map(code)) {
+    assert.doesNotMatch(src, /addListener\(\s*['"]backButton['"]/);
+    assert.doesNotMatch(src, /\bonBackPressed\b|OnBackPressedCallback/);
+  }
   // iOS: Capacitor has no setting for the swipe; the app's own Swift turns it on.
-  const swift = fs
-    .readdirSync(path.join(ROOT, "mobile/ios/App/App"), { recursive: true })
-    .filter((f) => f.endsWith(".swift"))
-    .map((f) => read(path.join("mobile/ios/App/App", f)));
+  const swift = sources("mobile/ios/App/App", [".swift"]).map(code);
   assert.ok(swift.some((s) => /allowsBackForwardNavigationGestures\s*=\s*true/.test(s)));
 });
 
@@ -182,10 +220,10 @@ test("Scenario: Location refused", { todo: "until #363 and #364 ask for location
   await assert.rejects(m.locate(refuse), (e) => e.reason === "denied");
   assert.match(m.locateMessage("denied", "Central London"), /^Location permission was not given/);
   const src = read("src/map.mjs");
-  const ask = src.indexOf("locate(navigator.geolocation)");
-  assert.equal(src.lastIndexOf("locate(navigator.geolocation)"), ask);
-  const click = src.lastIndexOf('addEventListener("click", async () => {', ask);
-  assert.ok(click !== -1 && click < ask);
+  assert.equal(src.split("locate(navigator.geolocation)").length, 2);
+  const listener = src.indexOf('locateBtn.addEventListener("click"');
+  assert.notEqual(listener, -1);
+  assert.ok(blockAt(src, listener).includes("locate(navigator.geolocation)"));
   // The app may ask while in use, never in the background.
   const manifest = androidManifest();
   assert.match(manifest, /android\.permission\.ACCESS_(COARSE|FINE)_LOCATION/);
