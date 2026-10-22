@@ -5,7 +5,8 @@ workshops and community events (CreativeMornings, writing groups, ...).
 
 This repository is the **ingestion backend**, the **read API** and a
 minimal server-rendered **web page** (https://musenmingle.interstellarai.net),
-written in Rust (axum, tokio, sqlx, reqwest, maud).
+written in Rust (axum, tokio, sqlx, reqwest, maud). The Android app in
+`mobile/` is that website in a Capacitor shell (`docs/mobile.md`).
 
 The project was called **Thaleia** until 2026-09-26. The old host
 `thaleia.interstellarai.net` stays attached and redirects to the new one
