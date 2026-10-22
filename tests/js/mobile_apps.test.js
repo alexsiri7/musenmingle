@@ -225,10 +225,20 @@ test("The iPhone app opens calendar files in Safari, not the offline page", () =
   const response = body.indexOf("decidePolicyFor navigationResponse");
   assert.ok(response >= 0, "navigation responses are not decided");
   assert.match(blockAt(body, response), /canShowMIMEType[\s\S]*UIApplication\.shared\.open\([\s\S]*\(\.cancel\)/);
-  for (const fail of ["didFail navigation", "didFailProvisionalNavigation navigation"]) {
-    const at = body.indexOf(fail);
+  // Everything else (venue links to Safari, the loading state) stays Capacitor's.
+  const responds = body.indexOf("func responds(to");
+  assert.ok(responds >= 0, "responds(to:) is not overridden");
+  assert.match(blockAt(body, responds), /super\.responds\(to:\s*aSelector\)\s*\|\|\s*capacitor\.responds\(to:\s*aSelector\)/);
+  const forwarding = body.indexOf("func forwardingTarget(for");
+  assert.ok(forwarding >= 0, "forwardingTarget(for:) is not overridden");
+  assert.match(blockAt(body, forwarding), /capacitor\.responds\(to:\s*aSelector\)\s*\?\s*capacitor\s*:\s*nil/);
+  for (const fail of ["didFail", "didFailProvisionalNavigation"]) {
+    const at = body.indexOf(`${fail} navigation`);
     assert.ok(at >= 0, `${fail} is not overridden`);
-    assert.match(blockAt(body, at), /if\s+!Self\.isInterruption\(error\)/);
+    const method = blockAt(body, at);
+    const guard = method.search(/if\s+!Self\.isInterruption\(error\)/);
+    assert.ok(guard >= 0, `${fail} does not skip interruptions`);
+    assert.match(blockAt(method, guard), new RegExp(`capacitor\\.webView\\?\\(webView,\\s*${fail}:\\s*navigation,\\s*withError:\\s*error\\)`));
   }
   assert.match(body, /NSURLErrorCancelled/);
   assert.match(body, /"WebKitErrorDomain"\s*&&\s*error\.code\s*==\s*102/);
