@@ -1,0 +1,74 @@
+name: Android
+
+# Builds the Android app (mobile/, docs/mobile.md) as a release AAB. Pull
+# requests build it unsigned unless the Doppler token is available; main and
+# manual runs must sign it with the upload key from Doppler.
+on:
+  pull_request:
+    paths: ["mobile/**", ".github/workflows/android.yml"]
+  push:
+    branches: [main]
+    paths: ["mobile/**", ".github/workflows/android.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    name: release AAB
+    runs-on: ubuntu-latest
+    env:
+      DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+          cache-dependency-path: mobile/android/**/*.gradle*
+      - run: npm ci
+      - run: npx cap sync android
+      - name: Require the signing key outside pull requests
+        if: github.event_name != 'pull_request' && env.DOPPLER_TOKEN == ''
+        run: |
+          echo "::error::DOPPLER_TOKEN is not set: add a Doppler service token for the Android signing config (docs/mobile.md)."
+          exit 1
+      - name: Fetch the upload key from Doppler
+        if: env.DOPPLER_TOKEN != ''
+        uses: dopplerhq/secrets-fetch-action@v2.0.0
+        with:
+          doppler-token: ${{ env.DOPPLER_TOKEN }}
+          inject-env-vars: true
+      - name: Write the keystore
+        if: env.DOPPLER_TOKEN != ''
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/upload.jks" >> "$GITHUB_ENV"
+      - name: Build the release bundle
+        working-directory: mobile/android
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
+        run: ./gradlew --no-daemon bundleRelease
+      - name: Check the signature
+        if: env.DOPPLER_TOKEN != ''
+        # Not -strict: an upload key is self-signed. An unsigned bundle also exits 0.
+        run: jarsigner -verify android/app/build/outputs/bundle/release/app-release.aab | grep -x "jar verified."
+      - uses: actions/upload-artifact@v4
+        with:
+          name: musenmingle-android-${{ github.run_number }}
+          path: mobile/android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
