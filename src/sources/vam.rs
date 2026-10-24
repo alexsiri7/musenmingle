@@ -36,8 +36,10 @@
 //!   on-demand items, members-only, schools and educators' events, recurring
 //!   series ("Every Monday …"), open-ended displays ("Now open" without a
 //!   closing date) and timed non-exhibition items spanning several days
-//!   (session series whose start and end are months apart); `qa_scope` tells
-//!   the scraper check.
+//!   (session series whose start and end are months apart; the card shows
+//!   only the envelope, e.g. "On now until …", and the dates of the
+//!   sessions, such as upperground's Thursdays with a gap on 29 October
+//!   2026, are in prose only); `qa_scope` tells the scraper check.
 //! * Content policy (seed): facts + link only; see the migration.
 
 use std::str::FromStr;
@@ -391,8 +393,10 @@ impl Source for Vam {
              schools and educators' events, items with no venue (museum-wide seasons \
              such as the Digital Art Season), recurring series whose date line \
              starts \"Every …\" (the National Art Library talks), open-ended \
-             displays (\"Now open\"), and timed events that run over several days \
-             (session series such as Mini Play).",
+             displays (\"Now open\"), and special events, talks and workshops that \
+             run over several days, whether the date line gives a range or reads \
+             \"On now until …\" (weekly or session series such as the upperground DJ \
+             sets, Woodworking Saturdays or Mini Play).",
         )
     }
 }
@@ -499,7 +503,13 @@ mod tests {
         for word in SKIP_TYPES.iter().chain(SKIP_WORDS) {
             assert!(scope.contains(word), "{word}");
         }
-        for word in ["no venue", "\"Every", "\"Now open\"", "several days"] {
+        for word in [
+            "no venue",
+            "\"Every",
+            "\"Now open\"",
+            "several days",
+            "\"On now until",
+        ] {
             assert!(scope.contains(word), "{word}");
         }
     }

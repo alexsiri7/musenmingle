@@ -120,6 +120,36 @@ fn qa_2026_09_29_page_values() {
     );
 }
 
+/// Issue #371: the scraper check of 2026-10-24 found "upperground: DJ sets"
+/// missed. It is a weekly Thursday DJ residency (the card says "On now until
+/// …"; the microdata spans 8 October – 17 December, and the sessions,
+/// including the gap on 29 October, are in prose only): a series of
+/// sessions over several days, skipped on purpose (`qa_scope`). Expected
+/// values are the page's.
+#[test]
+fn qa_2026_10_24_page_values() {
+    let raws = parse_listing(&fixture(&format!("{DIR}/qa-2026-10-24.html")));
+    let raw = raws
+        .iter()
+        .find(|r| {
+            r.source_event_id == "event/p9PR3vALR5D/upperground-dj-sets-october-december-2026"
+        })
+        .expect("listed");
+    let skipped = source().normalise(raw).expect("normalise").is_none();
+    insta::assert_json_snapshot!(
+        "vam_qa_2026_10_24",
+        serde_json::json!({
+            "title": raw.payload["title"],
+            "type": raw.payload["type"],
+            "date_text": raw.payload["date_text"],
+            "venue": raw.payload["venue"],
+            "start": raw.payload["start"],
+            "end": raw.payload["end"],
+            "skipped": skipped,
+        })
+    );
+}
+
 #[tokio::test]
 async fn fetches_the_listing_via_fetch_context() {
     let server = MockServer::start().await;
