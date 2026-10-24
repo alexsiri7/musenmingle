@@ -1,0 +1,13 @@
+---
+source: tests/source_vam.rs
+expression: "serde_json::json!({\n    \"title\": raw.payload[\"title\"], \"type\": raw.payload[\"type\"], \"date_text\":\n    raw.payload[\"date_text\"], \"venue\": raw.payload[\"venue\"], \"start\":\n    raw.payload[\"start\"], \"end\": raw.payload[\"end\"], \"skipped\": skipped,\n})"
+---
+{
+  "date_text": "On now until Thursday, 17 December 2026",
+  "end": "2026-12-17 21:30:00 +0000",
+  "skipped": true,
+  "start": "2026-10-08 19:30:00 +0100",
+  "title": "upperground: DJ sets",
+  "type": "Special event",
+  "venue": "V&A East Museum"
+}
