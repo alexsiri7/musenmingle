@@ -156,6 +156,29 @@ fn date_only_start_is_all_day_even_with_a_closing_time_end() {
 }
 
 #[test]
+fn the_magazine_is_the_north_gallery_building() {
+    let event = normalise_payload(&serde_json::json!({
+        "jsonld": {
+            "name": "Zaha Hadid: The World is Not a Rectangle",
+            "startDate": "2026-10-31T18:30:00+00:00",
+            "location": {"@type": "Place", "name": "The Magazine"},
+        },
+        "price_text": null,
+    }))
+    .unwrap()
+    .unwrap();
+    assert_eq!(
+        event.venue_name.as_deref(),
+        Some("Serpentine North Gallery")
+    );
+    assert_eq!(
+        event.address.as_deref(),
+        Some("West Carriage Drive, Kensington Gardens, London W2 2AR")
+    );
+    assert_eq!((event.lat, event.lng), (Some(51.5055), Some(-0.1718)));
+}
+
+#[test]
 fn every_listing_link_has_a_fixture() {
     // Keeps the fixture set complete when the listing fixture is refreshed.
     let slugs = detail_slugs();
