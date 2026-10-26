@@ -124,7 +124,8 @@ pub fn parse_detail(html: &str, path: &str) -> Option<RawEvent> {
 /// Coordinates are approximate building locations in Kensington Gardens.
 pub fn venue_details(location: &str) -> Option<(&'static str, &'static str, f64, f64)> {
     let l = location.to_lowercase();
-    if l.contains("north") || l.contains("sackler") {
+    // "The Magazine" is the Zaha Hadid building that houses the North Gallery.
+    if l.contains("north") || l.contains("sackler") || l.contains("magazine") {
         Some((
             "Serpentine North Gallery",
             "West Carriage Drive, Kensington Gardens, London W2 2AR",
