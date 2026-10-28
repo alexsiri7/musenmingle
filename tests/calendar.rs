@@ -282,7 +282,7 @@ async fn month_view_places_events_once_with_markers() {
         "{wed}"
     );
     assert!(wed.contains("<span class=\"cal-venue\">Barbican</span>"));
-    assert!(!b.contains("November talk"));
+    assert!(!grid.contains("November talk"));
 
     // Agenda markup: days without events are marked (hidden at phone width),
     // every day heading names the weekday and month for the list layout.
