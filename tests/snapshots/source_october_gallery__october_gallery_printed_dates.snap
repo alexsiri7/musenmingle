@@ -1,0 +1,41 @@
+---
+source: tests/source_october_gallery.rs
+expression: "serde_json::json!({\"raw\": raw, \"event\":\n    s.normalise(&raw).expect(\"normalise\")})"
+---
+{
+  "event": {
+    "address": "24 Old Gloucester Street, London WC1N 3AL",
+    "all_day": true,
+    "category": "exhibition",
+    "dedupe_key": "education-exhibition-who-wears-future|2026-01-20|october",
+    "description": null,
+    "ends_at": "2026-01-30T00:00:00Z",
+    "image_url": "https://www.octobergallery.co.uk/website_safezone/images/figures/who_wears_the_future_portraitish.webp",
+    "lat": 51.5215,
+    "lng": -0.1236,
+    "price": {
+      "currency": null,
+      "is_free": false,
+      "max": null,
+      "min": null
+    },
+    "starts_at": "2026-01-20T00:00:00Z",
+    "tags": [],
+    "title": "Education Exhibition: Who Wears the Future?",
+    "url": "https://www.octobergallery.co.uk/exhibitions/who-wears-the-future",
+    "venue_name": "October Gallery"
+  },
+  "raw": {
+    "payload": {
+      "dates": "20th - 30th January 2026",
+      "image_url": "https://www.octobergallery.co.uk/website_safezone/images/figures/who_wears_the_future_portraitish.webp",
+      "kind": "printed_exhibition",
+      "listed_on": "2026-09-27",
+      "prose": null,
+      "title": "Education Exhibition: Who Wears the Future?",
+      "url": "https://www.octobergallery.co.uk/exhibitions/who-wears-the-future"
+    },
+    "source_event_id": "who-wears-the-future",
+    "source_url": "https://www.octobergallery.co.uk/exhibitions/who-wears-the-future"
+  }
+}
