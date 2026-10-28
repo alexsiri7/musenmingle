@@ -625,6 +625,30 @@ mod tests {
     }
 
     #[test]
+    fn timings_read_one_session_per_paragraph_or_line() {
+        let timings = |sessions: &str| {
+            let html = format!(
+                r#"<div class="title_and_icon"><h2>Mini Morris</h2></div>
+                <aside><div class="event_detail"><h4>Timings</h4>
+                <p class="large timings_date">Thursday 19 November 2026</p>
+                {sessions}</div></aside>"#
+            );
+            parse_detail(&html).unwrap().sessions
+        };
+        let both = ["10:00am to 11:00am.", "11:30am to 12:30pm."];
+        assert_eq!(
+            timings(
+                r#"<p class="large">10:00am to 11:00am.</p><p class="large">11:30am to 12:30pm.</p>"#
+            ),
+            both
+        );
+        assert_eq!(
+            timings(r#"<p class="large">10:00am to 11:00am.<br />11:30am to 12:30pm.<br /></p>"#),
+            both
+        );
+    }
+
+    #[test]
     fn bad_dates_or_sessions_are_errors() {
         for payload in [
             event("Autumn 2026", &[], &["workshops"]),
