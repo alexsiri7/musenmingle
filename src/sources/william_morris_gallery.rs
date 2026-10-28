@@ -20,7 +20,7 @@
 //!   "On now until Sunday 14 March 2027", and no page, card, JSON-LD or
 //!   sitemap says when it started any more), sidebar blocks headed "Timings"
 //!   (the date in `p.timings_date`, then a paragraph per session, "1:00pm to
-//!   4:00pm."), "Fees" and "Other information", and the event's categories
+//!   4:00pm.", or one paragraph with a line per session), "Fees" and "Other information", and the event's categories
 //!   as `event-category-*` classes on the `<article>`. The sidebar nests
 //!   `<p>` in `<p>`, which the parser splits into siblings, so blocks are
 //!   read paragraph by paragraph.
@@ -43,7 +43,7 @@
 
 use async_trait::async_trait;
 use chrono::{NaiveDate, NaiveTime};
-use scraper::{ElementRef, Html, Selector};
+use scraper::{ElementRef, Html, Node, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
@@ -87,6 +87,27 @@ fn selector(s: &str) -> Selector {
 
 fn element_text(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
+}
+
+/// The non-empty lines of an element split at its `<br>`s.
+fn element_lines(e: ElementRef<'_>) -> Vec<String> {
+    let mut lines = vec![String::new()];
+    for node in e.descendants() {
+        match node.value() {
+            Node::Text(t) => {
+                let line = lines.last_mut().expect("never empty");
+                line.push_str(t);
+                line.push(' ');
+            }
+            Node::Element(el) if el.name() == "br" => lines.push(String::new()),
+            _ => {}
+        }
+    }
+    lines
+        .iter()
+        .map(|l| clean_text(l))
+        .filter(|l| !l.is_empty())
+        .collect()
 }
 
 /// `/event/<slug>/` from a card's `href`.
@@ -175,7 +196,7 @@ pub struct Detail {
 }
 
 /// The non-empty paragraphs of the sidebar block headed `heading`.
-fn sidebar_paragraphs(doc: &Html, heading: &str) -> Vec<String> {
+fn sidebar_paragraphs<'a>(doc: &'a Html, heading: &str) -> Vec<ElementRef<'a>> {
     doc.select(&selector("aside div.event_detail"))
         .find(|block| {
             block
@@ -186,8 +207,7 @@ fn sidebar_paragraphs(doc: &Html, heading: &str) -> Vec<String> {
         .map(|block| {
             block
                 .select(&selector("p"))
-                .map(element_text)
-                .filter(|t| !t.is_empty())
+                .filter(|p| !element_text(*p).is_empty())
                 .collect()
         })
         .unwrap_or_default()
@@ -217,7 +237,8 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
         sidebar_paragraphs(&doc, "Other information"),
     ]
     .into_iter()
-    .find_map(|ps| ps.into_iter().next());
+    .find_map(|ps| ps.into_iter().next())
+    .map(element_text);
     Some(Detail {
         title,
         subtitle: first_text("div.event_header_details h3"),
@@ -225,6 +246,7 @@ pub fn parse_detail(html: &str) -> Option<Detail> {
         sessions: sidebar_paragraphs(&doc, "Timings")
             .into_iter()
             .skip(1)
+            .flat_map(element_lines)
             .collect(),
         categories,
         price_text,

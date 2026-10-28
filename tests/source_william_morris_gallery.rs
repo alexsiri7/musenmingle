@@ -321,3 +321,51 @@ async fn full_grid_without_a_page_id_is_reported() {
     assert!(errors[0].contains("no page id"), "{errors:?}");
     assert!(errors[1].contains("without a title"), "{errors:?}");
 }
+
+/// Same-day sessions as lines of one paragraph (#379): the first is the time.
+#[test]
+fn sessions_in_one_paragraph_snapshot() {
+    let p = "/event/mini-morris-wonderful-windows/";
+    let detail = parse_detail(&detail_html(slug(p))).expect("detail");
+    assert_eq!(
+        detail.sessions,
+        ["10:00am to 11:00am", "11:30am to 12:30pm"]
+    );
+    let site: Url = SITE.parse().unwrap();
+    let raw = detail_event(p, &site.join(p).unwrap(), &detail);
+    let event = WilliamMorrisGallery::new(site)
+        .normalise(&raw)
+        .expect("normalise")
+        .expect("in scope");
+    assert_eq!(event.starts_at.to_rfc3339(), "2026-11-19T10:00:00+00:00");
+    insta::assert_json_snapshot!(
+        "william_morris_gallery_sessions_in_one_paragraph",
+        serde_json::json!({ "payload": raw.payload, "event": event })
+    );
+}
+
+#[tokio::test]
+async fn fetches_sessions_in_one_paragraph_via_fetch_context() {
+    let p = "/event/mini-morris-wonderful-windows/";
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    let listing = format!(
+        r#"<html><body><div class="event_grid" id="response">{}</div></body></html>"#,
+        card(slug(p))
+    );
+    serve(&server, "/whats-on/", listing).await;
+    serve(&server, p, detail_html(slug(p))).await;
+
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let s = WilliamMorrisGallery::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert!(errors.is_empty(), "{errors:?}");
+    assert_eq!(raws.len(), 1);
+    let event = s.normalise(&raws[0]).unwrap().unwrap();
+    assert_eq!(event.starts_at.to_rfc3339(), "2026-11-19T10:00:00+00:00");
+    assert_eq!(
+        event.ends_at.unwrap().to_rfc3339(),
+        "2026-11-19T11:00:00+00:00"
+    );
+}

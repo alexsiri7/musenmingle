@@ -1,0 +1,45 @@
+---
+source: tests/source_william_morris_gallery.rs
+expression: "serde_json::json!({ \"payload\": raw.payload, \"event\": event })"
+---
+{
+  "event": {
+    "address": "Lloyd Park, Forest Road, Walthamstow, London E17 4PP",
+    "all_day": false,
+    "category": "workshop",
+    "dedupe_key": "mini-morris-wonderful-windows|2026-11-19|william-morris",
+    "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds Discover the beauty of William Morris’s stained glass designs in this colourful window-making workshop. Taking inspiration from the stained glass on display in the Gallery, children will explore Morris’s work before creating their own artwork using paper and vibrant cellophane. Experimenting with colour, shape and pattern, they’ll design a stained glass-style window to take home and display. Hang it in a window and watch it catch the winter light, bringing a touch of William Morris-inspired colour into your home. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge.",
+    "ends_at": "2026-11-19T11:00:00Z",
+    "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/IMG_4060-scaled.jpg",
+    "lat": 51.5913,
+    "lng": -0.0203,
+    "price": {
+      "currency": null,
+      "is_free": true,
+      "max": "0",
+      "min": "0"
+    },
+    "starts_at": "2026-11-19T10:00:00Z",
+    "tags": [],
+    "title": "Mini Morris: Wonderful Windows",
+    "url": "https://www.wmgallery.org.uk/event/mini-morris-wonderful-windows/",
+    "venue_name": "William Morris Gallery"
+  },
+  "payload": {
+    "categories": [
+      "families",
+      "workshops"
+    ],
+    "dates_text": "Thursday 19 November 2026",
+    "description": "Join us for Mini Morris drop in sessions. Toddler-friendly crafting for 2-5 year olds Discover the beauty of William Morris’s stained glass designs in this colourful window-making workshop. Taking inspiration from the stained glass on display in the Gallery, children will explore Morris’s work before creating their own artwork using paper and vibrant cellophane. Experimenting with colour, shape and pattern, they’ll design a stained glass-style window to take home and display. Hang it in a window and watch it catch the winter light, bringing a touch of William Morris-inspired colour into your home. Mini Morris sessions are now DROP IN ONLY. FREE. Donations welcome. As this can be a messy session, please wear or bring old clothes. Aprons are available. All sessions include the craft activity, singing and a snack to take away. Led by artist educator Lesley Palmer of Scribble & Smudge.",
+    "image_url": "https://www.wmgallery.org.uk/wp-content/uploads/2026/10/IMG_4060-scaled.jpg",
+    "price_text": "These are FREE sessions but donations in support of our public programme are always welcomed.",
+    "sessions": [
+      "10:00am to 11:00am",
+      "11:30am to 12:30pm"
+    ],
+    "subtitle": "Wonderful Windows",
+    "title": "Mini Morris",
+    "url": "https://www.wmgallery.org.uk/event/mini-morris-wonderful-windows/"
+  }
+}
