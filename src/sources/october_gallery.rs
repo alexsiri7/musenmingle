@@ -9,12 +9,18 @@
 //!   everything from the "Recent" anchor (`a[name="previous"]`) on, and the
 //!   by-year menu, is the archive. Unlinked items (art-fair booths
 //!   elsewhere) have no page and are left out.
-//! * Each exhibition page carries one `ExhibitionEvent` with date-only
+//! * Most exhibition pages carry one `ExhibitionEvent` with date-only
 //!   `startDate`/`endDate` (matching the printed "8th October - 21st
 //!   November"), stored `all_day` at London midnight of the first and last
 //!   day, and an `offers` price (0: free). Its `description` is empty or a
 //!   one-line lead, so the description is the page's own prose
 //!   (`article.main-text > p`). At most [`MAX_DETAIL_PAGES`] pages a run.
+//! * Pages without one (the yearly "Education Exhibition") are read from
+//!   their printed title (`.exhib-title h1`) and dates (`.exhib-title
+//!   .dates`: "20th - 30th January 2026", "30 July – 2 August 2025"):
+//!   ordinals stripped, then Chisenhale's [`parse_date_range`], a year-less
+//!   range resolved against `listed_on`. The printed year is taken as
+//!   written. The image is the page's first `figure img`.
 //! * `/events/` has no JSON-LD and no per-event pages. Only its
 //!   "Forthcoming Events" block (the `.flex-parent` that isn't the past
 //!   events' `.moreflexitems`) is read: title (`.minor-heading`), a free-text
@@ -43,11 +49,11 @@ use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
-use super::chisenhale_gallery::{infer_date, parse_time_range};
+use super::chisenhale_gallery::{infer_date, parse_date_range, parse_time_range};
 use super::jsonld::{extract_events, first_offer, image_url};
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
-use crate::model::{Category, NewEvent, RawEvent};
+use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
     normalise_title_for_key, parse_price, price_from_amounts,
@@ -125,24 +131,53 @@ pub fn parse_listing(html: &str, page_url: &Url) -> Vec<String> {
 }
 
 /// Parse an exhibition page (fetched from `page_url`) into a [`RawEvent`]:
-/// its `ExhibitionEvent` node plus the page's prose. `None` without one.
-pub fn parse_detail(html: &str, page_url: &Url) -> Option<RawEvent> {
+/// its `ExhibitionEvent` node, else its printed title and dates, plus the
+/// page's prose. `None` with neither. `listed_on` is the London date of the
+/// fetch, kept for year inference.
+pub fn parse_detail(html: &str, page_url: &Url, listed_on: NaiveDate) -> Option<RawEvent> {
     let doc = Html::parse_document(html);
-    let event = extract_events(&doc).into_iter().next()?;
     let prose: Vec<String> = doc
         .select(&selector("#inner-content article.main-text > p"))
         .map(|p| p.inner_html())
         .collect();
+    let prose = (!prose.is_empty()).then(|| prose.join("\n"));
     let slug = page_url.path().trim_matches('/').rsplit('/').next()?;
-    Some(RawEvent {
-        source_event_id: slug.to_string(),
-        source_url: Some(page_url.to_string()),
-        payload: json!({
+    let payload = match extract_events(&doc).into_iter().next() {
+        Some(event) => json!({
             "kind": "exhibition",
             "url": page_url.as_str(),
             "jsonld": event,
-            "prose": (!prose.is_empty()).then(|| prose.join("\n")),
+            "prose": prose,
         }),
+        None => {
+            let printed = |s: &str| {
+                doc.select(&selector(&format!(
+                    "#inner-content article.main-text .exhib-title {s}"
+                )))
+                .next()
+                .map(element_text)
+                .filter(|t| !t.is_empty())
+            };
+            json!({
+                "kind": "printed_exhibition",
+                "url": page_url.as_str(),
+                "title": printed("h1")?,
+                "dates": printed(".dates")?,
+                "prose": prose,
+                "image_url": doc
+                    .select(&selector("#inner-content article.main-text figure img[src]"))
+                    .next()
+                    .and_then(|i| i.value().attr("src"))
+                    .and_then(|src| page_url.join(src).ok())
+                    .map(String::from),
+                "listed_on": listed_on.to_string(),
+            })
+        }
+    };
+    Some(RawEvent {
+        source_event_id: slug.to_string(),
+        source_url: Some(page_url.to_string()),
+        payload,
     })
 }
 
@@ -279,6 +314,60 @@ pub fn event_category(title: &str) -> Option<Category> {
         .filter(|c| matches!(c, Category::Talk | Category::Workshop | Category::Community))
 }
 
+/// "20th - 30th January 2026" → "20 - 30 January 2026": Chisenhale's
+/// [`parse_date_range`] wants bare day numbers.
+fn strip_ordinals(text: &str) -> String {
+    text.split_whitespace()
+        .map(|token| {
+            let digits = token.trim_end_matches(|c: char| c.is_ascii_alphabetic());
+            let suffix = token[digits.len()..].to_lowercase();
+            if !digits.is_empty()
+                && digits.chars().all(|c| c.is_ascii_digit())
+                && ["st", "nd", "rd", "th"].contains(&suffix.as_str())
+            {
+                digits
+            } else {
+                token
+            }
+        })
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// An all-day exhibition at the gallery from its first to its last day.
+fn exhibition(
+    title: String,
+    (first, last): (NaiveDate, NaiveDate),
+    description: Option<String>,
+    price: Price,
+    payload: &Value,
+    image_url: Option<String>,
+) -> NewEvent {
+    let midnight = |d: NaiveDate| london_to_utc(d.and_time(NaiveTime::MIN));
+    let starts_at = midnight(first);
+    NewEvent {
+        sessions: Vec::new(),
+        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+        title,
+        description,
+        venue_name: Some(VENUE_NAME.to_string()),
+        address: Some(VENUE_ADDRESS.to_string()),
+        lat: Some(VENUE_LAT),
+        lng: Some(VENUE_LNG),
+        starts_at,
+        ends_at: (last > first).then(|| midnight(last)),
+        all_day: true,
+        price,
+        url: payload
+            .get("url")
+            .and_then(Value::as_str)
+            .map(str::to_string),
+        image_url,
+        category: Category::Exhibition,
+        tags: vec![],
+    }
+}
+
 fn normalise_exhibition(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
     let ev = payload
         .get("jsonld")
@@ -309,9 +398,6 @@ fn normalise_exhibition(payload: &Value) -> Result<Option<NewEvent>, SourceError
             "{title:?} ends before it starts"
         )));
     }
-    let midnight = |d: NaiveDate| london_to_utc(d.and_time(NaiveTime::MIN));
-    let starts_at = midnight(first);
-
     let price = first_offer(ev)
         .and_then(|o| {
             let amount: Decimal = match o.get("price")? {
@@ -329,27 +415,36 @@ fn normalise_exhibition(payload: &Value) -> Result<Option<NewEvent>, SourceError
     let description = clean_description(payload.get("prose").and_then(Value::as_str))
         .or_else(|| clean_description(ev.get("description").and_then(Value::as_str)));
 
-    Ok(Some(NewEvent {
-        sessions: Vec::new(),
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+    Ok(Some(exhibition(
         title,
+        (first, last),
         description,
-        venue_name: Some(VENUE_NAME.to_string()),
-        address: Some(VENUE_ADDRESS.to_string()),
-        lat: Some(VENUE_LAT),
-        lng: Some(VENUE_LNG),
-        starts_at,
-        ends_at: (last > first).then(|| midnight(last)),
-        all_day: true,
         price,
-        url: payload
-            .get("url")
-            .and_then(Value::as_str)
-            .map(str::to_string),
-        image_url: image_url(ev),
-        category: Category::Exhibition,
-        tags: vec![],
-    }))
+        payload,
+        image_url(ev),
+    )))
+}
+
+fn normalise_printed_exhibition(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
+    let text = |k: &str| payload.get(k).and_then(Value::as_str);
+    let title = text("title")
+        .map(clean_text)
+        .filter(|t| !t.is_empty())
+        .ok_or_else(|| SourceError::Parse("printed exhibition without title".into()))?;
+    let listed_on = text("listed_on")
+        .and_then(|s| NaiveDate::parse_from_str(s, "%Y-%m-%d").ok())
+        .ok_or_else(|| SourceError::Parse(format!("{title:?}: no listed_on")))?;
+    let dates = text("dates").unwrap_or_default();
+    let days = parse_date_range(&strip_ordinals(dates), listed_on)?
+        .ok_or_else(|| SourceError::Parse(format!("{title:?}: no dates in {dates:?}")))?;
+    Ok(Some(exhibition(
+        title,
+        days,
+        clean_description(text("prose")),
+        Price::default(),
+        payload,
+        text("image_url").map(str::to_string),
+    )))
 }
 
 fn normalise_event(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
@@ -410,6 +505,7 @@ fn normalise_event(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
 pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
     match payload.get("kind").and_then(Value::as_str) {
         Some("exhibition") => normalise_exhibition(payload),
+        Some("printed_exhibition") => normalise_printed_exhibition(payload),
         Some("event") => normalise_event(payload),
         other => Err(SourceError::Parse(format!(
             "unknown payload kind {other:?}"
@@ -436,20 +532,23 @@ impl Source for OctoberGallery {
                 "no current or forthcoming exhibitions found on the Exhibitions page".into(),
             ));
         }
+        let listed_on = london_date(Utc::now());
         let mut raws = Vec::new();
         for path in paths.iter().take(self.max_detail_pages) {
             let page_url = url(path)?;
             match ctx.get_text(&page_url).await {
-                Ok(html) => match parse_detail(&html, &page_url) {
+                Ok(html) => match parse_detail(&html, &page_url, listed_on) {
                     Some(raw) => raws.push(raw),
-                    None => ctx.report_error(format!("{path}: no ExhibitionEvent JSON-LD")),
+                    None => ctx.report_error(format!(
+                        "{path}: no ExhibitionEvent JSON-LD or printed title and dates"
+                    )),
                 },
                 Err(e) => ctx.report_error(format!("{path}: {e}")),
             }
         }
         let events_url = url(EVENTS_PATH)?;
         match ctx.get_text(&events_url).await {
-            Ok(html) => match parse_events(&html, &events_url, london_date(Utc::now())) {
+            Ok(html) => match parse_events(&html, &events_url, listed_on) {
                 Some(events) => raws.extend(events),
                 None => ctx.report_error(format!(
                     "{EVENTS_PATH}: no events found (forthcoming or past)"
@@ -665,6 +764,57 @@ mod tests {
             parse_listing(html, &page_url),
             ["/exhibitions/now", "/exhibitions/next"]
         );
+    }
+
+    #[test]
+    fn strips_ordinals() {
+        assert_eq!(
+            strip_ordinals("20th - 30th January 2026"),
+            "20 - 30 January 2026"
+        );
+        assert_eq!(
+            strip_ordinals("26th November, 2026 – 16th January, 2027"),
+            "26 November, 2026 – 16 January, 2027"
+        );
+        assert_eq!(strip_ordinals("1st August"), "1 August");
+        assert_eq!(strip_ordinals("22nd 3RD"), "22 3");
+        assert_eq!(
+            strip_ordinals("North 4th-floor th 7"),
+            "North 4th-floor th 7"
+        );
+    }
+
+    fn printed(dates: &str) -> Value {
+        json!({
+            "kind": "printed_exhibition",
+            "url": "https://www.octobergallery.co.uk/exhibitions/beyond-the-weave",
+            "title": "Education Exhibition: Beyond the Weave",
+            "dates": dates,
+            "listed_on": "2026-10-28",
+        })
+    }
+
+    #[test]
+    fn printed_exhibition_dates() {
+        let e = normalise_payload(&printed("30 July – 2 August 2025"))
+            .unwrap()
+            .unwrap();
+        assert_eq!(e.starts_at.to_rfc3339(), "2025-07-29T23:00:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2025-08-01T23:00:00+00:00");
+        assert!(e.all_day);
+        assert_eq!(e.category, Category::Exhibition);
+        let e = normalise_payload(&printed("8th October - 21st November"))
+            .unwrap()
+            .unwrap();
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-10-07T23:00:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-11-21T00:00:00+00:00");
+    }
+
+    #[test]
+    fn unreadable_printed_dates_are_errors() {
+        for dates in ["Until 3 May", "Spring 2027", ""] {
+            assert!(normalise_payload(&printed(dates)).is_err(), "{dates:?}");
+        }
     }
 
     #[test]

@@ -36,7 +36,8 @@ fn raws() -> Vec<RawEvent> {
         .iter()
         .map(|slug| {
             let html = fixture(&format!("{DIR}/detail/{slug}.html"));
-            parse_detail(&html, &url(&format!("/exhibitions/{slug}"))).expect("ExhibitionEvent")
+            parse_detail(&html, &url(&format!("/exhibitions/{slug}")), listed_on())
+                .expect("ExhibitionEvent")
         })
         .collect();
     raws.extend(
@@ -99,6 +100,23 @@ fn normalised_output_snapshot() {
         })
         .collect();
     insta::assert_json_snapshot!("october_gallery_normalised", out);
+}
+
+#[test]
+fn printed_dates_snapshot() {
+    let html = fixture(&format!("{DIR}/detail/who-wears-the-future.html"));
+    let raw = parse_detail(
+        &html,
+        &url("/exhibitions/who-wears-the-future"),
+        listed_on(),
+    )
+    .expect("printed title and dates");
+    assert_eq!(raw.payload["kind"], "printed_exhibition");
+    let s = OctoberGallery::new(SITE.parse().unwrap());
+    insta::assert_json_snapshot!(
+        "october_gallery_printed_dates",
+        serde_json::json!({"raw": raw, "event": s.normalise(&raw).expect("normalise")})
+    );
 }
 
 async fn mount(server: &MockServer, at: &str, body: String, times: u64) {
@@ -211,10 +229,55 @@ async fn exhibition_page_without_jsonld_is_reported() {
     assert_eq!(
         ctx.take_errors(),
         [
-            "/exhibitions/show: no ExhibitionEvent JSON-LD",
+            "/exhibitions/show: no ExhibitionEvent JSON-LD or printed title and dates",
             "/events/: no events found (forthcoming or past)",
         ]
     );
+}
+
+#[tokio::test]
+async fn exhibition_page_with_printed_dates_is_read() {
+    let server = MockServer::start().await;
+    mount(
+        &server,
+        "/robots.txt",
+        fixture(&format!("{DIR}/robots.txt")),
+        1,
+    )
+    .await;
+    mount(
+        &server,
+        "/exhibitions/",
+        r#"<div id="inner-content"><div class="exhib-title"><h2><a href="/exhibitions/who-wears-the-future">Who Wears the Future?</a></h2></div></div>"#.into(),
+        1,
+    )
+    .await;
+    mount(
+        &server,
+        "/exhibitions/who-wears-the-future",
+        fixture(&format!("{DIR}/detail/who-wears-the-future.html")),
+        1,
+    )
+    .await;
+    mount(
+        &server,
+        "/events/",
+        fixture(&format!("{DIR}/events.html")),
+        1,
+    )
+    .await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let s = OctoberGallery::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    assert!(ctx.take_errors().is_empty());
+    assert!(
+        raws.iter()
+            .any(|r| r.source_event_id == "who-wears-the-future"
+                && r.payload["kind"] == "printed_exhibition")
+    );
+    for raw in &raws {
+        s.normalise(raw).expect("normalise");
+    }
 }
 
 #[tokio::test]
