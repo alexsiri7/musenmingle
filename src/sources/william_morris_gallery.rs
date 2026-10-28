@@ -625,7 +625,7 @@ mod tests {
     }
 
     #[test]
-    fn timings_read_one_session_per_paragraph_or_line() {
+    fn timings_read_one_session_per_paragraph_or_br_line() {
         let timings = |sessions: &str| {
             let html = format!(
                 r#"<div class="title_and_icon"><h2>Mini Morris</h2></div>
@@ -645,6 +645,10 @@ mod tests {
         assert_eq!(
             timings(r#"<p class="large">10:00am to 11:00am.<br />11:30am to 12:30pm.<br /></p>"#),
             both
+        );
+        assert_eq!(
+            timings(r#"<p class="large"><strong>10:00am</strong> to 11:00am.</p>"#),
+            ["10:00am to 11:00am."]
         );
     }
 
