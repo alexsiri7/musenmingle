@@ -19,7 +19,9 @@
 //!   page then prints dates only ("8 Jul – 22 Nov 2026", even where the
 //!   payload has opening hours). Otherwise the time comes from the printed
 //!   line ("Sat 3 Oct, 3–4.30pm"), which wins over the payload's end (17:00
-//!   for that talk); its start must match the payload's. Anything but an
+//!   for that talk); its start must match the payload's, except for a
+//!   12-hour am/pm slip in the payload ("Thu 3 Dec, 6–7.30pm" given as
+//!   06:00), where the printed time wins. Anything but an
 //!   exhibition spanning more than one day is a run of sessions and skipped.
 //! * Category from the site's: talks → talk; workshops → workshop;
 //!   exhibitions and library-in-residence (a residency installed in the
@@ -303,7 +305,10 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
             .rsplit_once(',')
             .and_then(|(_, time)| parse_time_range(&time.replace(' ', "")))
             .ok_or_else(|| SourceError::Parse(format!("{title:?}: no time in {printed:?}")))?;
-        if from != start.time() {
+        // An am/pm slip in the payload: the printed line, which the page
+        // shows, wins.
+        let gap = (from - start.time()).num_seconds().abs();
+        if gap != 0 && gap != 12 * 3600 {
             return Err(SourceError::Parse(format!(
                 "{title:?}: printed time {printed:?} doesn't match {}",
                 item.start_date
@@ -459,6 +464,30 @@ mod tests {
             );
             assert!(normalise_payload(&payload).is_err(), "{printed:?}");
         }
+    }
+
+    #[test]
+    fn an_am_pm_slip_in_the_payload_start_takes_the_printed_time() {
+        let e = normalised(&item(
+            &["talks"],
+            "2026-12-03T06:00:00+00:00",
+            "2026-12-03T19:30:00+00:00",
+            "Thu 3 Dec, 6–7.30pm",
+        ));
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-12-03T18:00:00+00:00");
+        assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-12-03T19:30:00+00:00");
+        assert!(!e.all_day);
+    }
+
+    #[test]
+    fn a_pm_am_slip_in_the_payload_start_takes_the_printed_time() {
+        let e = normalised(&item(
+            &["talks"],
+            "2026-12-03T18:00:00+00:00",
+            "2026-12-03T19:30:00+00:00",
+            "Thu 3 Dec, 6–7.30am",
+        ));
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-12-03T06:00:00+00:00");
     }
 
     #[test]
