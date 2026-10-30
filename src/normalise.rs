@@ -667,7 +667,7 @@ const MONTH_NAMES: [&str; 12] = [
 ];
 
 /// Month number of "October", "oct" or "sept" (any case).
-fn month_number(word: &str) -> Option<u32> {
+pub fn month_number(word: &str) -> Option<u32> {
     let w = word.to_lowercase();
     MONTH_NAMES
         .iter()
