@@ -1211,6 +1211,20 @@ mod tests {
             2,
             "nor one without its weekday"
         );
+        let wrong_weekday = "<p>Wednesday 18th November 11-4pm.</p>\
+                             <p>Thursday 19th November 11-4pm.</p>\
+                             <p>Tuesday 25th November 2-3pm drop-in.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", wrong_weekday),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-19T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a nearby date printed under another weekday is not a session"
+        );
         let new_year = "<p>Wednesday 30 December 6-8pm.</p><p>Wednesday 6 January 6-8pm.</p>";
         assert_eq!(
             sessions("2026-12-30 18:00:00", "2026-12-30 20:00:00", new_year).0,
