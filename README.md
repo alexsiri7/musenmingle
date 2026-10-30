@@ -267,7 +267,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
   - `tec-<venue>` — one platform source (`src/sources/tec.rs`) for venue
     sites running WordPress + The Events Calendar: the TEC REST API
     (`ends_after`, paginated with a page cap), falling back to the list
-    view's JSON-LD `Event`s when the API is off. Each venue is an
+    view's JSON-LD `Event`s when the API is off (then fetching an event's
+    own page when the list view cuts its description short, for the
+    sessions it prints, #385). Each venue is an
     `events.sources` row with `platform = 'tec'` and its own `config`
     (default venue, category map and skips), so a new venue is a migration
     row, not code; London-only, online events skipped, times read as London

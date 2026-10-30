@@ -521,6 +521,31 @@ async fn a_failed_event_page_is_reported_and_the_event_kept() {
     assert_eq!(root["ends_at"], "2026-11-18T16:00:00Z");
 }
 
+#[tokio::test]
+async fn an_event_page_without_a_description_is_reported() {
+    let server = slbi_qa_2026_10_30_server().await;
+    let moved = "<html><body><h1>Page moved</h1></body></html>".to_string();
+    mount_list(&server, "/event/green-futures-root/", moved, 1).await;
+    let seed = fixture("scrapers/tec-slbi/qa-2026-10-30-3.html");
+    mount_list(&server, "/event/green-futures-seed/", seed, 1).await;
+    let (_, config) = seed_row("tec-slbi");
+    let ctx = ctx();
+    let raws = tec(&server, config).fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(
+        errors[0].contains("/event/green-futures-root/: no event description"),
+        "{errors:?}"
+    );
+    let events = normalised("tec-slbi", &raws);
+    let root = events
+        .iter()
+        .map(|e| &e["event"])
+        .find(|e| e["title"] == "Green Futures: ROOT")
+        .expect("kept");
+    assert_eq!(root["ends_at"], "2026-11-18T16:00:00Z");
+}
+
 /// A server with open robots.txt and SLBI's list view of 2026-10-30.
 async fn slbi_qa_2026_10_30_server() -> MockServer {
     let server = MockServer::start().await;

@@ -90,6 +90,8 @@ pub const PLATFORM: &str = "tec";
 /// Upper bound on API pages per run (150 events).
 pub const MAX_API_PAGES: u32 = 3;
 const PER_PAGE: u32 = 50;
+/// Longest gap between a course's printed sessions: a weekly class.
+const MAX_SESSION_GAP_DAYS: i64 = 7;
 const DEFAULT_API_PATH: &str = "/wp-json/tribe/events/v1/events";
 
 /// A venue's `events.sources.config`. Unknown fields are rejected, so a
@@ -226,18 +228,21 @@ impl Tec {
 
     /// Adds the event page's description to the payload, for the sessions
     /// it prints. The page is fetched from `base_url`, like the API pages;
-    /// a failure is reported and the event kept as the list view gives it.
+    /// a failure, or a page without a description, is reported and the
+    /// event kept as the list view gives it.
     async fn add_page_description(&self, ctx: &FetchContext, raw: &mut RawEvent) {
         let page = match self.url(&raw.source_event_id) {
             Ok(url) => ctx.get_text(&url).await.map_err(SourceError::from),
             Err(e) => Err(e),
         };
-        match page {
-            Ok(html) => {
-                if let Some(description) = page_description(&html) {
-                    raw.payload["page_description"] = Value::String(description);
-                }
+        match page.map(|html| page_description(&html)) {
+            Ok(Some(description)) => {
+                raw.payload["page_description"] = Value::String(description);
             }
+            Ok(None) => ctx.report_error(format!(
+                "{}: no event description on the page",
+                raw.source_event_id
+            )),
             Err(e) => ctx.report_error(format!("{}: {e}", raw.source_event_id)),
         }
     }
@@ -677,19 +682,30 @@ fn first_day_time(description: &str, day: NaiveDate) -> Option<NaiveTime> {
 /// The sessions a description prints one per line when the event's dates
 /// hold only the first (#385: a four-day course stored as its first day,
 /// "Wednesday 18th November 11-4pm" … "Saturday 21st November 1-4pm").
-/// Taken only when the first dated line is on the event's first day and the
-/// last is after its last, so dates mentioned in passing never shorten an
-/// event.
+/// The sessions run from the first dated line, which must be on the event's
+/// first day, while each line follows the one before by at most
+/// [`MAX_SESSION_GAP_DAYS`], so a later date mentioned in passing ("our next
+/// course starts …") is no session; they are taken only when they reach past
+/// the event's last day, so they never shorten it.
 fn printed_sessions(description: &str, times: &Times) -> Option<Vec<Session>> {
     if times.all_day {
         return None;
     }
     let first = london_date(times.starts_at);
     let last = london_date(times.ends_at.unwrap_or(times.starts_at));
-    let lines: Vec<_> = description_lines(description)
+    let mut lines: Vec<(NaiveDate, NaiveTime, Option<NaiveTime>)> = Vec::new();
+    for line in description_lines(description)
         .iter()
         .filter_map(|line| dated_line(line, first))
-        .collect();
+    {
+        if let Some(&(previous, ..)) = lines.last() {
+            let gap = (line.0 - previous).num_days();
+            if !(0..=MAX_SESSION_GAP_DAYS).contains(&gap) {
+                break;
+            }
+        }
+        lines.push(line);
+    }
     let (first_line, last_line) = (lines.first()?, lines.last()?);
     (first_line.0 == first && last_line.0 > last).then(|| {
         lines
@@ -727,14 +743,16 @@ fn description_lines(description: &str) -> Vec<String> {
 /// A line that begins with a date and gives a clock range after it
 /// ("Weds 14 October: Private View 5 – 9pm", "Saturday 21st November
 /// 1-4pm …"): the date and the range. Without a written year the date is
-/// the first on or after `from`.
+/// the first on or after `from`; a printed weekday must be that date's.
 fn dated_line(line: &str, from: NaiveDate) -> Option<(NaiveDate, NaiveTime, Option<NaiveTime>)> {
     let text = line.to_lowercase();
     let mut tokens = text
         .split_whitespace()
         .map(|t| t.trim_end_matches([',', ':']))
         .peekable();
-    tokens.next_if(|t| crate::hours::parse_day(t).is_some());
+    let weekday = tokens
+        .next_if(|t| crate::hours::parse_day(t).is_some())
+        .and_then(crate::hours::parse_day);
     let number = tokens.next()?;
     let number = ["st", "nd", "rd", "th"]
         .iter()
@@ -751,6 +769,9 @@ fn dated_line(line: &str, from: NaiveDate) -> Option<(NaiveDate, NaiveTime, Opti
             .filter(|d| *d >= from)
             .or_else(|| NaiveDate::from_ymd_opt(from.year() + 1, month, day))?,
     };
+    if weekday.is_some_and(|w| u32::from(w) != date.weekday().number_from_monday()) {
+        return None;
+    }
     let rest: Vec<&str> = tokens.collect();
     let (start, end) = find_clock_range(&rest.join(" "))?;
     Some((date, start, end))
@@ -1153,6 +1174,42 @@ mod tests {
             sessions("2026-11-18 11:00:00", "2026-11-28 16:00:00", within).1,
             0,
             "printed days inside the event's dates leave them"
+        );
+        let next_course = "<p>Wednesday 18th November 11-4pm Rethinking the weed.</p>\
+                           <p>Saturday 21st November 1-4pm Co-lead our open day.</p>\
+                           <p>Wednesday 2nd December 9am our next course starts.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", next_course),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-21T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a date well after the sessions is not one of them"
+        );
+        let earlier_aside = "<p>Wednesday 18th November 11-4pm Course day one.</p>\
+                             <p>Thursday 19th November 11-4pm Course day two.</p>\
+                             <p>Sunday 15th November 2-3pm Optional taster.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", earlier_aside),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-19T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a date before the first day is not rolled into next year"
+        );
+        let undated_aside = "<p>Wednesday 18th November 11-4pm.</p>\
+                             <p>Thursday 19th November 11-4pm.</p>\
+                             <p>15 November 2-3pm taster.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", undated_aside).1,
+            2,
+            "nor one without its weekday"
         );
         let new_year = "<p>Wednesday 30 December 6-8pm.</p><p>Wednesday 6 January 6-8pm.</p>";
         assert_eq!(

@@ -149,7 +149,8 @@ not code: `events.sources.platform` names the shared implementation
 
 1. Check robots.txt as above, against the exact URLs the source requests:
    `/wp-json/tribe/events/v1/events?ends_after=…&per_page=50&page=1` and,
-   if used, the list view. Sites often disallow `/wp-json/` or `/*?`; then
+   if used, the list view and its events' own pages (`/event/<slug>/`,
+   fetched when the list view cuts a description short). Sites often disallow `/wp-json/` or `/*?`; then
    the API is out and only the list view can be used.
 2. Probe the API once: `curl -A "$UA" 'https://<site>/wp-json/tribe/events/v1/events?per_page=1'`.
    If it is off (404) or disallowed, find the TEC list view (usually
@@ -158,7 +159,8 @@ not code: `events.sources.platform` names the shared implementation
    whether events carry a venue (`venue: []` means they don't).
 4. Read the terms and decide the content policy as for any other source.
 5. Save fixtures under `tests/fixtures/scrapers/tec-<venue>/` (robots.txt
-   plus `api-page-1.json` or `list.html`) and add a snapshot test to
+   plus `api-page-1.json` or `list.html`, and the page of any listed
+   event whose description ends in "…") and add a snapshot test to
    `tests/source_tec.rs`; it normalises with the seed row's `config`.
 6. Add the row in a new migration with `platform = 'tec'` and a `config`
    holding only what differs from the defaults:
