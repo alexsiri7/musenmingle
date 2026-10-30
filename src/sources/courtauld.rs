@@ -14,7 +14,9 @@
 //!   graph), so detail pages are read with CSS selectors.
 //! * Scope is decided from the REST `class_list` before any detail page is
 //!   fetched: online items, short courses, young people's and members'
-//!   programmes are skipped; gallery exhibitions/displays become
+//!   programmes, and password-protected posts (WordPress's
+//!   `post-password-required`: the page isn't published yet, so it has no
+//!   title or dates to read) are skipped; gallery exhibitions/displays become
 //!   exhibitions and lectures/research seminars/conferences become talks.
 //!   The venue comes from the location class (`locations-gallery` →
 //!   Somerset House, `locations-vernon-square` → Vernon Square); items with
@@ -164,11 +166,13 @@ pub fn parse_ids(body: &Value) -> Result<Vec<u64>, SourceError> {
 
 /// Decide from an item's WordPress `class_list` whether it is in scope, and
 /// as what: `None` for online items, courses, young people's and members'
-/// programmes, unrecognised genres and unknown locations.
+/// programmes, password-protected posts, unrecognised genres and unknown
+/// locations.
 pub fn classify(classes: &[&str]) -> Option<(Category, Venue)> {
     let has = |c: &str| classes.contains(&c);
     let genre = |g: &str| has(&format!("event-genres-{g}"));
-    if has("locations-online")
+    if has("post-password-required")
+        || has("locations-online")
         || has("audiences-members")
         || has("audiences-young-people")
         || [
@@ -695,6 +699,9 @@ mod tests {
             "event-genres-friends locations-gallery audiences-members",
             "event-genres-lecture event-genres-research",
             "event-genres-lecture locations-online",
+            "post-175848 events type-events status-publish post-password-required hentry \
+             event-genres-lecture event-genres-research locations-lecture-theatre-2 \
+             locations-vernon-square audiences-researchers",
         ] {
             assert_eq!(c(skipped), None, "{skipped}");
         }
