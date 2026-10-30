@@ -249,7 +249,7 @@ impl Tec {
 }
 
 /// The full description on a TEC event page.
-pub fn page_description(html: &str) -> Option<String> {
+fn page_description(html: &str) -> Option<String> {
     let description =
         Selector::parse(".tribe-events-single-event-description").expect("valid selector");
     Html::parse_document(html)
