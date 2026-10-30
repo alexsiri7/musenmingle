@@ -480,6 +480,17 @@ mod tests {
     }
 
     #[test]
+    fn a_pm_am_slip_in_the_payload_start_takes_the_printed_time() {
+        let e = normalised(&item(
+            &["talks"],
+            "2026-12-03T18:00:00+00:00",
+            "2026-12-03T19:30:00+00:00",
+            "Thu 3 Dec, 6–7.30am",
+        ));
+        assert_eq!(e.starts_at.to_rfc3339(), "2026-12-03T06:00:00+00:00");
+    }
+
+    #[test]
     fn multi_day_and_whole_day_spans_are_all_day() {
         let run = normalised(&item(
             &["exhibitions"],
