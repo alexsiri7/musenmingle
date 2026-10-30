@@ -1233,6 +1233,29 @@ mod tests {
                 Some("2027-01-06T20:00:00+00:00".into())
             )
         );
+        let one_block = "<p>Wednesday 18th November 11-4pm.<br />Thursday 19th November 2-5pm.</p>";
+        let payload = api(json!({"start_date": "2026-11-18 11:00:00",
+                                 "end_date": "2026-11-18 16:00:00", "description": one_block}));
+        let event = norm(&payload, json!({"default_category": "workshop"})).unwrap();
+        let times: Vec<_> = event
+            .sessions
+            .iter()
+            .map(|s| (s.starts_at.to_rfc3339(), s.ends_at.map(|t| t.to_rfc3339())))
+            .collect();
+        assert_eq!(
+            times,
+            [
+                (
+                    "2026-11-18T11:00:00+00:00".to_string(),
+                    Some("2026-11-18T16:00:00+00:00".to_string())
+                ),
+                (
+                    "2026-11-19T14:00:00+00:00".to_string(),
+                    Some("2026-11-19T17:00:00+00:00".to_string())
+                ),
+            ],
+            "sessions on lines of one block are read line by line"
+        );
     }
 
     #[test]
