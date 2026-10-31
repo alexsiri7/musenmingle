@@ -1,0 +1,29 @@
+---
+source: tests/source_horse_hospital.rs
+expression: ev
+---
+{
+  "title": "Dancing On My Own",
+  "description": "Dancing On My Own is a two-day exhibition of artist’s film and video. Shorts by Mark Leckey, Morgan Quaintance and Keith Piper play throughout the day, accompanied by an evening screening of feature length films by Larry Achiampong (Saturday 21st), and Sarah Miles and Zarina Nares (Sunday 22nd).",
+  "venue_name": "The Horse Hospital",
+  "address": "Colonnade, Bloomsbury, London WC1N 1JD",
+  "lat": null,
+  "lng": null,
+  "starts_at": "2026-11-21T15:00:00Z",
+  "ends_at": "2026-11-22T21:00:00Z",
+  "all_day": false,
+  "price": {
+    "is_free": false,
+    "min": null,
+    "max": null,
+    "currency": null
+  },
+  "url": "https://www.thehorsehospital.com/events/nfts-dancing-on-my-own",
+  "image_url": "http://static1.squarespace.com/static/5a65df9e2aeba5d8b0fd547c/5a65e00253450a34f40b32e4/6ae4b102d1fb857c12f54e44/1793379891301/Jasmine%2BUla%2BDancing%2BOn%2BMy%2BOwn%2BPoster.png?format=1500w",
+  "category": "exhibition",
+  "tags": [
+    "exhibition",
+    "film"
+  ],
+  "dedupe_key": "dancing-on-my-own|2026-11-21|horse-hospital"
+}
