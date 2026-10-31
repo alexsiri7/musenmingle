@@ -11,9 +11,11 @@
 //!   `/events/un/stable-8`). At most [`MAX_DETAIL_PAGES`] pages a run.
 //! * Each event page carries one JSON-LD `Event` whose `startDate`/`endDate`
 //!   have honest offsets (`2026-10-08T19:00:00+0100`, `…+0000` after the
-//!   clocks go back). The printed 24-hour start
-//!   (`time.event-time-24hr-start`) must agree with it or the page is a
-//!   parse error; every event is timed, so none is `all_day`. The JSON-LD
+//!   clocks go back). The printed 24-hour start must agree with it or the
+//!   page is a parse error: `time.event-time-24hr-start` on a one-day event,
+//!   the first `time.event-time-24hr` on one spanning days (each day's date
+//!   then carries one time, the first day's the start). Every event is
+//!   timed, so none is `all_day`. The JSON-LD
 //!   `name` carries a " — The Horse Hospital" suffix and its `location` is
 //!   empty, so the title is the page's `h1.eventitem-title` and every event
 //!   is placed at the venue.
@@ -129,7 +131,10 @@ pub fn parse_detail(html: &str, page_url: &Url) -> Option<RawEvent> {
             "url": page_url.as_str(),
             "jsonld": event,
             "title": first_text("h1.eventitem-title"),
-            "printed_start": first_text("time.event-time-24hr-start"),
+            "printed_start": first_text(
+                ".eventitem-column-meta time.event-time-24hr-start, \
+                 .eventitem-column-meta time.event-time-24hr"
+            ),
             "lead": blocks.first().map(|b| b.inner_html()),
             "admission": admission,
             "categories": categories,

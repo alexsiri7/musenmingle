@@ -50,6 +50,21 @@ fn normalised_output_snapshot() {
     insta::assert_json_snapshot!("horse_hospital_normalised", out);
 }
 
+/// An event spanning days prints one time per day (`time.event-time-24hr`,
+/// no `-start`/`-end`); the first day's is its start (#390).
+#[test]
+fn an_event_spanning_days_reads_the_first_days_time() {
+    let p = "/events/nfts-dancing-on-my-own";
+    let url = Url::parse(SITE).unwrap().join(p).unwrap();
+    let raw = parse_detail(&detail_fixture(p), &url).expect("JSON-LD Event");
+    assert_eq!(raw.payload["printed_start"], "15:00");
+    let ev = HorseHospital::new(SITE.parse().unwrap())
+        .normalise(&raw)
+        .expect("normalise")
+        .expect("an exhibition");
+    insta::assert_json_snapshot!("horse_hospital_spanning_days", ev);
+}
+
 async fn serve_site(server: &MockServer, broken: &str) {
     Mock::given(method("GET"))
         .and(path("/robots.txt"))
