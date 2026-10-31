@@ -315,9 +315,9 @@ pub fn event_category(type_label: &str, title: &str) -> Option<Category> {
     }
 }
 
-/// The first clock range in `text` ("at 4.30 – 6.30pm", "2.30-4.30pm."):
-/// a run starting at a digit and ending in "am"/"pm" within 20 characters
-/// that `parse_time_range` accepts.
+/// The first clock range in `text` ("at 4.30 – 6.30pm", "2.30-4.30pm.",
+/// "11am – 5pm"): the longest run starting at a digit and ending in
+/// "am"/"pm" within 20 characters that `parse_time_range` accepts.
 pub fn find_clock_range(text: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
     let lower = text.to_lowercase();
     lower
@@ -331,11 +331,14 @@ pub fn find_clock_range(text: &str) -> Option<(NaiveTime, Option<NaiveTime>)> {
         })
         .find_map(|(i, _)| {
             let rest: String = lower[i..].chars().take(20).collect();
-            let end = ["am", "pm"]
-                .iter()
-                .filter_map(|m| rest.find(m).map(|j| j + 2))
-                .min()?;
-            parse_time_range(&rest[..end])
+            let mut ends: Vec<usize> = rest
+                .match_indices("am")
+                .chain(rest.match_indices("pm"))
+                .map(|(j, _)| j + 2)
+                .collect();
+            ends.sort_unstable_by(|a, b| b.cmp(a));
+            ends.into_iter()
+                .find_map(|end| parse_time_range(&rest[..end]))
         })
 }
 
@@ -724,6 +727,14 @@ mod tests {
         assert_eq!(
             find_clock_range("Sessions are every Saturday, 2.30-4.30pm."),
             Some((t(14, 30), Some(t(16, 30))))
+        );
+        assert_eq!(
+            find_clock_range("General Admission 11am – 5pm"),
+            Some((t(11, 0), Some(t(17, 0))))
+        );
+        assert_eq!(
+            find_clock_range("Doors 7pm, talk at 7.30pm"),
+            Some((t(19, 0), None))
         );
         assert_eq!(
             find_clock_range("Saturdays: 10 Oct, 24 Oct, 7 Nov 2026"),

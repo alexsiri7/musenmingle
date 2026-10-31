@@ -1,0 +1,124 @@
+---
+source: tests/source_tec.rs
+expression: events
+---
+[
+  {
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "green-futures-seed|2026-11-05|south-botanical-institute",
+      "description": "Join our co-learning space for young people aged 18-25 from Lambeth to explore shared knowledge and practical training in the field of plants, urban greening and community organising. Sign up for our Autumn term FREE courses. SEED - 1 day course in celebrating access to urban nature and edible plants Thursday 5th November 11-4pm - …",
+      "ends_at": "2026-11-05T16:00:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/10/IMG_0128-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-05T11:00:00Z",
+      "tags": [],
+      "title": "Green Futures: SEED",
+      "url": "https://www.slbi.org.uk/event/green-futures-seed/",
+      "venue_name": "The South London Botanical Institute"
+    },
+    "id": "/event/green-futures-seed/"
+  },
+  {
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "mushroom-university|2026-11-16|south-botanical-institute",
+      "description": "Develop skills on how to identify fungi in these co-learning identification sessions with Fabrice Boltho and friends.",
+      "ends_at": "2026-11-16T19:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/66ce41b3c5496dc96fac2ea79f00e47d-3rMptL.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-16T17:30:00Z",
+      "tags": [],
+      "title": "Mushroom University",
+      "url": "https://www.slbi.org.uk/event/mushroom-university-10/",
+      "venue_name": "The South London Botanical Institute"
+    },
+    "id": "/event/mushroom-university-10/"
+  },
+  {
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "green-futures-root|2026-11-18|south-botanical-institute",
+      "description": "Join our co-learning space for young people aged 18-25 from Lambeth to explore shared knowledge and practical training in the field of plants, urban greening and community organising. Sign up for our Autumn term FREE courses. ROOT - Biodiversity, weeds and urban nature for all: A four day course of workshops celebrating our urban nature …",
+      "ends_at": "2026-11-21T16:00:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/10/IMG_0128-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-18T16:00:00Z",
+          "starts_at": "2026-11-18T11:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-19T16:00:00Z",
+          "starts_at": "2026-11-19T11:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-20T16:00:00Z",
+          "starts_at": "2026-11-20T11:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-21T16:00:00Z",
+          "starts_at": "2026-11-21T13:00:00Z"
+        }
+      ],
+      "starts_at": "2026-11-18T11:00:00Z",
+      "tags": [],
+      "title": "Green Futures: ROOT",
+      "url": "https://www.slbi.org.uk/event/green-futures-root/",
+      "venue_name": "The South London Botanical Institute"
+    },
+    "id": "/event/green-futures-root/"
+  },
+  {
+    "event": {
+      "address": "323 Norwood Road, London, SE24 9AQ",
+      "all_day": false,
+      "category": "community",
+      "dedupe_key": "mushroom-university|2026-11-30|south-botanical-institute",
+      "description": "Develop skills on how to identify fungi in these co-learning identification sessions with Fabrice Boltho and friends.",
+      "ends_at": "2026-11-30T19:30:00Z",
+      "image_url": "https://www.slbi.org.uk/assets/uploads/2026/09/66ce41b3c5496dc96fac2ea79f00e47d-3rMptL.tmp_.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-30T17:30:00Z",
+      "tags": [],
+      "title": "Mushroom University",
+      "url": "https://www.slbi.org.uk/event/mushroom-university-11/",
+      "venue_name": "The South London Botanical Institute"
+    },
+    "id": "/event/mushroom-university-11/"
+  }
+]

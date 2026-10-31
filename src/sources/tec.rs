@@ -17,8 +17,11 @@
 //!   JSON or is disallowed by robots.txt, and the row has a `list_path`, the
 //!   TEC list view's schema.org `Event` JSON-LD is read instead. Other
 //!   failures (5xx, timeouts) are errors: an outage must reach the health
-//!   checker. A list view without `Event` JSON-LD is an error too. No detail
-//!   pages or images are fetched.
+//!   checker. A list view without `Event` JSON-LD is an error too. An
+//!   event whose JSON-LD description is cut short ("…") has its page fetched
+//!   (from `base_url`) for the full description, read only for printed
+//!   sessions; a page that fails is reported and the event kept as listed.
+//!   No images are fetched.
 //! * Ids are the event URL's path (occurrences of a recurring event carry
 //!   their date in it), the one identifier both paths carry, so a venue
 //!   moving between the API and the fallback keeps its ids.
@@ -33,7 +36,11 @@
 //!   venue's calendar can carry one start time for days that differ, so a
 //!   timed API event spanning several days whose description has a block
 //!   headed by its start date with a clock range ("Wednesday 14 October /
-//!   Private View 5 – 9pm") starts at that time (#262).
+//!   Private View 5 – 9pm") starts at that time (#262). A timed event
+//!   whose description prints dated sessions one per line, the first on its
+//!   first day and the last after its last ("Wednesday 18th November
+//!   11-4pm" … "Saturday 21st November 1-4pm"), takes them as its sessions:
+//!   venues store a course as its first day (#385).
 //! * Venue: the event's TEC venue, else the row's `config.venue` (sites
 //!   that leave events without a venue), else unknown. Only London events
 //!   are kept: the row's own venue, coordinates inside Greater London, or,
@@ -63,7 +70,7 @@ use async_trait::async_trait;
 use chrono::{DateTime, Datelike, Days, NaiveDate, NaiveTime, Utc};
 use chrono_tz::Europe::London;
 use rust_decimal::Decimal;
-use scraper::{Html, Selector};
+use scraper::{Html, Node, Selector};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use url::Url;
@@ -71,10 +78,11 @@ use url::Url;
 use super::the_showroom::find_clock_range;
 use super::{SkipReason, Source, SourceError, jsonld};
 use crate::fetch::{FetchContext, FetchError};
-use crate::model::{Category, NewEvent, Price, RawEvent};
+use crate::model::{Category, NewEvent, Price, RawEvent, Session};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, in_london_bbox, is_london_midnight, london_date,
-    london_to_utc, map_category, parse_london_wall_clock, parse_price, price_from_amounts, words,
+    london_to_utc, map_category, month_number, parse_london_wall_clock, parse_price,
+    price_from_amounts, words,
 };
 
 /// `events.sources.platform` of TEC venues.
@@ -82,6 +90,8 @@ pub const PLATFORM: &str = "tec";
 /// Upper bound on API pages per run (150 events).
 pub const MAX_API_PAGES: u32 = 3;
 const PER_PAGE: u32 = 50;
+/// Longest gap between a course's printed sessions: a weekly class.
+const MAX_SESSION_GAP_DAYS: i64 = 7;
 const DEFAULT_API_PATH: &str = "/wp-json/tribe/events/v1/events";
 
 /// A venue's `events.sources.config`. Unknown fields are rejected, so a
@@ -208,8 +218,51 @@ impl Tec {
         }
         let mut out = Vec::new();
         collect(ctx, items, &mut out);
+        for raw in &mut out {
+            if list_excerpt_is_cut(raw) {
+                self.add_page_description(ctx, raw).await;
+            }
+        }
         Ok(out)
     }
+
+    /// Adds the event page's description to the payload, for the sessions
+    /// it prints. The page is fetched from `base_url`, like the API pages;
+    /// a failure, or a page without a description, is reported and the
+    /// event kept as the list view gives it.
+    async fn add_page_description(&self, ctx: &FetchContext, raw: &mut RawEvent) {
+        let page = match self.url(&raw.source_event_id) {
+            Ok(url) => ctx.get_text(&url).await.map_err(SourceError::from),
+            Err(e) => Err(e),
+        };
+        match page.map(|html| page_description(&html)) {
+            Ok(Some(description)) => {
+                raw.payload["page_description"] = Value::String(description);
+            }
+            Ok(None) => ctx.report_error(format!(
+                "{}: no event description on the page",
+                raw.source_event_id
+            )),
+            Err(e) => ctx.report_error(format!("{}: {e}", raw.source_event_id)),
+        }
+    }
+}
+
+/// The full description on a TEC event page.
+fn page_description(html: &str) -> Option<String> {
+    let description =
+        Selector::parse(".tribe-events-single-event-description").expect("valid selector");
+    Html::parse_document(html)
+        .select(&description)
+        .next()
+        .map(|el| el.inner_html())
+}
+
+fn list_excerpt_is_cut(raw: &RawEvent) -> bool {
+    raw.payload
+        .get("event")
+        .and_then(jsonld_description)
+        .is_some_and(|d| d.ends_with('…'))
 }
 
 /// Keep the first of each id; report items that have none.
@@ -438,6 +491,8 @@ struct Parsed {
     image_url: Option<String>,
     category: Option<Category>,
     tags: Vec<String>,
+    /// Sessions printed in the description, replacing `times`.
+    sessions: Option<Vec<Session>>,
 }
 
 /// Normalise a TEC [`RawEvent`] payload (either path) for a venue.
@@ -450,7 +505,11 @@ pub fn normalise_payload(
         .ok_or_else(|| SourceError::Parse("payload without event".into()))?;
     let parsed = match payload.get("via").and_then(Value::as_str) {
         Some("api") => parse_api_event(event, config)?,
-        Some("jsonld") => parse_jsonld_event(event, config)?,
+        Some("jsonld") => parse_jsonld_event(
+            event,
+            payload.get("page_description").and_then(Value::as_str),
+            config,
+        )?,
         other => return Err(SourceError::Parse(format!("unknown payload via {other:?}"))),
     };
     let Some(p) = parsed else {
@@ -472,9 +531,9 @@ pub fn normalise_payload(
     let Some(category) = p.category.or(config.default_category) else {
         return Ok(None);
     };
-    Ok(Some(NewEvent {
+    let mut event = NewEvent {
         sessions: Vec::new(),
-        dedupe_key: dedupe_key(&p.title, p.times.starts_at, Some(&venue.name)),
+        dedupe_key: String::new(),
         title: p.title,
         description: p.description,
         venue_name: Some(venue.name),
@@ -489,7 +548,12 @@ pub fn normalise_payload(
         image_url: p.image_url,
         category,
         tags: p.tags,
-    }))
+    };
+    if let Some(sessions) = p.sessions {
+        event.set_sessions(sessions);
+    }
+    event.dedupe_key = dedupe_key(&event.title, event.starts_at, event.venue_name.as_deref());
+    Ok(Some(event))
 }
 
 fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, SourceError> {
@@ -577,8 +641,10 @@ fn parse_api_event(event: &Value, config: &TecConfig) -> Result<Option<Parsed>, 
         event.get("description").and_then(Value::as_str),
     );
 
+    let description = event.get("description").and_then(Value::as_str);
     Ok(Some(Parsed {
-        description: clean_description(event.get("description").and_then(Value::as_str)),
+        description: clean_description(description),
+        sessions: description.and_then(|d| printed_sessions(d, &times)),
         times,
         venue: venue.or_else(|| Venue::from_config(config)),
         price,
@@ -604,35 +670,120 @@ fn london_time(t: DateTime<Utc>) -> NaiveTime {
 
 /// A multi-day event's first-day time from its description (#262): the
 /// venue's calendar can hold one start time for a fair whose days differ
-/// ("Wednesday 14 October / Private View 5 – 9pm"). The first `p`/`li`
-/// block that begins with `day`'s date gives its clock range's start.
+/// ("Wednesday 14 October / Private View 5 – 9pm"). The first dated line
+/// on `day` gives its clock range's start.
 fn first_day_time(description: &str, day: NaiveDate) -> Option<NaiveTime> {
-    let blocks = Selector::parse("p, li").expect("valid selector");
-    let month = day.format("%B").to_string().to_lowercase();
-    Html::parse_fragment(description)
-        .select(&blocks)
-        .find_map(|el| {
-            let text = clean_text(&el.inner_html()).to_lowercase();
-            let mut tokens = text
-                .split_whitespace()
-                .map(|t| t.trim_end_matches([',', ':']))
-                .peekable();
-            tokens.next_if(|t| crate::hours::parse_day(t).is_some());
-            let number = tokens.next()?;
-            let number = ["st", "nd", "rd", "th"]
-                .iter()
-                .find_map(|s| number.strip_suffix(s))
-                .unwrap_or(number);
-            (number.parse() == Ok(day.day())).then_some(())?;
-            let m = tokens.next()?;
-            (m == month || m == &month[..3]).then_some(())?;
-            tokens.next_if(|t| *t == day.year().to_string());
-            let rest: Vec<&str> = tokens.collect();
-            find_clock_range(&rest.join(" ")).map(|(start, _)| start)
-        })
+    description_lines(description)
+        .iter()
+        .filter_map(|line| dated_line(line, day))
+        .find_map(|(date, start, _)| (date == day).then_some(start))
 }
 
-fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>, SourceError> {
+/// The sessions a description prints one per line when the event's dates
+/// hold only the first (#385: a four-day course stored as its first day,
+/// "Wednesday 18th November 11-4pm" … "Saturday 21st November 1-4pm").
+/// The sessions run from the first dated line, which must be on the event's
+/// first day, while each line follows the one before by at most
+/// [`MAX_SESSION_GAP_DAYS`], so a later date mentioned in passing ("our next
+/// course starts …") is no session; they are taken only when they reach past
+/// the event's last day, so they never shorten it.
+fn printed_sessions(description: &str, times: &Times) -> Option<Vec<Session>> {
+    if times.all_day {
+        return None;
+    }
+    let first = london_date(times.starts_at);
+    let last = london_date(times.ends_at.unwrap_or(times.starts_at));
+    let mut lines: Vec<(NaiveDate, NaiveTime, Option<NaiveTime>)> = Vec::new();
+    for line in description_lines(description)
+        .iter()
+        .filter_map(|line| dated_line(line, first))
+    {
+        if let Some(&(previous, ..)) = lines.last() {
+            let gap = (line.0 - previous).num_days();
+            if !(0..=MAX_SESSION_GAP_DAYS).contains(&gap) {
+                break;
+            }
+        }
+        lines.push(line);
+    }
+    let (first_line, last_line) = (lines.first()?, lines.last()?);
+    (first_line.0 == first && last_line.0 > last).then(|| {
+        lines
+            .iter()
+            .map(|&(date, start, end)| Session {
+                starts_at: london_to_utc(date.and_time(start)),
+                ends_at: end.map(|e| london_to_utc(date.and_time(e))),
+            })
+            .collect()
+    })
+}
+
+/// The text of each `p`/`li` block of a description, then of each of its
+/// `br`-separated lines when it has several.
+fn description_lines(description: &str) -> Vec<String> {
+    let blocks = Selector::parse("p, li").expect("valid selector");
+    let mut lines = Vec::new();
+    for block in Html::parse_fragment(description).select(&blocks) {
+        lines.push(clean_text(&block.inner_html()));
+        let mut parts = vec![String::new()];
+        for node in block.descendants() {
+            match node.value() {
+                Node::Text(text) => parts.last_mut().expect("non-empty").push_str(text),
+                Node::Element(e) if e.name() == "br" => parts.push(String::new()),
+                _ => {}
+            }
+        }
+        if parts.len() > 1 {
+            lines.extend(parts.iter().map(|p| clean_text(p)));
+        }
+    }
+    lines
+}
+
+/// A line that begins with a date and gives a clock range after it
+/// ("Weds 14 October: Private View 5 – 9pm", "Saturday 21st November
+/// 1-4pm …"): the date and the range. Without a written year the date is
+/// the first on or after `from`; a printed weekday must be that date's.
+fn dated_line(line: &str, from: NaiveDate) -> Option<(NaiveDate, NaiveTime, Option<NaiveTime>)> {
+    let text = line.to_lowercase();
+    let mut tokens = text
+        .split_whitespace()
+        .map(|t| t.trim_end_matches([',', ':']))
+        .peekable();
+    let weekday = tokens
+        .next_if(|t| crate::hours::parse_day(t).is_some())
+        .and_then(crate::hours::parse_day);
+    let number = tokens.next()?;
+    let number = ["st", "nd", "rd", "th"]
+        .iter()
+        .find_map(|s| number.strip_suffix(s))
+        .unwrap_or(number);
+    let day: u32 = number.parse().ok()?;
+    let month = month_number(tokens.next()?)?;
+    let year = tokens
+        .next_if(|t| t.parse::<i32>().is_ok_and(|y| (1900..=2200).contains(&y)))
+        .and_then(|t| t.parse().ok());
+    let date = match year {
+        Some(year) => NaiveDate::from_ymd_opt(year, month, day)?,
+        None => NaiveDate::from_ymd_opt(from.year(), month, day)
+            .filter(|d| *d >= from)
+            .or_else(|| NaiveDate::from_ymd_opt(from.year() + 1, month, day))?,
+    };
+    if weekday.is_some_and(|w| u32::from(w) != date.weekday().number_from_monday()) {
+        return None;
+    }
+    let rest: Vec<&str> = tokens.collect();
+    let (start, end) = find_clock_range(&rest.join(" "))?;
+    Some((date, start, end))
+}
+
+/// The JSON-LD path; `page_description` is the event page's full
+/// description, fetched when the list view's was cut short.
+fn parse_jsonld_event(
+    node: &Value,
+    page_description: Option<&str>,
+    config: &TecConfig,
+) -> Result<Option<Parsed>, SourceError> {
     let title =
         text_of(node.get("name")).ok_or_else(|| SourceError::Parse("event without name".into()))?;
     if node
@@ -686,16 +837,13 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
         })
         .or_else(|| Venue::from_config(config));
 
-    let description = node
-        .get("description")
-        .and_then(Value::as_str)
-        // TEC escapes the HTML description once more for JSON-LD.
-        .and_then(|d| clean_description(Some(&clean_text(&d.replace("\\n", " ")))));
+    let description = jsonld_description(node);
     let category = map_category(
         &[Some(title.as_str()), description.as_deref()].map(Option::unwrap_or_default),
     );
     Ok(Some(Parsed {
         description,
+        sessions: page_description.and_then(|d| printed_sessions(d, &times)),
         times,
         venue,
         price: jsonld_price(node),
@@ -705,6 +853,15 @@ fn parse_jsonld_event(node: &Value, config: &TecConfig) -> Result<Option<Parsed>
         tags: Vec::new(),
         title,
     }))
+}
+
+/// A JSON-LD node's description: an excerpt ending in "…" when the
+/// venue's is longer.
+fn jsonld_description(node: &Value) -> Option<String> {
+    node.get("description")
+        .and_then(Value::as_str)
+        // TEC escapes the HTML description once more for JSON-LD.
+        .and_then(|d| clean_description(Some(&clean_text(&d.replace("\\n", " ")))))
 }
 
 /// TEC writes a free cheapest tier as "Free" in a cost range ("Free –
@@ -939,8 +1096,15 @@ mod tests {
                 Some("2026-10-18T17:00:00+00:00".into())
             )
         );
+        assert_eq!(
+            start(days, "2026-10-14 21:00:00"),
+            (
+                "2026-10-14T16:00:00+00:00".into(),
+                Some("2026-10-15T16:00:00+00:00".into())
+            ),
+            "the printed days outrun the event's: sessions"
+        );
         let kept = "2026-10-14T17:00:00+00:00";
-        assert_eq!(start(days, "2026-10-14 21:00:00").0, kept);
         let narrative =
             "<p>The fair runs from Wednesday 14th October – Sunday 18th October, 5 – 9pm</p>";
         assert_eq!(start(narrative, "2026-10-18 18:00:00").0, kept);
@@ -955,6 +1119,142 @@ mod tests {
         assert_eq!(
             start(suffix_and_year, "2026-10-18 18:00:00").0,
             "2026-10-14T16:00:00+00:00"
+        );
+    }
+
+    #[test]
+    fn printed_sessions_extend_an_event_stored_as_its_first_day() {
+        let course = "<p><b>ROOT &#8211; A four day course</b><br />\n\
+                      Wednesday 18th November 11-4pm Rethinking the weed.</p>\
+                      <p>Thursday 19th November 11-4pm Plant walk.</p>\
+                      <p>Saturday 21st November 1-4pm Co-lead our open day.</p>";
+        let sessions = |start: &str, end: &str, description: &str| {
+            let payload = api(json!({"start_date": start, "end_date": end,
+                                     "description": description}));
+            let event = norm(&payload, json!({"default_category": "workshop"})).unwrap();
+            let times = (
+                event.starts_at.to_rfc3339(),
+                event.ends_at.map(|t| t.to_rfc3339()),
+            );
+            (times, event.sessions.len())
+        };
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", course),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-21T16:00:00+00:00".into())
+                ),
+                3
+            )
+        );
+        let stored = (
+            (
+                "2026-11-18T11:00:00+00:00".into(),
+                Some("2026-11-18T16:00:00+00:00".into()),
+            ),
+            0,
+        );
+        let mentioned = "<p>Wednesday 18th November 11-4pm.</p>\
+                         <p>Our next course starts on 2 December.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", mentioned),
+            stored,
+            "a date without a time is no session"
+        );
+        let later_start = "<p>Thursday 19th November 11-4pm.</p>\
+                           <p>Saturday 21st November 1-4pm.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", later_start),
+            stored,
+            "the first printed day must be the event's"
+        );
+        let within = "<p>Wednesday 18th November 11-4pm.</p><p>Saturday 21st November 1-4pm.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-28 16:00:00", within).1,
+            0,
+            "printed days inside the event's dates leave them"
+        );
+        let next_course = "<p>Wednesday 18th November 11-4pm Rethinking the weed.</p>\
+                           <p>Saturday 21st November 1-4pm Co-lead our open day.</p>\
+                           <p>Wednesday 2nd December 9am our next course starts.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", next_course),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-21T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a date well after the sessions is not one of them"
+        );
+        let earlier_aside = "<p>Wednesday 18th November 11-4pm Course day one.</p>\
+                             <p>Thursday 19th November 11-4pm Course day two.</p>\
+                             <p>Sunday 15th November 2-3pm Optional taster.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", earlier_aside),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-19T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a date before the first day is not rolled into next year"
+        );
+        let undated_aside = "<p>Wednesday 18th November 11-4pm.</p>\
+                             <p>Thursday 19th November 11-4pm.</p>\
+                             <p>15 November 2-3pm taster.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", undated_aside).1,
+            2,
+            "nor one without its weekday"
+        );
+        let wrong_weekday = "<p>Wednesday 18th November 11-4pm.</p>\
+                             <p>Thursday 19th November 11-4pm.</p>\
+                             <p>Tuesday 25th November 2-3pm drop-in.</p>";
+        assert_eq!(
+            sessions("2026-11-18 11:00:00", "2026-11-18 16:00:00", wrong_weekday),
+            (
+                (
+                    "2026-11-18T11:00:00+00:00".into(),
+                    Some("2026-11-19T16:00:00+00:00".into())
+                ),
+                2
+            ),
+            "a nearby date printed under another weekday is not a session"
+        );
+        let new_year = "<p>Wednesday 30 December 6-8pm.</p><p>Wednesday 6 January 6-8pm.</p>";
+        assert_eq!(
+            sessions("2026-12-30 18:00:00", "2026-12-30 20:00:00", new_year).0,
+            (
+                "2026-12-30T18:00:00+00:00".into(),
+                Some("2027-01-06T20:00:00+00:00".into())
+            )
+        );
+        let one_block = "<p>Wednesday 18th November 11-4pm.<br />Thursday 19th November 2-5pm.</p>";
+        let payload = api(json!({"start_date": "2026-11-18 11:00:00",
+                                 "end_date": "2026-11-18 16:00:00", "description": one_block}));
+        let event = norm(&payload, json!({"default_category": "workshop"})).unwrap();
+        let times: Vec<_> = event
+            .sessions
+            .iter()
+            .map(|s| (s.starts_at.to_rfc3339(), s.ends_at.map(|t| t.to_rfc3339())))
+            .collect();
+        assert_eq!(
+            times,
+            [
+                (
+                    "2026-11-18T11:00:00+00:00".to_string(),
+                    Some("2026-11-18T16:00:00+00:00".to_string())
+                ),
+                (
+                    "2026-11-19T14:00:00+00:00".to_string(),
+                    Some("2026-11-19T17:00:00+00:00".to_string())
+                ),
+            ],
+            "sessions on lines of one block are read line by line"
         );
     }
 

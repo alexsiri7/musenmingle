@@ -456,6 +456,105 @@ async fn list_only_venues_never_call_the_api() {
     assert_eq!(ids(&raws), ids(&list_view("tec-bow-arts")));
 }
 
+/// Scraper check 2026-10-30 (#385): the list view gives the four-day
+/// course "Green Futures: ROOT" as its first day only, with its description
+/// cut short; the event page prints every session, the last "Saturday 21st
+/// November 1-4pm". Only events whose description is cut have their page
+/// fetched.
+#[tokio::test]
+async fn slbi_qa_2026_10_30_page_values() {
+    let server = slbi_qa_2026_10_30_server().await;
+    let seed = fixture("scrapers/tec-slbi/qa-2026-10-30-3.html");
+    mount_list(&server, "/event/green-futures-seed/", seed, 1).await;
+    let root = fixture("scrapers/tec-slbi/qa-2026-10-30-2.html");
+    mount_list(&server, "/event/green-futures-root/", root, 1).await;
+    for uncut in [
+        "/event/mushroom-university-10/",
+        "/event/mushroom-university-11/",
+    ] {
+        mount_status(&server, uncut, 200, 0).await;
+    }
+    let (_, config) = seed_row("tec-slbi");
+    let ctx = ctx();
+    let raws = tec(&server, config).fetch(&ctx).await.expect("fetch");
+    assert_eq!(ctx.take_errors(), Vec::<String>::new());
+
+    let events = normalised("tec-slbi", &raws);
+    insta::assert_json_snapshot!("tec_slbi_qa_2026_10_30", events);
+    let event = |title: &str| {
+        events
+            .iter()
+            .map(|e| &e["event"])
+            .find(|e| e["title"] == title)
+            .unwrap_or_else(|| panic!("{title} listed"))
+    };
+    let root = event("Green Futures: ROOT");
+    assert_eq!(root["starts_at"], "2026-11-18T11:00:00Z");
+    assert_eq!(root["ends_at"], "2026-11-21T16:00:00Z");
+    assert_eq!(root["sessions"].as_array().map(Vec::len), Some(4));
+    let seed = event("Green Futures: SEED");
+    assert_eq!(seed["ends_at"], "2026-11-05T16:00:00Z");
+    assert!(seed.get("sessions").is_none());
+}
+
+#[tokio::test]
+async fn a_failed_event_page_is_reported_and_the_event_kept() {
+    let server = slbi_qa_2026_10_30_server().await;
+    mount_status(&server, "/event/green-futures-root/", 404, 1).await;
+    let seed = fixture("scrapers/tec-slbi/qa-2026-10-30-3.html");
+    mount_list(&server, "/event/green-futures-seed/", seed, 1).await;
+    let (_, config) = seed_row("tec-slbi");
+    let ctx = ctx();
+    let raws = tec(&server, config).fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(
+        errors[0].contains("/event/green-futures-root/"),
+        "{errors:?}"
+    );
+    let events = normalised("tec-slbi", &raws);
+    let root = events
+        .iter()
+        .map(|e| &e["event"])
+        .find(|e| e["title"] == "Green Futures: ROOT")
+        .expect("kept");
+    assert_eq!(root["ends_at"], "2026-11-18T16:00:00Z");
+}
+
+#[tokio::test]
+async fn an_event_page_without_a_description_is_reported() {
+    let server = slbi_qa_2026_10_30_server().await;
+    let moved = "<html><body><h1>Page moved</h1></body></html>".to_string();
+    mount_list(&server, "/event/green-futures-root/", moved, 1).await;
+    let seed = fixture("scrapers/tec-slbi/qa-2026-10-30-3.html");
+    mount_list(&server, "/event/green-futures-seed/", seed, 1).await;
+    let (_, config) = seed_row("tec-slbi");
+    let ctx = ctx();
+    let raws = tec(&server, config).fetch(&ctx).await.expect("fetch");
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(
+        errors[0].contains("/event/green-futures-root/: no event description"),
+        "{errors:?}"
+    );
+    let events = normalised("tec-slbi", &raws);
+    let root = events
+        .iter()
+        .map(|e| &e["event"])
+        .find(|e| e["title"] == "Green Futures: ROOT")
+        .expect("kept");
+    assert_eq!(root["ends_at"], "2026-11-18T16:00:00Z");
+}
+
+/// A server with open robots.txt and SLBI's list view of 2026-10-30.
+async fn slbi_qa_2026_10_30_server() -> MockServer {
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    let list = fixture("scrapers/tec-slbi/qa-2026-10-30.html");
+    mount_list(&server, "/events/", list, 1).await;
+    server
+}
+
 #[tokio::test]
 async fn api_off_without_a_list_view_is_an_error() {
     let server = MockServer::start().await;
