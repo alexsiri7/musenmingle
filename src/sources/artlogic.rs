@@ -492,6 +492,9 @@ pub fn is_offsite(text: &str) -> bool {
     })
 }
 
+/// Words that start an opening-reception note next to a show's dates.
+const NOTE_MARKERS: [&str; 3] = ["opening", "private view", "reception"];
+
 /// Parse an Artlogic date line into its first and last day. `Ok(None)` for
 /// open-ended text ("Until …", "Ongoing").
 pub fn parse_date_range(text: &str) -> Result<Option<(NaiveDate, NaiveDate)>, SourceError> {
@@ -510,9 +513,25 @@ pub fn parse_date_range(text: &str) -> Result<Option<(NaiveDate, NaiveDate)>, So
         return Ok(None);
     }
     // Ropac appends the opening to the dates: "13 October—18 December 2026
-    // Opening Tuesday 13 October, 6—8pm".
-    for marker in [" opening", " private view", " reception"] {
-        if let Some(i) = s.find(marker) {
+    // Opening Tuesday 13 October, 6—8pm", or puts it first, ending at its
+    // time: "Opening Thursday 7 January, 6—8pm 8 January—27 February 2027".
+    let leads_with_note = NOTE_MARKERS.iter().any(|m| {
+        s.strip_prefix(m)
+            .is_some_and(|rest| !rest.starts_with(|c: char| c.is_alphanumeric()))
+    });
+    if leads_with_note {
+        let words: Vec<&str> = s.split_whitespace().collect();
+        let is_time = |w: &&str| {
+            w.strip_suffix("pm")
+                .or_else(|| w.strip_suffix("am"))
+                .is_some_and(|t| t.is_empty() || t.ends_with(|c: char| c.is_ascii_digit()))
+        };
+        if let Some(i) = words.iter().position(is_time) {
+            s = words[i + 1..].join(" ");
+        }
+    }
+    for marker in NOTE_MARKERS {
+        if let Some(i) = s.find(&format!(" {marker}")) {
             s.truncate(i);
         }
     }
@@ -810,6 +829,20 @@ mod tests {
         assert_eq!(
             range("13 October\u{2014}18 December 2026 Opening Tuesday 13 October, 6\u{2014}8pm"),
             r("2026-10-13", "2026-12-18")
+        );
+        assert_eq!(
+            range("Opening Thursday 7 January, 6\u{2014}8pm 8 January\u{2014}27 February 2027"),
+            r("2027-01-08", "2027-02-27")
+        );
+        assert_eq!(
+            range(
+                "Private view: Thursday 7 January, 6\u{2014}8pm 8 January\u{2014}27 February 2027"
+            ),
+            r("2027-01-08", "2027-02-27")
+        );
+        assert_eq!(
+            range("Reception Thursday 7 January, 6pm 8 January\u{2014}27 February 2027"),
+            r("2027-01-08", "2027-02-27")
         );
     }
 
