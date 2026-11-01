@@ -510,7 +510,19 @@ pub fn parse_date_range(text: &str) -> Result<Option<(NaiveDate, NaiveDate)>, So
         return Ok(None);
     }
     // Ropac appends the opening to the dates: "13 October—18 December 2026
-    // Opening Tuesday 13 October, 6—8pm".
+    // Opening Tuesday 13 October, 6—8pm", or puts it first, ending at its
+    // time: "Opening Thursday 7 January, 6—8pm 8 January—27 February 2027".
+    if s.starts_with("opening ") {
+        let words: Vec<&str> = s.split_whitespace().collect();
+        let is_time = |w: &&str| {
+            w.strip_suffix("pm")
+                .or_else(|| w.strip_suffix("am"))
+                .is_some_and(|t| t.is_empty() || t.ends_with(|c: char| c.is_ascii_digit()))
+        };
+        if let Some(i) = words.iter().position(is_time) {
+            s = words[i + 1..].join(" ");
+        }
+    }
     for marker in [" opening", " private view", " reception"] {
         if let Some(i) = s.find(marker) {
             s.truncate(i);
@@ -810,6 +822,10 @@ mod tests {
         assert_eq!(
             range("13 October\u{2014}18 December 2026 Opening Tuesday 13 October, 6\u{2014}8pm"),
             r("2026-10-13", "2026-12-18")
+        );
+        assert_eq!(
+            range("Opening Thursday 7 January, 6\u{2014}8pm 8 January\u{2014}27 February 2027"),
+            r("2027-01-08", "2027-02-27")
         );
     }
 
