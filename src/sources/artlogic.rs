@@ -460,7 +460,7 @@ pub fn parse_single_show(html: &str, page_url: &Url) -> Option<Card> {
 
 /// Phrases that mark a listed item as happening away from the gallery: art
 /// fair booths, biennale presentations.
-const OFFSITE_PHRASES: [&str; 12] = [
+const OFFSITE_PHRASES: [&str; 13] = [
     "art fair",
     "biennale",
     "biennial",
@@ -469,6 +469,7 @@ const OFFSITE_PHRASES: [&str; 12] = [
     "pad london",
     "armory show",
     "art basel",
+    "design miami",
     "lapada",
     "tefaf",
     "international art exhibition",
@@ -899,6 +900,7 @@ mod tests {
             "Institutional exhibitions",
             "1-54 London",
             "PAD London",
+            "Design Miami 2026 I Unveiling: A Visible Voice | Unveiling: A Visible Voice",
         ] {
             assert!(is_offsite(text), "{text:?}");
         }
@@ -908,6 +910,7 @@ mod tests {
             "Golden Square",
             "Stand-up paintings",
             "London Gallery I",
+            "Under Wraps: Inaugural Mayfair Group Exhibition",
         ] {
             assert!(!is_offsite(text), "{text:?}");
         }
