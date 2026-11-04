@@ -3,15 +3,33 @@
 
 mod common;
 
+use chrono::NaiveDate;
 use common::fixture;
 use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
+use musenmingle::model::Category;
+use musenmingle::normalise::london_date;
 use musenmingle::sources::Source;
-use musenmingle::sources::vam::{Vam, parse_listing};
+use musenmingle::sources::vam::{
+    Vam, parse_exhibition_carousels, parse_listing, with_exhibition_page,
+};
+use rust_decimal::Decimal;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const DIR: &str = "scrapers/vam";
+/// The exhibitions in the carousels of both listing fixtures.
+const CAROUSEL_SLUGS: [&str; 9] = [
+    "inside-aardman-wallace-gromit-and-friends",
+    "schiaparelli",
+    "the-music-is-black-a-british-story",
+    "rising-voices-contemporary-art-from-asia-australia-and-the-pacific",
+    "constantinople-to-istanbul-one-city-two-empires",
+    "punk-to-pop",
+    "south-asia-now-fashion-art-design",
+    "sculpture-in-clay",
+    "chintz",
+];
 
 fn source() -> Vam {
     Vam::new("https://www.vam.ac.uk".parse().unwrap())
@@ -150,14 +168,95 @@ fn qa_2026_10_24_page_values() {
     );
 }
 
+/// Issue #397: the scraper check of 2026-11-04 found the nine exhibitions of
+/// the listing's "Current" and "Upcoming" carousels missed (they are not
+/// grid cards). Their dates come from each exhibition's page; expected
+/// values are the page's.
+#[test]
+fn qa_2026_11_04_page_values() {
+    let s = source();
+    let listing = fixture(&format!("{DIR}/qa-2026-11-04.html"));
+    let grid = parse_listing(&listing);
+    let carousels = parse_exhibition_carousels(&listing);
+    let ids: Vec<String> = CAROUSEL_SLUGS
+        .iter()
+        .map(|slug| format!("exhibitions/{slug}"))
+        .collect();
+    assert_eq!(
+        carousels
+            .iter()
+            .map(|r| r.source_event_id.as_str())
+            .collect::<Vec<_>>(),
+        ids
+    );
+    let mut out = Vec::new();
+    for (slug, raw) in CAROUSEL_SLUGS.iter().zip(carousels) {
+        assert!(
+            grid.iter()
+                .all(|g| g.source_event_id != raw.source_event_id),
+            "{slug} is a grid card"
+        );
+        let page = fixture(&format!("{DIR}/exhibitions/{slug}.html"));
+        let raw = with_exhibition_page(raw, &page).expect("JSON-LD event");
+        let e = s.normalise(&raw).expect("normalise").expect("kept");
+        assert!(e.all_day, "{slug}");
+        assert_eq!(e.category, Category::Exhibition, "{slug}");
+        // The card's line: "Closes Sunday, 15 November 2026" or "Opens …".
+        let line = raw.payload["date_text"].as_str().unwrap();
+        let (prefix, date) = line.split_once(' ').unwrap();
+        let date = NaiveDate::parse_from_str(date, "%A, %d %B %Y").unwrap();
+        match prefix {
+            "Closes" => assert_eq!(e.ends_at.map(london_date), Some(date), "{slug}"),
+            "Opens" => assert_eq!(london_date(e.starts_at), date, "{slug}"),
+            _ => panic!("{slug}: {line}"),
+        }
+        out.push(serde_json::json!({
+            "id": raw.source_event_id,
+            "title": e.title,
+            "venue": e.venue_name,
+            "date_text": line,
+            "starts_at": e.starts_at,
+            "ends_at": e.ends_at,
+            "all_day": e.all_day,
+            "category": e.category,
+            "price": e.price,
+        }));
+        match *slug {
+            "schiaparelli" => {
+                assert_eq!(e.title, "Schiaparelli: Fashion Becomes Art");
+                assert_eq!(e.starts_at.to_rfc3339(), "2026-03-28T00:00:00+00:00");
+                assert_eq!(e.ends_at.unwrap().to_rfc3339(), "2026-11-15T00:00:00+00:00");
+                assert_eq!(e.venue_name.as_deref(), Some("V&A South Kensington"));
+                assert_eq!(e.price.min, Some(Decimal::from(28)));
+            }
+            "inside-aardman-wallace-gromit-and-friends" => {
+                assert_eq!(e.title, "Inside Aardman: Wallace & Gromit and Friends");
+                assert_eq!(e.venue_name.as_deref(), Some("Young V&A"));
+            }
+            // "Tickets available soon": no offer yet, so not free.
+            "punk-to-pop" => {
+                assert!(!e.price.is_free);
+                assert_eq!(e.price.min, None);
+            }
+            _ => {}
+        }
+    }
+    insta::assert_json_snapshot!("vam_qa_2026_11_04", out);
+}
+
 #[tokio::test]
 async fn fetches_the_listing_via_fetch_context() {
     let server = MockServer::start().await;
+    // The site's rules, without its `Crawl-delay: 2` (FetchContext honours
+    // it, which would add 2 s per exhibition page).
+    let robots: String = fixture(&format!("{DIR}/robots.txt"))
+        .lines()
+        .filter(|l| !l.starts_with("Crawl-delay"))
+        .map(|l| format!("{l}\n"))
+        .collect();
     Mock::given(method("GET"))
         .and(path("/robots.txt"))
-        .respond_with(
-            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/robots.txt"))),
-        )
+        .respond_with(ResponseTemplate::new(200).set_body_string(robots))
         .expect(1)
         .mount(&server)
         .await;
@@ -169,13 +268,64 @@ async fn fetches_the_listing_via_fetch_context() {
         .expect(1)
         .mount(&server)
         .await;
+    for slug in CAROUSEL_SLUGS {
+        Mock::given(method("GET"))
+            .and(path(format!("/exhibitions/{slug}")))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_string(fixture(&format!("{DIR}/exhibitions/{slug}.html"))),
+            )
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
     let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let s = Vam::new(server.uri().parse().unwrap());
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
     let expected = parse_listing(&fixture(&format!("{DIR}/whatson.html")));
+    assert_eq!(raws.len(), expected.len() + CAROUSEL_SLUGS.len());
+    assert!(expected.len() > 50, "{}", expected.len());
+    let schiaparelli = raws
+        .iter()
+        .find(|r| r.source_event_id == "exhibitions/schiaparelli")
+        .expect("fetched");
+    assert_eq!(schiaparelli.payload["start"], "2026-03-28");
+}
+
+#[tokio::test]
+async fn a_failed_exhibition_page_is_reported_not_fatal() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("User-agent: *\nAllow: /\n"))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whatson"))
+        .respond_with(
+            ResponseTemplate::new(200).set_body_string(fixture(&format!("{DIR}/whatson.html"))),
+        )
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/exhibitions/schiaparelli"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let s = Vam::new(server.uri().parse().unwrap());
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let expected = parse_listing(&fixture(&format!("{DIR}/whatson.html")));
     assert_eq!(raws.len(), expected.len());
-    assert!(raws.len() > 50, "{}", raws.len());
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), CAROUSEL_SLUGS.len(), "{errors:?}");
+    assert!(
+        errors
+            .iter()
+            .any(|e| e.contains("exhibitions/schiaparelli: no JSON-LD event")),
+        "{errors:?}"
+    );
 }
 
 #[tokio::test]

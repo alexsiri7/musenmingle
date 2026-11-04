@@ -4,8 +4,8 @@
 //! * robots.txt (checked 2026-09-27, saved as a fixture): `User-agent: *`,
 //!   `Crawl-delay: 2`; `/whatson` is allowed, but pagination (`/*page=`,
 //!   `/*p=`) and search (`/*q=*`) are disallowed, so the source reads only
-//!   the first listing page (~85 items), without a query string. One request
-//!   per run; the listing has every field needed, so no detail pages.
+//!   the first listing page (~85 items), without a query string. The grid
+//!   cards have every field needed, so they need no detail pages.
 //! * Every card is an `article[itemprop=event]` with `name`, `startDate`,
 //!   `endDate`, `description`, `image` and an `Offer` (`price` is `5.0`,
 //!   `0`, `£6.00` or `£1,600.00`). The microdata `location` is always
@@ -40,6 +40,19 @@
 //!   only the envelope, e.g. "On now until …", and the dates of the
 //!   sessions, such as upperground's Thursdays with a gap on 29 October
 //!   2026, are in prose only); `qa_scope` tells the scraper check.
+//! * The flagship exhibitions are not grid cards: they appear only in the
+//!   page's "Current" and "Upcoming" exhibition carousels
+//!   (`a.exhibiton-carousel-card`, the site's spelling), whose cards say
+//!   only "Closes …" or "Opens …" (scraper check of 2026-11-04, #397). So
+//!   each carousel exhibition's own page (`/exhibitions/<slug>`, allowed by
+//!   robots.txt) is fetched for its JSON-LD `ExhibitionEvent`: date-only
+//!   `startDate`/`endDate` and the `Offer` (`price` a number such as `28.0`;
+//!   no offer while tickets are "available soon"). Title, type, date line,
+//!   venue and image come from the card, so the payload has the grid's
+//!   shape. A carousel exhibition that is also a grid card is left to the
+//!   grid; at most [`MAX_EXHIBITION_PAGES`] pages are fetched, and a page
+//!   that fails or has no JSON-LD event is a reported error, not a failed
+//!   run.
 //! * Content policy (seed): facts + link only; see the migration.
 
 use std::str::FromStr;
@@ -51,7 +64,7 @@ use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
 
-use super::{Source, SourceError};
+use super::{Source, SourceError, jsonld};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
@@ -61,6 +74,11 @@ use crate::normalise::{
 pub const KEY: &str = "vam";
 const LISTING_PATH: &str = "/whatson";
 const SITE: &str = "https://www.vam.ac.uk";
+/// Upper bound on exhibition pages fetched per run (the carousels hold ~9).
+pub const MAX_EXHIBITION_PAGES: usize = 20;
+/// A card's visible date line and venue label, on grid and carousel cards.
+const DATE_LINE: &str = ".b-icon-list__icon--calendar .b-icon-list__item-text";
+const PIN_LABEL: &str = ".b-icon-list__icon--pin .b-icon-list__item-text";
 
 /// The London sites, by the card's pin label: (label, address, lat, lng).
 /// Addresses from the site footer (2026-09-27); coordinates approximate.
@@ -139,8 +157,8 @@ pub fn parse_listing(html: &str) -> Vec<RawEvent> {
     let base = Url::parse(SITE).expect("valid url");
     let link_sel = selector("a.b-event-teaser__link[href]");
     let type_sel = selector(".b-event-teaser__type");
-    let date_sel = selector(".b-icon-list__icon--calendar .b-icon-list__item-text");
-    let pin_sel = selector(".b-icon-list__icon--pin .b-icon-list__item-text");
+    let date_sel = selector(DATE_LINE);
+    let pin_sel = selector(PIN_LABEL);
     let offer_sel = selector("[itemprop=offers]");
     let price_sel = selector("[itemprop=price]");
     let currency_sel = selector("meta[itemprop=priceCurrency]");
@@ -197,6 +215,84 @@ pub fn parse_listing(html: &str) -> Vec<RawEvent> {
         });
     }
     out
+}
+
+/// Parse the exhibition carousels of the `/whatson` listing into one
+/// [`RawEvent`] per exhibition, in document order, without the dates and
+/// price only its page has (see [`with_exhibition_page`]).
+pub fn parse_exhibition_carousels(html: &str) -> Vec<RawEvent> {
+    let doc = Html::parse_document(html);
+    let base = Url::parse(SITE).expect("valid url");
+    let title_sel = selector("h3.b-card__heading");
+    let type_sel = selector(".exhibiton-carousel-card__event-type-label");
+    let date_sel = selector(DATE_LINE);
+    let pin_sel = selector(PIN_LABEL);
+    let image_sel = selector("img.b-card__image");
+    let mut out: Vec<RawEvent> = Vec::new();
+    for card in doc.select(&selector("a.exhibiton-carousel-card[href]")) {
+        let Some(url) = card.value().attr("href").and_then(|h| base.join(h).ok()) else {
+            continue;
+        };
+        let id = url.path().trim_matches('/').to_string();
+        if out.iter().any(|r| r.source_event_id == id) {
+            continue;
+        }
+        let text = |sel: &Selector| card.select(sel).next().map(element_text);
+        let Some(title) = text(&title_sel).filter(|t| !t.is_empty()) else {
+            continue;
+        };
+        let image_url = card
+            .select(&image_sel)
+            .next()
+            .and_then(|i| i.value().attr("src"))
+            .and_then(|s| base.join(s).ok())
+            .map(String::from);
+        out.push(RawEvent {
+            source_event_id: id,
+            source_url: Some(url.to_string()),
+            payload: json!({
+                "url": url.to_string(),
+                "title": title,
+                "type": text(&type_sel),
+                "date_text": text(&date_sel),
+                "venue": text(&pin_sel),
+                "start": null,
+                "end": null,
+                "description": null,
+                "price": null,
+                "currency": null,
+                "image_url": image_url,
+            }),
+        });
+    }
+    out
+}
+
+/// Complete a carousel exhibition with the dates and price of its page's
+/// JSON-LD event; `None` if the page has none.
+pub fn with_exhibition_page(mut raw: RawEvent, html: &str) -> Option<RawEvent> {
+    let event = jsonld::extract_events(&Html::parse_document(html))
+        .into_iter()
+        .next()?;
+    let offer = jsonld::first_offer(&event);
+    let price = offer.and_then(|o| match o.get("price")? {
+        Value::Number(n) => Some(n.to_string()),
+        Value::String(s) => Some(s.clone()),
+        _ => None,
+    });
+    let payload = raw.payload.as_object_mut()?;
+    payload.insert("start".into(), event["startDate"].clone());
+    payload.insert("end".into(), event["endDate"].clone());
+    payload.insert("price".into(), json!(price));
+    payload.insert(
+        "currency".into(),
+        json!(
+            offer
+                .and_then(|o| o.get("priceCurrency"))
+                .and_then(Value::as_str)
+        ),
+    );
+    Some(raw)
 }
 
 /// A V&A `/event/` time stamp (`2026-10-01 14:00:00 +0100`). The digits
@@ -369,11 +465,34 @@ impl Source for Vam {
             .base_url
             .join(LISTING_PATH)
             .map_err(|e| SourceError::Config(e.to_string()))?;
-        let raws = parse_listing(&ctx.get_text(&url).await?);
+        let html = ctx.get_text(&url).await?;
+        let mut raws = parse_listing(&html);
         if raws.is_empty() {
             return Err(SourceError::Parse(
                 "no microdata events found on /whatson".into(),
             ));
+        }
+        let exhibitions: Vec<RawEvent> = parse_exhibition_carousels(&html)
+            .into_iter()
+            .filter(|c| !raws.iter().any(|r| r.source_event_id == c.source_event_id))
+            .take(MAX_EXHIBITION_PAGES)
+            .collect();
+        for raw in exhibitions {
+            let id = raw.source_event_id.clone();
+            let page = match self.base_url.join(&format!("/{id}")) {
+                Ok(page) => page,
+                Err(e) => {
+                    ctx.report_error(format!("bad exhibition path {id}: {e}"));
+                    continue;
+                }
+            };
+            match ctx.get_text(&page).await {
+                Ok(html) => match with_exhibition_page(raw, &html) {
+                    Some(raw) => raws.push(raw),
+                    None => ctx.report_error(format!("{id}: no JSON-LD event")),
+                },
+                Err(e) => ctx.report_error(format!("{id}: {e}")),
+            }
         }
         Ok(raws)
     }

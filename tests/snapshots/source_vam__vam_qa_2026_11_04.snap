@@ -1,0 +1,150 @@
+---
+source: tests/source_vam.rs
+expression: out
+---
+[
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Closes Sunday, 15 November 2026",
+    "ends_at": "2026-11-15T00:00:00Z",
+    "id": "exhibitions/inside-aardman-wallace-gromit-and-friends",
+    "price": {
+      "currency": "GBP",
+      "is_free": false,
+      "max": "12.5",
+      "min": "12.5"
+    },
+    "starts_at": "2026-02-12T00:00:00Z",
+    "title": "Inside Aardman: Wallace & Gromit and Friends",
+    "venue": "Young V&A"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Closes Sunday, 15 November 2026",
+    "ends_at": "2026-11-15T00:00:00Z",
+    "id": "exhibitions/schiaparelli",
+    "price": {
+      "currency": "GBP",
+      "is_free": false,
+      "max": "28",
+      "min": "28"
+    },
+    "starts_at": "2026-03-28T00:00:00Z",
+    "title": "Schiaparelli: Fashion Becomes Art",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Closes Sunday, 10 January 2027",
+    "ends_at": "2027-01-10T00:00:00Z",
+    "id": "exhibitions/the-music-is-black-a-british-story",
+    "price": {
+      "currency": "GBP",
+      "is_free": false,
+      "max": "22.5",
+      "min": "22.5"
+    },
+    "starts_at": "2026-04-17T23:00:00Z",
+    "title": "The Music is Black: A British Story",
+    "venue": "V&A East Museum"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Closes Sunday, 10 January 2027",
+    "ends_at": "2027-01-10T00:00:00Z",
+    "id": "exhibitions/rising-voices-contemporary-art-from-asia-australia-and-the-pacific",
+    "price": {
+      "currency": "GBP",
+      "is_free": false,
+      "max": "17",
+      "min": "17"
+    },
+    "starts_at": "2026-05-15T23:00:00Z",
+    "title": "Rising Voices: Contemporary Art from Asia, Australia and the Pacific",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Opens Saturday, 7 November 2026",
+    "ends_at": "2027-05-08T23:00:00Z",
+    "id": "exhibitions/constantinople-to-istanbul-one-city-two-empires",
+    "price": {
+      "currency": "GBP",
+      "is_free": false,
+      "max": "25",
+      "min": "25"
+    },
+    "starts_at": "2026-11-07T00:00:00Z",
+    "title": "Constantinople to Istanbul: One City, Two Empires",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Opens Saturday, 13 March 2027",
+    "ends_at": "2028-01-02T00:00:00Z",
+    "id": "exhibitions/punk-to-pop",
+    "price": {
+      "currency": null,
+      "is_free": false,
+      "max": null,
+      "min": null
+    },
+    "starts_at": "2027-03-13T00:00:00Z",
+    "title": "Punk to Pop",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Opens Saturday, 24 April 2027",
+    "ends_at": "2028-01-23T00:00:00Z",
+    "id": "exhibitions/south-asia-now-fashion-art-design",
+    "price": {
+      "currency": null,
+      "is_free": false,
+      "max": null,
+      "min": null
+    },
+    "starts_at": "2027-04-23T23:00:00Z",
+    "title": "South Asia Now: Fashion. Art. Design.",
+    "venue": "V&A East Museum"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Opens Saturday, 29 May 2027",
+    "ends_at": "2028-02-06T00:00:00Z",
+    "id": "exhibitions/sculpture-in-clay",
+    "price": {
+      "currency": null,
+      "is_free": false,
+      "max": null,
+      "min": null
+    },
+    "starts_at": "2027-05-28T23:00:00Z",
+    "title": "Sculpture in Clay",
+    "venue": "V&A South Kensington"
+  },
+  {
+    "all_day": true,
+    "category": "exhibition",
+    "date_text": "Opens Saturday, 18 September 2027",
+    "ends_at": "2028-06-03T23:00:00Z",
+    "id": "exhibitions/chintz",
+    "price": {
+      "currency": null,
+      "is_free": false,
+      "max": null,
+      "min": null
+    },
+    "starts_at": "2027-09-17T23:00:00Z",
+    "title": "Chintz",
+    "venue": "V&A South Kensington"
+  }
+]
