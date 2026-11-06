@@ -434,13 +434,18 @@ impl FetchContext {
         })
     }
 
-    /// GET and decode the body as JSON.
+    /// GET and decode the body as JSON. A decode error names the
+    /// response's content type: an intermittent HTML page in place of an
+    /// API's JSON (a challenge or error page) shows up as `text/html`.
     pub async fn get_json<T: DeserializeOwned>(&self, url: &Url) -> Result<T, FetchError> {
-        let bytes = self.get_bytes_limited(url, MAX_BODY_BYTES).await?.bytes;
-        self.keep(url, &String::from_utf8_lossy(&bytes), true);
-        serde_json::from_slice(&bytes).map_err(|e| FetchError::Decode {
+        let fetched = self.get_bytes_limited(url, MAX_BODY_BYTES).await?;
+        self.keep(url, &String::from_utf8_lossy(&fetched.bytes), true);
+        serde_json::from_slice(&fetched.bytes).map_err(|e| FetchError::Decode {
             url: redact(url),
-            message: e.to_string(),
+            message: format!(
+                "{e} (Content-Type: {})",
+                fetched.content_type.as_deref().unwrap_or("none")
+            ),
         })
     }
 }
@@ -674,6 +679,34 @@ mod tests {
         assert!(matches!(text, FetchError::TooLarge { .. }), "{text}");
         let json = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
         assert!(matches!(json, FetchError::TooLarge { .. }), "{json}");
+    }
+
+    /// #401: the Cinema Museum's API now and then answers 200 with a body
+    /// that isn't JSON; the error should say what it was.
+    #[tokio::test]
+    async fn json_decode_errors_name_the_content_type() {
+        use wiremock::matchers::method;
+        use wiremock::{Mock, MockServer, ResponseTemplate};
+
+        let server = MockServer::start().await;
+        Mock::given(method("GET"))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_raw("<!DOCTYPE html><html></html>", "text/html; charset=UTF-8"),
+            )
+            .mount(&server)
+            .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        let url = u(&format!("{}/wp-json/events?key=secret", server.uri()));
+        let err = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
+        assert!(matches!(err, FetchError::Decode { .. }), "{err}");
+        assert!(
+            err.to_string().ends_with(
+                "expected value at line 1 column 1 (Content-Type: text/html; charset=UTF-8)"
+            ),
+            "{err}"
+        );
+        assert!(!err.to_string().contains("secret"), "{err}");
     }
 
     #[tokio::test(start_paused = true)]
