@@ -17,7 +17,7 @@
 //! * a 202, or an HTML page where JSON was expected, is a
 //!   [`FetchError::Challenge`] (most likely a host's anti-bot check; never
 //!   retried), and every failed response is logged with its status, content
-//!   type and the start of its body (query values redacted).
+//!   type and the start of its body (credential-like query values redacted).
 //!
 //! The underlying `reqwest::Client` is private on purpose; do not add an
 //! accessor for it.
@@ -134,33 +134,71 @@ async fn body_prefix(resp: &mut reqwest::Response) -> Vec<u8> {
     body
 }
 
-/// The start of a failed response's body as one short line, with every
-/// query value of `url` redacted: an error page may echo an API key.
-fn body_snippet(url: &Url, body: &[u8]) -> String {
-    let mut text =
-        String::from_utf8_lossy(&body[..body.len().min(FAILED_BODY_PREFIX_BYTES)]).into_owned();
-    let raw_values = url
+/// Query parameters whose values may be credentials, by name fragment
+/// (lower case, `-`/`_` removed): `apikey`, `access_token`, `sig`, ….
+const CREDENTIAL_PARAMS: &[&str] = &["key", "token", "secret", "sig", "auth", "pass"];
+
+/// The values of `url`'s credential-like query parameters, raw and decoded,
+/// longest first so a value containing another is replaced whole. Other
+/// values (`page=1`, dates) stay: redacting them would garble the snippet.
+fn query_secrets(url: &Url) -> Vec<String> {
+    let is_credential = |name: &str| {
+        let name: String = name
+            .chars()
+            .filter(|c| c.is_ascii_alphanumeric())
+            .collect::<String>()
+            .to_ascii_lowercase();
+        CREDENTIAL_PARAMS.iter().any(|p| name.contains(p))
+    };
+    let raw = url
         .query()
         .unwrap_or_default()
         .split('&')
-        .filter_map(|pair| pair.split_once('=').map(|(_, v)| v.to_string()));
-    let decoded_values = url.query_pairs().map(|(_, v)| v.into_owned());
-    let mut secrets: Vec<String> = raw_values
-        .chain(decoded_values)
-        .filter(|v| !v.is_empty())
-        .collect();
-    // Longest first, so a value containing another is replaced whole.
+        .filter_map(|pair| pair.split_once('='))
+        .filter(|(name, _)| is_credential(name))
+        .map(|(_, v)| v.to_string());
+    let decoded = url
+        .query_pairs()
+        .filter(|(name, _)| is_credential(name))
+        .map(|(_, v)| v.into_owned());
+    let mut secrets: Vec<String> = raw.chain(decoded).filter(|v| !v.is_empty()).collect();
     secrets.sort_by_key(|v| std::cmp::Reverse(v.len()));
+    secrets
+}
+
+/// The start of a failed response's body as one short line, with the
+/// values of `url`'s credential-like query parameters redacted: an error
+/// page may echo an API key. Redaction runs over the whole body before any
+/// truncation, and a body that ends partway through a secret loses that
+/// fragment (a failed `get` reads only the body's start).
+fn body_snippet(url: &Url, body: &[u8]) -> String {
+    let mut text = String::from_utf8_lossy(body).into_owned();
+    let secrets = query_secrets(url);
     for secret in &secrets {
         text = text.replace(secret.as_str(), "[redacted]");
     }
-    text.split(|c: char| c.is_whitespace() || c.is_control())
+    for secret in &secrets {
+        if let Some(n) = (1..secret.len())
+            .rev()
+            .find(|&n| secret.is_char_boundary(n) && text.ends_with(&secret[..n]))
+        {
+            text.truncate(text.len() - n);
+        }
+    }
+    let mut snippet = String::new();
+    for word in text
+        .split(|c: char| c.is_whitespace() || c.is_control())
         .filter(|word| !word.is_empty())
-        .collect::<Vec<_>>()
-        .join(" ")
-        .chars()
-        .take(FAILED_BODY_SNIPPET_CHARS)
-        .collect()
+    {
+        if snippet.len() >= FAILED_BODY_SNIPPET_CHARS {
+            break;
+        }
+        if !snippet.is_empty() {
+            snippet.push(' ');
+        }
+        snippet.push_str(word);
+    }
+    snippet.chars().take(FAILED_BODY_SNIPPET_CHARS).collect()
 }
 
 fn log_failed_fetch(url: &Url, status: StatusCode, content_type: Option<&str>, body: &[u8]) {
@@ -875,20 +913,34 @@ mod tests {
     }
 
     #[test]
-    fn failed_fetch_snippets_redact_query_values_and_stay_short() {
-        let url = u("https://example.org/api?apikey=SECRET%2Fx&q=");
+    fn failed_fetch_snippets_redact_credentials_and_stay_short() {
+        let url = u("https://example.org/api?apikey=SECRET%2Fx&access-token=TOK123&q=&page=1");
         let body = format!(
-            "<p>bad key\tSECRET/x\n and SECRET%2Fx</p>\n{}",
+            "<h1>Error 1015</h1> page 1\tSECRET/x\n and SECRET%2Fx TOK123\n{}",
             "padding ".repeat(400)
         );
         let snippet = body_snippet(&url, body.as_bytes());
         assert!(!snippet.contains("SECRET"), "{snippet}");
-        assert!(snippet.contains("[redacted]"), "{snippet}");
+        assert!(!snippet.contains("TOK123"), "{snippet}");
+        assert!(
+            snippet.starts_with("<h1>Error 1015</h1> page 1 [redacted]"),
+            "{snippet}"
+        );
         assert!(!snippet.contains(['\n', '\t']), "{snippet}");
         assert!(
             snippet.chars().count() <= FAILED_BODY_SNIPPET_CHARS,
             "{snippet}"
         );
+    }
+
+    /// A secret past the snippet's length, or cut off by a partial read,
+    /// never leaks a fragment.
+    #[test]
+    fn failed_fetch_snippets_redact_before_truncating() {
+        let url = u("https://example.org/api?apikey=ABCDEFGHIJKLMNOP");
+        let echoed = format!("{}ABCDEFGHIJKLMNOP", "\n".repeat(2000));
+        assert_eq!(body_snippet(&url, echoed.as_bytes()), "[redacted]");
+        assert_eq!(body_snippet(&url, b"bad key ABCDEFGH"), "bad key");
     }
 
     #[test]
