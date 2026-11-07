@@ -31,14 +31,15 @@ fn feed_items() -> Vec<Value> {
 }
 
 /// The feed items as `fetch` would store them, event pages read from the
-/// fixtures (skipped programme types, residencies, have none).
+/// fixtures (skipped programme types, residencies and untyped hires, have
+/// none).
 fn raws() -> Vec<RawEvent> {
     let site = Url::parse(SITE).unwrap();
     feed_items()
         .iter()
         .map(|item| {
             let path = item_path(item).expect("event link");
-            let in_scope = category(item["type"]["slug"].as_str().unwrap()).is_some();
+            let in_scope = category(item["type"]["slug"].as_str().unwrap_or_default()).is_some();
             let detail = in_scope.then(|| {
                 let slug = path.trim_start_matches("/whats-on/");
                 parse_detail(&fixture(&format!("{DIR}/{slug}.html")))
@@ -65,7 +66,7 @@ fn saved_robots_allow_the_feed_and_event_pages() {
 #[test]
 fn every_feed_item_links_to_its_page() {
     let items = feed_items();
-    assert_eq!(items.len(), 11);
+    assert_eq!(items.len(), 12);
     assert!(items.iter().all(|i| item_path(i).is_some()));
 }
 

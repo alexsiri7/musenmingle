@@ -720,7 +720,6 @@ pub fn session_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec
 /// (inclusive), for sessions that repeat weekly (#207). `None` without the
 /// phrase or with fewer than two days.
 pub fn weekly_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec<NaiveDate>> {
-    use chrono::Datelike;
     const DAYS: [&str; 7] = [
         "monday",
         "tuesday",
@@ -731,13 +730,41 @@ pub fn weekly_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec<
         "sunday",
     ];
     let lower = text.to_lowercase();
-    let weekday = DAYS.iter().position(|d| {
+    let weekday = DAYS.iter().find(|d| {
         lower.contains(&format!("every {d}")) || lower.contains(&format!("every {d}s"))
     })?;
+    weekdays_between(first, last, weekday.parse().ok()?)
+}
+
+/// A dated range whose both ends are labelled with the same weekday ("Sat
+/// 10 Oct 2026–Sat 3 Jul 2027"): each such weekday from `first` to `last`
+/// (inclusive), for weekly sessions whose listing states no rule (#182).
+/// `None` unless `first` and `last` fall on that weekday and `text` names
+/// it at least twice and no other weekday.
+pub fn weekday_range_days(text: &str, first: NaiveDate, last: NaiveDate) -> Option<Vec<NaiveDate>> {
+    use chrono::{Datelike, Weekday};
+    let named: Vec<Weekday> = text
+        .split(|c: char| !c.is_alphabetic())
+        .filter_map(|t| t.parse::<Weekday>().ok())
+        .collect();
+    let weekday = first.weekday();
+    (named.len() >= 2 && named.iter().all(|w| *w == weekday) && last.weekday() == weekday)
+        .then_some(())?;
+    weekdays_between(first, last, weekday)
+}
+
+/// Each `weekday` from `first` to `last` (inclusive); `None` with fewer
+/// than two.
+fn weekdays_between(
+    first: NaiveDate,
+    last: NaiveDate,
+    weekday: chrono::Weekday,
+) -> Option<Vec<NaiveDate>> {
+    use chrono::Datelike;
     let days: Vec<NaiveDate> = first
         .iter_days()
         .take_while(|d| *d <= last)
-        .filter(|d| d.weekday().num_days_from_monday() as usize == weekday)
+        .filter(|d| d.weekday() == weekday)
         .collect();
     (days.len() >= 2).then_some(days)
 }
@@ -823,6 +850,45 @@ mod tests {
         );
         assert_eq!(
             weekly_days("Saturdays", d(2026, 10, 10), d(2026, 10, 31)),
+            None
+        );
+        let saturdays = Some(vec![
+            d(2026, 10, 10),
+            d(2026, 10, 17),
+            d(2026, 10, 24),
+            d(2026, 10, 31),
+        ]);
+        assert_eq!(
+            weekday_range_days(
+                "Sat 10 Oct 2026–Sat 31 Oct 2026",
+                d(2026, 10, 10),
+                d(2026, 10, 31)
+            ),
+            saturdays
+        );
+        // Both ends must be labelled, with the event's own weekday.
+        assert_eq!(
+            weekday_range_days("10 Oct 2026/31 Oct 2026", d(2026, 10, 10), d(2026, 10, 31)),
+            None
+        );
+        assert_eq!(
+            weekday_range_days("Sat 10 Oct 2026", d(2026, 10, 10), d(2026, 10, 31)),
+            None
+        );
+        assert_eq!(
+            weekday_range_days(
+                "Sun 11 Oct 2026–Sun 1 Nov 2026",
+                d(2026, 10, 10),
+                d(2026, 10, 31)
+            ),
+            None
+        );
+        assert_eq!(
+            weekday_range_days(
+                "Sat 10 Oct 2026–Fri 30 Oct 2026",
+                d(2026, 10, 10),
+                d(2026, 10, 30)
+            ),
             None
         );
     }
