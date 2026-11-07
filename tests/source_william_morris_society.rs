@@ -180,3 +180,14 @@ async fn cards_without_a_title_link_are_reported() {
     assert!(errors[0].contains("Renamed Heading"), "{errors:?}");
     assert!(errors[1].contains("Write to Us"), "{errors:?}");
 }
+
+#[test]
+fn cards_sharing_a_title_link_are_listed_once() {
+    let listing = r#"<html><body><ul class="fusion-grid">
+        <li class="post-card"><h3 class="fusion-title-heading"><a href="https://williammorrissociety.digitickets.co.uk/event-tickets/1">Morning Tour</a></h3></li>
+        <li class="post-card"><h3 class="fusion-title-heading"><a href="https://williammorrissociety.digitickets.co.uk/event-tickets/1">Afternoon Tour</a></h3></li>
+        </ul></body></html>"#;
+    let cards = parse_listing(listing).cards;
+    assert_eq!(cards.len(), 1);
+    assert_eq!(cards[0].title, "Morning Tour");
+}
