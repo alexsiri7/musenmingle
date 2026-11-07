@@ -13,10 +13,15 @@
 //!   an excerpt (`.fusion-content-tb`, ending in a "Read More" link, which is
 //!   dropped) and an image. The detail pages repeat the same facts as
 //!   free-form prose, so they are never fetched.
+//! * Since November 2026 most title links go to the Society's ticket shop
+//!   (`williammorrissociety.digitickets.co.uk/event-tickets/<id>?catID=…`)
+//!   or another page of its site, and its own `/events/<slug>/` pages 404,
+//!   so a card's identity and link is whatever absolute http(s) URL its
+//!   title links to.
 //! * Cards with an empty date are open-ended or recurring programmes (the
 //!   museum exhibition, weekly guided tours, multi-date textile tours) and
 //!   are skipped. A non-empty date or time that doesn't parse is an error,
-//!   and so is a card without an `/events/<slug>/` title link.
+//!   and so is a card without an http(s) title link.
 //! * Times are London wall-clock. An end time not after the start (MorrisFest:
 //!   "6:00 pm" to "3:00 pm", ending on a later day the card doesn't give) is
 //!   dropped; a card with no start time starts at London midnight.
@@ -36,7 +41,7 @@ use async_trait::async_trait;
 use chrono::{NaiveDate, NaiveTime};
 use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
-use url::Url;
+use url::{Position, Url};
 
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
@@ -67,8 +72,8 @@ impl WilliamMorrisSociety {
 /// One listing card, as printed.
 #[derive(Debug, serde::Serialize)]
 pub struct Card {
-    /// `/events/<slug>/`.
-    pub path: String,
+    /// The title link, absolute.
+    pub url: String,
     pub title: String,
     pub date_text: Option<String>,
     pub start_text: Option<String>,
@@ -87,21 +92,16 @@ fn element_text(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
 }
 
-fn event_path(href: &str) -> Option<String> {
+fn event_url(href: &str) -> Option<String> {
     let url = Url::parse(href).ok()?;
-    let slug = url.path().strip_prefix("/events/")?.strip_suffix('/')?;
-    let valid = !slug.is_empty()
-        && slug
-            .chars()
-            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-');
-    valid.then(|| url.path().to_string())
+    matches!(url.scheme(), "http" | "https").then(|| url.into())
 }
 
 fn parse_card(card: ElementRef<'_>) -> Option<Card> {
     let link = card
         .select(&selector("h3.fusion-title-heading a[href]"))
         .next()?;
-    let path = event_path(link.value().attr("href")?)?;
+    let url = event_url(link.value().attr("href")?)?;
     let title = Some(element_text(link)).filter(|t| !t.is_empty())?;
     let first = |s: &str| card.select(&selector(s)).next();
     let first_text = |s: &str| first(s).map(element_text).filter(|t| !t.is_empty());
@@ -112,7 +112,7 @@ fn parse_card(card: ElementRef<'_>) -> Option<Card> {
             .to_string()
     });
     Some(Card {
-        path,
+        url,
         title,
         date_text: first_text(".event-date"),
         start_text: first_text(".event-time-start"),
@@ -146,7 +146,7 @@ pub fn parse_listing(html: &str) -> Listing {
             rejected.push(format!("unusable listing card {heading:?}"));
             continue;
         };
-        if !cards.iter().any(|c| c.path == card.path) {
+        if !cards.iter().any(|c| c.url == card.url) {
             cards.push(card);
         }
     }
@@ -193,8 +193,8 @@ pub fn price(excerpt: &str) -> Price {
         .unwrap_or_default()
 }
 
-/// Normalise a William Morris Society [`RawEvent`] payload (a card plus its
-/// absolute `url` and `image_url`).
+/// Normalise a William Morris Society [`RawEvent`] payload (a card with its
+/// `image_url` made absolute).
 pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceError> {
     let text = |key: &str| payload.get(key).and_then(Value::as_str);
     let title = text("title")
@@ -251,11 +251,9 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
 
 /// The [`RawEvent`] for a card on the listing page at `page_url`.
 pub fn card_event(card: &Card, page_url: &Url) -> Result<RawEvent, SourceError> {
-    let url = page_url
-        .join(&card.path)
-        .map_err(|e| SourceError::Parse(format!("bad card path {:?}: {e}", card.path)))?;
+    let url = Url::parse(&card.url)
+        .map_err(|e| SourceError::Parse(format!("bad card url {:?}: {e}", card.url)))?;
     let mut payload = serde_json::to_value(card).expect("card serialises");
-    payload["url"] = json!(url.as_str());
     payload["image_url"] = json!(
         card.image_url
             .as_deref()
@@ -263,8 +261,10 @@ pub fn card_event(card: &Card, page_url: &Url) -> Result<RawEvent, SourceError> 
             .map(String::from)
     );
     Ok(RawEvent {
-        source_event_id: card.path.trim_matches('/').to_string(),
-        source_url: Some(url.to_string()),
+        source_event_id: url[Position::BeforeHost..Position::AfterQuery]
+            .trim_end_matches('/')
+            .to_string(),
+        source_url: Some(card.url.clone()),
         payload,
     })
 }
