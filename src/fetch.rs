@@ -211,9 +211,9 @@ fn log_failed_fetch(url: &Url, status: StatusCode, content_type: Option<&str>, b
     );
 }
 
-fn content_type_of(resp: &reqwest::Response) -> Option<String> {
+fn header_str(resp: &reqwest::Response, name: reqwest::header::HeaderName) -> Option<String> {
     resp.headers()
-        .get(reqwest::header::CONTENT_TYPE)
+        .get(name)
         .and_then(|v| v.to_str().ok())
         .map(str::to_string)
 }
@@ -496,7 +496,7 @@ impl FetchContext {
         if status.is_success() && status != StatusCode::ACCEPTED {
             return Ok(resp);
         }
-        let content_type = content_type_of(&resp);
+        let content_type = header_str(&resp, reqwest::header::CONTENT_TYPE);
         let body = body_prefix(&mut resp).await;
         log_failed_fetch(url, status, content_type.as_deref(), &body);
         if status == StatusCode::ACCEPTED {
@@ -543,15 +543,9 @@ impl FetchContext {
             return Err(too_large());
         }
         let status = resp.status();
-        let header = |name: reqwest::header::HeaderName| {
-            resp.headers()
-                .get(name)
-                .and_then(|v| v.to_str().ok())
-                .map(str::to_string)
-        };
-        let content_type = header(reqwest::header::CONTENT_TYPE);
-        let etag = header(reqwest::header::ETAG);
-        let last_modified = header(reqwest::header::LAST_MODIFIED);
+        let content_type = header_str(&resp, reqwest::header::CONTENT_TYPE);
+        let etag = header_str(&resp, reqwest::header::ETAG);
+        let last_modified = header_str(&resp, reqwest::header::LAST_MODIFIED);
         let mut bytes = Vec::new();
         while let Some(chunk) = resp.chunk().await.map_err(|e| FetchError::Http {
             url: redact(url),
