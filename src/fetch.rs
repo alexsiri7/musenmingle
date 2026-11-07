@@ -13,7 +13,11 @@
 //! * public addresses only ([`crate::netguard`]): http(s) URLs whose host
 //!   resolves only to public IPs, checked before the request and again on
 //!   each of at most [`MAX_REDIRECTS`] redirects;
-//! * bodies of at most [`MAX_BODY_BYTES`] (or a caller's lower limit).
+//! * bodies of at most [`MAX_BODY_BYTES`] (or a caller's lower limit);
+//! * a 202, or an HTML page where JSON was expected, is a
+//!   [`FetchError::Challenge`] (most likely a host's anti-bot check; never
+//!   retried), and every failed response is logged with its status, content
+//!   type and the start of its body (credential-like query values redacted).
 //!
 //! The underlying `reqwest::Client` is private on purpose; do not add an
 //! accessor for it.
@@ -65,6 +69,10 @@ pub enum FetchError {
     InvalidUrl(String),
     #[error("could not decode response from {url}: {message}")]
     Decode { url: String, message: String },
+    /// A 202, or an HTML page where JSON was expected: most likely a host's
+    /// anti-bot challenge (#401). Never retried.
+    #[error("possible anti-bot challenge from {url}: {detail}")]
+    Challenge { url: String, detail: String },
     #[error("response from {url} is larger than {limit} bytes")]
     TooLarge { url: String, limit: usize },
     #[error("{reason}: {url}")]
@@ -74,6 +82,7 @@ pub enum FetchError {
 /// A body fetched by [`FetchContext::get_bytes_limited`].
 #[derive(Debug, Clone)]
 pub struct FetchedBytes {
+    pub status: StatusCode,
     pub bytes: Vec<u8>,
     pub content_type: Option<String>,
     pub etag: Option<String>,
@@ -105,6 +114,119 @@ fn blocked_reason(e: &reqwest::Error) -> Option<String> {
         source = err.source();
     }
     None
+}
+
+/// How much of a failed response's body is read for the log.
+const FAILED_BODY_PREFIX_BYTES: usize = 1024;
+/// The longest body snippet a failed fetch logs.
+const FAILED_BODY_SNIPPET_CHARS: usize = 300;
+
+/// The first [`FAILED_BODY_PREFIX_BYTES`] (or a little more) of a body;
+/// read errors just end it.
+async fn body_prefix(resp: &mut reqwest::Response) -> Vec<u8> {
+    let mut body = Vec::new();
+    while body.len() < FAILED_BODY_PREFIX_BYTES {
+        match resp.chunk().await {
+            Ok(Some(chunk)) => body.extend_from_slice(&chunk),
+            _ => break,
+        }
+    }
+    body
+}
+
+/// Query parameters whose values may be credentials, by name fragment
+/// (lower case, `-`/`_` removed): `apikey`, `access_token`, `sig`, ….
+const CREDENTIAL_PARAMS: &[&str] = &["key", "token", "secret", "sig", "auth", "pass"];
+
+/// The values of `url`'s credential-like query parameters, raw and decoded,
+/// longest first so a value containing another is replaced whole. Other
+/// values (`page=1`, dates) stay: redacting them would garble the snippet.
+fn query_secrets(url: &Url) -> Vec<String> {
+    let is_credential = |name: &str| {
+        let name: String = name
+            .chars()
+            .filter(|c| c.is_ascii_alphanumeric())
+            .collect::<String>()
+            .to_ascii_lowercase();
+        CREDENTIAL_PARAMS.iter().any(|p| name.contains(p))
+    };
+    let raw = url
+        .query()
+        .unwrap_or_default()
+        .split('&')
+        .filter_map(|pair| pair.split_once('='))
+        .filter(|(name, _)| is_credential(name))
+        .map(|(_, v)| v.to_string());
+    let decoded = url
+        .query_pairs()
+        .filter(|(name, _)| is_credential(name))
+        .map(|(_, v)| v.into_owned());
+    let mut secrets: Vec<String> = raw.chain(decoded).filter(|v| !v.is_empty()).collect();
+    secrets.sort_by_key(|v| std::cmp::Reverse(v.len()));
+    secrets
+}
+
+/// The start of a failed response's body as one short line, with the
+/// values of `url`'s credential-like query parameters redacted: an error
+/// page may echo an API key. Redaction runs over the whole body before any
+/// truncation, and a body that ends partway through a secret loses that
+/// fragment (a failed `get` reads only the body's start).
+fn body_snippet(url: &Url, body: &[u8]) -> String {
+    let mut text = String::from_utf8_lossy(body).into_owned();
+    let secrets = query_secrets(url);
+    for secret in &secrets {
+        text = text.replace(secret.as_str(), "[redacted]");
+    }
+    for secret in &secrets {
+        if let Some(n) = (1..secret.len())
+            .rev()
+            .find(|&n| secret.is_char_boundary(n) && text.ends_with(&secret[..n]))
+        {
+            text.truncate(text.len() - n);
+        }
+    }
+    let mut snippet = String::new();
+    for word in text
+        .split(|c: char| c.is_whitespace() || c.is_control())
+        .filter(|word| !word.is_empty())
+    {
+        if snippet.len() >= FAILED_BODY_SNIPPET_CHARS {
+            break;
+        }
+        if !snippet.is_empty() {
+            snippet.push(' ');
+        }
+        snippet.push_str(word);
+    }
+    snippet.chars().take(FAILED_BODY_SNIPPET_CHARS).collect()
+}
+
+fn log_failed_fetch(url: &Url, status: StatusCode, content_type: Option<&str>, body: &[u8]) {
+    tracing::warn!(
+        url = %redact(url),
+        %status,
+        content_type = content_type.unwrap_or("none"),
+        body = %body_snippet(url, body),
+        "fetch failed"
+    );
+}
+
+fn header_str(resp: &reqwest::Response, name: reqwest::header::HeaderName) -> Option<String> {
+    resp.headers()
+        .get(name)
+        .and_then(|v| v.to_str().ok())
+        .map(str::to_string)
+}
+
+/// Whether a Content-Type's media type is `text/html`.
+fn is_html(content_type: Option<&str>) -> bool {
+    content_type.is_some_and(|ct| {
+        ct.split(';')
+            .next()
+            .unwrap_or_default()
+            .trim()
+            .eq_ignore_ascii_case("text/html")
+    })
 }
 
 /// Bodies larger than this are not captured.
@@ -341,7 +463,8 @@ impl FetchContext {
     }
 
     /// GET `url` after the address, robots.txt and rate-limit checks.
-    /// Non-2xx statuses are errors.
+    /// Non-2xx statuses are errors; so is a 202 (a possible anti-bot
+    /// challenge). Failed responses are logged with the start of their body.
     pub async fn get(&self, url: &Url) -> Result<reqwest::Response, FetchError> {
         netguard::check_url(url, self.allow_loopback).map_err(|e| FetchError::Blocked {
             reason: e.to_string(),
@@ -354,7 +477,7 @@ impl FetchContext {
         let (_, host) = Self::origin_and_host(url)?;
         self.limiter.acquire(&host, robots.crawl_delay()).await;
         tracing::debug!(url = %redact(url), "GET");
-        let resp =
+        let mut resp =
             self.client
                 .get(url.clone())
                 .send()
@@ -370,13 +493,25 @@ impl FetchContext {
                     },
                 })?;
         let status = resp.status();
-        if !status.is_success() {
-            return Err(FetchError::Status {
-                status,
+        if status.is_success() && status != StatusCode::ACCEPTED {
+            return Ok(resp);
+        }
+        let content_type = header_str(&resp, reqwest::header::CONTENT_TYPE);
+        let body = body_prefix(&mut resp).await;
+        log_failed_fetch(url, status, content_type.as_deref(), &body);
+        if status == StatusCode::ACCEPTED {
+            return Err(FetchError::Challenge {
                 url: redact(url),
+                detail: format!(
+                    "HTTP 202 Accepted (Content-Type: {})",
+                    content_type.as_deref().unwrap_or("none")
+                ),
             });
         }
-        Ok(resp)
+        Err(FetchError::Status {
+            status,
+            url: redact(url),
+        })
     }
 
     /// GET and return the body as text (invalid UTF-8 replaced).
@@ -407,15 +542,10 @@ impl FetchContext {
         {
             return Err(too_large());
         }
-        let header = |name: reqwest::header::HeaderName| {
-            resp.headers()
-                .get(name)
-                .and_then(|v| v.to_str().ok())
-                .map(str::to_string)
-        };
-        let content_type = header(reqwest::header::CONTENT_TYPE);
-        let etag = header(reqwest::header::ETAG);
-        let last_modified = header(reqwest::header::LAST_MODIFIED);
+        let status = resp.status();
+        let content_type = header_str(&resp, reqwest::header::CONTENT_TYPE);
+        let etag = header_str(&resp, reqwest::header::ETAG);
+        let last_modified = header_str(&resp, reqwest::header::LAST_MODIFIED);
         let mut bytes = Vec::new();
         while let Some(chunk) = resp.chunk().await.map_err(|e| FetchError::Http {
             url: redact(url),
@@ -427,6 +557,7 @@ impl FetchContext {
             bytes.extend_from_slice(&chunk);
         }
         Ok(FetchedBytes {
+            status,
             bytes,
             content_type,
             etag,
@@ -434,18 +565,32 @@ impl FetchContext {
         })
     }
 
-    /// GET and decode the body as JSON. A decode error names the
-    /// response's content type: an intermittent HTML page in place of an
-    /// API's JSON (a challenge or error page) shows up as `text/html`.
+    /// GET and decode the body as JSON. A body that doesn't decode is
+    /// logged; served as `text/html` it is a [`FetchError::Challenge`] (an
+    /// intermittent HTML page in place of an API's JSON), otherwise a
+    /// [`FetchError::Decode`] naming the response's content type. HTML is
+    /// judged only after decoding fails: some sites serve valid JSON as
+    /// `text/html`, and PHP notices put `<br />` before JSON.
     pub async fn get_json<T: DeserializeOwned>(&self, url: &Url) -> Result<T, FetchError> {
         let fetched = self.get_bytes_limited(url, MAX_BODY_BYTES).await?;
         self.keep(url, &String::from_utf8_lossy(&fetched.bytes), true);
-        serde_json::from_slice(&fetched.bytes).map_err(|e| FetchError::Decode {
-            url: redact(url),
-            message: format!(
-                "{e} (Content-Type: {})",
-                fetched.content_type.as_deref().unwrap_or("none")
-            ),
+        serde_json::from_slice(&fetched.bytes).map_err(|e| {
+            let content_type = fetched.content_type.as_deref();
+            log_failed_fetch(url, fetched.status, content_type, &fetched.bytes);
+            let content_type_label = content_type.unwrap_or("none");
+            if is_html(content_type) {
+                FetchError::Challenge {
+                    url: redact(url),
+                    detail: format!(
+                        "an HTML page instead of JSON (Content-Type: {content_type_label})"
+                    ),
+                }
+            } else {
+                FetchError::Decode {
+                    url: redact(url),
+                    message: format!("{e} (Content-Type: {content_type_label})"),
+                }
+            }
         })
     }
 }
@@ -681,32 +826,124 @@ mod tests {
         assert!(matches!(json, FetchError::TooLarge { .. }), "{json}");
     }
 
-    /// #401: the Cinema Museum's API now and then answers 200 with a body
-    /// that isn't JSON; the error should say what it was.
-    #[tokio::test]
-    async fn json_decode_errors_name_the_content_type() {
+    async fn serving(template: wiremock::ResponseTemplate) -> wiremock::MockServer {
         use wiremock::matchers::method;
-        use wiremock::{Mock, MockServer, ResponseTemplate};
+        use wiremock::{Mock, MockServer};
 
         let server = MockServer::start().await;
         Mock::given(method("GET"))
-            .respond_with(
-                ResponseTemplate::new(200)
-                    .set_body_raw("<!DOCTYPE html><html></html>", "text/html; charset=UTF-8"),
-            )
+            .respond_with(template)
             .mount(&server)
             .await;
+        server
+    }
+
+    /// #401: SiteGround answers a suspected bot with a 202 HTML challenge.
+    #[tokio::test]
+    async fn a_202_challenge_page_is_a_challenge_error() {
+        let server = serving(
+            wiremock::ResponseTemplate::new(202)
+                .insert_header("sg-captcha", "challenge")
+                .set_body_raw(
+                    r#"<html><head><meta http-equiv="refresh" content="0;/.well-known/sgcaptcha/?r=%2Fwp-json%2F"></head></html>"#,
+                    "text/html",
+                ),
+        )
+        .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        let url = u(&format!("{}/wp-json/events?key=secret", server.uri()));
+        let json = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
+        let text = ctx.get_text(&url).await.unwrap_err();
+        for err in [json, text] {
+            assert!(matches!(err, FetchError::Challenge { .. }), "{err}");
+            let message = err.to_string();
+            assert!(message.contains("possible anti-bot challenge"), "{message}");
+            assert!(
+                message.contains("HTTP 202 Accepted (Content-Type: text/html"),
+                "{message}"
+            );
+            assert!(!message.contains("secret"), "{message}");
+        }
+    }
+
+    /// #401: the Cinema Museum's API now and then answers 200 with an HTML
+    /// page instead of JSON.
+    #[tokio::test]
+    async fn html_in_place_of_json_is_a_challenge_error() {
+        let server = serving(
+            wiremock::ResponseTemplate::new(200)
+                .set_body_raw("<!DOCTYPE html><html></html>", "text/html; charset=UTF-8"),
+        )
+        .await;
         let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
         let url = u(&format!("{}/wp-json/events?key=secret", server.uri()));
         let err = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
-        assert!(matches!(err, FetchError::Decode { .. }), "{err}");
+        assert!(matches!(err, FetchError::Challenge { .. }), "{err}");
         assert!(
-            err.to_string().ends_with(
-                "expected value at line 1 column 1 (Content-Type: text/html; charset=UTF-8)"
-            ),
+            err.to_string()
+                .ends_with("an HTML page instead of JSON (Content-Type: text/html; charset=UTF-8)"),
             "{err}"
         );
         assert!(!err.to_string().contains("secret"), "{err}");
+    }
+
+    /// A PHP notice before an API's JSON is not a challenge.
+    #[tokio::test]
+    async fn other_json_decode_errors_stay_decode_errors() {
+        let server = serving(
+            wiremock::ResponseTemplate::new(200)
+                .set_body_raw("<br />\n<b>Notice</b>: x\n{\"a\":1}", "application/json"),
+        )
+        .await;
+        let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+        let url = u(&format!("{}/wp-json/events", server.uri()));
+        let err = ctx.get_json::<serde_json::Value>(&url).await.unwrap_err();
+        assert!(matches!(err, FetchError::Decode { .. }), "{err}");
+        assert!(
+            err.to_string()
+                .ends_with("(Content-Type: application/json)"),
+            "{err}"
+        );
+    }
+
+    #[test]
+    fn failed_fetch_snippets_redact_credentials_and_stay_short() {
+        let url = u("https://example.org/api?apikey=SECRET%2Fx&access-token=TOK123&q=&page=1");
+        let body = format!(
+            "<h1>Error 1015</h1> page 1\tSECRET/x\n and SECRET%2Fx TOK123\n{}",
+            "padding ".repeat(400)
+        );
+        let snippet = body_snippet(&url, body.as_bytes());
+        assert!(!snippet.contains("SECRET"), "{snippet}");
+        assert!(!snippet.contains("TOK123"), "{snippet}");
+        assert!(
+            snippet.starts_with("<h1>Error 1015</h1> page 1 [redacted]"),
+            "{snippet}"
+        );
+        assert!(!snippet.contains(['\n', '\t']), "{snippet}");
+        assert!(
+            snippet.chars().count() <= FAILED_BODY_SNIPPET_CHARS,
+            "{snippet}"
+        );
+    }
+
+    /// A secret past the snippet's length, or cut off by a partial read,
+    /// never leaks a fragment.
+    #[test]
+    fn failed_fetch_snippets_redact_before_truncating() {
+        let url = u("https://example.org/api?apikey=ABCDEFGHIJKLMNOP");
+        let echoed = format!("{}ABCDEFGHIJKLMNOP", "\n".repeat(2000));
+        assert_eq!(body_snippet(&url, echoed.as_bytes()), "[redacted]");
+        assert_eq!(body_snippet(&url, b"bad key ABCDEFGH"), "bad key");
+    }
+
+    #[test]
+    fn html_is_judged_by_media_type() {
+        assert!(is_html(Some("text/html")));
+        assert!(is_html(Some("Text/HTML; charset=UTF-8")));
+        assert!(!is_html(Some("application/json")));
+        assert!(!is_html(Some("text/htmlx")));
+        assert!(!is_html(None));
     }
 
     #[tokio::test(start_paused = true)]

@@ -14,14 +14,14 @@
 //!   yesterday. Page URLs are built from `base_url`, not the response's
 //!   `next_rest_url`. An empty programme is `Ok(vec![])`.
 //! * Fallback: if the first API page is refused (401/403/404/410), isn't
-//!   JSON or is disallowed by robots.txt, and the row has a `list_path`, the
-//!   TEC list view's schema.org `Event` JSON-LD is read instead. Other
-//!   failures (5xx, timeouts) are errors: an outage must reach the health
-//!   checker. A list view without `Event` JSON-LD is an error too. An
-//!   event whose JSON-LD description is cut short ("…") has its page fetched
-//!   (from `base_url`) for the full description, read only for printed
-//!   sessions; a page that fails is reported and the event kept as listed.
-//!   No images are fetched.
+//!   JSON (an HTML page or a possible bot challenge) or is disallowed by
+//!   robots.txt, and the row has a `list_path`, the TEC list view's
+//!   schema.org `Event` JSON-LD is read instead. Other failures (5xx,
+//!   timeouts) are errors: an outage must reach the health checker. A list
+//!   view without `Event` JSON-LD is an error too. An event whose JSON-LD
+//!   description is cut short ("…") has its page fetched (from `base_url`)
+//!   for the full description, read only for printed sessions; a page that
+//!   fails is reported and the event kept as listed. No images are fetched.
 //! * Ids are the event URL's path (occurrences of a recurring event carry
 //!   their date in it), the one identifier both paths carry, so a venue
 //!   moving between the API and the fallback keeps its ids.
@@ -283,7 +283,11 @@ fn api_unavailable(e: &SourceError) -> bool {
         SourceError::Fetch(FetchError::Status { status, .. }) => {
             matches!(status.as_u16(), 401 | 403 | 404 | 410)
         }
-        SourceError::Fetch(FetchError::Decode { .. } | FetchError::RobotsDisallowed(_)) => true,
+        SourceError::Fetch(
+            FetchError::Decode { .. }
+            | FetchError::Challenge { .. }
+            | FetchError::RobotsDisallowed(_),
+        ) => true,
         _ => false,
     }
 }

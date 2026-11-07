@@ -444,6 +444,46 @@ async fn falls_back_to_the_list_view_when_the_api_is_off() {
     assert_eq!(ids(&raws), ids(&list_view("tec-housmans")));
 }
 
+async fn mount_html(server: &MockServer, at: &str, status: u16, expect: u64) {
+    Mock::given(method("GET"))
+        .and(path(at))
+        .respond_with(
+            ResponseTemplate::new(status)
+                .set_body_raw("<!DOCTYPE html><html></html>", "text/html; charset=UTF-8"),
+        )
+        .expect(expect)
+        .mount(server)
+        .await;
+}
+
+#[tokio::test]
+async fn an_html_api_response_falls_back_to_the_list_view() {
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    mount_html(&server, API_PATH, 200, 1).await;
+    let html = fixture("scrapers/tec-housmans/list.html");
+    mount_list(&server, "/events/", html, 1).await;
+    let (_, config) = seed_row("tec-housmans");
+    let raws = tec(&server, config).fetch(&ctx()).await.expect("fetch");
+    assert_eq!(ids(&raws), ids(&list_view("tec-housmans")));
+}
+
+/// #401: the Cinema Museum has no list view to fall back to.
+#[tokio::test]
+async fn a_bot_challenge_without_a_list_view_is_an_error() {
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    mount_html(&server, API_PATH, 202, 1).await;
+    let err = tec(&server, json!({}))
+        .fetch(&ctx())
+        .await
+        .expect_err("challenged");
+    assert!(
+        err.to_string().contains("possible anti-bot challenge"),
+        "{err}"
+    );
+}
+
 #[tokio::test]
 async fn list_only_venues_never_call_the_api() {
     let server = MockServer::start().await;
