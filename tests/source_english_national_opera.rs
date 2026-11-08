@@ -177,23 +177,39 @@ async fn caps_event_pages_and_reports_unreadable_ones() {
         ResponseTemplate::new(500),
     )
     .await;
+    let broken_booking_data = page("tosca").replace(
+        r#"<script id="json-data" class="">"#,
+        r#"<script id="json-data" class="">[{"#,
+    );
+    serve(
+        &server,
+        "/events/sessions-at-the-london-coliseum-black-country-new-road/",
+        ResponseTemplate::new(200).set_body_string(broken_booking_data),
+    )
+    .await;
     let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = EnglishNationalOpera::new(server.uri().parse().unwrap())
-        .with_max_details(3)
+        .with_max_details(4)
         .fetch(&ctx)
         .await
         .expect("fetch");
     assert_eq!(raws.len(), 1);
     assert_eq!(raws[0].source_event_id, "tosca");
     let errors = ctx.take_errors();
-    assert_eq!(errors.len(), 2 + SLUGS.len() - 3, "{errors:?}");
+    assert_eq!(errors.len(), 3 + SLUGS.len() - 4, "{errors:?}");
     assert!(
         errors[0].contains("adriana-mater: not an event page"),
         "{errors:?}"
     );
     assert!(errors[1].starts_with("iphigenie-en-tauride:"), "{errors:?}");
     assert!(
-        errors[2].contains("over the 3 event-page cap"),
+        errors[2].starts_with(
+            "sessions-at-the-london-coliseum-black-country-new-road: parse error: booking json-data"
+        ),
+        "{errors:?}"
+    );
+    assert!(
+        errors[3].contains("over the 4 event-page cap"),
         "{errors:?}"
     );
 }
