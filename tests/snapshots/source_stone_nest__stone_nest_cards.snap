@@ -1,0 +1,86 @@
+---
+source: tests/source_stone_nest.rs
+expression: cards()
+---
+[
+  {
+    "date": "13 November 7.30pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a6b25fb3b6e15e3f3e87625_Muireann%20Bradley%204x3%20(1)%20(1).jpeg",
+    "place": "Stone Nest",
+    "slug": "muireann-bradley",
+    "subtitle": "Support from BLÁNID. EFG London Jazz Festival 2026.",
+    "summary": "A once-in-a-generation talent; the Irish guitarist and singer captivates audiences worldwide with her interpretations of classic blues songs.",
+    "title": "Muireann Bradley",
+    "url": "https://www.stonenest.org/events/muireann-bradley"
+  },
+  {
+    "date": "14 November 3pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a4fc46f4e8a04494de4523a_Photo%202_Nature%20Set_Credit%20Fadi%20Dahabreh%20(1).avif",
+    "place": "Stone Nest",
+    "slug": "faris-ishaq",
+    "subtitle": "EFG London Jazz Festival 2026",
+    "summary": "From Bethlehem to London : Palestinian Nay- master presents his new album Jasad",
+    "title": "Faris Ishaq",
+    "url": "https://www.stonenest.org/events/faris-ishaq"
+  },
+  {
+    "date": "15 November 3pm & 6pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a16c343d94d00ddfd0534e2_Lead%20Photo%20ManuDelago%26MaxZT_Press_Photo%2014%20(c)%20Simon%20Reithofer%204x3.jpg",
+    "place": "Stone Nest",
+    "slug": "manu-delago-x-max-zt",
+    "subtitle": "EFG London Jazz Festival 2026",
+    "summary": "The Grammy-nominated innovators come together in a bold new duo that reimagines the sonic possibilities of their instruments.",
+    "title": "Manu Delago x Max ZT",
+    "url": "https://www.stonenest.org/events/manu-delago-x-max-zt"
+  },
+  {
+    "date": "17 November 7.30pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/689b4434ff10606ef9ec0566_Ant%20%26%20Alex%20landscape%20%5Bcredit%20Blackham%20Images%5D.jpg",
+    "place": "Stone Nest",
+    "slug": "same-moon-in-the-same-world-2026",
+    "subtitle": "EFG London Jazz Festival",
+    "summary": "Cutting edge new jazz from Ant Law and Alex Hitchcock and special guests, described as 'world-class original music making' by Jazzwise",
+    "title": "Ant Law and Alex Hitchcock | Same Moon in the Same World 2026",
+    "url": "https://www.stonenest.org/events/same-moon-in-the-same-world-2026"
+  },
+  {
+    "date": "23/25/27/28 November 7.30pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6acf9273b5b1300184b2d26c_figure%20website%20(1).avif",
+    "place": "Stone Nest",
+    "slug": "orpheus-and-eurydice",
+    "subtitle": "Gluck's masterpiece reimagined",
+    "summary": "FIGURE, in collaboration with Refound, present a new Chamber arrangement of Gluck's Masterpiece with countertenor Hugh Cutting",
+    "title": "Orpheus and Eurydice",
+    "url": "https://www.stonenest.org/events/orpheus-and-eurydice"
+  },
+  {
+    "date": "5 December 8pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a8f111e1663d8161078945a__Z7M2043-ezgif.com-jpg-to-avif-converter.avif",
+    "place": "Stone Nest",
+    "slug": "soho-hidden-jazz-club-05-12-26",
+    "subtitle": null,
+    "summary": "Hidden Jazz Club is the place for Londoners in the know to discover the best of the city’s jazz scene, within a unique setting.",
+    "title": "Soho Hidden Jazz Club 05.12.26",
+    "url": "https://www.stonenest.org/events/soho-hidden-jazz-club-05-12-26"
+  },
+  {
+    "date": "11 December 7.30pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6acf60f50ba266b5a39212b8_Leap-landscape%20empty.avif",
+    "place": "Stone Nest",
+    "slug": "from-one-glasse-to-another-day-1",
+    "subtitle": "Nora Fischer performs The Leap",
+    "summary": "A grippingly tragic yet humorous storytelling performance by Nora Fischer. Day 1 of a transdisciplinary festival of voice and video curated by Sam Belinfante and Musarc.",
+    "title": "…from one glasse to another. Day 1.",
+    "url": "https://www.stonenest.org/events/from-one-glasse-to-another-day-1"
+  },
+  {
+    "date": "12 December 5.30pm & 8pm",
+    "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6ad0aaf37baedeb426405be5_32bc15b973bdfd7f24fef1fe1bc9962f53610982-1920x1080-2.avif",
+    "place": "Stone Nest",
+    "slug": "from-one-glasse-to-another-day-2",
+    "subtitle": "Musarc performs work by Philip Glass, Lina Lapelyte, Meredith Monk, Pauline Oliveros, Sarah Kate Wilson, Laure Prouvost, Ben Rivers and Ralph Vaughan Williams.",
+    "summary": "Day 2 of a transdisciplinary festival of voice and video curated by Sam Belinfante and Musarc.",
+    "title": "…from one glasse to another. Day 2.",
+    "url": "https://www.stonenest.org/events/from-one-glasse-to-another-day-2"
+  }
+]

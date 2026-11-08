@@ -675,6 +675,27 @@ pub fn month_number(word: &str) -> Option<u32> {
         .map(|i| i as u32 + 1)
 }
 
+/// How far before the fetch's day a year-less date may fall (a card still
+/// listed on the days after).
+pub const YEAR_LESS_PAST_DAYS: i64 = 7;
+
+/// The date of a year-less `day` `month` (on `weekday`, when written): the
+/// first such date no more than [`YEAR_LESS_PAST_DAYS`] before `listed_on`.
+pub fn year_less_date(
+    day: u32,
+    month: u32,
+    weekday: Option<chrono::Weekday>,
+    listed_on: NaiveDate,
+) -> Option<NaiveDate> {
+    use chrono::Datelike;
+    let from = listed_on - chrono::Duration::days(YEAR_LESS_PAST_DAYS);
+    // Two years ahead: a written weekday can skip a year.
+    (from.year()..=from.year() + 2)
+        .filter_map(|y| NaiveDate::from_ymd_opt(y, month, day))
+        .filter(|d| weekday.is_none_or(|w| d.weekday() == w))
+        .find(|d| *d >= from)
+}
+
 /// The session days a listing spells out (#207): every "<day> <month>"
 /// (optionally followed by a year) in `text`, in order: "20 October, 3
 /// November, … 26 January" or "Saturdays: 10 Oct, 24 Oct, 7 Nov, 21 Nov

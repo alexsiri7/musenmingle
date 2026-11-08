@@ -1,0 +1,254 @@
+---
+source: tests/source_stone_nest.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "muireann-bradley|2026-11-13|stone-nest",
+      "description": "Muireann Bradley is a once-in-a-generation talent; aged just eighteen, the Irish guitarist and singer has captivated audiences worldwide with her interpretations of classic blues songs. Raised in County Donegal, she began playing guitar aged nine, inspired by her blues-loving father. Despite detours into competitive Jiu-Jitsu, music remained her true calling. Muireann's debut album I Kept These Old Blues, recorded between lockdowns during Covid when she was able to get into a studio - starting from when she was still just 14 years old, has become a coveted collector’s item, with the first pressing of the record selling out everywhere. Featuring masterful covers of Blind Blake, Rev Gary Davis, and Mississippi John Hurt, the album reveals a rare depth of understanding and musicality. Equally drawn to the stories behind the songs, Bradley channels the spirit of blues pioneers; her reverence for artists like Elizabeth Cotten and Memphis Minnie informs both her playing and her storytelling, earning her recognition from industry legends — including Jools Holland who invited her to perform on the Hootenanny. A natural performer with astonishing skill, Muireann Bradley is not just reviving the blues — she’s helping to shape its future. Opening is BLÁNID. Her voice stops you in your tracks – distinctively rich, sweet and powerful. Her performances are unflinchingly still; her warm humour in-between songs a cathartic lightness. Supported by cinematic soundscapes and swelling synths, her songs explore power, sex, violence, and redemption. At over a million streams amassed on Spotify, plus both national TV appearances & radio plays, BLÁNID is “one of our brightest stars”, (Belfast Telegraph). Her debut album, SERENE (releasing 2027), is a blistering portrait of resilience and recovery. This event is part of EFG London Jazz Festival 2026",
+      "ends_at": null,
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a6b25fb3b6e15e3f3e87625_Muireann%20Bradley%204x3%20(1)%20(1).jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Muireann Bradley",
+      "url": "https://www.stonenest.org/events/muireann-bradley",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "muireann-bradley"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "faris-ishaq|2026-11-14|stone-nest",
+      "description": "Doors 2.30, music 3pm JASAD جَسَد (Arabic for “Body”) is the new album by Palestinian Nay virtuoso and percussionist Faris Ishaq, a breath-driven manifesto reimagining the Nay—a Middle Eastern flute with a 5,000-year history—as a contemporary, self-sustained acoustic landscape. Performing the Nay alongside a leg-mounted frame drum, the JASAD setup was born from the Nay’s raw intensity. Made of reed cane, with no mouthpiece or mechanics, it responds solely to the player’s breath and intention, a quality celebrated in JASAD as living technology. Faris creates an array of breath-led extended techniques and intricate rhythms, trading electronic effects for acoustic illusions, woven live with his soulful lyricism into an immersive, multi-layered acoustic solo. Steeped from a young age in Dabke dance, he blends its earthy footwork with the rhythmic improvisational Nay tradition of Tashbib, shaping a synergy of Palestinian breath and culture. Infused with global jazz sensibilities, his original compositions move seamlessly between rich Arabic Maqam modalities and fierce, Coltrane-inspired arrangements, igniting an evolving dialogue between Tashbib and jazz. JASAD rekindles the quiet dialogue between breath, body, and our surrounding living landscape in an increasingly digitised world. By weaving cultural memory with contemporary expression, it celebrates the Nay as a living artefact—rooted, evolving, and present. For this EFG London Jazz Festival performance Faris Ishaq will be premiering the new duo format of JASAD with Belfast based drummer / percussionist Conor McAuley.",
+      "ends_at": null,
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a4fc46f4e8a04494de4523a_Photo%202_Nature%20Set_Credit%20Fadi%20Dahabreh%20(1).avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T15:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Faris Ishaq",
+      "url": "https://www.stonenest.org/events/faris-ishaq",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "faris-ishaq"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "manu-delago-x-max-zt|2026-11-15|stone-nest",
+      "description": "Grammy-nominated innovators Manu Delago (handpan) and Max ZT (hammered dulcimer) come together in a bold new duo that reimagines the sonic possibilities of their instruments. Drawing from a lifetime of global collaboration, deep improvisation, and refined compositional craft, the two virtuosos create immersive, meditative soundscapes that unfold with both delicacy and drive. “Hearing Manu for the first time blew me away. There was the obvious virtuosity, but the way that he was composing and thinking about his instrument in an unusual and unique way really stuck out to me and made me feel like this was a connection that needed to be developed further” explains Max ZT. The duo met almost 10 years ago when Manu Delago was touring in the US. “Originally we started with improvisation, but over the years we developed various compositions. Last year we finally found the perfect time and space to record the music, in an amazing 18th-century space in an even older monastery in the Alps. A duo facing each other where both members had just turned 40? We had to call the album Deuce” remembers Manu Delago. Manu Delago and Max ZT will release their debut album Deuce in early 2026. Rooted in rhythm, rich in texture, and open in spirit, the duo invite listeners into a world that feels both ancient and somehow entirely new. With exquisite sensitivity and unparalleled technical mastery, they create spellbinding soundscapes that captivate audiences from the very first note. This event is part of EFG London Jazz Festival 2026",
+      "ends_at": "2026-11-15T18:00:00Z",
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a16c343d94d00ddfd0534e2_Lead%20Photo%20ManuDelago%26MaxZT_Press_Photo%2014%20(c)%20Simon%20Reithofer%204x3.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-15T15:00:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-15T18:00:00Z"
+        }
+      ],
+      "starts_at": "2026-11-15T15:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Manu Delago x Max ZT",
+      "url": "https://www.stonenest.org/events/manu-delago-x-max-zt",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "manu-delago-x-max-zt"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ant-law-alex-hitchcock-same-moon-in-same-world-2026|2026-11-17|stone-nest",
+      "description": "Acclaimed as composers as well as instrumentalists, sharing multiple awards and numerous albums as leaders between them, saxophonist Alex Hitchcock and guitarist Ant Law have created a startlingly vivid new soundworld in their trailblazing group Same Moon in the Same World. Returning for the EFG London Jazz Festival, the quartet presents a special one-off performance here at Stone Nest. Joined by special guests, Hitchcock and Law bring together an exceptional band for an evening of adventurous new music as part of the city’s annual celebration of jazz. Ant Law was listed as a Rising Star in the Downbeat Critics Poll 2026 and called “a game changer” and “an innovator” in The Guardian. His ninth album ‘Unified Theories’ was Jazzwise magazine’s editor’s choice, receiving a 4.5 star review. London-born Alex Hitchcock is a leading international voice on the saxophone. An Ivor Novello-nominated composer, he was described by BBC Jazz World as 'leading the charge in terms of new jazz music being created in the UK'.",
+      "ends_at": null,
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/689b4434ff10606ef9ec0566_Ant%20%26%20Alex%20landscape%20%5Bcredit%20Blackham%20Images%5D.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-17T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Ant Law and Alex Hitchcock | Same Moon in the Same World 2026",
+      "url": "https://www.stonenest.org/events/same-moon-in-the-same-world-2026",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "same-moon-in-the-same-world-2026"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "orpheus-eurydice|2026-11-23|stone-nest",
+      "description": "Following the success of their recent production MOURN with Alkanna Graeca, FIGURE, in collaboration with Refound, return to present their new production, Orpheus and Eurydice. The production stars Hugh Cutting, winner of the 2025 International Opera Rising Star Award and the first countertenor to win the Kathleen Ferrier Award, and is directed by Laura Hounsell, winner of the 2025 Nicky Creed Award at Garsington Opera. In the ancient Greek legend, Orpheus travels to the underworld to rescue his lost love, Eurydice. He is granted the chance to bring her out of the afterlife and back to the world, but on the condition that he does not look back at her while he leads her. At the final moment, Orpheus can no longer resist the temptation, and turns to look at Eurydice, tragically losing her again, forever. The story has been told and retold through history, and has been a particular source of inspiration to composers - Orpheus is a musician, and he is able to persuade the gods to let him find his dead lover because his sorrowful songs are so beautiful. Christoph Willibald Gluck’s working of the tale, his 1762 Orfeo ed Euridice, marks a significant moment in the history of opera: a departure from a form in which a narrative serves as a vehicle to showcase music and vocal athleticism, to one which puts the music in service of the drama. In the spirit of Gluck’s reform, FIGURE is reworking his opera into a new chamber version for mixed ensemble. By contemporising the story and the music, the opera is no longer an artefact of the 18th century but the modern drama which Gluck wanted to create. Orfeo - Hugh Cutting Euridice - Sofia Kirwan-Baez Amore - Anna Dennis Stage Director - Laura Hounsell Movement Director - Rebecca Meltzer Creative Producer and Music Director - Frederick Waxman Past work from FIGURE at Stone Nest includes: a staged Pergolesi Stabat Mater with new music from Alex Mills, starring Dame Emma Kirkby, praised in The Guardian for it’s “timeless directness and simplicity”; Rhythm of the Seasons, Vivaldi’s Four Seasons recomposed as a percussion concerto, just recorded with Delphian Records for release in 2027, praised in The Times as “High-risk, high-reward”; and SIDE BY SIDE, performances of baroque and contemporary music, for which FIGURE was praised in the Guardian as \"unequivocally impressive, its sound invigorating, its commitment absolute”.",
+      "ends_at": "2026-11-28T19:30:00Z",
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6acf9273b5b1300184b2d26c_figure%20website%20(1).avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-23T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-25T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-27T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-28T19:30:00Z"
+        }
+      ],
+      "starts_at": "2026-11-23T19:30:00Z",
+      "tags": [],
+      "title": "Orpheus and Eurydice",
+      "url": "https://www.stonenest.org/events/orpheus-and-eurydice",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "orpheus-and-eurydice"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "soho-hidden-jazz-club-05-12-26|2026-12-05|stone-nest",
+      "description": "An electrifying, intimate and fun musical experience like no other. For the past few years Hidden Jazz Club has been the place for Londoners in the know to discover the best of the city’s jazz scene within a unique setting. Completely artist-run, fun, spontaneous, and relaxed, this is not like your parents’ jazz club. Hidden Jazz Club is the type of space where guests are able to relax and connect with world class artists between sets of amazing live music.",
+      "ends_at": null,
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6a8f111e1663d8161078945a__Z7M2043-ezgif.com-jpg-to-avif-converter.avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-05T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Soho Hidden Jazz Club 05.12.26",
+      "url": "https://www.stonenest.org/events/soho-hidden-jazz-club-05-12-26",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "soho-hidden-jazz-club-05-12-26"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "from-one-glasse-to-another-day-1|2026-12-11|stone-nest",
+      "description": "Doors 7pm, Performance 7.30pm The Leap is a one-woman performance by vocalist Nora Fischer, except for the unexpected twist that Singer Nora will not be present on stage. Instead, Person Nora will be explaining why she will not be singing. For a while, she was unable to do so because of a complex cramp that was keeping her larynx in such a strong headlock that even Happy Birthday for her best friends was no longer an option. How could such a thing happen? With this burning question, Nora starts digging for answers: from the pressure of the world's largest stages, to the inner pressure that she had to remove from her system like a wasp's poisonous sting. She unravels how the joy with which she once produced her frst notes, gradually got overshadowed by piercing eyes and razor sharp judgments. There is no shortage of demons behind the successful performer she had become – and among those demons is Nora's sister, who falls deeper and deeper into darkness as Nora's voice falls into silence. But Nora is not the type to simply give up: there is a reason her parents used to call her “The Tank”. In the midst of the ruins, she demands answers: how can the radiating joy with which two girls started their lives, evolve into such an all-encompassing cramp? Who told us to get so caught up in suffocating perfectionism? In this grippingly tragic yet humorous storytelling performance, Nora invites her audience to join her in a highly intimate disclosure of what we secretly all know: nothing is what it seems. ‍ The Leap is presented by Musarc as part of a transdisciplinary festival of voice and video. …from one glasse to another explores the myth of Echo and Narcissus in relationship to voice, performance and technology, where recent translations and reformulations, reveal nuanced and radical approaches to both gender and audio-visual phenomena. Curated by Sam Belinfante.",
+      "ends_at": null,
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6acf60f50ba266b5a39212b8_Leap-landscape%20empty.avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-11T19:30:00Z",
+      "tags": [],
+      "title": "…from one glasse to another. Day 1.",
+      "url": "https://www.stonenest.org/events/from-one-glasse-to-another-day-1",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "from-one-glasse-to-another-day-1"
+  },
+  {
+    "event": {
+      "address": "136 Shaftesbury Avenue, London W1D 5EZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "from-one-glasse-to-another-day-2|2026-12-12|stone-nest",
+      "description": "Doors 5pm, performance at 5.30pm Doors 7.30pm, performance 8pm Musarc performs work by Philip Glass, Lina Lapelyte, Meredith Monk, Pauline Oliveros, Sarah Kate Wilson, Laure Prouvost, Ben Rivers and Ralph Vaughan Williams. Day 2 of …from one glasse to another, a transdisciplinary festival of voice and video curated by Sam Belinfante. Featuring work by Lina Lapelyte, Laure Prouvost, Ben Rivers, Ralph Vaughan Williams and Philip Glass, performed by Musarc with Patricia Auchterlonie and Plus-Minus Ensemble. Musical Director: Oli Kitching. In Ovid’s story Echo and Narcissus play creatively and provocatively with sonic and visual image making; Echo – particularly – is able to conjure new meaning and form through vocal repetition and mimicry. Beyond profound relations between light and sound, the stories are replete with issues of emptiness and fullness of self, of absorption and reflection. Musarc presents a series of musical vignettes that restage Echo and Narcissus’ dialogues through modern and seemingly outmoded audiovisual technology. Further information on the programme: ‍ In his early, rarely performed partsong; Echo's Lament for Narcissus (1895–96), Ralph Vaughan Williams teases out the temporal and synaesthetic distortions of Ben Jonson’s poem of the same name. This extraordinary setting forms the basis of a series of new reflections and voicings of Echo and Narcissus that reveal nuanced and radical approaches to both gender and audio-visual phenomena. Recalling her recent performances and video installations at The Cosmic House (2025), artist and composer Lina Lapelyte presents a series of live and filmed fragments where performers ponder, commune, and weave new interpretations of cosmic themes. Further attuning to the world Musarc also present Pauline Oliveros’s radical Tuning Meditation (1971), this time paired with the artist Sarah Kate Wilson’s Rainbows, first presented by the artist and Musarc at Palais de Tokyo, Paris in 2017. In Laure Prouvost’s film Shadow Does (2023) we see the world through the eyes of a little girl, who in shadow play, explpres the objects of her daily life and rapidly changing habits. The film is further layered with songs by Sam Belinfante and interventions by the extraordinary singer and maker Patricia Auchterlonie. Ben Rivers takes us deeper into post-apocalyptic earth with his film Golden Cities, an extract from his award winning Mare’s Nest, based on Don DeLillo's climate crisis play The Word for Snow (2014). In counterpoint, Meredith Monk’s Earth Seen from Above – from her 1991 opera ATLAS – reflects an earth traversed as both spiritual odyssey and embodied choreography. The culmination of the event is a multimedia performance of ‘Vessels’, from Philip Glass’ seminal score for Godfrey Reggio’s Koyaanisqatsi (1982). Even after the excessive proliferation of timelapse imagery, now a signifier of stock video and AI slop, the music and visuals of Koyaanisqatsi remain staggeringly prophetic in the re-imagining of people, technology and our environment. \"It's not that we use technology, we live technology. Technology has become as ubiquitous as the air we breathe...\" - Godfrey Reggio, 2022 Image Credits Lead Image: Lina Lapelytė, In the Dark, We Play, 2025, video still by Martynas Norvaišas, commissioned by the Jencks Foundation at The Cosmic House. Second Image: Musarc Winter Konsert 2025. Photo: Yiannis Katsaris",
+      "ends_at": "2026-12-12T20:00:00Z",
+      "image_url": "https://cdn.prod.website-files.com/61f2dd13b69b2408c0d49b6b/6ad0aaf37baedeb426405be5_32bc15b973bdfd7f24fef1fe1bc9962f53610982-1920x1080-2.avif",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-12T17:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-12T20:00:00Z"
+        }
+      ],
+      "starts_at": "2026-12-12T17:30:00Z",
+      "tags": [],
+      "title": "…from one glasse to another. Day 2.",
+      "url": "https://www.stonenest.org/events/from-one-glasse-to-another-day-2",
+      "venue_name": "Stone Nest"
+    },
+    "source_event_id": "from-one-glasse-to-another-day-2"
+  }
+]
