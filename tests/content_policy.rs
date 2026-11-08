@@ -244,24 +244,27 @@ async fn enforce_content_policy_cleans_existing_rows() {
         .execute(&pool)
         .await
         .unwrap();
-    // A pre-#211 raw payload holding the full text, written directly.
-    // Its dates are joined by no-break spaces only, and its long link has
-    // no whitespace at all (kept whole).
+    // Pre-#211 raw payloads holding the full text, written directly. In the
+    // second, the only long text is joined by no-break spaces, beside a long
+    // link with no whitespace at all (kept whole).
+    let full_raw = serde_json::json!({ "id": "l", "detail": { "body": long } });
     let nbsp_long = "Friday\u{a0}12\u{a0}December\u{a0}".repeat(20);
     let long_url = format!("https://strict.test/{}", "x".repeat(400));
-    let full_raw = serde_json::json!({
-        "id": "l",
-        "detail": { "body": long, "dates": nbsp_long, "url": long_url },
+    let nbsp_raw = serde_json::json!({
+        "id": "o",
+        "detail": { "dates": nbsp_long, "url": long_url },
     });
-    sqlx::query("UPDATE events.event_sources SET raw = $2 WHERE source_event_id = $1")
-        .bind("l")
-        .bind(&full_raw)
-        .execute(&pool)
-        .await
-        .unwrap();
+    for (id, payload) in [("l", &full_raw), ("o", &nbsp_raw)] {
+        sqlx::query("UPDATE events.event_sources SET raw = $2 WHERE source_event_id = $1")
+            .bind(id)
+            .bind(payload)
+            .execute(&pool)
+            .await
+            .unwrap();
+    }
     let r = repo::enforce_content_policy(&pool).await.unwrap();
     assert_eq!(r.descriptions_trimmed, 1);
-    assert_eq!(r.raw_trimmed, 1);
+    assert_eq!(r.raw_trimmed, 2);
     assert_eq!(
         r.descriptions_cleared + r.images_cleared + r.raw_redacted,
         0
@@ -274,11 +277,16 @@ async fn enforce_content_policy_cleans_existing_rows() {
             .await
             .unwrap();
     assert_eq!(stored_raw, repo::excerpt_raw(&full_raw));
+    let stored_nbsp: serde_json::Value =
+        sqlx::query_scalar("SELECT raw FROM events.event_sources WHERE source_event_id = 'o'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
     assert_eq!(
-        stored_raw["detail"]["dates"],
+        stored_nbsp["detail"]["dates"],
         musenmingle::normalise::excerpt(&nbsp_long)
     );
-    assert_eq!(stored_raw["detail"]["url"], long_url);
+    assert_eq!(stored_nbsp["detail"]["url"], long_url);
     assert_eq!(
         repo::enforce_content_policy(&pool).await.unwrap(),
         repo::PolicyReport::default()
