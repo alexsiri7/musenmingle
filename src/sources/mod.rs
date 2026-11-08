@@ -21,6 +21,7 @@ pub mod clerkenwell_design_week;
 pub mod conway_hall;
 pub mod courtauld;
 pub mod design_museum;
+pub mod english_national_opera;
 pub mod estorick_collection;
 pub mod foundling_museum;
 pub mod four_corners;
@@ -211,6 +212,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         stone_nest::KEY => Ok(Box::new(stone_nest::StoneNest::new(base))),
         union_chapel::KEY => Ok(Box::new(union_chapel::UnionChapel::new(base))),
         wiltons_music_hall::KEY => Ok(Box::new(wiltons_music_hall::WiltonsMusicHall::new(base))),
+        english_national_opera::KEY => Ok(Box::new(
+            english_national_opera::EnglishNationalOpera::new(base),
+        )),
         the_showroom::KEY => Ok(Box::new(the_showroom::TheShowroom::new(base))),
         gasworks::KEY => Ok(Box::new(gasworks::Gasworks::new(base))),
         two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),

@@ -1,0 +1,454 @@
+---
+source: tests/source_english_national_opera.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tosca|2026-11-10|coliseum",
+      "description": "The art of resistance Where love is dangerous, power is corrupt and art is under attack. Puccini ’s classic thriller, Tosca, unfolds in a world of desire, fear and resistance, where nothing feels safe and every choice has consequences. One of opera’s most electrifying works, Tosca moves at breathless pace through desire, betrayal and sacrifice, powered by Giacomo Puccini’s soaring score and a heroine forced to confront the brutal limits of love and loyalty. In Annilese Miskimmon’s gripping new ENO production, Tosca becomes impossible to look away from. Book your Tosca tickets now and experience the drama of this unforgettable opera live on the iconic London Coliseum stage in 2026. Overview Following the critical success of Dead Man Walking in 2025, ENO’s Artistic Director Annilese Miskimmon reimagines this timeless opera, exploring the art of resistance and love in the face of political censorship. Set in a concert hall in an unidentified European state overtaken by civil conflict, opera singer Floria Tosca plans a secret meeting with her lover, the painter Mario Cavaradossi. When the corrupt police chief Scarpia intervenes, a place of music is transformed into a site of fear and violence. Over the course of one night, Tosca is forced to fight for her love, her honour and her life. More than a love story. This is an opera about resistance in the face of oppression, and the enduring power of love and art to defy tyranny. Enjoy Tosca as a stand-alone performance, or as a companion piece to Kaija Saariaho’s Adriana Mater as part of a broader exploration of the human cost of war and the resilience of the human spirit. Both operas feature in our unmissable 2026/27 season. Principal Production Sponsors : George & Patti White Discover the story of Tosca Staging and Score The mid-century inspired architecture of the concert hall setting forms a backdrop to this revolutionary new take on one of the world’s most performed operas. Featuring some of Puccini’s most famous arias, including Vissi d’arte (Love and Music) and E lucevan le stelle, d’arte (With the Stars Shining Brightly), this iconic score seamlessly connects and contrasts the fast-paced plot with the tenderness of Tosca and Cavaradossi’s romance. Its quick-shifting tempos and intensity will leave hearts pounding and pulses racing in this must-see production, sung in an English translation by Amanda Holden. Singers and Creatives Making her ENO debut, internationally acclaimed Grammy Award winner Axelle Fanyo takes on the role of Tosca, with her lover Cavaradossi played by tenor Chaz’men Williams-Ali. Sadistic police chief Scarpia is brought to life by Christopher Purves and later in the run, Craig Colclough. After his acclaimed performances of La bohème in 2022, where he “drew out a truly glorious performance from the ENO Orchestra” (Bachtrack), we welcome the return of internationally renowned conductor Ben Glassberg. The Children’s Choir is generously supported by Melissa Disney. This production has been made possible through the generous support of our Principal Production Sponsors George & Patti White, our Role Sponsors Olly Carpenter & Johnno Loggie, Melissa Disney and Christoph & Pamela Stanger, and a syndicate comprising J.S. Murdoch, Martin Randall Travel, Kieran Cooper, Neville Astley & Isabel Radage and Leo Toralballa.",
+      "ends_at": "2026-12-11T21:45:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/09/WEB-HERO-2000x1000_S2627_02_Tosca_Update.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-10T21:45:00Z",
+          "starts_at": "2026-11-10T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-12T21:45:00Z",
+          "starts_at": "2026-11-12T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-19T21:45:00Z",
+          "starts_at": "2026-11-19T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-21T20:15:00Z",
+          "starts_at": "2026-11-21T18:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-27T21:45:00Z",
+          "starts_at": "2026-11-27T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-30T19:15:00Z",
+          "starts_at": "2026-11-30T17:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-02T21:45:00Z",
+          "starts_at": "2026-12-02T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-12-05T15:45:00Z",
+          "starts_at": "2026-12-05T13:30:00Z"
+        },
+        {
+          "ends_at": "2026-12-09T21:45:00Z",
+          "starts_at": "2026-12-09T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-12-11T21:45:00Z",
+          "starts_at": "2026-12-11T19:30:00Z"
+        }
+      ],
+      "starts_at": "2026-11-10T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Tosca",
+      "url": "https://www.eno.org/events/tosca/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "2hrs 15mins There is one interval.",
+    "source_event_id": "tosca",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability)",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "adriana-mater|2026-11-28|coliseum",
+      "description": "Like father, like son…? In a world shaped by war, Kaija Saariaho’s opera, Adriana Mater finds hope where it seems impossible. Powerful and rarely staged, this ENO debut unites Artistic Director Annilese Miskimmon and Music Director Designate André de Ridder in their first collaboration. Book your tickets for Adriana Mater, an opera that will stay with you long after the curtain falls, live at the London Coliseum in 2026. Overview Amid a brutal civil war, Adriana becomes pregnant following a violent assault by a soldier. She chooses to give birth to the child she conceives, naming her son Yonas and raising him with love and hope for the future, whilst shielding him from the truth about his father. Many years later the young man discovers the truth of his origin, and becomes consumed by the desire for revenge. In a gripping climax, Adriana tries to convince Yonas that true strength lies in mercy, not murder. And that, only by breaking the male cycle of violence, will they, and their country, truly be healed. Righting the wrongs of Tosca, Adriana Mater forms the second half of a bold narrative arc contributing to a season that brings stories of resistance, resilience, hope and what it means to be free. Discover the story of Adriana Mater Experience Adriana Mater as a stand-alone story, or paired with Tosca as the other half of the story. Staging and score Adriana Mater picks up where Tosca left off, returning to the concert hall which we now find is a field hospital in post-war turmoil, where the women and mothers, like Adriana, that are left to pick up the pieces. Kaija Saariaho was named ‘Greatest living composer’ in a 2019 BBC Music Magazine poll. Since her death in 2023, she has continued to be one of the most influential voices in contemporary classical music of the last half-century. This opera is a collaboration between Saariaho and the writer and war correspondent Amin Maalouf, inspired by his experiences and Saariaho’s reflections on motherhood. Her pioneering music often blends electronics with live instruments to create a distinctive, shimmering sound world. It will be performed in a new, specially commissioned English translation by the composer’s son, writer-director Aleksi Barrière. Singers and creatives Conducted by ENO Music Director Designate André de Ridder and directed by Annilese Miskimmon in their first collaboration. The title role will be performed by Kristina Stanek, making her ENO debut. Caspar Singh returns to sing Adriana’s son, Yonas, following his stand-out performance in ENO’s 2025 production of Albert Herring. Widely praised for his performance in The Rhinegold, ENO favourite Leigh Melrose sings the role of the militia leader, Tsargo and Lauren Fagan makes her company debut as Refka. This production has been made possible through the generous support of our Role Sponsor, Richard Buxton and a syndicate comprising Mr R Bridge, Liz Cratchley OBE, Dr Paul Gilluley & Mr Tim Hardy, Mr Ralph Kanza, Alan Karr & Jeanne Ruane, Harriet & Michael Maunsell, Kate Olver & Jeremy Young, Professor Mick Peake OBE, Ann Redfearn & Keith Etherington and John & Linde Wotton. Credits: Adriana Mater Music by Kaija Saariaho Libretto by Amin Maalouf English Translation by Aleksi Barrière",
+      "ends_at": "2026-12-12T16:30:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_04_AdriannaMater.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-28T21:30:00Z",
+          "starts_at": "2026-11-28T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-01T21:30:00Z",
+          "starts_at": "2026-12-01T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-03T21:30:00Z",
+          "starts_at": "2026-12-03T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-05T21:30:00Z",
+          "starts_at": "2026-12-05T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-08T21:30:00Z",
+          "starts_at": "2026-12-08T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-10T21:30:00Z",
+          "starts_at": "2026-12-10T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-12T16:30:00Z",
+          "starts_at": "2026-12-12T14:00:00Z"
+        }
+      ],
+      "starts_at": "2026-11-28T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Adriana Mater",
+      "url": "https://www.eno.org/events/adriana-mater/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "2hrs 30mins. There is one interval.",
+    "source_event_id": "adriana-mater",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "iphigenie-en-tauride|2026-11-09|coliseum",
+      "description": "A daughter of sacrifice A family divided by destiny, reunited by hope. Gluck ’s rarely performed opera, Iphigénie en Tauride makes its ENO debut in a new staging for 2026/27 by Olivier award-winning director Lyndsey Turner. Book your tickets for Iphigénie en Tauride and experience an operatic masterpiece in this new production, live at the London Coliseum in 2026. Overview Iphigénie and her brother Oreste are the children of the most blood-soaked dynasty in Greek history. Their inheritance is a legacy of violence dating back to the dawn of time. Her journey has taken her to a forlorn temple at the ends of the earth. His has taken him to the edge of madness. Each fears the other is dead. Stranded on a remote island, forced to minister to the wishes of a terrifying ruler, Iphigenie dreams of home. The hope that she will one day reunite with her brother Oreste is all that stands between her and despair. So, when a mysterious stranger washes up on the island’s shores with news of the collapse of her family, Iphigenie fears the worst. But is all as hopeless as first seems? Or is there more to this stranger than meets the eye? Find out what fate has in store for the siblings, in a new interpretation of this rarely performed operatic masterpiece. Discover the story of Iphigénie en Tauride Staging and score Widely regarded as Gluck’s most important work, Iphigénie en Tauride will be performed in its original French libretto by Nicolas-François Guillard. While ENO usually performs in English, for this production we are retaining the original French to preserve the close relationship between Gluck’s music and text. English surtitles will be projected above the stage. Singers and creatives Baroque specialist David Bates makes his ENO debut on the podium, while Lyndsey Turner directs. Christine Rice leads the cast as Iphigénie after her unforgettable performance in Dead Man Walking, with her brother Oreste played by Jacques Imbrailo. This production has been made possible through the generous support of our Role Sponsor, Kathryn Uhde, and a syndicate comprising Stephen & Margaret Bickford-Smith, Nicola Kerr, Kate Olver & Jeremy Young, Mark Tousey, Frances Tait, Su-Mei & Marcus Thompson, Liz Cratchley OBE, Vincent Mercer & Mrs Anzo Francis and Elizabeth Wright.",
+      "ends_at": "2026-11-14T20:00:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_03_Iphigenie.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-09T21:30:00Z",
+          "starts_at": "2026-11-09T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-11T21:30:00Z",
+          "starts_at": "2026-11-11T19:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-14T20:00:00Z",
+          "starts_at": "2026-11-14T18:00:00Z"
+        }
+      ],
+      "starts_at": "2026-11-09T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Iphigénie en Tauride",
+      "url": "https://www.eno.org/events/iphigenie-en-tauride/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "2hrs There is one interval.",
+    "source_event_id": "iphigenie-en-tauride",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sessions-at-london-coliseum-black-country-new-road|2026-11-13|coliseum",
+      "description": "Black Country, New Road will perform a landmark and genre-defying concert at the London Coliseum with the award-winning Orchestra of ENO, curated and conducted by André de Ridder, ENO’s Music Director Designate. BC,NR and André de Ridder have collaborated with a distinguished group of composers and artists to create new arrangements that reveal fresh dimensions of their music, showcasing the Orchestra of ENO’s sound in innovative ways. They include Owen Pallett (Arcade Fire), Josephine Stephenson, and Fiona Brice. For this concert, they will perform new arrangements of songs from their latest studio album, Forever Howlong, featuring ‘Forever Howlong’, ‘Happy Birthday’ and ‘For the Cold Country’. Their third album marks a bold new chapter with shared vocal and songwriting duties, inventive instrumentation, and expansive arrangements, showcasing a fearless exploration of chamber pop, folk, and prog influences that cements the group as one of the most exciting voices in contemporary rock. Widely acclaimed for his stylistic versatility and bold interpretations, André de Ridder works across opera and orchestral music, jazz and electronics, avant-garde experimentation and indie pop. He has also collaborated with Dirty Projectors, The Flaming Lips and Gorillaz. The Orchestra of ENO, renowned for their versatility of repertoire, provide the musical landscape and emotional richness for ENO productions and collaborations. This concert is part of ENO’s unmissable 2026/27 season.",
+      "ends_at": null,
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/06/5222_WEB-HERO-2000x1000_BlackCountryNewRoad_26-27_v5.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "39",
+        "min": "39"
+      },
+      "starts_at": "2026-11-13T19:30:00Z",
+      "tags": [],
+      "title": "Sessions at the London Coliseum: Black Country, New Road",
+      "url": "https://www.eno.org/events/sessions-at-the-london-coliseum-black-country-new-road/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": null,
+    "source_event_id": "sessions-at-the-london-coliseum-black-country-new-road",
+    "tickets": "Tickets from £39 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "to-die-for-comedy|2026-11-29|coliseum",
+      "description": "Will our obsession with celebrity be the death of us? For one night only, ENO welcomes a guest production by Nederlandse Reisopera and Phion Symphony Orchestra for the UK premiere of this exceptional new comic opera, following its world premiere in The Netherlands in April 2026. Overview This exuberant black farce, by British-Russian composer Elena Langer, is a satire about our fixation on fame, and the shameless exploitation for profit, entertainment and voyeurism of other people’s misery. Originally commissioned by the Stanislavsky Theatre in Moscow, this comic opera was cancelled after the invasion of Ukraine, being deemed insufficiently patriotic. Since Nikolai Erdman’s 1928 play The Suicide, the basis of the opera, was itself banned before its first performance, the opera has therefore helped Erdman achieve the distinction of getting banned on two separate occasions in Russia, a hundred years apart. At the centre of the opera, set in the chaotic new Russia of the 1990s, is the unemployed and hopeless Semyon Podsekayev. He has missed out on the dodgy economic boom-times of the new country, and when his latest pathetic venture falls apart, he decides it’s time to call it a day. But his intended suicide is immediately hijacked by a horde of bloodsuckers and crooks eager to profit from it. Semyon becomes instantly famous, but during the glitzy TV variety show where his suicide is to be broadcast live, surrounded by all these monsters, he realises that his old life might have been worthwhile after all. But is it too late? Staging and score A comic opera in two acts composed by Elena Langer. Libretto by Arkady Zastyrets, translated into English by Maggie F. Gottlieb. Based on the play The Suicide (1928) by Nikolai Erdman. Singers and creatives Directing is Sam Brown, Artistic Director of the Nederlandse Reisopera, the Dutch national touring opera company; on the podium is English conductor Adrian Kelly, Artistic Director of the Buxton International Festival. Co-produced by the Netherlands Reisopera and Phion Symphony Orchestra This production was made possible by the generosity of The Nicholas John Trust and is dedicated to the memory of Nicholas John, Dramaturge of English National Opera, 1985-1996. Supported in part by the Performing Arts Fund NL.",
+      "ends_at": "2026-11-29T21:30:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_05_ToDieFor.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-11-29T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "To Die For [A Comedy]",
+      "url": "https://www.eno.org/events/to-die-for-a-comedy/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "2hrs 30mins There is one interval.",
+    "source_event_id": "to-die-for-a-comedy",
+    "tickets": "Tickets from £25 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "la-traviata|2027-02-03|coliseum",
+      "description": "Love costs everything A timeless story of love, society’s demands and impossible choices. Peter Konwitschny’s Olivier Award-nominated production of La traviata strips the story back to its core, capturing the raw intensity of all-consuming love and tragedy. Celebrated worldwide and still influencing popular culture today, Verdi ’s musical masterpiece remains one of the most performed operas of all time. Book your opera tickets with ENO to experience the drama and emotion of La traviata live at the London Coliseum in 2027. Overview At the heart of Parisian society, the beautiful and celebrated Violetta turns away from her glittering life when she falls in love with Alfredo. Their happiness is short‑lived as their love threatens to shame Alfredo’s family. His father, Germont, pressures Violetta to give up her one chance of happiness. Broken-hearted, Violetta agrees, allowing Alfredo to believe she has returned to her former life while hiding a more painful truth. With her health deteriorating, will Alfredo discover the truth before it’s too late? This heartbreaking drama asks whether love can survive society’s judgement and time itself. Discover the full story of La traviata Staging and Score In this much-loved opera production of La traviata, the opulence and excess are stripped away to reveal the beating heart of the drama. Framed by cascading red curtains and a single chair, this minimalist approach focuses attention on the characters’ emotional truth, making Violetta’s journey feel startlingly modern and real. One of the most popular operas of all time, La traviata contains many instantly recognisable melodies, including the lively drinking song “Brindisi Let’s drink and be merry” (“Libiamo”) and “Let me live the life I want to” (“Sempre Libera”) – an emotionally charged bravura showstopper sung by Violetta. Singers and Creatives Returning to ENO following her acclaimed portrayal of Mary, Queen of Scots (2025), Heidi Stober steps into the shoes of Violetta, with Alison Langer performing as Violetta on the 3rd and 5th of March 2027. Egor Zhuravskii, winner of the Mozart Prize at Tenor Viñas 2025, sings Alfredo. David Stout, beloved for his Papageno in ENO’s The Magic Flute (2024), sings Germont. Conducting one of opera’s most iconic and romantic scores is Kevin John Edusei. While Revival director PJ Harris returns to ENO following the award-winning 2020 Drive and Live production of La bohème at Alexandra Palace. This production has been made possible through the generous support of our Role Sponsor, Mark Tousey, and a syndicate comprising of Audley Travel, and Vincent Mercer & Mrs Anzo Francis.",
+      "ends_at": "2027-03-13T16:50:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_06_Latraviata_v2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-02-03T21:20:00Z",
+          "starts_at": "2027-02-03T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-06T19:50:00Z",
+          "starts_at": "2027-02-06T18:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-10T21:20:00Z",
+          "starts_at": "2027-02-10T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-12T21:20:00Z",
+          "starts_at": "2027-02-12T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-17T21:20:00Z",
+          "starts_at": "2027-02-17T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-19T21:20:00Z",
+          "starts_at": "2027-02-19T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-22T21:20:00Z",
+          "starts_at": "2027-02-22T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-24T21:20:00Z",
+          "starts_at": "2027-02-24T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-02-27T19:50:00Z",
+          "starts_at": "2027-02-27T18:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-03T21:20:00Z",
+          "starts_at": "2027-03-03T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-05T21:20:00Z",
+          "starts_at": "2027-03-05T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-08T21:20:00Z",
+          "starts_at": "2027-03-08T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-10T21:20:00Z",
+          "starts_at": "2027-03-10T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-13T16:50:00Z",
+          "starts_at": "2027-03-13T15:00:00Z"
+        }
+      ],
+      "starts_at": "2027-02-03T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "La traviata",
+      "url": "https://www.eno.org/events/la-traviata/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "1hr 50mins There is no interval.",
+    "source_event_id": "la-traviata",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": null,
+    "running_time": "1hr 15mins",
+    "source_event_id": "abracadopera",
+    "tickets": null,
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "breaking-waves|2027-02-13|coliseum",
+      "description": "In sickness and in health… This hauntingly beautiful opera explores faith, heartbreak and loss with unflinching emotional intensity. Emerging as one of the most powerful contemporary operas of our time and adapted from Lars von Trier’s critically acclaimed film, Missy Mazzoli ’s Breaking the Waves comes to ENO in a striking new production for 2026/27. Book your tickets to experience the drama and emotion of Breaking the Waves in a new opera production, live at the London Coliseum in 2027. Please note our recommended age guidance for Breaking the Waves is 18+. Overview On a remote Scottish island, within a strict religious community, Bess meets oil rig worker Jan, and they fall in love. They are happily married, until a terrible accident leaves Jan paralysed and no longer able to have a sexual relationship with his wife. He asks Bess to have sex with other men and describe her experiences to him; convincing her that this will help him to heal. Bess, a deeply devout woman, believing it’s God’s will, reluctantly embarks upon a series of increasingly dangerous encounters with strangers. Will her sacrifice save the man she loves? Or will she be left the tragic victim of a system indifferent to her suffering? Find out what depths humanity is willing to go to in this ultimate test of faith. Discover the story of Breaking the Waves Staging and score Adapted from Lars von Trier’s multi-award-winning 1996 film of the same name, this opera maintains its haunting beauty and cinematic experience from screen to stage. Composer Missy Mazzoli is a cultural trailblazer, the first woman commissioned by the Metropolitan Opera and hailed as ‘Brooklyn’s post-millennial Mozart’ (Time Out). With its psychological depth and conversational yet expressive qualities. Mazzoli’s music is influenced both by Britten and the minimalist music of Philip Glass in its use of hypnotic rhythmic pattern. Librettist Royce Vavrek brings an intimate, human voice to the work. A long‑time collaborator of Mazzoli, he is known for creating contemporary librettos that probe belief, morality and power with piercing clarity. Singers and creatives Directed by Tinuke Craig who returns following her award nominated production of Blue (2023) and conducted by Joana Carneiro who is renowned for her commitment to contemporary operas. She makes a welcome return following recent productions of ENO’s Mary, Queen of Scots (2025) and The Handmaid’s Tale (2022 and 2024). Making her ENO debut is Grammy Award-nominated Lauren Snouffer as Bess McNeill, a role she has sung in major international productions to great acclaim. Performing as her husband, Jan, is Liam James Karai. Mezzo-soprano Joanne Evans sings Dodo McNeill. ENO regular Emma Bell sings Mrs McNeill with former Harewood Artist Elgan Llŷr Thomas singing Dr Richardson. This production has been made possible through the generous support of our Role sponsors, Malcom Herring and So-Chung Shinn & Tony W. Lee, and a syndicate comprising Peter Hill & Elizabeth McKay, Kate Olver & Jeremy Young, The Pell Charitable Trust, and Sue Sheridan OBE. Funded in part by The Amphion Foundation, Inc.",
+      "ends_at": "2027-02-25T21:35:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_07_BreakingTheWaves.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-02-13T21:35:00Z",
+          "starts_at": "2027-02-13T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-18T21:35:00Z",
+          "starts_at": "2027-02-18T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-20T20:35:00Z",
+          "starts_at": "2027-02-20T18:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-23T21:35:00Z",
+          "starts_at": "2027-02-23T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-25T21:35:00Z",
+          "starts_at": "2027-02-25T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-02-13T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Breaking the Waves",
+      "url": "https://www.eno.org/events/breaking-the-waves/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "2hrs 35mins There is one interval.",
+    "source_event_id": "breaking-the-waves",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": {
+      "address": "St Martin's Lane, London WC2N 4ES",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "trial-by-jury-zoo|2027-03-04|coliseum",
+      "description": "A wildly ridiculous romance One doomed engagement. Two brilliantly matched comic operas. Trial by Jury & The Zoo come together in this wildly entertaining pairing. Acting as the prequel and sequel to the same ill‑fated love story, these rarely performed works are full of wit, absurdity and unexpected twists. Directed by John Savournin, enjoy a rare glimpse of Sullivan’s early work alongside the first success of one of opera’s most legendary partnerships. Book your tickets for Trial by Jury & The Zoo live at the London Coliseum in 2027. Overview The course of true love never did run smooth. Especially in Sullivan’s The Zoo, where we meet a pair of young lovers who, despite hidden identities, secret marriages and mischievous mix-ups, manage to become engaged. Discover the story of The Zoo But the story doesn’t end there. In this hilarious pairing of the two operettas, we then head to the courtroom for Trial by Jury, where Angelina is suing former fiancé Edwin for breach of promise. Cue chaos, joyous absurdity and an unexpected twist – courtesy of a romantically-inclined judge. Discover the story of Trial by Jury Staging and score Paired alongside Gilbert & Sullivan ‘s Trial by Jury in a 2025 production from Scottish Opera is Sullivan’s The Zoo with words by Bolton Rowe in a new production performed for the first time at ENO. These two one-act operettas are directed by ENO favourite and G&S specialist John Savournin who brings his iconic flair and a 1980s vibe. Although early works, the music of both pieces is already quintessential Sullivan – light, witty and melodically brilliant. Both librettos come with a healthy dose of the ridiculous spiced with a light sprinkling of social satire. Singers and creatives Olivier Award winner Peter Whelan conducts both pieces. G&S veterans Mary Bevan and Robert Murray lead both operas as our turbulent love-birds Angelina and Edwin. They are joined by an outstanding ensemble including Neal Davies as The Learned Judge, following his critically acclaimed performance as Sir Joseph in HMS Pinafore (2025-2026) and former Harewood Artist Madeleine Shaw sings Eliza Smith. This production has been made possible through the generous support of our Role Sponsors, Peter Dolgenos in memory of Katherine R. Zades, Graham Brookman, Alexandra Jupin & John Bean and Kathryn Uhde, and a syndicate comprising of Olly Carpenter, Michael J Dyer JP, Anne Hobbs, Vincent Mercer & Mrs Anzo Frances, Roy Shutz, and Tessa Smith.",
+      "ends_at": "2027-03-12T20:55:00Z",
+      "image_url": "https://www.eno.org/wp-content/uploads/2026/04/WEB-HERO-2000x1000_S2627_08_TrialByJury_TheZoo_v2.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "15"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-03-04T20:55:00Z",
+          "starts_at": "2027-03-04T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-06T15:25:00Z",
+          "starts_at": "2027-03-06T14:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-06T19:25:00Z",
+          "starts_at": "2027-03-06T18:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-11T16:25:00Z",
+          "starts_at": "2027-03-11T15:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-11T20:55:00Z",
+          "starts_at": "2027-03-11T19:30:00Z"
+        },
+        {
+          "ends_at": "2027-03-12T16:25:00Z",
+          "starts_at": "2027-03-12T15:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-12T20:55:00Z",
+          "starts_at": "2027-03-12T19:30:00Z"
+        }
+      ],
+      "starts_at": "2027-03-04T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Trial by Jury & The Zoo",
+      "url": "https://www.eno.org/events/trial-by-jury-the-zoo/",
+      "venue_name": "London Coliseum"
+    },
+    "running_time": "1hr 25mins There is no interval.",
+    "source_event_id": "trial-by-jury-the-zoo",
+    "tickets": "Tickets from £15 (Ticket price includes all fees. All tickets subject to availability).",
+    "venue": "London Coliseum"
+  },
+  {
+    "event": null,
+    "running_time": "The run time for Einstein on the Beach is between 4 and 5 hours. Please note there is no interval. You are welcome to leave the Warehouse during the performance. Re-entry into the Warehouse will be facilitated throughout the performance.",
+    "source_event_id": "einstein-on-the-beach",
+    "tickets": null,
+    "venue": "Aviva Studios, Manchester"
+  }
+]
