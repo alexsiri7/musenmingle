@@ -561,6 +561,15 @@ mod tests {
             parse("2 November 8pm"),
             When::Days(vec![d(2026, 11, 2)], vec![t(20, 0)])
         );
+        // Exactly PAST_DAYS back is still this year; a day more is next.
+        assert_eq!(
+            parse("1 November 8pm"),
+            When::Days(vec![d(2026, 11, 1)], vec![t(20, 0)])
+        );
+        assert_eq!(
+            parse("31 October 8pm"),
+            When::Days(vec![d(2027, 10, 31)], vec![t(20, 0)])
+        );
         // Days spanning the new year follow the last one back.
         assert_eq!(
             parse("30 December / 2 January 8pm"),
@@ -619,6 +628,7 @@ mod tests {
         assert!(!ev.all_day);
         assert_eq!(ev.venue_name.as_deref(), Some("Stone Nest"));
         assert_eq!(ev.description.as_deref(), Some("A summary."));
+        assert!(!ev.price.is_free);
 
         let ev = normalise_payload(&payload("13 November 7.30pm", "Solo", ""))
             .unwrap()
@@ -675,6 +685,15 @@ mod tests {
                 "{title}"
             );
         }
+    }
+
+    #[test]
+    fn the_event_page_gives_description_and_free_admission() {
+        let mut p = payload("13 November 7.30pm", "Gig", "");
+        p["detail"] = json!({"description": "The full programme.", "free": true});
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        assert!(ev.price.is_free);
+        assert_eq!(ev.description.as_deref(), Some("The full programme."));
     }
 
     #[test]
