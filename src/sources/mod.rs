@@ -40,6 +40,7 @@ pub mod london_review_bookshop;
 pub mod luma;
 pub mod lux;
 pub mod mall_galleries;
+pub mod nonclassical;
 pub mod october_gallery;
 pub mod old_royal_naval_college;
 pub mod photographers_gallery;
@@ -187,6 +188,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         )),
         lux::KEY => Ok(Box::new(lux::Lux::new(base))),
         mall_galleries::KEY => Ok(Box::new(mall_galleries::MallGalleries::new(base))),
+        nonclassical::KEY => Ok(Box::new(nonclassical::Nonclassical::new(base))),
         october_gallery::KEY => Ok(Box::new(october_gallery::OctoberGallery::new(base))),
         old_royal_naval_college::KEY => Ok(Box::new(
             old_royal_naval_college::OldRoyalNavalCollege::new(base),
