@@ -239,6 +239,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     times are listed), ranges to their last day; free admission on exhibitions;
     screenings and children's/family sessions skipped; tours/talks → talk,
     the rest → community; no descriptions.
+  - `cafe-oto` — CSS on the `/events/` listing pages (no JSON-LD; `?page=N`
+    followed, capped at 10 a run): date line (London wall-clock door time),
+    promoter prefix and title, image and non-member prices; a residency's
+    page (capped at 15 a run; robots.txt asks for `Crawl-delay: 10`, so
+    the source asks for a longer fetch timeout) gives its nights as
+    sessions and its description; music tagged `experimental`, a fair →
+    expo; cancelled, off-site and private events skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
