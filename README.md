@@ -298,6 +298,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     the chapel's own Daylight Music and Sunday jazz jam are music, titles
     naming a talk are talks; mainstream gigs, comedy, films, tours,
     sing-alongs and cancelled events are skipped.
+  - `wiltons-music-hall` — CSS on the `/whats-on/` listing's own Music and
+    Opera genre views (`?category=music`, `?category=opera`, following the
+    pager; no JSON-LD) and every card's event page (capped at 40 a run):
+    its "Tickets & Times" table gives one session per performance ("Tue 23
+    Feb 2027" | "7 pm", the year left out in the current one), the block
+    under the heading the price and the running time (each session's end),
+    the "About" tab the description. Music subtags from the genre and title
+    (Opera → classical); the venue's other genres (theatre, comedy, cabaret,
+    magic, film, music hall, tours) are skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

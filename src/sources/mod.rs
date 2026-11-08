@@ -62,6 +62,7 @@ pub mod wellcome_collection;
 pub mod whitechapel_gallery;
 pub mod william_morris_gallery;
 pub mod william_morris_society;
+pub mod wiltons_music_hall;
 
 #[derive(Debug, thiserror::Error)]
 pub enum SourceError {
@@ -209,6 +210,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         ))),
         stone_nest::KEY => Ok(Box::new(stone_nest::StoneNest::new(base))),
         union_chapel::KEY => Ok(Box::new(union_chapel::UnionChapel::new(base))),
+        wiltons_music_hall::KEY => Ok(Box::new(wiltons_music_hall::WiltonsMusicHall::new(base))),
         the_showroom::KEY => Ok(Box::new(the_showroom::TheShowroom::new(base))),
         gasworks::KEY => Ok(Box::new(gasworks::Gasworks::new(base))),
         two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),
