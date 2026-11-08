@@ -246,6 +246,12 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     the source asks for a longer fetch timeout) gives its nights as
     sessions and its description; music tagged `experimental`, a fair →
     expo; cancelled, off-site and private events skipped.
+  - `vortex-jazz-club` — the site's iCal feed (`/events/?ical=1`, one
+    request a run; its times are labelled `UTC+0` but are London wall
+    clock): title, door time to the end of the last set, link, image; all
+    music at the club, tagged `jazz`, plus `experimental` when the title
+    or description names free improvisation, free jazz or the avant-garde;
+    no prices; facts + link only.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

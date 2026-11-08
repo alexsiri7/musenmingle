@@ -1,0 +1,1338 @@
+---
+source: tests/source_vortex_jazz_club.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "thurston-moore-mark-wastell|2026-11-08|vortex-jazz-club",
+      "description": "Timings: Doors 7:00 PM, Music 7:30 PM - 1 set of music (SOLD OUT) *New show added due to popular demand* Doors 9:30 PM, Music 10:00 PM - 1 set of music Line-up: Thurston Moore - Guitar Mark Wastell - Percussion About: A very welcomed return to the Vortex for the exciting electric guitar and drums collaboration between Thurston Moore and Mark Wastell. They played to a sell out audience last December, a show which was described as “deeply post-psychedelic, dreamlike in atmosphere, before expanding into the charming spasms of free jazz.” Two vastly experienced masters of the craft. Guaranteed to be another sell out - don’t hesitate to book your ticket. Photos by Sean Kelly, Vortex Jazz Club, December 2025. [embed]https://www.youtube.com/watch?v=bUbYqrQDoqw[/embed]",
+      "ends_at": "2026-11-08T23:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Thurston-Moore-and-Mark-Wastell.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-08T19:00:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Thurston Moore and Mark Wastell",
+      "url": "https://www.vortexjazz.co.uk/event/thurston-moore-and-mark-wastell/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27584"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "one-orchestra-new|2026-11-10|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Caroline Kraabel – alto sax/voice Katherine Farnden - oboes Kamila Wielebska - voice/dance Iris Casling – double bass Cath Roberts – saxes/electronics Dee Byrne – alto sax Sue Lynch - tenor sax/flute/clarinet Bara Noha – voice Rosa Theodora – keyboards/piano/voice Emmanuelle Waeckerle - voice/objects Saori Miraku - piano/keyboards Kri – voice Shama Rahman – sitar Megan Steinberg – turntables Jane Perrot – voice Ana Chora - electric guitar Barbara Mukoda - flutes About: ONe_Orchestra New work in large-group improvisation to free themselves and their listeners from the default assumptions built up through the centuries-long predominance of cis men in music... This improvising orchestra's work opens up novel, important, and fascinating new forms, relations, AND sounds. Improvisation is, by necessity, a big part of being and surviving as ‘other’; conversely, otherness – that everyone experiences somewhere in their heart – has a huge influence on the creation of improvisation. The shared experiences and sense of safety among ONe_Orchestra New members allow them to explore more boldly in their quest to uncover new ways of hearing, as well as new things to hear.",
+      "ends_at": "2026-11-10T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/ONe_Orchestra-New-.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-10T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "ONe_Orchestra New",
+      "url": "https://www.vortexjazz.co.uk/event/one_orchestra-new-3/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27757"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "crowley-bonney-brice-harlan|2026-11-11|vortex-jazz-club",
+      "description": "Doors 6:45 PM, Music 7:15 PM - 1 set of music Line-up: Alex Bonney - Trumpet Olie Brice - Double bass George Crowley - Tenor Saxophone Sacha Harlan - Drum kit About: A top-flight quartet of UK improvisers blow their way through legendary free jazz repertoire from the likes of Ornette Coleman, Don Cherry, Albert Ayler & Paul Motian",
+      "ends_at": "2026-11-11T20:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Crowley-Bonney-Brice-Harlan.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T18:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Crowley / Bonney / Brice / Harlan",
+      "url": "https://www.vortexjazz.co.uk/event/bonney-brice-crowley-giles/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27787"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "family-band|2026-11-11|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 set(s) of music Line-up: Kim Macari - Trumpet Riley Stone-Lonergan - Tenor saxophone Tom Rivière - Double bass Steve Hanley - Drum kit About: Comprising four long-term collaborators and friends (thus the 'family' tag), the band takes as its starting point the freewheeling music of those musicians who, back in the 1960s, were at the forefront of the free jazz revolution, but whose opening up of jazz's constraints is now recognised as not a break from the past but an integral part of the music's development. So Family Band doesn't recreate the work of Ornette Coleman and others, but shares its powerful and freewheeling momentum - moments of fierce intensity, introspection and the blues all combining into an emotionally complex and often cathartic whole. [embed]https://www.youtube.com/watch?v=ynB37CklFdc[/embed]",
+      "ends_at": "2026-11-11T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/02/Family-Band.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T19:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Family Band",
+      "url": "https://www.vortexjazz.co.uk/event/family-band-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27730"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "finn-carter-stephanie-burrell|2026-11-12|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM This performance will start promptly at 8:30pm Line-up: Stephanie Burrell - dance Finn Carter - piano About: This month, Finn Carter experiments with form and what the idea of improvisation and communication look like between music and dance. Part of Finn Carter’s monthly residency at the Vortex, showcasing a new project each month. Stephanie Burrell Stephanie Burrell is an artist working across dance, film, performance, choreography and theatre. She is the co-founder of Birthday Fish Theatre, a surrealist theatre company, and leads the collaborative conceptual performance project Housewife Going Digital. Her practice is research-driven and subversive. While her foundation lies in contemporary dance and ballet, Stephanie’s work now spans physical theatre, commercial choreography, and experimental performance. Her choreographic practice began in 2020 as she investigated ways to fuse improvisation with theatrical modes of performance inspired by and in response to jazz music. Finn Carter As we move beyond the quarter century, the London scene continues to provide a home for some of the most adventurous genre-blending sounds to be heard anywhere. Pianist/composer Finn Carter is at once right at the center of the capital’s jazz community, regularly appearing at venues like Ronnie Scott’s and The Vortex, and yet simultaneously inhabiting a space of his very own, on his own journey that encompasses working with such musically sympathetic stars of the pop world as Loyle Carner, Olivia Dean and Rex Orange County while honing his own uncompromising musical vision. Finn’s music contains echoes of his inspirations - he names Alice Coltrane, Andrew Hill and Jason Moran as favourites, but transcends influence to make its own utterly individual statement.",
+      "ends_at": "2026-11-12T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Finn-Carter-Stephanie-Burrell-Music-Dance.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-12T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Finn Carter & Stephanie Burrell",
+      "url": "https://www.vortexjazz.co.uk/event/finn-carter-stephanie-burrell/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27773"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dalston-song-club-lily-lyons-downstairs|2026-11-13|vortex-jazz-club",
+      "description": "Doors 6:45 PM, Music 7:15 PM - 1 set of music About: Our monthly series brings together some of the most prominent voices in contemporary songwriting, hosted by Matthew Herd. The incredible Lily Lyons joins us this month for a London Jazz Festival special. Lily Lyons Raised between London and Somerset, Lily Lyons blends tender folk influences with emotionally incisive songwriting, creating songs that feel both intimate and quietly defiant. Inspired by artists such as Joni Mitchell, Nick Drake and Big Thief, Lily writes with a rare balance of softness and strength. Her work is rooted in honesty and human connection, embracing contradiction: joy alongside grief, tenderness alongside anger, stillness alongside emotional intensity. With a captivating live presence and a deeply personal approach to storytelling, Lily creates music that invites listeners into a world that is raw, healing, and unmistakably her own. Her debut album, “Re-Open the World” was released in 2025 to universal acclaim, and was closely followed by a live album recorded last November at St Matthias Church in Dalston. Instagram: https://www.instagram.com/lilylyonsmusic/",
+      "ends_at": "2026-11-13T20:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Dalston-Song-Club-Lily-Lyons.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T18:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Dalston Song Club: Lily Lyons (Downstairs)",
+      "url": "https://www.vortexjazz.co.uk/event/dalston-song-club-lily-lyons-downstairs/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27671"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "after-john-cosmic-music-of-alice-coltrane|2026-11-13|vortex-jazz-club",
+      "description": "PRESENTED BY ALINA BZHEZHINSKA, TONY KOFI & YOUSUF ALI KHAN Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Alina Bzhezhinska - Harp Tony Kofi - Saxophone Yousuf Ali Khan - Tabla About: Award-winning duo Alina Bzhezhinska (harp) and Tony Kofi (saxophone), joined by tabla virtuoso Yousuf Ali Khan, present After John, a celebration of the visionary music Alice Coltrane created following the passing of her husband and greatest musical collaborator, John Coltrane. Blending jazz, Indian classical traditions and spiritual improvisation, this captivating performance explores her transcendent musical legacy, taking audiences on an immersive journey of beauty, contemplation and joy. Created exclusively for the EFG London Jazz Festival, this special performance is a rare, one-off event not to be missed. [embed]https://youtu.be/0nMBSauwTdU?si=MB8kcUtgL2S_kyOW[/embed]",
+      "ends_at": "2026-11-13T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Alina-Bzhezhinska-After-John-Cosmic-Music-of-Alice-Coltrane.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "After John - Cosmic Music of Alice Coltrane",
+      "url": "https://www.vortexjazz.co.uk/event/alina-bzhezhinska-after-john-cosmic-music-of-alice-coltrane/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27601"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ari-hoenig-trio-featuring-tom-ollendorff-viktor-nyberg-2-shows|2026-11-14|vortex-jazz-club",
+      "description": "Timings: *Please note each ticket will give you access to the time slot you book for. Please arrive for the door time. 1st Show Doors 6:30 PM, Music 7:00 PM – 1 set of music 2nd Show Doors 8:30 PM, Music 9:00 PM – 1 set of music Line-up: Tom Ollendorff - Guitar Viktor Nyberg - Double bass Ari Hoenig - Drum kit About: Following his sold-out appearances at the Vortex in 2022, legendary New York drummer Ari Hoenig returns with his acclaimed trio featuring Tom Ollendorff and Viktor Nyberg. Widely regarded as one of the jazz world's leading drummers and among its most celebrated contemporary musicians, Hoenig is renowned for his astonishing rhythmic imagination and melodic approach to the drum kit. Performing music from their critically acclaimed album Enchanted, the trio combines Hoenig's innovative rhythmic approach with Ollendorff's lyrical guitar work and Nyberg's deeply melodic bass playing, creating music of remarkable interplay, subtlety and spontaneity. [embed]https://www.youtube.com/watch?v=d1zPpLdc-Go&list=RDd1zPpLdc-Go&start_radio=1&t=8s[/embed] Event Date",
+      "ends_at": "2026-11-14T22:00:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Ari-Hoenig-Trio-featuring-Tom-Ollendorff-and-Viktor-Nyberg-2-shows.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T18:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Ari Hoenig Trio featuring Tom Ollendorff and Viktor Nyberg (2 shows)",
+      "url": "https://www.vortexjazz.co.uk/event/ari-hoenig-trio-featuring-tom-ollendorff-and-viktor-nyberg-2-shows/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27603"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "london-jazz-orchestra-festival-special|2026-11-15|vortex-jazz-club",
+      "description": "Doors 3:00 PM, Music 3:30 PM - 1 set of music About: The LJO’s residency at the Vortex is a London jazz institution, producing great up-close-and-personal gigs since the club’s opening. Directed by Scott Stroman, today’s band is as vital as ever, featuring legendary soloists as well as exciting new talent. Their new Primetime album on Analogue/October records received rave reviews, and it will be follow by Between Earth and Sky later this season. Their special Festival gig will be made up of one 75-minute set, featuring brand new music by the band’s composer/soloists, including Stroman, saxophonists Pete Hurt, Tori Freestone and Mick Foster, pianist Alcyona Mick, guitarist Nick Costley-White, bassist Calum Gourlay, and trumpeters Andre Cannier and Henry Lowther",
+      "ends_at": "2026-11-15T17:00:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/London-Jazz-Orchestra-Festival-Special.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-15T15:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "London Jazz Orchestra Festival Special",
+      "url": "https://www.vortexjazz.co.uk/event/london-jazz-orchestra-festival-special-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27669"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mopomoso-international-free-improvised-music-november-2026|2026-11-15|vortex-jazz-club",
+      "description": "Doors 6:30 PM, Music 7:00 PM About A wonderful evening of freely improvised music from Croatia, USA, Germany, New Zealand, UK Croatia and USA: Boris Janje (double bass), Damir Kafka (sax), Susanna Ferrar (violin) & Tracy Lisk (drums) + Germany and NZ: Mitch Heinrich (vocals), Christoph Irmer (violin) & David Leahy (double bass), + UK: STARNOSEDMOLE - Joanne Morrison (voice, movement, objects) & Nick Smith (percussion) (not necessarily playing in this order) Quartet: Tracy Lisk USA (drums), Damir Kafka - Croatia (sax), Boris Janje - Croatia (drums), Susanna Ferrar NZ/UK (violin). We are delighted to have this quartet, two of whom are from Croatia where there is a flourishing improvised music scene at ImproMondays in Zagreb. They are both highly regarded both as musicians and artistic directors of the ImproMondays International Festival of Improvised Music. Elations trio is made up of local double bassist David Leahy and Christoph Irmer (violin) and Mitch Heinrich (voice), both from Wuppertal, Germany. Their playing relationship began over 20 years ago when David was regularly touring Germany and Christoph was a regular visitor to the London Improvisers Orchestra. Mitch uses his published books of Dada poetry as a source material to improvise with in this trio's performance. STARNOSEDMOLE has been going since 2024 and is the duo of Nick Smith (percussion/effects) and Joanne Morrison -an experimental vocalist and improvising performer with a penchant for cat toys, costume and masks.",
+      "ends_at": "2026-11-15T22:00:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/09/Mopomoso-15th-November-2026-amended.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-15T18:30:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "MOPOMOSO: International Free Improvised Music – November 2026",
+      "url": "https://www.vortexjazz.co.uk/event/mopomoso-international-free-improvised-music-november-2026/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27721"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "crow-culture-tara-cunningham-james-kitchman-will-glaser|2026-11-16|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Tara Cunningham - Guitar James Kitchman - Guitar Will Glaser - Drums About: Crow Culture are a trio made up of guitarists James Kitchman and Tara Cunningham, and drummer Will Glaser. They have recently recorded their debut EP where the group take on and bring Kitchman and Cunningham’s compositions to life, drawing upon punk, jazz, country and everything in between.",
+      "ends_at": "2026-11-16T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/10/Crow-Culture.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-16T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Crow Culture (Tara Cunningham / James Kitchman / Will Glaser)",
+      "url": "https://www.vortexjazz.co.uk/event/crow-culture-tara-cunningham-james-kitchman-will-glaser/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27605"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "emilia-martensson-matt-robinson-featuring-adam-waldmann-max-luthert-will-glaser|2026-11-17|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Emilia Martensson - Voice Matt Robinson - Piano Adam Waldmann - Saxophone Max Luthert - Double bass Adriano Adawale - Percussion About: Emilia Märtensson & Matt Robinson bring together lyrical songwriting, improvisation, and contemporary European jazz in music that is both intimate and expansive. Their long-standing musical partnership centres on a shared love of space, clarity, and expressive storytelling, creating performances that are immersive, spontaneous, and deeply connected. Parliamentary Jazz Award-winning vocalist Emilia Märtensson is recognised as one of the most distinctive voices in UK jazz, celebrated for her expressive tone and emotionally nuanced storytelling. The Observer described her as \"the new face of British jazz,\" while Jazzwise praised her as \"a voice of quite remarkable expressive depth.\" Pianist, composer, and producer Matt Robinson, known for his work with Snowpoet, is acclaimed for his melodic improvisations, harmonic richness, and imaginative use of piano, synthesisers, and live electronics. Drawing inspiration from iconic European jazz duos such as Sidsel Endresen & Bugge Wesseltoft and Norma Winstone & John Taylor, Märtensson and Robinson subtly reimagine the voice-piano format through improvisation, extended techniques, and understated electronics, while preserving its essential intimacy. For this performance, the duo is joined by acclaimed saxophonist Adam Waldmann, bassist Max Luthert, and drummer Will Glaser. Together, the quintet expands the duo's finely detailed musical world into a richly textured ensemble, balancing openness, lyricism, and collective improvisation.",
+      "ends_at": "2026-11-17T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Emilia-MartenssonMatt-Robinson-featuring-Adam-Waldmann-Max-Luthert-Will-Glaser.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-17T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Emilia Martensson/Matt Robinson featuring Adam Waldmann, Max Luthert & Will Glaser",
+      "url": "https://www.vortexjazz.co.uk/event/emilia-martenssonmatt-robinson-featuring-adam-waldmann-max-luthert-will-glaser/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27606"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "reiss-ellis-beckles-presents-blues-abstract-truth|2026-11-18|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Joseph Oti - Trumpet Reiss Ellis Beckles - Alto Saxophone Houston Patton - Tenor Saxophone Phil Knights - Baritone Saxophone Simon Purcell - Piano Tom Riviere - Double Bass Laura Klain - Drum Kit About: For one night only, saxophonist and bandleader Reiss Ellis Beckles presents a live performance of Oliver Nelson’s iconic The Blues and the Abstract Truth. Featuring Nelson’s original arrangements, the ensemble brings this landmark 1961 recording to life in its entirety — celebrating its powerful melodies, sophisticated harmonies and timeless blues language. A rare opportunity to experience one of jazz’s most influential albums performed live, as originally conceived.",
+      "ends_at": "2026-11-18T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2024/09/Screenshot-2024-09-03-at-12.53.05.png",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-18T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Reiss Ellis Beckles presents Blues and The Abstract Truth",
+      "url": "https://www.vortexjazz.co.uk/event/reiss-ellis-beckles-presents-blues-and-the-abstract-truth/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27634"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "coras-trio|2026-11-19|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music About: Córas Trio reinvent the spontaneous. Deconstructed Irish traditional melodies emerge from blissful, otherworldly textures that foreground fiddle, guitar and percussion with transcendental electronics; suspending elements of collective free improvisation with seisiún-style playfulness. They are part of a creative wave of musicians based in Belfast exploring how traditional music relates to the experience of the 21st century; challenging ideas of cultural purism and ‘subverting audiences’ expectations’ (Kate Molleson BBC Radio 3), ‘they boldly go where few have even dreamed of going before’ (The Irish Times). Their rapid rise has seen them support experimental folk heavy weights such as The Olllam, Aidan O’Rourke & Brìghde Chaimbeul, Väsen, and Hawktail. Their debut album, released in July 2024, received critical acclaim, leading to a string of sold-out headline shows across Ireland, a BBC Radio 6 New Music Fix live session, and global radio play and press features, including The Wire, The Irish Times, RTÉ, and Mojo magazine.Their avant-folk sound has been described asIrish traditional music taken to the outer reaches where the spirits of Schoenberg and Sun Ra play with Seán Ó Riada and Tommie Potts.The trio were selected to showcase atWOMEX Manchester 2024 and Celtic Connections 2025, securing international bookings well into 2026. 2025 has seen them perform at Eurojazz Mexico City, Jazzycolors Paris, Saison Pannonica Nantes, Huddersfield Contemporary Music Festival, and Other VoicesIreland.Their Irish bookings are currently handled by Moving on Music’s ‘Middle-Aisle ‘...absolutely special and totally unusual!’ (Caoimhe Ní Chathail, BBC Radio Ulster) ‘imaginative...quick witted...boldly investigating 21st century Irish identity’ (The Wire) ‘Explosive!’(Soweto Kinch BBC Radio 3 [embed]https://open.spotify.com/artist/26aXnE55jpsxcf1jkk9IeC[/embed]",
+      "ends_at": "2026-11-19T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Coras-Trio.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T19:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Córas Trio",
+      "url": "https://www.vortexjazz.co.uk/event/coras-trio/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27623"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "downstairs-living-presents-songs-of-joni-mitchell-with-rebecka-edlund-immy-churchill|2026-11-20|vortex-jazz-club",
+      "description": "Doors 6:45 PM, Music 7:15 PM - 1 set of music About: Joni Mitchell is a cornerstone in the musical lives of Rebecka Edlund and Immy Churchill. These two singer-songwriters connected over their love of albums such as 'Blue' and 'Hejira' and have immersed themselves in this music over the last decade. For the 2026 London Jazz Festival, the curators of The Downstairs Living Room warmly invite you to an evening of Joni Mitchell classics, paired with their own original songs. For lovers of \"A Case of You\", \"Coyote\" and \"Amelia\" this will be a night of nostalgia and stories; shared through two voices, two guitars and a harmonium. Rebecka Edlund and Immy Churchill, plus special guests.",
+      "ends_at": "2026-11-20T20:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/The-Downstairs-Living-Presents-Songs-of-Joni-Mitchell-with-Rebecka-Edlund-and-Immy-Churchill.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T18:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "The Downstairs Living Presents: Songs of Joni Mitchell with Rebecka Edlund and Immy Churchill",
+      "url": "https://www.vortexjazz.co.uk/event/the-downstairs-living-presents-songs-of-joni-mitchell-with-rebecka-edlund-and-immy-churchill/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27673"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "heinen-vogel-hitchcock-bareket-calderazzo-akki-ligeti-project|2026-11-20|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Bruno Heinen - Piano Heidi Vogel - Voice Alex Hitchcock - Tenor saxophone Or Bareket - Bass Gene Calderazzo - Drums Salim Akki - Percussion About: Marking the 20th anniversary of avant-garde master György Ligeti’s passing, pianist Bruno Heinen—described by The Guardian as “eclectic, eccentric, and unobtrusively erudite”—brings a thrilling rhythmic experiment to The Vortex Jazz Club. Drawing from Ligeti’s masterpiece \"Musica Ricercata,\" the ensemble fuses the composer's eerie, iconic soundscapes—made famous by filmmaker Stanley Kubrick—with jazz exploration. Starting from minimal melodic ideas, the music expands into deep, shifting grooves. Featuring a stellar lineup of Heidi Vogel (vocals), Alex Hitchcock (saxophone), NYC-bassist Or Bareket, and an explosive two-drummer concept led by Gene Calderazzo alongside Moroccan roots/groove percussionist Salim Akki, this performance promises an unparalleled evening of spontaneous creation, celebrating Ligeti’s enduring genius.",
+      "ends_at": "2026-11-20T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/Heinen-Vogel-Hitchcock-Bareket-Calderazzo-The-Ligeti-Project-.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T19:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Heinen / Vogel / Hitchcock / Bareket / Calderazzo / Akki : The Ligeti Project",
+      "url": "https://www.vortexjazz.co.uk/event/heinen-vogel-hitchcock-bareket-calderazzo-the-ligeti-project/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27609"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "james-allsopp-group|2026-11-21|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: James Allsopp - Tenor saxophone, Synthesizer Chris Batchelor - Trumpet Zands Duggan - Percussion Dave Storey - Drum kit Riaan Vosloo - Bass guitar About: For this performance we will be playing music from our forthcoming album “The Forest Speaks” set for release on London based Batov records in 2027. The album has been produced in collaboration with Ben Lamdin (Nostalgia 77) and the psychedelic, dub aesthetic of the production enhances and deepens the atmosphere of the record and that’s the experience we want to give the listener at the gig! This is joyous, life affirming music. Deceptively simple, deeply melodic with a healthy dose of the other worldly. [embed]https://m.youtube.com/watch?v=bTaJCvFRp7o&pp=ygUcSmFtZXMgYWxsc29wcCBncm91cCBmaXNodGFuaw%3D%3D&ra=m https://open.spotify.com/album/2x18fkRYPpfmVIvAlPi8wm?si=OBTNrZSMRwGQfllXO5NhfA&utm_source=copy-link[/embed]",
+      "ends_at": "2026-11-21T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/10/James-Allsopp-22Stars-and-Sand22-Album-Launch.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-21T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "James Allsopp Group",
+      "url": "https://www.vortexjazz.co.uk/event/james-allsopp-group-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27805"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-jam-session|2026-11-22|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:15 PM House Band TBC About A weekly session on Sunday evenings, hosted by four of London’s finest: guitarist Nick Costley-White, Trumpeter Sean Gibbs, pianist Rick Simpson and tenor saxophonists and Riley Stone-Lonergan, each one hosting one session on rotation. If you’re an instrumentalist – we can’t wait to welcome you back to the club – you can attend for free if you’re planning on playing with the house band. No need to book in advance! Our dear Vortex members are also welcome to these sessions free of charge.",
+      "ends_at": "2026-11-22T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2022/08/vortex-jam.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Jam Session",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-jam-session-10-2026-11-22/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27476"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "milena-granci-to-some-place-new|2026-11-25|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Milena Granci - Piano Aitzi Cofre Real - Voice Harry Toulson - Alto Saxophone James Pettinger - Accordion Harry Pearce - Double bass Ollie Peszynski - Drum kit About: French-Italian pianist and composer Milena Granci presents her debut album, “To Some Place New”. Blending jazz with folk and cinematic influences, she creates an immersive and emotionally rich sound world. Moving beyond traditional jazz forms, her music unfolds through lyrical wordless melodies and layered harmonies, inviting listeners through introspective, melancholic and ultimately uplifting landscapes. Her music draws inspiration from artists such as Maria Schneider and John Taylor. Jazz Views (UK) “To Some Place New is a patient, assured debut from a composer who already knows what she wants to say — and an ensemble that doesn’t accompany the compositions so much as inhabit them.” Arne Schumacher JAZZTHETIK (DE) “The overall sound and the evocative solos convey an uplifting, positive spirit that endures even in the more stately, wistful, and romantic \"narratives.\" An enchanting album that could - and should - open doors.” Blue in Green (UK) “As part of the project's efforts to transport itself and its listeners to some place new by the album's conclusion, we are afforded the opportunity to do so through an artist that honours reflection as much as the notion of persevering onwards.” Paris Move (FR) “Her music remains deeply personal, anchored by a melodic sensibility that gives even the album’s most complex passages an unusual emotional clarity. Milena Granci is not simply a promising jazz musician. She is a composer with the rare ability to create worlds.” [embed]https://www.youtube.com/watch?v=0Dr_gK7oyis&list=PLmq8R5Fttk7sbMIMV8z2UGRCQLfFQS6j2[/embed]",
+      "ends_at": "2026-11-25T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/09/Milena-Granci-To-Some-Place-New.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-25T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Milena Granci - To Some Place New",
+      "url": "https://www.vortexjazz.co.uk/event/milena-granci-to-some-place-new/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27717"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "steve-noble-caius-williams-tom-challenger|2026-11-26|vortex-jazz-club",
+      "description": "Doors 6:45 PM, Music 7:15 PM - 1 set of music Line-up: Steve Noble - Drums Tom Challenger - Tenor saxophone Caius Williams - Double bass About Steve Noble is London’s leading drummer, a fearless and constantly inventive improviser whose super-precise, ultra-propulsive and hyper-detailed playing has galvanized encounters with Derek Bailey, Matthew Shipp, Ishmael Wadada Leo Smith, Stephen O’Malley, Joe McPhee, Alex Ward, Rhodri Davies and many, many more. In the early eighties, Noble played with the Nigerian master drummer Elkan Ogunde, Rip Rig and Panic, Brion Gysin and the Bow Gamelan Ensemble, before going on to work with the pianist Alex Maguire and with Derek Bailey (including Company Weeks 1987, 89 and 90). He was featured in the Bailey’s excellent TV series on Improvisation for Channel 4 based on his book ‘Improvisation; its nature and practise’. He has toured and performed throughout Europe, Africa and America and currently leads the groups N.E.W (with John Edwards and Alex Ward) and DECOY (with John Edwards and Alexander Hawkins). Caius Williams is a musician from London who plays the double bass, guitar, and bass guitar. He works in collaboration with others, alongside an ongoing solo project, and often works with improvisation. Some projects include ‘Crosspiece’ (with Theodora Laird), a duo with guitarist Tara Cunningham, alongside recent performances or collaborations with Lifetones (Charles Bullen of This Heat), Steve Noble, feeo, Daniel O’Sullivan, Mark Sanders, Sachiko M, Tom Challenger, Maggie Nicols, Mark Wastell, amongst others. Caius has been running the GRAIN series at Avalon Cafe in Bermondsey for the last 3 years, which is focussed on programming new and adventurous music and nurturing a growing community with cross-scene and cross-generational collaboration. Tom Challenger is a saxophonist, improviser and composer based in London. Having curated and composed for a variety of ensembles over the years, his current work explores improvisation in various guises, alongside developing composed works for various lineups. He has collaborated with the likes of Evan Parker, Charles Hayward, Ed Bennett, Byron Wallen, Kit Downes and Alex Hawkins, in addition to leading his own ensembles, such as Brass Mask. Recordings of improvised and written works are available on his label Sche-ima Recordings. [embed][/embed]",
+      "ends_at": "2026-11-26T20:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Steve-Noble-Caius-Williams-Tom-Challenger.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T18:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Steve Noble, Caius Williams & Tom Challenger",
+      "url": "https://www.vortexjazz.co.uk/event/steve-noble-caius-williams-tom-challenger/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27813"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "hannes-riepler-quartet-feat-alex-hitchcock|2026-11-26|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Hannes Riepler - Guitar Alex Hitchcock - Tenor saxophone Niklas Lukassen - Double bass Luke McCarthy - Drum kit About: Guitarist Hannes Riepler leads a quartet of distinctive voices from the contemporary London jazz scene, bringing together original music that is lyrical, searching, and rhythmically alive. The band moves fluidly between composed material and open improvisation, balancing melodic clarity with moments of raw intensity and play. Riepler’s guitar playing sits at the centre of the music — spacious, expressive, and deeply attentive to sound and silence. As one listener put it, “Hannes Riepler plays with a rare sense of patience and purpose — every note feels chosen, and every phrase tells a story.” He is joined by Alex Hitchcock on saxophone, who is a leading international voice on the saxophone. An Ivor Novello-nominated composer and described by The Guardian as a “virtuoso” saxophonist, his innovative collaborations have confirmed a growing reputation as a catalyst for musical encounters that continually push the envelope a little further.; Niklas Lukassen displays an equally astonishing lyrical sensibility and skilful command of the upright bass, described as \"a versatile bass virtuoso\" by Jazzwise magazine; and Luke McCarthy on drums, driving the music with sensitivity, lift, and fire. Expect a set that is thoughtful yet adventurous — modern jazz with warmth, edge, and a strong sense of collective spirit. [embed]https://youtu.be/jVe85pzleVA?si=97TC1IySj4en7LOZ[/embed]",
+      "ends_at": "2026-11-26T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/11/Hannes.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Hannes Riepler Quartet feat Alex Hitchcock",
+      "url": "https://www.vortexjazz.co.uk/event/hannes-riepler-quartet-feat-alex-hitchcock/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27852"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "out-front-olie-brice-quartet-double-bill|2026-11-27|vortex-jazz-club",
+      "description": "Doors 7:30 PM, Music 8:00 PM - 2 sets of music Line-up: Nick Malcolm - Trumpet Olie Brice - Double bass Will Glaser - Drum kit Jason Yarde - Alto Saxophone Jake McMurchie - Tenor Saxophone Liam Noble - Piano Rachel Musson - Tenor Saxophone About: A fantastic double bill featuring two of the most innovative and most distinctive groups in UK creative music. Both have been touring debut albums this year and feature superb line-ups of heavy weight improvisers, in ensembles of extreme flexibility, musical courage and the widest of emotional palettes. Both books of music combine powerful freedom and exploration with memorable melodies, driving swing and emotional intensity and this evening's gig will feature some collaborative pieces mixing both ensembles. Not to be missed! [embed]https://www.youtube.com/watch?v=lPXQRyus3Oo, https://www.youtube.com/watch?v=YqrGwLbfF3E&list=PLQAUPf_ODVQFHX3K67rDHTtiXX22K0FtF&index=7[/embed]",
+      "ends_at": "2026-11-27T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/09/Out-Front-Olie-Brice-Quartet-Double-Bill.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-27T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Out Front + Olie Brice Quartet (Double Bill)",
+      "url": "https://www.vortexjazz.co.uk/event/out-front-olie-brice-quartet-double-bill/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27740"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mark-kavuma-quintet|2026-11-28|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Mark Kavuma - Trumpet Donavan Haffner - Alto saxophone Jack Thomas - Drums Ewan Hastie - Bass Deschanel Gordon - Piano About: This performance marks the debut of a brand-new quintet, presenting new compositions and a new musical direction, born from Mark Kavuma’s record label Banger Factory records. The quintet promises an evening of adventurous improvisation, compelling melodies and collective expression.",
+      "ends_at": "2026-11-28T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/06/Mark-Kavuma-Quintet.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-28T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Mark Kavuma Quintet",
+      "url": "https://www.vortexjazz.co.uk/event/mark-kavuma-quintet-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27812"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "commission-for-new-old-art-presents-i-am-nobody-london-show|2026-11-29|vortex-jazz-club",
+      "description": "Doors: 2.30pm | Performance: 3pm - 4.30pm Programme tDaiken when the cross… (1994) tGoehr Three Piano Pieces (1964) tAnderson I'm Nobody (1995) tDaiken Viola Sonata (1977) tBirtwistle The Mouse Felt... (2005) tTakemitsu Hika (1966) Performers Roderick Chadwick - Piano Nathaniel Sullivan - Voice Peter Sheppard Skærved - Violin/ Viola Lydia Phillips - Reader Performer biographies Roderick Chadwick is a pianist, teacher and writer on music. Described by the Sunday Times as “Possessor of devastating musicality and technique”, he has performed some of the most challenging works for the instrument, including Lachenmann’s Serynade at the inaugural London Contemporary Music Festival, and the first complete performance of Jeremy Dale Roberts’s Tombeau since its 1969 premiere at the hands of Stephen Kovacevich. He attended Chetham’s School in Manchester in the 1980s, studying with Heather Slade-Lipkin, and later moved to London to learn with Hamish Milne. He lives in South London and is Reader in Music at the Royal Academy of Music. Nathaniel Sullivan is an NYC-based vocalist, performer, and writer. An \"alert and highly musical baritone\" (Opera News), Nathaniel Sullivan infuses his work with \"impressive strength and precision\" (Schmopera), as well as “great eloquence” and \"allegiance to both music and words\" (ConcertoNet). Upcoming appearances include a residency at the Yellow Barn Summer Festival, where he will perform repertoire of Schubert, Rihm, Saariaho, Schoenberg, Aperghis, and Bach; reprising the role of the King in George Benjamin's Lessons in Love and Violence with the London Philharmonic Orchestra (a role he first performed in the North American premiere of the opera at the Tanglewood Music Center in 2022); and recital appearances with the Brooklyn Art Song Society, Lyric Fest, Concerts on the Slope, and the Riverview Chamber Series. Recent performance highlights include the role of Jochanaan in Salome with Heartbeat Opera and with West Bay Opera; the role of The Mark in the world premiere of Constance: A Confession with Experiments in Opera; and solo appearances in Bach's Mass in B Minor with Abendmusik, in Ned Rorem's Evidence of Things Not Seen with the Brooklyn Art Song Society, and in the premieres of Terre Johnson's Te Deum and Marc-André Bougie's Stabat Mater at Carnegie Hall. Nathaniel was one of seven winners of the 2023 Astral Artists National Competition and has been awarded the Grace B. Jackson Prize for exceptional service at Tanglewood (2019); Third Place in the Washington International Competition (2023), the Lyndon Woodside Oratorio Solo Competition (2019), and the Orpheus Vocal Competition (2019); and First Place in the NATS National Musical Theatre Competition (2018). Peter Sheppard Skærved is acclaimed internationally for performances of a vast range of solo repertoire. His repertoire stretches from the late 16th century to hundreds of works written for him: these include major works by composers by established ‘greats’ such as Hans Werner Henze and George Rochberg, to the many young composers with whom he collaborates worldwide. Peter is a Grammy-nominated recording artist, with over one hundred critically acclaimed albums to his name. He is Honorary Professor at the Royal Northern College of Music, Manchester, Fellow of the Royal Academy of Music, London, and visiting Research Fellow of Goldsmiths, University of London. Lydia Phillips is an actor, musician and writer based in Manchester. She often improvises, normally playing the horn, harmonium and electronics. She has performed at venues across the North West including The White Hotel and the Bolton Socialist Club. Recent credits include Bow Down (2026) which was mounted at the Black Lights Festival in June 2026. She is a member of the Commission for New Art. This concert is made possible by a grant from the Vaughan Williams Foundation.",
+      "ends_at": "2026-11-29T16:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Commission-for-New-and-Old-Art.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T14:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "The Commission for New and Old Art presents: I Am Nobody - London Show",
+      "url": "https://www.vortexjazz.co.uk/event/the-commission-for-new-and-old-art-presents-i-am-nobody-london-show/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27783"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-jam-session|2026-11-29|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:15 PM House Band TBC About A weekly session on Sunday evenings, hosted by four of London’s finest: guitarist Nick Costley-White, Trumpeter Sean Gibbs, pianist Rick Simpson and tenor saxophonists and Riley Stone-Lonergan, each one hosting one session on rotation. If you’re an instrumentalist – we can’t wait to welcome you back to the club – you can attend for free if you’re planning on playing with the house band. No need to book in advance! Our dear Vortex members are also welcome to these sessions free of charge.",
+      "ends_at": "2026-11-29T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2022/08/vortex-jam.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Jam Session",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-jam-session-10-2026-09-06-2026-09-13-2026-11-29/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27477"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "fabienne-ambuehl-quartet|2026-12-01|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 set(s) of music Line-up: Ant Law - Guitar Tom Farmer - Double bass Jon Scott - Drum kit Fabienne Ambuehl - Piano, Voice About: Fabienne Ambuehl is known for her vibrant contemporary jazz, weaving together elements of poetry and storytelling. Her latest album Thrive, released on Ubuntu Music, won ‘Jazz Recording of The Year’ at the 2025 Presto Music Awards. The music of the London-based, Swiss-born pianist, singer and composer receives widespread acclaim from the international jazz press. Ambuehl’s sound is lyrical and rich in detail, with fluid, expressive piano playing and emotive vocals, drawing inspiration from both the natural world and urban life. Her debut album Glitterwoods (Traumton, Berlin), was named ‘Album of the Year’ by UK Vibe and she has since worked with various artists internationally. Thrive was selected as ‘Album of the Week’ by Germany’s Rondo Magazine, and had regular radio play on Jazz FM UK and BBC Radio 3. Ambuehl was described as posing \"somewhat of a triple threat as a fine pianist, wonderful singer and a composer of note” by Jazzviews UK. Together with acclaimed guitarist Ant Law, bassist Tom Farmer and drummer Jon Scott, the Fabienne Ambuehl Quartet creates a sound that is daring yet intimate, and truly its own. With compelling rhythms and melodies loosely influenced by blues, Brahms and the Beatles, you will hear songs from the album Thrive as well as brand new material from their upcoming next album. ‘…Ambuehl crafts a mesmerising soundscape that seamlessly blends songs and instrumentals...the album sounds terrific and delivers an impressively immersive musical experience.’ Peter Quinn, Jazzwise Magazine [embed]https://www.youtube.com/watch?v=8Gl0bePQOwI[/embed]",
+      "ends_at": "2026-12-01T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Fabienne-Ambuehl-Quartet-v-2.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-01T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Fabienne Ambuehl Quartet",
+      "url": "https://www.vortexjazz.co.uk/event/fabienne-ambuehl-quartet-3/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27767"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "joe-boyles-union-album-launch|2026-12-02|vortex-jazz-club",
+      "description": "Doors 6:45 PM, Music 7:15 PM - 1 set(s) of music Line-up: Joe Boyle - Double bass Sam Glaser - Alto saxophone, Tenor Saxophone Sam Leak - Piano Dougal Taylor - Drum kit About: Joe Boyle's Union present \"Welcome to the New World\", the debut album from British Double Bassist Joe Boyle. The record consists of 7 highly original compositions which showcase his writing, taking influence from traditional jazz to classical music, as well as psychedelic rock and free improvisation. Such diverse styles as theses, as well as South African township and delicate ballads, are blended seamlessly and held together by Boyle's distinctive, powerful and driving double bass playing. [embed]https://www.youtube.com/watch?v=zNVPdYu-5co&list=RDzNVPdYu-5co&start_radio=1[/embed]",
+      "ends_at": "2026-12-02T20:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/11/Joe-Boyles-Union.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T18:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Joe Boyle's Union - Album Launch",
+      "url": "https://www.vortexjazz.co.uk/event/joe-boyles-union/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27838"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "john-butcher-phil-durrant-mark-wastell|2026-12-02|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Mark Wastell - Drums John Butcher - Saxophone Phil Durrant - Electric Mandolin About: A trio that re-weaves many strands. The three initially performed together as part of the Chris Burn Ensemble in the late 1990s. In 1984 Butcher and Durrant (on violin) began an influential trio with guitarist John Russell which performed for 15 years. On one occasion with Wastell (on cello) replacing Russell. Thereafter, Butcher and Durrant (switching to electronics) continued as a duo. Spanning the years either side of the millennium, Durrant and Wastell explored reductionism together in various combinations. Wastell has now moved to drums and cymbals, a set-up which includes various parts of John Stevens' (an inspiration for him) original Spontaneous Music Ensemble kit. And Butcher played for 2 years in the last version of Stevens' SME (with guitarist Roger Smith). \"Their “virtuosity” consists essentially and miraculously in constantly renewing their sonic resources almost infinitely. At once refined and abundant, like a journey in space, crossing stars and galaxies. Quite unique of its kind.\" (Orynx - Jean-Michel Van Schouwburg) \".... one of the wonders of this area of music, at least to these ears, the essential character of the music has cohered into something palpable and breathing. Butcher generates some lovely, slightly fluttering, ultra-soft tones on tenor, Wastell contributes spacious, irregular brush caresses of drum heads and cymbals, Durrant the occasional, gentle twang, all of a piece and fully formed, ending in a fine flurry..... a set of sounds very much residing in open air, quite exhilarating..... the results are extremely rewarding.\" (Brian Olewnik, Squidsear) [embed]https://youtu.be/_Pl_Rir0L_k?si=yN2mRC1H_gOWEaIi[/embed]",
+      "ends_at": "2026-12-02T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/John-Butcher-Phil-Durrant-Mark-Wastell.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "John Butcher / Phil Durrant / Mark Wastell",
+      "url": "https://www.vortexjazz.co.uk/event/john-butcher-phil-durrant-mark-wastell/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27806"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "karim-saber-quintet|2026-12-03|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Karim Saber - Guitar Reuben Goldmark - Piano Myele Manzanza - Drum kit Matt Cook - Tenor Saxophone Niklas Lukassen - Double bass About: Guitarist and composer Karim Saber brings together a group of acclaimed London based musicians for a night of original music. \"a shooting star of the new generation UK jazz scene\"- Marlbank \"Virtuosic abilities\" - Jazz Journal \"...delivers a confident, richly textured second album that confirms why he's so widely tipped to become one of the most distinctive voices on the UK jazz scene.\"— ukvibe” [embed]https://www.youtube.com/watch?v=txy8IVnh2MY&list=RDtxy8IVnh2MY&start_radio=1[/embed]",
+      "ends_at": "2026-12-03T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/11/Karim.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-03T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Karim Saber Quintet",
+      "url": "https://www.vortexjazz.co.uk/event/karim-saber-quintet-4/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27769"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "basil-hodge-quartet-featuring-tony-kofi|2026-12-04|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Basil Hodge - Piano Tony Kofi - Alto saxophone Oli Hayhurst - Double bass Alfonso Vitale - Drum kit About: Pianist and composer Basil Hodge has been a mainstay of the British Jazz scene since the early nineties. The band will play Basil’s compositions from his critically acclaimed album 'A Point of Reference' with some of his early tunes. You will hear contemporary Jazz with a cohesive blend of swing Latin and funk rhythms. [embed]https://youtu.be/Hnu7a8XKI3Y[/embed]",
+      "ends_at": "2026-12-04T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Basil-Hodge-Quartet-Featuring-Tony-Kofi.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-04T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Basil Hodge Quartet Featuring Tony Kofi",
+      "url": "https://www.vortexjazz.co.uk/event/basil-hodge-quartet-featuring-tony-kofi/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27808"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-collective-presents-future-standards-downstairs-jam|2026-12-05|vortex-jazz-club",
+      "description": "Doors 2:30 PM, Music 3:00 PM About \"Standards are engaging and accessible for musicians and listeners alike, but nearly all of jazz’s standard repertoire is from a 50 year period ca. 1920 – 1970. Another half century has since passed, where new compositions have not been added to this shared language. Join a collective of musicians who met through the Vortex jazz club in imagining future standards. 3 – 7.30pm: accessible open jam session open to all to join in from 3pm, for standards from the real book and \"future standards\". House band will play a number of future standards throughout the afternoon. For more details on the future standards project, including sheet music, workshops, and to suggest additions to the repertoire, contact vortex.jazz.collective@gmail.com [embed]https://open.spotify.com/playlist/72DeFa18IBvWJD8P8pyX8T?si=e5YnxemiRMuh__x-7iaT_w&nd=1&dlsi=e80d6a1d1d3a46e8[/embed]",
+      "ends_at": "2026-12-05T19:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/10/fs_2025.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-05T14:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Collective presents: Future Standards & Downstairs Jam",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-collective-presents-future-standards-downstairs-jam-11/2026-12-05/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27448"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "phil-robsons-organ-trio|2026-12-05|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Phil Robson - Guitar Ross Stanley - Organ Gene Calderazzo - Drum kit About: Phil Robson, an incredibly versatile and creative guitar player as well as composer, named Musician of the Year at 2009 Parliamentary Jazz Awards, plus winning Album of the Year in 2015, joined forces with the Hammond virtuoso Ross Stanley and the inspiring and powerful drummer Gene Calderazzo to form this all-star band in 2015 and they come together to tour regularly because they love playing together. Robson was a seminal part of the London scene for over 2 decades before moving to New York City for 5 years. He is now based in Ireland. The trio play mostly Robson originals which are steeped in the swing, groove and the organ trio tradition, while also being contemporary with strong melodies making their music exciting but accessible to all who love to see passionate live music and real bands. The exceptional musicianship of all members is unquestionable. Together, as a band they create a very refreshing and compelling mix. The music is sensational, played with great energy and the incredible rapport between the three members which is something that definitely sets this band apart. You will hear powerful melodies, grooves and burning improv all melded together by the formidable blend of guitar and Hammond, driven by Gene's dynamic drumming. “This was a blast! Three superb players bringing the organ trio into the 21st Century.” Bebop Spoken Here “Phil Robson’s inventiveness on the guitar is unstoppable...” The Telegraph “Phil Robson's music, on a first hearing, always gives me that feeling I haven't yet heard right the way through it to the other side. Yes, there are moments of beauty, external allure, yes there is variety. But there is also a depth which brings one back wanting to revisit, to hear more and more..... unmissable!” UK Jazz News “British guitar phenomenon Phil Robson hardly needs any introduction, save that his new musical departure is realised by an organ trio offering a smorgasbord of exciting and imaginative compositions.” All About Jazz As a band leader, Phil Robson has fronted many innovative projects including: The Levy/Robson Quartet co-led with NYC saxophonist Jed Levy who release their new album in May 2026 on Livia records, The Immeasurable Code Quintet featuring US saxophone star Mark Turner, Six Strings & The Beat, Phil Robson Trio with drum legend Billy Hart and James Genus on bass as well as Quartet featuring David Liebman and Jeff Williams. For 23 years Phil also co-led the cult band Partisans which was a major influence on the European “Nu-Jazz” scene. He’s also known for his work with partner & celebrated vocalist/composer Christine Tobin. [embed]https://youtu.be/TmVVrUBlDrg[/embed]",
+      "ends_at": "2026-12-05T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Phil-Robsons-Organ-Trio.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-05T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Phil Robson's Organ Trio",
+      "url": "https://www.vortexjazz.co.uk/event/phil-robsons-organ-trio-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27795"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "london-jazz-orchestra-with-essex-youth-jazz-orchestra|2026-12-06|vortex-jazz-club",
+      "description": "Doors 3:30 PM, Music 4:00 PM About Two great bands: the London Jazz Orchestra, directed by Scott Stroman, host the award-winning young players of the Essex Youth Jazz Orchestra, directed by Martin Hathaway, for a first set. The second set features the latest from the LJO. In addition to being top performers, the members of the LJO are leading educators, teaching at all the London music colleges and for schools and education authorities around the country. Long-term LJO alto saxophonist Martin Hathaway leads his award-winning young band as they share the Vortex stage with one of the country’s finest ensembles.",
+      "ends_at": "2026-12-06T18:00:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/08/London-Jazz-Orchestra-Festival-Special.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-06T15:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "London Jazz Orchestra with the Essex Youth Jazz Orchestra",
+      "url": "https://www.vortexjazz.co.uk/event/london-jazz-orchestra-with-the-essex-youth-jazz-orchestra/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27822"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-jam-session|2026-12-06|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:15 PM House Band TBC About A weekly session on Sunday evenings, hosted by four of London’s finest: guitarist Nick Costley-White, Trumpeter Sean Gibbs, pianist Rick Simpson and tenor saxophonists and Riley Stone-Lonergan, each one hosting one session on rotation. If you’re an instrumentalist – we can’t wait to welcome you back to the club – you can attend for free if you’re planning on playing with the house band. No need to book in advance! Our dear Vortex members are also welcome to these sessions free of charge.",
+      "ends_at": "2026-12-06T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2022/08/vortex-jam.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-06T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Jam Session",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-jam-session-10-2026-09-06-2026-09-13-2026-12-06/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27478"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "miles-spilsbury|2026-12-08|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Miles Spilsbury - Tenor saxophone, Soprano Saxophone, EWI, Flute, Electronics, Synthesiser, Sampling Harvey Grant - Synthesizer, Keytar, Electronics Rosie Turton - Modular Synthesiser Jake Long - Modified Drum Kit, Percussion Cam Dawson - Bass Guitar About Miles Spilsbury makes warm & expansive music, inspired by great improvising ensembles and drawing from fusion & new age worlds. His collaborators include Carlos Niño, Puma Blue, Nate Mercereau, Surya Botofasina & Gorse Panshawe as well as playing in The Physics House Band & Spirit Level. Following on from his debut album ‘Light Manoeuvres’ and recent release ‘Spirit Level’, the multi instrumentalist & composer presents new music and improvisations with a quintet. Spilsbury holds the two sometimes contrasting approaches of pure improvisation, and carefully constructed compositions and explores both without genre constraint. With influences ranging from Jon Hassell, Don Cherry, Billy Harper, Iasos & Art Ensemble Of Chicago, the group will explore textural improvisation with experimental instrumentation. [embed]https://www.youtube.com/watch?v=T2NUpYNI73s[/embed]",
+      "ends_at": "2026-12-08T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Miles-Spilsbury-.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-08T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Miles Spilsbury",
+      "url": "https://www.vortexjazz.co.uk/event/miles-spilsbury/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27770"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "frank-carlberg-with-trinity-laban-jazz-orchestra-two-shows|2026-12-10|vortex-jazz-club",
+      "description": "Timings: *Please note each ticket will give you access to the time slot you book for. Please arrive for the door time. 1st Show Doors 7:30 PM, Music 8:00 PM – 1 set of music 2nd Show Doors 9:30 PM, Music 10:00 PM – 1 set of music Line-up: Olivia Murphy - conductor Frank Carlberg - piano Zach Sewell, Tristan Sutton, Kobie Dozier, Louis Allan-Sinclair, Milo Delcroix-Jones - reeds Tom Gaddes, Finn Hori-Öhrström, Diggory Keyse, Lara Hopper - trumpets Dylan Rennie-Carter, Misha Fox, Osk Busiri-Vici, Charlie Mellon - trombones Rufus Draper - steelpan Aleks Dimitrova - double bass Miranda Radford - drums Miila Dietz, Kora Williams - vocals About: The Trinity Laban Jazz orchestra conducted by Olivia Murphy returns to the Vortex in a new project with Frank Carlberg on piano. Frank Carlberg is a NYC-resident composer, arranger, pianist and educator whose extensive body of work ranges from small ensembles to big bands, duos to symphony orchestras. Carlberg has performed and recorded with musical giants Steve Lacy, Bob Brookmeyer, Roswell Rudd and Kenny Wheeler, and studied with Jimmy Giuffre, Paul Bley, Ran Blake, and Geri Allen. Since 1999 he is part of the jazz faculty of New England Conservatory, Boston. Furthering the legacy of his esteemed teachers, Carlberg has left an imprint on such former students as composer Nicholas Urie; pianists Vardan Ovsepian, Leo Genovese, Carmen Staaf, Julian Shore and Isaac Wilson; saxophonists Noah Preminger and Brian Landrus; bassists Kim Cass and Simon Willson; trumpeter David Adewumi, and many more. Carlberg also directs the NEC Jazz Composers’ Workshop Ensemble, allowing student composers to hear their works for large jazz orchestra realized in live performance. After moving to New York in 1992, Carlberg became enmeshed in the city’s thriving jazz and creative music scene. He became a founding member of Brooklyn’s Douglass Street Music Collective and organized the borough’s annual Gowanus Jazz Fest from 2010-2014. Meanwhile his work continued to grow in scope, garnering support from Chamber Music America’s New Works Commission Grant and French-American Collaboration Grant, as well as fellowships at MacDowell, Yaddo and the Millay Arts Residency. As leader of the Frank Carlberg Large Ensemble, Carlberg performs originals as well as arrangements and re-compositions of standards and folk materials, as heard on the 2024 release Elegy For Thelonious and its 2019 predecessor Monk Dreams, Hallucinations and Nightmares (4 1/2 and 5 stars respectively from DownBeat). With Tivoli Trio, joined by bassist John Hébert and drummer Gerald Cleaver, Carlberg plays an eclectic mix of original music drawn from cinematic and circus inspirations (“pushes the boundaries of the traditional piano trio” – Mark Corroto, All About Jazz).",
+      "ends_at": "2026-12-10T23:00:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Frank-Carlberg-with-the-Trinity-Laban-Jazz-Orchestra.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-10T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Frank Carlberg with the Trinity Laban Jazz Orchestra (Two Shows)",
+      "url": "https://www.vortexjazz.co.uk/event/frank-carlberg-with-the-trinity-laban-jazz-orchestra-two-shows/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27777"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "queer-jazz-christmas-party-jam|2026-12-11|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM Line-up: Lulu Manning Bel Comeau Arowah Rosetta About: Queer Jazz is ending the year in style by bringing together four pioneering improvisers for an incredibly special night. Expect ambient soundscapes, captivating musicianship and intimate moments. Queer Jazz, founded by Tina Edwards and Arowah, exists to platform, nurture and celebrate the emerging queer jazz scene. For this night they have assembled a very special quartet of exceptional and experimental musicians from the emerging queer jazz scene. [embed]https://www.youtube.com/watch?v=A-doAFIL9rA[/embed]",
+      "ends_at": "2026-12-11T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/11/Queer-Jazz-Christmas-Party-Jam.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-11T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Queer Jazz: Christmas Party Jam",
+      "url": "https://www.vortexjazz.co.uk/event/queer-jazz-christmas-party-jam-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27842"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mark-lockheart-shapeshifter-trio|2026-12-12|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Mark Lockheart - saxes, bass clarinet, electronics Huw V Williams - bass Jay Davis - drums and percussion About Shapeshifter is a new trio featuring three very special creative voices of the UK scene. Creating a unique sonic experience this new trio shifts moment to moment, gracefully and spontaneously stitching together sound landscapes and grooves. Taking the exploratory spirit of groups like Polar Bear and Malija the band move together through a common language of jazz, rock, classical and free improvisation exploring dark textures and dramatic musical shifts as they revel in the unexpected! Shapeshifter’s debut album was released on Vinyl and CD on March 6th 2026. All crucial musicians and composers on the UK music scene, between them Shapeshifter have played with a glittering array of artists including: Dave Holland, Django Bates, Jim Black, Kenny Wheeler, Norma Winstone, Laura Jurd, Rob Luft, Elliot Galvin, Polar Bear, Perfect Houseplants, Loose Tubes and Radiohead. [embed]https://www.youtube.com/watch?v=ShRLjHVV5ds[/embed]",
+      "ends_at": "2026-12-12T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/11/Mark-Lockheart-Shapeshifter-Trio.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-12T19:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Mark Lockheart – Shapeshifter Trio",
+      "url": "https://www.vortexjazz.co.uk/event/mark-lockheart-shapeshifter-trio-2/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27816"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-jam-session|2026-12-13|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:15 PM House Band TBC About A weekly session on Sunday evenings, hosted by four of London’s finest: guitarist Nick Costley-White, Trumpeter Sean Gibbs, pianist Rick Simpson and tenor saxophonists and Riley Stone-Lonergan, each one hosting one session on rotation. If you’re an instrumentalist – we can’t wait to welcome you back to the club – you can attend for free if you’re planning on playing with the house band. No need to book in advance! Our dear Vortex members are also welcome to these sessions free of charge.",
+      "ends_at": "2026-12-13T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2022/08/vortex-jam.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Jam Session",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-jam-session-10-2026-09-06-2026-09-13-2026-12-13/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27479"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "being-human-minar-of-dreams-album-launch|2026-12-15|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Mindaugas Stumbras - Guitar Mattia Galeotti - Drums Michelangelo Scandroglio - Double bass Fergus McCreadie - Piano About: Pan-European contemporary jazz quartet Being Human are a band built across borders. Bringing together acclaimed Lithuanian guitarist Mindaugas Stumbras, Mercury Prize-nominated Scottish pianist Fergus McCreadie, and a celebrated Tuscan rhythm section complete with Michelangelo Scandroglio (LVDF) and Mattia Galeotti, the group are united by a musical language that reaches beyond geography – folding the folk traditions of their respective homes into lyrical contemporary jazz, vivid melodic storytelling and free-flowing improvisation. Nine years in the making, their story is rooted first and foremost in friendship. Scandroglio, Galeotti and Stumbras first crossed paths at the Siena Jazz Summer Workshop in Italy, before Stumbras invited fellow Royal Conservatoire of Scotland student McCreadie into the fold. A formative Italian tour followed, setting in motion an unlikely musical relationship between four musicians living across four different countries. Through the logistical challenges of distance and the disruption of the pandemic, that connection has endured, developing across years of touring into a distinctive collective voice. Releasing on Friday 6th November via Bridge The Gap, the group’s new album ‘Minar of Dreams’ is the clearest articulation of that voice yet. Following their self-titled 2021 debut, the quartet began to question what truly defined Being Human: what should this combination of four distinct musical backgrounds sound like when distilled into one? During a drive through the Scottish Highlands, they set themselves a challenge – to compose a new body of original music that drew instinctively from their individual cultural traditions, while placing the collective ahead of any one voice. The result is colourful, intense and dreamlike: folk-rooted melodies drift through restless harmonic movement, and moments of uninhibited improvisation. [embed]https://www.youtube.com/watch?v=ckHANexUgEs&list=RDckHANexUgEs&start_radio=1[/embed]",
+      "ends_at": "2026-12-15T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Being-Human-Minar-of-Dreams-Album-Launch.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-15T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Being Human - Minar of Dreams (Album Launch)",
+      "url": "https://www.vortexjazz.co.uk/event/being-human-minar-of-dreams-album-launch/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27810"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "finn-carter-matt-carmichael-alex-hitchcock|2026-12-16|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Finn Carter - Piano Matt Carmichael - Tenor saxophone Alex Hitchcock - Tenor Saxophone About: Part of Finn Carter’s monthly residency at the Vortex, showcasing a new project each month. Matt Carmichael Heralded by BBC Music Magazine as \"a distinctive new voice in a crowded scene,\" Scottish saxophonist and composer Matt Carmichael continues to move from strength to strength and grow his reach globally with his powerfully emotive blend of melodic jazz and folk music. Born just outside of Inverness before moving to Glasgow, where, at the age of 11, he enthusiastically ran home from school clutching a letter from his local music service offering saxophone lessons. Music instantly became his passion, and he soon began writing music for his own band, performing their first gig at the Butterfly and Pig in Glasgow — before half the band were legally allowed in the pub. Since then, the band has developed a special chemistry and sound together, grounded in collective improvisation. They regularly perform internationally at venues like Bimhuis, Fasching, Celtic Connections, Ronnie Scott’s, and Love Supreme, as well as Matt working as a soloist and arranger with the Grammy Award-winning WDR Big Band and the Scottish National Jazz Orchestra. Following his critically acclaimed debut Where Will the River Flow (which amassed over 10 million streams), Carmichael signed to the renowned label Edition Records for his second album, Marram. His latest album, Dancing with Embers included collaborations with Rachel Sermanni and Brìghde Chaimbeul and was shortlisted for the multi-genre SAY awards as well as winning ‘Best Album’ in the Scottish Jazz Awards. The next one ‘Held in the Dark’ comes out October 26. Alex Hitchcock London-born Alex Hitchcock is a leading international voice on the saxophone. An Ivor Novello-nominated composer and described by The Guardian as a “virtuoso” saxophonist, his innovative collaborations have confirmed a growing reputation as a catalyst for musical encounters that continually push the envelope a little further. An awarded composer and recording artist, Hitchcock has released music as a leader on New Soil, Edition Records, Whirlwind Recordings, and Fresh Sound New Talent. Dream Band: Live in London (2023) was Jazzwise Editor’s Album of the Year. Recognition for his work includes the Peter Whittingham Award, the Conad Jazz Prize at the Umbria Jazz Festival, and selection for Sound and Music’s In Motion cohort in 2026. Working between London and New York resulted in Letters From Afar (2025), which was selected as a Stereogum and NPR Album of the Week. He arranged and performed on Jasper Høiby’s 2025 release We Must Fight, reworking the landmark Phronesis catalogue for an oud, flute, and saxophone frontline. His work has been featured by the BBC, France Musique, WDR, JazzFM, Worldwide FM, and in publications including DownBeat, MOJO, Jazzwise, Musica Jazz, Stereogum, and Uncut. He has become known for distinctive contributions in a wide variety of musical contexts. His own music is at times intense and chaotic, at others disarmingly sparse and emotionally direct, inspired by the radical tradition of Black American music. Finn Carter As we move beyond the quarter century, the London scene continues to provide a home for some of the most adventurous genre-blending sounds to be heard anywhere. Pianist/composer Finn Carter is at once right at the center of the capital’s jazz community, regularly appearing at venues like Ronnie Scott’s and The Vortex, and yet simultaneously inhabiting a space of his very own, on his own journey that encompasses working with such musically sympathetic stars of the pop world as Loyle Carner, Olivia Dean and Rex Orange County while honing his own uncompromising musical vision. Finn’s music contains echoes of his inspirations - he names Alice Coltrane, Andrew Hill and Jason Moran as favourites, but transcends influence to make its own utterly individual statement.",
+      "ends_at": "2026-12-16T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Finn-Carter-Matt-Carmichael-Alex-Hitchcock.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-16T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Finn Carter, Matt Carmichael & Alex Hitchcock",
+      "url": "https://www.vortexjazz.co.uk/event/finn-carter-matt-carmichael-alex-hitchcock/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27775"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vortex-jam-session|2026-12-20|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:15 PM House Band TBC About A weekly session on Sunday evenings, hosted by four of London’s finest: guitarist Nick Costley-White, Trumpeter Sean Gibbs, pianist Rick Simpson and tenor saxophonists and Riley Stone-Lonergan, each one hosting one session on rotation. If you’re an instrumentalist – we can’t wait to welcome you back to the club – you can attend for free if you’re planning on playing with the house band. No need to book in advance! Our dear Vortex members are also welcome to these sessions free of charge.",
+      "ends_at": "2026-12-20T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2022/08/vortex-jam.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-20T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Vortex Jam Session",
+      "url": "https://www.vortexjazz.co.uk/event/vortex-jam-session-10-2026-09-06-2026-09-13-2026-12-20/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27480"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "roella-oloro-trio|2026-12-22|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Roella Oloro - Piano, Alto Saxophone Andee Liu - Drums Rio Kai - Double bass About: Roella Oloro is a multi-instrumentalist and composer originally from Gloucester, UK with Nigerian and Jamaican Heritage. She has performed worldwide and written music in a variety of styles ranging from trio and quartet instrumentation to Jazz and Symphonic orchestra. She graduated Magna Cum Laude in May 2023 from Berklee College of Music where she studied for 4 years on a full tuition scholarship. She has also recently obtained a Master’s Degree at the Berklee Global Jazz Institute in June 2024. So far in, 2026 she has performed at a number of high profile venues in New York City and State including at the Lincoln Centre, for Jazz Forum Arts in Tarrytown, NY and debuted at the Legendary Blue Note Jazz club with high-energy British afro-jazz band \"Steamdown.\" In August 2026 she was the opening headline act of the Charles River Jazz Fest in Boston; as part of the festival's first year at the Hatch Memorial Shell- an iconic bostonian landmark come stage. In Fall 2025 she completed a US/UK tour with her trio where she performed in NY, Connecticut and Boston in the US and The Stroud Goodshed, The Royal Albert Hall, The Ned and at Templeton Gardens for Brave Poets in the UK. Early 2024 she performed with her trio and tenor saxophonist Mary Orji's band on the Bands at NAMM stages at the Hilton Hotel and the Grand Plaza. In May 2024 she went on a mini-tour to Panama with the Berklee Global Jazz Ambassadors led by Danilo Perez, pianistic prodigy, artistic director and founder of the Global Institute and Panama Jazz Festival. In 2023, Roella performed with her piano trio at the NAMM show in Anaheim, California and at Capitol Turnaround in Washington DC as a featured artist of the SHEROCKS 2023 showcase. Pianistically, she has represented Berklee's Jazz and Gender Justice Institute at the RENO JAZZ FESTIVAL, the Detroit Jazz Festival Collegiate competition, and headlined with Terri-Lyne Carrington's band as part of BAMSfest 2023. In May 2022, she won the ISJAC (International Society of Jazz Arrangers and Composers) prize for Emerging Black Composers. She traveled to Austin, Texas to accept the award and perform with the 17-piece jazz orchestra that was provided. In November 2022, Roella booked and completed a London Mini-tour with her trio from Berklee that coincided with the London Jazz Festival. The 3 biggest of the 5 show dates; The Elgar Room at the Royal Albert Hall, a Late Late Show at Ronnie Scott’s and a lunch-time show at The Pizza Express Soho were all sold out. The tour also coincided with the release of her first EP,\"Sentient Sounds.\" When she returned to the United States after her mini-tour, her original composition” La Voyage de La Rivière,” for Wind Orchestra was debuted by the Berklee Symphonic Winds Orchestra with Roella conducting at the Berklee Performance Centre during their Fall 2022 concert, “Colours.” [embed]https://youtu.be/6ynmzABbxh8?si=JuHrdj5hK4jD7qxN https://youtu.be/oahaImfMPeo https://youtu.be/-6wiscFY58s https://www.youtube.com/watch?v=VaoCWGYyykk https://www.youtube.com/live/Wu-w9dhn5rc?si=j7jDvQmk0dpciAnL[/embed]",
+      "ends_at": "2026-12-22T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/04/Roella-Oloro.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-22T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Roella Oloro Trio",
+      "url": "https://www.vortexjazz.co.uk/event/roella-oloro-trio-3/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27772"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "john-etheridge-vimala-rowe|2026-12-28|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: John Etheridge - Guitar Vimala Rowe - Vocals Pete Whittaker - Organ Ian Thomas - Drum kit About: The sensational vocalist Vimala Rowe joins guitar legend John Etheridge's Blue Spirits (Pete Whittaker (organ) and Ian Thomas (drums) for a post Christmas treat of jazz, blues and global music. Vimala and John have a long established and celebrated partnership and the Blue Spirits Trio is ever popular at the Vortex. This will be a soulful and powerful night.",
+      "ends_at": "2026-12-28T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/10/John-Etheridge-and-Vimala-Rowe.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-28T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "John Etheridge and Vimala Rowe",
+      "url": "https://www.vortexjazz.co.uk/event/john-etheridge-and-vimala-rowe-7/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27794"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ian-shaws-new-years-eve-bash|2026-12-31|vortex-jazz-club",
+      "description": "Doors 9:30 PM, Music 10:15 PM About We are delighted to welcome back the multi-award winning Ian Shaw (vocals, piano) for his traditional New Year’s Eve performance. Only on this special night at The Vortex does Shaw mix up his teen favourites (Elton, Bowie, Billy Joel, Stevie Wonder) with some legendary old blues and soul bangers. Add some seasonally satirical comedy originals, singalongs and, in the company of 'simply our finest' (Time Out), Shaw will whip up an unforgettable ‘Hello 2027’ evening.",
+      "ends_at": "2027-01-01T01:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2023/10/Ian-Shaw-NYE.jpg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-31T21:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Ian Shaw’s New Year’s Eve Bash",
+      "url": "https://www.vortexjazz.co.uk/event/ian-shaws-new-years-eve-bash-8/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27599"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "procrastinators-nye-party|2027-01-01|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Gina Boreham - Voice Piotr Jordan - Violin Paul Moylan - Double bass Zac Gvirtzman - Piano About: Please join the Procrastinators as they celebrate the New Year - as per tradition - one day late. So you can stay at home and do your first-footing, watch Jools Holland or hit your local. Then come and celebrate for real on 1st January - with great music, good company, normal prices and a countdown to midnight at a time that suits - using the special Procrastinators' Clock. Gypsy and Hotclub jazz, tango, Klezmer and some jazz standards from some of the best musos in London!",
+      "ends_at": "2027-01-01T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/09/The-Procrastinators-NYE-Party.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-01T19:45:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "The Procrastinators NYE Party",
+      "url": "https://www.vortexjazz.co.uk/event/the-procrastinators-nye-party/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27752"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "yarde-brice-ibbetson|2027-01-14|vortex-jazz-club",
+      "description": "Doors 7:45 PM, Music 8:30 PM - 2 sets of music Line-up: Peter Ibbetson - Drums Olie Brice - Double bass Jason Yarde - Alto Saxophone About The YARDE / BRICE / IBBETSON Trio is a powerhouse contemporary jazz and free improvisation group based in the UK. Bringing together three individuals of distinct musical voices, the trio creates music that is highly spontaneous, deeply emotional, and fiercely inventive. Yarde is widely regarded as one of the greatest saxophonists, composers, and music directors the UK has ever produced. He has a storied career collaborating with jazz giants like Louis Moholo, McCoy Tyner, Andrew Hill, and Jack DeJohnette. His playing is celebrated for its virtuosic scope, blending explosive energy with delicate lyricism. Brice is a premier London-based double bassist, composer, and improviser. Known for leading his own highly acclaimed groups—such as the Olie Brice Quartet—he is a vital pillar of the UK creative music scene. His authoritative tone and structural flexibility bridge the gap between heavy groove and absolute sonic freedom. A dynamic drummer, producer, and improviser, Ibbetson is a standout addition to the creative music community. Known for his elastic rhythmic concepts and texture-forward approach to the drum kit, he moves effortlessly between abstract soundscapes and driving grooves. The group notably performed at boundary-pushing music events like the Two Ship Festival (with guest Xhosa Cole) With a debut album on the horizon, previews of their studio chemistry already generating buzz on progressive radio platforms like Soho Radio and Resonance FM.",
+      "ends_at": "2027-01-14T22:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/10/Yarde-Brice-Ibbetson.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-14T19:45:00Z",
+      "tags": [
+        "jazz",
+        "experimental"
+      ],
+      "title": "Yarde / Brice / Ibbetson",
+      "url": "https://www.vortexjazz.co.uk/event/yarde-brice-ibbetson/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27818"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "calum-gourlay-big-band-celebrating-burns-night|2027-01-25|vortex-jazz-club",
+      "description": "Timings: *Please note each ticket will give you access to the time slot you book for. Please arrive for the door time. 1st Show Doors 7:00 PM, Music 7:30 PM – 1 set of music 2nd Show Doors 9:15 PM, Music 9:45 PM – 1 set of music About: Join Calum Gourlay’s big band for an unforgettable Burn’s Night celebration. Featuring a band comprised of London’s thriving Scottish jazz community, tonight’s gig includes Calum’s own musical arrangements and compositions, comprising striking new material, haunting and evocative melodies as well as reimagined jazz standards. Tickets are limited and include a nip of whiskey to toast Burns’ Immortal memory, the vibrant artistic community in London and our good health. “Here's a bottle and an honest friend! What wad ye wish for mair, man? Wha kens, before his life may end, What his share may be o' care, man. Then catch the moments as they fly, And use them as ye ought, man; Believe me, happiness is shy And comes not ay when sought, man.” A Bottle and Friend - Robert Burns [embed]https://youtu.be/6dYf-QTpvXc?si=ml4UTQ_F9RPHEOCx[/embed]",
+      "ends_at": "2027-01-25T23:30:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2025/10/Calum-Gourlay-Big-Band.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-25T19:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Calum Gourlay Big Band: Celebrating Burns Night",
+      "url": "https://www.vortexjazz.co.uk/event/calum-gourlay-big-band-celebrating-burns-night/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27789"
+  },
+  {
+    "event": {
+      "address": "11 Gillett Square, Dalston, London N16 8AZ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jure-pukl-analog-ai-two-shows|2027-02-12|vortex-jazz-club",
+      "description": "Timings: *Please note each ticket will give you access to the time slot you book for. Please arrive for the door time. 1st Show Doors 7:00 PM, Music 7:30 PM – 1 set of music 2nd Show Doors 9:30 PM, Music 10:00 PM – 1 set of music Line-up: Jure Pukl - Tenor saxophone & Soprano Saxophone John Escreet - Piano Joe Sanders - Double bass Christian Lillinger - Drum kit About: A musical imitation of analogue artificial intelligence. Broken, technically sophisticated rhythms, modern lyrical bass lines, robust saxophone sounds and unpredictable improvisation constitutes the language of this new band of old friends. Their musical expression is a response to AI, as they insist that music is still at it's most powerful, beautiful, most wild, lyrical and sensual when performed by musicians in the moment and before a live audience. After making his highly praised albums 'Broken Circles’ and ‘Melt’ (Whirlwind Recordings), Jure Pukl, one of Slovenia's most acclaimed musicians and his project Analog AI are embarking on a tour to present the material from their forthcoming album.",
+      "ends_at": "2027-02-12T23:15:00Z",
+      "image_url": "https://www.vortexjazz.co.uk/wp-content/uploads/2026/11/Jure-Pukl-ANALOG-AI.jpeg",
+      "lat": 51.5487082,
+      "lng": -0.0764992,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-12T19:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Jure Pukl - ANALOG AI (Two Shows)",
+      "url": "https://www.vortexjazz.co.uk/event/jure-pukl-analog-ai/",
+      "venue_name": "Vortex Jazz Club"
+    },
+    "source_event_id": "27840"
+  }
+]

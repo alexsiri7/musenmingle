@@ -32,6 +32,7 @@ pub mod horse_hospital;
 pub mod hunterian_museum;
 pub mod ibraaz;
 pub mod ica;
+mod ical;
 pub mod jsonld;
 pub mod lisson_gallery;
 pub mod london_review_bookshop;
@@ -51,6 +52,7 @@ pub mod the_showroom;
 pub mod ticketmaster;
 pub mod two_temple_place;
 pub mod vam;
+pub mod vortex_jazz_club;
 pub mod wellcome_collection;
 pub mod whitechapel_gallery;
 pub mod william_morris_gallery;
@@ -212,6 +214,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         )),
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
         vam::KEY => Ok(Box::new(vam::Vam::new(base))),
+        vortex_jazz_club::KEY => Ok(Box::new(vortex_jazz_club::VortexJazzClub::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }
 }
