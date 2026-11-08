@@ -3251,12 +3251,12 @@ pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport>
     .await?
     .rows_affected();
     // `strict` keeps `$.**` from unwrapping arrays into duplicate items.
+    // Only length is checked here: `excerpt_raw` alone decides what is text.
     let long_raw: Vec<(i64, String, serde_json::Value)> = sqlx::query_as(
         "SELECT es.source_id, es.source_event_id, es.raw FROM events.event_sources es
          WHERE EXISTS (SELECT 1 FROM jsonb_path_query(es.raw, 'strict $.**') v
                        WHERE jsonb_typeof(v) = 'string'
-                         AND char_length(v #>> '{}') > $1
-                         AND (v #>> '{}') ~ '[[:space:]]')",
+                         AND char_length(v #>> '{}') > $1)",
     )
     .bind(i32::try_from(crate::normalise::EXCERPT_MAX_CHARS).unwrap_or(i32::MAX))
     .fetch_all(pool)

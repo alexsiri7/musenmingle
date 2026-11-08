@@ -245,7 +245,14 @@ async fn enforce_content_policy_cleans_existing_rows() {
         .await
         .unwrap();
     // A pre-#211 raw payload holding the full text, written directly.
-    let full_raw = serde_json::json!({ "id": "l", "detail": { "body": long } });
+    // Its dates are joined by no-break spaces only, and its long link has
+    // no whitespace at all (kept whole).
+    let nbsp_long = "Friday\u{a0}12\u{a0}December\u{a0}".repeat(20);
+    let long_url = format!("https://strict.test/{}", "x".repeat(400));
+    let full_raw = serde_json::json!({
+        "id": "l",
+        "detail": { "body": long, "dates": nbsp_long, "url": long_url },
+    });
     sqlx::query("UPDATE events.event_sources SET raw = $2 WHERE source_event_id = $1")
         .bind("l")
         .bind(&full_raw)
@@ -267,6 +274,11 @@ async fn enforce_content_policy_cleans_existing_rows() {
             .await
             .unwrap();
     assert_eq!(stored_raw, repo::excerpt_raw(&full_raw));
+    assert_eq!(
+        stored_raw["detail"]["dates"],
+        musenmingle::normalise::excerpt(&nbsp_long)
+    );
+    assert_eq!(stored_raw["detail"]["url"], long_url);
     assert_eq!(
         repo::enforce_content_policy(&pool).await.unwrap(),
         repo::PolicyReport::default()
