@@ -13,6 +13,10 @@ use crate::sources::Source;
 const SOURCE_FILES: &[(&str, &str)] = &[
     ("artlogic", include_str!("../sources/artlogic.rs")),
     ("barbican", include_str!("../sources/barbican.rs")),
+    (
+        "blackheath_halls",
+        include_str!("../sources/blackheath_halls.rs"),
+    ),
     ("cafe_oto", include_str!("../sources/cafe_oto.rs")),
     (
         "camden_art_centre",

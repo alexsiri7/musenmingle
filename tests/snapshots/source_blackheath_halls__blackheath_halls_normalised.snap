@@ -1,0 +1,1874 @@
+---
+source: tests/source_blackheath_halls.rs
+expression: out
+---
+[
+  {
+    "date_text": "Mon 9 Nov, 10am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "music-appreciation-roaring-twenties|2026-11-09|blackheath-halls",
+      "description": "The Roaring Twenties: A New Music for a New Age The 1920s tore up the rulebook. Gone were the shadowed, pre-war streets of Vienna and the seismic shock of Stravinsky’s Rite of Spring. In their place came something lighter, sharper, and altogether more fun, an exuberant spirit that swept far beyond the Charleston-crazed dance halls of America to sweep across Europe entire, from Walton and Bliss in England to Nielsen in Denmark, Sibelius in Finland, and Janáček in Czechoslovakia. This was the age of neo: Neo-Classicism and Neo-Romanticism, composers looking back even as they raced forward, Stravinsky chief among them. In Vienna, Berg pushed music in a starker, more radical direction with Wozzeck, while Paris found its own answer in Les Six, among them Poulenc, Milhaud and Honegger, mischievous, irreverent, in love with jazz and cabaret as much as the concert hall. Meanwhile Gershwin and Copland gave the decade its American voice, and Bartók and Kodály its Hungarian one. But the party couldn’t last forever. When the Wall Street Crash brought the decade crashing down, music grew serious again, its playful energy sobered by hard times ahead. All lectures take place at Blackheath Halls on a Monday, 10am, unless otherwise stated Sep 21 & 28 Morden College, SE3 0PW Oct 5, 12 & 19 Nov 2, 9, 16, 23 Nov 30 Morden College, SE3 0PW Dec 7 The Roaring Twenties Weekly Programme Course Fee: £170 (£17 per lecture) Further details and to book: Richard Perks 07957749438 or email rfperks@gmail.com",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/09/Music-Appreciation-The-Roaring-Twenties-394-x-220-px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "170",
+        "min": "17"
+      },
+      "starts_at": "2026-11-09T10:00:00Z",
+      "tags": [
+        "music",
+        "talks"
+      ],
+      "title": "Music Appreciation: The Roaring Twenties",
+      "url": "https://www.blackheathhalls.com/whats-on/music-appreciation-the-roaring-twenties-5/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "music-appreciation-the-roaring-twenties-5",
+    "types": [
+      "Music",
+      "Talks"
+    ]
+  },
+  {
+    "date_text": "Mon 9 Nov, 1.10pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lunchtime-recital-blaze-ensemble-26|2026-11-09|blackheath-halls",
+      "description": "Programme Adrian Sutton ‘Montana Peaks’ Dectet Charles Villiers Stanford Serenade in F Major Bohuslav Martinu Nonet H.374 Blaze Ensemble return for another engaging Lunchtime Recital. The group are a London based chamber ensemble, with performances range from works for small wind and string ensemble to chamber orchestra. In addition to performing staples from their ensemble repertoire, Blaze Ensemble has commissioned new works from the UK’s most established contemporary composers, and for this recital, will include a piece written especially for them by British composer, Adrian Sutton who lived in Blackheath.",
+      "ends_at": "2026-11-09T14:10:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2025/12/Blaze-Ensemble-394-x-220.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-11-09T13:10:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Lunchtime Recital: Blaze Ensemble 26",
+      "url": "https://www.blackheathhalls.com/whats-on/lunchtime-recital-blaze-ensemble-26/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lunchtime-recital-blaze-ensemble-26",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Wed 11 Nov, 7.00pm",
+    "event": null,
+    "source_event_id": "lifem26-festival-pass-wed-11th-sat-14th-nov",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Wed 11 Nov, 7.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-ensemble-inventio|2026-11-11|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/EnsembleInventio-16.9-Web-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T19:00:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Ensemble Inventio",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-ensemble-inventio/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-ensemble-inventio",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-2-day-pass-thu-fri",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-3-day-pass-thu-fri-sat",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-festival-day-pass",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-day-pass",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 9.30am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "lifem26-exhibition-only|2026-11-12|blackheath-halls",
+      "description": "The annual exhibition in Blackheath Halls is a fabulous showcase of all things early music, and an important marketplace attracting attendees from around the UK and the world. Makers and exhibitors are at the very beating heart of the festival, contributing to the legacy of early music exhibitions in London spanning over half a century. Established brands come together with highly respected individual makers, publishers, early music organisations, and more to create a vibrant atmosphere in the Great Hall. The exhibition is a popular destination for professionals, students, and enthusiasts alike. This year, for the first time, entry to the exhibition is free to all. Why not upgrade your ticket to the Exhibition Plus pass ? This gives you access to the Makers’ Demonstrations, Performers’ Platforms, Early Music Young Ensemble Competition, and our range of talks, presentations, and fringe events.",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Exhibition-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-12T09:30:00Z",
+      "tags": [
+        "exhibition",
+        "music"
+      ],
+      "title": "LIFEM26: Exhibition Only",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-exhibition-only/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-exhibition-only",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 2.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-nigel-north|2026-11-12|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/NigelNorth-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-12T14:00:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Nigel North",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-nigel-north/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-nigel-north",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 12 Nov, 7.30pm",
+    "event": {
+      "address": "St Michael & All Angels Church, London, SE3 9JL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-phantasm-elizabeth-kenny|2026-11-12|st-michael-all-angels-church",
+      "description": "Phantasm was founded in 1994 by Laurence Dreyfus and catapulted into international prominence when its debut CD of works by Henry Purcell won a Gramophone Award for the Best Baroque Instrumental Recording of 1997. Phantasm’s 20 recordings have won consistent praise and numerous awards including further Gramophone Awards – for Orlando Gibbons (2004) and John Dowland’s Lachrimae (2017), Diapason d’Or for William Byrd and the Chamber Music Prize from Limelight Magazine (Australia) for Lawes Royal Consort. The consort has travelled the world over, performing in major festivals and concert series. Elizabeth Kenny is one of Europe’s leading lute players. She has devised several critically acclaimed recordings of solo music from the ML Lute Book. Her most recent solo recording, Ars Longa (Linn Records) was nominated for the BBC Music Magazine Solo Instrumental recording of the year 2019. In 2017 Shakespeare Songs with Ian Bostridge and co-collaborators won the Grammy best solo vocal recital. Kenny has been professor of Lute at the Royal Academy of Music since 1999, and Dean of Students since 2020. At LIFEM 2026, Phantasm and Elizabeth Kenny reunite to perform their award-winning interpretation of Dowland’s Lachrimae or Seven Tears in the composer’s anniversary year. Their recording of this programme won two major Early Music awards: the 2017 Gramophone Award and the 2017 Diapason d’or de l’année. It was also named a BBC Radio 3 Building A Library ‘First Choice’. Summing up the Renaissance preoccupation with melancholy, this extraordinary collection of dance music for viols and lute includes Dowland’s ‘signature’ piece, Semper Dowland Semper Dolens. Dowland reveals a personal world of sublime sadness, grief, anger and melancholy mollified by moments of joy and gladness. Although freed from lyric constraints poetic images linger prompting Phantasm’s Laurence Dreyfus to describe this as “the most sensuously tuneful hour of music ever written”. “This song-based music is of a nature that, once it grips you, it’s unlikely ever to let go, especially in a performance as finely balanced as this.” – The Irish Times ***** Laurence Dreyfus treble viol Emilia Benjamin treble & tenor viols Jonathan Manson tenor viol Heidi Gröger viola da gamba Markku Luolajan-Mikkola bass viol Elizabeth Kenny lute This concert is included in the LIFEM Festival Pass and LIFEM Thursday Day Pass.",
+      "ends_at": "2026-11-12T21:30:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/PhantasmLizKenny-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "35",
+        "min": "25"
+      },
+      "starts_at": "2026-11-12T19:30:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Phantasm & Elizabeth Kenny",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-phantasm-elizabeth-kenny/",
+      "venue_name": "St Michael & All Angels Church"
+    },
+    "source_event_id": "lifem26-phantasm-elizabeth-kenny",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 9.30am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "lifem26-exhibition-only|2026-11-13|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Exhibition-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T09:30:00Z",
+      "tags": [
+        "exhibition",
+        "music"
+      ],
+      "title": "LIFEM26: Exhibition Only",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-exhibition-only-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-exhibition-only-2",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-2-day-pass-fri-sat",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-day-pass-2",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-festival-day-pass-2",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 1.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-eun-sol-lee|2026-11-13|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/EunSolLee-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T13:00:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Eun Sol Lee",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-eun-sol-lee/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-eun-sol-lee",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 2.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-early-music-young-ensemble-competition-final|2026-11-13|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Competition-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T14:30:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Early Music Young Ensemble Competition Final",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-early-music-young-ensemble-competition-final/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-early-music-young-ensemble-competition-final",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 13 Nov, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-lartefice|2026-11-13|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/LArtefice-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T19:30:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: L’Artefice",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-lartefice/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-lartefice",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-exhibition-plus-day-pass-3",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 9.30am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "lifem26-exhibition-only|2026-11-14|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Exhibition-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T09:30:00Z",
+      "tags": [
+        "exhibition",
+        "music"
+      ],
+      "title": "LIFEM26: Exhibition Only",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-exhibition-only-3/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-exhibition-only-3",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 9.30am",
+    "event": null,
+    "source_event_id": "lifem26-festival-day-pass-3",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 11.00am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-family-concert-wrong-recorder|2026-11-14|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/10/WallaceGromit-16.9.webp",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T11:00:00Z",
+      "tags": [
+        "exhibition",
+        "family",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Family Concert ‘The Wrong Recorder’",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-family-concert-the-wrong-recorder/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-family-concert-the-wrong-recorder",
+    "types": [
+      "Exhibition",
+      "Family",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 3.00pm",
+    "event": {
+      "address": "St Michael & All Angels Church, London, SE3 9JL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-festival-evensong|2026-11-14|st-michael-all-angels-church",
+      "description": "Join us for the annual LIFEM Festival Evensong in St Michael & All Angels Church, which this year features a return appearance from the Parish Choir of All Saints Church, Fulham under the direction of Jonathan Wikeley. The service will be led by the Reverend Trevor Kemp. Admission to the service is free and there is no need to book tickets for this event – all welcome. The choir is a semi-professional ensemble that performs an exciting and eclectic range of music to a very high standard. Many members of the choir are young professionals who have enjoyed singing in college and university choirs and who wish to keep singing to a similar standard while working or studying in London. Beyond the regular service schedule, the choir tours regularly to cathedrals in the UK (in recent years York, Southwell, Salisbury, Ely, Lincoln, Bury St Edmunds, Wells, Worcester, Norwich, Truro and St David’s) and abroad (Cologne, Bonn, northern France and southern Ireland). Other highlights include a termly ‘Three Choirs Evensong’ series, a rotating fixture between All Saints; St Luke’s, Chelsea; and St Matthew’s, Kensington. All Saints Choir organises regular workshops, most recently an early workshop with Stile Antico, and with Andrew Nethsingha (Westminster Abbey), David Hill (BBC Singers, Bach Choir), Martin Neary (Westminster Abbey) and Stephen Jackson. The choir has sung for a number of broadcasts, singing live on BBC1 for the Christmas Day Eucharist, and live on Radio 4 for the Palm Sunday ‘Sunday Worship’ programme. Further details of the order of service will be announced soon.",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Evensong-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-14T15:00:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Festival Evensong",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-festival-evensong/",
+      "venue_name": "St Michael & All Angels Church"
+    },
+    "source_event_id": "lifem26-festival-evensong",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 14 Nov, 6.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lifem26-erik-bosgraaf-baltic-baroque-orchestra|2026-11-14|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/ErikBosgraaf-16.9-Web.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T18:00:00Z",
+      "tags": [
+        "exhibition",
+        "music",
+        "classical"
+      ],
+      "title": "LIFEM26: Erik Bosgraaf & Baltic Baroque Orchestra",
+      "url": "https://www.blackheathhalls.com/whats-on/lifem26-erik-bosgraaf-baltic-baroque-orchestra/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lifem26-erik-bosgraaf-baltic-baroque-orchestra",
+    "types": [
+      "Exhibition",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 15 Nov, 10.30am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "blackheath-christmas-fair|2026-11-15|blackheath-halls",
+      "description": "Join us for our biggest and best Age Exchange Christmas Fair yet! This year we’re bringing you more stalls, more gifts, more festive fun, and more activities for children and families. Browse a fantastic range of handmade crafts, Christmas gifts, books, treats, and festive goodies while supporting your local charity. Our Café will be open throughout the day, serving delicious seasonal refreshments, cakes, and light lunches. Highlights include: More local artisan and community stalls Children’s activities and festive fun Charity Christmas cards now on sale Books, gifts, decorations, and stocking fillers Festive refreshments in our café Raffle and seasonal surprises Come along, soak up the Christmas atmosphere, and support the work of Age Exchange in your community. Everyone is welcome! £3 entry / U16s Free – all proceeds support Age Exchange, their Creative Dementia programme & Blackheath Community Library age-exchange.org.uk Charity No. 326 899",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/10/BH-Halls-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "3",
+        "min": "3"
+      },
+      "starts_at": "2026-11-15T10:30:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "Blackheath Christmas Fair",
+      "url": "https://www.blackheathhalls.com/whats-on/blackheath-christmas-fair-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "blackheath-christmas-fair-2",
+    "types": [
+      "Exhibition"
+    ]
+  },
+  {
+    "date_text": "Mon 16 Nov, 10am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "music-appreciation-roaring-twenties|2026-11-16|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/09/Music-Appreciation-The-Roaring-Twenties-394-x-220-px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-16T10:00:00Z",
+      "tags": [
+        "music",
+        "talks"
+      ],
+      "title": "Music Appreciation: The Roaring Twenties",
+      "url": "https://www.blackheathhalls.com/whats-on/music-appreciation-the-roaring-twenties-6/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "music-appreciation-the-roaring-twenties-6",
+    "types": [
+      "Music",
+      "Talks"
+    ]
+  },
+  {
+    "date_text": "Tue 17 Nov, 7.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "evening-with-sarah-raven-adam-nicolson|2026-11-17|blackheath-halls",
+      "description": "Join Sarah Raven and Adam Nicolson for a rare evening together, sharing the inside story of two remarkable gardens – Sissinghurst Castle and Perch Hill – and the family, ideas and history that connect them. Adam grew up at Sissinghurst with his grandparents, Vita Sackville-West and Harold Nicolson. Vita was a celebrated writer and the creative force behind one of England’s most influential gardens; Harold an MP and writer who gave the garden its enduring structure. Adam and Sarah returned to Sissinghurst in 2004 with their young family, while just a few miles away Sarah continued to create the world-famous garden at Perch Hill. Together, Sarah and Adam will explore these two very different places: Sissinghurst, steeped in memory and nostalgia, and Perch Hill, colourful, experimental and always looking forward. Through their personal stories, you’ll discover how each garden has evolved, the people and ideas that have shaped them, and what gardens can give us in return. There will be a Sarah Raven pop-up shop, book signing and Q&A. Duration: 110 minutes including an interval",
+      "ends_at": "2026-11-17T20:30:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/09/2026-394x220px-SR-AN-Blackheath-Halls.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "29",
+        "min": "29"
+      },
+      "starts_at": "2026-11-17T19:00:00Z",
+      "tags": [
+        "talks"
+      ],
+      "title": "An Evening With Sarah Raven & Adam Nicolson",
+      "url": "https://www.blackheathhalls.com/whats-on/an-evening-with-sarah-raven-adam-nicolson/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "an-evening-with-sarah-raven-adam-nicolson",
+    "types": [
+      "Talks"
+    ]
+  },
+  {
+    "date_text": "Wed 18 Nov 7.30pm (first session)",
+    "event": null,
+    "source_event_id": "blackheath-goes-gospel-advanced-choir-course-2026",
+    "types": [
+      "Take Part"
+    ]
+  },
+  {
+    "date_text": "Thu 19 Nov, 8.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "emma-smith-evening-of-swing-celebration|2026-11-19|blackheath-halls",
+      "description": "Peter Conway Promotions and Blackheath Halls present: Emma Smith – part of the EFG London Jazz Festival Experience one of the UK’s most captivating jazz performers as award-winning vocalist Emma Smith takes to the stage at Blackheath Halls for the first time. Celebrated for her rich, expressive voice and magnetic stage presence, Emma has become one of the leading names in contemporary jazz. Whether performing intimate ballads or exhilarating swing, she brings warmth, wit and extraordinary musicianship to every performance. Having appeared everywhere from the Royal Albert Hall to some of the world’s most iconic jazz clubs, Emma has shared the stage with artists including Michael Bublé, Jeff Goldblum, the Quincy Jones Orchestra and the Royal Philharmonic Orchestra. She is also a familiar face at legendary venues such as Ronnie Scott’s in London, Birdland in New York and Blue Note Milano, where her performances regularly sell out. Born into a family of jazz musicians, Emma’s love of the genre runs deep. Inspired by her grandfather, who performed alongside Frank Sinatra, Sammy Davis Jr. and Oscar Peterson, she combines a profound respect for the jazz tradition with a fresh, contemporary approach that has won audiences around the world. Her accolades include the Parliamentary Jazz Award for Jazz Vocalist of the Year and J azz Act of the Year at the Jools Holland Boisdale Music Awards. Alongside her acclaimed solo career, Emma has enjoyed the widespread success of her long-established vocal harmony group The Puppini Sisters and spent four years as a broadcaster on BBC Radio 3. Her most recent album Bitter Orange (released July 2025) met with widespread critical acclaim and multi-million streams. Expect an unforgettable evening of outstanding vocals, heartfelt interpretations and effortless swing from one of British jazz’s brightest stars. Whether you’re a lifelong jazz lover or discovering the genre for the first time, this promises to be a fantastic event. Sam Watts Piano Jack Tustin Double Bass Luke Tomlinson Drums part of the EFG London Jazz Festival",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Emma-smith-394-x-220-px-1.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "50",
+        "min": "30"
+      },
+      "starts_at": "2026-11-19T20:00:00Z",
+      "tags": [
+        "jazz",
+        "music"
+      ],
+      "title": "Emma Smith: An Evening of Swing and Celebration",
+      "url": "https://www.blackheathhalls.com/whats-on/emma-smith/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "emma-smith",
+    "types": [
+      "Jazz",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Fri 20 Nov, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "trinity-laban-string-ensemble-leon-bosch-marking-50-years-since-soweto-uprising|2026-11-20|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/juno-snowdon-photography-100_300dpi-394px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T19:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Trinity Laban String Ensemble and Leon Bosch: Marking 50 years since the Soweto Uprising",
+      "url": "https://www.blackheathhalls.com/whats-on/trinity-laban-string-ensemble-and-leon-bosch-marking-50-years-since-the-soweto-uprising/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "trinity-laban-string-ensemble-and-leon-bosch-marking-50-years-since-the-soweto-uprising",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 21 Nov, 11.00am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "blackheath-vintage-furniture-flea-market|2026-11-21|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://system.spektrix.com/blackheathhalls/files/721fe9f0-b239-4dab-9308-89e901cb6ac6.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-21T11:00:00Z",
+      "tags": [
+        "exhibition"
+      ],
+      "title": "The Blackheath Vintage Furniture & Flea Market",
+      "url": "https://www.blackheathhalls.com/whats-on/the-blackheath-vintage-furniture-flea-market/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "the-blackheath-vintage-furniture-flea-market",
+    "types": [
+      "Exhibition"
+    ]
+  },
+  {
+    "date_text": "Sat 21 Nov, 6.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "masters-of-melody-mohan-brothers-with-harkiret-singh|2026-11-21|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Lakshay-Mohan-Aayush-Mohan-Karkiret-Singh.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-21T18:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Masters of Melody:The Mohan Brothers with Harkiret Singh",
+      "url": "https://www.blackheathhalls.com/whats-on/masters-of-melody-the-mohan-brothers-with-harkiret-singh/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "masters-of-melody-the-mohan-brothers-with-harkiret-singh",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 22 Nov, 4.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "billy-kid-family-concert|2026-11-22|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/09/Billy-The-Kid-Family-Concert-Digital-Board-394-x-220-px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T16:30:00Z",
+      "tags": [
+        "family",
+        "music",
+        "classical"
+      ],
+      "title": "Billy The Kid Family Concert",
+      "url": "https://www.blackheathhalls.com/whats-on/billy-the-kid-family-concert/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "billy-the-kid-family-concert",
+    "types": [
+      "Family",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 22 Nov, 7.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "coplands-billy-kid-performance|2026-11-22|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/09/Billy-The-Kid-Evening-Concert-394px-x-220px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T19:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Copland’s Billy The Kid Performance",
+      "url": "https://www.blackheathhalls.com/whats-on/coplands-billy-the-kid-performance/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "coplands-billy-the-kid-performance",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Mon 23 Nov, 1.10pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lunchtime-recital-eva-doroszkowska|2026-11-23|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Eva-Doroszkowska-website-image-394-x-220-px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-23T13:10:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Lunchtime Recital: Eva Doroszkowska",
+      "url": "https://www.blackheathhalls.com/whats-on/lunchtime-recital-eva-doroszkowska/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lunchtime-recital-eva-doroszkowska",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Mon 23 Nov, 6.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "turning-of-year-2026|2026-11-23|blackheath-halls",
+      "description": "This event is SOLD OUT. We will not be running a waiting list but please keep checking the website for returns. This November, Turning of the Year returns with three captivating evenings of song, featuring performances by Lewisham schools in collaboration with Lewisham Music. Running Time: approx. 75 mins N.B. All audience members, including siblings of performers, need a ticket. Children under two can enter for free but must sit on laps and buggies must be left in the foyer",
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2022/10/Turning-of-the-year-720-x-520.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "9.50",
+        "min": "9.50"
+      },
+      "starts_at": "2026-11-23T18:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Turning of The Year 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/turning-of-the-year-2026/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "turning-of-the-year-2026",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Tue 24 Nov, 7pm - SOLD OUT",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "turning-of-year-2026|2026-11-24|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2022/10/Turning-of-the-year-720-x-520.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-24T19:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Turning of The Year 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/turning-of-the-year-2026-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "turning-of-the-year-2026-2",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Wed 25 Nov, 7pm - SOLD OUT",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "turning-of-year-2026|2026-11-25|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2022/10/Turning-of-the-year-720-x-520.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-25T19:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Turning of The Year 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/turning-of-the-year-2026-3/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "turning-of-the-year-2026-3",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 28 Nov, 1pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "junior-trinity-winter-concert|2026-11-28|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/Junior-trinity-394-x-220-px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-28T13:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Junior Trinity Winter Concert",
+      "url": "https://www.blackheathhalls.com/whats-on/junior-trinity-winter-concert/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "junior-trinity-winter-concert",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 28 Nov, 7pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "junior-trinity-winter-concert|2026-11-28|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/Junior-trinity-394-x-220-px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-28T19:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Junior Trinity Winter Concert",
+      "url": "https://www.blackheathhalls.com/whats-on/junior-trinity-winter-concert-3/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "junior-trinity-winter-concert-3",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 29 Nov, 1.30pm",
+    "event": null,
+    "source_event_id": "a-festive-family-sing-a-long-2026",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 29 Nov, 4pm",
+    "event": null,
+    "source_event_id": "a-festive-family-sing-a-long-2026-2",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Mon 30 Nov, 7.30pm",
+    "event": null,
+    "source_event_id": "blackheath-halls-orchestra-christmas-concert-2026-course",
+    "types": [
+      "Take Part"
+    ]
+  },
+  {
+    "date_text": "Wed 2 Dec, 7pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "trinity-laban-opera-scenes-winter-2026|2026-12-02|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/TL-LEnfant-Cast-2-Print0027-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T19:00:00Z",
+      "tags": [
+        "music",
+        "opera",
+        "classical"
+      ],
+      "title": "Trinity Laban Opera Scenes Winter 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/trinity-laban-opera-scenes-winter-2026/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "trinity-laban-opera-scenes-winter-2026",
+    "types": [
+      "Music",
+      "Opera"
+    ]
+  },
+  {
+    "date_text": "Thu 3 Dec, 6.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "side-by-side-with-london-mozart-players|2026-12-03|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/Symphony_Orchestra_25_EK_hi-res_APPROVED_023.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-03T18:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Side by Side with the London Mozart Players",
+      "url": "https://www.blackheathhalls.com/whats-on/side-by-side-with-the-london-mozart-players/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "side-by-side-with-the-london-mozart-players",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 3 Dec, 7pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "trinity-laban-opera-scenes-winter-2026|2026-12-03|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/TL-LEnfant-Cast-2-Print0027-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-03T19:00:00Z",
+      "tags": [
+        "music",
+        "opera",
+        "classical"
+      ],
+      "title": "Trinity Laban Opera Scenes Winter 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/trinity-laban-opera-scenes-winter-2026-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "trinity-laban-opera-scenes-winter-2026-2",
+    "types": [
+      "Music",
+      "Opera"
+    ]
+  },
+  {
+    "date_text": "Fri 4 Dec, 7pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "trinity-laban-opera-scenes-winter-2026|2026-12-04|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/TL-LEnfant-Cast-2-Print0027-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-04T19:00:00Z",
+      "tags": [
+        "music",
+        "opera",
+        "classical"
+      ],
+      "title": "Trinity Laban Opera Scenes Winter 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/trinity-laban-opera-scenes-winter-2026-3/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "trinity-laban-opera-scenes-winter-2026-3",
+    "types": [
+      "Music",
+      "Opera"
+    ]
+  },
+  {
+    "date_text": "Fri 4 Dec, 8.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "shez-raja-featuring-guthrie-govan-dennis-rollins|2026-12-04|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/Shez-Guthrie-Dennis-collage-394px.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-04T20:00:00Z",
+      "tags": [
+        "jazz",
+        "music"
+      ],
+      "title": "Shez Raja featuring Guthrie Govan & Dennis Rollins",
+      "url": "https://www.blackheathhalls.com/whats-on/shez-raja-featuring-guthrie-govan/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "shez-raja-featuring-guthrie-govan",
+    "types": [
+      "Jazz",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 5 Dec, 7.30pm",
+    "event": null,
+    "source_event_id": "havent-stopped-dancing-yet-xmas-2026",
+    "types": [
+      "Dance"
+    ]
+  },
+  {
+    "date_text": "Sun 6 Dec 2026, 2.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "green-matthews-midwinter-revels|2026-12-06|blackheath-halls",
+      "description": "Spanning several centuries, GreenMatthews’ Midwinter Revels is a celebration of Yuletide Past guaranteed to warm the cockles of the most Scrooge-like heart. Featuring Christmas carols, winter folk songs, toetapping tunes and a plethora of weird and wonderful instruments, the show is brought to life with Green Matthews’ trademark wit and humour.",
+      "ends_at": "2026-12-06T16:00:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2025/12/Green-Matthews-Midwinter-394-x-220-px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "15"
+      },
+      "starts_at": "2026-12-06T14:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Green Matthews: Midwinter Revels",
+      "url": "https://www.blackheathhalls.com/whats-on/green-matthews-midwinter-revels/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "green-matthews-midwinter-revels",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 12 Dec, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "blackheath-goes-gospel-2026-performance|2026-12-12|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/2025-12-13-Blackheath-Goes-Gospel_Colour-394px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-12T19:30:00Z",
+      "tags": [
+        "music"
+      ],
+      "title": "Blackheath Goes Gospel 2026: Performance",
+      "url": "https://www.blackheathhalls.com/whats-on/blackheath-goes-gospel-2026-performance/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "blackheath-goes-gospel-2026-performance",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 13 Dec, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "blackheath-halls-christmas-concert-2026|2026-12-13|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2024/07/ChristmasConcert-394-x-220.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T19:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Blackheath Halls Christmas Concert 2026",
+      "url": "https://www.blackheathhalls.com/whats-on/blackheath-halls-christmas-concert-2026/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "blackheath-halls-christmas-concert-2026",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Mon 14 Dec, 1.10pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lunchtime-recital-sara-trickey-daniel-tong|2026-12-14|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2024/12/Sara-Trickey-Dan-Tong-7044-Edit-1-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-14T13:10:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Lunchtime Recital: Sara Trickey & Daniel Tong",
+      "url": "https://www.blackheathhalls.com/whats-on/lunchtime-recital-sara-trickey-daniel-tong-3/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lunchtime-recital-sara-trickey-daniel-tong-3",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Mon 14 Dec, 7.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "matthew-rose-friends|2026-12-14|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/10/Matthew-Rose-and-Friends-394-x-220-px-1.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-14T19:00:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Matthew Rose & Friends",
+      "url": "https://www.blackheathhalls.com/whats-on/matthew-rose-friends/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "matthew-rose-friends",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 17 Dec, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jazzy-christmas-with-jo-harrop|2026-12-17|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/A-Jazzy-Christmas-394-x-220-px-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-17T19:30:00Z",
+      "tags": [
+        "jazz",
+        "music"
+      ],
+      "title": "A Jazzy Christmas with Jo Harrop",
+      "url": "https://www.blackheathhalls.com/whats-on/a-jazzy-christmas/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "a-jazzy-christmas",
+    "types": [
+      "Jazz",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Tue 22 Dec, 1.30pm",
+    "event": null,
+    "source_event_id": "the-nutcracker-2026",
+    "types": [
+      "Dance",
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Tue 22 Dec, 4pm",
+    "event": null,
+    "source_event_id": "the-nutcracker-2026-2",
+    "types": [
+      "Dance",
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Wed 23 Dec, 11am",
+    "event": null,
+    "source_event_id": "the-nutcracker-2026-3",
+    "types": [
+      "Dance",
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Wed 23 Dec, 1.30pm",
+    "event": null,
+    "source_event_id": "the-nutcracker-2026-4",
+    "types": [
+      "Dance",
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sat 30 Jan, 6.30pm SOLD OUT",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "burns-night-2027|2027-01-30|blackheath-halls",
+      "description": "This event has SOLD OUT. Please contact the Box Office to be added to the waiting list. Raise a glass to poet Robert Burns and join us for a night of ceilidh dancing, live music and fabulous food. We’ve brought together some of Blackheath Village’s finest: Hand Made Food, Ellis Butchers, Rockpool Fishmongers, Mons Cheesemongers, Everest Inn and Boulangerie Jade to lay on a feast fit for a Bard. Squinty McGinty’s Band will get toes tapping with live music and a rousing ceilidh. Kilts optional, good spirits guaranteed! Booking Information You can book either an entire table for 10 people or individual seats. Please note that Tables 1,2, 8 and 9 will be removed for the ceilidh. There will be some additional seating available if you would rather watch than dance! If you would like to be seated with specific people, please book all tickets together in a single transaction. Unfortunately, we cannot guarantee seating together for separately booked tickets. To accommodate all guests, we may occasionally need to rearrange table allocations. If this affects your booking, we will contact you in advance to let you know. Sponsored by",
+      "ends_at": "2027-01-30T23:00:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/08/Burns-Night-Leaflet-394-x-220-px-1.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "75",
+        "min": "40"
+      },
+      "starts_at": "2027-01-30T18:30:00Z",
+      "tags": [
+        "dance",
+        "music",
+        "classical"
+      ],
+      "title": "Burns Night 2027",
+      "url": "https://www.blackheathhalls.com/whats-on/burns-night-2027/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "burns-night-2027",
+    "types": [
+      "Dance",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 31 Jan, 12.00pm",
+    "event": null,
+    "source_event_id": "the-littlest-yak",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 31 Jan, 3pm",
+    "event": null,
+    "source_event_id": "the-littlest-yak-2",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Mon 1 Feb, 1.10pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lunchtime-recital-st-jamess-chamber-orchestra|2027-02-01|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/St-Jamess-Chamber-Orchestra-394-x-220.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-01T13:10:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Lunchtime Recital: St James’s Chamber Orchestra",
+      "url": "https://www.blackheathhalls.com/whats-on/lunchtime-recital-st-jamess-chamber-orchestra-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "lunchtime-recital-st-jamess-chamber-orchestra-2",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 18 Feb, 2.00pm",
+    "event": null,
+    "source_event_id": "cinderella-lets-all-dance",
+    "types": [
+      "Dance",
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 28 Feb, 6.30 *GENERAL ON SALE FROM 10AM MON 9 NOV*",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "opera-gala-night-2027|2027-02-28|blackheath-halls",
+      "description": "*Priority Booking for Patrons & Platinum Patrons opens from 10am Mon 2 November* On general sale from 10am Mon 9 November Back again for another wonderful year, enjoy a glittering evening of operatic favourites to raise money for our Community Opera project. The evening will include performances from our Opera Patron, Ailish Tynan and the Blackheath Halls Youth Choir with more singers to be announced. Event Timings: 6.30pm Doors open for a glass of fizz 7pm Performance begins The audience will be seated at tables and presented with Prosecco on arrival and a light supper. Booking Information: Guests can either book an entire table for 10 people or individual seats at a table of their choice. If you would like to book a table for more than 10 people, please call the Box Office on 020 8463 0100 to see if we can accommodate your needs. Bookings close at 5.00pm on Thursday 18th February.",
+      "ends_at": "2027-02-28T21:30:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/10/Opera-Gala2027_394x220.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "75",
+        "min": "75"
+      },
+      "starts_at": "2027-02-28T18:30:00Z",
+      "tags": [
+        "opera",
+        "classical"
+      ],
+      "title": "Opera Gala Night 2027",
+      "url": "https://www.blackheathhalls.com/whats-on/opera-gala-night-2027/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "opera-gala-night-2027",
+    "types": [
+      "Opera"
+    ]
+  },
+  {
+    "date_text": "Sat 20 Mar 1.30pm",
+    "event": null,
+    "source_event_id": "room-on-the-broom",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sat 20 Mar 4.30pm",
+    "event": null,
+    "source_event_id": "room-on-the-broom-3",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 21 Mar 11am",
+    "event": null,
+    "source_event_id": "room-on-the-broom-4",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 21 Mar 2pm - RELAXED PERFORMANCE",
+    "event": null,
+    "source_event_id": "room-on-the-broom-6",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Thu 1 Apr, 11.30am",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "fishing-for-haiku|2027-04-01|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://system.spektrix.com/blackheathhalls/files/c1741dc1-5a5b-4a93-b4fb-043989243767.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-04-01T10:30:00Z",
+      "tags": [
+        "family",
+        "music",
+        "classical"
+      ],
+      "title": "Fishing for Haiku",
+      "url": "https://www.blackheathhalls.com/whats-on/fishing-for-haiku/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "fishing-for-haiku",
+    "types": [
+      "Family",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Thu 1 Apr, 2pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "fishing-for-haiku|2027-04-01|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://system.spektrix.com/blackheathhalls/files/c1741dc1-5a5b-4a93-b4fb-043989243767.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-04-01T13:00:00Z",
+      "tags": [
+        "family",
+        "music",
+        "classical"
+      ],
+      "title": "Fishing for Haiku",
+      "url": "https://www.blackheathhalls.com/whats-on/fishing-for-haiku-2/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "fishing-for-haiku-2",
+    "types": [
+      "Family",
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 10 Apr, 1.30pm",
+    "event": null,
+    "source_event_id": "pip-and-posy-live",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sat 10 Apr, 4.30pm",
+    "event": null,
+    "source_event_id": "pip-and-posy-live-2",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 11 Apr, 10.30am",
+    "event": null,
+    "source_event_id": "pip-and-posy-live-3",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sun 11 Apr, 1.30pm - relaxed performance",
+    "event": null,
+    "source_event_id": "pip-and-posy-live-4",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Sat 17 Apr, 10.45am",
+    "event": null,
+    "source_event_id": "boppin-bunnies-interactive-music-show-3",
+    "types": [
+      "Family"
+    ]
+  },
+  {
+    "date_text": "Thu 22 Apr, 8.00pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "talk",
+      "dedupe_key": "wild-women-live|2027-04-22|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/07/WWL_NewArtwork_-62mm-x.39mm_300DPI_without-sponsors.-pdf-scaled.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-04-22T19:00:00Z",
+      "tags": [
+        "talks"
+      ],
+      "title": "Wild Women Live",
+      "url": "https://www.blackheathhalls.com/whats-on/wild-women-live/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "wild-women-live",
+    "types": [
+      "Talks"
+    ]
+  },
+  {
+    "date_text": "Fri 21 May, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ukulele-orchestra-of-great-britain|2027-05-21|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/06/UOGB.-394x220px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-05-21T18:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "The Ukulele Orchestra of Great Britain",
+      "url": "https://www.blackheathhalls.com/whats-on/the-ukulele-orchestra-of-great-britain/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "the-ukulele-orchestra-of-great-britain",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sun 20 Jun, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "phil-beer-trio|2027-06-20|blackheath-halls",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/10/Phil-Beer-Trio-394-x-220-px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-06-20T18:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Phil Beer Trio",
+      "url": "https://www.blackheathhalls.com/whats-on/phil-beer-trio/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "phil-beer-trio",
+    "types": [
+      "Music"
+    ]
+  },
+  {
+    "date_text": "Sat 9 Oct, 7.30pm",
+    "event": {
+      "address": "23 Lee Road, London SE3 9RQ",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "leveret|2027-10-09|blackheath-halls",
+      "description": "You choose the tunes, Leveret play them! For this special 2026 all-requests tour, the acclaimed English folk trio are putting their entire back catalogue in the hands of the audience. As you arrive, simply write down your favourite Leveret tunes and drop them into the request box. Then, live on stage, the trio will draw out your choices and bring them to life in a unique performance shaped entirely by you. Featuring three of England’s finest folk musicians, Andy Cutting (melodeon), Sam Sweeney (fiddle) and Rob Harbron (English concertina), Leveret combine extraordinary musicianship with an instinctive musical connection. Their playing is rooted in the English folk tradition, but their inventive approach gives familiar tunes a life of their own. Renowned for their intuitive interplay and captivating live performances, the trio create music in the moment, with no fixed arrangements and no two performances ever quite the same. Their repertoire brings together rediscovered traditional melodies, original interpretations and new compositions. With multiple BBC Folk Award wins between them and collaborations spanning some of the biggest names in folk music, the group are celebrated for their exceptional skill and musical chemistry. Whether you’re a lifelong folk fan or simply love live music played with passion and spontaneity, don’t miss this chance to choose the music and be part of a truly special Leveret performance.",
+      "ends_at": "2027-10-09T20:20:00Z",
+      "image_url": "https://www.blackheathhalls.com/wp-content/uploads/2026/11/Leveret-394-x-220-px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "20"
+      },
+      "starts_at": "2027-10-09T18:30:00Z",
+      "tags": [
+        "music",
+        "classical"
+      ],
+      "title": "Leveret",
+      "url": "https://www.blackheathhalls.com/whats-on/leveret/",
+      "venue_name": "Blackheath Halls"
+    },
+    "source_event_id": "leveret",
+    "types": [
+      "Music"
+    ]
+  }
+]
