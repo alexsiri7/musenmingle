@@ -115,9 +115,11 @@ async fn upsert_honours_policy_flags_and_cuts_descriptions_to_an_excerpt() {
     let mut a = event("Open talk", 3);
     a.description = Some(long.clone());
     a.image_url = Some("https://open.test/a.jpg".into());
-    let oa = repo::upsert_event(&pool, open, &a, &raw("a", "https://open.test/a"))
-        .await
-        .unwrap();
+    let raw_a = RawEvent {
+        payload: serde_json::json!({ "id": "a", "description": long }),
+        ..raw("a", "https://open.test/a")
+    };
+    let oa = repo::upsert_event(&pool, open, &a, &raw_a).await.unwrap();
     let (d, img, img_src) = stored(&pool, oa.event_id).await;
     let d = d.unwrap();
     assert!(d.chars().count() <= EXCERPT_MAX_CHARS, "{d}");
@@ -141,11 +143,12 @@ async fn upsert_honours_policy_flags_and_cuts_descriptions_to_an_excerpt() {
     assert_eq!(
         raws,
         [
-            ("a".to_string(), serde_json::json!({ "id": "a" })),
+            ("a".to_string(), repo::excerpt_raw(&raw_a.payload)),
             ("b".to_string(), repo::redacted_raw()),
         ],
         "a restricted source's raw payload is not kept"
     );
+    assert_ne!(raws[0].1, raw_a.payload, "long texts in raw are cut");
 
     // A short description is kept verbatim.
     let mut c = event("Short talk", 5);
@@ -241,11 +244,53 @@ async fn enforce_content_policy_cleans_existing_rows() {
         .execute(&pool)
         .await
         .unwrap();
+    // Pre-#211 raw payloads holding the full text, written directly. In the
+    // second, the only long text is joined by no-break spaces, beside a long
+    // link with no whitespace at all (kept whole).
+    let full_raw = serde_json::json!({ "id": "l", "detail": { "body": long } });
+    let nbsp_long = "Friday\u{a0}12\u{a0}December\u{a0}".repeat(20);
+    let long_url = format!("https://strict.test/{}", "x".repeat(400));
+    let nbsp_raw = serde_json::json!({
+        "id": "o",
+        "detail": { "dates": nbsp_long, "url": long_url },
+    });
+    for (id, payload) in [("l", &full_raw), ("o", &nbsp_raw)] {
+        sqlx::query("UPDATE events.event_sources SET raw = $2 WHERE source_event_id = $1")
+            .bind(id)
+            .bind(payload)
+            .execute(&pool)
+            .await
+            .unwrap();
+    }
     let r = repo::enforce_content_policy(&pool).await.unwrap();
     assert_eq!(r.descriptions_trimmed, 1);
-    assert_eq!(r.descriptions_cleared + r.images_cleared, 0);
+    assert_eq!(r.raw_trimmed, 2);
+    assert_eq!(
+        r.descriptions_cleared + r.images_cleared + r.raw_redacted,
+        0
+    );
     let trimmed = stored(&pool, other.event_id).await.0.unwrap();
     assert_eq!(trimmed, musenmingle::normalise::excerpt(&long));
+    let stored_raw: serde_json::Value =
+        sqlx::query_scalar("SELECT raw FROM events.event_sources WHERE source_event_id = 'l'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(stored_raw, repo::excerpt_raw(&full_raw));
+    let stored_nbsp: serde_json::Value =
+        sqlx::query_scalar("SELECT raw FROM events.event_sources WHERE source_event_id = 'o'")
+            .fetch_one(&pool)
+            .await
+            .unwrap();
+    assert_eq!(
+        stored_nbsp["detail"]["dates"],
+        musenmingle::normalise::excerpt(&nbsp_long)
+    );
+    assert_eq!(stored_nbsp["detail"]["url"], long_url);
+    assert_eq!(
+        repo::enforce_content_policy(&pool).await.unwrap(),
+        repo::PolicyReport::default()
+    );
 
     // The source's terms turn out to forbid both: existing data goes.
     repo::set_source_policy(
@@ -270,6 +315,37 @@ async fn enforce_content_policy_cleans_existing_rows() {
     );
     pool.close().await;
     db.drop_db().await;
+}
+
+#[test]
+fn excerpt_raw_cuts_long_texts_only() {
+    let prose = "A long sentence about the show and its artists. ".repeat(10);
+    let url = format!("https://cdn.test/{}", "x".repeat(350));
+    let payload = serde_json::json!({
+        "id": "x",
+        "url": url,
+        "description": prose,
+        "detail": { "body": prose },
+        "tags": ["a", prose],
+        "n": 3,
+        "short": "Hi.",
+    });
+    let cut = musenmingle::normalise::excerpt(&prose);
+    assert!(cut.chars().count() <= EXCERPT_MAX_CHARS);
+    let trimmed = repo::excerpt_raw(&payload);
+    assert_eq!(
+        trimmed,
+        serde_json::json!({
+            "id": "x",
+            "url": url,
+            "description": cut,
+            "detail": { "body": cut },
+            "tags": ["a", cut],
+            "n": 3,
+            "short": "Hi.",
+        })
+    );
+    assert_eq!(repo::excerpt_raw(&trimmed), trimmed);
 }
 
 // ---------------------------------------------------------------- thumbnailer

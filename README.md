@@ -448,7 +448,8 @@ small credited thumbnail, and send people to the venue.
   are facts + link only.
 - **Excerpts**: every stored description is cut to ≤ 300 characters at a
   sentence (else word) boundary with an ellipsis (`normalise::excerpt`);
-  pages say "An excerpt. Read more on <venue>".
+  pages say "An excerpt. Read more on <venue>". The same cut applies to
+  every long text in the stored raw payload (`repo::excerpt_raw`).
 - **Thumbnails, never hotlinks** (`src/thumbs.rs`): after the sources of a
   tick, the runner fetches each new source image ONCE through
   `FetchContext` (robots.txt, User-Agent, rate limit), skips images over
