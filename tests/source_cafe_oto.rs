@@ -11,7 +11,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
 use musenmingle::sources::Source;
 use musenmingle::sources::cafe_oto::{
-    CafeOto, MAX_LISTING_PAGES, is_residency, parse_detail, parse_listing, raw_event,
+    CafeOto, MAX_DETAILS, MAX_LISTING_PAGES, is_residency, parse_detail, parse_listing, raw_event,
 };
 use reqwest::StatusCode;
 use serde_json::Value;
@@ -225,25 +225,54 @@ async fn fetches_every_listing_page_and_the_residency_pages_via_fetch_context() 
 
 #[tokio::test]
 async fn caps_residency_page_fetches() {
+    let cards: String = (1..=MAX_DETAILS + 1)
+        .map(|i| {
+            format!(
+                r#"<div class="each-activity"><div class="each-header"><p>1–2 December 2026</p></div><div class="each-header"><p><a href="/events/residency-{i}/">Residency {i}</a></p></div></div>"#
+            )
+        })
+        .collect();
+    let listing =
+        format!(r#"<html><body><div class="activity-container-inner">{cards}</div></body></html>"#);
     let server = MockServer::start().await;
-    serve_site(&server).await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/events/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(listing))
+        .mount(&server)
+        .await;
+    let over = format!("/events/residency-{}/", MAX_DETAILS + 1);
+    Mock::given(method("GET"))
+        .and(path(over.as_str()))
+        .respond_with(ResponseTemplate::new(200))
+        .expect(0)
+        .with_priority(1)
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(wiremock::matchers::path_regex("^/events/.+/$"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("<html></html>"))
+        .expect(MAX_DETAILS as u64)
+        .mount(&server)
+        .await;
     let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
     let raws = CafeOto::new(server.uri().parse().unwrap())
-        .with_max_details(1)
         .fetch(&ctx)
         .await
         .expect("fetch");
-    assert_eq!(raws.len(), 51);
+    assert_eq!(raws.len(), MAX_DETAILS + 1);
+    let errors = ctx.take_errors();
     assert_eq!(
-        server.received_requests().await.unwrap().len(),
-        1 + PAGES + 1
+        errors,
+        vec![format!(
+            "residency-{}: over the {MAX_DETAILS} residency-page cap",
+            MAX_DETAILS + 1
+        )]
     );
-    let over_cap = ctx
-        .take_errors()
-        .iter()
-        .filter(|e| e.contains("residency-page cap"))
-        .count();
-    assert_eq!(over_cap, residency_slugs().len() - 1);
 }
 
 #[tokio::test]

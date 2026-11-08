@@ -66,21 +66,11 @@ const VENUE_ADDRESS: &str = "18–22 Ashwin Street, Dalston, London E8 3DL";
 
 pub struct CafeOto {
     base_url: Url,
-    max_details: usize,
 }
 
 impl CafeOto {
     pub fn new(base_url: Url) -> Self {
-        Self {
-            base_url,
-            max_details: MAX_DETAILS,
-        }
-    }
-
-    /// Override the per-run cap on residency pages (tests).
-    pub fn with_max_details(mut self, n: usize) -> Self {
-        self.max_details = n;
-        self
+        Self { base_url }
     }
 }
 
@@ -346,7 +336,7 @@ impl Source for CafeOto {
     fn fetch_timeout(&self) -> Option<Duration> {
         // The Crawl-delay per request (robots.txt, listing pages, residency
         // pages), plus a margin.
-        let requests = 1 + MAX_LISTING_PAGES + self.max_details;
+        let requests = 1 + MAX_LISTING_PAGES + MAX_DETAILS;
         Some(Duration::from_secs(CRAWL_DELAY_SECS * requests as u64 + 60))
     }
 
@@ -397,10 +387,9 @@ impl Source for CafeOto {
                 Some(Ok(url)) if residency => {
                     let slug = card["slug"].as_str().unwrap_or_default();
                     details += 1;
-                    if details > self.max_details {
+                    if details > MAX_DETAILS {
                         ctx.report_error(format!(
-                            "{slug}: over the {} residency-page cap",
-                            self.max_details
+                            "{slug}: over the {MAX_DETAILS} residency-page cap"
                         ));
                         None
                     } else {
