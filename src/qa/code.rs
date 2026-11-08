@@ -1,14 +1,14 @@
 //! The code hash of a source, so a QA check runs after its scraper changes.
 //!
 //! Only the source's own file is hashed: shared helpers (`normalise.rs`,
-//! `jsonld.rs`) change often and would re-check every source; the weekly
+//! `jsonld.rs`, `ical.rs`) change often and would re-check every source; the weekly
 //! check covers them.
 
 use sha2::{Digest, Sha256};
 
 use crate::sources::Source;
 
-/// Every file in `src/sources/` except `mod.rs` and `jsonld.rs`, by module
+/// Every file in `src/sources/` except `mod.rs`, `jsonld.rs` and `ical.rs`, by module
 /// name (a test keeps this in step with the directory).
 const SOURCE_FILES: &[(&str, &str)] = &[
     ("artlogic", include_str!("../sources/artlogic.rs")),
@@ -111,6 +111,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
     ),
     ("vam", include_str!("../sources/vam.rs")),
     (
+        "vortex_jazz_club",
+        include_str!("../sources/vortex_jazz_club.rs"),
+    ),
+    (
         "wellcome_collection",
         include_str!("../sources/wellcome_collection.rs"),
     ),
@@ -163,7 +167,7 @@ mod tests {
             .unwrap()
             .map(|e| e.unwrap().file_name().into_string().unwrap())
             .filter_map(|f| f.strip_suffix(".rs").map(str::to_string))
-            .filter(|m| m != "mod" && m != "jsonld")
+            .filter(|m| !["mod", "jsonld", "ical"].contains(&m.as_str()))
             .collect();
         files.sort();
         let mut table: Vec<String> = SOURCE_FILES.iter().map(|(m, _)| m.to_string()).collect();
