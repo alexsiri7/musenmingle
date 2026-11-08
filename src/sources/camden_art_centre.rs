@@ -16,7 +16,8 @@
 //!   ("£59", "Free") and the description (JSON-LD `Event`/`Course`
 //!   `description`, else the intro heading). The JSON-LD `Course` offers on
 //!   workshop pages say `"price": 0` / "Free" for paid workshops, so the
-//!   sidebar price is used, never the JSON-LD one.
+//!   sidebar price is used, never the JSON-LD one. Their `courseSchedule`
+//!   carries no time either; the sidebar's is the one shown.
 //! * Dates come from the feed's ISO fields; the sidebar's first day must
 //!   agree (sanity check). A single-day item with a time is timed; anything
 //!   else is all-day (London midnights, `ends_at` the last day, none for a
@@ -25,7 +26,8 @@
 //! * Categories by programme type: `exhibitions` → exhibition,
 //!   `courses-workshops` → workshop, talks/events → talk. Skipped: studio
 //!   `residencies` (not something the public attends; their pages list no
-//!   public sessions). Skipped items are not fetched.
+//!   public sessions) and items with no type (venue-hire offers such as
+//!   "Festive Hires"). Skipped items are not fetched.
 //! * `young-people` and `childrenandfamilies` programmes run as sessions on
 //!   a few days across months (#207). They are workshops (tagged `family` /
 //!   `young people`) with sessions from the sidebar's "Booking information"
@@ -33,8 +35,11 @@
 //!   `normalise::session_days`, which must start and end on the feed's
 //!   dates) or a weekly rule ("Sessions are every Saturday, 2.30-4.30pm",
 //!   `normalise::weekly_days`), timed by the row's clock range, else all-day
-//!   sessions. One whose sessions can't be read is skipped, as a single
-//!   range would read as open every day.
+//!   sessions. Booking text with neither ("2.30-4.30pm") falls back to the
+//!   `Date` row naming the same weekday at both ends ("Sat 10 Oct 2026–Sat
+//!   3 Jul 2027", `normalise::weekday_range_days`): weekly on that day. One
+//!   whose sessions can't be read is skipped, as a single range would read
+//!   as open every day.
 //! * Everything listed here is at the Centre; `/whats-on/offsite` and
 //!   `/whats-on/on-demand` are not read.
 
@@ -51,7 +56,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, day_sessions, dedupe_key, london_to_utc, parse_price,
-    session_days, weekly_days,
+    session_days, weekday_range_days, weekly_days,
 };
 
 pub const KEY: &str = "camden-art-centre";
@@ -276,7 +281,9 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
     let sessions = if is_session_programme(slug) {
         let booking = detail["booking_text"].as_str().unwrap_or_default();
         let days = end.and_then(|e| {
-            session_days(booking, start, e).or_else(|| weekly_days(booking, start, e))
+            session_days(booking, start, e)
+                .or_else(|| weekly_days(booking, start, e))
+                .or_else(|| weekday_range_days(date_text, start, e))
         });
         match days {
             Some(days) => day_sessions(&days, find_clock_range(booking)),
@@ -496,6 +503,26 @@ mod tests {
                 "2026-10-24T13:30:00+00:00",
                 "2026-10-31T14:30:00+00:00",
                 "2026-11-07T14:30:00+00:00"
+            ]
+        );
+    }
+
+    #[test]
+    fn programme_without_a_rule_repeats_on_its_dates_weekday() {
+        let mut p = programme("young-people", "2026-10-10", "2026-10-24", "2.30-4.30pm");
+        p["detail"]["date_text"] = json!("Sat 10 Oct 2026–Sat 24 Oct 2026");
+        let ev = normalise_payload(&p).unwrap().unwrap();
+        let s: Vec<String> = ev
+            .sessions
+            .iter()
+            .map(|s| s.starts_at.to_rfc3339())
+            .collect();
+        assert_eq!(
+            s,
+            [
+                "2026-10-10T13:30:00+00:00",
+                "2026-10-17T13:30:00+00:00",
+                "2026-10-24T13:30:00+00:00"
             ]
         );
     }

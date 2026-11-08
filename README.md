@@ -197,7 +197,9 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     time, price and description: exhibitions all day from the feed's ISO
     dates, single-day workshops timed (London wall clock); the sidebar
     price, not the JSON-LD `Course` offer (which says free for paid
-    workshops); residencies, young people's and family programmes skipped.
+    workshops); young people's and family programmes as workshop sessions
+    (listed days, a weekly rule, or the Date row's weekday at both ends);
+    residencies and untyped feed items (venue hires) skipped.
   - `estorick-collection` — CSS on three server-rendered listings
     (`/events`, `/exhibitions`, `/exhibitions/in-the/future`; no JSON-LD,
     no detail pages): date, time and description lines told apart by

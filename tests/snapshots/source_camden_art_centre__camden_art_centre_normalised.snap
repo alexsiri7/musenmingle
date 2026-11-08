@@ -293,7 +293,7 @@ expression: out
       "url": "https://camdenartcentre.org/whats-on/transformative-futures-6",
       "venue_name": "Camden Art Centre"
     },
-    "page_date": "10 Oct 2026/3 Jul 2027",
+    "page_date": "Sat 10 Oct 2026–Sat 3 Jul 2027",
     "source_event_id": "/whats-on/transformative-futures-6",
     "type": "young-people"
   },
@@ -404,6 +404,12 @@ expression: out
     "page_date": "22 Nov 2026 13:00-17:00",
     "source_event_id": "/whats-on/natural-dyes-study-group",
     "type": "courses-workshops"
+  },
+  {
+    "event": null,
+    "page_date": null,
+    "source_event_id": "/whats-on/festive-hires",
+    "type": null
   },
   {
     "event": {
