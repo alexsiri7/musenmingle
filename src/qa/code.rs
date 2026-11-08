@@ -80,6 +80,7 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "mall_galleries",
         include_str!("../sources/mall_galleries.rs"),
     ),
+    ("nonclassical", include_str!("../sources/nonclassical.rs")),
     (
         "october_gallery",
         include_str!("../sources/october_gallery.rs"),

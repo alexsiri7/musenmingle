@@ -271,6 +271,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     title say jazz, folk, gospel or swing), Talks → talk, fairs and markets
     (Exhibition) → expo; Family and Dance shows, Comedy, Take Part courses,
     festival passes and cancelled events skipped.
+  - `nonclassical` — the promoter's upcoming list on `/events` (Squarespace,
+    often one event or none), then the JSON-LD `Event` on each event page
+    (capped at 20 a run; honest offsets): title, times, place, description
+    and image. Every event is music, tagged `contemporary` and
+    `experimental`; events whose postcode is outside London (e.g. Bristol)
+    are skipped, and a place with neither "London" nor a postcode (e.g. an
+    address of only "United Kingdom") is reported as an error.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

@@ -1,0 +1,98 @@
+---
+source: tests/source_nonclassical.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "South Quay Plaza, E14 9SH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jocelyn-campbell-lo-end-pav|2026-11-19|theatreship",
+      "description": "Fragmented loops of sound shift and evolve in Jocelyn Campbell’s new work, lo-end. The unexpected combination of tuba ( Nona Lawrence ), double bass ( Gwen Reed ), and electronics (Campbell) shifts the ambient electronic genre into the analogue world. Theatreship becomes a space of the uncanny: what is live and what is recorded becomes unknown, as sound becomes embodied and disembodied in an ever-evolving wave of ambient music. Tuba and double bass accompany themselves through live and pre-recorded elements, memories that are eroded and disappear as soon as they become live. Sounds appear between memory and invention, presence and disappearance, and electronics and analogue. Support comes from Pav - a London-based composer, producer and sound designer. The closing DJ set - a combination of modernist music and electronics - comes from phonewifey, Campbell’s producer and DJ alter-ego.",
+      "ends_at": "2026-11-19T22:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/53b980a3e4b04cfc3189db9e/582f35d14402435aa8dcea27/6aacde888b88b95207a9431f/1789720457183/DSC_0122.jpeg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T19:30:00Z",
+      "tags": [
+        "contemporary",
+        "experimental"
+      ],
+      "title": "Jocelyn Campbell: lo-end / Pav",
+      "url": "https://www.nonclassical.co.uk/events/2026/9/18/jocelyn-campbell-lo-end-pav",
+      "venue_name": "Theatreship"
+    },
+    "source_event_id": "2026/9/18/jocelyn-campbell-lo-end-pav"
+  },
+  {
+    "event": null,
+    "source_event_id": "2026/10/31/wack-x-lovemusic-presented-by-arnolfini-lovemusic-nonclassical"
+  },
+  {
+    "event": {
+      "address": "The Mall, SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "in-round-wack-jennifer-walshe-neil-luck-x-lovemusic-kiran-leonard-ica|2026-10-29|ica",
+      "description": "In the Round: WACK x lovemusic | Presented by ICA + lovemusic + nonclassical Collective lovemusic - acclaimed Strasbourg-based music group - join with experimental composer-performers Jennifer Walshe and Neil Luck (aka WACK) for two UK premieres exploring radical experimental performance, unpredictable choices, and one of Britain's most exalted movie directors. lovemusic, known for their courageous explorations of new configurations of collaborative performance, are joined by WACK for a live collage in the round. Across their collaborative 45-minute new work, they’ll move between composed material, spoken text, visual elements and real-time decision making, creating a maximalist coming together of multilingual voices, acoustic instruments, live electronics, esoteric invocations, telepathic madrigals, dense noise and deep relaxation tapes. The gig will also feature a new piece by Neil Luck: an epic fan-fiction monologue that cinematically deconstructs the identity of acclaimed British film director Christopher Nolan. lovemusic is supported by the French Ministry of culture - DRAC Grand Est, the Conseil Régional Grand Est, the City of Strasbourg; Diaphonique, Franco-British-Irish fund for contemporary music, in partnership with the SACEM, the Friends of the French Institute Trust, the British Council, the Institut français, the Institut français du Royaume-Uni, the Centre National de la Musique, Culture Ireland and Salabert Fondation. Support from acclaimed composer, arranger and songwriter Kiran Leonard. Nonclassical is in receipt of the friendly support of the Ernst von Siemens Foundation.",
+      "ends_at": "2026-10-29T23:00:00Z",
+      "image_url": "http://static1.squarespace.com/static/53b980a3e4b04cfc3189db9e/582f35d14402435aa8dcea27/6a1eaa95f9f9513638dd91b5/1791366764901/Copy+of+3.Love.music.wack.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-29T19:30:00Z",
+      "tags": [
+        "contemporary",
+        "experimental"
+      ],
+      "title": "In the Round: WACK (Jennifer Walshe & Neil Luck) X lovemusic + Kiran Leonard | ICA",
+      "url": "https://www.nonclassical.co.uk/events/wack-collective-lovemusic",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "wack-collective-lovemusic"
+  },
+  {
+    "event": {
+      "address": "451 Queensbridge Road, London, England, E8 3AS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "outside-lines-narrator-max-syedtollan-listening-project-neil-luck|2026-10-15|victoria",
+      "description": "nonclassical's newest Outside the Lines compilation album launches with performances from three of the featured artists, each of whom tread the blurry line between composition, spoken word, performance art and electronic collage. It is sometimes absurd, sometimes surreal. It is at times plain-spoken, at others appearing as if from behind a veil. It might make you laugh, but it is dead serious. THE NARRATOR - the poem-shaped storyteller and songbird, and member of collective life is beautiful - builds sounds around sentences. Max Syedtollan is joined by The Listening Project for a full-bodied performance of some of his weird, amusing, convoluted, traditional, makeshift music. The Listening Project, is a contemporary music group that have cemented themselves as leading agitators in the performance of experimental, contemporary classical and popular music. Since their formation in 2021, the band has performed with Turner-Prize Winning Artist Jeremy Deller in a modern re-interpretation of his iconic work ‘Acid Brass’, played internationally at Real No Real Festival in Madrid with composer Max Syedtollan, been a guest at DIY label GLARC All-Dayer in Glasgow, along with being ensemble-in-residence at The Old Church, Stoke Newington 2022-23. In this time they have received praise from The Guardian, BBC Radio 6 Music, Soho Radio, BBC Radio 3 and more. Neil Luck - co-curator of the compilation - performs a strange, weird, unusual showcase of an instrument only he can play. It must be seen to be believed. This night and the full Outside the Lines, Vol. 8 compilation has been co-curated with Neil Luck, a composer and artist who attempts to frame the act of music making as something curious, or weird, or useful, or spectacular in and of itself. The full Outside The Lines, Vol. 8 compilation will be available for purchase (more than a week before its release date!) at the gig, as limited edition cassette and digital download.",
+      "ends_at": "2026-10-15T22:30:00Z",
+      "image_url": "http://static1.squarespace.com/static/53b980a3e4b04cfc3189db9e/582f35d14402435aa8dcea27/6aa7e08c8e45036825888166/1791366735133/lock+up+otl.jpg?format=1500w",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-10-15T18:30:00Z",
+      "tags": [
+        "contemporary",
+        "experimental"
+      ],
+      "title": "Outside the Lines: THE NARRATOR, Max Syedtollan + The Listening Project, Neil Luck",
+      "url": "https://www.nonclassical.co.uk/events/outside-the-lines-vol-8",
+      "venue_name": "The Victoria"
+    },
+    "source_event_id": "outside-the-lines-vol-8"
+  },
+  {
+    "error": "parse error: \"Album Launch: KOGG perform 'Mechanista' with Brass Ensemble & NikNak\": place \"Iklectik\" names neither London nor a postcode",
+    "source_event_id": "kogg-album-launch"
+  }
+]
