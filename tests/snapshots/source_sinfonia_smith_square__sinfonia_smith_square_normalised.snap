@@ -1,0 +1,1085 @@
+---
+source: tests/source_sinfonia_smith_square.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "earth-wind-fire-water-music|2027-03-06|sinfonia-smith-square",
+      "description": "Handel Music for the Royal Fireworks Handel Water Music",
+      "ends_at": "2027-03-06T11:45:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/10/family-1280x941.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-06T11:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Earth, Wind, Fire & Water Music",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/earth-wind-fire-water-music/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "earth-wind-fire-water-music"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "come-sing-coronation-anthems|2027-03-06|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2027-03-06T17:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/10/comeandsing-1280x941.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-06T12:30:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Come and Sing!: Coronation Anthems",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/come-and-sing-coronation-anthems/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "come-and-sing-coronation-anthems"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sanctuary-from-winters-stillness|2027-01-31|sinfonia-smith-square",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/10/From-Winter-Stillness-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-31T19:30:00Z",
+      "tags": [
+        "immersive",
+        "classical"
+      ],
+      "title": "Sanctuary – From Winter’s Stillness",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/sanctuary-from-winters-stillness/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "sanctuary-from-winters-stillness"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "roman-vespers|2027-03-13|sinfonia-smith-square",
+      "description": "George Frideric Hand el Dixit Dominus, HWV 232 Alessandro Scarlatti Magnificat",
+      "ends_at": "2027-03-13T21:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/10/Roman-Vespers-1055x960.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-03-13T19:00:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Roman Vespers",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/roman-vespers/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "roman-vespers"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "israel-in-egypt|2027-02-18|sinfonia-smith-square",
+      "description": "George Frideric Handel Israel in Egypt",
+      "ends_at": "2027-02-18T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/10/Israel-in-Egypt-1280x941.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-18T19:00:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Israel in Egypt",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/israel-in-egypt/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "israel-in-egypt"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "fulham-symphony-orchestra|2026-11-14|sinfonia-smith-square",
+      "description": "Mahler Symphony No. 5",
+      "ends_at": "2026-11-14T21:40:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2025/07/mg-fso-0324-8540-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T19:30:00Z",
+      "tags": [
+        "orchestral",
+        "classical"
+      ],
+      "title": "Fulham Symphony Orchestra",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/fulham-symphony-orchestra-4/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "fulham-symphony-orchestra-4"
+  },
+  {
+    "event": null,
+    "source_event_id": "christmas-concert-at-westminster-abbey-2"
+  },
+  {
+    "event": null,
+    "source_event_id": "handel-messiah-3"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tchaikovsky-christmas-by-candlelight|2026-12-17|sinfonia-smith-square",
+      "description": "Selections from Tchaikovsky’s Swan Lake, Sleeping Beauty and Symphony No.6 ‘Pathétique’",
+      "ends_at": "2026-12-17T20:40:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/08/raul-ling-fqAP0iCrg1A-unsplash-2-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-17T19:00:00Z",
+      "tags": [
+        "orchestral",
+        "classical"
+      ],
+      "title": "A Tchaikovsky Christmas by Candlelight",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/a-tchaikovsky-christmas-by-candlelight/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "a-tchaikovsky-christmas-by-candlelight"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "hwa-quartet|2026-12-02|sinfonia-smith-square",
+      "description": "Elizabeth Maconchy String Quartet No.3 Op.15 Jin Cho Yearning You Yet Emilie Mayer String Quartet in G minor, Op.14",
+      "ends_at": null,
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/08/DSC06229-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T13:05:00Z",
+      "tags": [
+        "chamber",
+        "classical"
+      ],
+      "title": "Hwa Quartet",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/hwa-quartet/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "hwa-quartet"
+  },
+  {
+    "event": null,
+    "source_event_id": "sound-and-fury"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ellingtons-nutcracker|2026-12-07|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-07T20:40:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/NYJO-BLUEPRINT-ORCHESTRA-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-07T19:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Ellington’s Nutcracker",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/nyjo-blueprint-orchestra-ellingtons-nutcracker/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "nyjo-blueprint-orchestra-ellingtons-nutcracker"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "snowman-live-in-concert|2026-12-19|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-20T12:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2025/06/The-Snowman-Flying-with-credit-line-copy-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-12-19T14:30:00Z",
+          "starts_at": "2026-12-19T13:30:00Z"
+        },
+        {
+          "ends_at": "2026-12-20T12:00:00Z",
+          "starts_at": "2026-12-20T11:00:00Z"
+        }
+      ],
+      "starts_at": "2026-12-19T13:30:00Z",
+      "tags": [
+        "family",
+        "family concerts and events",
+        "classical"
+      ],
+      "title": "The Snowman Live in Concert",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/the-snowman-live-in-concert-london/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "the-snowman-live-in-concert-london"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mr-handels-christmas-story|2026-12-08|sinfonia-smith-square",
+      "description": "Gabrieli Roar Mr Handel’s Christmas Story",
+      "ends_at": "2026-12-08T20:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/54271807233_96fce56252_o-1-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-08T19:00:00Z",
+      "tags": [
+        "choral",
+        "family",
+        "family concerts and events",
+        "classical"
+      ],
+      "title": "Mr Handel’s Christmas Story",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/mr-handels-christmas-story/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "mr-handels-christmas-story"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "handels-messiah|2026-12-02|sinfonia-smith-square",
+      "description": "George Frideric Handel Messiah",
+      "ends_at": "2026-12-02T21:45:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Westminster-Hall-concert-2018-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T19:30:00Z",
+      "tags": [
+        "choral",
+        "orchestral",
+        "classical"
+      ],
+      "title": "Handel’s Messiah",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/handels-messiah-4/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "handels-messiah-4"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "percussive-power-with-dame-evelyn-glennie|2026-11-29|sinfonia-smith-square",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/©-Chris-Payne-photo-ref-53924-back-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T19:00:00Z",
+      "tags": [
+        "contemporary",
+        "orchestral",
+        "classical"
+      ],
+      "title": "Percussive Power with Dame Evelyn Glennie",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/percussive-power/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "percussive-power"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "hey-for-christmas|2026-12-19|sinfonia-smith-square",
+      "description": "William Byrd In Winter Cold Trad. English Hey for Christmas",
+      "ends_at": "2026-12-19T21:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/DSCF8328-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-19T20:00:00Z",
+      "tags": [
+        "vocal",
+        "classical"
+      ],
+      "title": "Hey for Christmas!",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/hey-for-christmas/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "hey-for-christmas"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "when-david-heard|2026-11-15|sinfonia-smith-square",
+      "description": "Eric Whitacre When David Heard Tõnu Kõrvtis The Night is Darkening Round Me",
+      "ends_at": "2026-11-15T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/greg-rakozy-oMpAz-DN-9I-unsplash-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-15T19:30:00Z",
+      "tags": [
+        "choral",
+        "contemporary",
+        "classical"
+      ],
+      "title": "When David Heard",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/when-david-heard/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "when-david-heard"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "spirit-of-django|2026-11-19|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-11-19T20:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Spirit-of-Django-copy-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T19:00:00Z",
+      "tags": [
+        "jazz",
+        "orchestral"
+      ],
+      "title": "Spirit of Django",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/spirit-of-django/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "spirit-of-django"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "wallace-gromit-wrong-trousers-live-in-concert|2026-12-19|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-20T14:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/WG-TWT_Full-Card-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-12-19T16:00:00Z",
+          "starts_at": "2026-12-19T15:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-20T14:00:00Z",
+          "starts_at": "2026-12-20T13:00:00Z"
+        }
+      ],
+      "starts_at": "2026-12-19T15:00:00Z",
+      "tags": [
+        "family",
+        "family concerts and events",
+        "classical"
+      ],
+      "title": "Wallace & Gromit: The Wrong Trousers Live in Concert",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/wallace-gromit-the-wrong-trousers/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "wallace-gromit-the-wrong-trousers"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "5pence-kodie-kollective|2026-11-19|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-11-19T22:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Kodie-Kwartet-1280x960.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T21:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "5pence and the Kodie Kollective",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/5pence-and-the-kodie-kollective/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "5pence-and-the-kodie-kollective"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "zoffany-ensemble|2026-11-19|sinfonia-smith-square",
+      "description": "Johannes Brahms Serenade No.1 in D major, Op.11",
+      "ends_at": "2026-11-19T14:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/FULLRES-matsmithphotography-009-MSP_2433-Edit-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T13:05:00Z",
+      "tags": [
+        "chamber",
+        "classical"
+      ],
+      "title": "Zoffany Ensemble",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/zoffany-ensemble/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "zoffany-ensemble"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "schubert-winterreise-immersive-journey|2026-12-06|sinfonia-smith-square",
+      "description": "Franz Schubert Winterreise",
+      "ends_at": "2026-12-06T19:20:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Winterreise-event-image-1-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-12-06T16:20:00Z",
+          "starts_at": "2026-12-06T15:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-06T19:20:00Z",
+          "starts_at": "2026-12-06T18:00:00Z"
+        }
+      ],
+      "starts_at": "2026-12-06T15:00:00Z",
+      "tags": [
+        "immersive",
+        "vocal",
+        "classical"
+      ],
+      "title": "Schubert Winterreise: An Immersive Journey",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/schubert-winterreise-an-immersive-journey/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "schubert-winterreise-an-immersive-journey"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "angelus-ad-virginem|2026-12-21|sinfonia-smith-square",
+      "description": "Cheryl Frances-Hoad The Nativity Traditional carols from the 14th century onwards",
+      "ends_at": "2026-12-21T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/54869400880_8a0bf2d0b7_k-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-21T19:30:00Z",
+      "tags": [
+        "chamber",
+        "choral",
+        "classical"
+      ],
+      "title": "Angelus ad Virginem",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/angelus-ad-virginem/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "angelus-ad-virginem"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "hail-mary|2026-12-18|sinfonia-smith-square",
+      "description": "Michael Praetorius Magnificat Heinrich Schütz Magnificat",
+      "ends_at": "2026-12-18T21:20:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/HG102060FLAT_FINALBRIGHT-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-18T19:30:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Hail Mary!",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/hail-mary/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "hail-mary"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "on-christmas-night|2026-12-16|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-16T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/191223_LCS_Gloria_P2636-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-16T19:30:00Z",
+      "tags": [
+        "choral",
+        "orchestral",
+        "classical"
+      ],
+      "title": "On Christmas Night",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/on-christmas-night-2/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "on-christmas-night-2"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "christmas-brass-spectacular|2026-12-13|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-13T20:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Christmas-Brass-Spectacular-2-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T18:00:00Z",
+      "tags": [
+        "contemporary",
+        "family concerts and events",
+        "classical"
+      ],
+      "title": "Christmas Brass Spectacular",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/christmas-brass-spectacular-2/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "christmas-brass-spectacular-2"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "libera-in-concert|2026-12-05|sinfonia-smith-square",
+      "description": "A programme of Libera songs and arrangements",
+      "ends_at": "2026-12-05T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/IMG_5845-1-Andy-Winter-1-e1778770221955-1280x960.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-05T19:30:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Libera in Concert",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/libera-london-christmas-concert/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "libera-london-christmas-concert"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "verdis-requiem|2026-11-28|sinfonia-smith-square",
+      "description": "Giuseppe Verdi Messa da Requiem Claire Rutter – Soprano Carolyn Dobbin – Mezzo Soprano Sam Furness – Tenor Patrick Alexander Keefe – Bass",
+      "ends_at": "2026-11-28T21:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/Kingdom-square-1-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-28T19:00:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Verdi’s Requiem",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/verdis-requiem/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "verdis-requiem"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "classics-reloaded|2026-11-22|sinfonia-smith-square",
+      "description": "J.S Bach 6 Variations f rom “Goldberg Variations” Sergei Rachmaninov Prelude G Minor",
+      "ends_at": "2026-11-22T20:40:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/20251022_MKZ_Alexey_Botvinov_Burhan_Ocal-8-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-22T19:00:00Z",
+      "tags": [
+        "chamber",
+        "classical"
+      ],
+      "title": "Classics Reloaded",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/bach-reloaded/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "bach-reloaded"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "belshazzars-feast|2026-11-21|sinfonia-smith-square",
+      "description": "William Walton Belshazzar’s Feast",
+      "ends_at": "2026-11-21T21:15:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/BBWW.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-21T19:30:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Belshazzar’s Feast",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/belshazzars-feast/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "belshazzars-feast"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "o-magnum-mysterium|2026-12-15|sinfonia-smith-square",
+      "description": "Giovanni Pierluigi da Palestrina O magnum mysterium Blake Morgan Quem pastores laudavere (UK premiere) William Byrd Rorate Caeli",
+      "ends_at": "2026-12-15T21:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/G6-2025-C-credit-Andrew-Wilkinson-1-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-15T19:00:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "O Magnum Mysterium",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/o-magnum-mysterium/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "o-magnum-mysterium"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "joy-seasonal-gospel-celebration-of-sound|2026-12-11|sinfonia-smith-square",
+      "description": null,
+      "ends_at": "2026-12-12T16:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/LIGC-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-12-11T21:00:00Z",
+          "starts_at": "2026-12-11T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-12-12T16:30:00Z",
+          "starts_at": "2026-12-12T14:30:00Z"
+        }
+      ],
+      "starts_at": "2026-12-11T19:00:00Z",
+      "tags": [
+        "vocal"
+      ],
+      "title": "Joy! A Seasonal Gospel Celebration of Sound",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/joy-a-seasonal-gospel-celebration-of-sound/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "joy-a-seasonal-gospel-celebration-of-sound"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "handels-messiah|2026-12-04|sinfonia-smith-square",
+      "description": "George Frideric Handel Messiah",
+      "ends_at": "2026-12-04T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/06/Wild-Arts-Messiah-2-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-04T19:00:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "Handel’s Messiah",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/handels-messiah-3/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "handels-messiah-3"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ceremony-of-carols|2026-12-14|sinfonia-smith-square",
+      "description": "Benjamin Britten A Ceremony of Carols Henry Purcell Te Deum and Jubilate in D",
+      "ends_at": "2026-12-14T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/dscf6087edit_54818074256_o-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-14T19:30:00Z",
+      "tags": [
+        "choral",
+        "classical"
+      ],
+      "title": "A Ceremony of Carols",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/a-ceremony-of-carols/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "a-ceremony-of-carols"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jakub-jozef-orliński-sings-pergolesi|2026-11-26|sinfonia-smith-square",
+      "description": "Giovanni de Macque Prime stravaganze Arvo Pärt My Heart’s in the Highlands Giovanni Maria Trabaci Toccata I del secondo tono Giovan Battista Pergolesi Stabat mater",
+      "ends_at": "2026-11-26T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2026/05/image-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-26T19:30:00Z",
+          "starts_at": "2026-11-26T18:30:00Z"
+        },
+        {
+          "ends_at": "2026-11-26T21:30:00Z",
+          "starts_at": "2026-11-26T20:30:00Z"
+        }
+      ],
+      "starts_at": "2026-11-26T18:30:00Z",
+      "tags": [
+        "vocal",
+        "classical"
+      ],
+      "title": "Jakub Józef Orliński Sings Pergolesi",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/jakub-orlinski/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "jakub-orlinski"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "handels-messiah|2026-12-23|sinfonia-smith-square",
+      "description": "Stephen Layton conducts Polyphony and the OAE in a very special festive performance of Handel’s Messiah.",
+      "ends_at": "2026-12-23T21:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2024/06/0M2A8995_Polyphony_Anders-Lillebo-1-1280x960.webp",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-23T19:00:00Z",
+      "tags": [
+        "choral",
+        "orchestral",
+        "classical"
+      ],
+      "title": "Handel’s Messiah",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/handels-messiah-2026/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "handels-messiah-2026"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "bachs-christmas-oratorio|2026-12-22|sinfonia-smith-square",
+      "description": "Johann Sebastian Bach Christmas Oratorio (Pts. 1, 2, 3 & 6)",
+      "ends_at": "2026-12-22T21:30:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2024/11/Polyphony6X8-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-22T19:30:00Z",
+      "tags": [
+        "choral",
+        "orchestral",
+        "classical"
+      ],
+      "title": "Bach’s Christmas Oratorio",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/bachs-christmas-oratorio-2026/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "bachs-christmas-oratorio-2026"
+  },
+  {
+    "event": {
+      "address": "Smith Square, Westminster, London SW1P 3HA",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "roger-sayer-organ-recital|2026-12-17|sinfonia-smith-square",
+      "description": "Olivier Messiaen La Nativité du Seigneur",
+      "ends_at": "2026-12-17T14:00:00Z",
+      "image_url": "https://www.sinfoniasmithsq.org.uk/wp-content/uploads/2025/06/roger1-1280x960.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-17T13:05:00Z",
+      "tags": [
+        "organ",
+        "classical"
+      ],
+      "title": "Roger Sayer Organ Recital",
+      "url": "https://www.sinfoniasmithsq.org.uk/event/lunchtime-concert-series/",
+      "venue_name": "Sinfonia Smith Square"
+    },
+    "source_event_id": "lunchtime-concert-series"
+  }
+]

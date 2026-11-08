@@ -44,6 +44,7 @@ pub mod old_royal_naval_college;
 pub mod photographers_gallery;
 pub mod royal_museums_greenwich;
 pub mod serpentine;
+pub mod sinfonia_smith_square;
 pub mod soane_museum;
 pub mod somerset_house;
 pub mod south_london_gallery;
@@ -162,6 +163,9 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         conway_hall::KEY => Ok(Box::new(conway_hall::ConwayHall::new(base))),
         courtauld::KEY => Ok(Box::new(courtauld::Courtauld::new(base))),
         serpentine::KEY => Ok(Box::new(serpentine::Serpentine::new(base))),
+        sinfonia_smith_square::KEY => Ok(Box::new(
+            sinfonia_smith_square::SinfoniaSmithSquare::new(base),
+        )),
         design_museum::KEY => Ok(Box::new(design_museum::DesignMuseum::new(base))),
         estorick_collection::KEY => {
             Ok(Box::new(estorick_collection::EstorickCollection::new(base)))
