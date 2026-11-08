@@ -317,6 +317,34 @@ async fn a_later_listing_page_failing_keeps_the_cards_found_so_far() {
 }
 
 #[tokio::test]
+async fn a_failing_second_page_of_the_first_genre_keeps_its_first_page() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    serve_view(&server, "music", view_with(&MUSIC[..1], Some(2))).await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .and(query_param("category", "music"))
+        .and(query_param("event-page", "2"))
+        .respond_with(ResponseTemplate::new(404))
+        .expect(1)
+        .mount(&server)
+        .await;
+    serve_view(&server, "opera", view_with(&OPERA[..1], None)).await;
+    serve_page(&server, MUSIC[0], page(MUSIC[0])).await;
+    serve_page(&server, OPERA[0], page(OPERA[0])).await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = WiltonsMusicHall::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, [MUSIC[0], OPERA[0]]);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].starts_with("music listing page 2:"), "{errors:?}");
+}
+
+#[tokio::test]
 async fn empty_genre_views_are_not_an_error() {
     let server = MockServer::start().await;
     serve_robots(&server).await;
