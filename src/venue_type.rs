@@ -91,6 +91,7 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("sinfonia-smith-square", "other"),
     ("stone-nest", "other"),
     ("union-chapel", "other"),
+    ("wiltons-music-hall", "other"),
     ("vortex-jazz-club", "other"),
 ];
 

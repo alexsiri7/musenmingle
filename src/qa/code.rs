@@ -141,6 +141,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "william_morris_society",
         include_str!("../sources/william_morris_society.rs"),
     ),
+    (
+        "wiltons_music_hall",
+        include_str!("../sources/wiltons_music_hall.rs"),
+    ),
 ];
 
 /// The module segment of a source type path

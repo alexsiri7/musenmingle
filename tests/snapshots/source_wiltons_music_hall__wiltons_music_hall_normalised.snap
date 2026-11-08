@@ -1,0 +1,618 @@
+---
+source: tests/source_wiltons_music_hall.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "songs-from-sea|2026-11-09|wiltons-music",
+      "description": "The Salts are one of the most exciting and energetic folk concepts around, performing original material alongside unique interpretations of traditional sea shanties. From the chilly windswept shores of the UK to the tropical lagoons of South America, a voyage of seafaring songs and shanty-based folk awaits. The band features five seasoned musicians delivering full-on harmonies, great musicianship and a splash of humour. Drawing from their vastly different musical backgrounds, the result is a unique take on homegrown songs and maritime classics. In short, 21st century folk fires a respectful broadside at the traditional. Line-up: Lee Collinson – guitar/banjo/vocals Jeremy Hart – guitar/vocals Brian Bull – mandolin/vocals Richard Nash – drums/vocals Tim Cantrell – double bass/vocals",
+      "ends_at": "2026-11-09T20:50:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/The-Salts-Songs-of-the-Sea-e1781625204375-1024x647.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "23.00",
+        "min": "10.00"
+      },
+      "starts_at": "2026-11-09T19:00:00Z",
+      "tags": [],
+      "title": "Songs from the Sea",
+      "url": "https://wiltons.org.uk/whats-on/songs-from-the-sea-2/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Mon 9 Nov",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "songs-from-the-sea-2"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "city-of-london-sinfonia-these-memories-may-be-true|2026-11-10|wiltons-music",
+      "description": "These Memories May Be True An evening exploring what home means, how we hold onto it, and how we carry it with us when we have to leave, with music by Reena Esmail, Bushra el-Turk, Lembit Beecher, Piazzolla, Vaughan Williams and Copland. Part of CLS’s wider season exploring asylum and migration in the UK. This concert was born from a year of conversations in a community kitchen, between musicians and people who are seeking asylum in the UK, about the memories of people, places and lives they had left behind and their hopes for the future they are building. Scents and sounds so evocative and distinct that they conjure us through time, space and memory to a particular place. The musical programme moves across continents, borders and centuries. Reena Esmail writes from the meeting-point of Indian and Western classical traditions. Bushra el-Turk draws on her Lebanese heritage. Lembit Beecher gives life to his Estonian grandmother in five luminous minutes of string quartet. Piazzolla evokes Buenos Aires in a single, heartbroken melody. Vaughan Williams reaches into the English folk tradition for something ancient and aching. And Copland ’s Appalachian Spring distils an entire American spirit; pioneering, optimistic and alive with hope. It feels fitting that this evening takes place at Wilton’s Music Hall, off Cable Street; a place with its own deep history of community, resistance and refuge. With a performance interweaving orchestral music with words and stories, this is an evening that asks what binds us to a place — and to each other. Musicians – City of London Sinfonia Alexandra Wood – CLS Creative Director and Leader Majid Adin – Projection Designer and Visual Artist",
+      "ends_at": "2026-11-10T20:15:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/City-of-London-Sinfonia.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "28.00",
+        "min": "11.00"
+      },
+      "starts_at": "2026-11-10T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "City of London Sinfonia – These Memories May Be True",
+      "url": "https://wiltons.org.uk/whats-on/city-of-london-sinfonia-these-memories-may-be-true/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Tue 10 Nov",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "city-of-london-sinfonia-these-memories-may-be-true"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "swingle-singers-close-mic-classics|2026-11-13|wiltons-music",
+      "description": "The story of a sound that inspired decades of vocal music. In Paris 1962, Ward Swingle assembled a group of session singers and had them sing Bach as if it were jazz. He described the sound “as if the singers were whispering in the audience’s ear.” The records that followed won Grammy awards, inspired the genre we now recognise as modern a cappella, and crafted a sound that has carried The Swingle Singers for sixty years. Close-Mic Classics continues that story, showing how Ward’s writing and arranging shaped a genre, and is still present in how the current group arranges and composes over six decades later. With Ward’s centenary only months away, come and celebrate this legacy with The Swingle Singers as they perform his original arrangements in the oldest grand music hall in the world. Hear live some of the celebrated reimaginings of Bach, jazz standards, and original writing that made The Swingle Singers a household name.",
+      "ends_at": "2026-11-13T20:50:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/The-Swingles-1024x610.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "28.00",
+        "min": "11.00"
+      },
+      "starts_at": "2026-11-13T19:00:00Z",
+      "tags": [],
+      "title": "The Swingle Singers – Close-Mic Classics",
+      "url": "https://wiltons.org.uk/whats-on/the-swingle-singers-close-mic-classics/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Fri 13 Nov",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-swingle-singers-close-mic-classics"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jazz-noel|2026-11-27|wiltons-music",
+      "description": "Jazz Noël is all about bringing people together through the warmth and joy of live music during the festive season. Blending well-loved Christmas tunes made famous by legends like Ella Fitzgerald, Frank Sinatra, and Nat King Cole with fresh, modern jazz arrangements creates a sound that feels both familiar and exciting. A tight, groove-driven rhythm section lays the foundation for the evening, joined by a rich four-horn line-up that adds depth, colour, and energy, alongside two outstanding vocalists who bri ng personality, warmth, and flair to every song. From relaxed, soulful moments that capture the calm of a winter evening to upbeat, feel-good grooves that reflect the buzz of the holidays, there’s something for everyone to enjoy. The musicians interact in a natural, conversational way, adding spontaneity and fun to each performance. Whether you’re a lifelong jazz fan or simply looking for a great night out in the run-up to Christmas, Jazz Noël offers a welcoming, uplifting experience that captures the spiri t of the season in a fresh and engaging way! www.jazznoel.co.uk",
+      "ends_at": "2026-11-27T20:50:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/Jazz-Noel-1024x682.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.00",
+        "min": "8.50"
+      },
+      "starts_at": "2026-11-27T19:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Jazz Noël",
+      "url": "https://wiltons.org.uk/whats-on/jazz-noel/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Fri 27 Nov",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "jazz-noel"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "james-joyces-dead|2027-01-28|wiltons-music",
+      "description": "Presented by The Fourth Choir “It’s rare to sit amid such a spellbound audience, transfixed by the narration and the music – and, yes, there were tears” The Observer “It’s so, so beautiful” Scott Matthewman, The Reviews Hub Returning for the third year in a row, this atmospheric presentation of James Joyce ’s masterpiece by The Fourth Choir fits Wilton’s like a glove. Maybe that’s why all previous performances have sold out a month in advance – so don’t wait to book. Set at a New Year’s party in Dublin in 1907, The Dead was hailed by T.S. Eliot as one of the greatest short stories ever written. A casual overhearing of an Irish folk song triggers memories so powerful that the dividing line between those who have died and those that remain becomes vanishingly thin. The Fourth Choir, London’s queer classical choir, explores how unaccompanied singing can add layers of emotion to a powerful story. The music includes Irish folk songs, an exquisite Tudor Ave Maria, works by contemporary Irish composers, Áine Mallon and Rhona Clarke, and an arrangement by The Fourth Choir ’s Music Director, Jamie Powe, of Bid Adie u, the only known song for which Joyce wrote both the words and the melody. “James Joyce’s The Dead brought vividly to life by this exceptionally polished LGBTQ+ choir”. The Guardian Image Night, Trinity Churchyard – Victoria Garland",
+      "ends_at": "2027-01-30T21:05:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/James-Joyces-The-Dead-Night-Trinity-Churchyard-Victoria-Garland-1024x847.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "29",
+        "min": "12.00"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-01-28T21:05:00Z",
+          "starts_at": "2027-01-28T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-01-29T21:05:00Z",
+          "starts_at": "2027-01-29T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-01-30T16:35:00Z",
+          "starts_at": "2027-01-30T14:30:00Z"
+        },
+        {
+          "ends_at": "2027-01-30T21:05:00Z",
+          "starts_at": "2027-01-30T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-01-28T19:00:00Z",
+      "tags": [],
+      "title": "JAMES JOYCE’S The Dead",
+      "url": "https://wiltons.org.uk/whats-on/the-dead-2/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Thu 28 Jan 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 29 Jan 2027",
+        "7 pm"
+      ],
+      [
+        "Sat 30 Jan 2027",
+        "2:30 pm"
+      ],
+      [
+        "Sat 30 Jan 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-dead-2"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "brian-clemens-big-band-ft-francesca-confortini-20th-century-jukebox|2027-02-11|wiltons-music",
+      "description": "Los Angeles-born pianist, arranger and composer Brian Clemens and vocal jazz star Francesca Confortini return to Wilton’s Music Hall with The 20th Century Jukebox, two nights celebrating an eclectic mix of music from across the century. From classic swing and the Great American Songbook to Hollywood, James Bond, Motown, The Beatles, pop, rock and beyond, the Brian Clemens Big Band puts its own stamp on some of the century’s most memorable music. Familiar favourites sit alongside unexpected choices, original songs and bold new arrangements, brought to life by a roaring big band featuring some of London’s finest musicians. Following previous Wilton’s performances and UK theatre dates with Songs of the Silver Screen and Broadway to the West End, Clemens and Confortini return with a programme that brings together audience favourites and new surprises. Praised by The Spy in the Stalls as “a whirlwind ride through the music world,” the show showcases the musical chemistry between Clemens and Confortini, whose powerful vocals have been heard alongside artists including Cat Stevens and Rod Stewart.",
+      "ends_at": "2027-02-12T21:00:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/BCBB-20th-Century-jukebox-1024x619.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.00",
+        "min": "8.50"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-02-11T21:00:00Z",
+          "starts_at": "2027-02-11T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-12T21:00:00Z",
+          "starts_at": "2027-02-12T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-02-11T19:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Brian Clemens Big Band ft Francesca Confortini – The 20th Century Jukebox",
+      "url": "https://wiltons.org.uk/whats-on/brian-clemens-big-band-ft-francesca-confortini-the-20th-century-jukebox/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Thu 11 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 12 Feb 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "brian-clemens-big-band-ft-francesca-confortini-the-20th-century-jukebox"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tiger-lillies-in-macbeth-song|2027-02-23|wiltons-music",
+      "description": "Three witches sing to Macbeth, a power too great for a human. The Tiger Lillies and La Perla 29 take us to the heart of this story in a show-concert that blends the live music of the London trio with the aesthetics of the Catalan company. Guided by accordions, ukuleles, brand-new songs, emotional ballads, and three great actors, this special company creates a new way to tell this impactful story that speaks of power and war, guilt, blood-stained hands, death, spells, dark nights, fog, and the indelible memory of crimes committed by excessive ambition. Poor Macbeth, deluded, who killed the king to place the crown on his head. Three witches promise him power, and he enters the fatal labyrinth of ambition. The serpentine tongue of Lady Macbeth and the paranoia of the throne drive him to commit the most despicable crimes, and the gears of war and fear turn without anyone being able to stop them. Ah, poor tyrant, when he faces his guilty conscience every evening of the longest and darkest night. What a childish man, the despot, who kills and kills without knowing how to love. What ray of dawn can pierce these blood-soaked clouds? Where has freedom gone? The three Tiger Lillies sing to Macbeth, a power too great for a human soul. “If you’ve never encountered Macbeth before, now is the time to step into his dark kingdom. And if you have, you’ve never experienced it in a format like the one Broggi and The Tiger Lillies have created. Step right in.” – Sergi Doria, ABC",
+      "ends_at": "2027-03-06T21:20:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/THE-TIGER-LILLIES-V2.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "29.00",
+        "min": "12.00"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-02-23T21:20:00Z",
+          "starts_at": "2027-02-23T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-24T21:20:00Z",
+          "starts_at": "2027-02-24T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-25T21:20:00Z",
+          "starts_at": "2027-02-25T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-26T21:20:00Z",
+          "starts_at": "2027-02-26T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-27T16:20:00Z",
+          "starts_at": "2027-02-27T14:00:00Z"
+        },
+        {
+          "ends_at": "2027-02-27T21:20:00Z",
+          "starts_at": "2027-02-27T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-01T21:20:00Z",
+          "starts_at": "2027-03-01T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-02T21:20:00Z",
+          "starts_at": "2027-03-02T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-03T21:20:00Z",
+          "starts_at": "2027-03-03T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-04T21:20:00Z",
+          "starts_at": "2027-03-04T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-05T21:20:00Z",
+          "starts_at": "2027-03-05T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-06T21:20:00Z",
+          "starts_at": "2027-03-06T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-02-23T19:00:00Z",
+      "tags": [],
+      "title": "The Tiger Lillies in A Macbeth Song",
+      "url": "https://wiltons.org.uk/whats-on/the-tiger-lillies-in-a-macbeth-song/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Tue 23 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Wed 24 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Thu 25 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 26 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Sat 27 Feb 2027",
+        "2 pm"
+      ],
+      [
+        "Sat 27 Feb 2027",
+        "7 pm"
+      ],
+      [
+        "Mon 1 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Tue 2 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Wed 3 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Thu 4 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 5 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Sat 6 Mar 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-tiger-lillies-in-a-macbeth-song"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "onetrackminds|2027-03-09|wiltons-music",
+      "description": "Presented by VERYFINE The award-winning live show returns to Wilton’s Music Hall for another night of music and storytelling. An engaging cross between Desert Island Discs, TED Talks and The Moth, OneTrackMinds asks a selection of five guests to tell a story about one song that has changed their life – before we play that song to the audience. Previous guests have included: Sir David Suchet, Katie Melua, Jane Horrocks, Harry Hill, Peter Tatchell, Inua Ellams, Tom Basden, Jessie Buckley, Deborah Frances White and Chris Difford. “This show is like stepping into a warm bath” – Vanessa Kisuule “A London institution waiting to happen” – Erica Buist WINNER – Audience Award – Bitesize Festival 2024",
+      "ends_at": "2027-03-09T21:00:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/OneTrackMinds-1024x683.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "19.00",
+        "min": "7.50"
+      },
+      "starts_at": "2027-03-09T19:00:00Z",
+      "tags": [],
+      "title": "OneTrackMinds",
+      "url": "https://wiltons.org.uk/whats-on/onetrackminds-mar27/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Tue 9 Mar 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "onetrackminds-mar27"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "steve-pretty-friends-on-origin-of-pieces|2027-03-10|wiltons-music",
+      "description": "Are you musically curious? Why does a groove make us move? How do musicians from different traditions understand one another? Can a seashell become an instrument? Join musician, composer and Hackney Colliery Band leader Steve Pretty for a variety show that takes music apart and puts it back together live. Through performances, conversation, demonstrations and spontaneous collaborations, Steve and his guests explore where musical ideas come from, how they work and why they affect us. Previous live guests have included comedian Robin Ince, Pink Floyd bassist Guy Pratt, jazz star Theon Cross and Tony Award-winner Frances Ruffelle. Based on Steve’s podcast On the Origin of the Pieces ( “wide-ranging and insightful” — Guardian), the show roams across genres, cultures, science and the musical brain. No musical knowledge is required: whether you’re a seasoned musician or shower singer, you’ll leave with new ways to hear, understand and enjoy the music you love. With special guest Beardyman Joining Steve Pretty for an evening of music, chat and musical surprises is Beardyman : twice UK beatboxing champion, comedian and a pioneer of live looping. Using his voice and his own music-making technology, he creates tracks on the spot, combining extraordinary vocal skills with quick-thinking improvisation and humour. More guests to be announced. Weblinks: Podcast: www.originofthepieces.com Steve Pretty: www.stevepretty.com Hackney Colliery Band: www.hackneycollieryband.co.uk",
+      "ends_at": "2027-03-10T21:30:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/OOTP-@-Wiltons-Jan-2024-3-edited-1-1024x552.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20.00",
+        "min": "7.50"
+      },
+      "starts_at": "2027-03-10T19:00:00Z",
+      "tags": [],
+      "title": "Steve Pretty (and Friends) On the Origin of the Pieces",
+      "url": "https://wiltons.org.uk/whats-on/steve-pretty-and-friends-on-the-origin-of-the-pieces-3/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Wed 10 Mar 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "steve-pretty-and-friends-on-the-origin-of-the-pieces-3"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "marriage-of-figaro|2026-11-23|wiltons-music",
+      "description": "In a new Yorkshire version by Ian McMillan Mashallah! It’s Mozart…but not as you’ve heard it! Figaro’s getting wed to Suzanna. But his boss, the Count, has designs on her, neglecting his young Countess, Rosina. Can Figaro and Suzanna conspire to thwart the Count? And who is kissing the Countess down t’allotment! Set in 1970s Bradford, with a new translation by BBC3 star, Yorkshire’s own Ian McMillan, this orchestral reimagining seamlessly blends Western and Indian Classical instruments. Performed by an ensemble that combines expert musicians and singers from both traditions, this is a fresh twist on a beloved classic, authentic and true to Mozart and Indian Classical music. Following The Barber of Seville, praised as “an hilarious operatic treat” ★★★★ (The Telegraph), conductor Ben Crick and director Alex Chisholm continue to bring fresh life to familiar stories, with confidence, detail, and a real sense of play.",
+      "ends_at": "2026-11-25T21:50:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/06/The-Marriage-of-Figaro.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "28.00",
+        "min": "11.00"
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-11-23T21:50:00Z",
+          "starts_at": "2026-11-23T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-24T21:50:00Z",
+          "starts_at": "2026-11-24T19:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-25T21:50:00Z",
+          "starts_at": "2026-11-25T19:00:00Z"
+        }
+      ],
+      "starts_at": "2026-11-23T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "The Marriage of Figaro",
+      "url": "https://wiltons.org.uk/whats-on/the-marriage-of-figaro/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Mon 23 Nov",
+        "7 pm"
+      ],
+      [
+        "Tue 24 Nov",
+        "7 pm"
+      ],
+      [
+        "Wed 25 Nov",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-marriage-of-figaro"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "arcadians|2027-01-14|wiltons-music",
+      "description": "An Edwardian Fantasy Opera della Luna return to Wilton’s with their specially prepared semi-staged, rehearsed reading of the most successful of all Edwardian musical comedies. Performed with an 11-piece orchestra, the singers will be in costume but sing from music which they carry with them. The company presented this version in 2018 at Wilton’s and it received a huge ovation from a packed house. “Though scores were to hand, the dialogue crackled and the costumes, blocking, and Michael Waldron’s effervescent conducting brought this Edwardian period piece to life. Maybe, somewhere amid the fun and froth, it even carried a message for modern Britain.” Opera Magazine “The score is an absolute winner” The Stage",
+      "ends_at": "2027-01-15T21:25:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/Arcadians-960x580px-1024x619.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "32",
+        "min": "14.50"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-01-14T21:25:00Z",
+          "starts_at": "2027-01-14T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-01-15T21:25:00Z",
+          "starts_at": "2027-01-15T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-01-14T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "The Arcadians",
+      "url": "https://wiltons.org.uk/whats-on/the-arcadians-jan-26/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Thu 14 Jan 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 15 Jan 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-arcadians-jan-26"
+  },
+  {
+    "event": {
+      "address": "Graces Alley, London E1 8JB",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mikado|2027-03-16|wiltons-music",
+      "description": "Charles Court Opera ‘s highly successful production of The Mikado returns to bring ‘five-star heaven’ (WhatsOnStage) to Wilton’s Music Hall. Following their critically acclaimed productions of Iolanthe and Patience, the “masters of G&S” present their stylish production of one of the most loved of Gilbert and Sullivan ’s comic masterpieces. Behind closed doors at a British Consulate, the scheming Lord High Executioner is about to hatch one plot too far, with far-reaching and hilarious consequences for everyone involved. Containing familiar songs including “A wandering minstrel, I”, “I’ve got a little list” and “Three little maids from school”, this punchy and hilarious satire promises to be a treat for operetta lovers and newcomers alike. Directed by CCO’s Artistic Director, John Savournin, and featuring a first class cast including Matthew Kellett, Catrine Kirkman, Meriel Cunningham, Robin Bailey, Llio Evans, Fiona Finsbury and Matthew Palmer, this is one production you definitely do not want to miss! ★★★★★ “five-star heaven” – WhatsOnStage ★★★★ “This is a triumphant achievement both visually and musically” – The Stage ★★★★★ “This production simply cannot be bettered” – The Spy in the Stalls",
+      "ends_at": "2027-03-20T21:20:00Z",
+      "image_url": "https://wiltons.org.uk/wp-content/uploads/2026/09/The-Mikado-Wiltons-960-x-580-px-1-1.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "34.00",
+        "min": "14.00"
+      },
+      "sessions": [
+        {
+          "ends_at": "2027-03-16T21:20:00Z",
+          "starts_at": "2027-03-16T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-17T21:20:00Z",
+          "starts_at": "2027-03-17T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-18T16:20:00Z",
+          "starts_at": "2027-03-18T14:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-18T21:20:00Z",
+          "starts_at": "2027-03-18T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-19T21:20:00Z",
+          "starts_at": "2027-03-19T19:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-20T16:20:00Z",
+          "starts_at": "2027-03-20T14:00:00Z"
+        },
+        {
+          "ends_at": "2027-03-20T21:20:00Z",
+          "starts_at": "2027-03-20T19:00:00Z"
+        }
+      ],
+      "starts_at": "2027-03-16T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "The Mikado",
+      "url": "https://wiltons.org.uk/whats-on/the-mikado-2/",
+      "venue_name": "Wilton's Music Hall"
+    },
+    "performances": [
+      [
+        "Tue 16 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Wed 17 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Thu 18 Mar 2027",
+        "2 pm"
+      ],
+      [
+        "Thu 18 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Fri 19 Mar 2027",
+        "7 pm"
+      ],
+      [
+        "Sat 20 Mar 2027",
+        "2 pm"
+      ],
+      [
+        "Sat 20 Mar 2027",
+        "7 pm"
+      ]
+    ],
+    "source_event_id": "the-mikado-2"
+  }
+]
