@@ -1,0 +1,2033 @@
+{
+    "filters": {
+        "types": [
+            {
+                "slug": "ballet",
+                "name": "Ballet"
+            },
+            {
+                "slug": "chamber",
+                "name": "Chamber"
+            },
+            {
+                "slug": "choral",
+                "name": "Choral"
+            },
+            {
+                "slug": "community-event",
+                "name": "Community Event"
+            },
+            {
+                "slug": "contemporary",
+                "name": "Contemporary"
+            },
+            {
+                "slug": "dance",
+                "name": "Dance"
+            },
+            {
+                "slug": "family",
+                "name": "Family"
+            },
+            {
+                "slug": "family-concerts-and-events",
+                "name": "Family concerts and events"
+            },
+            {
+                "slug": "folk",
+                "name": "Folk"
+            },
+            {
+                "slug": "gospel",
+                "name": "Gospel"
+            },
+            {
+                "slug": "immersive",
+                "name": "Immersive"
+            },
+            {
+                "slug": "jazz",
+                "name": "Jazz"
+            },
+            {
+                "slug": "opera",
+                "name": "Opera"
+            },
+            {
+                "slug": "orchestral",
+                "name": "Orchestral"
+            },
+            {
+                "slug": "organ",
+                "name": "Organ"
+            },
+            {
+                "slug": "relaxed-performances",
+                "name": "Relaxed performances"
+            },
+            {
+                "slug": "talks-and-events",
+                "name": "Talks and Events"
+            },
+            {
+                "slug": "external",
+                "name": "Visiting"
+            },
+            {
+                "slug": "vocal",
+                "name": "Vocal"
+            }
+        ],
+        "venues": [
+            {
+                "slug": "smith-square-crypt",
+                "name": "Smith Square Crypt"
+            },
+            {
+                "slug": "smith-square-hall",
+                "name": "Smith Square Hall"
+            },
+            {
+                "slug": "elsewhere",
+                "name": "Elsewhere"
+            }
+        ],
+        "series": [
+            {
+                "slug": "anghiari-festival",
+                "name": "Anghiari Festival"
+            },
+            {
+                "slug": "christmas-festival",
+                "name": "Christmas Festival"
+            },
+            {
+                "slug": "concert-lab",
+                "name": "ConcertLab"
+            },
+            {
+                "slug": "easter-festival",
+                "name": "Easter Festival"
+            },
+            {
+                "slug": "family-events",
+                "name": "Family events"
+            },
+            {
+                "slug": "jazz-in-the-crypt",
+                "name": "Jazz in the Crypt"
+            },
+            {
+                "slug": "london-festival-of-baroque-music",
+                "name": "London Festival of Baroque Music"
+            },
+            {
+                "slug": "london-festival-of-chamber-music",
+                "name": "London Festival of Chamber Music"
+            },
+            {
+                "slug": "london-handel-festival-2027",
+                "name": "London Handel Festival 2027"
+            },
+            {
+                "slug": "lunchtime-concerts",
+                "name": "Lunchtime Concerts"
+            },
+            {
+                "slug": "rush-hour",
+                "name": "Rush Hour Concerts"
+            },
+            {
+                "slug": "sinfonia",
+                "name": "Sinfonia Smith Square Fellowship"
+            },
+            {
+                "slug": "the-organ-and-beyond",
+                "name": "The Organ and Beyond"
+            },
+            {
+                "slug": "under30s",
+                "name": "under30s"
+            }
+        ]
+    },
+    "items": [
+        {
+            "title": "Earth, Wind, Fire &#038; Water Music",
+            "excerpt": "",
+            "slug": "earth-wind-fire-water-music",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/earth-wind-fire-water-music\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "45",
+            "free": false,
+            "start_date": "Sat 6 Mar 2027",
+            "end_date": "Sat 6 Mar 2027",
+            "next_instance_date": "Sat 6 Mar 2027, 11.00am",
+            "display_date": "Sat 6 Mar 2027",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/10\/family-1280x941.jpg",
+            "time": "11.00am",
+            "performer": "Sinfonia Smith Square",
+            "repertoire": "<p><strong>Handel\u00a0<\/strong>Music for the Royal Fireworks<\/p>\n<p><strong>Handel\u00a0<\/strong>Water Music<\/p>\n",
+            "theme_colour": "internal",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-10-30 10:00:00",
+            "timestamp": [
+                "2027-03-06 11:00"
+            ],
+            "types": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Come and Sing!: Coronation Anthems",
+            "excerpt": "",
+            "slug": "come-and-sing-coronation-anthems",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/come-and-sing-coronation-anthems\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "300",
+            "free": false,
+            "start_date": "Sat 6 Mar 2027",
+            "end_date": "Sat 6 Mar 2027",
+            "next_instance_date": "Sat 6 Mar 2027, 12.30pm",
+            "display_date": "Sat 6 Mar 2027",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/10\/comeandsing-1280x941.jpg",
+            "time": "12.30pm",
+            "performer": "London Handel Orchestra",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-10-30 10:00:00",
+            "timestamp": [
+                "2027-03-06 12:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Sanctuary \u2013 From Winter&#8217;s Stillness",
+            "excerpt": "",
+            "slug": "sanctuary-from-winters-stillness",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/sanctuary-from-winters-stillness\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": false,
+            "free": false,
+            "start_date": "Sun 31 Jan 2027",
+            "end_date": "Sun 31 Jan 2027",
+            "next_instance_date": "Sun 31 Jan 2027, 7.30pm",
+            "display_date": "Sun 31 Jan 2027",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/10\/From-Winter-Stillness-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": null,
+            "timestamp": [
+                "2027-01-31 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Immersive",
+                    "slug": "immersive"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Roman Vespers",
+            "excerpt": "",
+            "slug": "roman-vespers",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/roman-vespers\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Sat 13 Mar 2027",
+            "end_date": "Sat 13 Mar 2027",
+            "next_instance_date": "Sat 13 Mar 2027, 7.00pm",
+            "display_date": "Sat 13 Mar 2027",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/10\/Roman-Vespers-1055x960.png",
+            "time": "7.00pm",
+            "performer": "London Handel Festival",
+            "repertoire": "<p><strong>George Frideric Hand<\/strong><em><strong>el <\/strong><\/em>Dixit Dominus, HWV 232<em><br \/>\n<\/em><strong>Alessandro Scarlatti <\/strong>Magnificat<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-10-14 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-10-21 10:00:00",
+            "timestamp": [
+                "2027-03-13 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "London Handel Festival 2027",
+                    "slug": "london-handel-festival-2027"
+                }
+            ]
+        },
+        {
+            "title": "Israel in Egypt",
+            "excerpt": "",
+            "slug": "israel-in-egypt",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/israel-in-egypt\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "150",
+            "free": false,
+            "start_date": "Thu 18 Feb 2027",
+            "end_date": "Thu 18 Feb 2027",
+            "next_instance_date": "Thu 18 Feb 2027, 7.00pm",
+            "display_date": "Thu 18 Feb 2027",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/10\/Israel-in-Egypt-1280x941.png",
+            "time": "7.00pm",
+            "performer": "London Handel Festival",
+            "repertoire": "<p><strong>George Frideric Handel<\/strong> Israel in Egypt<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-10-14 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-10-21 10:00:00",
+            "timestamp": [
+                "2027-02-18 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "London Handel Festival 2027",
+                    "slug": "london-handel-festival-2027"
+                }
+            ]
+        },
+        {
+            "title": "Fulham Symphony Orchestra",
+            "excerpt": "",
+            "slug": "fulham-symphony-orchestra-4",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/fulham-symphony-orchestra-4\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "130",
+            "free": false,
+            "start_date": "Sat 14 Nov 2026",
+            "end_date": "Sat 14 Nov 2026",
+            "next_instance_date": "Sat 14 Nov 2026, 7.30pm",
+            "display_date": "Sat 14 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2025\/07\/mg-fso-0324-8540-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "Fulham Symphony Orchestra",
+            "repertoire": "<p><strong>Mahler\u00a0<\/strong>Symphony No. 5<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": null,
+            "timestamp": [
+                "2026-11-14 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Christmas Concert at Westminster Abbey",
+            "excerpt": "",
+            "slug": "christmas-concert-at-westminster-abbey-2",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/christmas-concert-at-westminster-abbey-2\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": false,
+            "free": false,
+            "start_date": "Sat 19 Dec 2026",
+            "end_date": "Sat 19 Dec 2026",
+            "next_instance_date": "Sat 19 Dec 2026, 7.00pm",
+            "display_date": "Sat 19 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/09\/christmasconcert2026_landscape-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "The Choir of Westminster Abbey",
+            "repertoire": "<p><strong>Benjamin Britten<\/strong>\u00a0<em>Ceremony of Carols<\/em><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-09-10 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2027-01-01 00:00:00",
+            "timestamp": [
+                "2026-12-19 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Westminster Abbey",
+                    "slug": "westminster-abbey"
+                },
+                {
+                    "name": "Elsewhere",
+                    "slug": "elsewhere"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Handel Messiah",
+            "excerpt": "",
+            "slug": "handel-messiah-3",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/handel-messiah-3\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "150",
+            "free": false,
+            "start_date": "Fri 27 Nov 2026",
+            "end_date": "Fri 27 Nov 2026",
+            "next_instance_date": "Fri 27 Nov 2026, 7.00pm",
+            "display_date": "Fri 27 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/09\/Messiah2026_landscape-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "The Choir of Westminster Abbey & The English Concert",
+            "repertoire": "<p><strong>Handel\u00a0<\/strong>Messiah<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-09-14 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-09-16 10:00:00",
+            "timestamp": [
+                "2026-11-27 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Westminster Abbey",
+                    "slug": "westminster-abbey"
+                },
+                {
+                    "name": "Elsewhere",
+                    "slug": "elsewhere"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "A Tchaikovsky Christmas by Candlelight",
+            "excerpt": "",
+            "slug": "a-tchaikovsky-christmas-by-candlelight",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/a-tchaikovsky-christmas-by-candlelight\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "100",
+            "free": false,
+            "start_date": "Thu 17 Dec 2026",
+            "end_date": "Thu 17 Dec 2026",
+            "next_instance_date": "Thu 17 Dec 2026, 7.00pm",
+            "display_date": "Thu 17 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/08\/raul-ling-fqAP0iCrg1A-unsplash-2-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "SINFONIA SMITH SQUARE",
+            "repertoire": "<p>Selections from Tchaikovsky&#8217;s <span data-olk-copy-source=\"MessageBody\">Swan Lake, Sleeping Beauty and Symphony No.6 \u2018Path\u00e9tique\u2019<\/span><\/p>\n",
+            "theme_colour": "internal",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": null,
+            "timestamp": [
+                "2026-12-17 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "Sinfonia Smith Square Fellowship",
+                    "slug": "sinfonia"
+                }
+            ]
+        },
+        {
+            "title": "Hwa Quartet",
+            "excerpt": "",
+            "slug": "hwa-quartet",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/hwa-quartet\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": false,
+            "free": false,
+            "start_date": "Wed 2 Dec 2026",
+            "end_date": "Wed 2 Dec 2026",
+            "next_instance_date": "Wed 2 Dec 2026, 1.05pm",
+            "display_date": "Wed 2 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/08\/DSC06229-1280x960.jpg",
+            "time": "1.05pm",
+            "performer": "Lunchtime Concert Series",
+            "repertoire": "<p><strong>Elizabeth Maconchy<\/strong> String Quartet No.3 Op.15<\/p>\n<p><strong>Jin Cho<\/strong> Yearning You Yet<\/p>\n<p><strong>Emilie Mayer<\/strong> String Quartet in G minor, Op.14<\/p>\n",
+            "theme_colour": "internal",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": null,
+            "timestamp": [
+                "2026-12-02 13:05"
+            ],
+            "types": [
+                {
+                    "name": "Chamber",
+                    "slug": "chamber"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Lunchtime Concerts",
+                    "slug": "lunchtime-concerts"
+                }
+            ]
+        },
+        {
+            "title": "Sound and Fury",
+            "excerpt": "",
+            "slug": "sound-and-fury",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/sound-and-fury\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": false,
+            "duration": false,
+            "free": false,
+            "start_date": "Thu 12 Nov 2026",
+            "end_date": "Thu 12 Nov 2026",
+            "next_instance_date": "Thu 12 Nov 2026, 7.30pm",
+            "display_date": "Thu 12 Nov ",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/07\/image-asset-1280x960.webp",
+            "time": "7.30pm",
+            "performer": "Wimbledon International Music Festival",
+            "repertoire": "",
+            "theme_colour": "internal",
+            "priority_booking": "",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": null,
+            "timestamp": [
+                "2026-11-12 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Wimbledon High School",
+                    "slug": "wimbledon-high-school"
+                },
+                {
+                    "name": "Elsewhere",
+                    "slug": "elsewhere"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Sinfonia Smith Square Fellowship",
+                    "slug": "sinfonia"
+                }
+            ]
+        },
+        {
+            "title": "Ellington&#8217;s Nutcracker",
+            "excerpt": "",
+            "slug": "nyjo-blueprint-orchestra-ellingtons-nutcracker",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/nyjo-blueprint-orchestra-ellingtons-nutcracker\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "100",
+            "free": false,
+            "start_date": "Mon 7 Dec 2026",
+            "end_date": "Mon 7 Dec 2026",
+            "next_instance_date": "Mon 7 Dec 2026, 7.00pm",
+            "display_date": "Mon 7 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/NYJO-BLUEPRINT-ORCHESTRA-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "NYJO Blueprint orchestra",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-07 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Jazz",
+                    "slug": "jazz"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "The Snowman Live in Concert",
+            "excerpt": "",
+            "slug": "the-snowman-live-in-concert-london",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/the-snowman-live-in-concert-london\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Sat 19 Dec 2026",
+            "end_date": "Sun 20 Dec 2026",
+            "next_instance_date": "Sat 19 Dec 2026, 1.30pm",
+            "display_date": "Sat 19 - Sun 20 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2025\/06\/The-Snowman-Flying-with-credit-line-copy-1280x960.jpg",
+            "time": "1.30pm & 11.00am",
+            "performer": "Sinfonia Smith Square's Family Weekend",
+            "repertoire": "",
+            "theme_colour": "internal",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-19 13:30",
+                "2026-12-20 11:00"
+            ],
+            "types": [
+                {
+                    "name": "Family",
+                    "slug": "family"
+                },
+                {
+                    "name": "Family concerts and events",
+                    "slug": "family-concerts-and-events"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "Family events",
+                    "slug": "family-events"
+                },
+                {
+                    "name": "Sinfonia Smith Square Fellowship",
+                    "slug": "sinfonia"
+                }
+            ]
+        },
+        {
+            "title": "Mr Handel\u2019s Christmas Story",
+            "excerpt": "",
+            "slug": "mr-handels-christmas-story",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/mr-handels-christmas-story\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "90",
+            "free": false,
+            "start_date": "Tue 8 Dec 2026",
+            "end_date": "Tue 8 Dec 2026",
+            "next_instance_date": "Tue 8 Dec 2026, 7.00pm",
+            "display_date": "Tue 8 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/54271807233_96fce56252_o-1-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Gabrieli Roar",
+            "repertoire": "<p><strong>Gabrieli Roar<\/strong> Mr Handel\u2019s Christmas Story<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-08 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Family",
+                    "slug": "family"
+                },
+                {
+                    "name": "Family concerts and events",
+                    "slug": "family-concerts-and-events"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "Family events",
+                    "slug": "family-events"
+                }
+            ]
+        },
+        {
+            "title": "Handel&#8217;s Messiah",
+            "excerpt": "",
+            "slug": "handels-messiah-4",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/handels-messiah-4\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "135",
+            "free": false,
+            "start_date": "Wed 2 Dec 2026",
+            "end_date": "Wed 2 Dec 2026",
+            "next_instance_date": "Wed 2 Dec 2026, 7.30pm",
+            "display_date": "Wed 2 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Westminster-Hall-concert-2018-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "Parliament Choir",
+            "repertoire": "<p><strong>George Frideric Handel<\/strong><span class=\"NormalTextRun SCXW27921577 BCX8\"><strong>\u00a0<\/strong>Messiah<\/span><span class=\"NormalTextRun SCXW27921577 BCX8\">\u00a0<\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-02 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Percussive Power with Dame Evelyn Glennie",
+            "excerpt": "",
+            "slug": "percussive-power",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/percussive-power\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": false,
+            "free": false,
+            "start_date": "Sun 29 Nov 2026",
+            "end_date": "Sun 29 Nov 2026",
+            "next_instance_date": "Sun 29 Nov 2026, 7.00pm",
+            "display_date": "Sun 29 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/\u00a9-Chris-Payne-photo-ref-53924-back-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Fantasia Orchestra",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-29 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Contemporary",
+                    "slug": "contemporary"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Hey for Christmas!",
+            "excerpt": "",
+            "slug": "hey-for-christmas",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/hey-for-christmas\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Sat 19 Dec 2026",
+            "end_date": "Sat 19 Dec 2026",
+            "next_instance_date": "Sat 19 Dec 2026, 8.00pm",
+            "display_date": "Sat 19 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/DSCF8328-1280x960.jpg",
+            "time": "8.00pm",
+            "performer": "Siglo de Oro ",
+            "repertoire": "<p><strong>William Byrd<\/strong> In Winter Cold<br \/>\n<strong>Trad. English <\/strong>Hey for Christmas<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-19 20:00"
+            ],
+            "types": [
+                {
+                    "name": "Vocal",
+                    "slug": "vocal"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                }
+            ]
+        },
+        {
+            "title": "When David Heard",
+            "excerpt": "",
+            "slug": "when-david-heard",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/when-david-heard\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Sun 15 Nov 2026",
+            "end_date": "Sun 15 Nov 2026",
+            "next_instance_date": "Sun 15 Nov 2026, 7.30pm",
+            "display_date": "Sun 15 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/greg-rakozy-oMpAz-DN-9I-unsplash-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "The Purcell Singers ",
+            "repertoire": "<p><strong>Eric Whitacre<\/strong> When David Heard<br \/>\n<strong>T\u00f5nu K\u00f5rvtis<\/strong> The Night is Darkening Round Me<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-15 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Contemporary",
+                    "slug": "contemporary"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Spirit of Django",
+            "excerpt": "",
+            "slug": "spirit-of-django",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/spirit-of-django\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Thu 19 Nov 2026",
+            "end_date": "Thu 19 Nov 2026",
+            "next_instance_date": "Thu 19 Nov 2026, 7.00pm",
+            "display_date": "Thu 19 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Spirit-of-Django-copy-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Martin Taylor & Guy Barker",
+            "repertoire": "",
+            "theme_colour": "internal",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 00:00:00",
+            "timestamp": [
+                "2026-11-19 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Jazz",
+                    "slug": "jazz"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Sinfonia Smith Square Fellowship",
+                    "slug": "sinfonia"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Wallace &#038; Gromit: The Wrong Trousers Live in Concert",
+            "excerpt": "",
+            "slug": "wallace-gromit-the-wrong-trousers",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/wallace-gromit-the-wrong-trousers\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Sat 19 Dec 2026",
+            "end_date": "Sun 20 Dec 2026",
+            "next_instance_date": "Sat 19 Dec 2026, 3.00pm",
+            "display_date": "Sat 19 - Sun 20 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/WG-TWT_Full-Card-1280x960.jpg",
+            "time": "3.00pm & 1.00pm",
+            "performer": "Sinfonia Smith Square's Family Weekend",
+            "repertoire": "",
+            "theme_colour": "internal",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-19 15:00",
+                "2026-12-20 13:00"
+            ],
+            "types": [
+                {
+                    "name": "Family",
+                    "slug": "family"
+                },
+                {
+                    "name": "Family concerts and events",
+                    "slug": "family-concerts-and-events"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "Family events",
+                    "slug": "family-events"
+                },
+                {
+                    "name": "Sinfonia Smith Square Fellowship",
+                    "slug": "sinfonia"
+                }
+            ]
+        },
+        {
+            "title": "5pence and the Kodie Kollective",
+            "excerpt": "",
+            "slug": "5pence-and-the-kodie-kollective",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/5pence-and-the-kodie-kollective\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Thu 19 Nov 2026",
+            "end_date": "Thu 19 Nov 2026",
+            "next_instance_date": "Thu 19 Nov 2026, 9.00pm",
+            "display_date": "Thu 19 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Kodie-Kwartet-1280x960.jpeg",
+            "time": "9.00pm",
+            "performer": "Jazz in the Crypt",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-19 21:00"
+            ],
+            "types": [
+                {
+                    "name": "Jazz",
+                    "slug": "jazz"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Crypt",
+                    "slug": "smith-square-crypt"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Jazz in the Crypt",
+                    "slug": "jazz-in-the-crypt"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Zoffany Ensemble",
+            "excerpt": "",
+            "slug": "zoffany-ensemble",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/zoffany-ensemble\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "55",
+            "free": false,
+            "start_date": "Thu 19 Nov 2026",
+            "end_date": "Thu 19 Nov 2026",
+            "next_instance_date": "Thu 19 Nov 2026, 1.05pm",
+            "display_date": "Thu 19 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/FULLRES-matsmithphotography-009-MSP_2433-Edit-1280x960.jpg",
+            "time": "1.05pm",
+            "performer": "Lunchtime Concert Series",
+            "repertoire": "<p><strong>Johannes Brahms<\/strong> <span class=\"TextRun SCXW5216609 BCX8\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW5216609 BCX8\">Serenade No.1 in D major, Op.11 <\/span><\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-19 13:05"
+            ],
+            "types": [
+                {
+                    "name": "Chamber",
+                    "slug": "chamber"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Lunchtime Concerts",
+                    "slug": "lunchtime-concerts"
+                }
+            ]
+        },
+        {
+            "title": "Schubert Winterreise: An Immersive Journey",
+            "excerpt": "",
+            "slug": "schubert-winterreise-an-immersive-journey",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/schubert-winterreise-an-immersive-journey\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "80",
+            "free": false,
+            "start_date": "Sun 6 Dec 2026",
+            "end_date": "Sun 6 Dec 2026",
+            "next_instance_date": "Sun 6 Dec 2026, 3.00pm",
+            "display_date": "Sun 6 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Winterreise-event-image-1-1280x960.jpg",
+            "time": "3.00pm & 6.00pm",
+            "performer": "Roderick Williams OBE",
+            "repertoire": "<p><strong> Franz Schubert <\/strong>Winterreise<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-06 15:00",
+                "2026-12-06 18:00"
+            ],
+            "types": [
+                {
+                    "name": "Immersive",
+                    "slug": "immersive"
+                },
+                {
+                    "name": "Vocal",
+                    "slug": "vocal"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Angelus ad Virginem",
+            "excerpt": "",
+            "slug": "angelus-ad-virginem",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/angelus-ad-virginem\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Mon 21 Dec 2026",
+            "end_date": "Mon 21 Dec 2026",
+            "next_instance_date": "Mon 21 Dec 2026, 7.30pm",
+            "display_date": "Mon 21 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/54869400880_8a0bf2d0b7_k-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "Choir of Clare College, Cambridge",
+            "repertoire": "<p><strong>Cheryl Frances-Hoad<\/strong> The Nativity<\/p>\n<p><span class=\"TextRun SCXW212238229 BCX8\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW212238229 BCX8\">Traditional carols from the 14th century onwards<\/span><\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-21 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Chamber",
+                    "slug": "chamber"
+                },
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Hail Mary!",
+            "excerpt": "",
+            "slug": "hail-mary",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/hail-mary\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "110",
+            "free": false,
+            "start_date": "Fri 18 Dec 2026",
+            "end_date": "Fri 18 Dec 2026",
+            "next_instance_date": "Fri 18 Dec 2026, 7.30pm",
+            "display_date": "Fri 18 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/HG102060FLAT_FINALBRIGHT-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "The Tallis Scholars",
+            "repertoire": "<p><strong>Michael <\/strong><span class=\"TextRun SCXW118340070 BCX0\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW118340070 BCX0\"><strong>Praetorius<\/strong> Magnificat\u00a0<\/span><\/span><\/p>\n<p><strong>Heinrich <\/strong><span class=\"TextRun SCXW14429916 BCX0\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW14429916 BCX0\"><strong>Sch\u00fctz<\/strong> Magnificat<\/span><\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-18 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "On Christmas Night",
+            "excerpt": "",
+            "slug": "on-christmas-night-2",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/on-christmas-night-2\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Wed 16 Dec 2026",
+            "end_date": "Wed 16 Dec 2026",
+            "next_instance_date": "Wed 16 Dec 2026, 7.30pm",
+            "display_date": "Wed 16 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/191223_LCS_Gloria_P2636-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "London Choral Sinfonia",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-16 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Christmas Brass Spectacular",
+            "excerpt": "",
+            "slug": "christmas-brass-spectacular-2",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/christmas-brass-spectacular-2\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "150",
+            "free": false,
+            "start_date": "Sun 13 Dec 2026",
+            "end_date": "Sun 13 Dec 2026",
+            "next_instance_date": "Sun 13 Dec 2026, 6.00pm",
+            "display_date": "Sun 13 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Christmas-Brass-Spectacular-2-1280x960.jpg",
+            "time": "6.00pm",
+            "performer": "London Mozart Players",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-13 18:00"
+            ],
+            "types": [
+                {
+                    "name": "Contemporary",
+                    "slug": "contemporary"
+                },
+                {
+                    "name": "Family concerts and events",
+                    "slug": "family-concerts-and-events"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Libera in Concert",
+            "excerpt": "",
+            "slug": "libera-london-christmas-concert",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/libera-london-christmas-concert\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "sold-out",
+            "duration": "120",
+            "free": false,
+            "start_date": "Sat 5 Dec 2026",
+            "end_date": "Sat 5 Dec 2026",
+            "next_instance_date": "Sat 5 Dec 2026, 7.30pm",
+            "display_date": "Sat 5 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/IMG_5845-1-Andy-Winter-1-e1778770221955-1280x960.jpeg",
+            "time": "7.30pm",
+            "performer": "Libera",
+            "repertoire": "<p><span class=\"NormalTextRun SCXW141129774 BCX0\">A programme of <\/span><span class=\"FindHit SCXW141129774 BCX0\">Libera<\/span><span class=\"NormalTextRun SCXW141129774 BCX0\"> songs and arrangements<\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-05 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Verdi&#8217;s Requiem",
+            "excerpt": "",
+            "slug": "verdis-requiem",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/verdis-requiem\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Sat 28 Nov 2026",
+            "end_date": "Sat 28 Nov 2026",
+            "next_instance_date": "Sat 28 Nov 2026, 7.00pm",
+            "display_date": "Sat 28 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/Kingdom-square-1-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Islington Choral Society",
+            "repertoire": "<p><strong><span class=\"NormalTextRun SCXW145754864 BCX0\">Giuseppe\u00a0<\/span><span class=\"FindHit SCXW145754864 BCX0\">Verdi <\/span><\/strong><span class=\"NormalTextRun SCXW145754864 BCX0\"> Messa da\u00a0Requiem<\/span><\/p>\n<p>Claire Rutter &#8211; Soprano<\/p>\n<p>Carolyn Dobbin &#8211; Mezzo Soprano<\/p>\n<div class=\"x_WordSection1\">\n<p class=\"x_MsoNormal\" data-olk-copy-source=\"MessageBody\">Sam Furness &#8211; Tenor<\/p>\n<p class=\"x_MsoNormal\" data-olk-copy-source=\"MessageBody\">Patrick Alexander Keefe &#8211; Bass<\/p>\n<\/div>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-28 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Classics Reloaded",
+            "excerpt": "",
+            "slug": "bach-reloaded",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/bach-reloaded\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "100",
+            "free": false,
+            "start_date": "Sun 22 Nov 2026",
+            "end_date": "Sun 22 Nov 2026",
+            "next_instance_date": "Sun 22 Nov 2026, 7.00pm",
+            "display_date": "Sun 22 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/20251022_MKZ_Alexey_Botvinov_Burhan_Ocal-8-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Burhan \u00d6\u00e7al & Alexey Botvinov ",
+            "repertoire": "<p><span class=\"TextRun SCXW184847600 BCX0\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"FindHit SCXW184847600 BCX0\"><strong>J.S Bach<\/strong> 6 Variations f<\/span><span class=\"NormalTextRun SCXW184847600 BCX0\">rom &#8220;Goldberg Variations&#8221;<\/span><\/span><\/p>\n<p><span class=\"NormalTextRun ContextualSpellingAndGrammarErrorV2Themed GrammarErrorHighlight SCXW9921460 BCX0\"><strong>Sergei Rachmaninov<\/strong> Prelude<\/span><span class=\"NormalTextRun SCXW9921460 BCX0\">\u00a0G Minor\u00a0<\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-22 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Chamber",
+                    "slug": "chamber"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "Belshazzar&#8217;s Feast",
+            "excerpt": "",
+            "slug": "belshazzars-feast",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/belshazzars-feast\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "105",
+            "free": false,
+            "start_date": "Sat 21 Nov 2026",
+            "end_date": "Sat 21 Nov 2026",
+            "next_instance_date": "Sat 21 Nov 2026, 7.30pm",
+            "display_date": "Sat 21 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/BBWW.jpg",
+            "time": "7.30pm",
+            "performer": "The Cantus Ensemble & Hampstead Chamber Choir ",
+            "repertoire": "<p><strong>William Walton<\/strong> Belshazzar&#8217;s Feast<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-11-21 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "",
+                    "slug": ""
+                }
+            ]
+        },
+        {
+            "title": "O Magnum Mysterium",
+            "excerpt": "",
+            "slug": "o-magnum-mysterium",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/o-magnum-mysterium\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Tue 15 Dec 2026",
+            "end_date": "Tue 15 Dec 2026",
+            "next_instance_date": "Tue 15 Dec 2026, 7.00pm",
+            "display_date": "Tue 15 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/G6-2025-C-credit-Andrew-Wilkinson-1-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "The Gesualdo Six ",
+            "repertoire": "<p><strong>Giovanni Pierluigi da Palestrina<\/strong> O magnum mysterium<br \/>\n<strong>Blake Morgan<\/strong> Quem pastores laudavere (UK premiere)<br \/>\n<strong>William Byrd<\/strong> Rorate Caeli<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-15 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Joy! A Seasonal Gospel Celebration of Sound",
+            "excerpt": "",
+            "slug": "joy-a-seasonal-gospel-celebration-of-sound",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/joy-a-seasonal-gospel-celebration-of-sound\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Fri 11 Dec 2026",
+            "end_date": "Sat 12 Dec 2026",
+            "next_instance_date": "Fri 11 Dec 2026, 7.00pm",
+            "display_date": "Fri 11 - Sat 12 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/LIGC-1280x960.jpg",
+            "time": "7.00pm & 2.30pm",
+            "performer": "London International Gospel Choir",
+            "repertoire": "",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-11 19:00",
+                "2026-12-12 14:30"
+            ],
+            "types": [
+                {
+                    "name": "Vocal",
+                    "slug": "vocal"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Handel&#8217;s Messiah",
+            "excerpt": "",
+            "slug": "handels-messiah-3",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/handels-messiah-3\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "150",
+            "free": false,
+            "start_date": "Fri 4 Dec 2026",
+            "end_date": "Fri 4 Dec 2026",
+            "next_instance_date": "Fri 4 Dec 2026, 7.00pm",
+            "display_date": "Fri 4 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/06\/Wild-Arts-Messiah-2-1280x960.jpg",
+            "time": "7.00pm",
+            "performer": "Wild Arts",
+            "repertoire": "<p><strong>George Frideric Handel<\/strong> Messiah<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-04 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "A Ceremony of Carols",
+            "excerpt": "",
+            "slug": "a-ceremony-of-carols",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/a-ceremony-of-carols\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Mon 14 Dec 2026",
+            "end_date": "Mon 14 Dec 2026",
+            "next_instance_date": "Mon 14 Dec 2026, 7.30pm",
+            "display_date": "Mon 14 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/dscf6087edit_54818074256_o-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "Merton College, Oxford",
+            "repertoire": "<p><span class=\"TextRun SCXW211346303 BCX0\" lang=\"EN-GB\" xml:lang=\"EN-GB\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW211346303 BCX0\"><strong>Benjamin Britten<\/strong> A Ceremony of Carols<\/span><\/span><\/p>\n<p><span class=\"NormalTextRun SCXW47129263 BCX0\"><strong>Henry Purcell<\/strong> <\/span><span class=\"NormalTextRun SpellingErrorV2Themed SCXW47129263 BCX0\">Te<\/span><span class=\"NormalTextRun SCXW47129263 BCX0\">\u00a0Deum and\u00a0<\/span><span class=\"NormalTextRun SpellingErrorV2Themed SCXW47129263 BCX0\">Jubilate<\/span><span class=\"NormalTextRun SCXW47129263 BCX0\">\u00a0in D<\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-14 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Jakub\u00a0J\u00f3zef Orli\u0144ski\u00a0Sings Pergolesi",
+            "excerpt": "",
+            "slug": "jakub-orlinski",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/jakub-orlinski\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "60",
+            "free": false,
+            "start_date": "Thu 26 Nov 2026",
+            "end_date": "Thu 26 Nov 2026",
+            "next_instance_date": "Thu 26 Nov 2026, 6.30pm",
+            "display_date": "Thu 26 Nov 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2026\/05\/image-1280x960.jpg",
+            "time": "6.30pm & 8.30pm",
+            "performer": "",
+            "repertoire": "<p><strong>Giovanni de Macque<\/strong> Prime stravaganze<br \/>\n<strong>Arvo P\u00e4rt<\/strong> My Heart\u2019s in the Highlands<br \/>\n<strong>Giovanni Maria Trabaci<\/strong> Toccata I del secondo tono<br \/>\n<strong>Giovan Battista Pergolesi<\/strong> Stabat mater<\/p>\n<p>&nbsp;<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-05-15 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-05-26 10:00:00",
+            "timestamp": [
+                "2026-11-26 18:30",
+                "2026-11-26 20:30"
+            ],
+            "types": [
+                {
+                    "name": "Vocal",
+                    "slug": "vocal"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "under30s",
+                    "slug": "under30s"
+                }
+            ]
+        },
+        {
+            "title": "Handel&#8217;s Messiah",
+            "excerpt": "Stephen Layton conducts Polyphony and the OAE in a very special festive performance of Handel\u2019s Messiah.",
+            "slug": "handels-messiah-2026",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/handels-messiah-2026\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "sold-out",
+            "duration": "120",
+            "free": false,
+            "start_date": "Wed 23 Dec 2026",
+            "end_date": "Wed 23 Dec 2026",
+            "next_instance_date": "Wed 23 Dec 2026, 7.00pm",
+            "display_date": "Wed 23 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2024\/06\/0M2A8995_Polyphony_Anders-Lillebo-1-1280x960.webp",
+            "time": "7.00pm",
+            "performer": "Polyphony & Orchestra of the Age of Enlightenment",
+            "repertoire": "<p><strong>George Frideric Handel <\/strong>Messiah<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-23 19:00"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                },
+                {
+                    "name": "Visiting",
+                    "slug": "external"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                }
+            ]
+        },
+        {
+            "title": "Bach&#8217;s Christmas Oratorio",
+            "excerpt": "",
+            "slug": "bachs-christmas-oratorio-2026",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/bachs-christmas-oratorio-2026\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "120",
+            "free": false,
+            "start_date": "Tue 22 Dec 2026",
+            "end_date": "Tue 22 Dec 2026",
+            "next_instance_date": "Tue 22 Dec 2026, 7.30pm",
+            "display_date": "Tue 22 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2024\/11\/Polyphony6X8-1280x960.jpg",
+            "time": "7.30pm",
+            "performer": "Polyphony & Orchestra of the Age of Enlightenment",
+            "repertoire": "<p><strong>Johann Sebastian Bach<\/strong> Christmas Oratorio (Pts. 1, 2, 3 &amp; 6)<\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-22 19:30"
+            ],
+            "types": [
+                {
+                    "name": "Choral",
+                    "slug": "choral"
+                },
+                {
+                    "name": "Orchestral",
+                    "slug": "orchestral"
+                },
+                {
+                    "name": "Visiting",
+                    "slug": "external"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                }
+            ]
+        },
+        {
+            "title": "Roger Sayer Organ Recital",
+            "excerpt": "",
+            "slug": "lunchtime-concert-series",
+            "link": "https:\/\/www.sinfoniasmithsq.org.uk\/event\/lunchtime-concert-series\/",
+            "post_type": "event",
+            "coming_soon": false,
+            "availability": "available",
+            "duration": "55",
+            "free": false,
+            "start_date": "Thu 17 Dec 2026",
+            "end_date": "Thu 17 Dec 2026",
+            "next_instance_date": "Thu 17 Dec 2026, 1.05pm",
+            "display_date": "Thu 17 Dec 2026",
+            "image": "https:\/\/www.sinfoniasmithsq.org.uk\/wp-content\/uploads\/2025\/06\/roger1-1280x960.jpg",
+            "time": "1.05pm",
+            "performer": "Lunchtime Concert Series",
+            "repertoire": "<p><span class=\"TextRun SCXW35738589 BCX8\" lang=\"EN-US\" xml:lang=\"EN-US\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW35738589 BCX8\"><strong>Olivier Messiaen<\/strong><span class=\"TextRun SCXW94529732 BCX8\" lang=\"EN-US\" xml:lang=\"EN-US\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW94529732 BCX8\">\u00a0<\/span><\/span><span class=\"TextRun SCXW94529732 BCX8\" lang=\"EN-US\" xml:lang=\"EN-US\" data-contrast=\"auto\"><span class=\"NormalTextRun SCXW94529732 BCX8\">La\u00a0<\/span><span class=\"NormalTextRun SpellingErrorV2Themed SCXW94529732 BCX8\">Nativit\u00e9<\/span><span class=\"NormalTextRun SCXW94529732 BCX8\">\u00a0du Seigneur<\/span><\/span><\/span><\/span><\/p>\n",
+            "theme_colour": "external",
+            "priority_booking": "2026-06-22 10:00:00",
+            "priority_button_text": "Priority book",
+            "general_onsale_date": "2026-06-29 10:00:00",
+            "timestamp": [
+                "2026-12-17 13:05"
+            ],
+            "types": [
+                {
+                    "name": "Organ",
+                    "slug": "organ"
+                }
+            ],
+            "venues": [
+                {
+                    "name": "Smith Square Hall",
+                    "slug": "smith-square-hall"
+                }
+            ],
+            "series": [
+                {
+                    "name": "Christmas Festival",
+                    "slug": "christmas-festival"
+                },
+                {
+                    "name": "Lunchtime Concerts",
+                    "slug": "lunchtime-concerts"
+                }
+            ]
+        }
+    ]
+}

@@ -252,6 +252,14 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     music at the club, tagged `jazz`, plus `experimental` when the title
     or description names free improvisation, free jazz or the avant-garde;
     no prices; facts + link only.
+  - `sinfonia-smith-square` — the static JSON feed behind the site's
+    JavaScript "What's On" list (`/wp-content/uploads/whats-on.json`, one
+    request a run; no JSON-LD `Event`s): title, London wall-clock
+    performance times (several are sessions) with the listed duration as
+    the end, the excerpt or else the repertoire as the description, image,
+    free flag; the venue's types as tags plus `classical` unless they or
+    the title say jazz, folk or gospel; talks → talk, community events →
+    community, dance-only items and events held "Elsewhere" skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

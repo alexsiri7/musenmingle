@@ -93,6 +93,10 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         include_str!("../sources/royal_museums_greenwich.rs"),
     ),
     ("serpentine", include_str!("../sources/serpentine.rs")),
+    (
+        "sinfonia_smith_square",
+        include_str!("../sources/sinfonia_smith_square.rs"),
+    ),
     ("soane_museum", include_str!("../sources/soane_museum.rs")),
     (
         "somerset_house",
