@@ -85,6 +85,8 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("four-corners", "community"),
     ("tec-chats-palace", "community"),
     ("william-morris-society", "community"),
+    // Music venues: none of the kinds above.
+    ("cafe-oto", "other"),
 ];
 
 /// The default venue type of a source's events, if it has one.

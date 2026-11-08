@@ -13,6 +13,7 @@ use crate::repo::SourceRow;
 
 pub mod artlogic;
 pub mod barbican;
+pub mod cafe_oto;
 pub mod camden_art_centre;
 pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
@@ -151,6 +152,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             None => Err(SkipReason::MissingConfig(TICKETMASTER_API_KEY_ENV)),
         },
         barbican::KEY => Ok(Box::new(barbican::Barbican::new(base))),
+        cafe_oto::KEY => Ok(Box::new(cafe_oto::CafeOto::new(base))),
         camden_art_centre::KEY => Ok(Box::new(camden_art_centre::CamdenArtCentre::new(base))),
         clerkenwell_design_week::KEY => Ok(Box::new(
             clerkenwell_design_week::ClerkenwellDesignWeek::new(base),

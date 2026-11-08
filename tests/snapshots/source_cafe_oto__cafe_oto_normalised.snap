@@ -1,0 +1,1456 @@
+---
+source: tests/source_cafe_oto.rs
+expression: out
+---
+[
+  {
+    "date_text": "Sunday 8 November 2026, 2–5pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "evan-parker-matinee-residency-feedbaxophone-evan-parker-henry-dagg|2026-11-08|cafe-oto",
+      "description": null,
+      "ends_at": "2026-11-08T17:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Evan-Parker-Matinee-Residency_grayscale.jpg?ts=1780909164",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18",
+        "min": "18"
+      },
+      "starts_at": "2026-11-08T14:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Evan Parker – Matinee Residency: \"Feedbaxophone\" – Evan Parker & Henry Dagg",
+      "url": "https://www.cafeoto.co.uk/events/evan-parker-matinee-residency-3/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£18 TICKETS AT THE DOOR",
+    "source_event_id": "evan-parker-matinee-residency-3"
+  },
+  {
+    "date_text": "Sunday 8 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "upset-rhythm-presents-wendy-eisenberg-tara-clerkin-trio|2026-11-08|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Wendy_Eisenberg_2_by_Eleanor_Petry_grayscale.jpeg?ts=1776200494",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "17",
+        "min": "15"
+      },
+      "starts_at": "2026-11-08T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Upset The Rhythm presents: Wendy Eisenberg + Tara Clerkin Trio",
+      "url": "https://www.cafeoto.co.uk/events/upset-the-rhythm-presents-wendy-eisenberg-day-one/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£17 £15 (DICE)",
+    "source_event_id": "upset-the-rhythm-presents-wendy-eisenberg-day-one"
+  },
+  {
+    "date_text": "Monday 9 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "upset-rhythm-presents-wendy-eisenberg-jasper-llewellyn|2026-11-09|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Wendy_Eisenberg_2_by_Eleanor_Petry_grayscale.jpeg?ts=1776200494",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "17",
+        "min": "15"
+      },
+      "starts_at": "2026-11-09T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Upset The Rhythm presents: Wendy Eisenberg + Jasper Llewellyn",
+      "url": "https://www.cafeoto.co.uk/events/upset-the-rhythm-presents-wendy-eisenberg-day-two/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£17 £15 (DICE)",
+    "source_event_id": "upset-the-rhythm-presents-wendy-eisenberg-day-two"
+  },
+  {
+    "date_text": "Tuesday 10 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sam-eastmonds-bagatelles-band|2026-11-10|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Chelt_band_grayscale.jpg?ts=1790172445",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "20"
+      },
+      "starts_at": "2026-11-10T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Sam Eastmond’s Bagatelles Band",
+      "url": "https://www.cafeoto.co.uk/events/sam-eastmonds-bagatelles-band/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£22 £20 Advance",
+    "source_event_id": "sam-eastmonds-bagatelles-band"
+  },
+  {
+    "date_text": "Wednesday 11 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sagome-029-love-songs-regina-collage-stella-z-dj|2026-11-11|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/sagome-29_grayscale.jpg?ts=1790597516",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "17",
+        "min": "15"
+      },
+      "starts_at": "2026-11-11T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "SAGOME 029: LOVE SONGS + REGINA COLLAGE + STELLA Z (DJ)",
+      "url": "https://www.cafeoto.co.uk/events/sagome-029/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£17 £15 Advance",
+    "source_event_id": "sagome-029"
+  },
+  {
+    "date_text": "Thursday 12 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "space-5-michael-barthel-luciano-maggiore-seijiro-murayama-silvan-schmid-zara-joan-miller-ellis-berwick-regan-bowering-solo-piece|2026-11-12|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/space5-banner_grayscale.jpg?ts=1790610331",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "12"
+      },
+      "starts_at": "2026-11-12T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "SPACE 5: Michael Barthel / Luciano Maggiore + Seijiro Murayama / Silvan Schmid + Zara Joan-Miller / Ellis Berwick + Regan Bowering (solo piece)",
+      "url": "https://www.cafeoto.co.uk/events/space-5/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£14 £12 Advance",
+    "source_event_id": "space-5"
+  },
+  {
+    "date_text": "Friday 13 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dudu-kouate-ernst-reijseger-solos-duo|2026-11-13|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/kouate-reijseger_grayscale.jpg?ts=1793007580",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "18"
+      },
+      "starts_at": "2026-11-13T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Dudú Kouaté & Ernst Reijseger – solos and duo",
+      "url": "https://www.cafeoto.co.uk/events/dudu-kouate-ernst-reijseger/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£20 £18 Advance",
+    "source_event_id": "dudu-kouate-ernst-reijseger"
+  },
+  {
+    "date_text": "Saturday 14 November 2026, 2–5pm",
+    "event": null,
+    "price_text": "£12 £10 Advance",
+    "source_event_id": "offsite-show-zach-rowden-rory-salter-caius-william"
+  },
+  {
+    "date_text": "Saturday 14 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "maxine-funke-clayton-noone-time-is-away-dj|2026-11-14|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/maxine_funke_3_grayscale.jpg?ts=1792054990",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "19",
+        "min": "17"
+      },
+      "starts_at": "2026-11-14T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Maxine Funke + Clayton Noone + Time Is Away (DJ)",
+      "url": "https://www.cafeoto.co.uk/events/maxine-funke/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£19 £17 Advance",
+    "source_event_id": "maxine-funke"
+  },
+  {
+    "date_text": "Sunday 15 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unpredictable-presents-mexican-confluences-feat-pina-para-la-nina|2026-11-15|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Pina_para_la_nina_grayscale.jpg?ts=1789548712",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "12"
+      },
+      "starts_at": "2026-11-15T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Unpredictable presents: ✦ MEXICAN CONFLUENCES ✦ feat. Piña para la Niña",
+      "url": "https://www.cafeoto.co.uk/events/unpredictable-presents-mexican-confluences/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£15 £12 Advance",
+    "source_event_id": "unpredictable-presents-mexican-confluences"
+  },
+  {
+    "date_text": "Monday 16 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "infant-tree-kraak-present-kraaklings-w-horacio-pollard-venediktos-tempelboom-kiara-govaert|2026-11-16|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/oto-kraaklings-visual-lr_grayscale.jpg?ts=1792583213",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "12"
+      },
+      "starts_at": "2026-11-16T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Infant Tree + KRAAK present: KRAAKLINGS w/ Horacio Pollard + Venediktos Tempelboom + Kiara Govaert",
+      "url": "https://www.cafeoto.co.uk/events/kraaklings/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£14 £12 Advance",
+    "source_event_id": "kraaklings"
+  },
+  {
+    "date_text": "Tuesday 17 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "efg-london-jazz-festival-robyns-rocket-w-laura-jurd-robyn-rocket-little-kali-atmoss|2026-11-17|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/streamingthumnbnail17.11.26_grayscale.jpg?ts=1790001105",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "12"
+      },
+      "starts_at": "2026-11-17T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "EFG London Jazz Festival: Robyn's Rocket – w/ Laura Jurd & Robyn Rocket + Little Kali + ATMoss",
+      "url": "https://www.cafeoto.co.uk/events/efg-london-jazz-festival-robyns-rocket/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£15 £12 (Wegottickets)",
+    "source_event_id": "efg-london-jazz-festival-robyns-rocket"
+  },
+  {
+    "date_text": "18–19 November 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "upset-rhythm-grouper-two-day-residency|2026-11-18|cafe-oto",
+      "description": "Please note these shows are SOLD OUT. A waiting list for returns is available on Dice: - 18 November: https://link.dice.fm/Mcb92f87691c - 19 November: https://link.dice.fm/y5d22ad9b9c9 GROUPER is a recording and performing project by Liz Harris. She lives and works on the Oregon Coast. On the first night, we’ll also present two short films by Takashi Makino and Tanja Engelberts, both recently scored by Liz. The second evening will open with a live set by Coby Sey. https://grouper.bandcamp.com/",
+      "ends_at": "2026-11-19T19:30:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Grouper-2026-Scotland-crop_grayscale.jpg?ts=1787912130",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-18T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-11-19T19:30:00Z"
+        }
+      ],
+      "starts_at": "2026-11-18T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Upset the Rhythm: Grouper – Two-Day Residency",
+      "url": "https://www.cafeoto.co.uk/events/upset-the-rhythm-grouper/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "upset-the-rhythm-grouper"
+  },
+  {
+    "date_text": "20–21 November 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "jimi-tenor-band-two-day-residency|2026-11-20|cafe-oto",
+      "description": null,
+      "ends_at": "2026-11-21T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Jimi-Tenor-Band_grayscale.jpg?ts=1780329526",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "JIMI TENOR BAND – Two-Day Residency",
+      "url": "https://www.cafeoto.co.uk/events/jimi-tenor-band-two-day-residency/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "jimi-tenor-band-two-day-residency"
+  },
+  {
+    "date_text": "Sunday 22 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "nova-ghost-transmission-ekstasis-proteus-katie-shannon|2026-11-22|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/nova-ghost-transmission_grayscale.jpeg?ts=1792422931",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "13"
+      },
+      "starts_at": "2026-11-22T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "NOVA GHOST TRANSMISSION + EKSTASIS + PROTEUS + KATIE SHANNON",
+      "url": "https://www.cafeoto.co.uk/events/nova-ghost-transmission/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£15 £13 Advance",
+    "source_event_id": "nova-ghost-transmission"
+  },
+  {
+    "date_text": "Monday 23 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "xxxx-xxxxxxx-kologo-shabaka-flute-saxophone-dan-nicholls-keyboards-xxx-xxxxxxx-drums|2026-11-23|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/R1_Louise_Boer_36964.00_02_01_07.Still016-2_grayscale.jpg?ts=1792568034",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-23T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "XXXX XXXXXXX (kologo) + Shabaka (flute/saxophone) + Dan Nicholls (keyboards) + XXX XXXXXXX (drums)",
+      "url": "https://www.cafeoto.co.uk/events/23-nov-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "SOLD OUT returns waiting list",
+    "source_event_id": "23-nov-26"
+  },
+  {
+    "date_text": "Tuesday 24 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "okse-savannah-harris-mette-rasmussen-val-jeanty-petter-eldh|2026-11-24|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/%C3%98KSE-HORISONTAL-PHOTO-LO-RES-COLOR-by-Ziga-Koritnik_grayscale.jpg?ts=1786621264",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "18"
+      },
+      "starts_at": "2026-11-24T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "ØKSE (Savannah Harris / Mette Rasmussen / Val Jeanty / Petter Eldh)",
+      "url": "https://www.cafeoto.co.uk/events/okse/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£20 £18 Advance",
+    "source_event_id": "okse"
+  },
+  {
+    "date_text": "Wednesday 25 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "strangeness-of-jazz-with-edward-george-mariam-rezaei-cecil|2026-11-25|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Edward-George-by-David-Dacks_grayscale.png?ts=1753109965",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "12"
+      },
+      "starts_at": "2026-11-25T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Strangeness of Jazz with Edward George and Mariam Rezaei - Cecil",
+      "url": "https://www.cafeoto.co.uk/events/strangeness-of-jazz-november-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£14 £12 Advance",
+    "source_event_id": "strangeness-of-jazz-november-26"
+  },
+  {
+    "date_text": "Thursday 26 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "infinite-expanse-presents-46-000-fibres-megabasse-alex-howard|2026-11-26|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/InfiniteExpanse_CafeOTO_26Nov_cafeoto-web_2000x1500_1_grayscale.jpg?ts=1790770794",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "17"
+      },
+      "starts_at": "2026-11-26T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Infinite Expanse Presents: 46,000 Fibres + Megabasse + Alex Howard",
+      "url": "https://www.cafeoto.co.uk/events/infinite-expanse-46000-fibres/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£20 £17 Advance",
+    "source_event_id": "infinite-expanse-46000-fibres"
+  },
+  {
+    "date_text": "Friday 27 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lewis-x-lewis-klara-lewis-nik-colk-void-duo-graham-lewis-margaret-fiedler-mcginnis-kenichi-iwasa-trio|2026-11-27|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Klara-Lewis-x-Edvard-Graham-Lewis.-Ph-oto-by-Hampus-Hogberg-portrait-crop_grayscale.jpg?ts=1792676758",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "19",
+        "min": "17"
+      },
+      "starts_at": "2026-11-27T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "LEWIS x LEWIS + Klara Lewis / Nik Colk Void (duo) + Graham Lewis / Margaret Fiedler McGinnis / Kenichi Iwasa (trio)",
+      "url": "https://www.cafeoto.co.uk/events/lewis-x-lewis/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£19 £17 Advance",
+    "source_event_id": "lewis-x-lewis"
+  },
+  {
+    "date_text": "Saturday 28 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "the87press-present-mushaira-nathaniel-mackey-online-elaine-mitchener-dhanveer-singh-brar-annie-goh-oscar-guardiola-rivera-james-goodwin-braze-braise|2026-11-28|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Box-Set-grey-background-crop_grayscale.jpg?ts=1791208429",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "12",
+        "min": "10"
+      },
+      "starts_at": "2026-11-28T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "the87press present Mushaira: Nathaniel Mackey (online) + Elaine Mitchener + Dhanveer Singh Brar + Annie Goh + Oscar Guardiola Rivera + James Goodwin + Braze_____Braise",
+      "url": "https://www.cafeoto.co.uk/events/the87press-present-mushaira-nov-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£12 £10 Advance",
+    "source_event_id": "the87press-present-mushaira-nov-26"
+  },
+  {
+    "date_text": "Sunday 29 November 2026, 7.30pm",
+    "event": null,
+    "price_text": "cancelled",
+    "source_event_id": "for-the-lost-vol-iii"
+  },
+  {
+    "date_text": "Sunday 29 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "quality-sounds-ltd-loraine-james-ecka-mordecai-sleeves-tara-cunningham-jack-cooper|2026-11-29|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/quality-sounds-ltd-crop-2_grayscale.jpg?ts=1793620953",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "19",
+        "min": "17"
+      },
+      "starts_at": "2026-11-29T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Quality Sounds Ltd: Loraine James + Ecka Mordecai + The Sleeves (Tara Cunningham & Jack Cooper)",
+      "url": "https://www.cafeoto.co.uk/events/quality-sounds-ltd/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£19 £17 Advance",
+    "source_event_id": "quality-sounds-ltd"
+  },
+  {
+    "date_text": "Monday 30 November 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jennifer-walshe-tomomi-adachi-duo-jackson-burton|2026-11-30|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/walshe-adachi_grayscale.jpg?ts=1791205860",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "14"
+      },
+      "starts_at": "2026-11-30T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Jennifer Walshe / Tomomi Adachi (duo) + Jackson Burton",
+      "url": "https://www.cafeoto.co.uk/events/jennifer-walshe-tomomi-adachi/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £14 Advance",
+    "source_event_id": "jennifer-walshe-tomomi-adachi"
+  },
+  {
+    "date_text": "Tuesday 1 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tim-hodgkinson-atsuko-kamura-w-eddie-prevost-zheng-hao-zhuyang-liu|2026-12-01|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Tim-Hodgkinson--Atsuko-Kamura_grayscale.jpg?ts=1788783583",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "14"
+      },
+      "starts_at": "2026-12-01T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Tim Hodgkinson & Atsuko Kamura w/ Eddie Prévost, Zheng Hao + Zhuyang Liu",
+      "url": "https://www.cafeoto.co.uk/events/tim-hodgkinson-atsuko-kamura/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £14 Advance",
+    "source_event_id": "tim-hodgkinson-atsuko-kamura"
+  },
+  {
+    "date_text": "Thursday 3 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "grain-presents-suzueri-crosspiece|2026-12-03|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/grain-dec-26_grayscale.jpg?ts=1792676493",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "12"
+      },
+      "starts_at": "2026-12-03T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "GRAIN presents: suzueri + Crosspiece",
+      "url": "https://www.cafeoto.co.uk/events/grain-presents-suzueri-crosspiece/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£14 £12 Advance",
+    "source_event_id": "grain-presents-suzueri-crosspiece"
+  },
+  {
+    "date_text": "Friday 4 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "from-lips-to-moon|2026-12-04|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Photo-by-Jack-Batchelor_grayscale.jpg?ts=1789555739",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "14"
+      },
+      "starts_at": "2026-12-04T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "From the Lips to the Moon",
+      "url": "https://www.cafeoto.co.uk/events/from-the-lips-to-the-moon-dec-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £14 Advance",
+    "source_event_id": "from-the-lips-to-the-moon-dec-26"
+  },
+  {
+    "date_text": "Saturday 5 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mohammad-syfkhan-i-love-you-ireland-album-release|2026-12-05|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/mohammadsyfkhan-iloveireland_grayscale.jpg?ts=1792400479",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "17"
+      },
+      "starts_at": "2026-12-05T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Mohammad Syfkhan – 'I Love You Ireland' album release",
+      "url": "https://www.cafeoto.co.uk/events/mohammad-syfkhan-i-love-you-ireland/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£20 £17 Advance",
+    "source_event_id": "mohammad-syfkhan-i-love-you-ireland"
+  },
+  {
+    "date_text": "Sunday 6 December 2026, 11am–6pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "expo",
+      "dedupe_key": "cafe-oto-winter-fair|2026-12-06|cafe-oto",
+      "description": null,
+      "ends_at": "2026-12-06T18:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/oto-xmas-2026_grayscale.jpg?ts=1792403122",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-12-06T11:00:00Z",
+      "tags": [],
+      "title": "CAFE OTO WINTER FAIR",
+      "url": "https://www.cafeoto.co.uk/events/cafe-oto-winter-fair/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "Free Event",
+    "source_event_id": "cafe-oto-winter-fair"
+  },
+  {
+    "date_text": "7–8 December 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "charles-hayward-two-day-residency|2026-12-07|cafe-oto",
+      "description": null,
+      "ends_at": "2026-12-08T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/mirror-face---crop_grayscale.jpg?ts=1792421439",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-07T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "CHARLES HAYWARD – TWO-DAY RESIDENCY",
+      "url": "https://www.cafeoto.co.uk/events/charles-hayward-two-day-residency/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "charles-hayward-two-day-residency"
+  },
+  {
+    "date_text": "9–12 December 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "أحمد-ahmed-four-day-residency-pat-thomas-antonin-gerbal-joel-grip-seymour-wright|2026-12-09|cafe-oto",
+      "description": "Hugely excited to welcome back أحمد [Ahmed] - the quartet of Pat Thomas (piano), Antonin Gerbal (drums), Joel Grip (double bass) and Seymour Wright (alto saxophone) - for another extended four-day residency. They make music of heavy rhythm, repetition and syncopation, set deep into an understanding of jazz and the obscure depths of its history. The group work and rework the music of the late musician Ahmed Abdul-Malik, producing a stamping, swinging, relentlessly propulsive music where profundity and physicality root back to ecstatic feeling. It excavates, reinhabits and uses anew the now overlooked documents and fragmentary plans of his mid-20th-century synthetic vision, producing a new jazz imagination for the 21st century. \"What emerges from the breadth of Giant Beauty isn’t evolution, but a recurring, infinitely complex synthesis of shared history that concentrates into an explosive now. Thomas’s alternately gleeful and maniacal clusters, Wright’s ruthlessly reductive abstractions, and the way Gerbal and Grip’s hurtling velocity connects the rhythmic concepts of Count Basie and The John Coltrane Quartet to the energies of punk rock and techno carry each performance to places where development atomises into a ceaselessly slamming present. Of course, that’s not all that happens; one could expend thousands of words considering how each of these tracks embodies ecstatic abandon and rigorous analysis. It’ll do you no harm to start now.\" – Bill Meyer, WIRE magazine (WIRE album of the year, 2024) Pat Thomas / piano Antonin Gerbal / drums Joel Grip / double bass Seymour Wright / saxophone",
+      "ends_at": "2026-12-12T19:30:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Ahmed-in-Paris-lr_grayscale.jpg?ts=1748864794",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26",
+        "min": "24"
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-09T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-10T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-11T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-12T19:30:00Z"
+        }
+      ],
+      "starts_at": "2026-12-09T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "أحمد [Ahmed] – Four-Day residency – Pat Thomas / Antonin Gerbal / Joel Grip / Seymour Wright",
+      "url": "https://www.cafeoto.co.uk/events/ahmed-four-day-residency-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "ahmed-four-day-residency-26"
+  },
+  {
+    "date_text": "Saturday 12 December 2026, 2–4pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "matinee-curved-pitch-presents-taresa-fernandes-i-hope-you-change-lp-listening-film-conversation-with-elisa-tavares|2026-12-12|cafe-oto",
+      "description": null,
+      "ends_at": "2026-12-12T16:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/BW-Taresa_-photo-by-Joel-Grip-lr_grayscale.jpg?ts=1793120517",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-12-12T14:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "MATINEE – Curved Pitch presents: Taresa Fernandes – I Hope You Change (LP listening, film & conversation with Elisa Tavares)",
+      "url": "https://www.cafeoto.co.uk/events/curved-pitch-presents-taresa-fernandes/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£0 Free Advance",
+    "source_event_id": "curved-pitch-presents-taresa-fernandes"
+  },
+  {
+    "date_text": "Saturday 12 December 2026, 7pm",
+    "event": null,
+    "price_text": "£27 £25 (Ticket Tailor)",
+    "source_event_id": "offsite-marginal-consort"
+  },
+  {
+    "date_text": "Sunday 13 December 2026, 2–5pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "evan-parker-matinee-residency-trio-improvisations-evan-parker-pat-thomas-thurston-moore|2026-12-13|cafe-oto",
+      "description": null,
+      "ends_at": "2026-12-13T17:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Evan-Parker-Matinee-Residency_grayscale.jpg?ts=1780909164",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T14:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Evan Parker – Matinee Residency: \"Trio Improvisations\" – Evan Parker / Pat Thomas / Thurston Moore",
+      "url": "https://www.cafeoto.co.uk/events/evan-parker-matinee-residency-4/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "SOLD OUT returns waiting list",
+    "source_event_id": "evan-parker-matinee-residency-4"
+  },
+  {
+    "date_text": "13–14 December 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "company-2026-for-derek-bailey|2026-12-13|cafe-oto",
+      "description": null,
+      "ends_at": "2026-12-14T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/company2026_banner_v10_colour_2000_grayscale.png?ts=1788185555",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-13T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "COMPANY 2026 (for Derek Bailey)",
+      "url": "https://www.cafeoto.co.uk/events/company-2026-for-derek-bailey/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "company-2026-for-derek-bailey"
+  },
+  {
+    "date_text": "Tuesday 15 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "london-sacred-harp|2026-12-15|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/LSHDoubleAllDay2024-01-scaled_grayscale.jpg?ts=1732718275",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "14",
+        "min": "12"
+      },
+      "starts_at": "2026-12-15T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "London Sacred Harp",
+      "url": "https://www.cafeoto.co.uk/events/london-sacred-harp-dec-2026/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£14 £12 Advance",
+    "source_event_id": "london-sacred-harp-dec-2026"
+  },
+  {
+    "date_text": "18–20 December 2026",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "baba-yagas-hut-dj-scotch-egg-three-day-residency|2026-12-18|cafe-oto",
+      "description": "Veteran producer, Shigeru Ishihara is an artist as multifaceted as he is boundary-breaking. Originally from Tokyo, he exploded onto Brighton’s underground music scene in the early 2000’s as DJ Scotch Egg, building a legion of dedicated followers who flocked to witness his energetic performances. Armed with a Game Boy and a megaphone, he battered audiences with a blend of relentless riffs and confrontational guttural roar, later dubbed breakcore. Alongside, he created Wrong Music, a noise-oriented anything-goes event series with friends Henry Collins (aka Shitmat) and Matt (Roger Species). Since relocating to Berlin in 2011, the melting pot has expanded ever further. His sound has been informed through collaborations with artists from all over the world: Turkish MC Ethnique Punch, Shanghai’s Gooooose (SVBKVLT), and bass music legend, Shackleton. Following a seminal artist residency in 2019 with Nyege Nyege in Kampala, Uganda, collaborations with a kaleidoscope of East-African talent opened a new portal. ‘TEWARI’ (2020) was released to much critical acclaim under his new Scotch Rolex alias. 20 years on from the release that started it all, KFC CORE (2005, Adadaat), DJ Scotch Egg has not only survived the test of time, but thrives in a universe all of his own: 8-bit gabber + breakcore, seething bass, irresistible melodies, and a good dose of stage-diving have made his high-energy performances a must-see for a new generation of extreme music lovers.",
+      "ends_at": "2026-12-20T19:30:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/dj-scotch-egg-2026_grayscale.jpg?ts=1787740174",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "20"
+      },
+      "sessions": [
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-18T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-19T19:30:00Z"
+        },
+        {
+          "ends_at": null,
+          "starts_at": "2026-12-20T19:30:00Z"
+        }
+      ],
+      "starts_at": "2026-12-18T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Baba Yaga's Hut: DJ Scotch Egg – Three-Day Residency",
+      "url": "https://www.cafeoto.co.uk/events/baba-yagas-hut-dj-scotch-egg-2026/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "baba-yagas-hut-dj-scotch-egg-2026"
+  },
+  {
+    "date_text": "Monday 21 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "contagious-sabine-ercklentz-andrea-neumann-mieko-suzuki|2026-12-21|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/contagious_05_3000px_photo-by-carina-khorkhordina_grayscale.jpg?ts=1792146770",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "15",
+        "min": "13"
+      },
+      "starts_at": "2026-12-21T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "CONTAGIOUS (Sabine Ercklentz / Andrea Neumann / Mieko Suzuki)",
+      "url": "https://www.cafeoto.co.uk/events/contagious/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£15 £13 Advance",
+    "source_event_id": "contagious"
+  },
+  {
+    "date_text": "Tuesday 22 December 2026, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "art-terrys-black-christmas-song-cycle|2026-12-22|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Scottish_tour_grayscale.jpg?ts=1791445331",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "14"
+      },
+      "starts_at": "2026-12-22T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "ART TERRY'S BLACK CHRISTMAS SONG CYCLE",
+      "url": "https://www.cafeoto.co.uk/events/black-christmas-song-cycle-26/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £14 Advance",
+    "source_event_id": "black-christmas-song-cycle-26"
+  },
+  {
+    "date_text": "Thursday 7 January 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "phil-coy-sixty-beats-per-minute-60bpm-33rpm-stereo-pair|2027-01-07|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/2027-OTO-1999-COY-Sound-Mirror-BW-lr_grayscale.jpg?ts=1792405540",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "12",
+        "min": "10"
+      },
+      "starts_at": "2027-01-07T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Phil Coy, sixty beats per minute, 60BPM 33RPM + Stereo Pair",
+      "url": "https://www.cafeoto.co.uk/events/phil-coy-sixty-beats-per-minute/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£12 £10 Advance",
+    "source_event_id": "phil-coy-sixty-beats-per-minute"
+  },
+  {
+    "date_text": "11–12 January 2027",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "london-improvisers-orchestra-two-day-residency|2027-01-11|cafe-oto",
+      "description": null,
+      "ends_at": "2027-01-12T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/lio-2025_grayscale.jpg?ts=1758531168",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-11T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "London Improvisers Orchestra – Two-Day Residency",
+      "url": "https://www.cafeoto.co.uk/events/london-improvisers-orchestra-2027/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "london-improvisers-orchestra-2027"
+  },
+  {
+    "date_text": "Tuesday 19 January 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "infant-worm-joke-lanz-alice-kemp-jacob-winans-shearman-rory-salter-duo|2027-01-19|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/joke-lanz-alice-kemp_grayscale.jpg?ts=1793636582",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "12"
+      },
+      "starts_at": "2027-01-19T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "infant worm: Joke Lanz + Alice Kemp + Jacob Winans + Shearman / Rory Salter (duo)",
+      "url": "https://www.cafeoto.co.uk/events/infant-worm/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £12 Advance",
+    "source_event_id": "infant-worm"
+  },
+  {
+    "date_text": "Sunday 24 January 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "baba-yagas-hut-sara-parkman|2027-01-24|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/sara-farg-F1378-lr_grayscale.jpg?ts=1789389589",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "20"
+      },
+      "starts_at": "2027-01-24T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Baba Yaga's Hut: Sara Parkman",
+      "url": "https://www.cafeoto.co.uk/events/baba-yagas-hut-sara-parkman/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£22 £20 (DICE)",
+    "source_event_id": "baba-yagas-hut-sara-parkman"
+  },
+  {
+    "date_text": "25–26 January 2027",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "arashi-akira-sakata-johan-berthling-paal-nilssen-love-two-day-residency|2027-01-25|cafe-oto",
+      "description": null,
+      "ends_at": "2027-01-26T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/arashi-news_grayscale.jpg?ts=1655897347",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-01-25T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Arashi (Akira Sakata / Johan Berthling / Paal Nilssen-Love) – Two-Day Residency",
+      "url": "https://www.cafeoto.co.uk/events/arashi-residency-2027/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "arashi-residency-2027"
+  },
+  {
+    "date_text": "Wednesday 27 January 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "form-presents-sheherazaad|2027-01-27|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Sheherazaad_by_Zayira_Ray_press_photo_01_WEB_4x3_grayscale.jpg?ts=1788767888",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "19.50"
+      },
+      "starts_at": "2027-01-27T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "FORM Presents: SHEHERAZAAD",
+      "url": "https://www.cafeoto.co.uk/events/form-presents-sheherazaad/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£22 £19.50 (DICE)",
+    "source_event_id": "form-presents-sheherazaad"
+  },
+  {
+    "date_text": "Saturday 30 January 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "baba-yagas-hut-marta-salogni-stefano-pilia-anton-pearson|2027-01-30|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Marta_Salogni__Stefano_Pilia_grayscale.jpeg?ts=1787567265",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "20"
+      },
+      "starts_at": "2027-01-30T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Baba Yaga's Hut: Marta Salogni & Stefano Pilia + Anton Pearson",
+      "url": "https://www.cafeoto.co.uk/events/baba-yagas-hut-marta-salogni-stefano-pilia/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£22 £20 (DICE)",
+    "source_event_id": "baba-yagas-hut-marta-salogni-stefano-pilia"
+  },
+  {
+    "date_text": "4–5 February 2027",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "fred-moten-brandon-lo-pez-gerald-cleaver-two-day-residency|2027-02-04|cafe-oto",
+      "description": null,
+      "ends_at": "2027-02-05T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Lopez-Moten-Cleaver-by-Cameron-Kelly-McLeod-Issue-Project-Room_grayscale.jpg?ts=1787300147",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-04T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "FRED MOTEN / BRANDON LÓPEZ / GERALD CLEAVER – TWO-DAY RESIDENCY",
+      "url": "https://www.cafeoto.co.uk/events/moten-lopez-cleaver-2027/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "moten-lopez-cleaver-2027"
+  },
+  {
+    "date_text": "Thursday 11 February 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "south-of-north-presents-magic-pony-productions-elizabeth-davis-kim-david-bots-lyckle-de-jong|2027-02-11|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/south-of-north_grayscale.jpg?ts=1793634247",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "17",
+        "min": "15"
+      },
+      "starts_at": "2027-02-11T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "South of North presents: Magic Pony Productions + Elizabeth Davis + Kim David Bots & Lyckle De Jong",
+      "url": "https://www.cafeoto.co.uk/events/south-of-north/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£17 £15 Advance",
+    "source_event_id": "south-of-north"
+  },
+  {
+    "date_text": "Monday 15 February 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "upset-rhythm-presents-old-saw|2027-02-15|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Old-saw-Yard---credit-Lizzy-Chemel-crop_grayscale.jpg?ts=1792398768",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16",
+        "min": "14"
+      },
+      "starts_at": "2027-02-15T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Upset the Rhythm presents: OLD SAW",
+      "url": "https://www.cafeoto.co.uk/events/upset-the-rhythm-old-saw/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£16 £14 (DICE)",
+    "source_event_id": "upset-the-rhythm-old-saw"
+  },
+  {
+    "date_text": "16–17 February 2027",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "alasdair-roberts-fredrik-rasten-two-day-residency-w-brigid-mae-power-burd-ellen|2027-02-16|cafe-oto",
+      "description": null,
+      "ends_at": "2027-02-17T00:00:00Z",
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/Alasdair-Roberts--Fredrik-Rasten-photo-by-Luke-Fowler---crop_grayscale.jpg?ts=1793637467",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-16T00:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Alasdair Roberts & Fredrik Rasten – Two-Day Residency w/ Brigid Mae Power + Burd Ellen",
+      "url": "https://www.cafeoto.co.uk/events/alasdair-roberts-fredrik-rasten-residency/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "MORE INFO & TICKETS",
+    "source_event_id": "alasdair-roberts-fredrik-rasten-residency"
+  },
+  {
+    "date_text": "Friday 19 February 2027, 7.30pm",
+    "event": {
+      "address": "18–22 Ashwin Street, Dalston, London E8 3DL",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "inklingroom-festival-of-new-music-from-eastern-europe-presents-wojciech-rusin-object-blue-natalia-podgorska-gediminas-žygus-more-tba|2027-02-19|cafe-oto",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://media.cafeoto.co.uk/_versions/images/inklingroom-poster-crop_grayscale.jpg?ts=1792678415",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "14"
+      },
+      "starts_at": "2027-02-19T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "inklingroom: Festival of New Music from Eastern Europe presents: Wojciech Rusin + object blue & Natalia Podgórska + Gediminas Žygus + more TBA",
+      "url": "https://www.cafeoto.co.uk/events/inklingroom/",
+      "venue_name": "Cafe OTO"
+    },
+    "price_text": "£22 £14 (DICE)",
+    "source_event_id": "inklingroom"
+  }
+]
