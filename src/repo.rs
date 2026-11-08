@@ -122,6 +122,29 @@ pub fn redacted_raw() -> serde_json::Value {
     serde_json::json!({ "redacted": "content policy" })
 }
 
+/// What `events.event_sources.raw` holds for the other sources: the payload
+/// with every long text cut by [`crate::normalise::excerpt`], so we keep
+/// only short excerpts of a source's words (#211). Long strings without
+/// whitespace (URLs, ids) are not text and are kept whole.
+pub fn excerpt_raw(payload: &serde_json::Value) -> serde_json::Value {
+    use serde_json::Value;
+    match payload {
+        Value::Object(map) => Value::Object(
+            map.iter()
+                .map(|(k, v)| (k.clone(), excerpt_raw(v)))
+                .collect(),
+        ),
+        Value::Array(items) => Value::Array(items.iter().map(excerpt_raw).collect()),
+        Value::String(s)
+            if s.chars().count() > crate::normalise::EXCERPT_MAX_CHARS
+                && s.contains(char::is_whitespace) =>
+        {
+            Value::String(crate::normalise::excerpt(s))
+        }
+        other => other.clone(),
+    }
+}
+
 impl SourcePolicy {
     /// The source's terms restrict reuse: we keep facts + link only, and
     /// not its raw payload either.
@@ -365,8 +388,8 @@ fn update_from_values(set: &str) -> String {
 /// can coexist. Overrides (`events.merge_overrides`) take effect the next
 /// time either listing is upserted.
 ///
-/// The `events.event_sources` row is then upserted (raw payload,
-/// last_seen_at), and an event the listing moved away from is deleted if
+/// The `events.event_sources` row is then upserted (raw payload, long
+/// texts cut to excerpts, last_seen_at), and an event the listing moved away from is deleted if
 /// nothing else links to it. Everything happens in one transaction.
 /// The venue-name resolver (`crate::venues::Resolver`) over
 /// `events.venue_aliases`.
@@ -966,11 +989,12 @@ async fn upsert_event_tx(
             ev.lng = Some(lng);
         }
     }
-    // A restricted source's raw payload (full text, image URLs) is not kept.
+    // A restricted source's raw payload (full text, image URLs) is not
+    // kept; other sources' long texts are cut to excerpts.
     let payload = if policy.restricted() {
         redacted_raw()
     } else {
-        raw.payload.clone()
+        excerpt_raw(&raw.payload)
     };
     let mut holder = key_holder(tx, &ev.dedupe_key).await?;
     if holder.is_some_and(|h| forbidden.contains(&h)) {
@@ -3160,6 +3184,7 @@ pub struct PolicyReport {
     pub images_cleared: u64,
     pub thumbnails_deleted: u64,
     pub raw_redacted: u64,
+    pub raw_trimmed: u64,
 }
 
 /// Bring stored rows in line with the current content policy (idempotent,
@@ -3172,7 +3197,8 @@ pub struct PolicyReport {
 ///   [`crate::normalise::excerpt`];
 /// * thumbnails whose event lost its image or whose source may no longer be
 ///   stored are deleted;
-/// * raw payloads of restricted sources are replaced by [`redacted_raw`].
+/// * raw payloads of restricted sources are replaced by [`redacted_raw`];
+/// * long texts in other raw payloads are cut with [`excerpt_raw`].
 pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport> {
     let images_cleared = sqlx::query(
         "UPDATE events.events e SET image_url = NULL, image_source_id = NULL
@@ -3224,6 +3250,34 @@ pub async fn enforce_content_policy(pool: &PgPool) -> sqlx::Result<PolicyReport>
     .execute(pool)
     .await?
     .rows_affected();
+    // `strict` keeps `$.**` from unwrapping arrays into duplicate items.
+    let long_raw: Vec<(i64, String, serde_json::Value)> = sqlx::query_as(
+        "SELECT es.source_id, es.source_event_id, es.raw FROM events.event_sources es
+         WHERE EXISTS (SELECT 1 FROM jsonb_path_query(es.raw, 'strict $.**') v
+                       WHERE jsonb_typeof(v) = 'string'
+                         AND char_length(v #>> '{}') > $1
+                         AND (v #>> '{}') ~ '[[:space:]]')",
+    )
+    .bind(i32::try_from(crate::normalise::EXCERPT_MAX_CHARS).unwrap_or(i32::MAX))
+    .fetch_all(pool)
+    .await?;
+    for (source_id, source_event_id, raw) in long_raw {
+        let trimmed = excerpt_raw(&raw);
+        if trimmed == raw {
+            continue;
+        }
+        report.raw_trimmed += sqlx::query(
+            "UPDATE events.event_sources SET raw = $3
+             WHERE source_id = $1 AND source_event_id = $2 AND raw = $4",
+        )
+        .bind(source_id)
+        .bind(&source_event_id)
+        .bind(&trimmed)
+        .bind(&raw)
+        .execute(pool)
+        .await?
+        .rows_affected();
+    }
     report.thumbnails_deleted = sqlx::query(
         "DELETE FROM events.thumbnails t
          USING events.events e

@@ -90,7 +90,9 @@ pub enum OverrideAction {
 /// One item as fetched from a source, before normalisation.
 ///
 /// `payload` is whatever the source found (API JSON object, JSON-LD node,
-/// scraped fields) and is stored verbatim in `events.event_sources.raw`.
+/// scraped fields) and is stored in `events.event_sources.raw` with long
+/// texts cut to excerpts (`repo::excerpt_raw`), or redacted for restricted
+/// sources.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RawEvent {
     /// Stable identifier of the event within the source.
