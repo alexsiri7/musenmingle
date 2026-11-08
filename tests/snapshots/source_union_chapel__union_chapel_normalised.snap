@@ -1,0 +1,251 @@
+---
+source: tests/source_union_chapel.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "organ-recital-with-katy-silverman|2027-04-14|union-chapel",
+      "description": "Katy Silverman is Director of Music at St Mary’s, Battersea, where she is passionate about maintaining an excellent amateur choir alongside a thriving choral and organ scholarship programme. Recent projects at St Mary’s have included a performance of a newly-commissioned anthem by the composer Ben Ponniah, evensong at Magdalene College, Cambridge, and a collaboration with the Bromley Boy Singers. Katy read Music at Worcester College, Oxford and accompanied and directed the chapel choir as organ scholar throughout her degree. After graduating she qualified as a secondary school teacher and taught music for several years before deciding to devote more time to the organ. Katy went on to be the organ scholar at Guildford Cathedral and Assistant Director of Music at St Mary’s, Putney before taking up her current role. She graduated with Distinction from the Master of Music in Performance course at the Royal College of Music in 2018, where she studied with David Graham, Andrew Dewar and Sophie-Véronique Cauchefer-Choplin. She also holds the Associateship diploma from the Royal College of Organists.",
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/files/Katy%20Silverman%20Whats%20On%20Listing.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-04-14T18:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "An Organ Recital with Katy Silverman",
+      "url": "https://unionchapel.org.uk/whats-on/an-organ-recital-with-katy-silverman",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "an-organ-recital-with-katy-silverman",
+    "when": [
+      "Wednesday 14th April 2027",
+      "Doors 6.30pm",
+      "Starts 7pm",
+      "(approx runtime one hour)",
+      "Curfew 10.30pm",
+      "U16s to be accompanied by an adult aged 18 and over"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "organ-recital-with-yvette-murphy|2027-02-24|union-chapel",
+      "description": "Yvette Murphy is Organist & Director of Music at St Saviour’s Church, Pimlico. A graduate of the University of Cambridge, Yvette read for a degree in Theology, Religion and Philosophy of Religion, receiving the Lightfoot Prize for Ecclesiastical History. She held the Organ Scholarship at Selwyn College, during which time she performed on BBC Radio 3, and recorded several CDs with Regent Records. Before arriving in Cambridge, Yvette held the Organ Scholarship at St George’s Cathedral, Southwark, and was organist at the Parish Church of St Mary and St Nicholas, Leatherhead. Yvette has recently performed recitals at Westminster Abbey, Southwark Cathedral, Temple Church, St Stephen's, Walbrook, and The Queens' College, Oxford. Alongside her work as an organist, Yvette is a keen educator. She works as Courses Manager and Tutor for Creative Oundle for Organists (COfO), helping to provide high-quality educational opportunities to young organists across the UK and abroad. She is also Head of Outreach and Choral Education at Temple Church, where she works closely with the probationers and choristers, as well as developing a programme of organ and choral outreach in schools across London. This builds upon her work as Director of the Westminster Schools Singing Programme for Diocese of Westminster, where she worked directly with around 1,400 pupils per week, and grew a programme reaching more than 20 Catholic primary schools. Yvette is Assistant Conductor of Hackney Festival Chorus, and was formerly Musical Director of Genesis Choral, a choral society based in West Byfleet.",
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/images/yvette%20organ%20square.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-02-24T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "An Organ Recital with Yvette Murphy",
+      "url": "https://unionchapel.org.uk/whats-on/an-organ-recital-with-yvette-murphy",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "an-organ-recital-with-yvette-murphy",
+    "when": [
+      "Wednesday 24th February 2027",
+      "Doors 6.30pm",
+      "Starts 7pm",
+      "(approx runtime one hour)",
+      "Curfew 10.30pm",
+      "U16s to be accompanied by an adult aged 18 and over"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "johns-boys-welsh-male-voice-choir|2027-07-16|union-chapel",
+      "description": "Experience the unmistakable sound of Johns’ Boys Welsh Male Voice Choir in the extraordinary surroundings of London’s iconic Union Chapel. Johns' Boys made history as the first and only British male voice choir to win the prestigious Pavarotti Choir of the World title at the Llangollen International Musical Eisteddfod. Since then, the choir have appeared on Britain's Got Talent, The Royal Variety Performance, BBC's Last Night of the Proms and Netflix's Stay Close, captivating audiences with their rich harmonies, musical excellence and distinctive Welsh sound. Renowned for combining the proud tradition of Welsh male voice singing with fresh, contemporary arrangements, Johns' Boys present a programme of soaring harmonies, beloved hymns, traditional Welsh favourites and modern classics. Every performance is delivered with passion, warmth and exceptional musicianship, creating an unforgettable concert experience that has captivated audiences across the UK and beyond. Join Johns' Boys for a very special London concert in one of the capital's most atmospheric venues, celebrating the very best of Welsh choral music. With recent concerts selling out across the UK, early booking is strongly recommended.",
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/files/JohnsBoys_2027_UnionChapel_360x300px.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-07-16T18:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Johns' Boys Welsh Male Voice Choir",
+      "url": "https://unionchapel.org.uk/whats-on/johns-boys-welsh-male-voice-choir",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "johns-boys-welsh-male-voice-choir",
+    "when": [
+      "Friday 16th July 2027",
+      "Doors 6.30pm",
+      "Start 7.30pm",
+      "Curfew 10.30pm",
+      "U16s to be accompanied by an adult aged 18 and over"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "cinematic-orchestra|2027-05-02|union-chapel",
+      "description": null,
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/images/CINEMATIC%20ORCHESTRA_2027%20_%20London%20Union%20Chapel_%20360%20x%20300.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2027-05-02T18:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "THE CINEMATIC ORCHESTRA",
+      "url": "https://unionchapel.org.uk/whats-on/the-cinematic-orchestra",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "the-cinematic-orchestra",
+    "when": [
+      "Sunday 2nd May 2027",
+      "Doors 7pm",
+      "Curfew 10.30pm",
+      "U16s to be accompanied by an adult aged 18 and over"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "christmas-organ-recital-with-wayne-marshall|2026-12-09|union-chapel",
+      "description": "British conductor, organist and pianist, Wayne Marshall, is world-renowned for his musicianship and versatility on the podium and at the keyboard. He has served as Chief Conductor of WDR Funkhausorchester, Cologne (2014-20) and Principal Guest Conductor of Orchestra Sinfonica di Milano Giuseppe Verdi (2007-13.) He is a celebrated interpreter of the music of George Gershwin, Leonard Bernstein as well as other 20th-Century American Composers. He has conducted Bernstein’s Candide (Deutsche Staatsoper, Berlin and Lyon Opera), Mass (Orchestre de Paris) and White House Cantata (Netherlands Radio Philharmonic Orchestra), Harbison’s The Great Gatsby (Semperoper, Dresden), Heggie’s Dead Man Walking (Montreal Opera) and numerous productions of Porgy and Bess (including Opera Comique, Paris, Washington National Opera and Dallas Opera, Vienna Staatsoper.)",
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/images/Wayne%20Marshall.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-09T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "A Christmas Organ Recital with Wayne Marshall",
+      "url": "https://unionchapel.org.uk/whats-on/a-christmas-organ-recital-with-wayne-marshall",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "a-christmas-organ-recital-with-wayne-marshall",
+    "when": [
+      "Wednesday 9th December 2026",
+      "Doors 6.30pm",
+      "Starts 7pm",
+      "(approx runtime one hour)",
+      "Curfew 10.30pm",
+      "U16s to be accompanied by an adult aged 18 and over"
+    ]
+  },
+  {
+    "event": null,
+    "source_event_id": "nu-civilisation-orchestra",
+    "when": [
+      "Monday 9th November 2026",
+      "Doors 7pm",
+      "Curfew 10.30pm",
+      "18+"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "faures-requiem-in-service-setting-for-remembrance-sunday|2026-11-08|union-chapel",
+      "description": "Union Chapel Church hosts a special service for Remembrance Sunday, featuring a traditional act of remembrance and a special performance of Faure’s Requiem sung by Eclectic Voices and Highbury Youth Choir. Scott Stroman directs the beautiful music, wound through the service, with a chamber ensemble of violin, cello, harp and organ. All are welcome",
+      "ends_at": null,
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/images/poppies.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": true,
+        "max": "0",
+        "min": "0"
+      },
+      "starts_at": "2026-11-08T10:50:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Faure's Requiem - in a service setting for Remembrance Sunday",
+      "url": "https://unionchapel.org.uk/whats-on/faures-requiem--in-a-service-setting-for-remembrance-sunday",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "faures-requiem--in-a-service-setting-for-remembrance-sunday",
+    "when": [
+      "Sunday 8th November 2026. 10:50am.",
+      "All are welcome"
+    ]
+  },
+  {
+    "event": {
+      "address": "Compton Terrace, London N1 2UN",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sunday-jam|2026-11-08|union-chapel",
+      "description": "Join us for a relaxed afternoon of live music in the atmospheric bar of the iconic Union Chapel. Brought to you by Union Chapel Church, the session is led by our friendly and experienced in-house band. Would you like to play? Performance slots are free, and you can play whatever you like, solo or with friends. Slots are on a first come first served basis and really do fill up fast. To guarantee a slot let us know in advance (inc. your song selection/chord charts/audio example) by emailing us at [email protected] (subject: Jazz Jam). Requests close 48 hours before the event. For full band support, check the band repertoire below. Please be aware that while the main bar is closed for the afternoon, wine and other beverages will be available for guests and performers on a donation basis. Our aim is to showcase every performer in the best light possible with a top class band, sound and lighting. We aim to record every event for our YouTube channel. Please let us know if you prefer not to be filmed. Expect some surprise entrants! Enjoy a sublime afternoon of top end jazz in one of London's most unique settings. Slots are interspersed with numbers from our band. All of me There will never be another you Foggy day All the things Ain’t misbehavin Take the a train A fine romance Autumn leaves Basin st blues But not for me Bye bye blackbird Cherokee Do nothing till you here from me Flintstones Georgia on my mind How high the moon I get a kick out of you It don’t mean a thing Mood indigo Night and day Our love is here to stay Lady be good Old devil moon Pennies from heaven Sunny side of the street ‘S wonderful Satin doll Summertime Seeet Georgia brown St Louis blues Quiet night of quiet stars Girl from Ipanema",
+      "ends_at": "2026-11-08T16:30:00Z",
+      "image_url": "https://s3.eu-west-2.amazonaws.com/cdn.unionchapel.org.uk/images/The%20Union%20Chapel%20Jam%20square.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "5",
+        "min": "5"
+      },
+      "starts_at": "2026-11-08T14:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Sunday Jam",
+      "url": "https://unionchapel.org.uk/whats-on/sunday-jam",
+      "venue_name": "Union Chapel"
+    },
+    "source_event_id": "sunday-jam",
+    "when": [
+      "Sunday 8th November 2026",
+      "2pm - 4:30pm",
+      "Under 16's must be accompanied by an adult 18+"
+    ]
+  }
+]
