@@ -143,3 +143,37 @@ async fn an_empty_feed_is_an_error() {
         .unwrap_err();
     assert!(err.to_string().contains("no events"), "{err}");
 }
+
+#[tokio::test]
+async fn a_bad_listing_is_reported_and_the_rest_are_kept() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    let feed = format!(
+        "BEGIN:VCALENDAR\r\n\
+         BEGIN:VEVENT\r\nUID:1-2-3@x\r\nSUMMARY:Private hire\r\nDTSTART:20261108T190000\r\n\
+         URL:https://elsewhere.example/event/a/\r\nEND:VEVENT\r\n\
+         BEGIN:VEVENT\r\nUID:7-2-3@x\r\nSUMMARY:Gig\r\nDTSTART:20261108T190000\r\n\
+         URL:{}/event/gig/\r\nEND:VEVENT\r\n\
+         END:VCALENDAR\r\n",
+        server.uri()
+    );
+    Mock::given(method("GET"))
+        .and(path("/events/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(feed))
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = VortexJazzClub::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["7"]);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].contains("Private hire"), "{errors:?}");
+}
