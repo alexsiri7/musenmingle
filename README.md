@@ -287,6 +287,17 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     description and the free flag. Every event is music, with subtags from
     the card's words ("EFG London Jazz Festival" → jazz); theatre, dance,
     comedy and cancelled events skipped.
+  - `union-chapel` — CSS on the `/whats-on` cards (no JSON-LD; title and
+    dated "Fri 6 Nov 2026" line) and, for in-scope upcoming cards, their
+    event pages (capped at 30 a run): the sidebar's free-text WHEN lines
+    give the start (the "Start"/"Onstage" time, else doors, else a range or
+    the date line's time; "Ends" is the end, the curfew is not), TICKET
+    PRICE the price, the paragraphs before the venue's boilerplate the
+    description. Only the arty end of the mixed programme: titles naming a
+    `crate::music` genre (organ recitals, choirs, orchestras, a Requiem) or
+    the chapel's own Daylight Music and Sunday jazz jam are music, titles
+    naming a talk are talks; mainstream gigs, comedy, films, tours,
+    sing-alongs and cancelled events are skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

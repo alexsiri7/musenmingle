@@ -55,6 +55,7 @@ pub mod tec;
 pub mod the_showroom;
 pub mod ticketmaster;
 pub mod two_temple_place;
+pub mod union_chapel;
 pub mod vam;
 pub mod vortex_jazz_club;
 pub mod wellcome_collection;
@@ -207,6 +208,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
             base,
         ))),
         stone_nest::KEY => Ok(Box::new(stone_nest::StoneNest::new(base))),
+        union_chapel::KEY => Ok(Box::new(union_chapel::UnionChapel::new(base))),
         the_showroom::KEY => Ok(Box::new(the_showroom::TheShowroom::new(base))),
         gasworks::KEY => Ok(Box::new(gasworks::Gasworks::new(base))),
         two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),
