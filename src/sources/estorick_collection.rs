@@ -25,8 +25,8 @@
 //!   they are tagged with); TALK / BOOK LAUNCH / ITALIAN TALK / TOUR →
 //!   talk; ADULT ART CLASS / LIFE DRAWING CLASS → workshop; SPECIAL EVENT /
 //!   LATE THURSDAYS → community; otherwise the title's keywords decide
-//!   (a "Symposium" is a talk), and an event nothing matches is skipped.
-//!   Artist tags stay as tags.
+//!   (a "Symposium" is a talk), and an event nothing matches is skipped;
+//!   `qa_scope` tells the scraper check. Artist tags stay as tags.
 
 use async_trait::async_trait;
 use chrono::{DateTime, Datelike, NaiveDate, NaiveTime, Utc};
@@ -371,6 +371,15 @@ impl Source for EstorickCollection {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Talks, tours, adult art classes, special events and exhibitions. Family \
+             and children's sessions (anything tagged FAMILIES or UNDER 5S, such as \
+             Mini Marvels and Family Art Days) are left out on purpose, whatever else \
+             they are tagged with, as are runs longer than a year.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -527,5 +536,21 @@ mod tests {
         assert!(err.to_string().contains("no date"), "{err}");
         let long = payload("exhibitions", "1 January 2026 - 1 January 2028", None, &[]);
         assert_eq!(normalise_payload(&long).unwrap(), None);
+    }
+
+    #[test]
+    fn the_qa_scope_names_what_is_left_out() {
+        let scope = EstorickCollection::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        for word in [
+            "Talks",
+            "FAMILIES",
+            "UNDER 5S",
+            "children's",
+            "longer than a year",
+        ] {
+            assert!(scope.contains(word), "{word}");
+        }
     }
 }
