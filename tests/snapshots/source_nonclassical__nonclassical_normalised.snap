@@ -92,7 +92,7 @@ expression: out
     "source_event_id": "outside-the-lines-vol-8"
   },
   {
-    "event": null,
+    "error": "parse error: \"Album Launch: KOGG perform 'Mechanista' with Brass Ensemble & NikNak\": place \"Iklectik\" names neither London nor a postcode",
     "source_event_id": "kogg-album-launch"
   }
 ]

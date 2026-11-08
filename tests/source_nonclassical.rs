@@ -19,7 +19,7 @@ const LISTED: &str = "/events/2026/9/18/jocelyn-campbell-lo-end-pav";
 
 /// Saved event pages: the one listed on 2026-11-08, and past ones reached
 /// through its "Previous" links (London by postcode or by name, BST, Bristol
-/// and an address of only "United Kingdom").
+/// (skipped) and an address of only "United Kingdom" (an error)).
 const PAGES: &[(&str, &str)] = &[
     (LISTED, "jocelyn-campbell-lo-end-pav"),
     (
@@ -63,6 +63,24 @@ fn the_listing_links_its_one_upcoming_event() {
 }
 
 #[test]
+fn the_listing_keeps_each_event_page_once_on_its_own_host() {
+    let url = Url::parse(&format!("{SITE}/events")).unwrap();
+    let html = listing_of(&[
+        "/events/a",
+        "https://example.com/events/elsewhere",
+        "/events/b?format=ical",
+        "/events/",
+        "/about",
+        &format!("{SITE}/events/a"),
+        "/events/c",
+    ]);
+    assert_eq!(
+        parse_listing(&html, &url).expect("event list"),
+        ["/events/a", "/events/c"]
+    );
+}
+
+#[test]
 fn normalised_output_snapshot() {
     let s = Nonclassical::new(SITE.parse().unwrap());
     let out: Vec<_> = PAGES
@@ -70,10 +88,16 @@ fn normalised_output_snapshot() {
         .map(|(p, file)| {
             let url = Url::parse(SITE).unwrap().join(p).unwrap();
             let raw = parse_detail(&page(file), &url).expect("JSON-LD Event");
-            serde_json::json!({
-                "source_event_id": raw.source_event_id,
-                "event": s.normalise(&raw).expect("normalise"),
-            })
+            match s.normalise(&raw) {
+                Ok(event) => serde_json::json!({
+                    "source_event_id": raw.source_event_id,
+                    "event": event,
+                }),
+                Err(e) => serde_json::json!({
+                    "source_event_id": raw.source_event_id,
+                    "error": e.to_string(),
+                }),
+            }
         })
         .collect();
     insta::assert_json_snapshot!("nonclassical_normalised", out);

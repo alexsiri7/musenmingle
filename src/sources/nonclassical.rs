@@ -21,8 +21,10 @@
 //! * The `location` is a `Place` whose `address` lines end in "United
 //!   Kingdom" and usually hold only the postcode ("The Mall\nSW1Y 5AH").
 //!   Events are kept when the place says London or has a London postcode
-//!   ([`is_london`]); the rest (Bristol's Arnolfini, or a place whose
-//!   address is only "United Kingdom") are skipped (`Ok(None)`).
+//!   ([`in_london`]) and skipped (`Ok(None)`) when its postcode is elsewhere
+//!   (Bristol's Arnolfini). A place with neither (Iklectik, a London venue,
+//!   came with only "United Kingdom") is a parse error, so it shows in the
+//!   run's errors instead of vanishing.
 //! * The description is the page's text blocks; prices are only on the
 //!   ticket sites, so price is unknown.
 //! * Category: every event is music (gigs, album launches, the summer
@@ -130,12 +132,13 @@ fn parse_offset_datetime(s: &str) -> Option<DateTime<Utc>> {
 }
 
 /// Whether a place (its name and address) is in London: it says so, or its
-/// postcode is in one of [`LONDON_POSTCODE_AREAS`].
-pub fn is_london(place: &str) -> bool {
+/// postcode is in one of [`LONDON_POSTCODE_AREAS`]. `None` when it says
+/// neither and has no postcode, so there is no telling.
+pub fn in_london(place: &str) -> Option<bool> {
     if place.to_lowercase().contains("london") {
-        return true;
+        return Some(true);
     }
-    postcode_outward(place).is_some_and(|outward| {
+    postcode_outward(place).map(|outward| {
         let area: String = outward
             .chars()
             .take_while(char::is_ascii_alphabetic)
@@ -183,8 +186,14 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .flatten()
         .collect::<Vec<_>>()
         .join(", ");
-    if !is_london(&where_) {
-        return Ok(None);
+    match in_london(&where_) {
+        Some(true) => {}
+        Some(false) => return Ok(None),
+        None => {
+            return Err(SourceError::Parse(format!(
+                "{title:?}: place {where_:?} names neither London nor a postcode"
+            )));
+        }
     }
 
     Ok(Some(NewEvent {
@@ -257,9 +266,8 @@ impl Source for Nonclassical {
 
     fn qa_scope(&self) -> Option<&'static str> {
         Some(
-            "Only events in London: an event whose location is outside London \
-             (e.g. Bristol), or whose address doesn't say where (only \"United \
-             Kingdom\"), is left out on purpose.",
+            "Only events in London: an event whose location's postcode is outside \
+             London (e.g. Bristol) is left out on purpose.",
         )
     }
 }
@@ -317,28 +325,40 @@ mod tests {
 
     #[test]
     fn london_by_name_or_postcode() {
-        assert!(is_london("ICA, The Mall, SW1Y 5AH"));
-        assert!(is_london("Theatreship, South Quay Plaza, E14 9SH"));
-        assert!(is_london("Somewhere, London"));
-        assert!(is_london("Hall, 1 Road, ec1a 1bb"));
-        assert!(!is_london(
-            "Arnolfini, 16 Narrow Quay Bristol BS1 4QA, BS1 4QA"
-        ));
-        assert!(!is_london("Iklectik"));
-        assert!(!is_london("Hall, Bromley BR1 1AA"));
-        assert!(is_london("Hall, Bromley, London BR1 1AA"));
+        assert_eq!(in_london("ICA, The Mall, SW1Y 5AH"), Some(true));
+        assert_eq!(
+            in_london("Theatreship, South Quay Plaza, E14 9SH"),
+            Some(true)
+        );
+        assert_eq!(in_london("Somewhere, London"), Some(true));
+        assert_eq!(in_london("Hall, 1 Road, ec1a 1bb"), Some(true));
+        assert_eq!(
+            in_london("Arnolfini, 16 Narrow Quay Bristol BS1 4QA, BS1 4QA"),
+            Some(false)
+        );
+        assert_eq!(in_london("Hall, Bromley BR1 1AA"), Some(false));
+        assert_eq!(in_london("Hall, Bromley, London BR1 1AA"), Some(true));
+        assert_eq!(in_london("Iklectik"), None);
     }
 
     #[test]
-    fn events_outside_london_or_without_an_address_are_skipped() {
+    fn events_with_a_postcode_outside_london_are_skipped() {
         let bristol = json!({"name": "Arnolfini ", "address": "16 Narrow Quay Bristol BS1 4QA\nBS1 4QA\nUnited Kingdom"});
+        assert!(
+            normalise_payload(&payload("2026-10-15T19:30:00+0100", bristol))
+                .unwrap()
+                .is_none()
+        );
+    }
+
+    #[test]
+    fn a_place_that_does_not_say_where_is_a_parse_error() {
         let nowhere = json!({"name": "Iklectik", "address": "United Kingdom"});
-        for place in [bristol, nowhere, Value::Null] {
-            assert!(
-                normalise_payload(&payload("2026-10-15T19:30:00+0100", place))
-                    .unwrap()
-                    .is_none()
-            );
+        for place in [nowhere, Value::Null] {
+            let err = normalise_payload(&payload("2026-10-15T19:30:00+0100", place))
+                .unwrap_err()
+                .to_string();
+            assert!(err.contains("neither London nor a postcode"), "{err}");
         }
     }
 }
