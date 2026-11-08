@@ -41,7 +41,7 @@
 use std::time::Duration;
 
 use async_trait::async_trait;
-use chrono::{Datelike, NaiveDate, NaiveTime, Utc, Weekday};
+use chrono::{NaiveDate, NaiveTime, Utc, Weekday};
 use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
@@ -51,7 +51,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, month_number,
-    padded_words, parse_price, words,
+    padded_words, parse_price, words, year_less_date,
 };
 
 pub const KEY: &str = "blackheath-halls";
@@ -66,9 +66,6 @@ pub const MAX_DETAILS: usize = 60;
 const CRAWL_DELAY_SECS: u64 = 10;
 const VENUE_NAME: &str = "Blackheath Halls";
 const VENUE_ADDRESS: &str = "23 Lee Road, London SE3 9RQ";
-/// How far back a year-less date may fall from the fetch's day (a card
-/// still listed on the day after).
-const PAST_DAYS: i64 = 7;
 /// Words (as [`padded_words`]) in the labels or title of a concert that is
 /// not classical.
 const NOT_CLASSICAL: &[&str] = &["jazz", "folk", "gospel", "swing"];
@@ -244,7 +241,7 @@ fn parse_clock(token: &str) -> Option<NaiveTime> {
 /// Parse a date line ("Mon 9 Nov, 10am", "Sun 6 Dec 2026, 2.30pm", "Wed 18
 /// Nov 7.30pm (first session)") into its day and London wall-clock time, if
 /// any; words after the time are ignored. A year-less date is the first on
-/// the written weekday from [`PAST_DAYS`] before `listed_on`.
+/// the written weekday by [`year_less_date`].
 pub fn parse_date_line(
     text: &str,
     listed_on: NaiveDate,
@@ -270,13 +267,7 @@ pub fn parse_date_line(
         .and_then(|t| parse_clock(t));
     let date = match year {
         Some(y) => NaiveDate::from_ymd_opt(y, month, day),
-        None => {
-            let from = listed_on - chrono::Duration::days(PAST_DAYS);
-            (from.year()..=from.year() + 2)
-                .filter_map(|y| NaiveDate::from_ymd_opt(y, month, day))
-                .filter(|d| weekday.is_none_or(|w| d.weekday() == w))
-                .find(|d| *d >= from)
-        }
+        None => year_less_date(day, month, weekday, listed_on),
     }
     .ok_or_else(err)?;
     Ok((date, time))

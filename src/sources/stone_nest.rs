@@ -17,8 +17,9 @@
 //!   7.30pm", "15 November 3pm & 6pm" (two sessions), "23/25/27/28 November
 //!   7.30pm" (sessions, #207) or a run "23 November – 28 November 7.30pm"
 //!   (a session each day). The year puts the last day no more than
-//!   [`PAST_DAYS`] before the fetch; earlier days follow it back. A line
-//!   without a time is all day.
+//!   [`YEAR_LESS_PAST_DAYS`](crate::normalise::YEAR_LESS_PAST_DAYS) before
+//!   the fetch; earlier days follow it back. A line without a time is all
+//!   day.
 //! * Each card's event page (at most [`MAX_DETAILS`] a run) adds the full
 //!   description (`.info .rte`) and whether it is free ("Free admission"
 //!   instead of "Book Now"); prices are only on the ticket site, so price
@@ -42,7 +43,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent, Session};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, month_number,
-    padded_words,
+    padded_words, year_less_date,
 };
 
 pub const KEY: &str = "stone-nest";
@@ -52,9 +53,6 @@ const EVENT_PREFIX: &str = "/events/";
 pub const MAX_DETAILS: usize = 40;
 const VENUE_NAME: &str = "Stone Nest";
 const VENUE_ADDRESS: &str = "136 Shaftesbury Avenue, London W1D 5EZ";
-/// How far before the fetch's day an event's last day may fall (a card
-/// still listed on the days after).
-const PAST_DAYS: i64 = 7;
 /// Words or phrases (as [`padded_words`]) in a title or subtitle of an
 /// event that is not a concert.
 const NOT_MUSIC: &[&str] = &[
@@ -255,14 +253,12 @@ fn day_months(text: &str) -> Option<Vec<(u32, u32)>> {
     (pending.is_empty() && !out.is_empty()).then_some(out)
 }
 
-/// The dates of year-less days and months in order, the last one no more
-/// than [`PAST_DAYS`] before `listed_on`; earlier ones go back a year when
-/// their month is later than the next one's.
+/// The dates of year-less days and months in order, the last one by
+/// [`year_less_date`]; earlier ones go back a year when their month is
+/// later than the next one's.
 fn with_years(days: &[(u32, u32)], listed_on: NaiveDate) -> Option<Vec<NaiveDate>> {
     let &(last_day, last_month) = days.last()?;
-    let from = listed_on - chrono::Duration::days(PAST_DAYS);
-    let mut year = (from.year()..=from.year() + 1)
-        .find(|y| NaiveDate::from_ymd_opt(*y, last_month, last_day).is_some_and(|d| d >= from))?;
+    let mut year = year_less_date(last_day, last_month, None, listed_on)?.year();
     let mut out = Vec::with_capacity(days.len());
     let mut next_month = last_month;
     for &(day, month) in days.iter().rev() {
@@ -561,7 +557,7 @@ mod tests {
             parse("2 November 8pm"),
             When::Days(vec![d(2026, 11, 2)], vec![t(20, 0)])
         );
-        // Exactly PAST_DAYS back is still this year; a day more is next.
+        // Exactly YEAR_LESS_PAST_DAYS back is still this year; a day more is next.
         assert_eq!(
             parse("1 November 8pm"),
             When::Days(vec![d(2026, 11, 1)], vec![t(20, 0)])
