@@ -103,7 +103,7 @@ fn normalised_output_snapshot() {
             let slug = card["slug"].as_str().unwrap();
             let detail = SAVED_DETAILS
                 .contains(&slug)
-                .then(|| parse_detail(&detail_fixture(slug)));
+                .then(|| parse_detail(&detail_fixture(slug)).expect("event banner"));
             let raw = raw_event(card, listed_on(), detail);
             serde_json::json!({
                 "source_event_id": raw.source_event_id,
@@ -124,7 +124,7 @@ fn the_event_page_gives_the_title_when_the_card_has_the_date() {
         .find(|c| c["slug"] == "turning-of-the-year-2026")
         .unwrap();
     assert_eq!(card["title"], "Mon 23 Nov, 6.30pm SOLD OUT");
-    let detail = parse_detail(&detail_fixture("turning-of-the-year-2026"));
+    let detail = parse_detail(&detail_fixture("turning-of-the-year-2026")).unwrap();
     let ev = s
         .normalise(&raw_event(&card, listed_on(), Some(detail)))
         .unwrap()
@@ -216,16 +216,31 @@ async fn fetches_every_listing_page_and_the_in_scope_event_pages_via_fetch_conte
     assert!(ev.description.is_some());
 }
 
-#[tokio::test]
-async fn caps_event_page_fetches() {
-    let cards: String = (1..=MAX_DETAILS + 1)
-        .map(|i| {
+/// A listing page of concerts with these slugs, linking to `next`.
+fn listing(slugs: &[String], next: Option<&str>) -> String {
+    let cards: String = slugs
+        .iter()
+        .map(|slug| {
             format!(
-                r#"<div class="event-card"><span class="event-card-types"><span>Music</span></span><h3>Concert {i}</h3><span class="event-card-date">Mon 7 Dec, 7pm</span><a href="/whats-on/concert-{i}/" class="button-more-details">More Details</a></div>"#
+                r#"<div class="event-card"><span class="event-card-types"><span>Music</span></span><h3>{slug}</h3><span class="event-card-date">Mon 7 Dec, 7pm</span><a href="/whats-on/{slug}/" class="button-more-details">More Details</a></div>"#
             )
         })
         .collect();
-    let listing = format!(r#"<html><body><div class="events-grid">{cards}</div></body></html>"#);
+    let next = next
+        .map(|href| format!(r#"<div class="has-another-page"><a href="{href}">Next</a></div>"#))
+        .unwrap_or_default();
+    format!(r#"<html><body><div class="events-grid">{cards}</div>{next}</body></html>"#)
+}
+
+const EVENT_PAGE: &str =
+    r#"<html><body><div id="event-banner"><h1>A concert</h1></div></body></html>"#;
+
+#[tokio::test]
+async fn caps_event_page_fetches() {
+    let slugs: Vec<String> = (1..=MAX_DETAILS + 1)
+        .map(|i| format!("concert-{i}"))
+        .collect();
+    let listing = listing(&slugs, None);
     let server = MockServer::start().await;
     Mock::given(method("GET"))
         .and(path("/robots.txt"))
@@ -247,7 +262,7 @@ async fn caps_event_page_fetches() {
         .await;
     Mock::given(method("GET"))
         .and(path_regex("^/whats-on/.+/$"))
-        .respond_with(ResponseTemplate::new(200).set_body_string("<html></html>"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(EVENT_PAGE))
         .expect(MAX_DETAILS as u64)
         .mount(&server)
         .await;
@@ -303,6 +318,76 @@ async fn caps_listing_page_fetches() {
             .any(|e| e.contains(&format!("more than {MAX_LISTING_PAGES} listing pages"))),
         "{errors:?}"
     );
+}
+
+#[tokio::test]
+async fn a_card_on_two_listing_pages_is_read_once() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    let page = |slugs: &[&str], next| {
+        let slugs: Vec<String> = slugs.iter().map(|s| s.to_string()).collect();
+        ResponseTemplate::new(200).set_body_string(listing(&slugs, next))
+    };
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .and(query_param("pagetoshow", "2"))
+        .respond_with(page(&["b", "c"], None))
+        .with_priority(1)
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .respond_with(page(&["a", "b"], Some("/whats-on/?pagetoshow=2")))
+        .mount(&server)
+        .await;
+    for slug in ["a", "b", "c"] {
+        Mock::given(method("GET"))
+            .and(path(format!("/whats-on/{slug}/")))
+            .respond_with(ResponseTemplate::new(200).set_body_string(EVENT_PAGE))
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = BlackheathHalls::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    let ids: Vec<&str> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, ["a", "b", "c"]);
+    assert_eq!(ctx.take_errors(), Vec::<String>::new());
+}
+
+#[tokio::test]
+async fn an_event_page_without_its_banner_is_an_error() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(listing(&["a".to_string()], None)))
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/a/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string("<html><body></body></html>"))
+        .expect(1)
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = BlackheathHalls::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(raws.len(), 1);
+    assert_eq!(ctx.take_errors(), ["a: no #event-banner on its page"]);
 }
 
 #[tokio::test]

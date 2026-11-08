@@ -166,13 +166,12 @@ pub fn parse_listing(html: &str, page_url: &Url) -> ListingPage {
 }
 
 /// What an event page adds: its labels, heading and post title, price,
-/// duration and location lines, and the description.
-pub fn parse_detail(html: &str) -> Value {
+/// duration and location lines, and the description; `None` when the page
+/// has no `#event-banner`.
+pub fn parse_detail(html: &str) -> Option<Value> {
     let doc = Html::parse_document(html);
     let banner = selector("#event-banner");
-    let Some(banner) = doc.select(&banner).next() else {
-        return json!({});
-    };
+    let banner = doc.select(&banner).next()?;
     let line = |class: &str| {
         banner
             .select(&selector(&format!(".event-details .{class}")))
@@ -190,7 +189,7 @@ pub fn parse_detail(html: &str) -> Value {
         .filter(|e| !element_text(*e).is_empty())
         .map(|e| e.inner_html())
         .collect();
-    json!({
+    Some(json!({
         "types": labels(banner, &selector(".event-card-types span")),
         "title": banner.select(&selector("h1")).next().map(element_text),
         "post_title": post_title,
@@ -199,7 +198,7 @@ pub fn parse_detail(html: &str) -> Value {
         "location": line("event-detail-location"),
         "date_text": line("event-detail-time"),
         "description": (!description.is_empty()).then(|| description.join("\n")),
-    })
+    }))
 }
 
 /// The stored payload for a card; `listed_on` is the London date of the
@@ -388,12 +387,12 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
     let card = &p["card"];
     let detail = &p["detail"];
     let (types, title) = types_and_title(card, detail);
-    if title.is_empty() {
-        return Err(SourceError::Parse("card without a title".into()));
-    }
     let Some(category) = category(&types, &title) else {
         return Ok(None);
     };
+    if title.is_empty() {
+        return Err(SourceError::Parse("card without a title".into()));
+    }
     let listed_on = p["listed_on"]
         .as_str()
         .and_then(|s| s.parse::<NaiveDate>().ok())
@@ -494,7 +493,10 @@ impl Source for BlackheathHalls {
                         None
                     } else {
                         match ctx.get_text(&url).await {
-                            Ok(html) => Some(parse_detail(&html)),
+                            Ok(html) => parse_detail(&html).or_else(|| {
+                                ctx.report_error(format!("{slug}: no #event-banner on its page"));
+                                None
+                            }),
                             Err(e) => {
                                 ctx.report_error(format!("{slug}: {e}"));
                                 None
@@ -631,6 +633,34 @@ mod tests {
             "Emma Smith: An Evening of Swing"
         );
         assert!(!is_date_line("Sun Ra Arkestra"));
+    }
+
+    #[test]
+    fn a_skipped_card_is_skipped_whatever_its_title() {
+        let payload = |types: &[&str]| {
+            let card = json!({"types": types, "title": "Mon 23 Nov, 6.30pm SOLD OUT",
+                "date_text": "Mon 23 Nov, 6.30pm SOLD OUT"});
+            raw_event(&card, d(2026, 11, 8), None).payload
+        };
+        assert!(matches!(normalise_payload(&payload(&["Family"])), Ok(None)));
+        assert!(matches!(
+            normalise_payload(&payload(&["Music"])),
+            Err(SourceError::Parse(_))
+        ));
+    }
+
+    #[test]
+    fn a_date_without_a_time_is_all_day() {
+        let all_day = |date_text: &str| {
+            let card = json!({"types": ["Exhibition"], "title": "Christmas Fair",
+                "date_text": date_text});
+            normalise_payload(&raw_event(&card, d(2026, 11, 8), None).payload)
+                .unwrap()
+                .unwrap()
+                .all_day
+        };
+        assert!(all_day("Sat 21 Nov 2026"));
+        assert!(!all_day("Sat 21 Nov 2026, 12.00pm"));
     }
 
     #[test]
