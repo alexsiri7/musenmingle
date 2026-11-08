@@ -11,7 +11,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
 use musenmingle::sources::Source;
 use musenmingle::sources::cafe_oto::{
-    CafeOto, is_residency, parse_detail, parse_listing, raw_event,
+    CafeOto, MAX_LISTING_PAGES, is_residency, parse_detail, parse_listing, raw_event,
 };
 use reqwest::StatusCode;
 use serde_json::Value;
@@ -108,6 +108,40 @@ fn normalised_output_snapshot() {
         })
         .collect();
     insta::assert_json_snapshot!("cafe_oto_normalised", out);
+}
+
+fn residency_card(date_text: &str) -> Value {
+    serde_json::json!({
+        "slug": "a-residency",
+        "url": format!("{SITE}/events/a-residency/"),
+        "date_text": date_text,
+        "title": "A Residency",
+        "price_text": "£15",
+    })
+}
+
+#[test]
+fn a_residency_page_without_nights_is_an_error() {
+    let s = CafeOto::new(SITE.parse().unwrap());
+    let detail = parse_detail("<html><body><p>Moved</p></body></html>");
+    let raw = raw_event(
+        &residency_card("18–19 November 2026"),
+        listed_on(),
+        Some(detail),
+    );
+    let err = s.normalise(&raw).unwrap_err().to_string();
+    assert!(err.contains("residency page had no nights"), "{err}");
+}
+
+#[test]
+fn a_run_longer_than_a_year_is_skipped() {
+    let s = CafeOto::new(SITE.parse().unwrap());
+    let card = residency_card("18 November 2026 – 19 November 2028");
+    let raw = raw_event(&card, listed_on(), None);
+    assert!(s.normalise(&raw).unwrap().is_none());
+    let grouper = parse_detail(&fixture(&format!("{DIR}/upset-the-rhythm-grouper.html")));
+    let raw = raw_event(&card, listed_on(), Some(grouper));
+    assert!(s.normalise(&raw).unwrap().is_none());
 }
 
 async fn serve_site(server: &MockServer) {
@@ -210,6 +244,42 @@ async fn caps_residency_page_fetches() {
         .filter(|e| e.contains("residency-page cap"))
         .count();
     assert_eq!(over_cap, residency_slugs().len() - 1);
+}
+
+#[tokio::test]
+async fn caps_listing_page_fetches() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/robots.txt"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    // Page 1 links to `?page=2` and is served for every page, so the chain
+    // never ends.
+    Mock::given(method("GET"))
+        .and(path("/events/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(page_fixture(1)))
+        .expect(MAX_LISTING_PAGES as u64)
+        .mount(&server)
+        .await;
+    Mock::given(method("GET"))
+        .and(wiremock::matchers::path_regex("^/events/.+/$"))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = CafeOto::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert!(!raws.is_empty());
+    let errors = ctx.take_errors();
+    assert!(
+        errors
+            .iter()
+            .any(|e| e.contains(&format!("more than {MAX_LISTING_PAGES} listing pages"))),
+        "{errors:?}"
+    );
 }
 
 #[tokio::test]
