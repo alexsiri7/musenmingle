@@ -29,12 +29,14 @@
 //!   (`27584-1794164400-1794179700@www.vortexjazz.co.uk`); the link is the
 //!   `URL`, which must be an `/event/` page on the site.
 
+use std::collections::BTreeMap;
+
 use async_trait::async_trait;
-use chrono::{DateTime, NaiveDate, NaiveDateTime, NaiveTime, Utc};
+use chrono::{NaiveDate, NaiveTime};
 use serde_json::{Value, json};
 use url::Url;
 
-use super::ical::{first, text, unescape, unfold, vevents};
+use super::ical::{IcsTime, first, parse_time_value, text, unescape, unfold, vevents};
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
@@ -120,30 +122,10 @@ pub fn parse_feed(
         .collect())
 }
 
-/// A `DTSTART`/`DTEND` value: a date, or a time read as London wall clock
-/// unless it is UTC (`…Z`); see the module docs.
-#[derive(Debug, Clone, Copy, PartialEq)]
-enum FeedTime {
-    Date(NaiveDate),
-    At(DateTime<Utc>),
-}
-
-fn parse_feed_time(value: &str) -> Option<FeedTime> {
-    if value.len() == 8 {
-        return NaiveDate::parse_from_str(value, "%Y%m%d")
-            .ok()
-            .map(FeedTime::Date);
-    }
-    let (value, utc) = match value.strip_suffix('Z') {
-        Some(v) => (v, true),
-        None => (value, false),
-    };
-    let t = NaiveDateTime::parse_from_str(value, "%Y%m%dT%H%M%S").ok()?;
-    Some(FeedTime::At(if utc {
-        t.and_utc()
-    } else {
-        london_to_utc(t)
-    }))
+/// A `DTSTART`/`DTEND` value. Its `TZID` is not kept, so a time without
+/// `Z` reads as London wall clock; see the module docs.
+fn parse_feed_time(value: &str) -> Option<IcsTime> {
+    parse_time_value(value, &BTreeMap::new())
 }
 
 /// Whether a gig's title or description names experimental music.
@@ -168,17 +150,18 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let end = s("dtend").and_then(parse_feed_time);
     let midnight = |d: NaiveDate| london_to_utc(d.and_time(NaiveTime::MIN));
     let (starts_at, ends_at, all_day) = match (start, end) {
-        (FeedTime::Date(first_day), end) => {
+        (IcsTime::Date(first_day), end) => {
             // DTEND of a date is exclusive: the last day is the one before.
             let last_day = match end {
-                Some(FeedTime::Date(d)) => d.pred_opt().filter(|d| *d > first_day),
+                Some(IcsTime::Date(d)) => d.pred_opt().filter(|d| *d > first_day),
                 _ => None,
             };
             (midnight(first_day), last_day.map(midnight), true)
         }
-        (FeedTime::At(starts_at), end) => {
+        (start @ IcsTime::Local(..), end) => {
+            let starts_at = start.utc();
             let ends_at = match end {
-                Some(FeedTime::At(e)) => Some(e).filter(|e| *e > starts_at),
+                Some(end @ IcsTime::Local(..)) => Some(end.utc()).filter(|e| *e > starts_at),
                 _ => None,
             };
             (starts_at, ends_at, false)
@@ -247,6 +230,7 @@ impl Source for VortexJazzClub {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::{DateTime, Utc};
 
     fn payload(dtstart: &str, dtend: Option<&str>) -> Value {
         json!({

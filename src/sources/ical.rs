@@ -1,11 +1,14 @@
 //! Reading iCalendar feeds (RFC 5545), shared by the sources that read one
-//! (`luma`, `vortex_jazz_club`): line unfolding, content lines, VEVENTs and
-//! TEXT unescaping. No iCalendar crate.
+//! (`luma`, `vortex_jazz_club`): line unfolding, content lines, VEVENTs,
+//! TEXT unescaping and DATE/DATE-TIME values. No iCalendar crate.
 
 use std::collections::BTreeMap;
 
+use chrono::{DateTime, Days, Duration, NaiveDate, NaiveDateTime, NaiveTime, Utc};
+use chrono_tz::Tz;
+
 use super::SourceError;
-use crate::normalise::clean_text;
+use crate::normalise::{clean_text, london_to_utc};
 
 /// One content line: `NAME;PARAM=V;…:VALUE`.
 #[derive(Debug, Clone)]
@@ -124,4 +127,75 @@ pub(crate) fn text(event: &Component, name: &str) -> Option<String> {
     first(event, name)
         .map(|p| clean_text(&unescape(&p.value)))
         .filter(|t| !t.is_empty())
+}
+
+/// A DTSTART/DTEND/EXDATE value.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) enum IcsTime {
+    /// `VALUE=DATE`.
+    Date(NaiveDate),
+    /// Wall-clock time in a zone (`TZID=`; floating times use London), or
+    /// UTC (`…Z`, `Tz::UTC`).
+    Local(NaiveDateTime, Tz),
+}
+
+impl IcsTime {
+    pub(crate) fn utc(self) -> DateTime<Utc> {
+        match self {
+            IcsTime::Date(d) => london_to_utc(d.and_time(NaiveTime::MIN)),
+            IcsTime::Local(t, tz) => local_to_utc(t, tz),
+        }
+    }
+
+    pub(crate) fn shifted(self, days: u64) -> Option<IcsTime> {
+        Some(match self {
+            IcsTime::Date(d) => IcsTime::Date(d.checked_add_days(Days::new(days))?),
+            IcsTime::Local(t, tz) => IcsTime::Local(t.checked_add_days(Days::new(days))?, tz),
+        })
+    }
+
+    pub(crate) fn date(self) -> NaiveDate {
+        match self {
+            IcsTime::Date(d) => d,
+            IcsTime::Local(t, _) => t.date(),
+        }
+    }
+}
+
+fn local_to_utc(t: NaiveDateTime, tz: Tz) -> DateTime<Utc> {
+    use chrono::TimeZone;
+    if tz == chrono_tz::Europe::London {
+        return london_to_utc(t);
+    }
+    tz.from_local_datetime(&t)
+        .earliest()
+        .or_else(|| tz.from_local_datetime(&(t + Duration::hours(1))).earliest())
+        .map_or_else(|| t.and_utc(), |t| t.with_timezone(&Utc))
+}
+
+pub(crate) fn parse_time_value(value: &str, params: &BTreeMap<String, String>) -> Option<IcsTime> {
+    let value = value.trim();
+    if params
+        .get("VALUE")
+        .is_some_and(|v| v.eq_ignore_ascii_case("DATE"))
+        || value.len() == 8
+    {
+        return NaiveDate::parse_from_str(value, "%Y%m%d")
+            .ok()
+            .map(IcsTime::Date);
+    }
+    let (value, utc) = match value.strip_suffix('Z') {
+        Some(v) => (v, true),
+        None => (value, false),
+    };
+    let t = NaiveDateTime::parse_from_str(value, "%Y%m%dT%H%M%S").ok()?;
+    let tz = if utc {
+        Tz::UTC
+    } else {
+        params
+            .get("TZID")
+            .and_then(|z| z.parse::<Tz>().ok())
+            .unwrap_or(chrono_tz::Europe::London)
+    };
+    Some(IcsTime::Local(t, tz))
 }
