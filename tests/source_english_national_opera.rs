@@ -8,7 +8,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
 use musenmingle::sources::Source;
 use musenmingle::sources::english_national_opera::{
-    EnglishNationalOpera, drop_repeats, parse_detail, parse_listing, raw_event,
+    EnglishNationalOpera, parse_detail, parse_listing, raw_event,
 };
 use reqwest::StatusCode;
 use url::Url;
@@ -18,14 +18,14 @@ use wiremock::{Mock, MockServer, ResponseTemplate};
 const DIR: &str = "scrapers/english-national-opera";
 const SITE: &str = "https://www.eno.org";
 
-/// The listing's events on 2026-11-08: the two featured, then the grid.
+/// The listing's events on 2026-11-08: the two featured, then the grid,
+/// less the Relaxed Programme.
 const SLUGS: &[&str] = &[
     "tosca",
     "adriana-mater",
     "iphigenie-en-tauride",
     "sessions-at-the-london-coliseum-black-country-new-road",
     "to-die-for-a-comedy",
-    "relaxed-programme",
     "la-traviata",
     "abracadopera",
     "breaking-the-waves",
@@ -69,10 +69,13 @@ fn normalised_output_snapshot() {
         .iter()
         .map(|slug| {
             let url = Url::parse(&format!("{SITE}/events/{slug}/")).unwrap();
-            raw_event(slug, &url, parse_detail(&page(slug)).expect("event page"))
+            let detail = parse_detail(&page(slug))
+                .expect("readable")
+                .expect("event page");
+            raw_event(slug, &url, detail)
         })
-        .collect();
-    let out: Vec<_> = drop_repeats(raws)
+        .collect::<Vec<_>>();
+    let out: Vec<_> = raws
         .iter()
         .map(|raw| match s.normalise(raw) {
             Ok(event) => serde_json::json!({
@@ -133,12 +136,7 @@ async fn fetches_the_listing_and_its_event_pages_via_fetch_context() {
     let raws = s.fetch(&ctx).await.expect("fetch");
     assert!(ctx.take_errors().is_empty());
     let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
-    let expected: Vec<_> = SLUGS
-        .iter()
-        .copied()
-        .filter(|s| *s != "relaxed-programme")
-        .collect();
-    assert_eq!(ids, expected);
+    assert_eq!(ids, SLUGS);
     // The saved listing links the live site; pages are read from its own
     // origin.
     assert_eq!(

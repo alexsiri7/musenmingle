@@ -12,16 +12,16 @@
 //!   unescaped quotes inside strings), so it can't be read. The same
 //!   performances are in the page's booking calendar data,
 //!   `<script id="json-data">`: valid JSON, one entry per performance with
-//!   its London wall-clock start (`raw_date`, "2026-11-10 19:30:00") and
-//!   booking link. A production is one event with a session per
-//!   performance (#207). The header gives the title, the composer credit
+//!   its London wall-clock start (`raw_date`, "2026-11-10 19:30:00"), or
+//!   `false` when nothing is on sale. A production is one event with a
+//!   session per performance (#207). The header gives the title, the composer credit
 //!   ENO prints over its operas (`.surtitle`: "Puccini") and the venue; the
 //!   sidebar the running time ("2hrs 15mins", each session's end) and the
 //!   ticket price ("Tickets from £15").
 //! * Skipped: events away from the Coliseum (ENO also stages in Greater
 //!   Manchester), pages with no performances (schools events booked by
-//!   form) and programme pages whose performances all belong to other
-//!   events' pages (the Relaxed Programme, see [`drop_repeats`]).
+//!   form) and [`PROGRAMMES`], pages whose performances are other
+//!   productions' (not fetched).
 //! * Everything is music; an event with a composer credit is an opera, so
 //!   `classical` (through `crate::music`), and title keywords add the rest.
 
@@ -43,6 +43,12 @@ pub const LISTING_PATH: &str = "/whats-on/";
 const EVENT_PREFIX: &str = "/events/";
 /// At most this many event pages a run (11 on 2026-11-08).
 pub const MAX_DETAILS: usize = 40;
+/// Programme pages: the Relaxed Programme lists one performance each of
+/// other productions, with their booking links, so it would repeat them as
+/// an event of its own. Its performances can't tell it apart from a
+/// production (once its earlier ones pass, they are a subset of one other
+/// page's), hence the slug.
+pub const PROGRAMMES: &[&str] = &["relaxed-programme"];
 const VENUE_NAME: &str = "London Coliseum";
 const VENUE_ADDRESS: &str = "St Martin's Lane, London WC2N 4ES";
 
@@ -74,8 +80,8 @@ fn text_of(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
 }
 
-/// The slugs of the events the listing links, in page order; `None` when
-/// it is not the What's On page.
+/// The slugs of the events the listing links, in page order, without
+/// [`PROGRAMMES`]; `None` when it is not the What's On page.
 pub fn parse_listing(html: &str, page_url: &Url) -> Option<Vec<String>> {
     let doc = Html::parse_document(html);
     let listing = doc.select(&selector("#whats-on-listing")).next()?;
@@ -88,23 +94,55 @@ pub fn parse_listing(html: &str, page_url: &Url) -> Option<Vec<String>> {
             continue;
         };
         let slug = slug.trim_matches('/');
-        if !slug.is_empty() && !slug.contains('/') && !slugs.iter().any(|s| s == slug) {
+        if !slug.is_empty()
+            && !slug.contains('/')
+            && !PROGRAMMES.contains(&slug)
+            && !slugs.iter().any(|s| s == slug)
+        {
             slugs.push(slug.to_string());
         }
     }
     Some(slugs)
 }
 
+/// The performances' London wall-clock starts in an event page's booking
+/// calendar data: none without the script or when it is `false`; anything
+/// else that is not an array is an error.
+fn performance_starts(doc: &Html) -> Result<Vec<Value>, SourceError> {
+    let Some(script) = doc.select(&selector("script#json-data")).next() else {
+        return Ok(Vec::new());
+    };
+    let text: String = script.text().collect();
+    let data: Value = serde_json::from_str(text.trim())
+        .map_err(|e| SourceError::Parse(format!("booking json-data: {e}")))?;
+    match data {
+        Value::Bool(false) => Ok(Vec::new()),
+        Value::Array(performances) => Ok(performances
+            .iter()
+            .map(|p| json!({"starts": p["raw_date"]}))
+            .collect()),
+        _ => Err(SourceError::Parse(
+            "booking json-data is not an array".into(),
+        )),
+    }
+}
+
 /// What an event page says: title, composer credit, venue, performances
-/// (`{"starts", "booking"}`), running time, ticket line, description and
-/// image. `None` when it is not an event page.
-pub fn parse_detail(html: &str) -> Option<Value> {
+/// (`{"starts"}`), running time, ticket line, description and image.
+/// `None` when it is not an event page; an error when its booking calendar
+/// data can't be read.
+pub fn parse_detail(html: &str) -> Result<Option<Value>, SourceError> {
     let doc = Html::parse_document(html);
-    let header = doc.select(&selector("header.page-header--event")).next()?;
-    let title = header
+    let Some(header) = doc.select(&selector("header.page-header--event")).next() else {
+        return Ok(None);
+    };
+    let Some(title) = header
         .select(&selector("h1.page-header__heading"))
         .next()
-        .map(text_of)?;
+        .map(text_of)
+    else {
+        return Ok(None);
+    };
     let header_text = |s: &str| {
         header
             .select(&selector(s))
@@ -112,14 +150,7 @@ pub fn parse_detail(html: &str) -> Option<Value> {
             .map(text_of)
             .filter(|t| !t.is_empty())
     };
-    let performances: Vec<Value> = doc
-        .select(&selector("script#json-data"))
-        .next()
-        .and_then(|s| serde_json::from_str::<Vec<Value>>(&s.text().collect::<String>()).ok())
-        .unwrap_or_default()
-        .iter()
-        .map(|p| json!({"starts": p["raw_date"], "booking": p["url"]}))
-        .collect();
+    let performances = performance_starts(&doc)?;
     let detail = |heading: &str| {
         doc.select(&selector("aside.event-details li.post-detail"))
             .find(|li| {
@@ -147,7 +178,7 @@ pub fn parse_detail(html: &str) -> Option<Value> {
         .select(&selector(r#"meta[property="og:image"][content]"#))
         .next()
         .and_then(|m| m.value().attr("content"));
-    Some(json!({
+    Ok(Some(json!({
         "title": title,
         "composer": header_text(".surtitle"),
         "venue": header_text(".event-title__venue-location"),
@@ -156,7 +187,7 @@ pub fn parse_detail(html: &str) -> Option<Value> {
         "tickets": detail("Tickets"),
         "description": (!description.is_empty()).then_some(description),
         "image_url": image,
-    }))
+    })))
 }
 
 /// The stored payload for the event page at `url`; `detail` is
@@ -167,48 +198,6 @@ pub fn raw_event(slug: &str, url: &Url, detail: Value) -> RawEvent {
         source_url: Some(url.to_string()),
         payload: json!({"url": url.as_str(), "detail": detail}),
     }
-}
-
-/// A performance's booking id: the last segment of its booking link
-/// ("//booking.eno.org/book-online/76801/" → "76801").
-fn booking_id(performance: &Value) -> Option<&str> {
-    let url = performance["booking"].as_str()?.trim_end_matches('/');
-    url.rsplit('/').next().filter(|id| !id.is_empty())
-}
-
-fn booking_ids(raw: &RawEvent) -> Vec<&str> {
-    raw.payload["detail"]["performances"]
-        .as_array()
-        .into_iter()
-        .flatten()
-        .filter_map(booking_id)
-        .collect()
-}
-
-/// Drops ENO's programme pages: the Relaxed Programme lists one performance
-/// each of other productions, with the same booking links, which would
-/// otherwise repeat as an event of its own. Such a page's performances are
-/// all on other pages, but no one other page has them all; a production
-/// whose only performance is also in a programme (a subset of that page)
-/// is kept.
-pub fn drop_repeats(raws: Vec<RawEvent>) -> Vec<RawEvent> {
-    let ids: Vec<Vec<&str>> = raws.iter().map(booking_ids).collect();
-    let others = |i: usize| ids.iter().enumerate().filter(move |(j, _)| *j != i);
-    let repeats: Vec<bool> = ids
-        .iter()
-        .enumerate()
-        .map(|(i, own)| {
-            !own.is_empty()
-                && own
-                    .iter()
-                    .all(|id| others(i).any(|(_, other)| other.contains(id)))
-                && !others(i).any(|(_, other)| own.iter().all(|id| other.contains(id)))
-        })
-        .collect();
-    raws.into_iter()
-        .zip(repeats)
-        .filter_map(|(raw, repeat)| (!repeat).then_some(raw))
-        .collect()
 }
 
 /// The minutes of a running time that opens with a duration: "2hrs
@@ -322,13 +311,14 @@ impl Source for EnglishNationalOpera {
             };
             match ctx.get_text(&url).await {
                 Ok(html) => match parse_detail(&html) {
-                    Some(detail) => out.push(raw_event(slug, &url, detail)),
-                    None => ctx.report_error(format!("{slug}: not an event page")),
+                    Ok(Some(detail)) => out.push(raw_event(slug, &url, detail)),
+                    Ok(None) => ctx.report_error(format!("{slug}: not an event page")),
+                    Err(e) => ctx.report_error(format!("{slug}: {e}")),
                 },
                 Err(e) => ctx.report_error(format!("{slug}: {e}")),
             }
         }
-        Ok(drop_repeats(out))
+        Ok(out)
     }
 
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
@@ -466,27 +456,32 @@ mod tests {
         assert_eq!(ev.ends_at, None);
     }
 
-    fn raw(slug: &str, ids: &[&str]) -> RawEvent {
-        let performances: Vec<Value> = ids
-            .iter()
-            .map(|id| json!({"booking": format!("//booking.eno.org/book-online/{id}/")}))
-            .collect();
-        raw_event(
-            slug,
-            &Url::parse("https://www.eno.org/events/x/").unwrap(),
-            json!({"performances": performances}),
-        )
-    }
-
     #[test]
-    fn pages_repeating_other_pages_performances_are_dropped() {
-        let kept = drop_repeats(vec![
-            raw("tosca", &["76201", "76801"]),
-            raw("relaxed-programme", &["76801", "82601"]),
-            raw("trial-by-jury", &["82601"]),
-            raw("abracadopera", &[]),
-        ]);
-        let slugs: Vec<_> = kept.iter().map(|r| r.source_event_id.as_str()).collect();
-        assert_eq!(slugs, ["tosca", "trial-by-jury", "abracadopera"]);
+    fn booking_calendar_data() {
+        let page = |script: &str| {
+            format!(
+                r#"<html><body><header class="page-header page-header--event">
+                <h1 class="page-header__heading">Tosca</h1></header>{script}</body></html>"#
+            )
+        };
+        let performances =
+            |script: &str| parse_detail(&page(script)).map(|d| d.unwrap()["performances"].clone());
+        assert_eq!(
+            performances(
+                r#"<script id="json-data">[{"raw_date": "2026-11-10 19:30:00"}]</script>"#
+            )
+            .unwrap(),
+            json!([{"starts": "2026-11-10 19:30:00"}])
+        );
+        assert_eq!(performances("").unwrap(), json!([]));
+        assert_eq!(
+            performances(r#"<script id="json-data"> false </script>"#).unwrap(),
+            json!([])
+        );
+        for broken in ["{\"raw_date\": 1}", "[{", "true"] {
+            let script = format!(r#"<script id="json-data">{broken}</script>"#);
+            let err = performances(&script).unwrap_err().to_string();
+            assert!(err.contains("booking json-data"), "{broken}: {err}");
+        }
     }
 }
