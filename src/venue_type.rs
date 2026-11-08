@@ -86,6 +86,7 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("tec-chats-palace", "community"),
     ("william-morris-society", "community"),
     // Music venues: none of the kinds above.
+    ("blackheath-halls", "other"),
     ("cafe-oto", "other"),
     ("sinfonia-smith-square", "other"),
     ("vortex-jazz-club", "other"),

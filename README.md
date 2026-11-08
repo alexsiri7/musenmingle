@@ -260,6 +260,17 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     free flag; the venue's types as tags plus `classical` unless they or
     the title say jazz, folk or gospel; talks → talk, community events →
     community, dance-only items and events held "Elsewhere" skipped.
+  - `blackheath-halls` — CSS on the `/whats-on/` listing pages (no JSON-LD
+    `Event`s; `?pagetoshow=N`, up to 8): genre labels, title and year-less
+    London wall-clock date line (the year is the one matching the written
+    weekday); each in-scope card's event page (capped at 60 a run;
+    robots.txt asks for `Crawl-delay: 10`, so a longer fetch timeout) adds
+    price, duration (the end), location (a room of the halls, or another
+    place such as a festival's church) and description. Music, Jazz or
+    Opera → music (the labels as tags, plus `classical` unless they or the
+    title say jazz, folk, gospel or swing), Talks → talk, fairs and markets
+    (Exhibition) → expo; Family and Dance shows, Comedy, Take Part courses,
+    festival passes and cancelled events skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
