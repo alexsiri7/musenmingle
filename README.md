@@ -278,6 +278,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     `experimental`; events whose postcode is outside London (e.g. Bristol)
     are skipped, and a place with neither "London" nor a postcode (e.g. an
     address of only "United Kingdom") is reported as an error.
+  - `stone-nest` — CSS on the Webflow `/events` page's upcoming list (no
+    JSON-LD; Webflow's hidden `w-condition-invisible` variants ignored):
+    title, subtitle, summary, room and a year-less London wall-clock date
+    line ("15 November 3pm & 6pm", "23/25/27/28 November 7.30pm": several
+    are sessions; the year puts the last day at most a week before the
+    fetch); each card's event page (capped at 40 a run) adds the
+    description and the free flag. Every event is music, with subtags from
+    the card's words ("EFG London Jazz Festival" → jazz); theatre, dance,
+    comedy and cancelled events skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and

@@ -50,6 +50,7 @@ pub mod sinfonia_smith_square;
 pub mod soane_museum;
 pub mod somerset_house;
 pub mod south_london_gallery;
+pub mod stone_nest;
 pub mod tec;
 pub mod the_showroom;
 pub mod ticketmaster;
@@ -205,6 +206,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         south_london_gallery::KEY => Ok(Box::new(south_london_gallery::SouthLondonGallery::new(
             base,
         ))),
+        stone_nest::KEY => Ok(Box::new(stone_nest::StoneNest::new(base))),
         the_showroom::KEY => Ok(Box::new(the_showroom::TheShowroom::new(base))),
         gasworks::KEY => Ok(Box::new(gasworks::Gasworks::new(base))),
         two_temple_place::KEY => Ok(Box::new(two_temple_place::TwoTemplePlace::new(base))),
