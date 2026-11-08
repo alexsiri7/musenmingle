@@ -66,8 +66,8 @@ impl SinfoniaSmithSquare {
 }
 
 /// Parse the feed fetched from `feed_url` into one [`RawEvent`] per item, in
-/// feed order, the item itself as the payload. An item without a slug or an
-/// `/event/` link on the feed's host is an error.
+/// feed order, the item itself as the payload with its `link` resolved. An
+/// item without a slug or an `/event/` link on the feed's host is an error.
 pub fn parse_feed(
     feed: &Value,
     feed_url: &Url,
@@ -93,10 +93,12 @@ pub fn parse_feed(
                             .is_some_and(|slug| !slug.trim_matches('/').is_empty())
                 })
                 .ok_or_else(|| bad("no /event/ link"))?;
+            let mut payload = item.clone();
+            payload["link"] = Value::from(url.as_str());
             Ok(RawEvent {
                 source_event_id: slug.to_string(),
                 source_url: Some(url.to_string()),
-                payload: item.clone(),
+                payload,
             })
         })
         .collect())
@@ -439,6 +441,31 @@ mod tests {
         assert!(items[2].as_ref().unwrap_err().to_string().contains("link"));
         assert_eq!(items[3].as_ref().unwrap().source_event_id, "d");
         assert!(parse_feed(&json!({}), &feed_url).is_err());
+    }
+
+    #[test]
+    fn a_relative_link_is_resolved_for_the_event_url() {
+        let feed_url =
+            Url::parse("https://www.sinfoniasmithsq.org.uk/wp-content/uploads/whats-on.json")
+                .unwrap();
+        let mut p = item(&["choral"], "hall", &["2026-11-29 19:00"], json!("90"));
+        p["link"] = json!("/event/hail-mary/");
+        let raw = parse_feed(&json!({ "items": [p] }), &feed_url)
+            .unwrap()
+            .remove(0)
+            .unwrap();
+        let e = normalise_payload(&raw.payload).unwrap().unwrap();
+        let resolved = "https://www.sinfoniasmithsq.org.uk/event/hail-mary/";
+        assert_eq!(raw.source_url.as_deref(), Some(resolved));
+        assert_eq!(e.url.as_deref(), Some(resolved));
+    }
+
+    #[test]
+    fn the_free_flag_is_the_price() {
+        let mut p = item(&["choral"], "hall", &["2026-11-29 19:00"], json!("90"));
+        assert!(!normalise_payload(&p).unwrap().unwrap().price.is_free);
+        p["free"] = json!(true);
+        assert!(normalise_payload(&p).unwrap().unwrap().price.is_free);
     }
 
     #[test]
