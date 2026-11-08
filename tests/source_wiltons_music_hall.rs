@@ -9,7 +9,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::{FetchContext, RobotsPolicy};
 use musenmingle::sources::Source;
 use musenmingle::sources::wiltons_music_hall::{
-    WiltonsMusicHall, parse_detail, parse_listing, raw_event,
+    MAX_PAGES, WiltonsMusicHall, parse_detail, parse_listing, raw_event,
 };
 use reqwest::StatusCode;
 use serde_json::Value;
@@ -187,12 +187,16 @@ async fn fetches_both_genre_views_and_their_event_pages_via_fetch_context() {
 }
 
 /// A genre view page holding only `slugs`' cards (cut from the saved Music
-/// view), with a pager linking page `next` when given.
+/// and Opera views), with a pager linking page `next` when given.
 fn view_with(slugs: &[&str], next: Option<u32>) -> String {
-    let saved = view("music");
-    let start = saved.find("<li class=\"WhatsonItem").unwrap();
-    let end = saved.rfind("</li>").unwrap() + "</li>".len();
-    let cards: String = saved[start..end]
+    let cards: String = ["music", "opera"]
+        .map(|genre| {
+            let saved = view(genre);
+            let start = saved.find("<li class=\"WhatsonItem").unwrap();
+            let end = saved.rfind("</li>").unwrap() + "</li>".len();
+            saved[start..end].to_string()
+        })
+        .concat()
         .split("<li class=\"WhatsonItem")
         .filter(|c| slugs.iter().any(|s| c.contains(&format!("/whats-on/{s}/"))))
         .map(|c| format!("<li class=\"WhatsonItem{c}"))
@@ -237,6 +241,79 @@ async fn follows_the_pager_and_caps_event_pages() {
         errors[1].contains("over the 2 event-page cap"),
         "{errors:?}"
     );
+}
+
+#[tokio::test]
+async fn an_event_in_both_genre_views_is_fetched_once_under_the_first() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    serve_view(&server, "music", view_with(&MUSIC[..1], None)).await;
+    serve_view(&server, "opera", view_with(&[MUSIC[0], OPERA[0]], None)).await;
+    serve_page(&server, MUSIC[0], page(MUSIC[0])).await;
+    serve_page(&server, OPERA[0], page(OPERA[0])).await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = WiltonsMusicHall::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert!(ctx.take_errors().is_empty());
+    let ids: Vec<_> = raws.iter().map(|r| r.source_event_id.as_str()).collect();
+    assert_eq!(ids, [MUSIC[0], OPERA[0]]);
+    assert_eq!(raws[0].payload["card"]["genre"], "Music");
+    assert_eq!(raws[1].payload["card"]["genre"], "Opera");
+}
+
+#[tokio::test]
+async fn caps_listing_pages_a_genre() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    serve_view(&server, "music", view_with(&[], Some(2))).await;
+    for n in 2..=MAX_PAGES {
+        Mock::given(method("GET"))
+            .and(path("/whats-on/"))
+            .and(query_param("category", "music"))
+            .and(query_param("event-page", n.to_string()))
+            .respond_with(ResponseTemplate::new(200).set_body_string(view_with(&[], Some(n + 1))))
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
+    serve_view(&server, "opera", EMPTY_VIEW.into()).await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = WiltonsMusicHall::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert!(raws.is_empty());
+    assert_eq!(
+        ctx.take_errors(),
+        [format!("music: over the {MAX_PAGES}-page cap")]
+    );
+}
+
+#[tokio::test]
+async fn a_later_listing_page_failing_keeps_the_cards_found_so_far() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    serve_view(&server, "music", view_with(&MUSIC[..1], None)).await;
+    Mock::given(method("GET"))
+        .and(path("/whats-on/"))
+        .and(query_param("category", "opera"))
+        .respond_with(ResponseTemplate::new(404))
+        .expect(1)
+        .mount(&server)
+        .await;
+    serve_page(&server, MUSIC[0], page(MUSIC[0])).await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = WiltonsMusicHall::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(raws.len(), 1);
+    assert_eq!(raws[0].source_event_id, MUSIC[0]);
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].starts_with("opera listing page 1:"), "{errors:?}");
 }
 
 #[tokio::test]

@@ -86,6 +86,45 @@ impl WiltonsMusicHall {
         }
         Ok(url)
     }
+
+    /// The cards of every genre view, in [`GENRES`] order; an event listed
+    /// under more than one genre keeps the first.
+    async fn genre_cards(&self, ctx: &FetchContext) -> Result<Vec<Value>, SourceError> {
+        let mut cards: Vec<Value> = Vec::new();
+        for (g, (genre, label)) in GENRES.iter().enumerate() {
+            for page in 1..=MAX_PAGES {
+                let url = self.listing_url(genre, page)?;
+                let listing = match ctx.get_text(&url).await {
+                    Ok(html) => parse_listing(&html, &url, label, page).ok_or_else(|| {
+                        SourceError::Parse(format!("no What's On listing at {}", url.path()))
+                    }),
+                    Err(e) => Err(e.into()),
+                };
+                let listing = match listing {
+                    Ok(listing) => listing,
+                    // The first listing page failing fails the run; a later
+                    // one is a soft error and the cards found so far are kept.
+                    Err(e) if g > 0 || page > 1 => {
+                        ctx.report_error(format!("{genre} listing page {page}: {e}"));
+                        break;
+                    }
+                    Err(e) => return Err(e),
+                };
+                for card in listing.cards {
+                    if !cards.iter().any(|c| c["slug"] == card["slug"]) {
+                        cards.push(card);
+                    }
+                }
+                if !listing.has_next {
+                    break;
+                }
+                if page == MAX_PAGES {
+                    ctx.report_error(format!("{genre}: over the {MAX_PAGES}-page cap"));
+                }
+            }
+        }
+        Ok(cards)
+    }
 }
 
 fn selector(s: &str) -> Selector {
@@ -344,27 +383,7 @@ impl Source for WiltonsMusicHall {
 
     async fn fetch(&self, ctx: &FetchContext) -> Result<Vec<RawEvent>, SourceError> {
         let listed_on = london_date(Utc::now());
-        let mut cards: Vec<Value> = Vec::new();
-        for (genre, label) in GENRES {
-            for page in 1..=MAX_PAGES {
-                let url = self.listing_url(genre, page)?;
-                let html = ctx.get_text(&url).await?;
-                let listing = parse_listing(&html, &url, label, page).ok_or_else(|| {
-                    SourceError::Parse(format!("no What's On listing at {}", url.path()))
-                })?;
-                for card in listing.cards {
-                    if !cards.iter().any(|c| c["slug"] == card["slug"]) {
-                        cards.push(card);
-                    }
-                }
-                if !listing.has_next {
-                    break;
-                }
-                if page == MAX_PAGES {
-                    ctx.report_error(format!("{genre}: over the {MAX_PAGES}-page cap"));
-                }
-            }
-        }
+        let cards = self.genre_cards(ctx).await?;
         let mut out = Vec::new();
         for (n, card) in cards.iter().enumerate() {
             let slug = card["slug"].as_str().unwrap_or_default();
