@@ -56,7 +56,7 @@ use crate::normalise::{
 pub const KEY: &str = "union-chapel";
 pub const LISTING_PATH: &str = "/whats-on";
 const EVENT_PREFIX: &str = "/whats-on/";
-/// At most this many event pages a run (9 in-scope cards on 2026-11-08).
+/// At most this many event pages a run (8 in-scope cards on 2026-11-08).
 pub const MAX_DETAILS: usize = 30;
 const VENUE_NAME: &str = "Union Chapel";
 const VENUE_ADDRESS: &str = "Compton Terrace, London N1 2UN";
@@ -528,6 +528,10 @@ mod tests {
             ])),
             Some((t(10, 50), None))
         );
+        assert_eq!(
+            event_times(&lines(&["Sunday 8th November 2026", "Dorrs 7pm"])),
+            Some((t(19, 0), None))
+        );
         assert_eq!(event_times(&lines(&["Sunday 8th November 2026"])), None);
     }
 
@@ -624,5 +628,17 @@ mod tests {
             .unwrap_err()
             .to_string();
         assert!(err.contains("no event page"), "{err}");
+    }
+
+    #[test]
+    fn an_unreadable_card_date_is_an_error() {
+        let detail = json!({"when": ["Doors 7pm"], "cancelled": false});
+        let err = normalise_payload(&payload("TBC", "Organ recital", detail))
+            .unwrap_err()
+            .to_string();
+        assert!(
+            err.contains("Organ recital") && err.contains("TBC"),
+            "{err}"
+        );
     }
 }
