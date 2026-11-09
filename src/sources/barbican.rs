@@ -205,56 +205,40 @@ fn description_html(doc: &Html) -> Option<String> {
     (!parts.is_empty()).then(|| parts.join("\n"))
 }
 
-/// Art-form slugs (`art-design`, `talks-events`, …) of the page's tag
-/// buttons. Other tag buttons link to series, taxonomy or visitor pages.
-fn art_forms(doc: &Html) -> Vec<String> {
-    let mut out: Vec<String> = Vec::new();
+/// The page's tag buttons: its art-form slugs (`art-design`,
+/// `talks-events`, …) and its series slugs (`/whats-on/series/<slug>` and
+/// `/whats-on/<year>/series/<slug>` links). Other tag buttons link to
+/// taxonomy or visitor pages.
+fn tag_buttons(doc: &Html) -> (Vec<String>, Vec<String>) {
+    let mut forms: Vec<String> = Vec::new();
+    let mut series: Vec<String> = Vec::new();
     for a in doc.select(&selector(".tag-buttons a.tag-button[href]")) {
-        let Some(form) = a
+        let Some(href) = a
             .value()
             .attr("href")
             .and_then(|h| h.strip_prefix("/whats-on/"))
         else {
             continue;
         };
-        let valid = !form.is_empty() && form.chars().all(|c| c.is_ascii_lowercase() || c == '-');
-        if valid && !out.iter().any(|f| f == form) {
-            out.push(form.to_string());
-        }
-    }
-    out
-}
-
-/// Series slugs of the page's tag buttons (`/whats-on/series/<slug>` and
-/// `/whats-on/<year>/series/<slug>` links).
-fn series(doc: &Html) -> Vec<String> {
-    let mut out: Vec<String> = Vec::new();
-    for a in doc.select(&selector(".tag-buttons a.tag-button[href]")) {
-        let Some(rest) = a
-            .value()
-            .attr("href")
-            .and_then(|h| h.strip_prefix("/whats-on/"))
-        else {
-            continue;
-        };
-        let rest = match rest.split_once('/') {
+        let rest = match href.split_once('/') {
             Some((year, rest)) if year.len() == 4 && year.chars().all(|c| c.is_ascii_digit()) => {
                 rest
             }
-            _ => rest,
+            _ => href,
         };
-        let Some(slug) = rest.strip_prefix("series/") else {
-            continue;
+        let (slug, out, digits) = match rest.strip_prefix("series/") {
+            Some(slug) => (slug, &mut series, true),
+            None => (href, &mut forms, false),
         };
         let valid = !slug.is_empty()
             && slug
                 .chars()
-                .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-');
+                .all(|c| c.is_ascii_lowercase() || (digits && c.is_ascii_digit()) || c == '-');
         if valid && !out.iter().any(|s| s == slug) {
             out.push(slug.to_string());
         }
     }
-    out
+    (forms, series)
 }
 
 /// The first ticket-price row: its value, or its title when the value is
@@ -299,6 +283,7 @@ pub fn parse_detail(
         .select(&selector(".event-byline .date-range time[datetime]"))
         .filter_map(|e| e.value().attr("datetime"))
         .collect();
+    let (art_forms, series) = tag_buttons(&doc);
     let image_url = listing_image.map(str::to_string).or_else(|| {
         doc.select(&selector(r#"meta[property="og:image"]"#))
             .next()
@@ -323,8 +308,8 @@ pub fn parse_detail(
             "starts": times.first(),
             "ends": times.get(1..).and_then(<[_]>::last),
             "room": first_text(".event-byline__venue"),
-            "art_forms": art_forms(&doc),
-            "series": series(&doc),
+            "art_forms": art_forms,
+            "series": series,
             "price_text": price_text(&doc),
             "description": description_html(&doc),
             "image_url": image_url,
