@@ -26,17 +26,9 @@ fn now() -> DateTime<Utc> {
 
 /// Every `(key, config)` Luma row in the seed migration.
 fn seed_rows() -> Vec<(String, Value)> {
-    let sql = std::fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(SEED))
-        .unwrap();
-    sql.match_indices("('luma-")
-        .map(|(i, _)| {
-            let row = &sql[i + 2..];
-            let key = &row[..row.find('\'').unwrap()];
-            let config = &row[row.find("'{").unwrap() + 1..row.find("}'::jsonb").unwrap() + 1];
-            let config = serde_json::from_str(&config.replace("''", "'"))
-                .unwrap_or_else(|e| panic!("{key}: config is not JSON: {e}"));
-            (key.to_string(), config)
-        })
+    common::seed_rows(SEED, "luma-", &[])
+        .into_iter()
+        .map(|(key, _, config)| (key, config))
         .collect()
 }
 
