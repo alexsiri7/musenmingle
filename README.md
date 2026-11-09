@@ -216,12 +216,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     day; film screenings, children's/family sessions, raffles and online
     selling shows skipped; talks → talk, workshops → workshop, the rest →
     community.
-  - `ica` — CSS on the ICA's `/talks` and `/exhibitions` listings (no
-    JSON-LD), plus the detail page of each single-day event (capped at 20
-    a run) for its time (London wall clock); ranges, "From" dates and days
+  - `ica` — CSS on the ICA's `/talks`, `/exhibitions` and `/live` listings
+    (no JSON-LD), plus the detail page of each single-day event (capped at
+    20 a run for talks and exhibitions, an error past it; 45 for `/live`,
+    whose furthest-out concerts wait for a later run) for its time (London
+    wall clock) and price (fees and levies left out); ranges, "From" dates and days
     whose detail page lists no performances all day; residencies and the young artists' programme, film screenings and
-    members-only events skipped; `/live` concerts not read; exhibitions →
-    exhibition, book launches → talk, performances → community.
+    members-only events skipped; exhibitions → exhibition, book launches →
+    talk, `/live` concerts → music (subtags from the title and card text,
+    else contemporary), performances → community.
   - `the-showroom` — CSS on the `/exhibitions/` and `/events/` listings
     (no JSON-LD; only the current section, not the archive), plus each
     current event's detail page (capped at 8 a run) for its type label,

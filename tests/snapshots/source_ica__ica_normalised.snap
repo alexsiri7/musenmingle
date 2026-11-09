@@ -292,5 +292,902 @@ expression: out
       "venue_name": "ICA"
     },
     "source_event_id": "/exhibitions/autumn-knight-pity-party"
+  },
+  {
+    "date_text": "Tue, 10 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "goat-jp-gal-go-grey|2026-11-10|ica",
+      "description": "Following a sold-out show in 2024, we are excited to welcome back one of the most formidable live acts in existence, as Japan's Goat return to the ICA this November. Support from Gal Go Grey.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13548.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.50",
+        "min": "26.50"
+      },
+      "starts_at": "2026-11-10T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Goat (jp) + Gal Go Grey",
+      "url": "https://www.ica.art/live/goat-japan",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/goat-japan"
+  },
+  {
+    "date_text": "Wed, 11 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "horse-lords-damian-dalla-torre|2026-11-11|ica",
+      "description": "Horse Lords grew out of the fertile Baltimore noise and leftfield rock scene, but their approach is more omnivorous than the stippled rhythms of instrumental electric rock would indicate. Support from Damian Dalle Torre.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/12938.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.50",
+        "min": "24.50"
+      },
+      "starts_at": "2026-11-11T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Horse Lords + Damian Dalla Torre",
+      "url": "https://www.ica.art/live/horse-lords",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/horse-lords"
+  },
+  {
+    "date_text": "Thu, 12 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "gold-panda-danalogue|2026-11-12|ica",
+      "description": "Derwin Schlecker has been making inventive, invigorating electronic music as Gold Panda for the better part of two decades now. He headlines later this year to mark the release of his new album TON UP. With support from Danalogue.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13304.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.21",
+        "min": "24.21"
+      },
+      "starts_at": "2026-11-12T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Gold Panda + Danalogue",
+      "url": "https://www.ica.art/live/gold-panda",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/gold-panda"
+  },
+  {
+    "date_text": "Fri, 13 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "kiss-facility|2026-11-13|ica",
+      "description": "Kiss Facility is the multidisciplinary duo of Mayah Alkhateri and Salvador Navarette, who have been working across sound, image, and performance since their first encounter. Their practice is rooted in spiritual enquiry, drawing on themes of psychic perception, ritual protection, intimacy and the afterlife as a force of future destiny. Support from Róisín El Cherif.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13448.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "23.08",
+        "min": "23.08"
+      },
+      "starts_at": "2026-11-13T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Kiss Facility",
+      "url": "https://www.ica.art/live/kiss-facility",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/kiss-facility"
+  },
+  {
+    "date_text": "Sat, 14 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "faux-real|2026-11-14|ica",
+      "description": "Faux Real are known for idiosyncratic, high-energy live shows combining choreography, showmanship, and practical effects with an intentionally unfiltered physicality. They return with their second album Poison Time, later this year.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13258.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "21.94",
+        "min": "21.94"
+      },
+      "starts_at": "2026-11-14T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Faux Real",
+      "url": "https://www.ica.art/live/faux-real",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/faux-real"
+  },
+  {
+    "date_text": "Tue, 17 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "rois|2026-11-17|ica",
+      "description": "RÓIS is a composer, vocalist, multi-instrumentalist, and electronic artist from Fermanagh, whose songs breathe new life into a forgotten Ireland. Blending elements of folk, sean-nós, electronics, and jazz harmony, RÓIS’ genre-bending sound transports listeners to a different realm.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14092.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.21",
+        "min": "24.21"
+      },
+      "starts_at": "2026-11-17T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "RÓIS",
+      "url": "https://www.ica.art/live/rois",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/rois"
+  },
+  {
+    "date_text": "Thu, 19 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "robocobra-quartet-lara-jones|2026-11-19|ica",
+      "description": "EFG London Jazz Festival presents Robocobra Quartet.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13627.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.21",
+        "min": "24.21"
+      },
+      "starts_at": "2026-11-19T19:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Robocobra Quartet + Lara Jones",
+      "url": "https://www.ica.art/live/robocobra-quartet",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/robocobra-quartet"
+  },
+  {
+    "date_text": "Fri, 20 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "lex-records-presents-pink-siifu-fly-anakin-chuck-strangers-quelle-chris|2026-11-20|ica",
+      "description": "Lex Records presents a stacked bill with Pink Siifu, Fly Anakin, Chuck Strangers and Quelle Chris.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14362.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.50",
+        "min": "22.50"
+      },
+      "starts_at": "2026-11-20T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Lex Records presents Pink Siifu + Fly Anakin + Chuck Strangers + Quelle Chris",
+      "url": "https://www.ica.art/live/lex-records",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/lex-records"
+  },
+  {
+    "date_text": "Sat, 21 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "client-03|2026-11-21|ica",
+      "description": "Client_03 is the testbed. Client_03 is a product of the internet. Client_03 is neither person nor machine. Client_03 is within the Host Body. Client_03 is an invitation.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13844.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "20"
+      },
+      "starts_at": "2026-11-21T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Client_03",
+      "url": "https://www.ica.art/live/client-03",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/client-03"
+  },
+  {
+    "date_text": "Wed, 25 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "modern-woman|2026-11-25|ica",
+      "description": "Modern Woman's debut album Johnny's Dreamworld represents the culmination of the London art-rock outfit's journey from singer Sophie Harris' intimate songwriting project into a full-bodied band capable of folding post-punk, avant-garde, and folk traditions into a live force of dynamic originality.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13045.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.54",
+        "min": "18.54"
+      },
+      "starts_at": "2026-11-25T19:30:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Modern Woman",
+      "url": "https://www.ica.art/live/modern-woman",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/modern-woman"
+  },
+  {
+    "date_text": "26 – 28 November 2026",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": true,
+      "category": "music",
+      "dedupe_key": "unsound-london|2026-11-26|ica",
+      "description": "Unsound Festival comes to the ICA for a three-day residency, bringing together adventurous live music, experimental sound and a programme of talks exploring contemporary culture.",
+      "ends_at": "2026-11-28T00:00:00Z",
+      "image_url": "https://www.ica.art/media/14390.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T00:00:00Z",
+      "tags": [
+        "contemporary",
+        "experimental"
+      ],
+      "title": "Unsound London",
+      "url": "https://www.ica.art/live/unsound-festival-ica",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-festival-ica"
+  },
+  {
+    "date_text": "Thu, 26 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unsound-london-footwork-international|2026-11-26|ica",
+      "description": "Chicago footwork pioneer RP Boo, Polish Outlines label boss Paide, 160 Unity/Tropical Waste founder Seb Wheeler and After Werks co-founder Aoife Keane discuss footwork's latest era, the rise of footwork dance culture outside of Chicago and footwork's ongoing evolution within and beyond Chicago. Moderated by Aliyah Husna.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14379.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-11-26T18:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Unsound London: Footwork International",
+      "url": "https://www.ica.art/live/unsound-london-footwork-international",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-london-footwork-international"
+  },
+  {
+    "date_text": "Thu, 26 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unsound-london-lorenzo-senni-rp-boo-gary-gwadera-aleksandra-słyż|2026-11-26|ica",
+      "description": "Opening night of Unsound London at ICA brings a new live show from trance pointillist Lorenzo Senni, a cross-cultural collision of Chicago footwork and Polish oberek from RP Boo and Gary Gwadera, joined by folk and footwork dancers, and the world premiere of a new work by Polish composer and sound artist Aleksandra Słyż.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14049.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-11-26T19:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Unsound London: Lorenzo Senni, RP Boo & Gary Gwadera, Aleksandra Słyż",
+      "url": "https://www.ica.art/live/unsound-ica-1",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-ica-1"
+  },
+  {
+    "date_text": "Fri, 27 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unsound-london-visible-cloaks-feat-hashtag-ensemble-heinali-andriana-yaroslava-saienko-giant-claw-julek-ploski|2026-11-27|ica",
+      "description": "The second night of ICA's partnership with Unsound Festival, features Visible Cloaks joining forces with Poland's Hashtag Ensemble, the UK debut of Гільдеґарда by Ukrainian artists Heinali and Andriana-Yaroslava Saienko and Giant Claw joins Warsaw-based eccentric Julek ploski for an exclusive Unsound A/V commission.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14048.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-11-27T19:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Unsound London: Visible Cloaks feat. Hashtag Ensemble, Heinali & Andriana-Yaroslava Saienko, Giant Claw & Julek ploski",
+      "url": "https://www.ica.art/live/unsound-ica-2",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-ica-2"
+  },
+  {
+    "date_text": "Sat, 28 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unsound-london-internet-folklores-w-kieran-press-reynolds-gunseli-yalcinkaya|2026-11-28|ica",
+      "description": "Kieran Press-Reynolds and Günseli Yalcinkaya join forces to explore internet folklore, digital subcultures and the feedback loops between online communities, algorithms and cultural production.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14381.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-11-28T11:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Unsound London: Internet Folklores w/ Kieran Press-Reynolds & Günseli Yalcinkaya",
+      "url": "https://www.ica.art/live/unsound-london-internet-folklores",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-london-internet-folklores"
+  },
+  {
+    "date_text": "Sat, 28 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "unsound-london-how-to-not-be-heard-2-w-steve-goodman-angus-carlyle|2026-11-28|ica",
+      "description": "Steve Goodman (Kode9) and Angus Carlyle presentations will engage a complex of ideas relating to sonic warfare, technologically augmented perception, and both strategic and tactical configurations of noise, silence, and deception.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14380.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "10",
+        "min": "10"
+      },
+      "starts_at": "2026-11-28T13:15:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "Unsound London: How to (Not) Be Heard #2 w/ Steve Goodman & Angus Carlyle",
+      "url": "https://www.ica.art/live/unsound-london-htnbh-2",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/unsound-london-htnbh-2"
+  },
+  {
+    "date_text": "Sun, 29 November",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jack-wyllie|2026-11-29|ica",
+      "description": "Portico Quartet co-founder Jack Wyllie presents the first project under his own name and introduces a new band featuring Hinako Omori on keyboards, Milo Fitzpatrick (Portico Quartet/Vega Trails) on bass, and drummer Jesse Barrett (Mammal Hands).",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13438.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-11-29T18:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Jack Wyllie",
+      "url": "https://www.ica.art/live/jack-wyllie",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/jack-wyllie"
+  },
+  {
+    "date_text": "Fri, 4 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "planningtorock|2026-12-04|ica",
+      "description": "Planningtorock - the long-running musical project of Tallinn-based artist, producer and composer Jam Rostron - presents a special, one-off, headline show at the ICA this December They present a special, one-off, headline show at the ICA this December which will be filmed as part of a documentary about Planningtorock directed by Vic Lentaigne and Posy Dixon and produced by LUCA and Grey Moth.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13979.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "25"
+      },
+      "starts_at": "2026-12-04T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Planningtorock",
+      "url": "https://www.ica.art/live/planningtorock",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/planningtorock"
+  },
+  {
+    "date_text": "Sat, 5 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tygapaw-live|2026-12-05|ica",
+      "description": "TYGAPAW is a Jamaican-born, Brooklyn-based artist and composer whose multidisciplinary practice spans music, performance, design, and visual art.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13717.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25",
+        "min": "17.50"
+      },
+      "starts_at": "2026-12-05T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "TYGAPAW (live)",
+      "url": "https://www.ica.art/live/tygapaw",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/tygapaw"
+  },
+  {
+    "date_text": "Wed, 9 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dis-fig-microplastics|2026-12-09|ica",
+      "description": "A double header of unhinged sonic intensity with Dis Fig performing her new album and the London live debut of Microplastics, the new band from three of South London's most distinctive artists: aya, Jennifer Walton and 96 Back",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13919.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.50",
+        "min": "22.50"
+      },
+      "starts_at": "2026-12-09T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Dis Fig + Microplastics",
+      "url": "https://www.ica.art/live/dis-fig-microplastics",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/dis-fig-microplastics"
+  },
+  {
+    "date_text": "Fri, 11 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "nightbus|2026-12-11|ica",
+      "description": "Nightbus are a brooding, cinematic two-piece blending post-punk, trip-hop, and late-night electronica into something dark, hypnotic and unmistakably their own.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/13981.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.51",
+        "min": "22.51"
+      },
+      "starts_at": "2026-12-11T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Nightbus",
+      "url": "https://www.ica.art/live/nightbus",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/nightbus"
+  },
+  {
+    "date_text": "Sat, 12 December",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "andy-stott-carmen-villain-church-andrews-matt-davies|2026-12-12|ica",
+      "description": "Goodness present a night of shuddering dub rhythms with Andy Stott, Carmen Villain and Church Andrews & Matt Davies.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14072.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "27.19",
+        "min": "27.19"
+      },
+      "starts_at": "2026-12-12T19:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Andy Stott + Carmen Villain + Church Andrews and Matt Davies",
+      "url": "https://www.ica.art/live/andy-stott",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/andy-stott"
+  },
+  {
+    "date_text": "Fri, 15 January 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jgrrey|2027-01-15|ica",
+      "description": "Following the release of her sophomore album you, me & jen, the South London singer-songwriter headlines the ICA.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14343.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.51",
+        "min": "22.51"
+      },
+      "starts_at": "2027-01-15T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "JGrrey",
+      "url": "https://www.ica.art/live/jgrrey",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/jgrrey"
+  },
+  {
+    "date_text": "Thu, 28 January 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "mormor|2027-01-28|ica",
+      "description": "Seth Nyquist, better known as MorMor, is a Toronto-based indie-pop musician and producer.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14335.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "23.64",
+        "min": "23.64"
+      },
+      "starts_at": "2027-01-28T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "MorMor",
+      "url": "https://www.ica.art/live/mormor",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/mormor"
+  },
+  {
+    "date_text": "Tue, 16 February 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "vanishing-twin|2027-02-16|ica",
+      "description": "Shapeshifting trio Vanishing Twin continue their stealth mission to redefine the possibilities of the modern band on new album Archives – a collage of postmodern songcraft that finds nirvana in the shared experience of creation.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14352.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.21",
+        "min": "24.21"
+      },
+      "starts_at": "2027-02-16T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Vanishing Twin",
+      "url": "https://www.ica.art/live/vanishing-twin",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/vanishing-twin"
+  },
+  {
+    "date_text": "Wed, 17 February 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "curbside-lambsear-gyeongsu-june-vanessa-bedoret|2027-02-17|ica",
+      "description": "Scenic Route return to ICA with new signing Curbside Lambsear, alongside Gyeongsu & June and Vanessa Bedoret.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14210.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.50",
+        "min": "22.50"
+      },
+      "starts_at": "2027-02-17T19:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Curbside Lambsear, Gyeongsu & June, Vanessa Bedoret",
+      "url": "https://www.ica.art/live/curbside-lambsear-gyeongsu-june",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/curbside-lambsear-gyeongsu-june"
+  },
+  {
+    "date_text": "Tue, 23 February 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dog-unit|2027-02-23|ica",
+      "description": "Dog Unit’s language exists beyond words; it’s not in the telling, but in the feeling. Four friends take on the scale of a mutant orchestra, a single mind of 16 limbs in perpetual forward motion and unspoken shared purpose.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14034.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20",
+        "min": "20"
+      },
+      "starts_at": "2027-02-23T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "Dog Unit",
+      "url": "https://www.ica.art/live/dog-unit",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/dog-unit"
+  },
+  {
+    "date_text": "Sat, 27 February 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "tony-njoku|2027-02-27|ica",
+      "description": "Tony Njoku is an award-winning British-Nigerian composer, recording artist and multidisciplinary artist known for emotionally resonant, genre-blurring music paired with striking visual work.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14317.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22.50",
+        "min": "22.50"
+      },
+      "starts_at": "2027-02-27T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Tony Njoku",
+      "url": "https://www.ica.art/live/tony-njoku",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/tony-njoku"
+  },
+  {
+    "date_text": "Wed, 17 March 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sam-quealy|2027-03-17|ica",
+      "description": "The sophomore album from Sam Quealy, JAWBREAKER takes its title from the timeless candy that shares the singular character of her music: a bold confection both addictively sweet and dangerously hard, widely beloved for its potential to wreak glorious havoc.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14236.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "21.94",
+        "min": "21.94"
+      },
+      "starts_at": "2027-03-17T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Sam Quealy",
+      "url": "https://www.ica.art/live/sam-quealy",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/sam-quealy"
+  },
+  {
+    "date_text": "Thu, 18 March 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "la-priest|2027-03-18|ica",
+      "description": "Sam Eastgate has built a reputation as a subversive, unpredictable musician, consistently innovating over the course of his work with his now defunct breakout band Late Of The Pier, his cherished Soft Hair collaboration with Connan Mockasin as well as his solo work under LA Priest.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14251.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.50",
+        "min": "26.50"
+      },
+      "starts_at": "2027-03-18T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "LA Priest",
+      "url": "https://www.ica.art/live/la-priest",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/la-priest"
+  },
+  {
+    "date_text": "Sat, 27 March 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "logic1000|2027-03-27|ica",
+      "description": "Logic1000 is the moniker of Sydney-born, London-based producer and DJ Samantha Poulter. In her unique music making process, Samantha conjures concepts, genres, samples, hyper-accurate digital synths and disembodied textures. Logic is set to release her highly anticipated sophomore album Confirmation! On October 4th, following the release of her critically-acclaimed DJ Kicks: Logic1000 in 2025.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14157.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.21",
+        "min": "24.21"
+      },
+      "starts_at": "2027-03-27T19:30:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Logic1000",
+      "url": "https://www.ica.art/live/logic1000",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/logic1000"
+  },
+  {
+    "date_text": "Sat, 22 May 2027",
+    "event": {
+      "address": "The Mall, London SW1Y 5AH",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "warrington-runcorn-new-town-development-plan|2027-05-22|ica",
+      "description": "Gordon Chapman-Fox’s Warrington-Runcorn New Town Development Plan project sees a bold visual aesthetic and striking retro-futuristic audio identity seamlessly melded together into one evocative musical package.",
+      "ends_at": null,
+      "image_url": "https://www.ica.art/media/14190.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24",
+        "min": "24"
+      },
+      "starts_at": "2027-05-22T18:00:00Z",
+      "tags": [
+        "contemporary"
+      ],
+      "title": "Warrington-Runcorn New Town Development Plan",
+      "url": "https://www.ica.art/live/warrington-runcorn-new-town-development-plan",
+      "venue_name": "ICA"
+    },
+    "source_event_id": "/live/warrington-runcorn-new-town-development-plan"
   }
 ]
