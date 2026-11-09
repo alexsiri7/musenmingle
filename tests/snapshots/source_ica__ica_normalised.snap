@@ -341,7 +341,7 @@ expression: out
       },
       "starts_at": "2026-11-11T19:30:00Z",
       "tags": [
-        "experimental"
+        "contemporary"
       ],
       "title": "Horse Lords + Damian Dalla Torre",
       "url": "https://www.ica.art/live/horse-lords",
@@ -453,7 +453,7 @@ expression: out
       },
       "starts_at": "2026-11-17T19:30:00Z",
       "tags": [
-        "jazz"
+        "contemporary"
       ],
       "title": "RÓIS",
       "url": "https://www.ica.art/live/rois",
@@ -565,7 +565,7 @@ expression: out
       },
       "starts_at": "2026-11-25T19:30:00Z",
       "tags": [
-        "experimental"
+        "contemporary"
       ],
       "title": "Modern Woman",
       "url": "https://www.ica.art/live/modern-woman",
@@ -593,7 +593,6 @@ expression: out
       },
       "starts_at": "2026-11-26T00:00:00Z",
       "tags": [
-        "contemporary",
         "experimental"
       ],
       "title": "Unsound London",
@@ -622,7 +621,7 @@ expression: out
       },
       "starts_at": "2026-11-26T18:00:00Z",
       "tags": [
-        "contemporary"
+        "experimental"
       ],
       "title": "Unsound London: Footwork International",
       "url": "https://www.ica.art/live/unsound-london-footwork-international",
@@ -650,7 +649,7 @@ expression: out
       },
       "starts_at": "2026-11-26T19:00:00Z",
       "tags": [
-        "contemporary"
+        "experimental"
       ],
       "title": "Unsound London: Lorenzo Senni, RP Boo & Gary Gwadera, Aleksandra Słyż",
       "url": "https://www.ica.art/live/unsound-ica-1",
@@ -678,7 +677,7 @@ expression: out
       },
       "starts_at": "2026-11-27T19:00:00Z",
       "tags": [
-        "contemporary"
+        "experimental"
       ],
       "title": "Unsound London: Visible Cloaks feat. Hashtag Ensemble, Heinali & Andriana-Yaroslava Saienko, Giant Claw & Julek ploski",
       "url": "https://www.ica.art/live/unsound-ica-2",
@@ -706,7 +705,7 @@ expression: out
       },
       "starts_at": "2026-11-28T11:30:00Z",
       "tags": [
-        "contemporary"
+        "experimental"
       ],
       "title": "Unsound London: Internet Folklores w/ Kieran Press-Reynolds & Günseli Yalcinkaya",
       "url": "https://www.ica.art/live/unsound-london-internet-folklores",
@@ -1042,7 +1041,7 @@ expression: out
       },
       "starts_at": "2027-02-23T19:30:00Z",
       "tags": [
-        "classical"
+        "contemporary"
       ],
       "title": "Dog Unit",
       "url": "https://www.ica.art/live/dog-unit",

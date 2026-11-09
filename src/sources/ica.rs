@@ -38,8 +38,11 @@
 //!   tours) are skipped; book launches → talk; other `/live` cards → music
 //!   (#209 option (b): the ICA's concerts are the 'arty' end); otherwise
 //!   the title's keywords decide and anything else (performances) is
-//!   community. A concert's subtags come from its title and card
-//!   description (`crate::music`), `contemporary` when neither names one.
+//!   community. A concert's subtags come from its title (`crate::music`)
+//!   and the festival its title or card description names
+//!   ([`SERIES_TAGS`]: "EFG London Jazz Festival presents …" is jazz,
+//!   Unsound experimental), `contemporary` when neither gives one. The description's other prose is not matched: its genre
+//!   words are often metaphors ("a mutant orchestra" for a rock band).
 //! * Price: the first line of the detail page's `#price-range`, up to any
 //!   "(" and without its fee and levy parts, when it names an amount
 //!   ("£26.50 (including DICE fees + £1.50 venue levy)" is £26.50, "£17.50 /
@@ -60,7 +63,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
-    parse_price, words,
+    padded_words, parse_price, words,
 };
 
 pub const KEY: &str = "ica";
@@ -68,8 +71,8 @@ pub const KEY: &str = "ica";
 pub const MAX_RANGE_DAYS: i64 = 366;
 /// Detail pages read per run (single-day events only).
 pub const MAX_DETAILS: usize = 20;
-/// Detail pages read per run for `/live` single days; later cards are left
-/// out, not errors.
+/// Detail pages read per run for `/live` single days (a failed read is an
+/// error and does not count); later cards are left out, not errors.
 pub const MAX_LIVE_DETAILS: usize = 45;
 pub const TALKS_PATH: &str = "/talks";
 pub const EXHIBITIONS_PATH: &str = "/exhibitions";
@@ -441,11 +444,23 @@ fn ticket_price_text(line: &str) -> String {
         .join(" / ")
 }
 
-/// A concert's subtags from its card description and title, `contemporary`
-/// when neither names one.
+/// Festivals a concert's title or card description can name, and the
+/// subtag each gives.
+const SERIES_TAGS: &[(&str, &str)] = &[
+    ("london jazz festival", "jazz"),
+    ("unsound", "experimental"),
+];
+
+/// A concert's subtags from its title and the festivals its title or card
+/// description names, `contemporary` when neither gives one.
 fn music_tags(description: Option<&str>, title: &str) -> Vec<String> {
-    let text: Vec<String> = description.map(str::to_string).into_iter().collect();
-    let tags = crate::music::tags_for(Category::Music.as_str(), &text, title);
+    let text = padded_words(&format!("{title} {}", description.unwrap_or_default()));
+    let series: Vec<String> = SERIES_TAGS
+        .iter()
+        .filter(|(name, _)| text.contains(&format!(" {name} ")))
+        .map(|(_, tag)| tag.to_string())
+        .collect();
+    let tags = crate::music::tags_for(Category::Music.as_str(), &series, title);
     if tags.is_empty() {
         vec!["contemporary".to_string()]
     } else {
@@ -492,11 +507,11 @@ impl Source for Ica {
             let mut detail = None;
             if needs_detail(card, *section, listed_on) {
                 let path = card["path"].as_str().unwrap_or_default();
-                if *section == Section::Live {
+                let live = *section == Section::Live;
+                if live {
                     if live_details >= MAX_LIVE_DETAILS {
                         continue;
                     }
-                    live_details += 1;
                 } else {
                     if details >= MAX_DETAILS {
                         ctx.report_error(format!("{path}: over the {MAX_DETAILS} detail-page cap"));
@@ -505,7 +520,10 @@ impl Source for Ica {
                     details += 1;
                 }
                 match ctx.get_text(&self.url(path)?).await {
-                    Ok(html) => detail = Some(parse_detail(&html)),
+                    Ok(html) => {
+                        live_details += usize::from(live);
+                        detail = Some(parse_detail(&html));
+                    }
                     Err(e) => {
                         ctx.report_error(format!("{path}: {e}"));
                         continue;
@@ -694,10 +712,19 @@ mod tests {
             assert_eq!(ev.category, Category::Music);
             ev.tags
         };
+        assert_eq!(tags("Horse Lords: noise night", None), ["experimental"]);
         assert_eq!(
-            tags("Horse Lords", Some("Baltimore's noise-minimalist quartet")),
-            ["experimental"]
+            tags("Dog Unit", Some("Instrumental rock as a mutant orchestra")),
+            ["contemporary"]
         );
+        assert_eq!(
+            tags(
+                "Robocobra Quartet",
+                Some("EFG London Jazz Festival presents Robocobra Quartet.")
+            ),
+            ["jazz"]
+        );
+        assert_eq!(tags("Unsound London: X", None), ["experimental"]);
         assert_eq!(tags("Goat (jp)", None), ["contemporary"]);
         assert!(tags("EFG London Jazz Festival: X", None).contains(&"jazz".to_string()));
     }

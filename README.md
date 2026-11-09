@@ -223,7 +223,7 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     wall clock) and price (fees and levies left out); ranges, "From" dates and days
     whose detail page lists no performances all day; residencies and the young artists' programme, film screenings and
     members-only events skipped; exhibitions → exhibition, book launches →
-    talk, `/live` concerts → music (subtags from the title and card text,
+    talk, `/live` concerts → music (subtags from the title and named festivals,
     else contemporary), performances → community.
   - `the-showroom` — CSS on the `/exhibitions/` and `/events/` listings
     (no JSON-LD; only the current section, not the archive), plus each
