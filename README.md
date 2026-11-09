@@ -307,6 +307,16 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     the "About" tab the description. Music subtags from the genre and title
     (Opera → classical); the venue's other genres (theatre, comedy, cabaret,
     magic, film, music hall, tours) are skipped.
+  - `english-national-opera` — CSS on the `/whats-on/` listing (one page,
+    no JSON-LD `Event`) for the event links, then every event page (capped
+    at 40 a run): its `Event` JSON-LD is invalid JSON, so the performances
+    come from the booking calendar's `<script id="json-data">` (one session
+    per performance, London wall clock), the header the title, composer
+    credit and venue, the sidebar the running time (each session's end) and
+    the "Tickets from" price. Everything is music, operas (those with a
+    composer credit) `classical`; productions away from the London
+    Coliseum, schools events with no listed performances and the Relaxed
+    Programme page (its performances are other productions') are skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
