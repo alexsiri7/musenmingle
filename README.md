@@ -69,9 +69,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     `events` for links and taxonomy classes) → server-rendered detail pages
     (CSS selectors) for dates, times and price; gallery exhibitions and
     public talks at Vernon Square, online items and courses skipped.
-  - `barbican` — CSS-selector scraper (no JSON-LD): the art & design and
-    talks & events listings (paginated) → detail pages for times, art-form
-    tags (category) and the standard ticket price.
+  - `barbican` — CSS-selector scraper (no JSON-LD): the art & design,
+    talks & events, classical music and contemporary music listings
+    (paginated, at most 30 new events each) → detail pages for times,
+    art-form tags (category, including music; the Barbican's Jazz series
+    adds `jazz`) and the standard ticket price.
   - `clerkenwell-design-week` — the annual design festival: one homepage
     request for its schema.org JSON-LD `Event` (category expo).
   - `chisenhale-gallery` — listing-only CSS scraper (no JSON-LD; robots.txt

@@ -365,6 +365,16 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
     assert_eq!(got, expected_ids);
 }
 
+#[test]
+fn the_fetch_timeout_covers_a_full_crawl_at_the_default_rate_limit() {
+    // Robots.txt, then per listing 5 pages and 30 detail pages, 2 s apart,
+    // plus a margin: above the 300 s default, so the runner uses it.
+    assert_eq!(
+        scraper().fetch_timeout(),
+        Some(std::time::Duration::from_secs(342))
+    );
+}
+
 #[tokio::test]
 async fn robots_disallow_blocks_the_scraper() {
     let server = MockServer::start().await;
