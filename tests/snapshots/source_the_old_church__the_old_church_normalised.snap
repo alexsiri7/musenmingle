@@ -1,0 +1,451 @@
+---
+source: tests/source_the_old_church.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "quiet-folk-detta-danford-album-launch|2026-11-11|old-church",
+      "description": "A transporting evening of folk music alongside new and original works celebrating the release of two debut albums from Quiet Folk (Rhia Parker mandolin/voice & Natasha Zielazinski banjo/voice) and Detta Danford on solo shakuhachi.",
+      "ends_at": "2026-11-11T23:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_0d75453b4ccd40d5bc0bb01787d6d90e~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-11T19:30:00Z",
+      "tags": [],
+      "title": "QUIET FOLK AND DETTA DANFORD ALBUM LAUNCH",
+      "url": "https://www.theoldchurch.org.uk/event-details/quiet-folk-and-detta-danford-album-launch",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "75db8870-206d-4233-9049-18b6252c98c9"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "shshchts-x-8-london-showcase|2026-11-12|old-church",
+      "description": "Ukrainian experimental electronic label SHSHCHTS returns to London with a label showcase in collaboration with Berlin-based – Club [8].",
+      "ends_at": "2026-11-12T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_de767ba3f10140629034414b23c0e81c~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-12T18:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "SHSHCHTS X [8]: LONDON SHOWCASE",
+      "url": "https://www.theoldchurch.org.uk/event-details/shshchts-x-8-london-showcase",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "d6fb2e68-2876-4d86-a705-a69c2640570a"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "erik-sigurd-sonnet|2026-11-13|old-church",
+      "description": "Celebrating the release of his sophomore album, 'Sonnet', Erik Sigurd leads his ensemble performing the ambitious work live with a string quartet, tenor saxophone, harp, and double bass.",
+      "ends_at": "2026-11-13T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_29839d86bb95463994b60f72927c1267~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T19:00:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "ERIK SIGURD: SONNET",
+      "url": "https://www.theoldchurch.org.uk/event-details/erik-sigurd-sonnet",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "eb00a44d-b1c1-49dc-adad-eba59977c8c1"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "joe-harvey-whyte-bobby-lee|2026-11-14|old-church",
+      "description": "A new project between ambient pedal steel explorer Joe Harvey-Whyte and psych-country guitarist Bobby Lee, “Last Ride” takes in Paris, Texas-esque dusty instrumentals, west coast canyon-rock, brit-folk pastoralism, kosmische choogle and new-age mellowness.",
+      "ends_at": "2026-11-14T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_d5ff32b93d2841a683121304701b8aa8~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T18:00:00Z",
+      "tags": [],
+      "title": "JOE HARVEY-WHYTE & BOBBY LEE",
+      "url": "https://www.theoldchurch.org.uk/event-details/joe-harvey-whyte-bobby-lee",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "5c17199e-c682-4c33-88cf-26e7de27a5b9"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ridgeclub|2026-11-17|old-church",
+      "description": null,
+      "ends_at": "2026-11-17T23:00:00Z",
+      "image_url": null,
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-17T19:00:00Z",
+      "tags": [],
+      "title": "RIDGECLUB",
+      "url": "https://www.theoldchurch.org.uk/event-details/ridgeclub-sold-out",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "1ecf3742-d4c4-4091-a32b-65c63cae57bf"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ethan-jewells-very-sad-tour-in-london|2026-11-19|old-church",
+      "description": "Ethan Jewell's Very Sad Tour is an emotional night of poetry and music. come cry, feel your feelings, and experience Ethan's music in person!",
+      "ends_at": "2026-11-19T21:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_d5ed2050513d49a5b44799fa7a7db667~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T20:00:00Z",
+      "tags": [],
+      "title": "ETHAN JEWELL'S VERY SAD TOUR IN LONDON",
+      "url": "https://www.theoldchurch.org.uk/event-details/ethan-jewells-very-sad-tour-in-london",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "e78caa25-02c6-4c20-be89-d68e9c4a558d"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "hidden-gems|2026-11-20|old-church",
+      "description": "Ensemble Molière perform beautiful and rarely heard works from 17th and 18th century France on their luscious combination of wind, string and keyboard instruments. Programme includes music by Francois Couperin, Jean-Baptiste Quentin and Michel Corrette.",
+      "ends_at": "2026-11-20T21:15:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_84e0fa92537b4fbdb596552fefb6c582~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-20T19:30:00Z",
+      "tags": [],
+      "title": "HIDDEN GEMS",
+      "url": "https://www.theoldchurch.org.uk/event-details/hidden-gems",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "ab8f65cc-774e-4e2a-97b4-01e4aa714467"
+  },
+  {
+    "event": null,
+    "source_event_id": "25a046c1-ea22-4954-9960-4a89907ea3d6"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "cornelia-murr-matinee-show-dana-gavanski|2026-11-24|old-church",
+      "description": "Cornelia Murr was born in London and resides in New York as a dual citizen. Working with producer Jim James of My Morning Jacket on her 2018 debut album Lake Tear of the Clouds, Murr conjured a hazy blend of folk and cosmic soul music, bringing to mind the fantasias of Broadcast, Stereolab’s most pa",
+      "ends_at": "2026-11-24T18:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_df32a287c275498096e6e4722725b50f~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-24T16:00:00Z",
+      "tags": [],
+      "title": "CORNELIA MURR (MATINEE SHOW) + DANA GAVANSKI",
+      "url": "https://www.theoldchurch.org.uk/event-details/cornelia-murr-matinee-show-dana-gavanski",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "c0e451e5-e1ed-4cc4-8e7d-fe506d58026e"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "cornelia-murr-evening-show-dana-gavanski|2026-11-24|old-church",
+      "description": "Cornelia Murr was born in London and resides in New York as a dual citizen. Working with producer Jim James of My Morning Jacket on her 2018 debut album Lake Tear of the Clouds, Murr conjured a hazy blend of folk and cosmic soul music, bringing to mind the fantasias of Broadcast, Stereolab’s most pa",
+      "ends_at": "2026-11-24T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_f6e8ea5b53a04fd5adcfacdb3a094c3d~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-24T19:00:00Z",
+      "tags": [],
+      "title": "CORNELIA MURR (EVENING SHOW) + DANA GAVANSKI",
+      "url": "https://www.theoldchurch.org.uk/event-details/cornelia-murr-evening-show-dana-gavanski",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "776f783e-a60b-4e0c-aac2-130859d2de13"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "josh-barry-experience|2026-11-25|old-church",
+      "description": "For one night only, The Josh Barry Experience takes on a different form within the beautiful, intimate surroundings of The Old Church. Known for his powerful voice, raw emotion and timeless blend of soul and rock, Josh Barry invites you into a special evening that promises to be unlike anything he's",
+      "ends_at": "2026-11-25T22:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_b03daff4e27543fca22433f8d0387ddd~mv2.jpeg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-25T19:30:00Z",
+      "tags": [],
+      "title": "THE JOSH BARRY EXPERIENCE",
+      "url": "https://www.theoldchurch.org.uk/event-details/the-josh-barry-experience",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "bed7a8e1-29f2-46d0-b910-98376e111d73"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "perfect-stranger|2026-11-26|old-church",
+      "description": "Blurring the boundaries between jazz, rock, funk and classical music, Perfect Stranger is an adventurous ensemble led by guitarist and composer Chris Sansom, bringing together some of the finest musicians on the London jazz scene.",
+      "ends_at": "2026-11-26T21:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_4442012dfd134beab3add7736cd49bd4~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-26T19:30:00Z",
+      "tags": [
+        "classical",
+        "jazz"
+      ],
+      "title": "PERFECT STRANGER",
+      "url": "https://www.theoldchurch.org.uk/event-details/perfect-stranger",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "695ab11c-f40d-4222-b365-32bdb44b6205"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "frozen-warnings|2026-11-27|old-church",
+      "description": "Nearly 60 years since the release of Nico’s groundbreaking solo album The Marble Index, artist and performer Peter Groom reinterprets the landmark record and its follow-up Desertshore.",
+      "ends_at": "2026-11-27T20:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_bd9e403fbd7d4df292380ecb7359e633~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-27T19:00:00Z",
+      "tags": [],
+      "title": "FROZEN WARNINGS",
+      "url": "https://www.theoldchurch.org.uk/event-details/frozen-warnings",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "37200668-f289-4a2b-b2c0-6dff62e00cca"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "no-computers-30-after-dark|2026-11-29|old-church",
+      "description": "No Computers is a recurring improv music event series at ‘The Deck’. The event is free and open to the public and the format is a feature act followed by an open improvisation where anyone can play regardless of background, ability or status.",
+      "ends_at": "2026-11-29T19:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_6575edf720e04e76a3c022e107583fa1~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-29T16:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "NO COMPUTERS 30 (AFTER-DARK!)",
+      "url": "https://www.theoldchurch.org.uk/event-details/no-computers-30-after-dark",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "bcc2738f-852d-4e50-bb43-3177bb214076"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "pop-up-christmas-gig|2026-12-01|old-church",
+      "description": "Formed in 2009 and based in South London, The Pop-Up Choir is a contemporary co-operative 25-piece a cappella choir singing in 5-part harmony (SAATB).",
+      "ends_at": "2026-12-01T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_d7af109f3c77473e879a41f241af1d44~mv2.png",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-01T19:00:00Z",
+      "tags": [
+        "classical",
+        "contemporary"
+      ],
+      "title": "THE POP-UP CHRISTMAS GIG",
+      "url": "https://www.theoldchurch.org.uk/event-details/the-pop-up-christmas-gig",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "a9eabf2b-33cb-47a9-a0f6-26328ae9c13f"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "box-fir|2026-12-02|old-church",
+      "description": "Baroque music from the lands of Christmas trees! Programme includes trio sonatas by Telemann and Buxtehude, guitar solos by Johan Helmich Roman and a Finnish lullaby.",
+      "ends_at": "2026-12-02T21:30:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_7c4f281cef1f46eeb814edec723734ff~mv2.avif",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-02T19:30:00Z",
+      "tags": [
+        "classical"
+      ],
+      "title": "THE BOX AND FIR",
+      "url": "https://www.theoldchurch.org.uk/event-details/the-box-and-fir",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "0accc669-403b-4421-b02b-c0dceee0560a"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "stanley-welch-songs-about-women-release-show|2026-12-03|old-church",
+      "description": "Come down and celebrate the release of Stanley Welch's double album, Songs About Women and Songs About Women: the Musical.",
+      "ends_at": "2026-12-03T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_fa32bef9a5144c6fab850887a7e05fa7~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-03T19:00:00Z",
+      "tags": [],
+      "title": "STANLEY WELCH - SONGS ABOUT WOMEN RELEASE SHOW",
+      "url": "https://www.theoldchurch.org.uk/event-details/stanley-welch-songs-about-women-release-show",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "a0470a7c-36ce-4bde-82d4-d7aaf7a40638"
+  },
+  {
+    "event": {
+      "address": "Stoke Newington Church St, London N16 9ES, UK",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "thin-veil-on-donkey|2026-12-04|old-church",
+      "description": "Interdisciplinary experimental arts night exploring themes of folklore, the eerie and irreverent in unique spaces.",
+      "ends_at": "2026-12-04T23:00:00Z",
+      "image_url": "https://static.wixstatic.com/media/08c405_fa637ce36f0446b6b6b5f6d198e50e4b~mv2.jpg",
+      "lat": 51.56135,
+      "lng": -0.08471999999999998,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-12-04T19:00:00Z",
+      "tags": [
+        "experimental"
+      ],
+      "title": "THIN THE VEIL ON THE DONKEY",
+      "url": "https://www.theoldchurch.org.uk/event-details/thin-the-veil-on-the-donkey",
+      "venue_name": "The Old Church"
+    },
+    "source_event_id": "04f3f0cd-aab1-4050-a70a-57f32183c34c"
+  }
+]
