@@ -1,7 +1,7 @@
 //! Barbican scraper: snapshot tests over saved HTML fixtures and an
 //! end-to-end fetch against wiremock.
 //!
-//! The listings link to ~60 events at ~150 KB each, so only a representative
+//! The listings link to ~140 events at ~150 KB each, so only a representative
 //! set of detail pages is saved (every category, every skip reason, and the
 //! same slug under two years); the fetch test serves 404 for the rest.
 
@@ -12,7 +12,7 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
 use musenmingle::sources::Source;
 use musenmingle::sources::barbican::{
-    Barbican, MAX_DETAIL_PAGES, MAX_LISTING_PAGES, parse_detail, parse_listing,
+    Barbican, MAX_DETAIL_PAGES_PER_LISTING, MAX_LISTING_PAGES, parse_detail, parse_listing,
 };
 use std::collections::BTreeMap;
 use url::Url;
@@ -29,7 +29,56 @@ const LISTINGS: &[(&str, u32, &str)] = &[
     ("talks-events", 0, "talks-events"),
     ("talks-events", 1, "talks-events-page-1"),
     ("talks-events", 2, "talks-events-page-2"),
+    ("classical-music", 0, "classical-music"),
+    ("classical-music", 1, "classical-music-page-1"),
+    ("contemporary-music", 0, "contemporary-music"),
+    ("contemporary-music", 1, "contemporary-music-page-1"),
+    ("contemporary-music", 2, "contemporary-music-page-2"),
 ];
+
+/// What a run over the listing fixtures requests.
+struct Crawl {
+    /// Whether each of [`LISTINGS`] is fetched.
+    fetched: Vec<bool>,
+    /// Detail paths, in fetch order.
+    paths: Vec<String>,
+    /// Whether some listing stopped at its quota with a next page left.
+    cut: bool,
+}
+
+/// A listing stops paginating once it has added its quota of new events.
+fn crawl() -> Crawl {
+    let mut fetched = Vec::new();
+    let mut cut = false;
+    let mut paths: Vec<String> = Vec::new();
+    let mut current = "";
+    let (mut added, mut done) = (0, false);
+    for (form, _, stem) in LISTINGS {
+        if *form != current {
+            current = form;
+            (added, done) = (0, false);
+        }
+        fetched.push(!done);
+        if done {
+            continue;
+        }
+        let page = parse_listing(&fixture(&format!("{DIR}/{stem}.html")));
+        for p in page.event_paths {
+            if added < MAX_DETAIL_PAGES_PER_LISTING && !paths.contains(&p) {
+                paths.push(p);
+                added += 1;
+            }
+        }
+        let full = added == MAX_DETAIL_PAGES_PER_LISTING;
+        cut |= full && page.next_page.is_some();
+        done = full || page.next_page.is_none();
+    }
+    Crawl {
+        fetched,
+        paths,
+        cut,
+    }
+}
 
 /// `<year>/<slug>` of every saved detail page, sorted.
 fn detail_ids() -> Vec<String> {
@@ -242,14 +291,12 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
         .expect(1) // cached for the rest of the run
         .mount(&server)
         .await;
-    let mut linked: Vec<String> = Vec::new();
-    for (form, page, stem) in LISTINGS {
+    // Unsaved next pages are unmocked: requesting one fails the fetch.
+    let crawl = crawl();
+    assert!(crawl.cut, "fixtures should exercise the per-listing quota");
+    let requested = &crawl.paths;
+    for ((form, page, stem), fetched) in LISTINGS.iter().zip(crawl.fetched) {
         let body = fixture(&format!("{DIR}/{stem}.html"));
-        for p in parse_listing(&body).event_paths {
-            if !linked.contains(&p) {
-                linked.push(p);
-            }
-        }
         let listing = Mock::given(method("GET")).and(path(format!("/whats-on/{form}")));
         let listing = if *page == 0 {
             listing.and(query_param_is_missing("page"))
@@ -258,15 +305,10 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
         };
         listing
             .respond_with(ResponseTemplate::new(200).set_body_string(body))
-            .expect(1)
+            .expect(u64::from(fetched))
             .mount(&server)
             .await;
     }
-    let requested = &linked[..MAX_DETAIL_PAGES.min(linked.len())];
-    assert!(
-        linked.len() > MAX_DETAIL_PAGES,
-        "fixtures should exercise the detail cap"
-    );
     let ids = detail_ids();
     let mut expected_ids = Vec::new();
     for id in &ids {
@@ -323,6 +365,16 @@ async fn fetches_paginated_listings_and_details_via_fetch_context() {
     assert_eq!(got, expected_ids);
 }
 
+#[test]
+fn the_fetch_timeout_covers_a_full_crawl_at_the_default_rate_limit() {
+    // Robots.txt, then per listing 5 pages and 30 detail pages, 2 s apart,
+    // plus a margin: above the 300 s default, so the runner uses it.
+    assert_eq!(
+        scraper().fetch_timeout(),
+        Some(std::time::Duration::from_secs(342))
+    );
+}
+
 #[tokio::test]
 async fn robots_disallow_blocks_the_scraper() {
     let server = MockServer::start().await;
@@ -362,7 +414,7 @@ async fn empty_listings_are_an_error() {
         .respond_with(ResponseTemplate::new(200).set_body_string(
             r#"<html><body><article class="listing--event"><a class="search-listing__link" href="/whats-on/2026/series/some-series"></a></article></body></html>"#,
         ))
-        .expect(2)
+        .expect(4)
         .mount(&server)
         .await;
     let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
@@ -383,7 +435,13 @@ async fn listing_pagination_stops_at_the_page_cap() {
         )
         .mount(&server)
         .await;
-    for form in ["art-design", "talks-events"] {
+    let forms = [
+        "art-design",
+        "talks-events",
+        "classical-music",
+        "contemporary-music",
+    ];
+    for form in forms {
         for page in 0..=MAX_LISTING_PAGES {
             let body = format!(
                 r#"<html><body>
@@ -412,7 +470,7 @@ async fn listing_pagination_stops_at_the_page_cap() {
 
     // Detail pages are unmocked (404), so each collected event is one error.
     assert!(raws.is_empty());
-    assert_eq!(ctx.take_errors().len(), 2 * MAX_LISTING_PAGES);
+    assert_eq!(ctx.take_errors().len(), forms.len() * MAX_LISTING_PAGES);
 }
 
 #[tokio::test]
@@ -429,6 +487,8 @@ async fn a_cross_listed_event_keeps_its_first_card_image_and_title() {
     for (form, image, title) in [
         ("art-design", "first.jpg", "First title"),
         ("talks-events", "second.jpg", "Second title"),
+        ("classical-music", "third.jpg", "Third title"),
+        ("contemporary-music", "fourth.jpg", "Fourth title"),
     ] {
         let body = format!(
             r#"<html><body><article class="listing--event">
