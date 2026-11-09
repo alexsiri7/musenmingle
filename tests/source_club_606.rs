@@ -267,6 +267,35 @@ async fn caps_event_pages_and_reports_bad_ones() {
 }
 
 #[tokio::test]
+async fn an_event_page_failing_is_reported_and_its_show_left_out() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    serve_week(&server, None, week("events")).await;
+    serve_week(&server, Some("2026-11-16"), empty_week_linking("x")).await;
+    let failing = WEEK_1[2];
+    Mock::given(method("GET"))
+        .and(path(format!("/events/view/{failing}/")))
+        .respond_with(ResponseTemplate::new(500))
+        .expect(1)
+        .mount(&server)
+        .await;
+    for slug in WEEK_1.iter().filter(|s| **s != failing) {
+        serve_page(&server, slug, page(slug)).await;
+    }
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = Club606::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(raws.len(), WEEK_1.len() - 1);
+    assert!(raws.iter().all(|r| r.source_event_id != failing));
+    let errors = ctx.take_errors();
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert!(errors[0].starts_with(&format!("{failing}: ")), "{errors:?}");
+    assert!(!errors[0].contains("not an event page"), "{errors:?}");
+}
+
+#[tokio::test]
 async fn a_later_week_failing_keeps_the_shows_found_so_far() {
     let server = MockServer::start().await;
     serve_robots(&server).await;
