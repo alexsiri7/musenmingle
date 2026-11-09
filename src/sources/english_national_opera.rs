@@ -117,18 +117,17 @@ fn performance_starts(doc: &Html) -> Result<Vec<Value>, SourceError> {
         .map_err(|e| SourceError::Parse(format!("booking json-data: {e}")))?;
     match data {
         Value::Bool(false) => Ok(Vec::new()),
-        Value::Array(performances) => Ok(performances
-            .iter()
-            .map(|p| json!({"starts": p["raw_date"]}))
-            .collect()),
+        Value::Array(performances) => {
+            Ok(performances.iter().map(|p| p["raw_date"].clone()).collect())
+        }
         _ => Err(SourceError::Parse(
             "booking json-data is not an array".into(),
         )),
     }
 }
 
-/// What an event page says: title, composer credit, venue, performances
-/// (`{"starts"}`), running time, ticket line, description and image.
+/// What an event page says: title, composer credit, venue, performances,
+/// running time, ticket line, description and image.
 /// `None` when it is not an event page; an error when its booking calendar
 /// data can't be read.
 pub fn parse_detail(html: &str) -> Result<Option<Value>, SourceError> {
@@ -242,7 +241,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         .map(Duration::minutes);
     let mut sessions = Vec::new();
     for p in detail["performances"].as_array().into_iter().flatten() {
-        let starts = p["starts"].as_str().unwrap_or_default();
+        let starts = p.as_str().unwrap_or_default();
         let starts_at = parse_london_wall_clock(starts)
             .ok_or_else(|| SourceError::Parse(format!("{title:?}: performance {starts:?}")))?;
         sessions.push(Session {
@@ -378,10 +377,7 @@ mod tests {
     fn a_production_is_one_event_with_a_session_per_performance() {
         let ev = normalise_payload(&tosca(
             "London Coliseum",
-            json!([
-                {"starts": "2026-11-10 19:30:00", "booking": "//booking.eno.org/book-online/76201"},
-                {"starts": "2026-12-05 13:30:00", "booking": "//booking.eno.org/book-online/77201"},
-            ]),
+            json!(["2026-11-10 19:30:00", "2026-12-05 13:30:00",]),
         ))
         .unwrap()
         .unwrap();
@@ -404,18 +400,15 @@ mod tests {
 
     #[test]
     fn summer_performances_are_london_wall_clock() {
-        let ev = normalise_payload(&tosca(
-            "London Coliseum",
-            json!([{"starts": "2027-06-01 19:30:00", "booking": "x/1"}]),
-        ))
-        .unwrap()
-        .unwrap();
+        let ev = normalise_payload(&tosca("London Coliseum", json!(["2027-06-01 19:30:00"])))
+            .unwrap()
+            .unwrap();
         assert_eq!(ev.starts_at.to_rfc3339(), "2027-06-01T18:30:00+00:00");
     }
 
     #[test]
     fn elsewhere_or_without_performances_is_skipped() {
-        let one = json!([{"starts": "2027-05-29 15:00:00", "booking": "x/1"}]);
+        let one = json!(["2027-05-29 15:00:00"]);
         assert!(
             normalise_payload(&tosca("Aviva Studios, Manchester", one))
                 .unwrap()
@@ -430,12 +423,9 @@ mod tests {
 
     #[test]
     fn an_unreadable_performance_or_title_is_an_error() {
-        let err = normalise_payload(&tosca(
-            "London Coliseum",
-            json!([{"starts": "TBC", "booking": "x/1"}]),
-        ))
-        .unwrap_err()
-        .to_string();
+        let err = normalise_payload(&tosca("London Coliseum", json!(["TBC"])))
+            .unwrap_err()
+            .to_string();
         assert!(err.contains("performance \"TBC\""), "{err}");
         let err = normalise_payload(&payload(json!({"venue": "London Coliseum"})))
             .unwrap_err()
@@ -448,7 +438,7 @@ mod tests {
         let ev = normalise_payload(&payload(json!({
             "title": "Sessions at the London Coliseum: Black Country, New Road",
             "venue": "London Coliseum",
-            "performances": [{"starts": "2026-11-13 19:30:00", "booking": "x/1"}],
+            "performances": ["2026-11-13 19:30:00"],
         })))
         .unwrap()
         .unwrap();
@@ -471,7 +461,7 @@ mod tests {
                 r#"<script id="json-data">[{"raw_date": "2026-11-10 19:30:00"}]</script>"#
             )
             .unwrap(),
-            json!([{"starts": "2026-11-10 19:30:00"}])
+            json!(["2026-11-10 19:30:00"])
         );
         assert_eq!(performances("").unwrap(), json!([]));
         assert_eq!(
