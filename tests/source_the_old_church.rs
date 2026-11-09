@@ -117,6 +117,39 @@ async fn fetches_only_the_listing_via_fetch_context() {
     assert_eq!(server.received_requests().await.unwrap().len(), 2);
 }
 
+#[test]
+fn an_event_without_an_id_or_slug_has_no_raw_event() {
+    let base = Url::parse(SITE).unwrap();
+    let ev = serde_json::json!({"id": "1", "slug": "a-gig"});
+    assert!(raw_event(ev, &base).is_some());
+    for ev in [
+        serde_json::json!({"slug": "a-gig"}),
+        serde_json::json!({"id": "1"}),
+        serde_json::json!({"id": "1", "slug": ""}),
+    ] {
+        assert!(raw_event(ev.clone(), &base).is_none(), "{ev}");
+    }
+}
+
+#[tokio::test]
+async fn a_listed_event_without_a_slug_is_reported() {
+    let server = MockServer::start().await;
+    serve_robots(&server).await;
+    let page = whats_on().replacen(
+        r#""slug":"quiet-folk-and-detta-danford-album-launch""#,
+        r#""slug":"""#,
+        1,
+    );
+    serve_listing(&server, page).await;
+    let ctx = FetchContext::new_allowing_loopback(RateLimitConfig::disabled()).unwrap();
+    let raws = TheOldChurch::new(server.uri().parse().unwrap())
+        .fetch(&ctx)
+        .await
+        .expect("fetch");
+    assert_eq!(raws.len(), 17);
+    assert_eq!(ctx.take_errors(), ["listed event without an id or slug"]);
+}
+
 #[tokio::test]
 async fn a_page_without_wix_events_data_is_an_error() {
     let server = MockServer::start().await;
