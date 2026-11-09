@@ -18,6 +18,7 @@ pub mod cafe_oto;
 pub mod camden_art_centre;
 pub mod chisenhale_gallery;
 pub mod clerkenwell_design_week;
+pub mod club_606;
 pub mod conway_hall;
 pub mod courtauld;
 pub mod design_museum;
@@ -234,6 +235,7 @@ pub fn build(row: &SourceRow, config: &Config) -> Result<Box<dyn Source>, SkipRe
         )),
         chisenhale_gallery::KEY => Ok(Box::new(chisenhale_gallery::ChisenhaleGallery::new(base))),
         vam::KEY => Ok(Box::new(vam::Vam::new(base))),
+        club_606::KEY => Ok(Box::new(club_606::Club606::new(base))),
         vortex_jazz_club::KEY => Ok(Box::new(vortex_jazz_club::VortexJazzClub::new(base))),
         _ => Err(SkipReason::UnknownKey),
     }

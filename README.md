@@ -324,6 +324,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     unless the title reads as a workshop or talk, subtags from the
     summary's words; wellness sessions (gong baths, sound journeys, yoga)
     and cancelled or undated events are skipped.
+  - `606-club` — CSS on the `/events/` weekly calendar (no JSON-LD),
+    following its "Next Week" button (at most 10 weeks, up to the first
+    with no shows), then every show's event page (capped at 70 a run): the
+    dated heading ("Friday 13th November 2026 - 9:00 pm", London wall
+    clock) gives the start, the "Music Charge" the price. Every show is
+    music, tagged `jazz` (the club's own genre) plus subtags from the
+    series label and title; the nights it lists as closed and its off-site
+    Fulham Palace series are left out. Facts + link only (its terms limit
+    content to personal use).
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
@@ -528,9 +537,9 @@ small credited thumbnail, and send people to the venue.
   reuse — then we keep facts + link only) and `policy_note` (why, with the
   terms URL and date). `repo::upsert_event` enforces the flags for every
   source, and the ingest runner's `repo::enforce_content_policy` clears data
-  already stored if a flag is turned off. Currently Ticketmaster (API terms),
-  Serpentine Galleries (site terms) and Sir John Soane's Museum (site terms)
-  are facts + link only.
+  already stored if a flag is turned off. Sources whose API or site terms
+  restrict reuse (Ticketmaster, Serpentine Galleries, the 606 Club and
+  others) are facts + link only; each source's `policy_note` says why.
 - **Excerpts**: every stored description is cut to ≤ 300 characters at a
   sentence (else word) boundary with an ellipsis (`normalise::excerpt`);
   pages say "An excerpt. Read more on <venue>". The same cut applies to

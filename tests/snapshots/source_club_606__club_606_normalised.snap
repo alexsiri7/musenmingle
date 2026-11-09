@@ -1,0 +1,342 @@
+---
+source: tests/source_club_606.rs
+expression: out
+---
+[
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "phil-mulfords-thunderthumbs|2026-11-09|606-club",
+      "description": "Join us to celebrate great Soul and Funk songs with “Thunderthumbs”, the 10-piece band led by bassist Phil Mulford and inspired by the great US bassist Louis Johnson and the iconic producer Quincy Jones (Michael Jackson). The gig features three brilliant singers, Jacqui Hicks & Debby Bracknell (Shakatak) & Simon Foster (Flying Pickets), a deeply grooving rhythm section and powerhouse horns! Tonight the band will be performing songs from 3 extraordinary albums, all produced by Quincy: \"The Dude\", \"Off the Wall\", (Michael Jackson) and \"Give Me The Night\" (George Benson). Epic! \"Jacqui Hicks is…one of the most soulful singers in Britain” MU Magazine; “Take Stevie Wonder, Joe Cocker, that dude from The Commitments…roll them up into one and you get something resembling the virtuosity that Simon Foster shows” RARB.org",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/phil-mulfords-thunderthumbs-0-1791398664.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20.00",
+        "min": "20.00"
+      },
+      "starts_at": "2026-11-09T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Phil Mulford's 'Thunderthumbs'",
+      "url": "https://www.606club.co.uk/events/view/phil-mulfords-thunderthumbs-25/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "phil-mulfords-thunderthumbs-25",
+    "when": "Monday 9 th November 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dan-reinstein|2026-11-10|606-club",
+      "description": "American-born but British educated, saxophonist Dan Reinstein first began playing at the old 606 Club on Kings Road when he was a medical undergraduate. Even then he was impressive, and after taking time off from his medical studies to attend the Berklee School of Music he became even more remarkable. Dan returned to the US in the early 90s where he became one of the world’s leading experts in laser eye surgery (he’s now officially Professor Reinstein). But he never stopped performing, and when he returned to London to live and work it was great to hear his fluent, classic hard-bop, muscular sax playing again at the Club, and the rest, as they say, is history-Dan & his quartet ( Tim Lapthorn -piano, Steve Rose -bass & Mark Mondesir -drums) have performed here for the last 23 years. The repertoire consists of best-loved jazz standards from the 50's through the 90's from artists including Miles, Hancock, Silver and more. “…impressive hard-bop saxophonist” Time Out Photo by Phil Carpenter",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/dan-reinstein-0-1792427300.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-11-10T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Dan Reinstein",
+      "url": "https://www.606club.co.uk/events/view/dan-reinstein-59/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "dan-reinstein-59",
+    "when": "Tuesday 10 th November 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "nigel-price-special-guest-lorne-lofsky|2026-11-11|606-club",
+      "description": "Nigel Price is a highly skilled guitarist as well as an accomplished composer whose swinging bebop approach combined with flawless control is a delight. He has played on more than 50 albums, spent ten years with acid jazz outfit the Filthy Six, was a member of James Taylor’s jazz/funk band and has appeared at Ronnie Scott’s over 600 times. As leader he has recorded 9 albums and has received the Parliamentary Jazz Award for Best Jazz Ensemble and the British Jazz Award for ‘Best Small Group’. Tonight he will be appearing with his Special guest, the Award-winning Canadian guitar legend Lorne Lofsky. An internationally recognized jazz guitarist, Lorne has been performing professionally for more than 40 years. He has played and recorded with a quite remarkable number of iconic jazz musicians, including Chet Baker, Dizzy Gillespie, Tal Farlow, Johnny Hartman, Clark Terry, Larry Coryell, Joey DeFrancesco, Ray Brown, Rosemary Clooney and Dave Holland. But he is perhaps best known for the time he spent with the great jazz pianist Oscar Peterson, including numerous tours and featuring on three of Oscar’s albums. Accompanied by Jeremy Brown -bass & Joel Barford -drums these two exceptional guitarists will play music from their new album, \"Lorne Lofsky/Nigel Price Quartet ‘Live at The Globe'\", along with whatever else takes their fancy. This is a must see for any jazz guitar enthusiast. “Lofsky…a masterful improviser with a warm, appealing tone…full of daring choices and dazzling solo turns” Jazz Times; “Lofsky…masterful technique and exquisite touch” Downbeat; “Very few players could manage playing as fluent, imaginative and technically impeccable as Price” Evening Standard; “Price…inventiveness, originality & ensemble playing…terrific” Guardian Photo of Nigel Price by Ron Milsom",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/nigel-price-special-guest-lorne-lofsky-0-1790604710.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-11-11T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Nigel Price & Special Guest Lorne Lofsky",
+      "url": "https://www.606club.co.uk/events/view/nigel-price-special-guest-lorne-lofsky-1/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "nigel-price-special-guest-lorne-lofsky-1",
+    "when": "Wednesday 11 th November 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "fraser-urquhart-quartet-ft-sam-braysher|2026-11-12|606-club",
+      "description": "Born and raised in Edinburgh, Fraser Urquhart is rapidly becoming one of the UK's foremost jazz pianists. Cutting his teeth on the vibrant Scottish jazz scene, his fluent and exciting playing has been heard at all the major jazz venues as well as the Edinburgh & and Glasgow Jazz Festivals, both in his own right and as accompanist to a host of high-profile jazz musicians such the Award-winning Scottish vocalist Georgia Cecile. Joined by Tom Farmer- bass, Matt Skelton -drums & special guest, the highly regarded, tasteful alto saxophonist Sam Braysher, this swinging, stellar quartet will play favourite standards from the Great American Songbook with a focus on two iconic composers: Richard Rodgers and George Gershwin. A fantastic choice for fans of classic melodic jazz & highly recommended. “Urquhart…unfailingly elegant piano playing\" Bebop Spoken Here; \"Extremely tasty sound at the piano\" Jamie Cullum, BBC; \"Braysher’s cool, modernist twist on old songs is just superb\" Jazz Journal fraserurquhart.com",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/fraser-urquhart-quartet-ft-sam-braysher-96419.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-11-12T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Fraser Urquhart Quartet ft. Sam Braysher",
+      "url": "https://www.606club.co.uk/events/view/fraser-urquhart-quartet-ft-sam-braysher/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "fraser-urquhart-quartet-ft-sam-braysher",
+    "when": "Thursday 12 th November 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "imaani-with-special-guest-polly-gibbons|2026-11-13|606-club",
+      "description": "Intro by Steve Rubie: Imaani has been performing at the Club for so long that we can’t actually remember when she first started! It’s certainly over 20 years and in that time, she has consistently produced remarkable gig after remarkable gig. No 606 LJF programme would be complete without Imaani starting it off! A terrific singer in the Soul/R&B tradition Imaani’ s worldwide tours, television, live and studio output includes work with the likes of Gloria Gaynor, Carleen Anderson and Beverley Knight. She first came to prominence as the UK’s 1998 entrant to the Eurovision Song contest (one of the better choices!) where she was runner up, and went on to produce a highly successful single that charted around the world. She then moved on to work with Dub Conspiracy (with whom she again charted). But currently, she is probably best known as one of the featured singers with the iconic band “Incognito”, of which she’s been a member for more than 20 years. Undoubtedly one of the finest Soul singers in Europe this is a rare chance to hear this giant of the UK Soul scene with her brilliant band featuring her Special Guest, Polly Gibbons. One of the most respected and talked-about singers of her generation, Polly is a consummate performer with a rich, soulful voice and a truly distinctive style. As much at home singing tender jazz ballads as she is rockin' R&B classics, she was nominated for Vocalist of the Year by both Jazz FM and the BBC, recorded three critically acclaimed albums for US label Resonance and toured extensively, notably performing at the Montreal Jazz Festival and the legendary Birdland Jazz Club, NYC. In 2022, Polly fulfilled a long-standing ambition with the release of \"As It Is\" - her album of all-original songs written by Polly alongside co-producer and Artistic Director of Ronnie Scott’s, James Pearson. The promise of these two magnificent singers joined up together with their band is sensational indeed – not to be missed! “The magnificent vocals of Imaani” DJ Times; “Imaani…standout” JjazzproJect; \"Polly Gibbons is unmistakably a class act” Guardian; \"[Gibbons] A truly exceptional…talent, possessing a voice of such sizzling intensity and raw emotion you could fry an egg on it\" Jazzwise",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/imaani-with-special-guest-polly-gibbons-15740.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25.00",
+        "min": "25.00"
+      },
+      "starts_at": "2026-11-13T21:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Imaani with special guest Polly Gibbons",
+      "url": "https://www.606club.co.uk/events/view/imaani-with-special-guest-polly-gibbons/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "imaani-with-special-guest-polly-gibbons",
+    "when": "Friday 13 th November 2026 - 9:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "peter-king-memorial-sax-summit-mornington-lockett-tommaso-starace-karen-sharp-donovan-haffner-rob-barron-trio|2026-11-14|606-club",
+      "description": "Intro by Steve Rubie: One of the finest saxophonists the UK has ever produced Peter King was unquestionably a genius (an overused word but in his case absolutely appropriate). An inspiration to 4 generations of saxophonists (including me!) every gig was an event. It’s an honour to keep his memory alive with this annual LJF gig. Tonight we will be hosting an evening dedicated to one of the UK's musical giants, the brilliant alto sax player Peter King, who led our Sax Summit for many years before he sadly passed away in 2020. This remarkable gig features a breathtaking 4-sax front line, each with their own unique sound and approach. A regular at the Club Mornington Lockett, who performed here with Peter for many years, is one of the UK’s leading tenor sax players. A former member of the Ronnie Scott quintet he has worked with singer Sarah Jane Morris and the Tracey’s - Stan and Clark - and was the driving force behind the brilliant “Celebrating the Jazz Couriers” quintet. He can be seen regularly at the Club with his own group. Alto saxophonist Tommaso Starace has performed at many of the top European jazz clubs and festivals and his fluent, hard-bop influenced playing has been heard with a notable cohort of international jazz musicians, including Billy Cobham, David Liebman and Kenny Wheeler. With 11 albums to his name (the latest just launched at the Club) it’s a pleasure to welcome this impressive, highly respected, player to the Sax Summit this evening. A prominent figure on the UK Jazz scene since moving to London in 2000, the multi-Award-winning Karen Sharp is universally admired for her melodic yet distinctive, saxophone playing. A member of the iconic UK trumpet player Humphrey Lyttelton's band, she’s since appeared as a soloist with an impressive array of high-profile artists, including the likes of US stars Scott Hamilton, Warren Vache and Bucky Pizzarelli as well as with larger ensembles such as the Guy Barker Big Band at the BBC Proms and Ronnie Scott's Jazz Orchestra. A nominee in the Rising Star category of the US Downbeat Critics Poll, she has won the British Jazz Award on several occasions. Up-and-coming alto saxophonist Donovan Haffner already has, in his burgeoning career, won the 'Breakthrough Act of the Year' category at the Jazz FM Awards 2026, the 'Martin Hummel' Parliamentary Jazz Award 2026 & ‘Jazz Newcomer’ Award 2025 and Tina May Young Musician Award 2026. His debut album “Alleviate” has further confirmed his tremendous ability and talent. This stunning lineup will be accompanied by one of the UK’s leading jazz pianists Rob Barron (Al Jarreau, Patti Austin, Marlena Shaw) & his trio featuring Calum Gourlay -bass & Mark Taylor -drums. “Lockett…plays with tremendous fluency and drive” Evening Standard; “Starace is on fire” Bebop Spoken Here; “Sharp loves melody, whether composed or improvised, as reflected in her relaxed and natural phrasing” Downbeat; “'Alleviate’ is an absolutely awesome debut… [Donovan] has blossomed into a really special musician” Tony Minvielle, Jazz FM/One Jazz Photo, Mornington Lockett by Tatiana Gorilovsky",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/peter-king-memorial-sax-summit-mornington-lockett-tommaso-starace-karen-sharp-donovan-haffner-the-rob-barron-trio-24866.png",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "25.00",
+        "min": "25.00"
+      },
+      "starts_at": "2026-11-14T21:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Peter King Memorial Sax Summit: Mornington Lockett, Tommaso Starace, Karen Sharp, Donovan Haffner & the Rob Barron Trio",
+      "url": "https://www.606club.co.uk/events/view/peter-king-memorial-sax-summit-mornington-lockett-tommaso-starace-karen-sharp-donovan-haffner-the-rob-barron-trio/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "peter-king-memorial-sax-summit-mornington-lockett-tommaso-starace-karen-sharp-donovan-haffner-the-rob-barron-trio",
+    "when": "Saturday 14 th November 2026 - 9:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "world-heart-beat-music-academy-julian-joseph-jazz-academy-present-together-we-go-forward|2026-11-15|606-club",
+      "description": "The 606 Club has always looked to the future generations of musicians and as part of that philosophy has good working relationships with a number of Schools and Academies. This afternoon we are very pleased to welcome two institutions particularly close to the 606 Club, World Heart Beat Music Academy and the Julian Joseph Academy who will be jointly presenting their programme “Together We Go Forward”. This is how they describe what they do and what to expect from the show: Long standing partners in music education, the World Heart Beat and Julian Joseph Jazz Academies join together to showcase the talents of their students at the 606 for this special performance. World Heart Beat’s jazz curriculum is spearheaded by the exemplary work of internationally renowned British jazz musicians such as Tony Kofi and Byron Wallen, as well benefitting from the energy of the new generation of jazz musicians including pianist Ayo Vincent, trombonist Wilf Diamond, and vocalist Ava Joseph. World Heart Beat students are exposed to specialist jazz programmes at Julian Joseph Jazz Academy, whilst JJJA students are given opportunity at World Heart Beat to expand their experience with opportunities in recording and live performance, as well as extra development in classical music, orchestra, Indian tabla, Latin and playing in the 51st State Big Band, performances and mentoring opportunities. In addition, World Heart Beat recently opened a state of the art venue in their new Embassy Gardens location, equipped with the innovative and groundbreaking d&b Soundscape technology which allows students to further push their musical boundaries. This afternoon, expect a wonderful programme where young, soulful, and talented jazz musicians from the two academies play a mix of standards and jazz standards. Previous alumni of both academies have gone on to win Jazz FM Awards, Berklee scholarships, and the BBC Young Jazz Musician of The Year, so if you want to be the first catch the next generation of jazz musicians, this is most definitely the gig for you!",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/world-heart-beat-music-academy-and-the-julian-joseph-jazz-academy-present-together-we-go-forward-5-33678.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "16.00",
+        "min": "16.00"
+      },
+      "starts_at": "2026-11-15T13:30:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "World Heart Beat Music Academy and the Julian Joseph Jazz Academy present 'Together We Go Forward'",
+      "url": "https://www.606club.co.uk/events/view/world-heart-beat-music-academy-and-the-julian-joseph-jazz-academy-present-together-we-go-forward-5/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "world-heart-beat-music-academy-and-the-julian-joseph-jazz-academy-present-together-we-go-forward-5",
+    "when": "Sunday 15 th November 2026 - 1:30 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "sandra-mae-lux|2026-11-15|606-club",
+      "description": "Intro by Steve Rubie: I was so knocked out when I first heard Sandra. Not only is she a great singer but, unusually for a singer, she is also a highly accomplished sax player. So much musicality in everything she does. Canadian vocalist/sax player Sandra-Mae Lux brings her stunning show “Celebrating the American Songbook – Old and New” to the Club! Branded a \"Canadian jazz legend\" by Petroc Trelawny on BBC Radio 3, Sandra-Mae makes a triumphant return to the 606 for this special London Jazz Festival night. An award-winning songwriter, vocalist and excellent saxophonist she was widely regarded as one of the most talented musicians of her generation in her native Canada. On moving to London she first made her mark with her debut album \"Happily Ever Now\" (2020) which explored jazz, funk, and soul grooves. However, in the last couple of years Sandra-Mae has gone back to her jazz roots, concentrating on her songwriting as well as performing, creating an outstanding album of new, contemporary, American Songbook style material, \"Seasons in Jazz\", which has received rave reviews. Packed full of swinging numbers bound to raise a smile, atmospheric ballads to bring a tear and everything in between, it's a delightful mix of jazz standards, old and new and perfect for this London Jazz Festival evening. Sandra’s live shows are a rarity, so don’t miss this opportunity to see this fantastic performer in this intimate setting. \"This hugely impressive collection of original songs draws from the Great American Songbook tradition, with storytelling at its core.” Jazzwise “★★★★ Editor’s Choice; “Great lyrics, beautiful music, beautifully sung.” Radio 3; “Lux is clearly an artist with flash and flair” The Vancouver Sun; “Superb” JFSR Radio Photo by Claire Harrison",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/sandra-mae-lux-91012.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "21.00",
+        "min": "21.00"
+      },
+      "starts_at": "2026-11-15T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Sandra-Mae Lux",
+      "url": "https://www.606club.co.uk/events/view/sandra-mae-lux/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "sandra-mae-lux",
+    "when": "Sunday 15 th November 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dino-baptiste|2026-12-07|606-club",
+      "description": "“Dino Baptiste…so highly regarded by the British blues press…impressive...among the best of the current crop of British blues keyboard players” Blues on Stage",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/dino-baptiste-0-1793637185.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-12-07T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Dino Baptiste",
+      "url": "https://www.606club.co.uk/events/view/dino-baptiste-34/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "dino-baptiste-34",
+    "when": "Monday 7 th December 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "dan-reinstein-celebrating-24-years-at-606|2026-12-08|606-club",
+      "description": "American-born but British educated, saxophonist Dan Reinstein first began playing at the old 606 Club on Kings Road when he was a medical undergraduate. Even then he was impressive, and after taking time off from his medical studies to attend the Berklee School of Music he became even more remarkable. Dan returned to the US in the early 90s where he became one of the world’s leading experts in laser eye surgery (he’s now officially Professor Reinstein). But he never stopped performing, and when he returned to London to live and work it was great to hear his fluent, classic hard-bop, muscular sax playing again at the Club, and the rest, as they say, is history-Dan & his quartet ( Tim Lapthorn -piano, Steve Rose -bass & Mark Mondesir -drums) have performed here for the last 24 years (which they will be celebrating at this very show). The repertoire consists of best-loved jazz standards from the 50's through the 90's from artists including Miles, Hancock, Silver and more. “…impressive hard-bop saxophonist” Time Out Photo by Phil Carpenter",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/dan-reinstein-0-1793894390.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-12-08T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Dan Reinstein: Celebrating 24 Years at the 606",
+      "url": "https://www.606club.co.uk/events/view/dan-reinstein-celebrating-24-years-at-the-606/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "dan-reinstein-celebrating-24-years-at-the-606",
+    "when": "Tuesday 8 th December 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jay-azzolina-ft-riley-stone-lonergan|2026-12-09|606-club",
+      "description": "From Connecticut USA, guitarist Jay Azzolina has had an absolutely remarkable career. Studying with none other than Pat Metheny & Mick Goodrick at Berklee College of Music (world recognised for its jazz programme), Jay went on to tour and record with jazz fusion band Spyro Gyra, receiving a Grammy-award nomination in the process for their album “Fast Forward”. Over a 30-year period as a leading light of the New York scene, Jay includes work with the likes of Jaco Pastorious, Chuck Mangione & Rickie Lee Jones whilst his own collaborations with his friends, saxophonist Michael Brecker and bassist John Patitucci produced some of the finest music to come out of the US at that time. More recently his projects with saxophonist Chris Potter and organist Larry Goldings have been similarly lauded. As one would expect surrounded by contemporaries of this calibre, Jay’s playing offers a masterclass of style and taste. Joined by top UK musicians Riley Stone-Lonergan, bassist Oli Hayhurst and drummer Matt Skeaping, the quartet will perform an exciting mix of Jay’s own compositions from his discography, material from his latest 2025 album “Present Tense” and “reworked” standards. Very special stuff! “…one of the finest and most talented guitarists on the planet.” Jazz Improv Magazine; “Azzolina is the consummate performer: His language embraces the contemporary side of jazz but he manifestly respects and owns the entire, seventy-year history of the electric guitar.” London Jazz News; “Exquisitely named saxophonist Riley Stone-Lonergan... [is] developing a sinewy soul-splattered sound of his own” Jazzwise",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/jay-azzolina-ft-riley-stone-lonergan-0-1793368363.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "18.00",
+        "min": "18.00"
+      },
+      "starts_at": "2026-12-09T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "Jay Azzolina ft Riley Stone-Lonergan",
+      "url": "https://www.606club.co.uk/events/view/jay-azzolina-ft-riley-stone-lonergan-1/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "jay-azzolina-ft-riley-stone-lonergan-1",
+    "when": "Wednesday 9 th December 2026 - 8:00 pm"
+  },
+  {
+    "event": {
+      "address": "90 Lots Road, London SW10 0QD",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "wonder-of-stevie-ft-noel-mccalla-derek-nash|2026-12-13|606-club",
+      "description": "Well, this is pretty special, two of the UK's finest musicians, saxophonist Derek Nash and singer Noel McCalla, coming together to celebrate the music of one of the greatest singer/songwriters of all time. An award-winning saxophonist, Derek Nash is perhaps best known as one of the featured saxophonists with the Jools Holland Band and leader of the enormously successful “Sax Appeal”. His muscular, fluent, modern jazz playing has been recognised with numerous awards, including “Best Jazz Ensemble” and “Best Jazz CD” as well as being voted one of the top 5 saxophonists in the country. Noel McCalla first came to prominence in the mid 80’s with the seminal Jazz/funk band Morrissey/Mullen. From the early 90’s, for almost 20 years, Noel’s searing, soulful vocals were featured with the iconic Manfred Mann’s “Earth Band”, but more recently Noel has moved away from his globetrotting exploits to front several new bands of his own. A unique and powerful experience. “Nash…bravura display of contemporary saxophone” The Observer; “ Nash...breathtaking” Sunday Times; “McCalla…spine tingling” Guardian; “McCalla… a confident, individual voice, graceful and dynamic.\" Independent on Sunday facebook.com/TheNoelMccallaMusic : www.dereknash.com Photo by Paul Wood",
+      "ends_at": null,
+      "image_url": "https://www.606club.co.uk/media/cache/event_large/uploads/events/the-wonder-of-stevie-ft-noel-mccalla-derek-nash-0-1793625349.jpeg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24.00",
+        "min": "24.00"
+      },
+      "starts_at": "2026-12-13T20:00:00Z",
+      "tags": [
+        "jazz"
+      ],
+      "title": "“The Wonder of Stevie” ft. Noel McCalla/Derek Nash",
+      "url": "https://www.606club.co.uk/events/view/the-wonder-of-stevie-ft-noel-mccalla-derek-nash-2/",
+      "venue_name": "606 Club"
+    },
+    "source_event_id": "the-wonder-of-stevie-ft-noel-mccalla-derek-nash-2",
+    "when": "Sunday 13 th December 2026 - 8:00 pm"
+  }
+]
