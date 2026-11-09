@@ -26,6 +26,7 @@ const SOURCE_FILES: &[(&str, &str)] = &[
         "chisenhale_gallery",
         include_str!("../sources/chisenhale_gallery.rs"),
     ),
+    ("club_606", include_str!("../sources/club_606.rs")),
     (
         "clerkenwell_design_week",
         include_str!("../sources/clerkenwell_design_week.rs"),

@@ -324,6 +324,15 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     unless the title reads as a workshop or talk, subtags from the
     summary's words; wellness sessions (gong baths, sound journeys, yoga)
     and cancelled or undated events are skipped.
+  - `606-club` — CSS on the `/events/` weekly calendar (no JSON-LD),
+    following its "Next Week" button (at most 10 weeks, up to the first
+    with no shows), then every show's event page (capped at 70 a run): the
+    dated heading ("Friday 13th November 2026 - 9:00 pm", London wall
+    clock) gives the start, the "Music Charge" the price. Every show is
+    music, tagged `jazz` (the club's own genre) plus subtags from the
+    series label and title; the nights it lists as closed and its off-site
+    Fulham Palace series are left out. Facts + link only (its terms limit
+    content to personal use).
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
