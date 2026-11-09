@@ -98,3 +98,20 @@ async fn api_error_fails_fetch_without_leaking_key() {
         "API key leaked into error: {err}"
     );
 }
+
+#[test]
+fn the_qa_scope_names_what_is_left_out() {
+    let tm = Ticketmaster::new("https://x.test/".parse().unwrap(), "test-key".into());
+    let scope = tm.qa_scope().unwrap();
+    for word in [
+        "workshops",
+        "talks",
+        "exhibitions",
+        "theatre",
+        "comedy",
+        "attractions",
+        "left out on purpose",
+    ] {
+        assert!(scope.contains(word), "{word}");
+    }
+}
