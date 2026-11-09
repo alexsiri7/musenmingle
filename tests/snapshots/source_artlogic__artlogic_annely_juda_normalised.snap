@@ -1,0 +1,31 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(KEY, &[card])"
+---
+[
+  {
+    "event": {
+      "address": "16 Hanover Square, London W1S 1HT",
+      "all_day": true,
+      "category": "exhibition",
+      "dedupe_key": "leon-kossoff-trains-stations|2026-11-19|annely-juda-fine-art",
+      "description": "Annely Juda Fine Art presents Leon Kossoff: Trains and Stations, an exhibition of paintings and drawings devoted to the stations, trains and railways in the North and East End of London where he lived and worked all his life. Kossoff drew his first station, Liverpool Street, in 1943 as...",
+      "ends_at": "2027-01-30T00:00:00Z",
+      "image_url": "https://static-assets.artlogic.net/w_1200,h_630,c_fill,f_auto,fl_lossy,q_auto/ws-annelyjudafineart/usr/images/exhibitions/main_image_override/407/lk0603.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-19T00:00:00Z",
+      "tags": [],
+      "title": "Leon Kossoff: Trains and Stations",
+      "url": "https://www.annelyjudafineart.co.uk/exhibitions/407-leon-kossoff-trains-and-stations/",
+      "venue_name": "Annely Juda Fine Art"
+    },
+    "id": "www.annelyjudafineart.co.uk:407"
+  }
+]
