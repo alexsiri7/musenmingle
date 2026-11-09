@@ -317,6 +317,13 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     composer credit) `classical`; productions away from the London
     Coliseum, schools events with no listed performances and the Relaxed
     Programme page (its performances are other productions') are skipped.
+  - `the-old-church` — the Wix Events data embedded in the `/whats-on`
+    page (`<script id="wix-warmup-data">`; no JSON-LD on the list, one
+    request a run): the next 18 or so events, with UTC start and end
+    times; the rest load only with the page's "Load more" script. Music
+    unless the title reads as a workshop or talk, subtags from the
+    summary's words; wellness sessions (gong baths, sound journeys, yoga)
+    and cancelled or undated events are skipped.
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
     JSON-LD): reads only the listing page(s), keeping the current and
