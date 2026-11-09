@@ -1,0 +1,18 @@
+---
+source: tests/source_artlogic.rs
+expression: "normalised(KEY, &cards)"
+---
+[
+  {
+    "event": null,
+    "id": "www.larkindurey.com:192"
+  },
+  {
+    "event": null,
+    "id": "www.larkindurey.com:196"
+  },
+  {
+    "event": null,
+    "id": "www.larkindurey.com:198"
+  }
+]

@@ -21,22 +21,11 @@ use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const SEED: &str = "migrations/20260927952001_seed_artlogic_galleries.sql";
+/// Later migrations merging into a seeded row's config.
+const CONFIG_UPDATES: &[&str] = &["migrations/20261109400001_artlogic_larkin_durey_loans.sql"];
 
-/// Every `(key, base_url, config)` Artlogic row in the seed migration.
 fn seed_rows() -> Vec<(String, String, Value)> {
-    let sql = std::fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(SEED))
-        .unwrap();
-    let mut rows = Vec::new();
-    for (i, _) in sql.match_indices("('artlogic-") {
-        let row = &sql[i + 2..];
-        let key = &row[..row.find('\'').unwrap()];
-        let base = row.split('\'').nth(4).unwrap();
-        let config = &row[row.find("'{").unwrap() + 1..row.find("}'::jsonb").unwrap() + 1];
-        let config = serde_json::from_str(&config.replace("''", "'"))
-            .unwrap_or_else(|e| panic!("{key}: config is not JSON: {e}"));
-        rows.push((key.to_string(), base.to_string(), config));
-    }
-    rows
+    common::seed_rows(SEED, "artlogic-", CONFIG_UPDATES)
 }
 
 fn seed_row(key: &str) -> (String, Value) {
@@ -218,6 +207,35 @@ fn frith_street_qa_2026_10_15_page_values() {
     .collect();
     assert_eq!(events[1]["title"], "Jaki Irvine: Five lines of song-smoke");
     insta::assert_json_snapshot!("artlogic_frith_street_qa_2026_10_15", events);
+}
+
+/// Scraper check #305: Larkin Durey lists its artists' museum shows (at
+/// Pérez Art Museum Miami, at Somerset House) among its own, with the host
+/// only in the title. They are not shows at the gallery.
+#[test]
+fn larkin_durey_qa_2026_11_09_museum_loans_are_skipped() {
+    const KEY: &str = "artlogic-larkin-durey";
+    let (base, _) = seed_row(KEY);
+    let base = Url::parse(&base).unwrap();
+    for (file, path) in [
+        (
+            "qa-2026-11-09",
+            "/exhibitions/196-anina-major-the-sacred-mangrove-at-perez-art/",
+        ),
+        (
+            "qa-2026-11-09-2",
+            "/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/",
+        ),
+    ] {
+        let card = parse_single_show(
+            &fixture(&format!("scrapers/{KEY}/{file}.html")),
+            &base.join(path).unwrap(),
+        )
+        .unwrap_or_else(|| panic!("{file}: no card"));
+        assert_eq!(normalised(KEY, &[card])[0]["event"], Value::Null, "{file}");
+    }
+    let cards = listing(KEY, "/exhibitions/");
+    insta::assert_json_snapshot!("artlogic_larkin_durey_normalised", normalised(KEY, &cards));
 }
 
 #[test]

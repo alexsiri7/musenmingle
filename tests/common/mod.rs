@@ -141,3 +141,54 @@ pub fn fixture(path: &str) -> String {
         .join(path);
     std::fs::read_to_string(&p).unwrap_or_else(|e| panic!("read {}: {e}", p.display()))
 }
+
+fn read_migration(file: &str) -> String {
+    std::fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(file))
+        .unwrap_or_else(|e| panic!("read {file}: {e}"))
+}
+
+/// Every `(key, base_url, config)` row whose key starts with `prefix` in a
+/// source seed migration, with the `config || '…'::jsonb ... WHERE key = '…'`
+/// merges of the later `updates` migrations applied.
+pub fn seed_rows(
+    seed: &str,
+    prefix: &str,
+    updates: &[&str],
+) -> Vec<(String, String, serde_json::Value)> {
+    let sql = read_migration(seed);
+    let mut rows = Vec::new();
+    for (i, _) in sql.match_indices(&format!("('{prefix}")) {
+        let row = &sql[i + 2..];
+        let key = &row[..row.find('\'').unwrap()];
+        let base = row.split('\'').nth(4).unwrap();
+        let config = &row[row.find("'{").unwrap() + 1..row.find("}'::jsonb").unwrap() + 1];
+        let config: serde_json::Value = serde_json::from_str(&config.replace("''", "'"))
+            .unwrap_or_else(|e| panic!("{key}: config is not JSON: {e}"));
+        rows.push((key.to_string(), base.to_string(), config));
+    }
+    for file in updates {
+        let sql = read_migration(file);
+        let merges = sql.match_indices("config || '").collect::<Vec<_>>();
+        assert!(!merges.is_empty(), "{file}: no `config || '…'` merge");
+        for (i, _) in merges {
+            let update = &sql[i + "config || '".len()..];
+            let patch: serde_json::Value = serde_json::from_str(
+                &update[..update.find("'::jsonb").unwrap()].replace("''", "'"),
+            )
+            .unwrap_or_else(|e| panic!("{file}: config is not JSON: {e}"));
+            let key = update
+                .split("WHERE key = '")
+                .nth(1)
+                .unwrap_or_else(|| panic!("{file}: merge without `WHERE key = '…'`"));
+            let key = &key[..key.find('\'').unwrap()];
+            let (_, _, config) = rows
+                .iter_mut()
+                .find(|(k, _, _)| k == key)
+                .unwrap_or_else(|| panic!("{file}: no seed row {key}"));
+            for (k, v) in patch.as_object().unwrap() {
+                config[k] = v.clone();
+            }
+        }
+    }
+    rows
+}
