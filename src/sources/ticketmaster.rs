@@ -124,6 +124,18 @@ impl Source for Ticketmaster {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_event(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only workshops, talks, expos and fairs, exhibitions and community events \
+             from Ticketmaster's Arts & Theatre and Miscellaneous segments: events \
+             whose classification or title names one of those (class, lecture, \
+             seminar, fine art, meetup and the like). Everything else those segments \
+             carry (theatre, musicals, comedy, dance, and standing attractions or \
+             day tickets such as illusion museums and immersive experiences) is left \
+             out on purpose.",
+        )
+    }
 }
 
 fn s<'a>(v: &'a Value, ptr: &str) -> Option<&'a str> {
