@@ -1,0 +1,1155 @@
+
+
+
+                        
+    <!DOCTYPE html>
+    <!-- Site by Artlogic - https://artlogic.net -->
+    <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <script>
+            /* Artlogic deterministic page-ready signal (see e2e/ + pageload perf notes).
+               Installs a default window.modulesReady that latches window.__artlogicReady,
+               adds a `modules-ready` class to <html>/<body>, and dispatches `artlogic:ready`
+               exactly once. Themes may still wrap window.modulesReady (prevReady pattern);
+               their wrapper chains through to this. All gallery JS loader paths converge on
+               window.modulesReady(); the legacy galleries.js now calls it after init too. */
+            (function () {
+                var prev = window.modulesReady;
+                window.modulesReady = function () {
+                    if (typeof prev === 'function') { try { prev(); } catch (e) {} }
+                    if (window.__artlogicReady) { return; }
+                    window.__artlogicReady = true;
+                    try { document.documentElement.className += ' modules-ready'; } catch (e) {}
+                    try { if (document.body) { document.body.className += ' modules-ready'; } } catch (e) {}
+                    try { document.dispatchEvent(new CustomEvent('artlogic:ready')); } catch (e) {}
+                };
+            })();
+            </script>
+            <title>Through Our Eyes: Sámi Art and Culture, Somerset House | 6 November 2026 - 7 February 2027 | Larkin Durey</title>
+        <meta property="og:site_name" content="Larkin Durey" />
+        <meta property="og:title" content="Through Our Eyes: Sámi Art and Culture, Somerset House | 6 November 2026 - 7 February 2027" />
+        <meta property="og:description" content="Anders Sunna is included in this first UK survey show dedicated to S&aacute;mi Art &amp; Culture at Somerset House. The S&aacute;mi are Europe's only recognised Indigenous people, whose traditional land spans the northern parts of Norway, Sweden, Finland, and Russia. Presented across five galleries, this exhibition brings together 19 incredible..." />
+        <meta property="og:image" content="https://static-assets.artlogic.net/w_1388,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg" />
+        <meta property="og:image:width" content="1388" />
+        <meta property="og:image:height" content="620" />
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/">
+        <meta property="twitter:title" content="Through Our Eyes: Sámi Art and Culture, Somerset House | 6 November 2026 - 7 February 2027">
+        <meta property="twitter:description" content="Anders Sunna is included in this first UK survey show dedicated to S&aacute;mi Art &amp; Culture at Somerset House. The S&aacute;mi are Europe's only recognised Indigenous people, whose traditional land spans the northern parts of Norway, Sweden, Finland, and Russia. Presented across five galleries, this exhibition brings together 19 incredible...">
+        <meta property="twitter:text:description" content="Anders Sunna is included in this first UK survey show dedicated to S&aacute;mi Art &amp; Culture at Somerset House. The S&aacute;mi are Europe's only recognised Indigenous people, whose traditional land spans the northern parts of Norway, Sweden, Finland, and Russia. Presented across five galleries, this exhibition brings together 19 incredible...">
+        <meta property="twitter:image" content="https://static-assets.artlogic.net/w_1388,h_620,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg">
+        <link rel="canonical" href="https://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" />
+        <meta name="google" content="notranslate" />
+            <meta name="description" content="Anders Sunna is included in this first UK survey show dedicated to S&aacute;mi Art &amp; Culture at Somerset House. The S&aacute;mi are Europe's only recognised Indigenous people, whose traditional land spans the northern parts of Norway, Sweden, Finland, and Russia. Presented across five galleries, this exhibition brings together 19 incredible..." />
+            <meta name="publication_date" content="2012-06-15 10:02:09" />
+            <meta name="generator" content="Artlogic CMS - https://artlogic.net" />
+            
+            <meta name="accessibility_version" content="1.1"/>
+            
+            
+                <meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0" />
+
+            
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+
+<meta name="application-name" content="Larkin Durey"/>
+<meta name="msapplication-TileColor" content="#ffffff"/>
+            
+            
+            
+                <link rel="stylesheet" media="print" href="/lib/g/2.0/styles/print.css">
+                <link rel="stylesheet" media="print" href="/styles/print.css">
+
+            <script src="/lib/js/datadog-logs/datadog-logs.js" type="text/javascript"></script>
+<script>
+try {
+    function checkStatisticsCookiePreference() {
+        // Get the cookie_preferences item from localStorage
+        const cookiePreferences = localStorage.getItem('cookie_preferences');
+
+        // Check if the item exists
+        if (!cookiePreferences) {
+            console.log('No cookie_preferences found in localStorage');
+            return false;
+        }
+
+        // Parse the JSON string
+        const preferences = JSON.parse(cookiePreferences);
+
+        // Check if statistics is set to true
+        const statisticsEnabled = preferences?.statistics === true;
+
+        console.debug('Statistics enabled:', statisticsEnabled);
+        return statisticsEnabled;
+    }
+
+    // Usage
+    const hasStatistics = checkStatisticsCookiePreference();
+
+    if (hasStatistics) {
+        // --- Check for artlogic_id cookie ---
+        const artlogicIdSet = document.cookie
+            .split('; ')
+            .some(cookie => cookie.startsWith('artlogic_id='));
+
+        console.debug('artlogic_id cookie set:', artlogicIdSet);
+
+        if (artlogicIdSet) {
+            window.DD_LOGS && window.DD_LOGS.init({
+                // TODO add proxy?
+                clientToken: 'pub0866d56abaa16869f0d9bb4a3c7da950',
+                site: 'datadoghq.eu',
+                forwardConsoleLogs: ["error"],
+                forwardErrorsToLogs: true,
+                service: 'artlogiccms',
+                // version: '1.3.4',  // TODO implement versioning in future.
+                sessionSampleRate: 100,
+                trackSessionAcrossSubdomains: true
+            });
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('site', 'jackbell2'.toLowerCase())
+
+                window.DD_LOGS && window.DD_LOGS.setGlobalContextProperty('hostname', 'web-g4'.toLowerCase())
+
+            // report any missing JS files
+            window.addEventListener('error', function(event) {
+                // Filter out standard JS runtime execution errors
+                if (event.target && event.target.tagName === 'SCRIPT') {
+                    window.DD_LOGS && window.DD_LOGS.logger.error(
+                        'A script failed to load: ' + (event.target?.src || event.target?.href),
+                        {'script': (event.target?.src || event.target?.href)}
+                    )
+                }
+            }, true); // The 'true' flag activates the capturing phase
+        }
+    }
+} catch (error) {
+    console.error(error);
+}
+</script>
+
+            
+
+            <script>
+            (window.Promise && window.Array.prototype.find) || document.write('<script src="/lib/js/polyfill/polyfill_es6.min.js"><\/script>');
+            </script>
+
+
+            
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/font-awesome/font-awesome-4.6.3/css/font-awesome.min.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/archimedes-frontend-core.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/archimedes/styles/accessibility.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/jquery.archimedes-frontend-core-plugins-0.1.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/fancybox-2.1.3/jquery.fancybox.artlogic.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/3.7.1/plugins/slick-1.8.1/slick.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/roomview-photo/1.0/jquery.roomview-photo.1.0.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/pageload/1.1/jquery.pageload.1.1.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/augmented_reality/1.0/jquery.augmented_reality.1.0.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_base.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_main.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/user_custom.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/core/dynamic_responsive.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/webfonts/artlogic-site-icons/artlogic-site-icons-1.0/artlogic-site-icons.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+		<link data-context="helper" rel="stylesheet" type="text/css" href="/lib/jquery/plugins/plyr/3.5.10/plyr.css?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"/>
+<!-- add crtical css to improve performance -->
+		<script>window.ARTLOGIC_ASSET_SUFFIX="_ver_c5f5a34dv7f75477g79702d5a3de69c92c3b3431285ca3a08";</script>
+		<script data-context="helper"  src="/lib/g/2.0/scripts/import_helpers.js"></script>
+		<script data-context="helper"  src="/lib/jquery/3.7.1/jquery-3.7.1.min.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/webpack_import_helpers.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/jquery/3.7.1/plugins/jquery.compat.selector.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.browser.min.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.easing.min.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.archimedes-frontend-core-plugins-0.1.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/jquery/1.12.4/plugins/jquery.fitvids.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/core/dynamic.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-core.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/archimedes-frontend-modules.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" type="module"  traceurOptions="--async-functions" src="/lib/g/2.0/scripts/galleries_js_loader__mjs.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/g/2.0/scripts/feature_panels.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/g/themes/aperture/2.0/scripts/script.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/shop.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+		<script data-context="helper" defer src="/lib/archimedes/scripts/recaptcha.js?c=5f5a34d&v=7f75477&g=79702d5a3de69c92c3b3431285ca3a08"></script>
+            
+            
+                
+
+
+    <script>
+        function get_cookie_preference(category) {
+            result = false;
+            try {
+                var cookie_preferences = localStorage.getItem('cookie_preferences') || "";
+                if (cookie_preferences) {
+                    cookie_preferences = JSON.parse(cookie_preferences);
+                    if (cookie_preferences.date) {
+                        var expires_on = new Date(cookie_preferences.date);
+                        expires_on.setDate(expires_on.getDate() + 365);
+                        console.log('cookie preferences expire on', expires_on.toISOString());
+                        var valid = expires_on > new Date();
+                        if (valid && cookie_preferences.hasOwnProperty(category) && cookie_preferences[category]) {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch(e) {
+                console.warn('get_cookie_preference() failed');
+                return result;
+            }
+            return result;
+        }
+
+        window.google_analytics_init = function(page){
+            var collectConsent = true;
+            var useConsentMode = false;
+            var analyticsProperties = ['G-GM1421GTJ3', 'UA-27646091-12'];
+            var analyticsCookieType = 'statistics';
+            var disableGa = false;
+            var sendToArtlogic = true;
+            var artlogicProperties = {
+                'UA': 'UA-157296318-1',
+                'GA': 'G-GLQ6WNJKR5',
+            };
+
+            analyticsProperties = analyticsProperties.concat(Object.values(artlogicProperties));
+
+            var uaAnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('UA-'));
+            var ga4AnalyticsProperties = analyticsProperties.filter((p) => p.startsWith('G-')).concat(analyticsProperties.filter((p) => p.startsWith('AW-')));
+
+            if (collectConsent) {
+                disableGa = !get_cookie_preference(analyticsCookieType);
+
+                for (var i=0; i < analyticsProperties.length; i++){
+                    var key = 'ga-disable-' + analyticsProperties[i];
+
+                    window[key] = disableGa;
+                }
+
+                if (disableGa) {
+                    if (document.cookie.length) {
+                        var cookieList = document.cookie.split(/; */);
+
+                        for (var i=0; i < cookieList.length; i++) {
+                            var splitCookie = cookieList[i].split('='); //this.split('=');
+
+                            if (splitCookie[0].indexOf('_ga') == 0 || splitCookie[0].indexOf('_gid') == 0 || splitCookie[0].indexOf('__utm') == 0) {
+                                //h.deleteCookie(splitCookie[0]);
+                                var domain = location.hostname;
+                                var cookie_name = splitCookie[0];
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                                // now delete the version without a subdomain
+                                domain = domain.split('.');
+                                domain.shift();
+                                domain = domain.join('.');
+                                document.cookie =
+                                    cookie_name + "=" + ";path=/;domain="+domain+";expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (uaAnalyticsProperties.length) {
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+                if (!disableGa) {
+                    var anonymizeIps = false;
+
+                    for (var i=0; i < uaAnalyticsProperties.length; i++) {
+                        var propertyKey = '';
+
+                        if (i > 0) {
+                            propertyKey = 'tracker' + String(i + 1);
+                        }
+
+                        var createArgs = [
+                            'create',
+                            uaAnalyticsProperties[i],
+                            'auto',
+                        ];
+
+                        if (propertyKey) {
+                            createArgs.push({'name': propertyKey});
+                        }
+
+                        ga.apply(null, createArgs);
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            propertyKey ? propertyKey + '.send' : 'send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+
+                    if (sendToArtlogic) {
+                        ga('create', 'UA-157296318-1', 'auto', {'name': 'artlogic_tracker'});
+
+                        if (anonymizeIps) {
+                            ga('set', 'anonymizeIp', true);
+                        }
+
+                        var pageViewArgs = [
+                            'artlogic_tracker.send',
+                            'pageview'
+                        ]
+
+                        if (page) {
+                            pageViewArgs.push(page)
+                        }
+
+                        ga.apply(null, pageViewArgs);
+                    }
+                }
+            }
+
+            if (ga4AnalyticsProperties.length) {
+                if (!disableGa || useConsentMode) {
+                    (function(d, script) {
+                        script = d.createElement('script');
+                        script.type = 'text/javascript';
+                        script.async = true;
+                        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4AnalyticsProperties[0];
+                        d.getElementsByTagName('head')[0].appendChild(script);
+                    }(document));
+
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function (){dataLayer.push(arguments);}
+                    window.gtag('js', new Date());
+
+                    if (useConsentMode) {
+                        gtag('consent', 'default', {
+                            'ad_storage': 'denied',
+                            'analytics_storage': 'denied',
+                            'functionality_storage': 'denied',
+                            'personalization_storage': 'denied',
+                            'security': 'denied',
+                        });
+
+                        if (disableGa) {
+                            // If this has previously been granted, it will need set back to denied (ie on cookie change)
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'denied',
+                            });
+                        } else {
+                            gtag('consent', 'update', {
+                                'analytics_storage': 'granted',
+                            });
+                        }
+                    }
+
+                    for (var i=0; i < ga4AnalyticsProperties.length; i++) {
+                        window.gtag('config', ga4AnalyticsProperties[i]);
+                    }
+
+                }
+            }
+        }
+
+        var waitForPageLoad = true;
+
+        if (waitForPageLoad) {
+            window.addEventListener('load', function() {
+                window.google_analytics_init();
+                window.archimedes.archimedes_core.analytics.init();
+            });
+        } else {
+            window.google_analytics_init();
+        }
+    </script>
+
+            
+            
+
+        </head>
+        
+        
+        
+        <body class="section-exhibitions page-exhibitions site-responsive responsive-top-size-1023 responsive-nav-slide-nav responsive-nav-side-position-fullscreen responsive-layout-forced-lists responsive-layout-forced-image-lists responsive-layout-forced-tile-lists analytics-track-all-links site-lib-version-2-0 scroll_sub_nav_enabled responsive_src_image_sizing hero_heading_title_position_overlay artworks_detail_ar_enabled page-param-198-through-our-eyes-sami-art-and-culture-somerset page-param-id-198 page-param-type-exhibition_id  layout-fixed-header site-type-template pageload-ajax-navigation-active layout-animation-enabled layout-lazyload-enabled" data-viewport-width="1024" data-site-name="jackbell2" data-connected-db-name="jackbell" data-pathname="/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/"
+>
+            <script>document.getElementsByTagName('body')[0].className+=' browser-js-enabled';</script>
+            
+
+
+            
+            
+
+
+
+
+
+
+        <div id="responsive_slide_nav_content_wrapper">
+
+    <div id="container">
+
+        
+    
+
+
+    <div class="header-fixed-wrapper">
+    <header id="header" class="clearwithin header_fixed header_hide_border   header_layout_left">
+        <div class="inner clearwithin">
+
+            
+
+
+<div id="logo" class=" user-custom-logo-image"><a href="/">Larkin Durey</a></div>
+
+
+            
+                <div id="skiplink-container">
+                    <div>
+                        <a href="#main_content" class="skiplink">Skip to main content</a>
+                    </div>
+                </div>
+            
+        
+            <div class="header-ui-wrapper">
+
+                    <div id="responsive_slide_nav_wrapper" class="mobile_menu_align_center" data-nav-items-animation-delay>
+                        <div id="responsive_slide_nav_wrapper_inner" data-responsive-top-size=1023>
+                        
+                            <nav id="top_nav" aria-label="Main site" class="navigation noprint clearwithin">
+                                
+<div id="top_nav_reveal" class="hidden"><ul><li><a href="#" role="button" aria-label="Close">Menu</a></li></ul></div>
+
+        <ul class="topnav">
+		<li class="topnav-filepath-artists topnav-label-artists topnav-id-11"><a href="/artists/" aria-label="Link to Larkin Durey Artists page">Artists</a></li>
+		<li class="topnav-filepath-exhibitions topnav-label-exhibitions topnav-id-13 active"><a href="/exhibitions/" aria-label="Link to Larkin Durey Exhibitions page (current nav item)">Exhibitions</a></li>
+		<li class="topnav-filepath-art-fairs topnav-label-fairs topnav-id-23"><a href="/art-fairs/" aria-label="Link to Larkin Durey Fairs page">Fairs</a></li>
+		<li class="topnav-filepath-news topnav-label-news topnav-id-16"><a href="/news/" aria-label="Link to Larkin Durey News page">News</a></li>
+		<li class="topnav-filepath-publications topnav-label-publications topnav-id-22"><a href="/publications/" aria-label="Link to Larkin Durey Publications page">Publications</a></li>
+		<li class="topnav-filepath-store topnav-label-shop topnav-id-28"><a href="/store/" aria-label="Link to Larkin Durey Shop page">Shop</a></li>
+		<li class="topnav-filepath-contact topnav-label-about topnav-id-19"><a href="/contact/" aria-label="Link to Larkin Durey About page">About</a></li>
+		<li class="topnav-filepath-video topnav-label-video topnav-id-35 last"><a href="/video/" aria-label="Link to Larkin Durey Video page">Video</a></li>
+	</ul>
+
+
+                                
+                                
+
+
+
+                                
+                            </nav>
+                        
+                        </div>
+                    </div>
+                
+
+                <div class="header-icons-wrapper  active cart-icon-active">
+                    
+                    
+
+                        
+
+
+
+<!--excludeindexstart-->
+<div id="store_cart_widget" class="">
+    <div class="store_cart_widget_inner">
+        <div id="scw_heading"><a href="/store/basket/" class="scw_checkout_link">Cart</a></div>
+        <div id="scw_items">
+            <a href="/store/basket/" aria-label="Your store basket is empty" data-currency="&pound;">
+                <span class="scw_total_items"><span class="scw_total_count">0</span><span class="scw_total_items_text"> items</span></span>
+               
+
+                    <span class="scw_total_price">
+                        <span class="scw_total_price_currency widget_currency">&pound;</span>
+                        <span class="scw_total_price_amount widget_total_price" 
+                                data-cart_include_vat_in_price="True" 
+                                data-total_price_without_vat_in_base_currency="0" 
+                                data-total_price_with_vat_in_base_currency="0"
+                                data-conversion_rate='{"GBP": {"conversion_rate": 1, "name": "&pound;", "stripe_code": "gbp"}}'
+                                data-count="0">
+                        </span>
+                    </span>
+      
+                
+            </a>
+        </div>
+        <div id="scw_checkout">
+            <div class="scw_checkout_button"><a href="/store/basket/" class="scw_checkout_link">Checkout</a></div>
+        </div>
+            <div id="scw_popup" class="hidden scw_popup_always_show">
+                <div id="scw_popup_inner">
+                    <h3>Item added to cart</h3>
+                    <div id="scw_popup_buttons_container">
+                        <div class="button"><a href="/store/basket/">View cart & checkout</a></div>
+                        <div id="scw_popup_close" class="link"><a href="#">Continue shopping</a></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        
+    </div>
+</div>
+<!--excludeindexend-->
+
+                    
+     
+                        <div id="slide_nav_reveal" tabindex="0" role="button">Menu</div>
+                </div>
+                
+                
+
+                
+
+
+
+                
+
+                
+            </div>
+        </div>
+        
+
+
+
+    </header>
+    </div>
+
+
+
+        
+
+        <div id="main_content" role="main" class="clearwithin">
+            <!--contentstart-->
+            
+
+
+
+
+
+
+
+
+
+
+    <div class="exhibition">
+        
+
+
+
+
+
+
+<div class="subsection-exhibition-detail-page subsection-wrapper record-page-content-combined record-content-group-images-override record-content-content record-content-selected-artists record-content-has-section-overview record-content-has-section-installation_shots record-content-has-section-works record-content-has-section-artist_page  " 
+     data-search-record-type="exhibitions" data-search-record-id="198">
+
+
+    
+
+
+        <div class="exhibition-header heading_wrapper clearwithin ">
+            
+        <a href="/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" >
+                <h1 class="has_subtitle"><span class="h1_heading">Through Our Eyes: Sámi Art and Culture, Somerset House</span></h1>
+            </a>
+
+            
+            
+                <div id="exhibition-status-current" class="hidden">
+                    Current exhibition
+                </div>
+
+                <div class="subtitle has_subnav">
+
+                    <span class="subtitle_date">6 November 2026 - 7 February 2027</span>
+
+
+                </div>
+
+                
+
+
+
+
+        <div id="sub_nav" class="navigation  noprint clearafter clearwithin" role="navigation" aria-label="Exhibition subnavigation">
+            <ul>
+                
+                    
+
+                        
+                        <li id="sub-item-overview" class="first">
+                                    
+                                    <a href="#" role="button" data-subsection-type="overview" >
+                                        Overview
+                                    </a>
+                        </li>
+                    
+                    
+
+                        
+                        <li id="sub-item-works" class="">
+                                    
+                                    <a href="#" role="button" data-subsection-type="works" >
+                                        Works
+                                    </a>
+                        </li>
+                    
+                    
+
+                        
+                        <li id="sub-item-installation-views" class="">
+                                    
+                                    <a href="#" role="button" data-subsection-type="installation_shots" >
+                                        Installation Views
+                                    </a>
+                        </li>
+                    
+            </ul>
+        </div>
+
+                
+
+
+
+
+
+
+        </div>
+
+
+    
+
+
+    <div id="content" class="content_alt clearwithin">
+
+
+
+            <div class="scroll_section_container scroll_section_hide_first_heading">
+                
+                    
+
+                        <section id="scroll_section_overview"
+                                 class="scroll_section scroll_section_overview"
+                                 data-subsection-type="overview"
+                                 tabindex=-1 aria-label="Overview">
+                                <div class="scroll_section_header">
+                                    <div class="subheading" role="heading" aria-level="2">
+                                        <span>Overview</span></div>
+                                </div>
+                            
+
+
+<div class="subsection-overview ">
+    
+
+    <div   class="sidebar clearwithin">
+        
+
+
+
+
+            
+            <div class="image  " data-width="3200" data-height="2133">
+                    <span class="object-fit-container"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="object-fit-contain"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg'}"  data-src="https://static-assets.artlogic.net/w_800,h_800,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/exhibitions/group_images_override/198/0b5a7885.jpg" alt="Through Our Eyes: Sámi Art and Culture, Somerset House"  /></span>
+            </div>
+            <div class="divider"></div>
+
+
+
+    </div><!-- end of #sidebar -->
+
+
+    <div  class="prose content_module clearwithin">
+
+            <div class="description">
+                <p>Anders Sunna is included in this first UK survey show dedicated to S&aacute;mi Art & Culture at Somerset House.<br><br>The S&aacute;mi are Europe's only recognised Indigenous people, whose traditional land spans the northern parts of Norway, Sweden, Finland, and Russia. Presented across five galleries, this exhibition brings together 19 incredible artists working today.<br><br>For hundreds of years, the traditional S&aacute;mi way of life has relied on nature and reindeer herding. Today, those traditions are under threat. While the exhibition tackles serious global issues like the environment and Indigenous rights, the artworks are also full of humour, creativity, and hope.<br><br>The exhibition will include rarely-seen work by pioneering S&aacute;mi artists Iver J&aring;ks, Hans Ragnar Mathisen, Britta Marakatt-Labba, and Nils-Aslak Valkeap&auml;&auml;, alongside some of the most inventive and prolific artists working today including Tomas Colbengtson, Carola Grahn, Marja Helander, Olof Marsja, Elina Waage Mikalsen, Joar Nango & Katarina Spik Skum, Outi Pieski, Ritni R&aacute;ste Pieski & Lotta Hagelin, Lada Suomenrinne, Anders Sunna, Carl-Johan Utsi & Jenni Laiti, and Liselotte Wajstedt.<br><br>The exhibition is curated by S&aacute;mi visual artist Matti Aikio and Somerset House's Director of Exhibitions Dr Cliff Lauson.</p>
+<p>&nbsp;</p>
+<p data-block-key="bsme1"><em>Through Our Eyes - S&aacute;mi Art and Culture</em>&nbsp;will tour to Kunstsilo, Kristiansand, Norway in Spring 2027.</p>
+<p data-block-key="bsme1"><a href="https://www.somersethouse.org.uk/whats-on/through-our-eyes">Somerset House</a></p>
+<section>
+<p>&nbsp;</p>
+</section>
+            </div>
+
+
+
+
+
+
+        
+        
+            <div id="popup_links not-prose">
+                        
+
+
+
+    <script>
+        var addthis_config = {
+            data_track_addressbar: false,
+            services_exclude: 'print, gmail, stumbleupon, more, google',
+            ui_click: true, data_ga_tracker: 'UA-27646091-12',
+            data_ga_property: 'UA-27646091-12',
+            data_ga_social: true,
+            ui_use_css: true,
+            data_use_cookies_ondomain: false,
+            data_use_cookies: false
+        };
+
+    </script>
+    <div class="social_sharing_wrap not-prose clearwithin">
+
+
+        
+
+        
+
+        <div class="link share_link popup_vertical_link  retain_dropdown_dom_position" data-link-type="share_link">
+            <a href="#" role="button" aria-haspopup="true" aria-expanded="false">Share</a>
+
+                
+                <div id="social_sharing" class="social_sharing popup_links_parent">
+                <div id="relative_social_sharing" class="relative_social_sharing">
+                <div id="social_sharing_links" class="social_sharing_links popup_vertical dropdown_closed addthis_toolbox popup_links">
+                        <ul>
+                        
+                            
+                                <li class="social_links_item">
+                                    <a href="https://www.facebook.com/sharer.php?u=http://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" target="_blank" class="addthis_button_facebook">
+                                        <span class="add_this_social_media_icon facebook"></span>Facebook
+                                    </a>
+                                </li>
+                            
+                                <li class="social_links_item">
+                                    <a href="https://x.com/share?url=http://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" target="_blank" class="addthis_button_x">
+                                        <span class="add_this_social_media_icon x"></span>X
+                                    </a>
+                                </li>
+                            
+                                <li class="social_links_item">
+                                    <a href="https://www.pinterest.com/pin/create/button/?url=https%3A//www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/&media=https%3A//static-assets.artlogic.net/w_1388%2Ch_620%2Cc_limit%2Cf_auto%2Cfl_lossy%2Cq_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg&description=Through%20Our%20Eyes%3A%20S%C3%A1mi%20Art%20and%20Culture%2C%20Somerset%20House%20%7C%206%20November%202026%20-%207%20February%202027" target="_blank" class="addthis_button_pinterest_share">
+                                        <span class="add_this_social_media_icon pinterest"></span>Pinterest
+                                    </a>
+                                </li>
+                            
+                                <li class="social_links_item">
+                                    <a href="https://www.tumblr.com/share/link?url=http://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" target="_blank" class="addthis_button_tumblr">
+                                        <span class="add_this_social_media_icon tumblr"></span>Tumblr
+                                    </a>
+                                </li>
+                            
+                                <li class="social_links_item">
+                                    <a href="mailto:?subject=Through%20Our%20Eyes%3A%20S%C3%A1mi%20Art%20and%20Culture%2C%20Somerset%20House%20%7C%206%20November%202026%20-%207%20February%202027&body= http://www.larkindurey.com/exhibitions/198-through-our-eyes-sami-art-and-culture-somerset/" target="_blank" class="addthis_button_email">
+                                        <span class="add_this_social_media_icon email"></span>Email
+                                    </a>
+                                </li>
+                        </ul>
+                </div>
+                </div>
+                </div>
+                
+        
+
+        </div>
+
+
+
+    </div>
+
+                
+            </div>
+
+
+
+    </div>
+</div>
+
+                        </section>
+                    
+
+                        <section id="scroll_section_works"
+                                 class="scroll_section scroll_section_works"
+                                 data-subsection-type="works"
+                                 tabindex=-1 aria-label="Works">
+                                <div class="scroll_section_header">
+                                    <div class="subheading" role="heading" aria-level="2">
+                                        <span>Works</span></div>
+                                </div>
+                            
+
+    <div class="subsection-works">
+
+
+
+                    
+
+
+                        
+                        
+
+
+
+
+
+    <div class="records_list image_list gd_no_of_columns_4 grid_dynamic_layout_exhibitions_works collapse_single_column image_grid clearwithin">
+        <ul class="clearwithin">
+                
+
+                <li class=" item"   data-record-type="artworks">
+
+                            <a href="/exhibitions/198/works/artworks-8833-anders-sunna-blood-red-is-the-new-green-2023/">
+
+
+                            <span class="image">
+                                <span style="" class="">
+
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg'}"  data-src="https://static-assets.artlogic.net/w_600,c_limit,f_auto,fl_lossy,q_auto/artlogicstorage/jackbell/images/view/323f05ad9db9a430183050a497cf47b0j/larkindurey-anders-sunna-blood-red-is-the-new-green-2023.jpg" alt="Anders Sunna, Blood Red is the New Green, 2023"  />
+                                </span>
+                            </span>
+
+
+                            <div class="content">
+                                    <span class="title"><span class="artist">Anders Sunna<span class="artist_comma"><span class="comma">, </span></span></span><span class="title">Blood Red is the New Green<span class="title_comma"><span class="comma">, </span></span></span><span class="year">2023</span></span>
+                            </div>
+
+                            </a>
+                    <div class="fancybox-caption hidden">
+                        
+                    </div>
+                </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+                        </section>
+                    
+
+                        <section id="scroll_section_installation_shots"
+                                 class="scroll_section scroll_section_installation_shots"
+                                 data-subsection-type="installation_shots"
+                                 tabindex=-1 aria-label="Installation Views">
+                                <div class="scroll_section_header">
+                                    <div class="subheading" role="heading" aria-level="2">
+                                        <span>Installation Views</span></div>
+                                </div>
+                            
+
+    
+    <div class="subsection-installation">
+                
+
+                    
+
+
+
+
+    
+        <div id="ig_slideshow_container" class="ig_slideshow_container" style="">
+            <div id="ig_slideshow" style="" data-cycle-custom-settings="{}">
+                
+                    
+                    <div class="item " data-rel="<div class=''></div>" style="">
+                        <span class="image" style=""><span style="">
+                                    <a href="https://static-assets.artlogic.net/w_2400,h_2400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg" class="image_popup" data-fancybox-group="group" data-fancybox-title="">
+                                        <span class="screen-reader-only">Open a larger version of the following image in a popup:</span>
+                                <img src="https://static-assets.artlogic.net/w_1600,h_1600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg'}" alt="" />
+                                    </a>
+                        </span></span>
+                    </div>
+                    
+                    <div class="item " data-rel="<div class=''></div>" style="">
+                        <span class="image" style=""><span style="">
+                                    <a href="https://static-assets.artlogic.net/w_2400,h_2400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg" class="image_popup" data-fancybox-group="group" data-fancybox-title="">
+                                        <span class="screen-reader-only">Open a larger version of the following image in a popup:</span>
+                                <img src="https://static-assets.artlogic.net/w_1600,h_1600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg"  data-responsive-src="{'750': 'https://static-assets.artlogic.net/w_750,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '850': 'https://static-assets.artlogic.net/w_850,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '2400': 'https://static-assets.artlogic.net/w_2400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '1600': 'https://static-assets.artlogic.net/w_1600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '1200': 'https://static-assets.artlogic.net/w_1200,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '345': 'https://static-assets.artlogic.net/w_345,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '470': 'https://static-assets.artlogic.net/w_470,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '3000': 'https://static-assets.artlogic.net/w_3000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '650': 'https://static-assets.artlogic.net/w_650,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '2600': 'https://static-assets.artlogic.net/w_2600,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '2800': 'https://static-assets.artlogic.net/w_2800,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '1400': 'https://static-assets.artlogic.net/w_1400,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg', '1000': 'https://static-assets.artlogic.net/w_1000,c_limit,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg'}" alt="" />
+                                    </a>
+                        </span></span>
+                    </div>
+            </div>
+            
+            <div id="ig_slideshow_thumbnails_container" class="ig_thumbnails_type_scroller jThumbnailScroller ig_thumbnails_type_scroller_click">
+                <div class="inner">
+                    <div id="ig_slideshow_thumbnails" class="jTscrollerContainer">
+                        <ul class="jTscroller">
+                                
+                                <li class="ig_slideshow_thumbnail">
+                                    <a href="" class="link-no-ajax" data-rel="0" aria-label="Select item to display in slideshow and pause." style="background-image:url('https://static-assets.artlogic.net/w_100,h_100,c_fill,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7885.jpg')">
+                                    </a>
+                                </li>
+                                
+                                <li class="ig_slideshow_thumbnail last">
+                                    <a href="" class="link-no-ajax" data-rel="1" aria-label="Select item to display in slideshow and pause." style="background-image:url('https://static-assets.artlogic.net/w_100,h_100,c_fill,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/exhibitions/images/exhibitions/198/0b5a7887.jpg')">
+                                    </a>
+                                </li>
+                        </ul>
+                    </div>
+                </div>
+                    <button class="jTscrollerPrevButton">Previous</button>
+                    <button class="jTscrollerNextButton">Next</button>
+            </div>
+            <div id="ig_slideshow_caption">
+                
+            </div>
+        </div>
+
+    
+
+    
+
+
+    </div>
+
+    
+    
+                        </section>
+            </div>
+
+                <div class="related_artists_container">
+                    <div class="divider"></div>
+                        
+
+
+
+    
+        <div class="scroll_section_container">
+            <section id="related_artists" data-subsection-type="related_artists" class="related_items_panel clearwithin not-prose">
+                    <h2 class="related_items_panel_heading">Related artist</h2>
+                <div class="records_list mini_list">
+                    <ul>
+                            
+                                <li>
+                                    <a href="/artists/215-anders-sunna/">
+                                            <span class="icon"><span>
+                                                <img src="https://static-assets.artlogic.net/w_50,h_50,c_fill,f_auto,fl_lossy,q_auto/ws-jackbell2/usr/images/artists/artwork_image_for_artists_page/items/33/33d0c27d9ddd4aa5878f4d3e6a672ccf/03373-image-6-.jpg" alt="Anders Sunna" />
+                                            </span></span>
+                                        <div class="content">
+                                            <h2>Anders Sunna</h2>
+                                        </div>
+                                    </a>
+                                </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+                </div>
+
+
+        
+
+
+        
+            <div class="back_to_link">
+                <div class="divider inner"></div>
+                <div class="link"><a href="/exhibitions/">Back to exhibitions</a></div>
+            </div>
+
+        
+
+
+    </div>
+
+    
+
+
+</div>
+
+
+    </div>
+
+
+            <!--contentend-->
+        </div>
+
+        
+
+
+            
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="footer" role="contentinfo" class="">
+    <div class="inner">
+            
+    <div class="copyright">
+            
+    <div class="small-links-container">
+            <div class="privacy-policy"><a href="/privacy-policy/">Privacy Policy</a></div>
+            <div class="cookie_notification_preferences"><a href="javascript:void(0)" role="button" class="link-no-ajax">Manage cookies</a></div>
+
+
+
+    </div>
+
+        <div id="copyright" class="noprint">
+            <div class="copyright-text">
+                    Copyright &copy; 2026 Larkin Durey
+            </div>
+                
+        
+        <div id="artlogic" class="noprint"><a href="https://artlogic.net/" target="_blank" rel="noopener noreferrer">
+                Site by Artlogic
+        </a></div>
+
+        </div>
+        
+    </div>
+
+            
+
+            
+
+            
+    
+        <div id="social_links" class="clearwithin">
+            <div id="instagram" class="social_links_item"><a href="http://instagram.com/larkindurey" class=""><span class="social_media_icon instagram"></span>Instagram<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="artsy" class="social_links_item"><a href="https://www.artsy.net/larkin-durey" class=""><span class="social_media_icon artsy"></span>Artsy<span class="screen-reader-only">, opens in a new tab.</span></a></div><div id="mailinglist" class="social_links_item"><a href="/mailing-list/" class=""><span class="social_media_icon mailinglist"></span>Join the mailing list</a></div><div id="email" class="social_links_item"><a href="/contact/form/" class="link-no-ajax"><span class="social_media_icon email"></span>Send an email</a></div><div id="googlemap" class="social_links_item"><a href="http://goo.gl/maps/u3Nb" class="website_map_popup" data-latlng="51.507740, -0.137524" data-title="Larkin Durey" data-zoom="15"><span class="social_media_icon googlemap"></span>View on Google Maps</a></div>
+        </div>
+
+            
+
+            
+
+        <div class="clear"></div>
+    </div>
+</div>
+        <div class="clear"></div>
+
+            <div id="cookie_notification" role="region" aria-label="Cookie banner" data-mode="consent" data-cookie-notification-settings="">
+    <div class="inner">
+        <div id="cookie_notification_message" class="prose">
+                <p><strong>This website uses cookies</strong><br>This site uses cookies to help make it more useful to you. Please contact us to find out more about our Cookie Policy.</p>
+        </div>
+        <div id="cookie_notification_preferences" class="link"><a href="javascript:;" role="button">Manage cookies</a></div>
+        <div id="cookie_notification_reject" class="button"><a href="javascript:;" role="button">Reject non essential</a></div>
+        <div id="cookie_notification_accept" class="button"><a href="javascript:;" role="button">Accept</a></div>
+
+    </div>
+</div>
+    <div id="manage_cookie_preferences_popup_container">
+        <div id="manage_cookie_preferences_popup_overlay"></div>
+        <div id="manage_cookie_preferences_popup_inner">
+            <div id="manage_cookie_preferences_popup_box" role="dialog" aria-modal="true" aria-label="Cookie preferences">
+                <div id="manage_cookie_preferences_close_popup_link" class="close">
+                    <a href="javascript:;" role="button" aria-label="close">
+                        <svg width="20px" height="20px" viewBox="0 0 488 488" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="close" fill="#5D5D5D" fill-rule="nonzero">
+                                    <polygon id="Path" points="488 468 468 488 244 264 20 488 0 468 224 244 0 20 20 0 244 224 468 0 488 20 264 244"></polygon>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <h2>Cookie preferences</h2>
+                    <p>Check the boxes for the cookie categories you allow our site to use</p>
+                
+                <div id="manage_cookie_preferences_form_wrapper">
+                    <div class="form form_style_simplified">
+
+                        <form id="cookie_preferences_form">
+                            <fieldset>
+                                <legend class="visually-hidden">Cookie options</legend>
+                                <div>
+                                    <label><input type="checkbox" name="essential" disabled checked value="1"> Strictly necessary</label>
+                                    <div class="note">Required for the website to function and cannot be disabled.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="functionality"  value="1"> Preferences and functionality</label>
+                                    <div class="note">Improve your experience on the website by storing choices you make about how it should function.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="statistics"  value="1"> Statistics</label>
+                                    <div class="note">Allow us to collect anonymous usage data in order to improve the experience on our website.</div>
+                                </div>
+                                <div>
+                                    <label><input type="checkbox" name="marketing"  value="1"> Marketing</label>
+                                    <div class="note">Allow us to identify our visitors so that we can offer personalised, targeted marketing.</div>
+                                </div>
+                            </fieldset>
+                            
+                            <div class="button">
+                                <a href="javascript:;" id="cookie_preferences_form_submit" role="button">Save preferences</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+            
+
+
+
+
+
+
+    </div>
+
+        </div>
+
+
+
+
+            
+            
+                
+
+
+
+
+
+            
+            
+        <!-- sentry-verification-string -->
+</body>
+    </html>
+
+
