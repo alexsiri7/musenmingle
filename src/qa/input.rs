@@ -20,10 +20,6 @@ use crate::runner::RunEvent;
 pub const MAX_INPUT_CHARS: usize = 36_000;
 /// Readability output shorter than this is not the page's content.
 pub const MIN_MAIN_CHARS: usize = 500;
-/// On a listing, Readability (built for articles) often keeps one event of
-/// many: its text is used only when it keeps at least this share of the
-/// visible text, else the judge would report "missed" events it never saw.
-pub const LISTING_MIN_MAIN_RATIO: f64 = 0.5;
 const MAX_JSON_LD_CHARS: usize = 4_000;
 const MAX_LISTING_RECORDS_CHARS: usize = 6_000;
 const TRUNCATED: &str = " […truncated]";
@@ -125,6 +121,11 @@ pub fn json_ld_blocks(html: &str) -> Vec<Value> {
 
 /// The text to show for a page and where it came from (`readability`,
 /// `visible` or `json`).
+///
+/// A listing is always shown as its visible text: Readability (built for
+/// articles) drops events from listings, sometimes all of them, sometimes
+/// just their titles while keeping their descriptions, and the judge then
+/// reports as "missed" events it never saw or could not name.
 pub fn page_text(body: &str, kind: PageKind, json: bool) -> (String, &'static str) {
     if json {
         let compact = serde_json::from_str::<Value>(body)
@@ -132,17 +133,11 @@ pub fn page_text(body: &str, kind: PageKind, json: bool) -> (String, &'static st
             .unwrap_or_else(|_| body.to_string());
         return (compact, "json");
     }
+    if kind == PageKind::Listing {
+        return (visible_text(body), "visible");
+    }
     let main = main_text(body);
-    let main_chars = main.chars().count();
-    let use_main = match kind {
-        PageKind::Detail | PageKind::Api => main_chars >= MIN_MAIN_CHARS,
-        PageKind::Listing => {
-            main_chars >= MIN_MAIN_CHARS
-                && main_chars as f64
-                    >= LISTING_MIN_MAIN_RATIO * visible_text(body).chars().count() as f64
-        }
-    };
-    if use_main {
+    if main.chars().count() >= MIN_MAIN_CHARS {
         let text = std::iter::once(main)
             .chain(aside_texts(body))
             .collect::<Vec<_>>()
@@ -472,6 +467,8 @@ pub(crate) mod tests {
         include_str!("../../tests/fixtures/scrapers/somerset-house/whats-on-page-1.html");
     const HUNTERIAN_LISTING: &str =
         include_str!("../../tests/fixtures/scrapers/hunterian-museum/whats-on.html");
+    const OLD_CHURCH_LISTING: &str =
+        include_str!("../../tests/fixtures/scrapers/the-old-church/whats-on.html");
 
     pub(crate) fn run_event(id: &str, title: &str, starts_at: DateTime<Utc>) -> RunEvent {
         RunEvent {
@@ -549,6 +546,24 @@ pub(crate) mod tests {
             page_text(HUNTERIAN_LISTING, PageKind::Detail, false).1,
             "readability"
         );
+    }
+
+    #[test]
+    fn listings_keep_every_event_title() {
+        // Readability keeps 81% of this listing's text but only 2 of its 18
+        // titles; the judge reported the rest as missed (#423).
+        let (text, from) = page_text(OLD_CHURCH_LISTING, PageKind::Listing, false);
+        assert_eq!(from, "visible");
+        for title in [
+            "SHSHCHTS X [8]: LONDON SHOWCASE",
+            "HIDDEN GEMS",
+            "CORNELIA MURR (MATINEE SHOW) + DANA GAVANSKI",
+            "FROZEN WARNINGS",
+            "THE POP-UP CHRISTMAS GIG",
+            "STANLEY WELCH - SONGS ABOUT WOMEN RELEASE SHOW",
+        ] {
+            assert!(text.contains(title), "{title} missing from {text}");
+        }
     }
 
     #[test]
