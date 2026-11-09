@@ -22,7 +22,10 @@ use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const SEED: &str = "migrations/20260927952001_seed_artlogic_galleries.sql";
 /// Later migrations merging into a seeded row's config.
-const CONFIG_UPDATES: &[&str] = &["migrations/20261109400001_artlogic_larkin_durey_loans.sql"];
+const CONFIG_UPDATES: &[&str] = &[
+    "migrations/20261109400001_artlogic_larkin_durey_loans.sql",
+    "migrations/20261109500001_artlogic_annely_juda_forthcoming.sql",
+];
 
 fn seed_rows() -> Vec<(String, String, Value)> {
     common::seed_rows(SEED, "artlogic-", CONFIG_UPDATES)
@@ -392,6 +395,46 @@ async fn a_listing_redirecting_to_one_show_yields_that_show() {
     );
     let event = s.normalise(&raws[0]).unwrap().expect("an event");
     assert_eq!(event.title, "Entwined");
+}
+
+/// Issue #416: between shows Annely Juda's current list is empty; its
+/// combined current/forthcoming path lands on the one announced show.
+#[tokio::test]
+async fn annely_juda_reads_its_forthcoming_show() {
+    const KEY: &str = "artlogic-annely-juda";
+    const SHOW: &str = "/exhibitions/407-leon-kossoff-trains-and-stations/overview/";
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    mount_page(
+        &server,
+        "/exhibitions/current-forthcoming/",
+        ResponseTemplate::new(302).insert_header("location", SHOW),
+        1,
+    )
+    .await;
+    let html = fixture(&format!("scrapers/{KEY}/current-forthcoming.html"));
+    mount_page(
+        &server,
+        SHOW,
+        ResponseTemplate::new(200).set_body_string(html),
+        1,
+    )
+    .await;
+    let ctx = ctx();
+    let (_, config) = seed_row(KEY);
+    let s = gallery(&server, config);
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    assert!(ctx.take_errors().is_empty());
+    assert_eq!(raws.len(), 1);
+    assert!(raws[0].source_event_id.ends_with(":407"), "{raws:?}");
+
+    let (base, _) = seed_row(KEY);
+    let card = parse_single_show(
+        &fixture(&format!("scrapers/{KEY}/current-forthcoming.html")),
+        &Url::parse(&base).unwrap().join(SHOW).unwrap(),
+    )
+    .expect("a card");
+    insta::assert_json_snapshot!("artlogic_annely_juda_normalised", normalised(KEY, &[card]));
 }
 
 #[tokio::test]
