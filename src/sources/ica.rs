@@ -92,11 +92,7 @@ pub enum Section {
 
 impl Section {
     fn name(self) -> &'static str {
-        match self {
-            Section::Talks => "talks",
-            Section::Exhibitions => "exhibitions",
-            Section::Live => "live",
-        }
+        self.prefix().trim_matches('/')
     }
 
     fn prefix(self) -> &'static str {
