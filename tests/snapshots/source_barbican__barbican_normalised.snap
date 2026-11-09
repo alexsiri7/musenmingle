@@ -42,6 +42,7 @@ expression: out
       "listing_title": "Concrete and Clay: Archiving the Barbican",
       "price_text": null,
       "room": "Mezzanine",
+      "series": [],
       "starts": "2025-02-10T10:00:00Z",
       "subtitle": "Archiving the Barbican",
       "title": "Concrete and Clay",
@@ -85,6 +86,7 @@ expression: out
       "listing_title": "An Evening with Fran Lebowitz",
       "price_text": null,
       "room": "Barbican Hall",
+      "series": [],
       "starts": "2026-10-27T19:30:00Z",
       "subtitle": "Fane Presents",
       "title": "An Evening with Fran Lebowitz",
@@ -130,6 +132,10 @@ expression: out
       "listing_title": "Architecture on Stage: Walters and Cohen",
       "price_text": "£16.50 (£15 + £1.50 transaction fee)",
       "room": "Frobisher Auditorium 1",
+      "series": [
+        "open-city-documentary-festival-2026",
+        "architecture-on-stage"
+      ],
       "starts": "2026-10-22T18:00:00Z",
       "subtitle": "Architecture on Stage",
       "title": "Walters and Cohen",
@@ -175,6 +181,10 @@ expression: out
       "listing_title": "Architecture on Stage: Worofila",
       "price_text": "£16.50 (£15 + £1.50 transaction fee)",
       "room": "Frobisher Auditorium 1",
+      "series": [
+        "open-city-documentary-festival-2026",
+        "architecture-on-stage"
+      ],
       "starts": "2026-11-03T19:00:00Z",
       "subtitle": "Architecture on Stage",
       "title": "The 2026 Rick Mather Lecture: Worofila",
@@ -220,6 +230,7 @@ expression: out
       "listing_title": "Black British Book Festival 2026",
       "price_text": null,
       "room": "Barbican Centre",
+      "series": [],
       "starts": "2026-10-04T11:30:00Z",
       "subtitle": "Europe’s largest celebration of Black literature",
       "title": "Black British Book Festival 2026",
@@ -267,10 +278,203 @@ expression: out
       "listing_title": "Darbar: Two Gharanas, One Musician — Shahbaz Hussain (Talk)",
       "price_text": "£24 (£20 + £4 transaction fee)",
       "room": "Frobisher Auditorium 1",
+      "series": [
+        "darbar-festival-2026"
+      ],
       "starts": "2026-10-31T11:00:00Z",
       "subtitle": "Darbar Festival 2026",
       "title": "Two Gharanas, One Musician - Shahbaz Hussain (Talk)",
       "url": "https://www.barbican.org.uk/whats-on/2026/event/darbar-two-gharanas-one-musician-shahbaz-hussain-talk"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "double-bill-amelia-al-ballo-trouble-in-tahiti|2026-11-02|barbican",
+      "description": "Italian comedy meets American satire. Two marriages, two worlds — one unmissable evening. At first glance, Gian Carlo Menotti 's sparkling comic opera Amelia al ballo and Leonard Bernstein 's jazz-inflected Trouble in Tahiti could not be more different. Look closer, and they are in illuminating conversation. Both centre on compelling female protagonists whose desires are constrained by the marriages meant to sustain them, offering a revealing portrait of two Western cultures at a 20th-century crossroads. The UK premiere of Amelia al ballo follows the irrepressible Amelia as she outwits a suspicious husband and needy lover to attend the season's grandest ball. In Trouble in Tahiti, Dinah and Sam's seemingly perfect suburban life masks deep unhappiness, exposing the cracks beneath the American dream. Directed by Ashley Dean, this new double-bill production is set in the 1950s. Please explore the free digital programme.",
+      "ends_at": "2026-11-09T19:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/2026_Autumn_Season_digital%20assets_Opera_1920x1080px_no%20text.jpg?itok=uI30IV6d",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "30",
+        "min": "30"
+      },
+      "starts_at": "2026-11-02T19:00:00Z",
+      "tags": [
+        "classical-music",
+        "theatre-dance"
+      ],
+      "title": "Double Bill: Amelia al ballo & Trouble in Tahiti",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/double-bill-amelia-al-ballo-trouble-in-tahiti",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/double-bill-amelia-al-ballo-trouble-in-tahiti",
+    "payload": {
+      "art_forms": [
+        "classical-music",
+        "theatre-dance"
+      ],
+      "date_text": "Mon 2 — Mon 9 Nov 2026",
+      "description": "\n  <p><span>Italian comedy meets American satire. Two marriages, two worlds — one unmissable evening.</span></p>\n\n<p>At first glance, <strong>Gian Carlo Menotti</strong>'s sparkling comic opera <em><strong>Amelia al ballo</strong></em><strong> </strong>and <strong>Leonard Bernstein</strong>'s jazz-inflected <em><strong>Trouble in Tahiti</strong></em><strong> </strong>could not be more different. Look closer, and they are in illuminating conversation.</p><p>Both centre on compelling female protagonists whose desires are constrained by the marriages meant to sustain them, offering a revealing portrait of two Western cultures at a 20th-century crossroads.</p><p>The UK premiere of <em>Amelia al ballo</em> follows the irrepressible Amelia as she outwits a suspicious husband and needy lover to attend the season's grandest ball.&nbsp;</p><p>In <em>Trouble in Tahiti</em>, Dinah and Sam's seemingly perfect suburban life masks deep unhappiness, exposing the cracks beneath the American dream.&nbsp;</p><p>Directed by <strong>Ashley Dean</strong>, this new double-bill production is set in the 1950s.</p><p><a href=\"https://www.guildhall-programmes.co.uk/double-bill-2026\"><strong>Please explore the free digital programme.&nbsp;</strong></a></p>",
+      "ends": "2026-11-09T19:00:00Z",
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/2026_Autumn_Season_digital%20assets_Opera_1920x1080px_no%20text.jpg?itok=uI30IV6d",
+      "listing_title": "Double Bill: Amelia al ballo & Trouble in Tahiti",
+      "price_text": "£30",
+      "room": "Silk Street Theatre",
+      "series": [],
+      "starts": "2026-11-02T19:00:00Z",
+      "subtitle": "Amelia al ballo & Trouble in Tahiti",
+      "title": "Guildhall Opera Double Bill",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/double-bill-amelia-al-ballo-trouble-in-tahiti"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "efg-london-jazz-festival-sounds-of-diaspora|2026-11-13|barbican",
+      "description": "Celebrate the rich musical heritage of Trinidad and Tobago with Endurance Steel, the musicians who have shaped its legacy across the diaspora. Join us for a morning celebrating the rich musical heritage of Trinidad and Tobago and its enduring influence across the diaspora. Through a vibrant mixed-ensemble performance, the programme traces the journey of the steelpan from its Caribbean roots to its place on the world stage, showcasing a diverse repertoire that spans traditional and contemporary works. Performed by one of the UK's leading steel orchestras, the concert highlights the versatility, power and beauty of the national instrument of Trinidad and Tobago while honouring the generations of musicians who have shaped its legacy. Endurance Steel Orchestra is a South East London-based organisation dedicated to youth development, community engagement and musical excellence through the art of steelpan.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Sounds%20of%20Diaspora.jpg?itok=UrPR4TTt",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-13T11:30:00Z",
+      "tags": [
+        "contemporary-music",
+        "take-part"
+      ],
+      "title": "EFG London Jazz Festival: Sounds of the Diaspora",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/efg-london-jazz-festival-sounds-of-the-diaspora",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/efg-london-jazz-festival-sounds-of-the-diaspora",
+    "payload": {
+      "art_forms": [
+        "contemporary-music",
+        "take-part"
+      ],
+      "date_text": "Fri 13 Nov 2026, 11:30",
+      "description": "\n  <p><span>Celebrate the rich musical heritage of Trinidad and Tobago with&nbsp;<strong>Endurance Steel</strong>, the musicians who have shaped its legacy across the diaspora.&nbsp;</span></p>\n\n<p>Join us for a morning celebrating the rich musical heritage of Trinidad and Tobago and its enduring influence across the diaspora. Through a vibrant mixed-ensemble performance, the programme traces the journey of the steelpan from its Caribbean roots to its place on the world stage, showcasing a diverse repertoire that spans traditional and contemporary works.</p><p>Performed by one of the UK's leading steel orchestras, the concert highlights the versatility, power and beauty of the national instrument of Trinidad and Tobago while honouring the generations of musicians who have shaped its legacy.&nbsp;</p><p>Endurance Steel Orchestra is a South East London-based organisation dedicated to youth development, community engagement and musical excellence through the art of steelpan.<br>&nbsp;</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-06/Sounds%20of%20Diaspora.jpg?itok=UrPR4TTt",
+      "listing_title": "EFG London Jazz Festival: Sounds of the Diaspora",
+      "price_text": null,
+      "room": "Hall",
+      "series": [
+        "efg-london-jazz-festival"
+      ],
+      "starts": "2026-11-13T11:30:00Z",
+      "subtitle": "Schools concert",
+      "title": "EFG London Jazz Festival: Sounds of the Diaspora",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/efg-london-jazz-festival-sounds-of-the-diaspora"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ensemble-pygmalion-mozarts-great-mass-in-c-minor|2026-11-09|barbican",
+      "description": "Pygmalion celebrates 20 years of impactful music-making in the highest echelons of period performance with Mozart’s glorious Great Mass in C minor and more. In 1782, Mozart took his new wife Constanze home to meet his father. What better way to seek his approval than to write a setting of the Mass, with its angelic soprano solos performed by Constanze herself? Tonight soprano Sabine Devieilhe follows in her footsteps, one of a quartet of first-rate soloists. Ensemble Pygmalion and their conductor Raphaël Pichon are renowned for their intelligent and creative programming. Tonight they preface Mozart’s masterpiece with music by a select handful of composers who, like Mozart, studied and embraced Baroque traditions and techniques. From Schubert’s intricate counterpoint for four-part women’s choir to the calm, prayerful harmonies of Bruckner, hear how each new generation takes the sounds of the past and weaves them into new music that’s somehow both fresh and familiar.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-11/Rapha%C3%ABl_Pichon_Fred_Mortagne.jpg?itok=N0cllI2w",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "24",
+        "min": "24"
+      },
+      "starts_at": "2026-11-09T20:00:00Z",
+      "tags": [
+        "classical-music"
+      ],
+      "title": "Ensemble Pygmalion: Mozart's Great Mass in C minor",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/ensemble-pygmalion-mozarts-great-mass-in-c-minor",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/ensemble-pygmalion-mozarts-great-mass-in-c-minor",
+    "payload": {
+      "art_forms": [
+        "classical-music"
+      ],
+      "date_text": "Mon 9 Nov 2026, 20:00",
+      "description": "\n  <p dir=\"ltr\"><span>Pygmalion celebrates 20 years of impactful music-making in the highest echelons of period performance with Mozart’s glorious Great Mass in C minor and more.</span></p>\n\n<p dir=\"ltr\"><span>In 1782, Mozart took his new wife Constanze home to meet his father. What better way to seek his approval than to write a setting of the Mass, with its angelic soprano solos performed by Constanze herself? Tonight soprano Sabine Devieilhe follows in her footsteps, one of a quartet of first-rate soloists.&nbsp;</span></p><p dir=\"ltr\"><span><strong>Ensemble Pygmalion</strong> and their conductor<strong> Raphaël Pichon</strong> are renowned for their intelligent and creative programming. Tonight they preface Mozart’s masterpiece with music by a select handful of composers who, like Mozart, studied and embraced Baroque traditions and techniques. From Schubert’s intricate counterpoint for four-part women’s choir to the calm, prayerful harmonies of Bruckner, hear how each new generation takes the sounds of the past and weaves them into new music that’s somehow both fresh and familiar.</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-11/Rapha%C3%ABl_Pichon_Fred_Mortagne.jpg?itok=N0cllI2w",
+      "listing_title": "Ensemble Pygmalion: Mozart's Great Mass in C minor",
+      "price_text": "From £24 (£20 + £4 transaction fee)",
+      "room": "Hall",
+      "series": [
+        "international-and-guest-ensembles",
+        "barbican-presents"
+      ],
+      "starts": "2026-11-09T20:00:00Z",
+      "subtitle": null,
+      "title": "Ensemble Pygmalion: Mozart's Great Mass in C minor",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/ensemble-pygmalion-mozarts-great-mass-in-c-minor"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "jaga-jazzist|2026-11-19|barbican",
+      "description": "The Norwegian eight-piece bring four decades of restless experimentation to the EFG London Jazz Festival, where jazz, post-rock, psychedelia and electronic music converge. Founded in Norway in 1994 by the Horntveth siblings, Jaga Jazzist have spent four decades resisting genre orthodoxy. Led compositionally by Lars Horntveth, the eight-piece has developed a language spanning jazz, electronica, post-rock, psychedelia and cinematic composition, while retaining a fundamentally collaborative approach. Their breakthrough came with A Livingroom Hush, reissued internationally by Ninja Tune in 2002, followed by What We Must, One-Armed Bandit and Starfire. In 2020, Pyramid marked their debut on Flying Lotus’ Brainfeeder label, distilling their experimental practice into four long-form compositions. Their significance lies in this refusal to settle: each record reconsiders what an ensemble can be.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/JJ%20Atom%20Brussels%20liten%20%281%29.jpg?h=308ef9ea&itok=5nMkpDAr",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "29",
+        "min": "29"
+      },
+      "starts_at": "2026-11-19T19:30:00Z",
+      "tags": [
+        "contemporary-music",
+        "jazz"
+      ],
+      "title": "Jaga Jazzist",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/jaga-jazzist",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/jaga-jazzist",
+    "payload": {
+      "art_forms": [
+        "contemporary-music"
+      ],
+      "date_text": "Thu 19 Nov 2026, 19:30",
+      "description": "\n  <p>The Norwegian eight-piece bring four decades of restless experimentation to the EFG London Jazz Festival, where jazz, post-rock, psychedelia and electronic music converge.</p>\n\n<p>Founded in Norway in 1994 by the Horntveth siblings, Jaga Jazzist have spent four decades resisting genre orthodoxy. Led compositionally by <strong>Lars Horntveth</strong>, the eight-piece has developed a language spanning jazz, electronica, post-rock, psychedelia and cinematic composition, while retaining a fundamentally collaborative approach.</p><p>Their breakthrough came with <em>A Livingroom Hush</em>, reissued internationally by Ninja Tune in 2002, followed by <em>What We Must</em>, <em>One-Armed Bandit </em>and <em>Starfire</em>. In 2020, <em>Pyramid</em> marked their debut on Flying Lotus’ Brainfeeder label, distilling their experimental practice into four long-form compositions. Their significance lies in this refusal to settle: each record reconsiders what an ensemble can be.</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-08/JJ%20Atom%20Brussels%20liten%20%281%29.jpg?h=308ef9ea&itok=5nMkpDAr",
+      "listing_title": "Jaga Jazzist",
+      "price_text": "From £29 (£25 + £4 transaction fee)",
+      "room": "Milton Court",
+      "series": [
+        "young-barbican-music-flash-sale",
+        "jazz",
+        "efg-london-jazz-festival"
+      ],
+      "starts": "2026-11-19T19:30:00Z",
+      "subtitle": "Part of EFG London Jazz Festival",
+      "title": "Jaga Jazzist",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/jaga-jazzist"
     }
   },
   {
@@ -310,10 +514,63 @@ expression: out
       "listing_title": "Lawrence Abu Hamdan: Zifzafa",
       "price_text": "Free",
       "room": "The Pit",
+      "series": [
+        "lawrence-abu-hamdan-repercussions"
+      ],
       "starts": "2026-09-23T11:00:00Z",
       "subtitle": "Lawrence Abu Hamdan: Repercussions",
       "title": "Zifzafa",
       "url": "https://www.barbican.org.uk/whats-on/2026/event/lawrence-abu-hamdan-zifzafa"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "london-symphony-orchestra-soweto-kinch|2026-11-19|barbican",
+      "description": "The saxophonist, rapper and composer Soweto Kinch revisits the trilogy of works he has created with LSO since 2019, with music from The Black Peril, White Juju and Soundtrack to the Apocalypse. Each work was inspired by a panoply of events, from commemorating the race riots of 1919 to the intensely fought culture wars in 2020 and lockdown, and the emergence of an apocalyptic, post-truth world. Covering Past, Present and Future they break beyond the boundaries of genre to explore these resonant themes. The layered storytelling, lyricism and musicality deliberately upends conventions – its often challenging messages are even more salient today. In Soweto’s words, ‘I’ve been on an intense journey, playing with and subverting tropes, gaining confidence in my own compositional voice but also discovering new approaches to storytelling with each commission.’ The results are this mix of cerebral and guttural, danceable creations – multi-platform works which should ‘assail the senses, but enrich the soul’.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-03/classical_2026_sowetokinch_image.jpg?itok=kN028rya",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "22",
+        "min": "22"
+      },
+      "starts_at": "2026-11-19T19:30:00Z",
+      "tags": [
+        "classical-music",
+        "contemporary-music"
+      ],
+      "title": "London Symphony Orchestra/Soweto Kinch",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/london-symphony-orchestrasoweto-kinch",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/london-symphony-orchestrasoweto-kinch",
+    "payload": {
+      "art_forms": [
+        "classical-music",
+        "contemporary-music"
+      ],
+      "date_text": "Thu 19 Nov 2026, 19:30",
+      "description": "\n  <p><span lang=\"EN-GB\">The saxophonist, rapper and composer Soweto Kinch revisits the trilogy of works he has created with LSO since 2019, with music from </span><em><span lang=\"EN-GB\">The Black Peril</span></em><span lang=\"EN-GB\">, </span><em><span lang=\"EN-GB\">White Juju</span></em><span lang=\"EN-GB\"> and </span><em><span lang=\"EN-GB\">Soundtrack to the Apocalypse</span></em><span lang=\"EN-GB\">. </span><span>&nbsp;</span></p>\n\n<p><span lang=\"EN-GB\">Each work was inspired by a panoply of events, from commemorating the race riots of 1919 to the intensely fought culture wars in 2020 and lockdown, and the emergence of an apocalyptic, post-truth world. Covering Past, Present and Future</span><em><span lang=\"EN-GB\"> </span></em><span lang=\"EN-GB\">they break beyond the boundaries of genre to explore these resonant themes. The layered storytelling, lyricism and musicality deliberately upends conventions – its often challenging messages are even more salient today. </span><span>&nbsp;</span></p><p><span lang=\"EN-GB\">In Soweto’s words, ‘I’ve been on an intense journey, playing with and subverting tropes, gaining confidence in my own compositional voice but also discovering new approaches to storytelling with each commission.’ The results are this mix of cerebral and guttural, danceable creations – multi-platform works which should ‘assail the senses, but enrich the soul’.</span><span>&nbsp;</span></p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-03/classical_2026_sowetokinch_image.jpg?itok=kN028rya",
+      "listing_title": "London Symphony Orchestra/Soweto Kinch",
+      "price_text": "From £22 (£18 + £4 transaction fee)",
+      "room": "Hall",
+      "series": [
+        "efg-london-jazz-festival",
+        "london-symphony-orchestra-multibuy-202627",
+        "london-symphony-orchestra"
+      ],
+      "starts": "2026-11-19T19:30:00Z",
+      "subtitle": "Part of EFG London Jazz Festival",
+      "title": "London Symphony Orchestra/Soweto Kinch",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/london-symphony-orchestrasoweto-kinch"
     }
   },
   {
@@ -330,6 +587,9 @@ expression: out
       "listing_title": "Robert Ryman: A New Way of Seeing – Courtauld Symposium",
       "price_text": "Free",
       "room": "The Courtauld at Vernon Square, Lecture Theatre 2",
+      "series": [
+        "robert-ryman-talks-and-events"
+      ],
       "starts": "2026-11-20T15:00:00Z",
       "subtitle": "Courtauld Symposium",
       "title": "Robert Ryman: A New Way of Seeing",
@@ -350,6 +610,9 @@ expression: out
       "listing_title": null,
       "price_text": "£20.50 (£19 + £1.50 transaction fee)",
       "room": "Art Gallery",
+      "series": [
+        "robert-ryman-talks-and-events"
+      ],
       "starts": "2026-11-06T18:30:00Z",
       "subtitle": "Robert Ryman: The Real Thing",
       "title": "Exhibition Tour with Curatorial Assistant Amber Li",
@@ -393,6 +656,9 @@ expression: out
       "listing_title": "Robert Ryman: The Real Thing",
       "price_text": "£20.50 (£19 + £1.50 transaction fee)",
       "room": "Art Gallery",
+      "series": [
+        "robert-ryman-talks-and-events"
+      ],
       "starts": "2026-10-08T09:00:00Z",
       "subtitle": "The Real Thing",
       "title": "Robert Ryman",
@@ -400,7 +666,31 @@ expression: out
     }
   },
   {
-    "event": null,
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "ryman-in-rhythm-sarathy-korwar|2026-11-18|barbican",
+      "description": "Join us for this intimate performance in the gallery by percussionist Sarathy Korwar as he responds to the work of Robert Ryman. Robert Ryman’s approach to painting was shaped by his early love of jazz. After moving to New York to pursue a career as a saxophonist, he became a painter, but continued to listen to music as he worked. He saw painting as a form of improvisation, with each brushstroke building on the last like successive notes in jazz. Sarathy Korwar is one of the UK’s most distinctive jazz artists, fusing jazz, electronics, Indian folk and classical influences. His work has earned two GRAMMY nominations, an AIM Award and MOJO Jazz Album of the Year. He has collaborated with Anoushka Shankar, Kamasi Washington, Shabaka Hutchings and the Metropole Orkest, and performed at Sydney Opera House, North Sea Jazz Festival and London Jazz Festival.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-09/Sarathy_8%20by%20Keerthana%20Kunnath%20%281%29.png?h=74ba9867&itok=lJodCcx5",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "20.50",
+        "min": "20.50"
+      },
+      "starts_at": "2026-11-18T19:15:00Z",
+      "tags": [
+        "art-design",
+        "contemporary-music"
+      ],
+      "title": "Ryman in Rhythm: Sarathy Korwar",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar",
+      "venue_name": "Barbican Centre"
+    },
     "id": "2026/ryman-in-rhythm-sarathy-korwar",
     "payload": {
       "art_forms": [
@@ -414,10 +704,59 @@ expression: out
       "listing_title": "Ryman in Rhythm: Sarathy Korwar",
       "price_text": "£20.50 (£19 + £1.50 transaction fee)",
       "room": "Art Gallery",
+      "series": [
+        "efg-london-jazz-festival",
+        "ryman-in-rhythm",
+        "robert-ryman-talks-and-events"
+      ],
       "starts": "2026-11-18T19:15:00Z",
       "subtitle": "Ryman in Rhythm",
       "title": "Sarathy Korwar",
       "url": "https://www.barbican.org.uk/whats-on/2026/event/ryman-in-rhythm-sarathy-korwar"
+    }
+  },
+  {
+    "event": {
+      "address": "Silk Street, London EC2Y 8DS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "squid-factory-floor|2026-12-05|barbican",
+      "description": "The English art rock quintet makes their Hall debut in celebration of Rough Trade's 50th Anniversary and in commemoration of their first decade as a band. Formed in Brighton in 2016, the quintet of Louis Borlase, Arthur Leadbetter, Laurie Nankivell, Anton Pearson and Ollie Judge have spent the past decade cementing their reputation as one of the most inventive bands in art rock, known for their ever evolving performances. Praised by The Quietus as ‘the most exciting and volatile the group has ever sounded’, Squid’s latest album Cowards is an exploration of evil; nine stories whose protagonists reckon with cults, charisma and apathy. The album ranges over textures of folk, kosmische, psychedelia, jazz and electronics, extending from an acclaimed catalogue of chart-topping hits that marked a new era of experimentation in British guitar music. The London-based electronic group Factory Floor opens the show.",
+      "ends_at": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/SQUID%20by%20Harrison%20Fishman%20%282024%29%209%20%284x3%29%20%281%29.png?itok=vqWI_xnm",
+      "lat": 51.5201,
+      "lng": -0.0955,
+      "price": {
+        "currency": "GBP",
+        "is_free": false,
+        "max": "26.50",
+        "min": "26.50"
+      },
+      "starts_at": "2026-12-05T20:00:00Z",
+      "tags": [
+        "contemporary-music"
+      ],
+      "title": "Squid + Factory Floor",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/squid-factory-floor",
+      "venue_name": "Barbican Centre"
+    },
+    "id": "2026/squid-factory-floor",
+    "payload": {
+      "art_forms": [
+        "contemporary-music"
+      ],
+      "date_text": "Sat 5 Dec 2026, 20:00",
+      "description": "\n  <p><span>The English art rock quintet makes their Hall debut</span> in celebration of Rough Trade's 50th Anniversary and in commemoration of their first decade as a band.</p>\n\n<p><span>Formed in Brighton in 2016, the quintet of Louis Borlase, Arthur Leadbetter, Laurie Nankivell, Anton Pearson and Ollie Judge have spent the past decade cementing their reputation as one of the most inventive bands in art rock, known for their ever evolving performances.&nbsp;</span></p><p>Praised by The Quietus as ‘the most exciting and volatile the group has ever sounded’, Squid’s latest album <em>Cowards</em> is an exploration of evil; nine stories whose protagonists reckon with cults, charisma and apathy. The album ranges over textures of folk, kosmische, psychedelia, jazz and electronics, extending from an acclaimed catalogue of chart-topping hits that marked a new era of experimentation in British guitar music.</p><p>The London-based electronic group <strong>Factory Floor</strong> opens the show.</p>",
+      "ends": null,
+      "image_url": "https://www.barbican.org.uk/sites/default/files/styles/event_listing_small_jpg/public/images/2026-07/SQUID%20by%20Harrison%20Fishman%20%282024%29%209%20%284x3%29%20%281%29.png?itok=vqWI_xnm",
+      "listing_title": "Squid + Factory Floor",
+      "price_text": "From £26.50 (£22.50 + £4 transaction fee)",
+      "room": "Hall",
+      "series": [],
+      "starts": "2026-12-05T20:00:00Z",
+      "subtitle": "Rough Trade 50",
+      "title": "Squid + Factory Floor",
+      "url": "https://www.barbican.org.uk/whats-on/2026/event/squid-factory-floor"
     }
   },
   {
@@ -436,6 +775,9 @@ expression: out
       "listing_title": "Young Barbican Pick & Mix: Signal Decay (15)",
       "price_text": null,
       "room": "Cinema 3",
+      "series": [
+        "young-barbican-events"
+      ],
       "starts": "2026-12-10T18:30:00Z",
       "subtitle": "Young Barbican Events",
       "title": "Pick & Mix: Signal Decay (15)",
@@ -479,6 +821,7 @@ expression: out
       "listing_title": "Yuko Mohri: In Concert",
       "price_text": "Free",
       "room": "The Curve",
+      "series": [],
       "starts": "2026-10-01T09:00:00Z",
       "subtitle": null,
       "title": "Yuko Mohri: In Concert",
@@ -499,6 +842,9 @@ expression: out
       "listing_title": null,
       "price_text": "£20.50 (£19 + £1.50 transaction fee)",
       "room": "Art Gallery",
+      "series": [
+        "robert-ryman-talks-and-events"
+      ],
       "starts": "2027-01-15T18:30:00Z",
       "subtitle": "Robert Ryman: The Real Thing",
       "title": "Exhibition Tour with Curatorial Assistant Amber Li",

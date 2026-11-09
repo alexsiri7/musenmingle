@@ -4,10 +4,10 @@
 //!   disallows only Drupal internals (`/core/`, `/admin/`, `/search`,
 //!   `/taxonomy/`, …); `/whats-on/…` is allowed and there is no Crawl-delay.
 //! * There is no JSON-LD at all, so CSS selectors are used. `/whats-on` itself
-//!   is a day-by-day listing dominated by cinema, so the two art-form
-//!   listings that hold in-scope events are crawled instead: art & design and
-//!   talks & events. ("Take part" adds only club nights and gigs beyond what
-//!   talks & events lists.) Each is a Drupal view paginated with a
+//!   is a day-by-day listing dominated by cinema, so the art-form listings
+//!   that hold in-scope events are crawled instead: art & design, talks &
+//!   events, classical music and contemporary music. ("Take part" adds only
+//!   club nights beyond what those list.) Each is a Drupal view paginated with a
 //!   `a[rel=next]` "Load More" link (`?page=1`, `?page=2`, …). Cards are
 //!   `article.listing--event`; only `/whats-on/<year>/event/<slug>` links are
 //!   kept (series pages are hubs). The same slug can exist under two years
@@ -27,10 +27,16 @@
 //!   filed under talks); talks & events plus take part → community (Young
 //!   Barbican, festivals); talks & events → talk (including talks also filed
 //!   under music); art & design spanning more than one London day →
-//!   exhibition. Anything else is skipped: single-slot art & design items are
-//!   concerts, performances, gallery tours and partner symposia, and take
-//!   part on its own or the other art forms are club nights, gigs and shows.
-//!   `qa_scope` tells the scraper check the same.
+//!   exhibition; classical or contemporary music → music (concerts, opera,
+//!   gigs, including ones also filed under art & design or take part).
+//!   Anything else is skipped: single-slot art & design items are
+//!   performances, gallery tours and partner symposia, and take part on its
+//!   own or the other art forms are club nights, shows and tours. `qa_scope`
+//!   tells the scraper check the same.
+//! * The art forms are the event's tags, so `crate::music` gives
+//!   `classical-music` the `classical` subtag and `contemporary-music` the
+//!   `contemporary` one. The Barbican's own "Jazz" series (a
+//!   `/whats-on/series/jazz` tag button) adds the tag `jazz`.
 //! * Price is the first ticket-price row only ("Standard £20.50 (£19 + £1.50
 //!   transaction fee)" → £20.50, or a bare "Free"); the other rows are
 //!   member and concession prices ("Free entry", "Free"). Pages without a
@@ -46,6 +52,7 @@
 //!   wrong venue.
 
 use std::collections::BTreeMap;
+use std::time::Duration;
 
 use async_trait::async_trait;
 use scraper::{ElementRef, Html, Selector};
@@ -53,6 +60,7 @@ use serde_json::{Value, json};
 use url::Url;
 
 use super::{Source, SourceError};
+use crate::config::DEFAULT_RATE_LIMIT_MS;
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
 use crate::normalise::{
@@ -61,14 +69,22 @@ use crate::normalise::{
 };
 
 pub const KEY: &str = "barbican";
-/// Upper bound on detail pages fetched per run (≈ 115 s with the listing
-/// pages at 1 req / 2 s).
-/// Listings are crawled in the order below, so exhibitions come first and
-/// only the furthest-out talks can be cut.
-pub const MAX_DETAIL_PAGES: usize = 50;
+/// Upper bound on detail pages each art-form listing adds to a run; a
+/// listing stops paginating once it has added this many. Events already
+/// added by an earlier listing don't count, and each listing keeps its
+/// soonest events, so the music listings can't crowd out exhibitions or
+/// talks, nor the other way round.
+pub const MAX_DETAIL_PAGES_PER_LISTING: usize = 30;
 /// Upper bound on pages fetched per art-form listing.
 pub const MAX_LISTING_PAGES: usize = 5;
-const LISTING_PATHS: &[&str] = &["/whats-on/art-design", "/whats-on/talks-events"];
+const LISTING_PATHS: &[&str] = &[
+    "/whats-on/art-design",
+    "/whats-on/talks-events",
+    "/whats-on/classical-music",
+    "/whats-on/contemporary-music",
+];
+/// The Barbican's "Jazz" series (`/whats-on/series/jazz`).
+const JAZZ_SERIES: &str = "jazz";
 const SITE: &str = "https://www.barbican.org.uk";
 const VENUE_NAME: &str = "Barbican Centre";
 const VENUE_ADDRESS: &str = "Silk Street, London EC2Y 8DS";
@@ -209,6 +225,38 @@ fn art_forms(doc: &Html) -> Vec<String> {
     out
 }
 
+/// Series slugs of the page's tag buttons (`/whats-on/series/<slug>` and
+/// `/whats-on/<year>/series/<slug>` links).
+fn series(doc: &Html) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    for a in doc.select(&selector(".tag-buttons a.tag-button[href]")) {
+        let Some(rest) = a
+            .value()
+            .attr("href")
+            .and_then(|h| h.strip_prefix("/whats-on/"))
+        else {
+            continue;
+        };
+        let rest = match rest.split_once('/') {
+            Some((year, rest)) if year.len() == 4 && year.chars().all(|c| c.is_ascii_digit()) => {
+                rest
+            }
+            _ => rest,
+        };
+        let Some(slug) = rest.strip_prefix("series/") else {
+            continue;
+        };
+        let valid = !slug.is_empty()
+            && slug
+                .chars()
+                .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-');
+        if valid && !out.iter().any(|s| s == slug) {
+            out.push(slug.to_string());
+        }
+    }
+    out
+}
+
 /// The first ticket-price row: its value, or its title when the value is
 /// empty (a bare "Free" row).
 fn price_text(doc: &Html) -> Option<String> {
@@ -276,6 +324,7 @@ pub fn parse_detail(
             "ends": times.get(1..).and_then(<[_]>::last),
             "room": first_text(".event-byline__venue"),
             "art_forms": art_forms(&doc),
+            "series": series(&doc),
             "price_text": price_text(&doc),
             "description": description_html(&doc),
             "image_url": image_url,
@@ -294,6 +343,8 @@ pub fn category(art_forms: &[&str], multi_day: bool) -> Option<Category> {
         Some(Category::Talk)
     } else if art_forms.contains(&"art-design") && multi_day {
         Some(Category::Exhibition)
+    } else if art_forms.contains(&"classical-music") || art_forms.contains(&"contemporary-music") {
+        Some(Category::Music)
     } else {
         None
     }
@@ -337,6 +388,14 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     let Some(category) = category(&forms, multi_day) else {
         return Ok(None);
     };
+    let in_jazz_series = payload
+        .get("series")
+        .and_then(Value::as_array)
+        .is_some_and(|a| a.iter().any(|s| s.as_str() == Some(JAZZ_SERIES)));
+    let mut tags: Vec<String> = forms.iter().map(|f| f.to_string()).collect();
+    if in_jazz_series {
+        tags.push("jazz".to_string());
+    }
     let description = clean_description(payload.get("description").and_then(Value::as_str));
     let price = match payload.get("price_text").and_then(Value::as_str) {
         Some(t) => parse_price(t.split('(').next().unwrap_or(t)),
@@ -369,7 +428,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
             .and_then(Value::as_str)
             .map(str::to_string),
         category,
-        tags: forms.iter().map(|f| f.to_string()).collect(),
+        tags,
     }))
 }
 
@@ -388,11 +447,13 @@ impl Source for Barbican {
                 .base_url
                 .join(listing)
                 .map_err(|e| SourceError::Config(e.to_string()))?;
+            let mut added = 0;
             for _ in 0..MAX_LISTING_PAGES {
                 let page = parse_listing(&ctx.get_text(&url).await?);
                 for path in page.event_paths {
-                    if !paths.contains(&path) {
+                    if added < MAX_DETAIL_PAGES_PER_LISTING && !paths.contains(&path) {
                         paths.push(path);
+                        added += 1;
                     }
                 }
                 for (path, image) in page.image_urls {
@@ -401,7 +462,10 @@ impl Source for Barbican {
                 for (path, title) in page.titles {
                     titles.entry(path).or_insert(title);
                 }
-                let Some(next) = page.next_page else {
+                let Some(next) = page
+                    .next_page
+                    .filter(|_| added < MAX_DETAIL_PAGES_PER_LISTING)
+                else {
                     break;
                 };
                 url = url
@@ -415,7 +479,7 @@ impl Source for Barbican {
             ));
         }
         let mut out = Vec::new();
-        for path in paths.iter().take(MAX_DETAIL_PAGES) {
+        for path in &paths {
             let url = match self.base_url.join(path) {
                 Ok(u) => u,
                 Err(e) => {
@@ -443,14 +507,25 @@ impl Source for Barbican {
         normalise_payload(&raw.payload)
     }
 
+    fn fetch_timeout(&self) -> Option<Duration> {
+        // The default rate limit per request (robots.txt, listing pages,
+        // detail pages), plus a margin.
+        let requests = 1 + LISTING_PATHS.len() * (MAX_LISTING_PAGES + MAX_DETAIL_PAGES_PER_LISTING);
+        Some(
+            Duration::from_millis(DEFAULT_RATE_LIMIT_MS * requests as u64)
+                + Duration::from_secs(60),
+        )
+    }
+
     fn qa_scope(&self) -> Option<&'static str> {
         Some(
-            "Only Talks & events (except anything also filed under Cinema) and \
-             Art & design exhibitions running over more than one day. \
-             Single-date Art & design items (concerts, gigs and performances, \
-             including ones also tagged Contemporary music, gallery tours, \
-             late openings, and symposia or study days held with a partner \
-             institution) are left out on purpose.",
+            "Only Talks & events, Art & design exhibitions running over more \
+             than one day, and Classical music and Contemporary music \
+             (concerts, opera and gigs), except anything also filed under \
+             Cinema. Single-date Art & design items not filed under music \
+             (performances, gallery tours, late openings, and symposia or \
+             study days held with a partner institution), Take part club \
+             nights, theatre and dance, and tours are left out on purpose.",
         )
     }
 }
@@ -595,8 +670,10 @@ mod tests {
             "more than one day",
             "Cinema",
             "Single-date",
+            "Classical music",
             "Contemporary music",
             "symposia",
+            "club nights",
             "left out on purpose",
         ] {
             assert!(scope.contains(words), "{words}");
@@ -613,15 +690,75 @@ mod tests {
             category(&["talks-events", "take-part", "cinema"], false),
             None
         );
-        assert_eq!(category(&["contemporary-music", "take-part"], false), None);
+        assert_eq!(
+            category(&["contemporary-music", "take-part"], false),
+            Some(Category::Music)
+        );
+        assert_eq!(category(&["take-part"], false), None);
         assert_eq!(
             category(&["classical-music", "talks-events"], false),
             Some(Category::Talk)
         );
+        assert_eq!(category(&["classical-music"], false), Some(Category::Music));
+        assert_eq!(
+            category(&["classical-music", "theatre-dance"], false),
+            Some(Category::Music)
+        );
+        assert_eq!(
+            category(&["contemporary-music"], true),
+            Some(Category::Music)
+        );
+        assert_eq!(category(&["contemporary-music", "cinema"], false), None);
         assert_eq!(category(&["art-design"], true), Some(Category::Exhibition));
         assert_eq!(category(&["art-design"], false), None);
-        assert_eq!(category(&["art-design", "contemporary-music"], false), None);
+        assert_eq!(
+            category(&["art-design", "contemporary-music"], false),
+            Some(Category::Music)
+        );
+        assert_eq!(
+            category(&["art-design", "classical-music"], true),
+            Some(Category::Exhibition)
+        );
         assert_eq!(category(&["cinema"], true), None);
+        assert_eq!(category(&["theatre-dance"], false), None);
+    }
+
+    #[test]
+    fn music_gets_its_subtags_from_the_art_forms_and_the_jazz_series() {
+        let subtags = |forms: Value, series: Value| {
+            let event = normalise_payload(&json!({
+                "title": "A concert",
+                "starts": "2026-11-20T19:30:00Z",
+                "art_forms": forms,
+                "series": series,
+            }))
+            .unwrap()
+            .unwrap();
+            assert_eq!(event.category, Category::Music);
+            crate::music::tags_for(event.category.as_str(), &event.tags, &event.title)
+        };
+        assert_eq!(
+            subtags(json!(["classical-music"]), json!(["barbican-presents"])),
+            ["classical"]
+        );
+        assert_eq!(
+            subtags(json!(["contemporary-music"]), json!([])),
+            ["contemporary"]
+        );
+        assert_eq!(
+            subtags(
+                json!(["contemporary-music"]),
+                json!(["young-barbican-music-flash-sale", "jazz"])
+            ),
+            ["contemporary", "jazz"]
+        );
+        assert_eq!(
+            subtags(
+                json!(["classical-music", "contemporary-music"]),
+                json!(["efg-london-jazz-festival"])
+            ),
+            ["classical", "contemporary"]
+        );
     }
 
     #[test]
