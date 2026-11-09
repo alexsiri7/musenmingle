@@ -539,8 +539,7 @@ small credited thumbnail, and send people to the venue.
   source, and the ingest runner's `repo::enforce_content_policy` clears data
   already stored if a flag is turned off. Sources whose API or site terms
   restrict reuse (Ticketmaster, Serpentine Galleries, the 606 Club and
-  others) are facts + link only; each seed migration's `policy_note` says
-  why.
+  others) are facts + link only; each source's `policy_note` says why.
 - **Excerpts**: every stored description is cut to ≤ 300 characters at a
   sentence (else word) boundary with an ellipsis (`normalise::excerpt`);
   pages say "An excerpt. Read more on <venue>". The same cut applies to
