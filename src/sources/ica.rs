@@ -1,14 +1,16 @@
-//! ICA (Institute of Contemporary Arts, The Mall, SW1) — talks, events and
-//! exhibitions from the site's server-rendered programme listings.
+//! ICA (Institute of Contemporary Arts, The Mall, SW1) — talks, events,
+//! exhibitions and concerts from the site's server-rendered programme
+//! listings.
 //!
 //! * robots.txt (checked 2026-09-27, saved as a fixture) disallows only
 //!   `/views/`, `/open-records-generator/` and dev paths, so the listings
 //!   and detail pages are allowed.
-//! * No JSON-LD at all, so CSS: two listings, `/talks` and `/exhibitions`
-//!   (a `div.category-section` per tab, `div.item` cards with `div.title`,
-//!   `div.date`, `div.description` and an `img`). `/upcoming` and `/live`
-//!   are not read: they are mostly film screenings and concerts, which are
-//!   out of scope.
+//! * No JSON-LD at all, so CSS: three listings, `/talks`, `/exhibitions`
+//!   and `/live` (a `div.category-section` per tab, `div.item` cards with
+//!   `div.title`, `div.date`, `div.description` and an `img`). `/live`'s
+//!   series tabs (`#unsound-london`) repeat cards from `#all-events`; a
+//!   card is kept once. `/upcoming` is not read: a daily mix of films and
+//!   the other listings.
 //! * On `/talks`, the `#residencies` and `#youth-programme` tabs repeat
 //!   cards from `#all-events`; those cards are participant programmes
 //!   (residencies, the young artists' course), not public events, and are
@@ -20,7 +22,10 @@
 //!   none for an open "From" run); runs longer than [`MAX_RANGE_DAYS`] are
 //!   skipped.
 //! * A single day has no time on the listing, so its detail page is read
-//!   (at most [`MAX_DETAILS`] a run): `.performance-list .performance`
+//!   (at most [`MAX_DETAILS`] a run for `/talks` and `/exhibitions`, over
+//!   the cap an error; [`MAX_LIVE_DETAILS`] for `/live`, whose later cards,
+//!   the furthest-out concerts, are left out until they come nearer):
+//!   `.performance-list .performance`
 //!   gives "Thu, 01 Oct 2026" + "07:00 pm", timed in London wall clock. A
 //!   detail page with no performance list at all (an untimed day such as
 //!   the Makers Market, #321) makes the day all-day; one whose performances
@@ -30,9 +35,19 @@
 //! * Categories: cards in the `/exhibitions` `#exhibitions` tab →
 //!   exhibition. Everything else by title: film screenings ("Artist's Film
 //!   Picks", "Film & Video") and members-only events (previews, curator
-//!   tours) are skipped; book launches → talk; otherwise the title's
-//!   keywords decide and anything else (performances) is community.
-//! * Price: the detail page's `#price-range` text when it names an amount.
+//!   tours) are skipped; book launches → talk; other `/live` cards → music
+//!   (#209 option (b): the ICA's concerts are the 'arty' end); otherwise
+//!   the title's keywords decide and anything else (performances) is
+//!   community. A concert's subtags come from its title (`crate::music`)
+//!   and the festival its title or card description names
+//!   ([`SERIES_TAGS`]: "EFG London Jazz Festival presents …" is jazz,
+//!   Unsound experimental), `contemporary` when neither gives one. The description's other prose is not matched: its genre
+//!   words are often metaphors ("a mutant orchestra" for a rock band).
+//! * Price: the first line of the detail page's `#price-range`, up to any
+//!   "(" and without its fee and levy parts, when it names an amount
+//!   ("£26.50 (including DICE fees + £1.50 venue levy)" is £26.50, "£17.50 /
+//!   £25 + DICE fees + £1.50 venue levy" £17.50–£25; later lines are
+//!   cloakroom notes).
 
 use std::collections::HashSet;
 
@@ -48,7 +63,7 @@ use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{
     clean_description, clean_text, dedupe_key, london_date, london_to_utc, map_category,
-    parse_price, words,
+    padded_words, parse_price, words,
 };
 
 pub const KEY: &str = "ica";
@@ -56,8 +71,12 @@ pub const KEY: &str = "ica";
 pub const MAX_RANGE_DAYS: i64 = 366;
 /// Detail pages read per run (single-day events only).
 pub const MAX_DETAILS: usize = 20;
+/// Detail pages read per run for `/live` single days (a failed read is an
+/// error and does not count); later cards are left out, not errors.
+pub const MAX_LIVE_DETAILS: usize = 45;
 pub const TALKS_PATH: &str = "/talks";
 pub const EXHIBITIONS_PATH: &str = "/exhibitions";
+pub const LIVE_PATH: &str = "/live";
 const VENUE_NAME: &str = "ICA";
 const VENUE_ADDRESS: &str = "The Mall, London SW1Y 5AH";
 /// `/talks` tabs whose cards are participant programmes, not events.
@@ -68,13 +87,19 @@ const PROGRAMME_TABS: [&str; 2] = ["residencies", "youth-programme"];
 pub enum Section {
     Talks,
     Exhibitions,
+    Live,
 }
 
 impl Section {
+    fn name(self) -> &'static str {
+        self.prefix().trim_matches('/')
+    }
+
     fn prefix(self) -> &'static str {
         match self {
             Section::Talks => "/talks/",
             Section::Exhibitions => "/exhibitions/",
+            Section::Live => "/live/",
         }
     }
 }
@@ -201,7 +226,7 @@ pub fn parse_listing(html: &str, section: Section) -> Vec<Value> {
 }
 
 /// What a detail page says: its performances (date and time lines) and
-/// its price text.
+/// the first line of its price text.
 pub fn parse_detail(html: &str) -> Value {
     let doc = Html::parse_document(html);
     let date_sel = selector("div.date");
@@ -216,8 +241,7 @@ pub fn parse_detail(html: &str) -> Value {
     let price = doc
         .select(&selector("#price-range"))
         .next()
-        .map(element_text)
-        .filter(|t| !t.is_empty());
+        .and_then(|e| e.text().map(clean_text).find(|t| !t.is_empty()));
     json!({"performances": performances, "price_text": price})
 }
 
@@ -240,16 +264,12 @@ pub fn raw_event(
         .as_str()
         .and_then(|src| site.join(src).ok())
         .map(|u| u.to_string());
-    let section = match section {
-        Section::Talks => "talks",
-        Section::Exhibitions => "exhibitions",
-    };
     RawEvent {
         source_event_id: path,
         source_url: Some(url.clone()),
         payload: json!({
             "url": url,
-            "section": section,
+            "section": section.name(),
             "card": card,
             "image_url": image,
             "listed_on": listed_on.to_string(),
@@ -302,16 +322,15 @@ pub fn category(card: &Value, section: &str) -> Option<Category> {
     if w.windows(2).any(|p| p[0] == "book" && p[1] == "launch") {
         return Some(Category::Talk);
     }
+    if section == "live" {
+        return Some(Category::Music);
+    }
     Some(map_category(&[title]).unwrap_or(Category::Community))
 }
 
 /// Whether a card needs its detail page: an in-scope single day.
 pub fn needs_detail(card: &Value, section: Section, listed_on: NaiveDate) -> bool {
-    let section = match section {
-        Section::Talks => "talks",
-        Section::Exhibitions => "exhibitions",
-    };
-    category(card, section).is_some()
+    category(card, section.name()).is_some()
         && card["date_text"]
             .as_str()
             .is_some_and(|d| matches!(parse_when(d, listed_on), Ok(When::Day(_))))
@@ -375,14 +394,21 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
     };
     let price = p["detail"]["price_text"]
         .as_str()
+        .map(ticket_price_text)
         .filter(|t| t.contains('£'))
-        .map(parse_price)
+        .map(|t| parse_price(&t))
         .unwrap_or_default();
+    let description = clean_description(card["description"].as_str());
+    let tags = if category == Category::Music {
+        music_tags(description.as_deref(), &title)
+    } else {
+        Vec::new()
+    };
     Ok(Some(NewEvent {
         sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         title,
-        description: clean_description(card["description"].as_str()),
+        description,
         venue_name: Some(VENUE_NAME.to_string()),
         address: Some(VENUE_ADDRESS.to_string()),
         lat: None,
@@ -394,8 +420,48 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
         url: p["url"].as_str().map(str::to_string),
         image_url: p["image_url"].as_str().map(str::to_string),
         category,
-        tags: Vec::new(),
+        tags,
     }))
+}
+
+/// The ticket amounts of a price line: up to any "(", without the parts
+/// (split on "+" and "|") that name a fee or levy ("£17.50 / £25 + DICE
+/// fees + £1.50 venue levy" → "£17.50 / £25").
+fn ticket_price_text(line: &str) -> String {
+    let line = line.split('(').next().unwrap_or_default();
+    line.split(['+', '|'])
+        .map(str::trim)
+        .filter(|part| {
+            let w = words(part);
+            !w.iter()
+                .any(|x| ["fee", "fees", "levy"].contains(&x.as_str()))
+        })
+        .collect::<Vec<_>>()
+        .join(" / ")
+}
+
+/// Festivals a concert's title or card description can name, and the
+/// subtag each gives.
+const SERIES_TAGS: &[(&str, &str)] = &[
+    ("london jazz festival", "jazz"),
+    ("unsound", "experimental"),
+];
+
+/// A concert's subtags from its title and the festivals its title or card
+/// description names, `contemporary` when neither gives one.
+fn music_tags(description: Option<&str>, title: &str) -> Vec<String> {
+    let text = padded_words(&format!("{title} {}", description.unwrap_or_default()));
+    let series: Vec<String> = SERIES_TAGS
+        .iter()
+        .filter(|(name, _)| text.contains(&format!(" {name} ")))
+        .map(|(_, tag)| tag.to_string())
+        .collect();
+    let tags = crate::music::tags_for(Category::Music.as_str(), &series, title);
+    if tags.is_empty() {
+        vec!["contemporary".to_string()]
+    } else {
+        tags.into_iter().map(str::to_string).collect()
+    }
 }
 
 #[async_trait]
@@ -422,19 +488,38 @@ impl Source for Ica {
             ),
             Err(e) => ctx.report_error(format!("{EXHIBITIONS_PATH}: {e}")),
         }
+        match ctx.get_text(&self.url(LIVE_PATH)?).await {
+            Ok(html) => cards.extend(
+                parse_listing(&html, Section::Live)
+                    .into_iter()
+                    .map(|c| (c, Section::Live)),
+            ),
+            Err(e) => ctx.report_error(format!("{LIVE_PATH}: {e}")),
+        }
         let mut out: Vec<RawEvent> = Vec::new();
         let mut details = 0;
+        let mut live_details = 0;
         for (card, section) in &cards {
             let mut detail = None;
             if needs_detail(card, *section, listed_on) {
                 let path = card["path"].as_str().unwrap_or_default();
-                if details >= MAX_DETAILS {
-                    ctx.report_error(format!("{path}: over the {MAX_DETAILS} detail-page cap"));
-                    continue;
+                let live = *section == Section::Live;
+                if live {
+                    if live_details >= MAX_LIVE_DETAILS {
+                        continue;
+                    }
+                } else {
+                    if details >= MAX_DETAILS {
+                        ctx.report_error(format!("{path}: over the {MAX_DETAILS} detail-page cap"));
+                        continue;
+                    }
+                    details += 1;
                 }
-                details += 1;
                 match ctx.get_text(&self.url(path)?).await {
-                    Ok(html) => detail = Some(parse_detail(&html)),
+                    Ok(html) => {
+                        live_details += usize::from(live);
+                        detail = Some(parse_detail(&html));
+                    }
                     Err(e) => {
                         ctx.report_error(format!("{path}: {e}"));
                         continue;
@@ -448,6 +533,16 @@ impl Source for Ica {
 
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
+    }
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Only Talks, Exhibitions and Live (concerts, filed as music). Film \
+             screenings and film picks, members-only previews and tours, the \
+             residencies and young artists' programme tabs, runs longer than a \
+             year, and Live concerts beyond the soonest 45 single days are left \
+             out on purpose; the price is the first line of the page's price box, \
+             up to any bracket and without fees or levies.",
+        )
     }
 }
 
@@ -578,6 +673,93 @@ mod tests {
             ),
             None
         );
+        assert_eq!(
+            c(
+                "live",
+                "all-events",
+                "/live/goat-japan",
+                "Goat (jp) + Gal Go Grey"
+            ),
+            Some(Category::Music)
+        );
+        assert_eq!(
+            c(
+                "live",
+                "all-events",
+                "/live/tg",
+                "Throbbing Gristle – Heathen Earth | Screening"
+            ),
+            None
+        );
+    }
+
+    #[test]
+    fn live_music_subtags() {
+        let tags = |title: &str, description: Option<&str>| {
+            let mut p = payload(
+                "live",
+                "all-events",
+                title,
+                "Tue, 10 November",
+                at("Tue, 10 Nov 2026", "07:30 pm"),
+            );
+            p["card"]["description"] = json!(description);
+            let ev = normalise_payload(&p).unwrap().unwrap();
+            assert_eq!(ev.category, Category::Music);
+            ev.tags
+        };
+        assert_eq!(tags("Horse Lords: noise night", None), ["experimental"]);
+        assert_eq!(
+            tags("Dog Unit", Some("Instrumental rock as a mutant orchestra")),
+            ["contemporary"]
+        );
+        assert_eq!(
+            tags(
+                "Robocobra Quartet",
+                Some("EFG London Jazz Festival presents Robocobra Quartet.")
+            ),
+            ["jazz"]
+        );
+        assert_eq!(tags("Unsound London: X", None), ["experimental"]);
+        assert_eq!(tags("Goat (jp)", None), ["contemporary"]);
+        assert!(tags("EFG London Jazz Festival: X", None).contains(&"jazz".to_string()));
+    }
+
+    #[test]
+    fn ticket_prices_leave_out_fees_and_levies() {
+        assert_eq!(
+            ticket_price_text("£17.50 / £20 / £25 + DICE fees + £1.50 venue levy"),
+            "£17.50 / £20 / £25"
+        );
+        assert_eq!(
+            ticket_price_text("First release £20 + fees | second release £25 + fees"),
+            "First release £20 / second release £25"
+        );
+        assert_eq!(
+            ticket_price_text("£10 full price + concessions"),
+            "£10 full price / concessions"
+        );
+    }
+
+    #[test]
+    fn price_is_the_first_line_before_brackets() {
+        let mut detail = parse_detail(
+            "<div id=price-range><p>£26.50 (including DICE fees + £1.50 venue levy)\
+             <br><br>Cloakroom tickets are £2.50 per item</p></div>",
+        );
+        detail["performances"] = at("Tue, 10 Nov 2026", "07:30 pm")["performances"].clone();
+        let ev = normalise_payload(&payload(
+            "live",
+            "all-events",
+            "Goat (jp)",
+            "Tue, 10 November",
+            detail,
+        ))
+        .unwrap()
+        .unwrap();
+        let price = ev.price;
+        assert_eq!(price.min, Some("26.50".parse().unwrap()), "{price:?}");
+        assert_eq!(price.max, price.min, "{price:?}");
     }
 
     #[test]
