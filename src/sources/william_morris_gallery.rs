@@ -503,7 +503,10 @@ impl Source for WilliamMorrisGallery {
         Some(
             "Anything the site shows as \"On now until\" a date (an exhibition \
              that has opened) is left out on purpose: the site no longer says \
-             when it started, and the event stored before it opened stays listed.",
+             when it started, and the event stored before it opened stays listed. \
+             So are tours, films and training courses (by the listing's category), \
+             and anything else that isn't an exhibition but spans more than one day \
+             (a run of individual sessions, often labelled \"Multiple dates\").",
         )
     }
 }
@@ -622,6 +625,8 @@ mod tests {
             .qa_scope()
             .unwrap();
         assert!(scope.contains("On now until"));
+        assert!(scope.contains("tours"));
+        assert!(scope.contains("Multiple dates"));
     }
 
     #[test]
