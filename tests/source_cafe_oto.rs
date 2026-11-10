@@ -121,16 +121,22 @@ fn residency_card(date_text: &str) -> Value {
 }
 
 #[test]
-fn a_residency_page_without_nights_is_an_error() {
+fn a_residency_page_without_nights_is_an_all_day_run() {
+    // Saved 2026-11-10: tickets still members-only, so no nights yet.
     let s = CafeOto::new(SITE.parse().unwrap());
-    let detail = parse_detail("<html><body><p>Moved</p></body></html>");
+    let detail = parse_detail(&fixture(&format!("{DIR}/fen-two-day-residency-2027.html")));
+    assert_eq!(detail["nights"], serde_json::json!([]));
     let raw = raw_event(
-        &residency_card("18–19 November 2026"),
+        &residency_card("1–2 February 2027"),
         listed_on(),
         Some(detail),
     );
-    let err = s.normalise(&raw).unwrap_err().to_string();
-    assert!(err.contains("residency page had no nights"), "{err}");
+    let ev = s.normalise(&raw).unwrap().unwrap();
+    assert!(ev.all_day);
+    assert!(ev.sessions.is_empty());
+    assert_eq!(ev.starts_at.to_rfc3339(), "2027-02-01T00:00:00+00:00");
+    assert_eq!(ev.price.min.unwrap().to_string(), "15");
+    assert!(ev.description.is_some());
 }
 
 #[test]

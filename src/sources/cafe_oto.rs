@@ -23,10 +23,10 @@
 //! * A residency card gives dates only. Its page lists one night per
 //!   `.each-activity` ("Wednesday 18 November 2026, 7.30pm", with that
 //!   night's prices): those are the event's sessions, and its intro text the
-//!   description; a page without nights is a parse error (the layout
-//!   changed). Without the page (failed or over the cap, reported) it is an
-//!   all-day run from the card's dates. Runs longer than
-//!   [`MAX_RANGE_DAYS`] are skipped.
+//!   description. Without nights (a residency whose tickets are still
+//!   members-only lists none, #437) or without the page (failed or over the
+//!   cap, reported) it is an all-day run from the card's dates. Runs longer
+//!   than [`MAX_RANGE_DAYS`] are skipped.
 //! * Price: the card's (or the nights') price spans, without the members'
 //!   price (linked to `/membership/`): "£22 £20 Advance" → £20–£22, "Free
 //!   Event" or "£0 Free Advance" → free, "SOLD OUT" → unknown.
@@ -272,13 +272,8 @@ pub fn normalise_payload(p: &Value) -> Result<Option<NewEvent>, SourceError> {
             if last.is_some_and(|l| (l - first).num_days() > MAX_RANGE_DAYS) {
                 return Ok(None);
             }
-            if !detail.is_null() {
-                let nights = detail["nights"].as_array().filter(|n| !n.is_empty());
-                let Some(nights) = nights else {
-                    return Err(SourceError::Parse(format!(
-                        "{title:?}: residency page had no nights"
-                    )));
-                };
+            let nights = detail["nights"].as_array().filter(|n| !n.is_empty());
+            if let Some(nights) = nights {
                 prices.clear();
                 for night in nights {
                     let line = text(&night["date_text"]);
