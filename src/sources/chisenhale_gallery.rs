@@ -5,8 +5,8 @@
 //!   allows `/whats-on/` and `/project/` but asks for `Crawl-delay: 20` (and
 //!   `Request-rate: 1/60`). So a run makes exactly two requests — robots.txt
 //!   and the listing — and never fetches detail pages.
-//! * There is no JSON-LD. The "Upcoming" block
-//!   (`section.block-calendar li.list-item.event`) has everything per card:
+//! * There is no JSON-LD. The "Current" and "Upcoming" blocks (both
+//!   `section.block-calendar li.list-item.event`) have everything per card:
 //!   a type label ("Exhibition", "Artist Talk", "Panel Discussion"), a date
 //!   line, a title, an optional artist line and (for exhibitions) an image.
 //!   Detail pages would only add the description, which is not worth 20 s a
@@ -28,7 +28,10 @@
 //!   conversation, discussion, panel, tour, lecture, …) and workshops are in
 //!   scope; anything else falls back to `map_category` over label and title
 //!   and is skipped (`Ok(None)`) when nothing matches (screenings,
-//!   performances). Open-ended dates ("Until …", "Ongoing") are skipped too.
+//!   performances). Open-ended dates ("Until …", "Ongoing") are skipped too:
+//!   once an exhibition opens the site moves it to "Current" and shows only
+//!   "Until <end>", and the real start stored from a run before it opened
+//!   stays. `qa_scope` tells the scraper check.
 //! * Price: the site-wide footer says "Free Entry" (gallery admission), which
 //!   is applied to exhibitions only; event prices are unknown.
 //! * Every item is placed at the gallery.
@@ -81,10 +84,10 @@ fn element_text(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
 }
 
-/// Parse the "Upcoming" cards of the What's On page. `page_url` is the
-/// address the page was fetched from (card links are resolved against it and
-/// must stay on its host); `listed_on` is the London date of the fetch, kept
-/// in each payload for year inference.
+/// Parse the "Current" and "Upcoming" cards of the What's On page.
+/// `page_url` is the address the page was fetched from (card links are
+/// resolved against it and must stay on its host); `listed_on` is the London
+/// date of the fetch, kept in each payload for year inference.
 pub fn parse_listing(html: &str, page_url: &Url, listed_on: NaiveDate) -> Vec<RawEvent> {
     let doc = Html::parse_document(html);
     let admission = doc
@@ -409,6 +412,16 @@ impl Source for ChisenhaleGallery {
     fn normalise(&self, raw: &RawEvent) -> Result<Option<NewEvent>, SourceError> {
         normalise_payload(&raw.payload)
     }
+
+    fn qa_scope(&self) -> Option<&'static str> {
+        Some(
+            "Exhibitions under the \"Current\" heading, shown only as \"Until\" \
+             a date (ones that have opened), are left out on purpose: the site no \
+             longer says when they started, and the event stored before they opened \
+             stays listed. So is anything \"Ongoing\", and screenings, performances \
+             and other cards that aren't exhibitions, talks, tours or workshops.",
+        )
+    }
 }
 
 #[cfg(test)]
@@ -566,6 +579,10 @@ mod tests {
                 .is_none()
         );
         assert!(normalise_payload(&payload("Artist Talk", "3 October, soon")).is_err());
+        let scope = ChisenhaleGallery::new(Url::parse("https://x.test/").unwrap())
+            .qa_scope()
+            .unwrap();
+        assert!(scope.contains("Current") && scope.contains("Until"));
     }
 
     #[test]
