@@ -84,10 +84,10 @@ fn element_text(e: ElementRef<'_>) -> String {
     clean_text(&e.text().collect::<Vec<_>>().join(" "))
 }
 
-/// Parse the "Upcoming" cards of the What's On page. `page_url` is the
-/// address the page was fetched from (card links are resolved against it and
-/// must stay on its host); `listed_on` is the London date of the fetch, kept
-/// in each payload for year inference.
+/// Parse the "Current" and "Upcoming" cards of the What's On page.
+/// `page_url` is the address the page was fetched from (card links are
+/// resolved against it and must stay on its host); `listed_on` is the London
+/// date of the fetch, kept in each payload for year inference.
 pub fn parse_listing(html: &str, page_url: &Url, listed_on: NaiveDate) -> Vec<RawEvent> {
     let doc = Html::parse_document(html);
     let admission = doc
