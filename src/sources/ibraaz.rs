@@ -21,12 +21,14 @@
 //!   line ("Sat 3 Oct, 3–4.30pm"), which wins over the payload's end (17:00
 //!   for that talk); its start must match the payload's, except for a
 //!   12-hour am/pm slip in the payload ("Thu 3 Dec, 6–7.30pm" given as
-//!   06:00), where the printed time wins. Anything but an
-//!   exhibition spanning more than one day is a run of sessions and skipped.
+//!   06:00), where the printed time wins. A non-exhibition spanning more
+//!   than one day is a run of sessions (#207): the printed line's days
+//!   (`normalise::session_days`) and clock range become `NewEvent::sessions`;
+//!   a line whose days can't be read this way still leaves the item skipped.
 //! * Category from the site's: talks → talk; workshops → workshop;
 //!   exhibitions and library-in-residence (a residency installed in the
-//!   library, open for months) → exhibition, in that order. Music,
-//!   performance, film and special projects alone are skipped.
+//!   library, open for months) → exhibition; music → music (#209), in
+//!   that order. Performance, film and special projects alone are skipped.
 
 use async_trait::async_trait;
 use chrono::{NaiveDateTime, NaiveTime};
@@ -39,7 +41,9 @@ use super::chisenhale_gallery::parse_time_range;
 use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, Price, RawEvent};
-use crate::normalise::{clean_description, clean_text, dedupe_key, london_to_utc};
+use crate::normalise::{
+    clean_description, clean_text, day_sessions, dedupe_key, london_to_utc, session_days,
+};
 
 pub const KEY: &str = "ibraaz";
 /// Upper bound on event pages fetched per run (≈ 60 s at 1 req / 2 s).
@@ -49,11 +53,12 @@ const IMAGE_BASE: &str = "https://ibraaz-website.imgix.net/";
 const VENUE_NAME: &str = "Ibraaz";
 const VENUE_ADDRESS: &str = "93 Mortimer Street, London W1W 7SS";
 /// Site category slugs → category, in order of precedence.
-const CATEGORIES: [(&str, Category); 4] = [
+const CATEGORIES: [(&str, Category); 5] = [
     ("talks", Category::Talk),
     ("workshops", Category::Workshop),
     ("exhibitions", Category::Exhibition),
     ("library-in-residence", Category::Exhibition),
+    ("music", Category::Music),
 ];
 
 pub struct Ibraaz {
@@ -283,9 +288,27 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
         )));
     }
     let (first, last) = (start.date(), end.date());
-    if last > first && category != Category::Exhibition {
-        return Ok(None);
-    }
+    let printed = item
+        .dates_text
+        .as_ref()
+        .map(|t| clean_text(&t.html))
+        .unwrap_or_default();
+    let printed_time = || {
+        printed
+            .rsplit_once(',')
+            .and_then(|(_, time)| parse_time_range(&time.replace(' ', "")))
+    };
+    // A non-exhibition run of more than one day is a run of sessions
+    // (#207), read from the printed line; one whose days can't be read
+    // this way is still skipped, as any such run used to be outright.
+    let sessions = if last > first && category != Category::Exhibition {
+        let Some(days) = session_days(&printed, first, last) else {
+            return Ok(None);
+        };
+        day_sessions(&days, printed_time())
+    } else {
+        Vec::new()
+    };
     let whole_day = start.time() == NaiveTime::MIN
         && end.time() == NaiveTime::from_hms_opt(23, 59, 59).unwrap();
 
@@ -296,14 +319,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
             true,
         )
     } else {
-        let printed = item
-            .dates_text
-            .as_ref()
-            .map(|t| clean_text(&t.html))
-            .unwrap_or_default();
-        let (from, to) = printed
-            .rsplit_once(',')
-            .and_then(|(_, time)| parse_time_range(&time.replace(' ', "")))
+        let (from, to) = printed_time()
             .ok_or_else(|| SourceError::Parse(format!("{title:?}: no time in {printed:?}")))?;
         // An am/pm slip in the payload: the printed line, which the page
         // shows, wins.
@@ -323,7 +339,7 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     };
 
     let text = |key: &str| payload.get(key).and_then(Value::as_str);
-    Ok(Some(NewEvent {
+    let mut event = NewEvent {
         sessions: Vec::new(),
         dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
         description: clean_description(text("description")),
@@ -344,7 +360,12 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
             .iter()
             .map(|c| clean_text(&c.title).to_lowercase())
             .collect(),
-    }))
+    };
+    if !sessions.is_empty() {
+        event.set_sessions(sessions);
+        event.dedupe_key = dedupe_key(&event.title, event.starts_at, Some(VENUE_NAME));
+    }
+    Ok(Some(event))
 }
 
 #[async_trait]
@@ -388,6 +409,7 @@ impl Source for Ibraaz {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::model::Session;
 
     fn item(categories: &[&str], start: &str, end: &str, printed: &str) -> Value {
         json!({
@@ -544,9 +566,38 @@ mod tests {
             Some(Category::Exhibition)
         );
         assert_eq!(cats(&["library-in-residence"]), Some(Category::Exhibition));
-        for skipped in ["music", "performance", "film", "special-projects"] {
+        assert_eq!(cats(&["music"]), Some(Category::Music));
+        for skipped in ["performance", "film", "special-projects"] {
             assert_eq!(cats(&[skipped]), None, "{skipped}");
         }
+    }
+
+    #[test]
+    fn a_multi_day_non_exhibition_with_readable_session_days_keeps_its_sessions() {
+        let payload = item(
+            &["workshops"],
+            "2026-10-24T14:00:00+00:00",
+            "2026-11-14T14:00:00+00:00",
+            "Sat 24 Oct & Sat 14 Nov, 2-5pm",
+        );
+        let e = normalised(&payload);
+        assert_eq!(
+            e.sessions,
+            vec![
+                Session {
+                    starts_at: "2026-10-24T13:00:00Z".parse().unwrap(),
+                    ends_at: Some("2026-10-24T16:00:00Z".parse().unwrap()),
+                },
+                Session {
+                    starts_at: "2026-11-14T14:00:00Z".parse().unwrap(),
+                    ends_at: Some("2026-11-14T17:00:00Z".parse().unwrap()),
+                },
+            ]
+        );
+        assert_eq!(e.starts_at, e.sessions[0].starts_at);
+        assert_eq!(e.ends_at, e.sessions[1].ends_at);
+        assert!(!e.all_day);
+        assert_eq!(e.category, Category::Workshop);
     }
 
     #[test]
