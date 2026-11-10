@@ -170,7 +170,40 @@ expression: out
     "id": "30581"
   },
   {
-    "event": null,
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "workshop",
+      "dedupe_key": "gathering-breath|2026-10-24|ibraaz",
+      "description": null,
+      "ends_at": "2026-11-14T17:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/30129/Picture-1-copy.tiff",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "sessions": [
+        {
+          "ends_at": "2026-10-24T16:00:00Z",
+          "starts_at": "2026-10-24T13:00:00Z"
+        },
+        {
+          "ends_at": "2026-11-14T17:00:00Z",
+          "starts_at": "2026-11-14T14:00:00Z"
+        }
+      ],
+      "starts_at": "2026-10-24T13:00:00Z",
+      "tags": [
+        "workshop"
+      ],
+      "title": "Gathering Breath",
+      "url": "https://ibraaz.org/whats-on/gathering-breath",
+      "venue_name": "Ibraaz"
+    },
     "id": "30129"
   },
   {
@@ -340,7 +373,30 @@ expression: out
     "id": "31155"
   },
   {
-    "event": null,
+    "event": {
+      "address": "93 Mortimer Street, London W1W 7SS",
+      "all_day": false,
+      "category": "music",
+      "dedupe_key": "kazdoura|2026-11-14|ibraaz",
+      "description": null,
+      "ends_at": "2026-11-14T20:00:00Z",
+      "image_url": "https://ibraaz-website.imgix.net/33097/Divine.jpg",
+      "lat": null,
+      "lng": null,
+      "price": {
+        "currency": null,
+        "is_free": false,
+        "max": null,
+        "min": null
+      },
+      "starts_at": "2026-11-14T19:00:00Z",
+      "tags": [
+        "music"
+      ],
+      "title": "Kazdoura",
+      "url": "https://ibraaz.org/whats-on/kazdoura",
+      "venue_name": "Ibraaz"
+    },
     "id": "33097"
   },
   {
