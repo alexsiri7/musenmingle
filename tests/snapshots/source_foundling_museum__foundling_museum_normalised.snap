@@ -180,10 +180,10 @@ expression: out
   },
   {
     "event": {
-      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "address": "1-8 Russell Sqare, WC1B 5BE",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "walking-tour-bloomsburys-best-kept-secrets|2026-10-11|foundling",
+      "dedupe_key": "walking-tour-bloomsburys-best-kept-secrets|2026-10-11|kimpton-fitzroy-hotel",
       "description": "Artists, academics and Russell Square... Think you know Bloomsbury? Think again.",
       "ends_at": null,
       "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/07/FOUNDLING_7_6_25_TOUR_MED-104websize-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
@@ -199,7 +199,7 @@ expression: out
       "tags": [],
       "title": "Walking Tour: Bloomsbury’s Best-Kept Secrets",
       "url": "https://foundlingmuseum.org.uk/event/bloomsburys-best-kept-secrets-oct-11/",
-      "venue_name": "Foundling Museum"
+      "venue_name": "Kimpton Fitzroy Hotel"
     },
     "source_event_id": "bloomsburys-best-kept-secrets-oct-11"
   },
@@ -305,10 +305,10 @@ expression: out
   },
   {
     "event": {
-      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "address": "61 St Martin’s Le Grand, London EC1A 4ER",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "hidden-gardens-of-london-walking-tour|2026-10-25|foundling",
+      "dedupe_key": "hidden-gardens-of-london-walking-tour|2026-10-25|lord-raglan",
       "description": "Join us for a special walking tour as we discover the City's unexpected green spaces and their fascinating history.",
       "ends_at": null,
       "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2026/02/green-spaces-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
@@ -324,7 +324,7 @@ expression: out
       "tags": [],
       "title": "Hidden Gardens of London Walking Tour",
       "url": "https://foundlingmuseum.org.uk/event/hidden-gardens-of-london-25-oct/",
-      "venue_name": "Foundling Museum"
+      "venue_name": "Lord Raglan"
     },
     "source_event_id": "hidden-gardens-of-london-25-oct"
   },
@@ -430,10 +430,10 @@ expression: out
   },
   {
     "event": {
-      "address": "40 Brunswick Square, London WC1N 1AZ",
+      "address": "268-269 Tottenham Court Road, W1T 7AQ",
       "all_day": false,
       "category": "talk",
-      "dedupe_key": "drink-death-debauchery-walking-tour|2026-11-22|foundling",
+      "dedupe_key": "drink-death-debauchery-walking-tour|2026-11-22|dominion",
       "description": "Join this walking tour to learn about the debauched and boozy history of 18th-century London, where half a pint of gin only set you back a penny.",
       "ends_at": null,
       "image_url": "https://e72fes626h4.exactdn.com/wp-content/uploads/2025/01/DDD-walking-tour-960x960.jpg?strip=all&quality=90&webp=90&avif=80",
@@ -449,7 +449,7 @@ expression: out
       "tags": [],
       "title": "Drink, Death & Debauchery Walking Tour",
       "url": "https://foundlingmuseum.org.uk/event/drink-death-and-debauchery-walking-tour-22-november/",
-      "venue_name": "Foundling Museum"
+      "venue_name": "Dominion Theatre"
     },
     "source_event_id": "drink-death-and-debauchery-walking-tour-22-november"
   },

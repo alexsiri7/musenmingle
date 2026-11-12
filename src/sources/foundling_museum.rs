@@ -27,8 +27,11 @@
 //!   run.
 //! * Terms restrict the site's material to personal use and forbid copying
 //!   its images, so the seed row is facts + link only.
-//! * Prices are not stated in a structured way, so price is unknown. Every
-//!   item is placed at the museum (walking tours end there).
+//! * Prices are not stated in a structured way, so price is unknown.
+//! * An item is placed at the museum unless its event page's itinerary has
+//!   a "Meet at/outside <place>, <address>" line naming another place with
+//!   a UK postcode: a walking tour's meeting point (#441). A meeting point
+//!   without a postcode keeps the museum.
 
 use async_trait::async_trait;
 use chrono::{DateTime, Datelike, NaiveDate, NaiveTime, Utc};
@@ -40,6 +43,7 @@ use super::{Source, SourceError};
 use crate::fetch::FetchContext;
 use crate::model::{Category, NewEvent, RawEvent};
 use crate::normalise::{clean_description, clean_text, dedupe_key, london_to_utc};
+use crate::venues::postcode;
 
 pub const KEY: &str = "foundling-museum";
 /// Upper bound on listing pages per run (the site shows three).
@@ -296,6 +300,25 @@ pub fn parse_day_and_time(text: &str) -> Result<(NaiveDate, Option<StartEnd>), S
     Ok((day, Some((start, end))))
 }
 
+/// The place and address named by an itinerary line ("11am: Meet at
+/// Dominion Theatre, 268-269 Tottenham Court Road, W1T 7AQ"), when it is a
+/// place other than the museum with a UK postcode.
+pub fn meeting_point(line: &str) -> Option<(String, String)> {
+    let line = clean_text(line);
+    let (clock, rest) = line.split_once("Meet ")?;
+    parse_clock(clock.trim().trim_end_matches(':').trim())?;
+    let rest = rest
+        .strip_prefix("at ")
+        .or_else(|| rest.strip_prefix("outside "))?;
+    let rest = rest.strip_prefix("the ").unwrap_or(rest);
+    let (venue, address) = rest.split_once(',')?;
+    let venue = venue.trim();
+    let address = clean_text(address);
+    let address = address.trim_end_matches('.');
+    let on_site = Some(postcode(address)?) == postcode(VENUE_ADDRESS);
+    (!venue.is_empty() && !on_site).then(|| (venue.to_string(), address.to_string()))
+}
+
 /// Parse an event page into the facts the card lacks.
 pub fn parse_detail(html: &str) -> Option<Value> {
     let doc = Html::parse_document(html);
@@ -314,6 +337,10 @@ pub fn parse_detail(html: &str) -> Option<Value> {
             .select(&selector(".article-body .content--intro"))
             .next()
             .map(|s| s.inner_html()),
+        "meeting_point": doc
+            .select(&selector("article p"))
+            .map(element_text)
+            .find(|t| meeting_point(t).is_some()),
     }))
 }
 
@@ -376,14 +403,17 @@ pub fn normalise_payload(payload: &Value) -> Result<Option<NewEvent>, SourceErro
     };
     let description = clean_description(text(detail, "description"))
         .or_else(|| clean_description(text(Some(card), "summary")));
+    let (venue, address) = text(detail, "meeting_point")
+        .and_then(meeting_point)
+        .unwrap_or_else(|| (VENUE_NAME.to_string(), VENUE_ADDRESS.to_string()));
 
     Ok(Some(NewEvent {
         sessions: Vec::new(),
-        dedupe_key: dedupe_key(&title, starts_at, Some(VENUE_NAME)),
+        dedupe_key: dedupe_key(&title, starts_at, Some(&venue)),
         description,
         title,
-        venue_name: Some(VENUE_NAME.to_string()),
-        address: Some(VENUE_ADDRESS.to_string()),
+        venue_name: Some(venue),
+        address: Some(address),
         lat: None,
         lng: None,
         starts_at,
@@ -610,6 +640,52 @@ mod tests {
         assert!(e.all_day);
         assert_eq!(e.starts_at.to_rfc3339(), "2026-11-22T00:00:00+00:00");
         assert_eq!(e.ends_at, None);
+    }
+
+    #[test]
+    fn meeting_point_needs_an_off_site_place_with_a_postcode() {
+        let place = |v: &str, a: &str| Some((v.to_string(), a.to_string()));
+        assert_eq!(
+            meeting_point("11am: Meet at Dominion Theatre, 268-269 Tottenham Court Road, W1T 7AQ"),
+            place("Dominion Theatre", "268-269 Tottenham Court Road, W1T 7AQ")
+        );
+        assert_eq!(
+            meeting_point(
+                "11am : Meet outside the Kimpton Fitzroy Hotel, 1-8 Russell Sqare, WC1B 5BE"
+            ),
+            place("Kimpton Fitzroy Hotel", "1-8 Russell Sqare, WC1B 5BE")
+        );
+        for none in [
+            "6pm: Meet at Covent Garden Underground Station.",
+            "1pm: End at Foundling Museum, 40 Brunswick Square, WC1N 1AZ",
+            "11am: Meet at Foundling Museum, 40 Brunswick Square, WC1N 1AZ",
+            "11am: Meet at the gates, 40 Brunswick Square, WC1N 1AZ",
+            "11am: Meet at Russell Square tube station, by the main entrance",
+            "Meet at the Dominion Theatre, Tottenham Court Road W1T 7AQ, to be guided",
+            "Meet the Experts: Wet-Nursing the Foundling Babies",
+        ] {
+            assert_eq!(meeting_point(none), None, "{none:?}");
+        }
+    }
+
+    #[test]
+    fn a_walking_tour_is_placed_at_its_meeting_point() {
+        let mut p = payload("Tours", "22 Nov 2026", Some("22 Nov 2026 11am"));
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert_eq!(e.venue_name.as_deref(), Some(VENUE_NAME));
+        assert_eq!(e.address.as_deref(), Some(VENUE_ADDRESS));
+        p["detail"]["meeting_point"] =
+            json!("11am: Meet at Dominion Theatre, 268-269 Tottenham Court Road, W1T 7AQ");
+        let e = normalise_payload(&p).unwrap().unwrap();
+        assert_eq!(e.venue_name.as_deref(), Some("Dominion Theatre"));
+        assert_eq!(
+            e.address.as_deref(),
+            Some("268-269 Tottenham Court Road, W1T 7AQ")
+        );
+        assert_eq!(
+            e.dedupe_key,
+            dedupe_key(&e.title, e.starts_at, Some("Dominion Theatre"))
+        );
     }
 
     #[test]
