@@ -12,9 +12,10 @@
 //!   Other `<time>` elements on detail pages belong to related-event teasers
 //!   and are ignored.
 //! * Exhibitions are date-only ranges ("1 May – 4 October 2026", "13 February
-//!   2026 – January 2027"). A start without a year takes the end's year (the
-//!   year before if that would put it after the end); a month-only end is the
-//!   last day of that month. Both ends are stored as London midnight of their
+//!   2026 – January 2027", "Friday 19 November 2026 – October 2027"; a
+//!   leading weekday is ignored). A start without a year takes the end's
+//!   year (the year before if that would put it after the end); a month-only
+//!   end is the last day of that month. Both ends are stored as London midnight of their
 //!   day, as for Somerset House.
 //! * Open-ended items (the permanent collection "Open daily", "Until June
 //!   2027" with no start, "From December 2025 - …") and pages without a header
@@ -27,7 +28,7 @@
 //!   off-site item with a proper date range would get the wrong venue.
 
 use async_trait::async_trait;
-use chrono::{Datelike, NaiveDate, NaiveTime};
+use chrono::{Datelike, NaiveDate, NaiveTime, Weekday};
 use scraper::{ElementRef, Html, Selector};
 use serde_json::{Value, json};
 use url::Url;
@@ -189,8 +190,14 @@ pub fn parse_date_range(text: &str) -> Result<Option<(NaiveDate, NaiveDate)>, So
     Ok(Some((start, end)))
 }
 
-/// "4 October 2026".
+/// "4 October 2026", or "Friday 19 November 2026" with the weekday ignored:
+/// the site has printed one that doesn't match its date (19 November 2026 is
+/// a Thursday).
 fn parse_day(s: &str) -> Option<NaiveDate> {
+    let s = match s.split_once(' ') {
+        Some((word, rest)) if word.parse::<Weekday>().is_ok() => rest,
+        _ => s,
+    };
     NaiveDate::parse_from_str(s, "%d %B %Y").ok()
 }
 
@@ -350,6 +357,14 @@ mod tests {
         assert_eq!(
             range("6 November 2026 - 8 August 2027"),
             pair("2026-11-06", "2027-08-08")
+        );
+        assert_eq!(
+            range("Friday 19 November 2026 – October 2027"),
+            pair("2026-11-19", "2027-10-31")
+        );
+        assert_eq!(
+            range("Sunday 1 November – 4 February 2027"),
+            pair("2026-11-01", "2027-02-04")
         );
     }
 
