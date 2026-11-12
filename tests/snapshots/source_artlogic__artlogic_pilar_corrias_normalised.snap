@@ -55,7 +55,7 @@ expression: "normalised(\"artlogic-pilar-corrias\", &cards)"
   },
   {
     "event": {
-      "address": "51 Conduit Street, London W1S 2YT",
+      "address": "2 Savile Row, London W1S 3PA",
       "all_day": true,
       "category": "exhibition",
       "dedupe_key": "rirkrit-tiravanija|2026-10-09|pilar-corrias",

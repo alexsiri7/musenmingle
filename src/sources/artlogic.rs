@@ -20,6 +20,10 @@
 //!   `og:image` is a book cover, Flowers' `og:description` is site
 //!   boilerplate). A listing path that redirects to a single exhibition (a
 //!   gallery with one show) is read from that page's `.exhibition-header`.
+//!   The one exception: for a gallery with `unlabelled_at_venue`, a card
+//!   with no location label (Pilar Corrias renders a section's only show
+//!   without one, issue #439) is looked up on the show's own page header, at
+//!   most [`MAX_SHOW_PAGES`] per run.
 //! * Sections: the newer `records_list` template wraps each list in
 //!   `#exhibitions-grid-<name>` (`current`, `forthcoming`,
 //!   `forthcoming_featured`, `current-forthcoming`, `past`, `online`, …), the
@@ -40,10 +44,11 @@
 //! * London: multi-city galleries list `locations` in their config; a card
 //!   must carry a matching location label (Victoria Miro's "London Gallery I",
 //!   Flowers' "London, Cork Street"), else it is skipped, and the match picks
-//!   the venue's name and address. Single-venue galleries place every show at
-//!   `venue`. Art-fair booths, biennale pavilions and museum loans are not
-//!   shows at the gallery and are skipped ([`is_offsite`] plus the row's
-//!   `skip_match`).
+//!   the venue's name and address (an unlabelled card of an
+//!   `unlabelled_at_venue` gallery may take its label from its own page).
+//!   Single-venue galleries place every show at `venue`. Art-fair booths,
+//!   biennale pavilions and museum loans are not shows at the gallery and
+//!   are skipped ([`is_offsite`] plus the row's `skip_match`).
 //! * Everything is an exhibition; price is unknown (commercial galleries are
 //!   generally free, but the cards don't say). The content policy is decided
 //!   per gallery in its seed row.
@@ -68,6 +73,9 @@ const MONTHS: [&str; 12] = [
 ];
 /// Section names (grid ids / data-labels) that hold shows to list.
 const KEEP_SECTIONS: [&str; 4] = ["current", "forthcoming", "upcoming", "future"];
+/// Show pages looked up per run for cards without a location label (see
+/// [`ArtlogicConfig::unlabelled_at_venue`]).
+pub const MAX_SHOW_PAGES: usize = 5;
 
 /// A gallery's `events.sources.config`. Unknown fields are rejected, so a
 /// typo in a seed row is a recorded skip rather than silently ignored.
@@ -86,7 +94,9 @@ pub struct ArtlogicConfig {
     pub locations: Vec<Location>,
     /// With `locations`: place cards that carry no location label at all at
     /// `venue` instead of skipping them (galleries whose spaces are all in
-    /// London but whose cards don't always say which).
+    /// London but whose cards don't always say which). Such cards' labels
+    /// are first looked up on the show's own page; only those still without a
+    /// label naming one of `locations` go to `venue`.
     #[serde(default)]
     pub unlabelled_at_venue: bool,
     /// Extra case-insensitive phrases that mark a card (title, subtitle or
@@ -134,6 +144,14 @@ impl ArtlogicConfig {
         }
         Ok(config)
     }
+
+    /// The first of `locations` whose `match` is in one of `places`.
+    fn location_for(&self, places: &[String]) -> Option<&Location> {
+        let place = places.join(" | ").to_lowercase();
+        self.locations
+            .iter()
+            .find(|l| place.contains(&l.matches.to_lowercase()))
+    }
 }
 
 pub struct Artlogic {
@@ -158,6 +176,29 @@ impl Artlogic {
         self.base_url.host_str().unwrap_or_default()
     }
 
+    /// GET a page on the gallery's own host: the URL it landed on and its
+    /// HTML. `what` names it in errors.
+    async fn fetch_page(
+        &self,
+        ctx: &FetchContext,
+        url: &Url,
+        what: &str,
+    ) -> Result<(Url, String), SourceError> {
+        let resp = ctx.get(url).await?;
+        let landed = resp.url().clone();
+        let html = resp
+            .text()
+            .await
+            .map_err(|e| SourceError::Parse(format!("reading {what}: {}", e.without_url())))?;
+        if landed.host_str() != Some(self.host()) {
+            return Err(SourceError::Parse(format!(
+                "{what} redirected off-site to {}",
+                landed.host_str().unwrap_or("?")
+            )));
+        }
+        Ok((landed, html))
+    }
+
     async fn fetch_listing(
         &self,
         ctx: &FetchContext,
@@ -167,22 +208,41 @@ impl Artlogic {
             .base_url
             .join(path)
             .map_err(|e| SourceError::Config(format!("{path:?}: {e}")))?;
-        let resp = ctx.get(&url).await?;
-        let landed = resp.url().clone();
-        let html = resp
-            .text()
-            .await
-            .map_err(|e| SourceError::Parse(format!("reading {path}: {}", e.without_url())))?;
-        if landed.host_str() != Some(self.host()) {
-            return Err(SourceError::Parse(format!(
-                "{path} redirected off-site to {}",
-                landed.host_str().unwrap_or("?")
-            )));
-        }
+        let (landed, html) = self.fetch_page(ctx, &url, path).await?;
         if exhibition_id(landed.path()).is_some() {
             return Ok(parse_single_show(&html, &landed).into_iter().collect());
         }
         Ok(parse_listing(&html, &landed))
+    }
+
+    /// For a gallery with `unlabelled_at_venue`: give cards that carry no
+    /// location label the one on the show's own page (at most
+    /// [`MAX_SHOW_PAGES`]), when it names one of `locations`. A page that
+    /// fails is reported; it, or one naming no known space, leaves its card
+    /// to the `venue` fallback (a label naming none would skip the show).
+    async fn label_from_show_pages(&self, ctx: &FetchContext, cards: &mut [Card]) {
+        if !self.config.unlabelled_at_venue || self.config.locations.is_empty() {
+            return;
+        }
+        for card in cards
+            .iter_mut()
+            .filter(|c| c.places.is_empty())
+            .take(MAX_SHOW_PAGES)
+        {
+            let page = match Url::parse(&card.url) {
+                Ok(url) => self.fetch_page(ctx, &url, &card.url).await,
+                Err(e) => Err(SourceError::Parse(e.to_string())),
+            };
+            match page {
+                Ok((_, html)) => {
+                    let places = parse_show_places(&html);
+                    if self.config.location_for(&places).is_some() {
+                        card.places = places;
+                    }
+                }
+                Err(e) => ctx.report_error(format!("{}: {e}", card.url)),
+            }
+        }
     }
 }
 
@@ -218,6 +278,7 @@ impl Source for Artlogic {
             let _ = ctx.take_errors();
             return Err(e);
         }
+        self.label_from_show_pages(ctx, &mut cards).await;
         Ok(cards.into_iter().map(|c| c.into_raw(self.host())).collect())
     }
 
@@ -256,7 +317,8 @@ pub struct Card {
     pub heading: Option<String>,
     pub subtitle: Option<String>,
     pub date_text: Option<String>,
-    /// Location labels (`.location`, a classic card's non-date `.bottom`s).
+    /// Location labels (`.location`, a classic card's non-date `.bottom`s),
+    /// or, looked up by `fetch`, the show page's header `.location`.
     pub places: Vec<String>,
     pub teaser: Option<String>,
     pub image_url: Option<String>,
@@ -456,6 +518,21 @@ pub fn parse_single_show(html: &str, page_url: &Url) -> Option<Card> {
         teaser: meta("og:description"),
         image_url: meta("og:image").filter(|u| u.contains("/usr/images/")),
     })
+}
+
+/// The location labels in an exhibition page's header: the hero's
+/// `.location` (Pilar Corrias' "Savile Row") or the `.exhibition-header`'s.
+pub fn parse_show_places(html: &str) -> Vec<String> {
+    let doc = Html::parse_document(html);
+    let mut places: Vec<String> = doc
+        .select(&selector(
+            "#hero .location, .exhibition-header .subtitle_location, .exhibition-header .location",
+        ))
+        .map(element_text)
+        .filter(|t| !t.is_empty())
+        .collect();
+    places.dedup();
+    places
 }
 
 /// Phrases that mark a listed item as happening away from the gallery: art
@@ -717,12 +794,7 @@ pub fn normalise_payload(
         if config.locations.is_empty() || (places.is_empty() && config.unlabelled_at_venue) {
             (config.venue.name.clone(), config.venue.address.clone())
         } else {
-            let place = places.join(" | ").to_lowercase();
-            let Some(loc) = config
-                .locations
-                .iter()
-                .find(|l| place.contains(&l.matches.to_lowercase()))
-            else {
+            let Some(loc) = config.location_for(&places) else {
                 return Ok(None);
             };
             (

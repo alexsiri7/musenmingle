@@ -12,7 +12,7 @@ use musenmingle::fetch::{FetchContext, RateLimiter, RobotsPolicy};
 use musenmingle::model::RawEvent;
 use musenmingle::sources::Source;
 use musenmingle::sources::artlogic::{
-    Artlogic, ArtlogicConfig, Card, parse_listing, parse_single_show,
+    Artlogic, ArtlogicConfig, Card, parse_listing, parse_show_places, parse_single_show,
 };
 use reqwest::StatusCode;
 use serde_json::{Value, json};
@@ -145,7 +145,11 @@ fn ropac_em_dash_dates_normalised() {
 
 #[test]
 fn pilar_corrias_dotted_dates_normalised() {
-    let cards = listing("artlogic-pilar-corrias", "/exhibitions/");
+    let mut cards = listing("artlogic-pilar-corrias", "/exhibitions/");
+    // Issue #439: a section's only show has no label; `fetch` reads its page.
+    let lone = cards.iter_mut().find(|c| c.id == 538).expect("card 538");
+    assert!(lone.places.is_empty());
+    lone.places = parse_show_places(&fixture("scrapers/artlogic-pilar-corrias/show-538.html"));
     insta::assert_json_snapshot!(
         "artlogic_pilar_corrias_normalised",
         normalised("artlogic-pilar-corrias", &cards)
@@ -435,6 +439,70 @@ async fn annely_juda_reads_its_forthcoming_show() {
     )
     .expect("a card");
     insta::assert_json_snapshot!("artlogic_annely_juda_normalised", normalised(KEY, &[card]));
+}
+
+const PILAR_CORRIAS_SHOW: &str = "/exhibitions/538-rirkrit-tiravanija-situational-awareness/";
+
+/// Fetches Pilar Corrias' listing with its show 538's page answered by
+/// `show`, and returns 538's stored address and the errors reported.
+async fn pilar_corrias_538(show: ResponseTemplate) -> (Option<String>, usize, Vec<String>) {
+    let server = MockServer::start().await;
+    mount_open_robots(&server).await;
+    let html = fixture("scrapers/artlogic-pilar-corrias/listing.html");
+    mount_page(
+        &server,
+        "/exhibitions/",
+        ResponseTemplate::new(200).set_body_string(html),
+        1,
+    )
+    .await;
+    mount_page(&server, PILAR_CORRIAS_SHOW, show, 1).await;
+    let ctx = ctx();
+    let (_, config) = seed_row("artlogic-pilar-corrias");
+    let s = gallery(&server, config);
+    let raws = s.fetch(&ctx).await.expect("fetch");
+    let raw = raws
+        .iter()
+        .find(|r| r.source_event_id.ends_with(":538"))
+        .expect("show 538");
+    let event = s.normalise(raw).unwrap().expect("an event");
+    (event.address, raws.len(), ctx.take_errors())
+}
+
+/// Issue #439: a card without a location label is placed by its own page.
+/// (Only 538 is looked up: any other request would 404 and be reported.)
+#[tokio::test]
+async fn pilar_corrias_looks_up_an_unlabelled_show_on_its_page() {
+    let page = fixture("scrapers/artlogic-pilar-corrias/show-538.html");
+    let (address, _, errors) =
+        pilar_corrias_538(ResponseTemplate::new(200).set_body_string(page)).await;
+    assert!(errors.is_empty(), "{errors:?}");
+    assert_eq!(address.as_deref(), Some("2 Savile Row, London W1S 3PA"));
+}
+
+/// A show page naming a space the config doesn't know must not skip the show.
+#[tokio::test]
+async fn a_show_page_naming_an_unknown_space_keeps_the_show_at_the_venue() {
+    let page = r#"<div id="hero"><div class="location">Mayfair Annex</div></div>"#;
+    let (address, count, errors) =
+        pilar_corrias_538(ResponseTemplate::new(200).set_body_string(page)).await;
+    assert!(errors.is_empty(), "{errors:?}");
+    assert_eq!(count, 3);
+    assert_eq!(
+        address.as_deref(),
+        Some("51 Conduit Street, London W1S 2YT")
+    );
+}
+
+#[tokio::test]
+async fn a_failed_show_lookup_is_reported_and_the_show_kept_at_the_venue() {
+    let (address, count, errors) = pilar_corrias_538(ResponseTemplate::new(500)).await;
+    assert_eq!(errors.len(), 1, "{errors:?}");
+    assert_eq!(count, 3);
+    assert_eq!(
+        address.as_deref(),
+        Some("51 Conduit Street, London W1S 2YT")
+    );
 }
 
 #[tokio::test]
