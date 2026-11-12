@@ -47,9 +47,10 @@
 //!   each carousel exhibition's own page (`/exhibitions/<slug>`, allowed by
 //!   robots.txt) is fetched for its JSON-LD `ExhibitionEvent`: date-only
 //!   `startDate`/`endDate` and the `Offer` (`price` a number such as `28.0`;
-//!   no offer while tickets are "available soon"). Title, type, date line,
-//!   venue and image come from the card, so the payload has the grid's
-//!   shape. A carousel exhibition that is also a grid card is left to the
+//!   no offer while tickets are "available soon"; on presale an empty
+//!   `"price": ,`, invalid JSON that `fill_empty_values` reads as no
+//!   price, #443). Title, type, date line, venue and image come from the
+//!   card, so the payload has the grid's shape. A carousel exhibition that is also a grid card is left to the
 //!   grid; at most [`MAX_EXHIBITION_PAGES`] pages are fetched, and a page
 //!   that fails or has no JSON-LD event is a reported error, not a failed
 //!   run.
@@ -271,7 +272,7 @@ pub fn parse_exhibition_carousels(html: &str) -> Vec<RawEvent> {
 /// Complete a carousel exhibition with the dates and price of its page's
 /// JSON-LD event; `None` if the page has none.
 pub fn with_exhibition_page(mut raw: RawEvent, html: &str) -> Option<RawEvent> {
-    let event = jsonld::extract_events(&Html::parse_document(html))
+    let event = jsonld::extract_events(&Html::parse_document(&fill_empty_values(html)))
         .into_iter()
         .next()?;
     let offer = jsonld::first_offer(&event);
@@ -293,6 +294,27 @@ pub fn with_exhibition_page(mut raw: RawEvent, html: &str) -> Option<RawEvent> {
         ),
     );
     Some(raw)
+}
+
+/// `html` with JSON's missing values filled with `null`: a key whose colon
+/// is followed (after whitespace) by `,` or `}`. Exhibition pages on presale
+/// give their offer an empty price (`"price": ,`, checked 2026-11-12, #443),
+/// which is invalid JSON, so the whole JSON-LD block would be dropped. Other
+/// invalid JSON is left as it is.
+fn fill_empty_values(html: &str) -> String {
+    let mut out = String::with_capacity(html.len());
+    let mut prev = None;
+    for (i, c) in html.char_indices() {
+        out.push(c);
+        if c == ':' && prev == Some('"') {
+            let next = html[i + 1..].trim_start_matches(|c: char| c.is_ascii_whitespace());
+            if next.starts_with([',', '}']) {
+                out.push_str(" null");
+            }
+        }
+        prev = Some(c);
+    }
+    out
 }
 
 /// A V&A `/event/` time stamp (`2026-10-01 14:00:00 +0100`). The digits
@@ -566,6 +588,22 @@ mod tests {
         let p = parse_offer_price(Some("5.0"), Some("GBP"));
         assert_eq!(p.min, Some(Decimal::from(5)));
         assert_eq!(parse_offer_price(None, Some("GBP")), Price::default());
+    }
+
+    #[test]
+    fn empty_values_are_filled_with_null() {
+        for (json, filled) in [
+            (r#"{"price": , "a": 1}"#, r#"{"price": null , "a": 1}"#),
+            ("{\"price\":\n }", "{\"price\": null\n }"),
+        ] {
+            assert!(serde_json::from_str::<Value>(json).is_err());
+            assert_eq!(fill_empty_values(json), filled);
+            let v: Value = serde_json::from_str(filled).unwrap();
+            assert_eq!(v["price"], Value::Null);
+        }
+        for json in [r#"{"a": 1, "b": "x", "c": ""}"#, r#"{"a": {"b": 2}}"#] {
+            assert_eq!(fill_empty_values(json), json);
+        }
     }
 
     fn day(s: &str) -> NaiveDate {

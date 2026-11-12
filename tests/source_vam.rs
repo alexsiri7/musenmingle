@@ -9,11 +9,12 @@ use musenmingle::config::RateLimitConfig;
 use musenmingle::fetch::FetchContext;
 use musenmingle::model::Category;
 use musenmingle::normalise::london_date;
-use musenmingle::sources::Source;
 use musenmingle::sources::vam::{
     Vam, parse_exhibition_carousels, parse_listing, with_exhibition_page,
 };
+use musenmingle::sources::{Source, jsonld};
 use rust_decimal::Decimal;
+use scraper::Html;
 use wiremock::matchers::{method, path};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
@@ -242,6 +243,31 @@ fn qa_2026_11_04_page_values() {
         }
     }
     insta::assert_json_snapshot!("vam_qa_2026_11_04", out);
+}
+
+/// Issue #443: on presale (2026-11-12) Punk to Pop's JSON-LD offer has an
+/// empty price (`"price": ,`), invalid JSON that dropped the whole event.
+/// It reads as an offer without a price, like "Tickets available soon".
+#[test]
+fn issue_443_presale_offer_without_a_price() {
+    let page = fixture(&format!("{DIR}/exhibitions/punk-to-pop-2026-11-12.html"));
+    assert!(jsonld::extract_events(&Html::parse_document(&page)).is_empty());
+    let raw = parse_exhibition_carousels(&fixture(&format!("{DIR}/qa-2026-11-04.html")))
+        .into_iter()
+        .find(|r| r.source_event_id == "exhibitions/punk-to-pop")
+        .unwrap();
+    let raw = with_exhibition_page(raw, &page).expect("JSON-LD event");
+    assert!(raw.payload["price"].is_null());
+    assert_eq!(raw.payload["currency"], "GBP");
+    let e = source().normalise(&raw).expect("normalise").expect("kept");
+    assert!(e.all_day);
+    assert_eq!(e.category, Category::Exhibition);
+    assert_eq!(
+        london_date(e.starts_at),
+        NaiveDate::from_ymd_opt(2027, 3, 13).unwrap()
+    );
+    assert!(!e.price.is_free);
+    assert_eq!(e.price.min, None);
 }
 
 #[tokio::test]
