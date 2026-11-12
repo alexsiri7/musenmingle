@@ -256,6 +256,9 @@ fn issue_443_presale_offer_without_a_price() {
         .into_iter()
         .find(|r| r.source_event_id == "exhibitions/punk-to-pop")
         .unwrap();
+    // Only the price is repaired: another empty value is still no event.
+    let empty_end = page.replace(r#""endDate": "2027-03-21""#, r#""endDate": "#);
+    assert!(with_exhibition_page(raw.clone(), &empty_end).is_none());
     let raw = with_exhibition_page(raw, &page).expect("JSON-LD event");
     assert!(raw.payload["price"].is_null());
     assert_eq!(raw.payload["currency"], "GBP");
