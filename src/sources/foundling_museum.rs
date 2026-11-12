@@ -661,6 +661,7 @@ mod tests {
             "1pm: End at Foundling Museum, 40 Brunswick Square, WC1N 1AZ",
             "11am: Meet at Foundling Museum, 40 Brunswick Square, WC1N 1AZ",
             "11am: Meet at the gates, 40 Brunswick Square, WC1N 1AZ",
+            "11am: Meet at Russell Square tube station, by the main entrance",
             "Meet at the Dominion Theatre, Tottenham Court Road W1T 7AQ, to be guided",
             "Meet the Experts: Wet-Nursing the Foundling Babies",
         ] {

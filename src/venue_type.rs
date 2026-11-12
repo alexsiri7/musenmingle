@@ -48,7 +48,6 @@ const SOURCE_DEFAULTS: &[(&str, &str)] = &[
     ("chisenhale-gallery", "museum"),
     ("courtauld", "museum"),
     ("design-museum", "museum"),
-    ("foundling-museum", "museum"),
     ("garden-museum", "museum"),
     ("gasworks", "museum"),
     ("goldsmiths-cca", "museum"),
@@ -254,6 +253,17 @@ mod tests {
         assert_eq!(
             classify(Some("Natural History Museum"), tm, &none()),
             "museum"
+        );
+        // The Foundling Museum's walking tours start elsewhere, so its
+        // venues are typed by name.
+        let foundling = &["foundling-museum"][..];
+        assert_eq!(
+            classify(Some("Foundling Museum"), foundling, &none()),
+            "museum"
+        );
+        assert_eq!(
+            classify(Some("Dominion Theatre"), foundling, &none()),
+            "other"
         );
         assert_eq!(
             classify(Some("Chats Palace Arts Centre"), tm, &none()),
