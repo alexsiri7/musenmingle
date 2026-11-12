@@ -340,10 +340,11 @@ cron ─────▶ |  musenmingle-ingest   |        |       musenmingle-api
     content to personal use).
   - `artlogic-<gallery>` — one platform source (`src/sources/artlogic.rs`)
     for London commercial galleries whose sites run the Artlogic CMS (no
-    JSON-LD): reads only the listing page(s), keeping the current and
+    JSON-LD): reads the listing page(s), keeping the current and
     forthcoming sections' cards (title, date range, location label, image,
     teaser); a listing that redirects to a single show is read from that
-    show's header. Dates are all-day ranges in many formats; multi-city
+    show's header, and for a gallery with `unlabelled_at_venue` a card
+    without a location label takes it from the show's own page. Dates are all-day ranges in many formats; multi-city
     galleries keep only cards whose location label matches the row's
     London `locations`; art-fair booths and biennale/museum presentations are
     skipped. Each gallery is an `events.sources` row with

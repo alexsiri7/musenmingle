@@ -200,7 +200,8 @@ images on `static-assets.artlogic.net`). They share `src/sources/artlogic.rs`
    case-insensitive substring of the label (`"London"`, `"Cork Street"`),
    optionally with its own `name`/`address`; cards matching none are
    skipped. `unlabelled_at_venue: true` places cards with no label at
-   `venue`. Leave out galleries whose current list is mostly off-site shows
+   `venue` (their label is first looked up on the show's own page, at most 5
+   per run). Leave out galleries whose current list is mostly off-site shows
    without labels to filter on.
 4. Find the address (footer or `/contact/`) for `venue`, and read the terms
    (`/terms-and-conditions/`, often only terms of sale) for the content
@@ -214,7 +215,7 @@ images on `static-assets.artlogic.net`). They share `src/sources/artlogic.rs`
    | `listing_paths` | `["/exhibitions/"]` | listing pages to read |
    | `venue` | required | `{"name", "address"}` of the London space |
    | `locations` | `[]` | `[{"match", "name"?, "address"?}]` London location labels |
-   | `unlabelled_at_venue` | `false` | with `locations`: unlabelled cards go to `venue` |
+   | `unlabelled_at_venue` | `false` | with `locations`: unlabelled cards go to `venue` (their label is first looked up on the show's own page, at most 5 per run) |
    | `skip_match` | `[]` | extra phrases marking a card as not at the gallery |
 
 Images all come from `static-assets.artlogic.net`, whose robots.txt asks for
