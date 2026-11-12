@@ -480,6 +480,20 @@ async fn pilar_corrias_looks_up_an_unlabelled_show_on_its_page() {
     assert_eq!(address.as_deref(), Some("2 Savile Row, London W1S 3PA"));
 }
 
+/// A show page naming a space the config doesn't know must not skip the show.
+#[tokio::test]
+async fn a_show_page_naming_an_unknown_space_keeps_the_show_at_the_venue() {
+    let page = r#"<div id="hero"><div class="location">Mayfair Annex</div></div>"#;
+    let (address, count, errors) =
+        pilar_corrias_538(ResponseTemplate::new(200).set_body_string(page)).await;
+    assert!(errors.is_empty(), "{errors:?}");
+    assert_eq!(count, 3);
+    assert_eq!(
+        address.as_deref(),
+        Some("51 Conduit Street, London W1S 2YT")
+    );
+}
+
 #[tokio::test]
 async fn a_failed_show_lookup_is_reported_and_the_show_kept_at_the_venue() {
     let (address, count, errors) = pilar_corrias_538(ResponseTemplate::new(500)).await;

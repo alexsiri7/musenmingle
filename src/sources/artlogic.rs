@@ -95,8 +95,8 @@ pub struct ArtlogicConfig {
     /// With `locations`: place cards that carry no location label at all at
     /// `venue` instead of skipping them (galleries whose spaces are all in
     /// London but whose cards don't always say which). Such cards' labels
-    /// are first looked up on the show's own page; only those still without
-    /// one go to `venue`.
+    /// are first looked up on the show's own page; only those still without a
+    /// label naming one of `locations` go to `venue`.
     #[serde(default)]
     pub unlabelled_at_venue: bool,
     /// Extra case-insensitive phrases that mark a card (title, subtitle or
@@ -143,6 +143,14 @@ impl ArtlogicConfig {
             return Err(SkipReason::InvalidConfig("empty location match".into()));
         }
         Ok(config)
+    }
+
+    /// The first of `locations` whose `match` is in one of `places`.
+    fn location_for(&self, places: &[String]) -> Option<&Location> {
+        let place = places.join(" | ").to_lowercase();
+        self.locations
+            .iter()
+            .find(|l| place.contains(&l.matches.to_lowercase()))
     }
 }
 
@@ -209,8 +217,9 @@ impl Artlogic {
 
     /// For a gallery with `unlabelled_at_venue`: give cards that carry no
     /// location label the one on the show's own page (at most
-    /// [`MAX_SHOW_PAGES`]). A page that fails is reported and its card left
-    /// to the `venue` fallback.
+    /// [`MAX_SHOW_PAGES`]), when it names one of `locations`. A page that
+    /// fails is reported; it, or one naming no known space, leaves its card
+    /// to the `venue` fallback (a label naming none would skip the show).
     async fn label_from_show_pages(&self, ctx: &FetchContext, cards: &mut [Card]) {
         if !self.config.unlabelled_at_venue || self.config.locations.is_empty() {
             return;
@@ -225,7 +234,12 @@ impl Artlogic {
                 Err(e) => Err(SourceError::Parse(e.to_string())),
             };
             match page {
-                Ok((_, html)) => card.places = parse_show_places(&html),
+                Ok((_, html)) => {
+                    let places = parse_show_places(&html);
+                    if self.config.location_for(&places).is_some() {
+                        card.places = places;
+                    }
+                }
                 Err(e) => ctx.report_error(format!("{}: {e}", card.url)),
             }
         }
@@ -780,12 +794,7 @@ pub fn normalise_payload(
         if config.locations.is_empty() || (places.is_empty() && config.unlabelled_at_venue) {
             (config.venue.name.clone(), config.venue.address.clone())
         } else {
-            let place = places.join(" | ").to_lowercase();
-            let Some(loc) = config
-                .locations
-                .iter()
-                .find(|l| place.contains(&l.matches.to_lowercase()))
-            else {
+            let Some(loc) = config.location_for(&places) else {
                 return Ok(None);
             };
             (
