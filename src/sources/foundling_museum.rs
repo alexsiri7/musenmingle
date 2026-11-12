@@ -315,8 +315,7 @@ pub fn meeting_point(line: &str) -> Option<(String, String)> {
     let venue = venue.trim();
     let address = clean_text(address);
     let address = address.trim_end_matches('.');
-    let on_site = Some(postcode(address)?) == postcode(VENUE_ADDRESS)
-        || venue.to_lowercase().contains("foundling");
+    let on_site = Some(postcode(address)?) == postcode(VENUE_ADDRESS);
     (!venue.is_empty() && !on_site).then(|| (venue.to_string(), address.to_string()))
 }
 
