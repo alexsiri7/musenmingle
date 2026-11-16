@@ -23,8 +23,9 @@
 //!   today).
 //! * Events are author talks held in the shop ("we turn our shop into a
 //!   miniature auditorium"); the page names no other venue, so every event
-//!   is placed at the shop. Retail evenings ("Late Night Shopping") and film
-//!   screenings are skipped (`Ok(None)`); everything else is a talk.
+//!   is placed at the shop. Retail evenings ("Late Night Shopping",
+//!   "Christmas Late Shopping") and film screenings are skipped (`Ok(None)`);
+//!   everything else is a talk.
 //!   `qa_scope` tells the scraper check.
 
 use async_trait::async_trait;
@@ -49,7 +50,12 @@ const VENUE_ADDRESS: &str = "14 Bury Place, London WC1A 2JL";
 const VENUE_LAT: f64 = 51.5184;
 const VENUE_LNG: f64 = -0.1245;
 /// Lower-cased title phrases marking items that are not talks.
-const SKIP_PHRASES: [&str; 3] = ["late night shopping", "screening", "film night"];
+const SKIP_PHRASES: [&str; 4] = [
+    "late night shopping",
+    "late shopping",
+    "screening",
+    "film night",
+];
 
 const MONTHS: [&str; 12] = [
     "january",
@@ -284,8 +290,9 @@ impl Source for LondonReviewBookshop {
     fn qa_scope(&self) -> Option<&'static str> {
         Some(
             "Only author talks held in the shop. Retail evenings (\"Late Night \
-             Shopping\", such as \"October Late Night Shopping\"), film screenings and \
-             film nights are left out on purpose: they are not talks.",
+             Shopping\", such as \"October Late Night Shopping\", or \"Christmas Late \
+             Shopping\"), film screenings and film nights are left out on purpose: they \
+             are not talks.",
         )
     }
 }
@@ -352,6 +359,7 @@ mod tests {
             Some(Category::Talk)
         );
         assert_eq!(category("October Late Night Shopping"), None);
+        assert_eq!(category("Christmas Late Shopping"), None);
         assert_eq!(category("Screening: Blue"), None);
     }
 
@@ -363,6 +371,7 @@ mod tests {
         for word in [
             "author talks",
             "Late Night Shopping",
+            "Christmas Late Shopping",
             "film screenings",
             "film nights",
         ] {
