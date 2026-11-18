@@ -52,6 +52,38 @@ fn normalised_output_snapshot() {
     insta::assert_json_snapshot!("london_review_bookshop_normalised", out);
 }
 
+/// Issue #450: the scraper check of 2026-11-16 found `Christmas Late
+/// Shopping` stored as a talk; the page says it's a retail shopping
+/// evening, the same as the already-skipped "October Late Night Shopping".
+/// Fixture saved straight from the venue's live listing on that date.
+#[test]
+fn qa_2026_11_16_christmas_late_shopping_is_skipped() {
+    let url: Url = format!("{SITE}/events").parse().unwrap();
+    let listed_on = NaiveDate::from_ymd_opt(2026, 11, 16).unwrap();
+    let raws = parse_listing(
+        &fixture(&format!("{DIR}/qa-2026-11-16.html")),
+        &url,
+        listed_on,
+    );
+    let shopping: Vec<&RawEvent> = raws
+        .iter()
+        .filter(|r| r.payload["title"] == "Christmas Late Shopping")
+        .collect();
+    assert_eq!(
+        shopping.len(),
+        4,
+        "expected 4 Christmas Late Shopping cards"
+    );
+    let s = LondonReviewBookshop::new(SITE.parse().unwrap());
+    for raw in shopping {
+        assert!(
+            s.normalise(raw).expect("normalise").is_none(),
+            "{:?} should be skipped, not stored as a talk",
+            raw.payload["date_text"]
+        );
+    }
+}
+
 async fn mount_robots(server: &MockServer) {
     Mock::given(method("GET"))
         .and(path("/robots.txt"))
