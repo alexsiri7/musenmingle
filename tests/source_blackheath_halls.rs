@@ -201,12 +201,15 @@ async fn fetches_every_listing_page_and_the_in_scope_event_pages_via_fetch_conte
     let requests = server.received_requests().await.unwrap();
     assert_eq!(requests.len(), 1 + PAGES + in_scope.len());
 
-    let phantasm = raws
-        .iter()
+    // The fetch stamps today's date; the saved cards' year-less dates
+    // resolve only against the day they were saved.
+    let mut phantasm = raws
+        .into_iter()
         .find(|r| r.source_event_id == "lifem26-phantasm-elizabeth-kenny")
         .unwrap();
+    phantasm.payload["listed_on"] = listed_on().to_string().into();
     let ev = BlackheathHalls::new(server.uri().parse().unwrap())
-        .normalise(phantasm)
+        .normalise(&phantasm)
         .unwrap()
         .unwrap();
     assert_eq!(
